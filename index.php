@@ -8,11 +8,11 @@
     </head>
     <body>
         <?php
-            require_once("/src/general/header.php");
+            require_once("./src/general/header.php");
         ?>
         Home page 
         <?php
-            require_once("/src/general/footer.php");
+            require_once("./src/general/footer.php");
         ?>
     </body>
 </html>
