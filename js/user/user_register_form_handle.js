@@ -17,6 +17,7 @@ medicalConcernBtn.addEventListener('click',(e)=>{
 
     const inputField = document.createElement("input");
     inputField.setAttribute('type', 'text');
+    inputField.setAttribute('name', 'medical_concern');
 
     const removeBtn = document.createElement("button"); //remove button
     removeBtn.innerHTML = "Remove";
@@ -78,13 +79,19 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
 
     const inputName = document.createElement("input");
     inputName.setAttribute('type', 'text');
+    inputName.setAttribute('name', 'name');
+    inputName.setAttribute('required', '');
 
     const inputRelationship = document.createElement("input");
     inputRelationship.setAttribute('type', 'text');
+    inputRelationship.setAttribute('name', 'relationship');
+    inputRelationship.setAttribute('required', '');
 
     const inputContactNum = document.createElement("input");
     inputContactNum.setAttribute('type', 'number');
     inputContactNum.setAttribute('min', '0');
+    inputContactNum.setAttribute('name', 'contactNum');
+    inputContactNum.setAttribute('required', '');
 
     const removeBtn = document.createElement("button"); //remove button
     removeBtn.innerHTML = "Remove";
@@ -128,4 +135,3 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
 
 const bDay = document.getElementById("bday");
 bDay.max = new Date().toISOString().split("T")[0];
-console.log(new Date().toISOString().split("T")[0]);
