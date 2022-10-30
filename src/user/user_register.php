@@ -13,20 +13,90 @@
 
     <div>
         <form action="" method="post">
-            First Name : <input type="text" pattern="[a-zA-Z]+" name="firstName" required> <br>
-            Last Name : <input type="text" pattern="[a-zA-Z]+" name="lastName" required> <br>
-            Date of Birth : <input type="date" id ="bday" name="birthday" required> <br>
-            Contact Number : <input type="text" pattern="[0-9]+" name="contactNum" required> <br>
-            Home Address : <textarea name="homeAddress" required> </textarea><br>
-            Height : <input type="number" placeholder="Optional (centimeters)" min="0" name="height"> <br>
-            Weight : <input type="number" placeholder="Optional (kilograms)" min="0" name="weight"> <br>
-            Gender : 
-                <input type="radio" name="gender" value="m"> Male
-                <input type="radio" name="gender" value="f"> Female <br>
-            Email Address : <input type="email" name="emailAddress" required> <br>
-            Username : <input type="text" required minlength="6"> Minimum length of 6<br>
+            Name:
+            <input type="text" 
+            pattern="[a-zA-Z]+" 
+            name="firstName" 
+            required placeholder="First Name">
+
+            <input type="text" 
+            pattern="[a-zA-Z]+" 
+            name="lastName" 
+            required 
+            placeholder="Last Name">
+            <br>
+
+            Date of Birth : 
+            <input type="date"
+            id ="bday" 
+            name="birthday" 
+            required> 
+            <br>
+
+            Contact Number : 
+            <input type="text"
+            pattern="[0-9]+" 
+            name="contactNum" 
+            required> 
+            <br>
+
+            Home Address : 
+            <textarea 
+            name="homeAddress" 
+            required> 
+            </textarea>
+            <br>
+
+            Height : 
+            <input 
+            type="text" 
+            placeholder="Optional (centimeters)" 
+            min="0" 
+            pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
+            name="height">
+
+            Weight : 
+            <input 
+            type="text" 
+            placeholder="Optional (kilograms)" 
+            min="0"
+            pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
+            name="weight"> 
+            <br>
+            
+            <label for="gender">
+                Gender : 
+                    <input type="radio" name="gender" value="m"> Male
+                    <input type="radio" name="gender" value="f"> Female <br>
+            </label>
+
+            Email Address : 
+            <!-- pattern indicates that it must follow somename@topleveldomain.domain-->
+            <input 
+            type="email" 
+            name="emailAddress"
+            pattern="/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/"
+            required> 
+            <br>
+
+            Username : 
+            <input 
+            type="text" 
+            required 
+            minlength="6" 
+            maxlength="15"
+            pattern="^[a-z]([a-z0-9_]){5,14}[a-z]$"
+            title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed">
+            <br>
+            
             <div>
-                Password : <input type="password" minlength="8" required> <button class="togglePassword"> Show Password</button> Password length must be atleast 8 characters. Must include a capital letter, number<br>
+                Password : 
+                <input 
+                type="password"  
+                pattern="(?=.*\d)(?=.*[A-Z]).{8,}" 
+                minlength="8" 
+                required title="Password length must be atleast 8 characters. Must include an uppercase letter and a number"> 
+                <button class="togglePassword"> Show Password</button><br>
             </div>
             <div>
                 Confirm Password : <input type="password" required> <button class="togglePassword"> Show Password</button> <br>
@@ -38,8 +108,8 @@
             <div id="emergencyDetails">
                 Emergency Contact Details: <br>
                 Name: <input type="text" name="name" required> <br>
-                Relationship: <input type="text" name="relationship" required> <br>
-                Contact Number: <input type="number" min="0" name="contactNum" required> <br>
+                Relationship: <input type="text" name="relationship" required pattern="[a-zA-Z]{3,15}"> <br>
+                Contact Number: <input type="number" min="0" name="contactNum" required pattern="[0-9]+"> <br>
                 Want to Add More? (Maximum of 3)
                 <br>
                 <button id="emergencyDetailsbtn">Add More</button>
