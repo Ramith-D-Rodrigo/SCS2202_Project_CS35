@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 29, 2022 at 08:29 PM
+-- Generation Time: Oct 30, 2022 at 11:49 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sportudetest`
+-- Database: `sportude`
 --
 
 -- --------------------------------------------------------
@@ -112,6 +112,19 @@ CREATE TABLE `discount` (
   `ending_date` date NOT NULL,
   `decision` char(1) NOT NULL,
   `discount_value` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login_details`
+--
+
+CREATE TABLE `login_details` (
+  `user_id` int(11) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(250) NOT NULL,
+  `user_role` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -241,17 +254,6 @@ CREATE TABLE `student_coach_feedback` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `student_medical_concern`
---
-
-CREATE TABLE `student_medical_concern` (
-  `stud_ID` int(11) NOT NULL,
-  `medical_concern` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `student_registered_session`
 --
 
@@ -347,6 +349,17 @@ CREATE TABLE `user_dependent` (
   `contactNum` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_medical_concern`
+--
+
+CREATE TABLE `user_medical_concern` (
+  `user_ID` int(11) NOT NULL,
+  `medical_concern` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Indexes for dumped tables
 --
@@ -392,6 +405,13 @@ ALTER TABLE `coaching_session`
 --
 ALTER TABLE `discount`
   ADD PRIMARY KEY (`manager_id`,`starting_date`);
+
+--
+-- Indexes for table `login_details`
+--
+ALTER TABLE `login_details`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- Indexes for table `manager`
@@ -458,12 +478,6 @@ ALTER TABLE `student_coach_feedback`
   ADD KEY `stud_ID` (`stud_ID`);
 
 --
--- Indexes for table `student_medical_concern`
---
-ALTER TABLE `student_medical_concern`
-  ADD PRIMARY KEY (`stud_ID`,`medical_concern`);
-
---
 -- Indexes for table `student_registered_session`
 --
 ALTER TABLE `student_registered_session`
@@ -512,6 +526,12 @@ ALTER TABLE `user_dependent`
   ADD PRIMARY KEY (`ownerID`,`name`);
 
 --
+-- Indexes for table `user_medical_concern`
+--
+ALTER TABLE `user_medical_concern`
+  ADD PRIMARY KEY (`user_ID`,`medical_concern`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -547,7 +567,8 @@ ALTER TABLE `branch_photo`
 -- Constraints for table `coach`
 --
 ALTER TABLE `coach`
-  ADD CONSTRAINT `coach_ibfk_1` FOREIGN KEY (`sport`) REFERENCES `sport` (`sport_id`);
+  ADD CONSTRAINT `coach_ibfk_1` FOREIGN KEY (`sport`) REFERENCES `sport` (`sport_id`),
+  ADD CONSTRAINT `coach_ibfk_2` FOREIGN KEY (`coach_ID`) REFERENCES `login_details` (`user_id`);
 
 --
 -- Constraints for table `coaching_session`
@@ -565,13 +586,21 @@ ALTER TABLE `discount`
 -- Constraints for table `manager`
 --
 ALTER TABLE `manager`
-  ADD CONSTRAINT `manager_ibfk_1` FOREIGN KEY (`manager_id`) REFERENCES `staff` (`staff_id`);
+  ADD CONSTRAINT `manager_ibfk_1` FOREIGN KEY (`manager_id`) REFERENCES `staff` (`staff_id`),
+  ADD CONSTRAINT `manager_ibfk_2` FOREIGN KEY (`manager_id`) REFERENCES `login_details` (`user_id`);
+
+--
+-- Constraints for table `owner`
+--
+ALTER TABLE `owner`
+  ADD CONSTRAINT `owner_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `login_details` (`user_id`);
 
 --
 -- Constraints for table `receptionist`
 --
 ALTER TABLE `receptionist`
-  ADD CONSTRAINT `receptionist_ibfk_1` FOREIGN KEY (`receptionist_id`) REFERENCES `staff` (`staff_id`);
+  ADD CONSTRAINT `receptionist_ibfk_1` FOREIGN KEY (`receptionist_id`) REFERENCES `staff` (`staff_id`),
+  ADD CONSTRAINT `receptionist_ibfk_2` FOREIGN KEY (`receptionist_id`) REFERENCES `login_details` (`user_id`);
 
 --
 -- Constraints for table `reservation`
@@ -592,7 +621,8 @@ ALTER TABLE `sports_court`
 -- Constraints for table `staff`
 --
 ALTER TABLE `staff`
-  ADD CONSTRAINT `staff_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_ID`);
+  ADD CONSTRAINT `staff_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_ID`),
+  ADD CONSTRAINT `staff_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `login_details` (`user_id`);
 
 --
 -- Constraints for table `student`
@@ -606,12 +636,6 @@ ALTER TABLE `student`
 ALTER TABLE `student_coach_feedback`
   ADD CONSTRAINT `student_coach_feedback_ibfk_1` FOREIGN KEY (`coach_ID`) REFERENCES `coach` (`coach_ID`),
   ADD CONSTRAINT `student_coach_feedback_ibfk_2` FOREIGN KEY (`stud_ID`) REFERENCES `student` (`stud_ID`);
-
---
--- Constraints for table `student_medical_concern`
---
-ALTER TABLE `student_medical_concern`
-  ADD CONSTRAINT `student_medical_concern_ibfk_1` FOREIGN KEY (`stud_ID`) REFERENCES `student` (`stud_ID`);
 
 --
 -- Constraints for table `student_registered_session`
@@ -628,10 +652,22 @@ ALTER TABLE `student_session_payment`
   ADD CONSTRAINT `student_session_payment_ibfk_2` FOREIGN KEY (`stud_ID`) REFERENCES `student` (`stud_ID`);
 
 --
+-- Constraints for table `system_admin`
+--
+ALTER TABLE `system_admin`
+  ADD CONSTRAINT `system_admin_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `login_details` (`user_id`);
+
+--
 -- Constraints for table `system_maintenance`
 --
 ALTER TABLE `system_maintenance`
   ADD CONSTRAINT `system_maintenance_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `system_admin` (`admin_id`);
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `login_details` (`user_id`);
 
 --
 -- Constraints for table `user_branch_feedback`
@@ -645,6 +681,12 @@ ALTER TABLE `user_branch_feedback`
 --
 ALTER TABLE `user_dependent`
   ADD CONSTRAINT `user_dependent_ibfk_1` FOREIGN KEY (`ownerID`) REFERENCES `user` (`user_id`);
+
+--
+-- Constraints for table `user_medical_concern`
+--
+ALTER TABLE `user_medical_concern`
+  ADD CONSTRAINT `user_medical_concern_ibfk_1` FOREIGN KEY (`user_ID`) REFERENCES `user` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
