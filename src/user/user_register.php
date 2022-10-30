@@ -16,12 +16,14 @@
             Name:
             <input type="text" 
             pattern="[a-zA-Z]+" 
-            name="firstName" 
+            name="firstName"
+            id="firstName" 
             required placeholder="First Name">
 
             <input type="text" 
             pattern="[a-zA-Z]+" 
-            name="lastName" 
+            name="lastName"
+            id="lastName" 
             required 
             placeholder="Last Name">
             <br>
@@ -103,7 +105,7 @@
                 Confirm Password : <input type="password" required> <button class="togglePassword"> Show Password</button> <br>
             </div>
             <div id="medCon">
-                Medical Concerns : (Maximum of 5)<br>
+                Medical Concerns : (Maximum of 5 | Please Add one Concern per Field)<br>
                 <button id="medConbtn"> Add </button>
             </div>
             <div id="emergencyDetails">
