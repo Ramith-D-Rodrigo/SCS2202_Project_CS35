@@ -2,53 +2,128 @@ function validateForm(event){
     const errMsg = document.getElementById("errmsg");   //For Displaying the Error messages
     errMsg.innerHTML = '';
     const form = document.querySelector("form");
+
     if(verbose){
         console.log(form.checkValidity());
+    }
+
+    if(form.checkValidity() === false){ //Form is invalid from HTML persepective
+        event.preventDefault();
+        errMsg.innerHTML = errMsg.innerHTML + "Please Add Valid Information";
+    }
+    else{   //Form is valid from HTML perspective
+    
+    //have to check input values validity (similary)
+
         const emergencyDetails = document.getElementById("emergencyDetails");
         const emergencyDetailsChildren = emergencyDetails.children;
-        let contact1, contact2, contact3; 
+        
+        let contactNum = [];    //contact number
+        let relationship = [];  //relationship
+        let names = [];         //name
 
         if(verbose){
             console.log(emergencyDetailsChildren);
         }
 
-        contact1 = emergencyDetailsChildren[5].value;   //1st one (Compulsary)
+        //1st one (Compulsary)
+        contactNum[0] = emergencyDetailsChildren[5].value;   
+        relationship[0] = emergencyDetailsChildren[3].value;
+        names[0] = emergencyDetailsChildren[1].value.toLowerCase();
 
         if(emergencyDetailsChildren.length == 10){    //has 2 emergency contact details
-            contact2 = emergencyDetailsChildren[9].children[4].value;   //2nd
+            contactNum[1] = emergencyDetailsChildren[9].children[4].value;   //2nd
+            relationship[1] = emergencyDetailsChildren[9].children[2].value.toLowerCase();
+            names[1] = emergencyDetailsChildren[9].children[0].value.toLowerCase();
         }
 
         if(emergencyDetailsChildren.length == 11){    //has 3 emergency contact details
-            contact2 = emergencyDetailsChildren[9].children[4].value;   //2nd
-            contact3 = emergencyDetailsChildren[10].children[4].value;  //3rd
+            contactNum[1] = emergencyDetailsChildren[9].children[4].value;   //2nd
+            relationship[1] = emergencyDetailsChildren[9].children[2].value.toLowerCase();
+            names[1] = emergencyDetailsChildren[9].children[0].value.toLowerCase();
+
+            contactNum[2] = emergencyDetailsChildren[10].children[4].value;  //3rd
+            relationship[2] = emergencyDetailsChildren[10].children[2].value.toLowerCase();
+            names[2] = emergencyDetailsChildren[10].children[0].value.toLowerCase();
         }
         const usercontact = document.getElementById('usercontact').value;   //registering user contact details
-        const contactArr = [contact1, contact2, contact3, usercontact];
+        const user = (document.getElementById('firstName').value + " " + document.getElementById('lastName').value).toLowerCase(); //registering user's name
+
+        contactNum.push(usercontact);
+        names.push(user);
+        console.log(user);
+        //removing empty fields
+        contactNum = contactNum.filter(i => i !== '');   
+        relationship = relationship.filter(i => i !== '');   
+        names = names.filter(i => i !== ''); 
 
         if(verbose){
-            console.log(contactArr);
+            console.log(contactNum);
+            console.log(relationship);
+            console.log(names);
         }
 
-        if(new Set(contactArr).size !== contactArr.length){ //check for duplicate contact numbers
+        if(new Set(contactNum).size !== contactNum.length){ //check for duplicate contact numbers
+            event.preventDefault();
             if(verbose){
-                console.log("Duplicate contact details");
+                console.log("Duplicate Contact Details");
             }
-            errMsg.innerHTML = errMsg.innerHTML + "Duplicate contact details<br>";
+            errMsg.innerHTML = errMsg.innerHTML + "Duplicate Contact Details<br>";
+        }
+        else{
+            errMsg.innerHTML.replace("Duplicate Contact Details<br>", '');  //Remove Contact Details Error Message
         }
 
-    }
+        if(new Set(relationship).size !== relationship.length){ //check for duplicate relationships
+            event.preventDefault();
+            if(verbose){
+                console.log("Duplicate Relationship Details");
+            }
+            errMsg.innerHTML = errMsg.innerHTML + "Duplicate Relationship Details<br>";
+        }
+        else{
+            errMsg.innerHTML.replace("Duplicate Relationship Details<br>", '');  //Remove relationship Error Message
+        }
 
-    if(form.checkValidity() === false){ //Form is invalid
-        event.preventDefault();
-        errMsg.innerHTML = errMsg.innerHTML + "Please Add Valid Information";
-    }
-    else{   //Form is valid
-        const emergencyDetails = document.getElementById("emergencyDetails");
-        const emergencyDetailsChildren = emergencyDetails.childNodes;
-        const contact1 = emergencyDetailsChildren[11].nodeValue;
-        const contact2 = emergencyDetailsChildren[19].nodeValue;
-        const contact3 = emergencyDetailsChildren[20].nodeValue;
-        console.log(emergencyDetails.childNodes[11])
+        if(new Set(names).size !== names.length){ //check for duplicate relationships
+            event.preventDefault();
+            if(verbose){
+                console.log("Duplicate Emergency Contact Detail Names");
+            }
+            errMsg.innerHTML = errMsg.innerHTML + "Duplicate Emergency Contact Detail Names<br>";
+        }
+        else{
+            errMsg.innerHTML.replace("Duplicate Emergency Contact Detail Names<br>", '');  //Remove duplicate name Error Message
+        }
+
+        
+        const medicalConcernDiv =  document.getElementById("medCon");
+        const medicalArr = Array.from(medicalConcernDiv.children);  //create an array for the elements inside the medical concern div
+        let concerns = []
+
+        medicalArr.forEach((val, i, arr)=> {    //traverse the array
+            if(val.tagName.toLowerCase() === 'div'){    //find the child divs
+               concerns.push(val.children.namedItem("medical_concern").value.toLowerCase());  //push the input value 
+            }
+        })
+
+        concerns = concerns.filter(i => i !== '');
+        
+        if(verbose){
+            console.log(concerns);
+        }
+
+        if(new Set(concerns).size !== concerns.length){ //check for duplicate contact numbers
+            event.preventDefault();
+            if(verbose){
+                console.log("Duplicate Medical Concern Details");
+            }
+            errMsg.innerHTML = errMsg.innerHTML + "Duplicate Medical Concern Details<br>";
+        }
+        else{
+            errMsg.innerHTML.replace("Duplicate Medical Concern Details<br>", '');  //Remove Contact Details Error Message
+        }
+
     }
     
 }
