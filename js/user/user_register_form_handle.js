@@ -17,7 +17,7 @@ medicalConcernBtn.addEventListener('click',(e)=>{
     e.preventDefault(); //so that the page is not going to refresh
 
     const inputDiv = document.createElement("div"); //new medical concern
-    inputDiv.setAttribute('id', 'concern' + medicalCount);
+    //inputDiv.setAttribute('id', 'concern' + medicalCount);
 
     const inputField = document.createElement("input");
     inputField.setAttribute('type', 'text');
@@ -86,7 +86,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     e.preventDefault(); //so that the page is not going to refresh
 
     const inputDiv = document.createElement("div"); //new emergency concern
-    inputDiv.setAttribute('id', 'emergencydetail' + emergencyCount);
+    //inputDiv.setAttribute('id', 'emergencydetail' + emergencyCount);
 
     const inputName = document.createElement("input");
     inputName.setAttribute('type', 'text');
@@ -100,9 +100,9 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     inputRelationship.setAttribute('pattern', '[a-zA-Z]{3,15}');
 
     const inputContactNum = document.createElement("input");
-    inputContactNum.setAttribute('type', 'number');
+    inputContactNum.setAttribute('type', 'text');
     inputContactNum.setAttribute('min', '0');
-    inputContactNum.setAttribute('pattern', '[0-9]+');
+    inputContactNum.setAttribute('pattern', '[0-9]{10,11}');
     inputContactNum.setAttribute('name', 'contactNum');
     inputContactNum.setAttribute('required', '');
 
