@@ -22,6 +22,7 @@ medicalConcernBtn.addEventListener('click',(e)=>{
     const inputField = document.createElement("input");
     inputField.setAttribute('type', 'text');
     inputField.setAttribute('name', 'medical_concern');
+    inputField.setAttribute('placeholder', 'ex: Have back pains');
     inputField.setAttribute('pattern',"[a-zA-Z]+");
 
     const removeBtn = document.createElement("button"); //remove button
