@@ -13,10 +13,10 @@
 
     <div>
         <form action="" method="post">
-            First Name : <input type="text" name="firstName" required> <br>
-            Last Name : <input type="text" name="lastName" required> <br>
+            First Name : <input type="text" pattern="[a-zA-Z]+" name="firstName" required> <br>
+            Last Name : <input type="text" pattern="[a-zA-Z]+" name="lastName" required> <br>
             Date of Birth : <input type="date" id ="bday" name="birthday" required> <br>
-            Contact Number : <input type="number" min="0" name="contactNum" required> <br>
+            Contact Number : <input type="text" pattern="[0-9]+" name="contactNum" required> <br>
             Home Address : <textarea name="homeAddress" required> </textarea><br>
             Height : <input type="number" placeholder="Optional (centimeters)" min="0" name="height"> <br>
             Weight : <input type="number" placeholder="Optional (kilograms)" min="0" name="weight"> <br>
