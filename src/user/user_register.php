@@ -45,7 +45,7 @@
                 <button id="emergencyDetailsbtn">Add More</button>
             </div>
 
-            <button type="submit"> Register </button>
+            <button type="submit" id="register"> Register </button>
         </form>
     </div>
 
