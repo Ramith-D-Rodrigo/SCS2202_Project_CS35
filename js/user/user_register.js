@@ -26,7 +26,7 @@ medicalConcernBtn.addEventListener('click',(e)=>{
         const parent = removeBtn.parentElement;
         medicalCount--;
         parent.remove();
-        if(medicalCount < 10){
+        if(medicalCount < 5){
             medicalConcernBtn.style.display = 'block';
         }
     });
@@ -35,7 +35,7 @@ medicalConcernBtn.addEventListener('click',(e)=>{
     inputDiv.appendChild(removeBtn);
 
     medicalConcernContainer.appendChild(inputDiv);
-    if(medicalCount == 10){
+    if(medicalCount == 5){
         medicalConcernBtn.style.display = 'none';
     }
 });

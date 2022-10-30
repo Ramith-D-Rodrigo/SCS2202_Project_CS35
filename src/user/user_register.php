@@ -17,6 +17,7 @@
             Last Name : <input type="text"> <br>
             Date of Birth : <input type="date" id ="bday"> <br>
             Contact Number : <input type="number" min="0"> <br>
+            Home Address : <textarea> </textarea><br>
             Height : <input type="number" placeholder="Optional (centimeters)" min="0"> <br>
             Weight : <input type="number" placeholder="Optional (kilograms)" min="0"> <br>
             Gender : 
@@ -25,13 +26,13 @@
             Email Address : <input type="email"> <br>
             Username : <input type="text"> <br>
             <div>
-                Password : <input type="password"> <button class="togglePassword"> Show Password</button> <br>
+                Password : <input type="password"> <button class="togglePassword"> Show Password</button> Password length must be greater than 8 characters. Must include a capital letter, number<br>
             </div>
             <div>
                 Confirm Password : <input type="password"> <button class="togglePassword"> Show Password</button> <br>
             </div>
             <div id="medCon">
-                Medical Concerns :<br>
+                Medical Concerns : (Maximum of 5)<br>
                 <button id="medConbtn"> Add </button>
             </div>
             <div id="emergencyDetails">
