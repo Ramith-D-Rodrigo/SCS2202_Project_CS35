@@ -55,5 +55,6 @@
     ?>
 
     </body>
-    <script src="/js/user/user_register.js"></script>
+    <script src="/js/user/user_register_form_handle.js"></script>
+    <script src="/js/user/user_register_validation.js"></script>
 </html>
