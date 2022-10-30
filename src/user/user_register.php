@@ -35,8 +35,9 @@
 
             Contact Number : 
             <input type="text"
-            pattern="[0-9]+" 
-            name="contactNum" 
+            pattern="[0-9]{10,11}" 
+            name="contactNum"
+            id="usercontact"
             required> 
             <br>
 
@@ -109,11 +110,12 @@
                 Emergency Contact Details: <br>
                 Name: <input type="text" name="name" required> <br>
                 Relationship: <input type="text" name="relationship" required pattern="[a-zA-Z]{3,15}"> <br>
-                Contact Number: <input type="number" min="0" name="contactNum" required pattern="[0-9]+"> <br>
+                Contact Number: <input type="text" min="0" name="contactNum" required pattern="[0-9]{10,11}"> <br>
                 Want to Add More? (Maximum of 3)
                 <br>
                 <button id="emergencyDetailsbtn">Add More</button>
             </div>
+            <div id="errmsg"></div>
 
             <button type="submit" id="register" onclick="return validateForm(event)"> Register </button>
         </form>
