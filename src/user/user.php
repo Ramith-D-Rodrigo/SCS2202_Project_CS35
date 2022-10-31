@@ -15,6 +15,7 @@ class User{
     private $username;
     private $password;
     private $gender;
+    private $isactive;
 
     public function __construct($fName, $lName, $email, $address, $contactNo, $dob, $uid, $dependents, $height, $weight, $medicalConcerns, $username, $password, $gender){
         $this -> userID = $uid;
@@ -32,6 +33,7 @@ class User{
         $this -> username = $username;
         $this -> password = $password;
         $this -> gender = $gender;
+        $this -> isactive = 1;
     }
 
     private function create_login_details_entry($database){   //first we createe the log in details entry
@@ -66,9 +68,10 @@ class User{
         `birthday`, 
         `register_date`, 
         `height`, 
-        `weight`) 
+        `weight`,
+        `is_active`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''))",
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), '%s')",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> firstName),
         $database -> real_escape_string($this -> lastName),
@@ -79,7 +82,8 @@ class User{
         $database -> real_escape_string($this -> dateOfBirth),
         $database -> real_escape_string($this -> registeredDate),
         $database -> real_escape_string($this -> height),
-        $database -> real_escape_string($this -> weight))); 
+        $database -> real_escape_string($this -> weight),
+        $database -> real_escape_string($this -> isactive))); 
 
         if ($result === TRUE) {
             echo "New user record created successfully<br>";
