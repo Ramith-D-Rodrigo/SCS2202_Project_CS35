@@ -18,8 +18,9 @@
             $_SESSION[$i] = $_POST[$i];
         }
     }
-
-    $hasEmailsql = sprintf("SELECT * FROM USER WHERE email_address = '%s'", $connection -> real_escape_string(htmlspecialchars($_POST['emailAddress'])));    //Checking if the account already exists
+    
+    //Checking if the account already exists
+    $hasEmailsql = sprintf("SELECT * FROM USER WHERE email_address = '%s'", $connection -> real_escape_string(htmlspecialchars($_POST['emailAddress'], ENT_QUOTES)));    
     $hasEmailResult = $connection -> query($hasEmailsql);
 
     if($hasEmailResult -> num_rows > 0){    //account already exists
@@ -36,27 +37,27 @@
         $userid = $row['UUID()'];
     }
 
-    $username = htmlspecialchars($_POST['username']);
-    $email = htmlspecialchars($_POST['emailAddress']);
-    $address = htmlspecialchars($_POST['homeAddress']);
-    $contactNo = htmlspecialchars($_POST['contactNum']);
-    $fName = htmlspecialchars($_POST['firstName']);
-    $lName = htmlspecialchars($_POST['lastName']);
-    $bday = htmlspecialchars($_POST['birthday']);
-    $gender = htmlspecialchars($_POST['gender']);
+    $username = htmlspecialchars($_POST['username'], ENT_QUOTES);
+    $email = htmlspecialchars($_POST['emailAddress'], ENT_QUOTES);
+    $address = htmlspecialchars($_POST['homeAddress'], ENT_QUOTES);
+    $contactNo = htmlspecialchars($_POST['contactNum'], ENT_QUOTES);
+    $fName = htmlspecialchars($_POST['firstName'], ENT_QUOTES);
+    $lName = htmlspecialchars($_POST['lastName'], ENT_QUOTES);
+    $bday = htmlspecialchars($_POST['birthday'], ENT_QUOTES);
+    $gender = htmlspecialchars($_POST['gender'], ENT_QUOTES);
 
     if(isset($_POST['height'])){
-        $height = htmlspecialchars($_POST['height']);
+        $height = htmlspecialchars($_POST['height'], ENT_QUOTES);
     }
     else{
-        $height = null;
+        $height = NULL;
     }
 
     if(isset($_POST['weight'])){
-        $weight = htmlspecialchars($_POST['weight']);
+        $weight = htmlspecialchars($_POST['weight'], ENT_QUOTES);
     }
     else{
-        $weight = null;
+        $weight = NULL;
     }
 
     //user medical concerns
@@ -65,7 +66,7 @@
     foreach($inputFields as $i){
         if(preg_match("/medical_concern[1-5]/", $i)){   //found a match 
             if(isset($_POST[$i])){
-                array_push($medical_concerns, htmlspecialchars($_POST[$i]));
+                array_push($medical_concerns, htmlspecialchars($_POST[$i], ENT_QUOTES));
             }
         }
     }
@@ -74,46 +75,34 @@
     $user_dependents = [];
     $j = 1;
     while($j <= 3){
-        $name = null;
-        $contact = null;
-        $relationship = null;
+        $name = NULL;
+        $contact = NULL;
+        $relationship = NULL;
 
         foreach($inputFields as $i){
             if(preg_match(sprintf("/name%s/",$j), $i)){   //found a match for name
                 if(isset($_POST[$i])){
-                    $name =  htmlspecialchars($_POST[$i]);
+                    $name =  htmlspecialchars($_POST[$i], ENT_QUOTES);
                 }
             }
             else if(preg_match(sprintf("/emgcontactNum%s/",$j), $i)){ //found a match for contact number
                 if(isset($_POST[$i])){
-                    $contact = htmlspecialchars($_POST[$i]);
+                    $contact = htmlspecialchars($_POST[$i], ENT_QUOTES);
                 }
             }
             else if(preg_match(sprintf("/relationship%s/",$j), $i)){ //found a match for relationship
                 if(isset($_POST[$i])){
-                    $relationship = htmlspecialchars($_POST[$i]);
+                    $relationship = htmlspecialchars($_POST[$i], ENT_QUOTES);
                 }
             }
         }
-        echo "<br>";
-        echo $name;
-        echo "<br>"; 
-        echo "<br>";
-        echo $relationship;
-        echo "<br>";
-        echo "<br>";
-        echo $contact;
-        echo "<br>";
-        if($name !== null && $contact !== null  && $relationship !== null){ //there is a contact information
-            echo "Inside dependent creation";
+        if($name !== NULL && $contact !== NULL  && $relationship !== NULL){ //there is a contact information
             $newDependent = new UserDependent($name, $relationship, $contact);  //create the dependent
             $newDependent -> setOwner($userid);     //set the user id
             array_push($user_dependents, $newDependent);    //push to the array
         }
         $j = $j + 1;
     }
-    print_r($_POST);
-
     $new_user = new User($fName, $lName, $email, $address, $contactNo, $bday, $userid, $user_dependents, $height, $weight, $medical_concerns, $username, $password, $gender);
     $new_user -> registerUser($connection);
 ?>
