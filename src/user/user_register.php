@@ -12,27 +12,30 @@
     ?>
 
     <div>
-        <form action="" method="post">
+        <form action="./register_controller.php" method="post">
             Name:
             <input type="text" 
             pattern="[a-zA-Z]+" 
             name="firstName"
             id="firstName" 
-            required placeholder="First Name">
+            required placeholder="First Name"
+            value=<?php if(isset($_SESSION['firstName'])) echo htmlspecialchars($_SESSION['firstName'], ENT_QUOTES)?>>
 
             <input type="text" 
             pattern="[a-zA-Z]+" 
             name="lastName"
             id="lastName" 
             required 
-            placeholder="Last Name">
+            placeholder="Last Name"
+            value=<?php if(isset($_SESSION['lastName'])) echo htmlspecialchars($_SESSION['lastName'], ENT_QUOTES)?>>
             <br>
 
             Date of Birth : 
             <input type="date"
             id ="bday" 
             name="birthday" 
-            required> 
+            required
+            value=<?php if(isset($_SESSION['birthday'])) echo htmlspecialchars($_SESSION['birthday'], ENT_QUOTES)?>> 
             <br>
 
             Contact Number : 
@@ -40,15 +43,16 @@
             pattern="[0-9]{10,11}" 
             name="contactNum"
             id="usercontact"
-            required> 
+            required
+            value=<?php if(isset($_SESSION['contactNum'])) echo htmlspecialchars($_SESSION['contactNum'], ENT_QUOTES)?>> 
             <br>
 
             Home Address : 
             <textarea 
             name="homeAddress"
             id="homeAddress" 
-            required> 
-            </textarea>
+            required
+            value=<?php if(isset($_SESSION['homeAddress'])) echo htmlspecialchars($_SESSION['homeAddress'], ENT_QUOTES)?>></textarea>
             <br>
 
             Height : 
@@ -58,7 +62,8 @@
             min="0" 
             pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
             id="height"
-            name="height">
+            name="height"
+            value=<?php if(isset($_SESSION['height'])) echo htmlspecialchars($_SESSION['height'], ENT_QUOTES)?>>
 
             Weight : 
             <input 
@@ -67,7 +72,8 @@
             min="0"
             pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
             id="weight"
-            name="weight"> 
+            name="weight"
+            value=<?php if(isset($_SESSION['weight'])) echo htmlspecialchars($_SESSION['weight'], ENT_QUOTES)?>> 
             <br>
             
             <label for="gender">
@@ -82,7 +88,8 @@
             type="email" 
             name="emailAddress"
             id="emailAddress"
-            required> 
+            required
+            value=<?php if(isset($_SESSION['emailAddress'])) echo htmlspecialchars($_SESSION['emailAddress'], ENT_QUOTES)?>> 
             <br>
 
             Username : 
@@ -94,7 +101,8 @@
             pattern="^[a-z]([a-z0-9_]){5,14}[a-z]$"
             name="username"
             id="username"
-            title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed">
+            title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed"
+            value=<?php if(isset($_SESSION['username'])) echo htmlspecialchars($_SESSION['username'], ENT_QUOTES)?>>
             <br>
             
             <div>
@@ -117,16 +125,25 @@
             </div>
             <div id="emergencyDetails">
                 Emergency Contact Details: <br>
-                Name: <input type="text" name="name" required> <br>
-                Relationship: <input type="text" name="relationship" required pattern="[a-zA-Z]{3,15}"> <br>
-                Contact Number: <input type="text" min="0" name="contactNum" required pattern="[0-9]{10,11}"> <br>
+                Name: <input type="text" name="name1" required value=<?php if(isset($_SESSION['name1'])) echo htmlspecialchars($_SESSION['name1'], ENT_QUOTES) ?>> <br>
+                Relationship: <input type="text" name="relationship1" required pattern="[a-zA-Z]{3,15}" value=<?php if(isset($_SESSION['relationship1'])) echo htmlspecialchars($_SESSION['relationship1'], ENT_QUOTES) ?>> <br>
+                Contact Number: <input type="text" min="0" name="emgcontactNum1" required pattern="[0-9]{10,11}" value=<?php if(isset($_SESSION['emgcontactNum1'])) echo htmlspecialchars($_SESSION['emgcontactNum1'], ENT_QUOTES) ?>> <br>
                 Want to Add More? (Maximum of 3)
                 <br>
                 <button id="emergencyDetailsbtn">Add More</button>
             </div>
-            <div id="errmsg"></div>
+            <div id="errmsg">
+                <?php
+                    if(isset($_SESSION['emailError'])){
+                        echo $_SESSION['emailError'];
+                    }
+                    if(isset($_SESSION['usernameError'])){
+                        echo $_SESSION['usernameError'];
+                    }
+                ?>
+            </div>
 
-            <button type="submit" id="register" onclick="return validateForm(event)"> Register </button>
+            <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
         </form>
     </div>
 

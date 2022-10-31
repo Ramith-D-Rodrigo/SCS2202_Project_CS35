@@ -103,7 +103,8 @@ function validateForm(event){
 
         medicalArr.forEach((val, i, arr)=> {    //traverse the array
             if(val.tagName.toLowerCase() === 'div'){    //find the child divs
-               concerns.push(val.children.namedItem("medical_concern").value.toLowerCase());  //push the input value 
+                console.log(val.children);
+                concerns.push(val.children.item(0).value.toLowerCase());  //push the input value 
             }
         })
 
