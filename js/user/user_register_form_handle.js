@@ -8,6 +8,15 @@ const medicalConcernContainer = document.getElementById("medCon");
 const medicalConcernBtn = document.getElementById("medConbtn");
 
 var medicalCount = 0;   //no of medical concerns of the user
+let medicalinputID = [];
+
+for(i = 1; i <=5; i++){ //array of medicalIDs
+    medicalinputID.push(i);
+}
+if(verbose){
+    console.log(medicalinputID);
+}
+
 
 medicalConcernBtn.addEventListener('click',(e)=>{
     medicalCount++;
@@ -18,15 +27,16 @@ medicalConcernBtn.addEventListener('click',(e)=>{
 
     const inputDiv = document.createElement("div"); //new medical concern
     //inputDiv.setAttribute('id', 'concern' + medicalCount);
-
+    const currID = medicalinputID.pop();    //Assigning ID
     const inputField = document.createElement("input");
     inputField.setAttribute('type', 'text');
-    inputField.setAttribute('name', 'medical_concern');
+    inputField.setAttribute('name', 'medical_concern' + currID);
     inputField.setAttribute('placeholder', 'ex: Have back pains');
     inputField.setAttribute('pattern',"[a-zA-Z]+");
 
     const removeBtn = document.createElement("button"); //remove button
     removeBtn.innerHTML = "Remove";
+    removeBtn.setAttribute('id', 'removebtn' + currID);
 
     removeBtn.addEventListener('click', (e)=>{
         medicalCount--;
@@ -34,6 +44,8 @@ medicalConcernBtn.addEventListener('click',(e)=>{
             console.log("Medical concern Remove button clicked -> count = " + medicalCount);
         }
         e.preventDefault();
+        const freedID = removeBtn.id.slice(-1);
+        medicalinputID.push(freedID);
         const parent = removeBtn.parentElement;
         parent.remove();
         if(medicalCount < 5){
@@ -78,6 +90,14 @@ const emergencyDetailsContainer = document.getElementById("emergencyDetails");
 const emergencyDetailsBtn = document.getElementById("emergencyDetailsbtn");
 
 var emergencyCount = 1;   //no of emergency details of the user
+let emergencydetailID = [];
+
+for(i = 2; i <=3; i++){ //array of medicalIDs
+    emergencydetailID.push(i);
+}
+if(verbose){
+    console.log(emergencydetailID);
+}
 
 emergencyDetailsBtn.addEventListener('click',(e)=>{
     emergencyCount++;
@@ -88,15 +108,16 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
 
     const inputDiv = document.createElement("div"); //new emergency concern
     //inputDiv.setAttribute('id', 'emergencydetail' + emergencyCount);
+    const currID = emergencydetailID.pop();    //Assigning ID
 
     const inputName = document.createElement("input");
     inputName.setAttribute('type', 'text');
-    inputName.setAttribute('name', 'name');
+    inputName.setAttribute('name', 'name' + currID);
     inputName.setAttribute('required', '');
 
     const inputRelationship = document.createElement("input");
     inputRelationship.setAttribute('type', 'text');
-    inputRelationship.setAttribute('name', 'relationship');
+    inputRelationship.setAttribute('name', 'relationship' + currID);
     inputRelationship.setAttribute('required', '');
     inputRelationship.setAttribute('pattern', '[a-zA-Z]{3,15}');
 
@@ -104,16 +125,20 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     inputContactNum.setAttribute('type', 'text');
     inputContactNum.setAttribute('min', '0');
     inputContactNum.setAttribute('pattern', '[0-9]{10,11}');
-    inputContactNum.setAttribute('name', 'contactNum');
+    inputContactNum.setAttribute('name', 'emgcontactNum' + currID);
     inputContactNum.setAttribute('required', '');
 
     const removeBtn = document.createElement("button"); //remove button
     removeBtn.innerHTML = "Remove";
+    removeBtn.setAttribute('id', 'removebtn' + currID);
 
     removeBtn.addEventListener('click', (e)=>{
         e.preventDefault();
         const parent = removeBtn.parentElement;
         emergencyCount--;
+
+        const freedID = removeBtn.id.slice(-1);
+        emergencydetailID.push(freedID);
         if(verbose){
             console.log("Emergency contact Remove button clicked -> count = " + emergencyCount);
         }
