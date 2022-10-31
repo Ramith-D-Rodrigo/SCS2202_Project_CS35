@@ -21,7 +21,7 @@ class UserDependent{
         `relationship`, 
         `contact_num`) 
         VALUES 
-        ('UUID_TO_BIN(%s, true)','%s','%s','%s')", 
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s')", 
         $database -> real_character_string($this->ownerID), 
         $database -> real_character_string($this->name), 
         $database -> real_character_string($this->relationship), 
