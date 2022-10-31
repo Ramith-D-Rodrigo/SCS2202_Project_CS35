@@ -19,7 +19,7 @@
             name="firstName"
             id="firstName" 
             required placeholder="First Name"
-            value=<?php if(isset($_POST['firstName'])) echo $_POST['firstName']?>>
+            value=<?php if(isset($_POST['firstName'])) echo htmlspecialchars($_POST['firstName'], ENT_QUOTES)?>>
 
             <input type="text" 
             pattern="[a-zA-Z]+" 
@@ -27,7 +27,7 @@
             id="lastName" 
             required 
             placeholder="Last Name"
-            value=<?php if(isset($_POST['lastName'])) echo $_POST['lastName']?>>
+            value=<?php if(isset($_POST['lastName'])) echo htmlspecialchars($_POST['lastName'], ENT_QUOTES)?>>
             <br>
 
             Date of Birth : 
@@ -35,7 +35,7 @@
             id ="bday" 
             name="birthday" 
             required
-            value=<?php if(isset($_POST['birthday'])) echo $_POST['birthday']?>> 
+            value=<?php if(isset($_POST['birthday'])) echo htmlspecialchars($_POST['birthday'], ENT_QUOTES)?>> 
             <br>
 
             Contact Number : 
@@ -44,7 +44,7 @@
             name="contactNum"
             id="usercontact"
             required
-            value=<?php if(isset($_POST['contactNum'])) echo $_POST['contactNum']?>> 
+            value=<?php if(isset($_POST['contactNum'])) echo htmlspecialchars($_POST['contactNum'], ENT_QUOTES)?>> 
             <br>
 
             Home Address : 
@@ -52,7 +52,7 @@
             name="homeAddress"
             id="homeAddress" 
             required
-            value=<?php if(isset($_POST['homeAddress'])) echo $_POST['homeAddress']?>> 
+            value=<?php if(isset($_POST['homeAddress'])) echo htmlspecialchars($_POST['homeAddress'], ENT_QUOTES)?>> 
             </textarea>
             <br>
 
@@ -64,7 +64,7 @@
             pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
             id="height"
             name="height"
-            value=<?php if(isset($_POST['height'])) echo $_POST['height']?>>
+            value=<?php if(isset($_POST['height'])) echo htmlspecialchars($_POST['height'], ENT_QUOTES)?>>
 
             Weight : 
             <input 
@@ -74,7 +74,7 @@
             pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
             id="weight"
             name="weight"
-            value=<?php if(isset($_POST['weight'])) echo $_POST['weight']?>> 
+            value=<?php if(isset($_POST['weight'])) echo htmlspecialchars($_POST['weight'], ENT_QUOTES)?>> 
             <br>
             
             <label for="gender">
@@ -90,7 +90,7 @@
             name="emailAddress"
             id="emailAddress"
             required
-            value=<?php if(isset($_POST['emailAddress'])) echo $_POST['emailAddress']?>> 
+            value=<?php if(isset($_POST['emailAddress'])) echo htmlspecialchars($_POST['emailAddress'], ENT_QUOTES)?>> 
             <br>
 
             Username : 
@@ -103,7 +103,7 @@
             name="username"
             id="username"
             title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed"
-            value=<?php if(isset($_POST['username'])) echo $_POST['username']?>>
+            value=<?php if(isset($_POST['username'])) echo htmlspecialchars($_POST['username'], ENT_QUOTES)?>>
             <br>
             
             <div>
