@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 31, 2022 at 04:20 AM
--- Server version: 10.4.24-MariaDB
+-- Generation Time: Oct 31, 2022 at 05:32 PM
+-- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -35,7 +35,7 @@ CREATE TABLE `branch` (
   `opening_date` date NOT NULL,
   `revenue` double DEFAULT NULL,
   `owner_id` binary(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -50,7 +50,7 @@ CREATE TABLE `branch_maintenance` (
   `starting_date` date NOT NULL,
   `ending_date` date NOT NULL,
   `requested_receptionist` binary(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -62,7 +62,7 @@ CREATE TABLE `branch_photo` (
   `branch_photo_id` binary(16) NOT NULL,
   `branch_id` binary(16) NOT NULL,
   `photo` mediumblob NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -77,10 +77,10 @@ CREATE TABLE `coach` (
   `home_address` varchar(250) NOT NULL,
   `email_address` varchar(100) NOT NULL,
   `gender` char(1) NOT NULL,
-  `contact_num` int(11) NOT NULL,
+  `contact_num` int NOT NULL,
   `photo` mediumblob NOT NULL,
   `sport` binary(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -97,8 +97,8 @@ CREATE TABLE `coaching_session` (
   `ending_time` time NOT NULL,
   `payment_amount` double NOT NULL,
   `time_period` time NOT NULL,
-  `no_of_students` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `no_of_students` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -112,7 +112,7 @@ CREATE TABLE `discount` (
   `ending_date` date NOT NULL,
   `decision` char(1) NOT NULL,
   `discount_value` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -123,9 +123,9 @@ CREATE TABLE `discount` (
 CREATE TABLE `login_details` (
   `user_id` binary(16) NOT NULL,
   `username` varchar(100) NOT NULL,
-  `password` varchar(250) NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `user_role` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -135,7 +135,7 @@ CREATE TABLE `login_details` (
 
 CREATE TABLE `manager` (
   `manager_id` binary(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -145,11 +145,11 @@ CREATE TABLE `manager` (
 
 CREATE TABLE `owner` (
   `owner_id` binary(16) NOT NULL,
-  `contact_no` int(11) NOT NULL,
+  `contact_no` int NOT NULL,
   `email_address` varchar(100) NOT NULL,
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -159,7 +159,7 @@ CREATE TABLE `owner` (
 
 CREATE TABLE `receptionist` (
   `receptionist_id` binary(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -177,7 +177,7 @@ CREATE TABLE `reservation` (
   `user_id` binary(16) DEFAULT NULL,
   `formal_manager_id` binary(16) DEFAULT NULL,
   `onsite_receptionist_id` binary(16) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -191,7 +191,7 @@ CREATE TABLE `sport` (
   `description` varchar(100) NOT NULL,
   `reservation_price` double NOT NULL,
   `min_coaching_session_price` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -205,7 +205,7 @@ CREATE TABLE `sports_court` (
   `court_name` varchar(5) NOT NULL,
   `branch_id` binary(16) NOT NULL,
   `added_manager` binary(16) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -216,7 +216,7 @@ CREATE TABLE `sports_court` (
 CREATE TABLE `staff` (
   `staff_id` binary(16) NOT NULL,
   `email_address` varchar(100) NOT NULL,
-  `contact_number` int(11) NOT NULL,
+  `contact_number` int NOT NULL,
   `gender` char(1) NOT NULL,
   `date_of_birth` date NOT NULL,
   `first_name` varchar(50) NOT NULL,
@@ -225,7 +225,7 @@ CREATE TABLE `staff` (
   `leave_date` date DEFAULT NULL,
   `branch_id` binary(16) NOT NULL,
   `staff_role` varchar(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -235,7 +235,7 @@ CREATE TABLE `staff` (
 
 CREATE TABLE `student` (
   `stud_id` binary(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -248,8 +248,8 @@ CREATE TABLE `student_coach_feedback` (
   `coach_id` binary(16) NOT NULL,
   `stud_id` binary(16) NOT NULL,
   `description` varchar(250) NOT NULL,
-  `rating` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `rating` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -262,7 +262,7 @@ CREATE TABLE `student_registered_session` (
   `session_id` binary(16) NOT NULL,
   `join_date` date NOT NULL,
   `leave_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -275,7 +275,7 @@ CREATE TABLE `student_session_payment` (
   `session_id` binary(16) NOT NULL,
   `stud_id` binary(16) NOT NULL,
   `payment_date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -286,7 +286,7 @@ CREATE TABLE `student_session_payment` (
 CREATE TABLE `system_admin` (
   `admin_id` binary(16) NOT NULL,
   `email_address` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -299,7 +299,7 @@ CREATE TABLE `system_maintenance` (
   `starting_date` date NOT NULL,
   `starting_time` time NOT NULL,
   `expected_downtime` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -314,12 +314,13 @@ CREATE TABLE `user` (
   `email_address` varchar(100) NOT NULL,
   `gender` char(1) NOT NULL,
   `home_address` varchar(250) NOT NULL,
-  `contact_num` int(11) NOT NULL,
+  `contact_num` int NOT NULL,
   `birthday` date NOT NULL,
   `register_date` date NOT NULL,
   `height` double DEFAULT NULL,
-  `weight` double DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `weight` double DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -332,9 +333,9 @@ CREATE TABLE `user_branch_feedback` (
   `user_id` binary(16) NOT NULL,
   `branch_id` binary(16) NOT NULL,
   `date` date NOT NULL,
-  `rating` int(11) NOT NULL,
+  `rating` int NOT NULL,
   `description` varchar(500) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -345,9 +346,9 @@ CREATE TABLE `user_branch_feedback` (
 CREATE TABLE `user_dependent` (
   `owner_id` binary(16) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `relationship` int(10) NOT NULL,
-  `contact_num` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `relationship` varchar(25) NOT NULL,
+  `contact_num` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -358,7 +359,7 @@ CREATE TABLE `user_dependent` (
 CREATE TABLE `user_medical_concern` (
   `user_id` binary(16) NOT NULL,
   `medical_concern` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Indexes for dumped tables
