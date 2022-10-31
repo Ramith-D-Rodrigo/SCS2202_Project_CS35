@@ -4,17 +4,17 @@ function validateForm(event){
     const form = document.querySelector("form");
 
     if(verbose){
-        console.log(form.checkValidity());
+        console.log(form.reportValidity());
     }
 
-    if(form.checkValidity() === false){ //Form is invalid from HTML persepective
-        event.preventDefault();
+    if(form.reportValidity() === false){ //Form is invalid from HTML persepective
         errMsg.innerHTML = errMsg.innerHTML + "Please Add Valid Information";
+        return false;
     }
     else{   //Form is valid from HTML perspective
     
     //have to check input values validity (similary)
-
+        let flag = true;    //for final validation
         const emergencyDetails = document.getElementById("emergencyDetails");
         const emergencyDetailsChildren = emergencyDetails.children;
         
@@ -64,33 +64,33 @@ function validateForm(event){
         }
 
         if(new Set(contactNum).size !== contactNum.length){ //check for duplicate contact numbers
-            event.preventDefault();
             if(verbose){
                 console.log("Duplicate Contact Details");
             }
             errMsg.innerHTML = errMsg.innerHTML + "Duplicate Contact Details<br>";
+            flag = false;
         }
         else{
             errMsg.innerHTML.replace("Duplicate Contact Details<br>", '');  //Remove Contact Details Error Message
         }
 
         if(new Set(relationship).size !== relationship.length){ //check for duplicate relationships
-            event.preventDefault();
             if(verbose){
                 console.log("Duplicate Relationship Details");
             }
             errMsg.innerHTML = errMsg.innerHTML + "Duplicate Relationship Details<br>";
+            flag = false;
         }
         else{
             errMsg.innerHTML.replace("Duplicate Relationship Details<br>", '');  //Remove relationship Error Message
         }
 
         if(new Set(names).size !== names.length){ //check for duplicate relationships
-            event.preventDefault();
             if(verbose){
                 console.log("Duplicate Emergency Contact Detail Names");
             }
             errMsg.innerHTML = errMsg.innerHTML + "Duplicate Emergency Contact Detail Names<br>";
+            flag = false;
         }
         else{
             errMsg.innerHTML.replace("Duplicate Emergency Contact Detail Names<br>", '');  //Remove duplicate name Error Message
@@ -114,16 +114,22 @@ function validateForm(event){
         }
 
         if(new Set(concerns).size !== concerns.length){ //check for duplicate contact numbers
-            event.preventDefault();
             if(verbose){
                 console.log("Duplicate Medical Concern Details");
             }
             errMsg.innerHTML = errMsg.innerHTML + "Duplicate Medical Concern Details<br>";
+            flag = false;
         }
         else{
             errMsg.innerHTML.replace("Duplicate Medical Concern Details<br>", '');  //Remove Contact Details Error Message
         }
 
+        if(flag === false){ //Has invalid inputs
+            return false;
+        }
+        else{   //valid to submit the data
+            return true;
+        }
     }
     
 }
