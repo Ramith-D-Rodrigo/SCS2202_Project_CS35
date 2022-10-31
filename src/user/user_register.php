@@ -45,7 +45,8 @@
 
             Home Address : 
             <textarea 
-            name="homeAddress" 
+            name="homeAddress"
+            id="homeAddress" 
             required> 
             </textarea>
             <br>
@@ -56,6 +57,7 @@
             placeholder="Optional (centimeters)" 
             min="0" 
             pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
+            id="height"
             name="height">
 
             Weight : 
@@ -64,12 +66,13 @@
             placeholder="Optional (kilograms)" 
             min="0"
             pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
+            id="weight"
             name="weight"> 
             <br>
             
             <label for="gender">
                 Gender : 
-                    <input type="radio" name="gender" value="m"> Male
+                    <input type="radio" name="gender" value="m" required> Male
                     <input type="radio" name="gender" value="f"> Female <br>
             </label>
 
@@ -78,7 +81,7 @@
             <input 
             type="email" 
             name="emailAddress"
-            pattern="/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/"
+            id="emailAddress"
             required> 
             <br>
 
@@ -89,6 +92,8 @@
             minlength="6" 
             maxlength="15"
             pattern="^[a-z]([a-z0-9_]){5,14}[a-z]$"
+            name="username"
+            id="username"
             title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed">
             <br>
             
@@ -97,7 +102,9 @@
                 <input 
                 type="password"  
                 pattern="(?=.*\d)(?=.*[A-Z]).{8,}" 
-                minlength="8" 
+                minlength="8"
+                id="password"
+                name="password"
                 required title="Password length must be atleast 8 characters. Must include an uppercase letter and a number"> 
                 <button class="togglePassword"> Show Password</button><br>
             </div>
