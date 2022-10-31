@@ -22,13 +22,13 @@ class UserDependent{
         `contact_num`) 
         VALUES 
         (UUID_TO_BIN('%s', 1),'%s','%s','%s')", 
-        $database -> real_character_string($this->ownerID), 
-        $database -> real_character_string($this->name), 
-        $database -> real_character_string($this->relationship), 
-        $database -> real_character_string($this->contactNo)));
+        $database -> real_escape_string($this->ownerID), 
+        $database -> real_escape_string($this->name), 
+        $database -> real_escape_string($this->relationship), 
+        $database -> real_escape_string($this->contactNo)));
 
         if ($result === TRUE) {
-            echo "New record created successfully\n";
+            echo "New user dependent record created successfully<br>";
         }
         else{
             echo "Error\n";
