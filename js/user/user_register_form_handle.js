@@ -32,7 +32,8 @@ medicalConcernBtn.addEventListener('click',(e)=>{
     inputField.setAttribute('type', 'text');
     inputField.setAttribute('name', 'medical_concern' + currID);
     inputField.setAttribute('placeholder', 'ex: Have back pains');
-    inputField.setAttribute('pattern',"[a-zA-Z]+");
+    inputField.setAttribute('required', '');
+    inputField.setAttribute('pattern',"[a-zA-Z ]+");
 
     const removeBtn = document.createElement("button"); //remove button
     removeBtn.innerHTML = "Remove";
