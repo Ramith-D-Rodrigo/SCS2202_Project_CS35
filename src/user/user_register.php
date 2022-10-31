@@ -12,27 +12,30 @@
     ?>
 
     <div>
-        <form action="" method="post">
+        <form action="./register_controller.php" method="post">
             Name:
             <input type="text" 
             pattern="[a-zA-Z]+" 
             name="firstName"
             id="firstName" 
-            required placeholder="First Name">
+            required placeholder="First Name"
+            value=<?php if(isset($_POST['firstName'])) echo $_POST['firstName']?>>
 
             <input type="text" 
             pattern="[a-zA-Z]+" 
             name="lastName"
             id="lastName" 
             required 
-            placeholder="Last Name">
+            placeholder="Last Name"
+            value=<?php if(isset($_POST['lastName'])) echo $_POST['lastName']?>>
             <br>
 
             Date of Birth : 
             <input type="date"
             id ="bday" 
             name="birthday" 
-            required> 
+            required
+            value=<?php if(isset($_POST['birthday'])) echo $_POST['birthday']?>> 
             <br>
 
             Contact Number : 
@@ -40,14 +43,16 @@
             pattern="[0-9]{10,11}" 
             name="contactNum"
             id="usercontact"
-            required> 
+            required
+            value=<?php if(isset($_POST['contactNum'])) echo $_POST['contactNum']?>> 
             <br>
 
             Home Address : 
             <textarea 
             name="homeAddress"
             id="homeAddress" 
-            required> 
+            required
+            value=<?php if(isset($_POST['homeAddress'])) echo $_POST['homeAddress']?>> 
             </textarea>
             <br>
 
@@ -58,7 +63,8 @@
             min="0" 
             pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
             id="height"
-            name="height">
+            name="height"
+            value=<?php if(isset($_POST['height'])) echo $_POST['height']?>>
 
             Weight : 
             <input 
@@ -67,7 +73,8 @@
             min="0"
             pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
             id="weight"
-            name="weight"> 
+            name="weight"
+            value=<?php if(isset($_POST['weight'])) echo $_POST['weight']?>> 
             <br>
             
             <label for="gender">
@@ -82,7 +89,8 @@
             type="email" 
             name="emailAddress"
             id="emailAddress"
-            required> 
+            required
+            value=<?php if(isset($_POST['emailAddress'])) echo $_POST['emailAddress']?>> 
             <br>
 
             Username : 
@@ -94,7 +102,8 @@
             pattern="^[a-z]([a-z0-9_]){5,14}[a-z]$"
             name="username"
             id="username"
-            title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed">
+            title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed"
+            value=<?php if(isset($_POST['username'])) echo $_POST['username']?>>
             <br>
             
             <div>
@@ -117,16 +126,16 @@
             </div>
             <div id="emergencyDetails">
                 Emergency Contact Details: <br>
-                Name: <input type="text" name="name" required> <br>
-                Relationship: <input type="text" name="relationship" required pattern="[a-zA-Z]{3,15}"> <br>
-                Contact Number: <input type="text" min="0" name="contactNum" required pattern="[0-9]{10,11}"> <br>
+                Name: <input type="text" name="name1" required> <br>
+                Relationship: <input type="text" name="relationship1" required pattern="[a-zA-Z]{3,15}"> <br>
+                Contact Number: <input type="text" min="0" name="emgcontactNum1" required pattern="[0-9]{10,11}"> <br>
                 Want to Add More? (Maximum of 3)
                 <br>
                 <button id="emergencyDetailsbtn">Add More</button>
             </div>
             <div id="errmsg"></div>
 
-            <button type="submit" id="register" onclick="return validateForm(event)"> Register </button>
+            <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
         </form>
     </div>
 
