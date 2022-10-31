@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 30, 2022 at 11:49 AM
+-- Generation Time: Oct 31, 2022 at 04:20 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -28,13 +28,13 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `branch` (
-  `branch_ID` int(11) NOT NULL,
+  `branch_id` binary(16) NOT NULL,
   `address` varchar(250) NOT NULL,
   `opening_time` time NOT NULL,
   `closing_time` time NOT NULL,
   `opening_date` date NOT NULL,
   `revenue` double DEFAULT NULL,
-  `owner_id` int(11) NOT NULL
+  `owner_id` binary(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -44,12 +44,12 @@ CREATE TABLE `branch` (
 --
 
 CREATE TABLE `branch_maintenance` (
-  `branch_id` int(11) NOT NULL,
+  `branch_id` binary(16) NOT NULL,
   `decision` char(1) NOT NULL,
   `status` varchar(15) NOT NULL,
   `starting_date` date NOT NULL,
   `ending_date` date NOT NULL,
-  `requested_receptionist` int(11) NOT NULL
+  `requested_receptionist` binary(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -59,8 +59,8 @@ CREATE TABLE `branch_maintenance` (
 --
 
 CREATE TABLE `branch_photo` (
-  `branch_photo_id` int(11) NOT NULL,
-  `branch_id` int(11) NOT NULL,
+  `branch_photo_id` binary(16) NOT NULL,
+  `branch_id` binary(16) NOT NULL,
   `photo` mediumblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -71,15 +71,15 @@ CREATE TABLE `branch_photo` (
 --
 
 CREATE TABLE `coach` (
-  `coach_ID` int(11) NOT NULL,
-  `firstName` varchar(20) NOT NULL,
-  `lastName` varchar(20) NOT NULL,
-  `homeAddress` varchar(250) NOT NULL,
-  `emailAddress` varchar(100) NOT NULL,
+  `coach_id` binary(16) NOT NULL,
+  `first_name` varchar(20) NOT NULL,
+  `last_name` varchar(20) NOT NULL,
+  `home_address` varchar(250) NOT NULL,
+  `email_address` varchar(100) NOT NULL,
   `gender` char(1) NOT NULL,
-  `contactNum` int(10) NOT NULL,
+  `contact_num` int(11) NOT NULL,
   `photo` mediumblob NOT NULL,
-  `sport` int(11) NOT NULL
+  `sport` binary(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -89,13 +89,13 @@ CREATE TABLE `coach` (
 --
 
 CREATE TABLE `coaching_session` (
-  `session_ID` int(11) NOT NULL,
-  `coach_ID` int(11) NOT NULL,
-  `court_ID` int(11) NOT NULL,
+  `session_id` binary(16) NOT NULL,
+  `coach_id` binary(16) NOT NULL,
+  `court_id` binary(16) NOT NULL,
   `day` varchar(15) NOT NULL,
   `starting_time` time NOT NULL,
   `ending_time` time NOT NULL,
-  `payment_amount` int(11) NOT NULL,
+  `payment_amount` double NOT NULL,
   `time_period` time NOT NULL,
   `no_of_students` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -107,7 +107,7 @@ CREATE TABLE `coaching_session` (
 --
 
 CREATE TABLE `discount` (
-  `manager_id` int(11) NOT NULL,
+  `manager_id` binary(16) NOT NULL,
   `starting_date` date NOT NULL,
   `ending_date` date NOT NULL,
   `decision` char(1) NOT NULL,
@@ -121,7 +121,7 @@ CREATE TABLE `discount` (
 --
 
 CREATE TABLE `login_details` (
-  `user_id` int(11) NOT NULL,
+  `user_id` binary(16) NOT NULL,
   `username` varchar(100) NOT NULL,
   `password` varchar(250) NOT NULL,
   `user_role` varchar(20) NOT NULL
@@ -134,7 +134,7 @@ CREATE TABLE `login_details` (
 --
 
 CREATE TABLE `manager` (
-  `manager_id` int(11) NOT NULL
+  `manager_id` binary(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -144,7 +144,7 @@ CREATE TABLE `manager` (
 --
 
 CREATE TABLE `owner` (
-  `owner_id` int(11) NOT NULL,
+  `owner_id` binary(16) NOT NULL,
   `contact_no` int(11) NOT NULL,
   `email_address` varchar(100) NOT NULL,
   `first_name` varchar(50) NOT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE `owner` (
 --
 
 CREATE TABLE `receptionist` (
-  `receptionist_id` int(11) NOT NULL
+  `receptionist_id` binary(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -168,15 +168,15 @@ CREATE TABLE `receptionist` (
 --
 
 CREATE TABLE `reservation` (
-  `reservation_id` int(11) NOT NULL,
+  `reservation_id` binary(16) NOT NULL,
   `date` date NOT NULL,
   `starting_time` time NOT NULL,
   `ending_time` time NOT NULL,
   `payment_amount` double NOT NULL,
-  `sport_court` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `formal_manager_id` int(11) DEFAULT NULL,
-  `onsite_receptionist_id` int(11) DEFAULT NULL
+  `sport_court` binary(16) NOT NULL,
+  `user_id` binary(16) DEFAULT NULL,
+  `formal_manager_id` binary(16) DEFAULT NULL,
+  `onsite_receptionist_id` binary(16) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -186,7 +186,7 @@ CREATE TABLE `reservation` (
 --
 
 CREATE TABLE `sport` (
-  `sport_id` int(11) NOT NULL,
+  `sport_id` binary(16) NOT NULL,
   `sport_name` varchar(25) NOT NULL,
   `description` varchar(100) NOT NULL,
   `reservation_price` double NOT NULL,
@@ -200,11 +200,11 @@ CREATE TABLE `sport` (
 --
 
 CREATE TABLE `sports_court` (
-  `court_id` int(11) NOT NULL,
-  `sport_id` int(11) NOT NULL,
+  `court_id` binary(16) NOT NULL,
+  `sport_id` binary(16) NOT NULL,
   `court_name` varchar(5) NOT NULL,
-  `branch_id` int(11) NOT NULL,
-  `added_manager` int(11) NOT NULL
+  `branch_id` binary(16) NOT NULL,
+  `added_manager` binary(16) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -214,7 +214,7 @@ CREATE TABLE `sports_court` (
 --
 
 CREATE TABLE `staff` (
-  `staff_id` int(11) NOT NULL,
+  `staff_id` binary(16) NOT NULL,
   `email_address` varchar(100) NOT NULL,
   `contact_number` int(11) NOT NULL,
   `gender` char(1) NOT NULL,
@@ -223,7 +223,7 @@ CREATE TABLE `staff` (
   `last_name` varchar(50) NOT NULL,
   `join_date` date NOT NULL,
   `leave_date` date DEFAULT NULL,
-  `branch_id` int(11) NOT NULL,
+  `branch_id` binary(16) NOT NULL,
   `staff_role` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -234,7 +234,7 @@ CREATE TABLE `staff` (
 --
 
 CREATE TABLE `student` (
-  `stud_ID` int(11) NOT NULL
+  `stud_id` binary(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -244,9 +244,9 @@ CREATE TABLE `student` (
 --
 
 CREATE TABLE `student_coach_feedback` (
-  `feedback_ID` int(11) NOT NULL,
-  `coach_ID` int(11) NOT NULL,
-  `stud_ID` int(11) NOT NULL,
+  `feedback_id` binary(16) NOT NULL,
+  `coach_id` binary(16) NOT NULL,
+  `stud_id` binary(16) NOT NULL,
   `description` varchar(250) NOT NULL,
   `rating` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -258,10 +258,10 @@ CREATE TABLE `student_coach_feedback` (
 --
 
 CREATE TABLE `student_registered_session` (
-  `stud_ID` int(11) NOT NULL,
-  `session_ID` int(11) NOT NULL,
-  `join_date` int(11) NOT NULL,
-  `leave_date` int(11) DEFAULT NULL
+  `stud_id` binary(16) NOT NULL,
+  `session_id` binary(16) NOT NULL,
+  `join_date` date NOT NULL,
+  `leave_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -271,10 +271,10 @@ CREATE TABLE `student_registered_session` (
 --
 
 CREATE TABLE `student_session_payment` (
-  `payment_ID` int(11) NOT NULL,
-  `session_ID` int(11) NOT NULL,
-  `stud_ID` int(11) NOT NULL,
-  `payment_date` int(11) NOT NULL
+  `payment_id` binary(16) NOT NULL,
+  `session_id` binary(16) NOT NULL,
+  `stud_id` binary(16) NOT NULL,
+  `payment_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -284,7 +284,7 @@ CREATE TABLE `student_session_payment` (
 --
 
 CREATE TABLE `system_admin` (
-  `admin_id` int(11) NOT NULL,
+  `admin_id` binary(16) NOT NULL,
   `email_address` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -295,7 +295,7 @@ CREATE TABLE `system_admin` (
 --
 
 CREATE TABLE `system_maintenance` (
-  `admin_id` int(11) NOT NULL,
+  `admin_id` binary(16) NOT NULL,
   `starting_date` date NOT NULL,
   `starting_time` time NOT NULL,
   `expected_downtime` time NOT NULL
@@ -308,15 +308,15 @@ CREATE TABLE `system_maintenance` (
 --
 
 CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL,
-  `firstName` varchar(100) NOT NULL,
-  `lastName` varchar(100) NOT NULL,
-  `emailAddress` varchar(50) NOT NULL,
+  `user_id` binary(16) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `email_address` varchar(100) NOT NULL,
   `gender` char(1) NOT NULL,
-  `homeAddress` varchar(250) NOT NULL,
-  `contactNum` int(10) NOT NULL,
+  `home_address` varchar(250) NOT NULL,
+  `contact_num` int(11) NOT NULL,
   `birthday` date NOT NULL,
-  `registerDate` date NOT NULL,
+  `register_date` date NOT NULL,
   `height` double DEFAULT NULL,
   `weight` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -328,9 +328,9 @@ CREATE TABLE `user` (
 --
 
 CREATE TABLE `user_branch_feedback` (
-  `userfeedback_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `branch_id` int(11) NOT NULL,
+  `userfeedback_id` binary(16) NOT NULL,
+  `user_id` binary(16) NOT NULL,
+  `branch_id` binary(16) NOT NULL,
   `date` date NOT NULL,
   `rating` int(11) NOT NULL,
   `description` varchar(500) NOT NULL
@@ -343,10 +343,10 @@ CREATE TABLE `user_branch_feedback` (
 --
 
 CREATE TABLE `user_dependent` (
-  `ownerID` int(11) NOT NULL,
+  `owner_id` binary(16) NOT NULL,
   `name` varchar(50) NOT NULL,
   `relationship` int(10) NOT NULL,
-  `contactNum` int(10) NOT NULL
+  `contact_num` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -356,7 +356,7 @@ CREATE TABLE `user_dependent` (
 --
 
 CREATE TABLE `user_medical_concern` (
-  `user_ID` int(11) NOT NULL,
+  `user_id` binary(16) NOT NULL,
   `medical_concern` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -368,7 +368,7 @@ CREATE TABLE `user_medical_concern` (
 -- Indexes for table `branch`
 --
 ALTER TABLE `branch`
-  ADD PRIMARY KEY (`branch_ID`),
+  ADD PRIMARY KEY (`branch_id`),
   ADD KEY `owner_id` (`owner_id`);
 
 --
@@ -389,16 +389,17 @@ ALTER TABLE `branch_photo`
 -- Indexes for table `coach`
 --
 ALTER TABLE `coach`
-  ADD PRIMARY KEY (`coach_ID`),
-  ADD UNIQUE KEY `emailAddress` (`emailAddress`),
+  ADD PRIMARY KEY (`coach_id`),
+  ADD UNIQUE KEY `emailAddress` (`email_address`),
   ADD KEY `sport` (`sport`);
 
 --
 -- Indexes for table `coaching_session`
 --
 ALTER TABLE `coaching_session`
-  ADD PRIMARY KEY (`session_ID`),
-  ADD KEY `court_ID` (`court_ID`);
+  ADD PRIMARY KEY (`session_id`),
+  ADD KEY `court_ID` (`court_id`),
+  ADD KEY `coach_id` (`coach_id`);
 
 --
 -- Indexes for table `discount`
@@ -453,7 +454,9 @@ ALTER TABLE `sport`
 --
 ALTER TABLE `sports_court`
   ADD PRIMARY KEY (`court_id`),
-  ADD KEY `added_manager` (`added_manager`);
+  ADD KEY `added_manager` (`added_manager`),
+  ADD KEY `sport_id` (`sport_id`),
+  ADD KEY `branch_id` (`branch_id`);
 
 --
 -- Indexes for table `staff`
@@ -467,30 +470,30 @@ ALTER TABLE `staff`
 -- Indexes for table `student`
 --
 ALTER TABLE `student`
-  ADD PRIMARY KEY (`stud_ID`);
+  ADD PRIMARY KEY (`stud_id`);
 
 --
 -- Indexes for table `student_coach_feedback`
 --
 ALTER TABLE `student_coach_feedback`
-  ADD PRIMARY KEY (`feedback_ID`),
-  ADD KEY `coach_ID` (`coach_ID`),
-  ADD KEY `stud_ID` (`stud_ID`);
+  ADD PRIMARY KEY (`feedback_id`),
+  ADD KEY `coach_ID` (`coach_id`),
+  ADD KEY `stud_ID` (`stud_id`);
 
 --
 -- Indexes for table `student_registered_session`
 --
 ALTER TABLE `student_registered_session`
-  ADD PRIMARY KEY (`stud_ID`,`session_ID`),
-  ADD KEY `session_ID` (`session_ID`);
+  ADD PRIMARY KEY (`stud_id`,`session_id`),
+  ADD KEY `session_ID` (`session_id`);
 
 --
 -- Indexes for table `student_session_payment`
 --
 ALTER TABLE `student_session_payment`
-  ADD PRIMARY KEY (`payment_ID`),
-  ADD KEY `session_ID` (`session_ID`),
-  ADD KEY `stud_ID` (`stud_ID`);
+  ADD PRIMARY KEY (`payment_id`),
+  ADD KEY `session_ID` (`session_id`),
+  ADD KEY `stud_ID` (`stud_id`);
 
 --
 -- Indexes for table `system_admin`
@@ -509,7 +512,7 @@ ALTER TABLE `system_maintenance`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `emailAddress` (`emailAddress`);
+  ADD UNIQUE KEY `emailAddress` (`email_address`);
 
 --
 -- Indexes for table `user_branch_feedback`
@@ -523,23 +526,13 @@ ALTER TABLE `user_branch_feedback`
 -- Indexes for table `user_dependent`
 --
 ALTER TABLE `user_dependent`
-  ADD PRIMARY KEY (`ownerID`,`name`);
+  ADD PRIMARY KEY (`owner_id`,`name`);
 
 --
 -- Indexes for table `user_medical_concern`
 --
 ALTER TABLE `user_medical_concern`
-  ADD PRIMARY KEY (`user_ID`,`medical_concern`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  ADD PRIMARY KEY (`user_id`,`medical_concern`);
 
 --
 -- Constraints for dumped tables
@@ -555,26 +548,28 @@ ALTER TABLE `branch`
 -- Constraints for table `branch_maintenance`
 --
 ALTER TABLE `branch_maintenance`
-  ADD CONSTRAINT `branch_maintenance_ibfk_1` FOREIGN KEY (`requested_receptionist`) REFERENCES `receptionist` (`receptionist_id`);
+  ADD CONSTRAINT `branch_maintenance_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`),
+  ADD CONSTRAINT `branch_maintenance_ibfk_2` FOREIGN KEY (`requested_receptionist`) REFERENCES `receptionist` (`receptionist_id`);
 
 --
 -- Constraints for table `branch_photo`
 --
 ALTER TABLE `branch_photo`
-  ADD CONSTRAINT `branch_photo_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_ID`);
+  ADD CONSTRAINT `branch_photo_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`);
 
 --
 -- Constraints for table `coach`
 --
 ALTER TABLE `coach`
-  ADD CONSTRAINT `coach_ibfk_1` FOREIGN KEY (`sport`) REFERENCES `sport` (`sport_id`),
-  ADD CONSTRAINT `coach_ibfk_2` FOREIGN KEY (`coach_ID`) REFERENCES `login_details` (`user_id`);
+  ADD CONSTRAINT `coach_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `login_details` (`user_id`),
+  ADD CONSTRAINT `coach_ibfk_2` FOREIGN KEY (`sport`) REFERENCES `sport` (`sport_id`);
 
 --
 -- Constraints for table `coaching_session`
 --
 ALTER TABLE `coaching_session`
-  ADD CONSTRAINT `coaching_session_ibfk_1` FOREIGN KEY (`court_ID`) REFERENCES `sports_court` (`court_id`);
+  ADD CONSTRAINT `coaching_session_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`coach_id`),
+  ADD CONSTRAINT `coaching_session_ibfk_2` FOREIGN KEY (`court_id`) REFERENCES `sports_court` (`court_id`);
 
 --
 -- Constraints for table `discount`
@@ -586,8 +581,7 @@ ALTER TABLE `discount`
 -- Constraints for table `manager`
 --
 ALTER TABLE `manager`
-  ADD CONSTRAINT `manager_ibfk_1` FOREIGN KEY (`manager_id`) REFERENCES `staff` (`staff_id`),
-  ADD CONSTRAINT `manager_ibfk_2` FOREIGN KEY (`manager_id`) REFERENCES `login_details` (`user_id`);
+  ADD CONSTRAINT `manager_ibfk_1` FOREIGN KEY (`manager_id`) REFERENCES `staff` (`staff_id`);
 
 --
 -- Constraints for table `owner`
@@ -599,57 +593,58 @@ ALTER TABLE `owner`
 -- Constraints for table `receptionist`
 --
 ALTER TABLE `receptionist`
-  ADD CONSTRAINT `receptionist_ibfk_1` FOREIGN KEY (`receptionist_id`) REFERENCES `staff` (`staff_id`),
-  ADD CONSTRAINT `receptionist_ibfk_2` FOREIGN KEY (`receptionist_id`) REFERENCES `login_details` (`user_id`);
+  ADD CONSTRAINT `receptionist_ibfk_1` FOREIGN KEY (`receptionist_id`) REFERENCES `staff` (`staff_id`);
 
 --
 -- Constraints for table `reservation`
 --
 ALTER TABLE `reservation`
   ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`sport_court`) REFERENCES `sports_court` (`court_id`),
-  ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `reservation_ibfk_3` FOREIGN KEY (`formal_manager_id`) REFERENCES `manager` (`manager_id`),
+  ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`formal_manager_id`) REFERENCES `manager` (`manager_id`),
+  ADD CONSTRAINT `reservation_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
   ADD CONSTRAINT `reservation_ibfk_4` FOREIGN KEY (`onsite_receptionist_id`) REFERENCES `receptionist` (`receptionist_id`);
 
 --
 -- Constraints for table `sports_court`
 --
 ALTER TABLE `sports_court`
-  ADD CONSTRAINT `sports_court_ibfk_1` FOREIGN KEY (`added_manager`) REFERENCES `manager` (`manager_id`);
+  ADD CONSTRAINT `sports_court_ibfk_1` FOREIGN KEY (`sport_id`) REFERENCES `sport` (`sport_id`),
+  ADD CONSTRAINT `sports_court_ibfk_2` FOREIGN KEY (`added_manager`) REFERENCES `manager` (`manager_id`),
+  ADD CONSTRAINT `sports_court_ibfk_3` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`);
 
 --
 -- Constraints for table `staff`
 --
 ALTER TABLE `staff`
-  ADD CONSTRAINT `staff_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_ID`),
-  ADD CONSTRAINT `staff_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `login_details` (`user_id`);
+  ADD CONSTRAINT `staff_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `login_details` (`user_id`),
+  ADD CONSTRAINT `staff_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`);
 
 --
 -- Constraints for table `student`
 --
 ALTER TABLE `student`
-  ADD CONSTRAINT `student_ibfk_1` FOREIGN KEY (`stud_ID`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `student_ibfk_1` FOREIGN KEY (`stud_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Constraints for table `student_coach_feedback`
 --
 ALTER TABLE `student_coach_feedback`
-  ADD CONSTRAINT `student_coach_feedback_ibfk_1` FOREIGN KEY (`coach_ID`) REFERENCES `coach` (`coach_ID`),
-  ADD CONSTRAINT `student_coach_feedback_ibfk_2` FOREIGN KEY (`stud_ID`) REFERENCES `student` (`stud_ID`);
+  ADD CONSTRAINT `student_coach_feedback_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`coach_id`),
+  ADD CONSTRAINT `student_coach_feedback_ibfk_2` FOREIGN KEY (`stud_id`) REFERENCES `student` (`stud_id`);
 
 --
 -- Constraints for table `student_registered_session`
 --
 ALTER TABLE `student_registered_session`
-  ADD CONSTRAINT `student_registered_session_ibfk_1` FOREIGN KEY (`session_ID`) REFERENCES `coaching_session` (`session_ID`),
-  ADD CONSTRAINT `student_registered_session_ibfk_2` FOREIGN KEY (`stud_ID`) REFERENCES `student` (`stud_ID`);
+  ADD CONSTRAINT `student_registered_session_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `coaching_session` (`session_id`),
+  ADD CONSTRAINT `student_registered_session_ibfk_2` FOREIGN KEY (`stud_id`) REFERENCES `student` (`stud_id`);
 
 --
 -- Constraints for table `student_session_payment`
 --
 ALTER TABLE `student_session_payment`
-  ADD CONSTRAINT `student_session_payment_ibfk_1` FOREIGN KEY (`session_ID`) REFERENCES `coaching_session` (`session_ID`),
-  ADD CONSTRAINT `student_session_payment_ibfk_2` FOREIGN KEY (`stud_ID`) REFERENCES `student` (`stud_ID`);
+  ADD CONSTRAINT `student_session_payment_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `coaching_session` (`session_id`),
+  ADD CONSTRAINT `student_session_payment_ibfk_2` FOREIGN KEY (`stud_id`) REFERENCES `student` (`stud_id`);
 
 --
 -- Constraints for table `system_admin`
@@ -673,20 +668,20 @@ ALTER TABLE `user`
 -- Constraints for table `user_branch_feedback`
 --
 ALTER TABLE `user_branch_feedback`
-  ADD CONSTRAINT `user_branch_feedback_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_ID`),
+  ADD CONSTRAINT `user_branch_feedback_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`),
   ADD CONSTRAINT `user_branch_feedback_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Constraints for table `user_dependent`
 --
 ALTER TABLE `user_dependent`
-  ADD CONSTRAINT `user_dependent_ibfk_1` FOREIGN KEY (`ownerID`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `user_dependent_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Constraints for table `user_medical_concern`
 --
 ALTER TABLE `user_medical_concern`
-  ADD CONSTRAINT `user_medical_concern_ibfk_1` FOREIGN KEY (`user_ID`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `user_medical_concern_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
