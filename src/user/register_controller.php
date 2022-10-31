@@ -63,7 +63,7 @@
     $medical_concerns = [];
 
     foreach($inputFields as $i){
-        if(preg_match('/medical_concern/', $i) === true){   //found a match 
+        if(preg_match("/medical_concern[1-5]/", $i)){   //found a match 
             if(isset($_POST[$i])){
                 array_push($medical_concerns, htmlspecialchars($_POST[$i]));
             }
@@ -79,30 +79,40 @@
         $relationship = null;
 
         foreach($inputFields as $i){
-            if(preg_match(sprintf("/name['%s']/",$j), $i) === true){   //found a match for name
+            if(preg_match(sprintf("/name%s/",$j), $i)){   //found a match for name
                 if(isset($_POST[$i])){
                     $name =  htmlspecialchars($_POST[$i]);
                 }
             }
-            else if(preg_match(sprintf("/emgcontactNum['%s']/",$j), $i) === true){ //found a match for contact number
+            else if(preg_match(sprintf("/emgcontactNum%s/",$j), $i)){ //found a match for contact number
                 if(isset($_POST[$i])){
                     $contact = htmlspecialchars($_POST[$i]);
                 }
-
             }
-            else if(preg_match(sprintf("/relationship['%s']/",$j), $i) === true){ //found a match for relationship
+            else if(preg_match(sprintf("/relationship%s/",$j), $i)){ //found a match for relationship
                 if(isset($_POST[$i])){
                     $relationship = htmlspecialchars($_POST[$i]);
                 }
             }
         }
+        echo "<br>";
+        echo $name;
+        echo "<br>"; 
+        echo "<br>";
+        echo $relationship;
+        echo "<br>";
+        echo "<br>";
+        echo $contact;
+        echo "<br>";
         if($name !== null && $contact !== null  && $relationship !== null){ //there is a contact information
+            echo "Inside dependent creation";
             $newDependent = new UserDependent($name, $relationship, $contact);  //create the dependent
             $newDependent -> setOwner($userid);     //set the user id
             array_push($user_dependents, $newDependent);    //push to the array
         }
-        $j++;
+        $j = $j + 1;
     }
+    print_r($_POST);
 
     $new_user = new User($fName, $lName, $email, $address, $contactNo, $bday, $userid, $user_dependents, $height, $weight, $medical_concerns, $username, $password, $gender);
     $new_user -> registerUser($connection);
