@@ -20,13 +20,36 @@
     }
     
     //Checking if the account already exists
+
+    //email availability
     $hasEmailsql = sprintf("SELECT * FROM USER WHERE email_address = '%s'", $connection -> real_escape_string(htmlspecialchars($_POST['emailAddress'], ENT_QUOTES)));    
     $hasEmailResult = $connection -> query($hasEmailsql);
 
+    $flag = true; //flag to check the account availability (username and email)
+
     if($hasEmailResult -> num_rows > 0){    //account already exists
         $_SESSION['emailError'] = "Account with same Email Address exists.";
-        return require_once './user_register.php';  //go back to the form
+        $flag = false;
     }
+    else{
+        unset($_SESSION['emailError']); //email is available, hence unset the error message
+    }
+    
+    //username availability
+    $hasUsernamesql = sprintf("SELECT * FROM `login_details` WHERE `username` = '%s'", $connection -> real_escape_string(htmlspecialchars($_POST['username'], ENT_QUOTES)));    
+    $hasUsernameResult = $connection -> query($hasUsernamesql);
+
+    if($hasUsernameResult -> num_rows > 0){    //account already exists
+        $_SESSION['usernameError'] = "Account with same Username exists.";
+        $flag = false;
+    }
+    else{
+        unset($_SESSION['usernameError']); //username is available, hence unset the error message
+    }
+    if($flag === false){
+        return require_once './user_register.php';  //go back to the form since errors are caught
+    }
+
     //can create a account
 
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    //hash the password

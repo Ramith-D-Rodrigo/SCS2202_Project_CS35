@@ -52,8 +52,7 @@
             name="homeAddress"
             id="homeAddress" 
             required
-            value=<?php if(isset($_SESSION['homeAddress'])) echo htmlspecialchars($_SESSION['homeAddress'], ENT_QUOTES)?>> 
-            </textarea>
+            value=<?php if(isset($_SESSION['homeAddress'])) echo htmlspecialchars($_SESSION['homeAddress'], ENT_QUOTES)?>></textarea>
             <br>
 
             Height : 
@@ -137,6 +136,9 @@
                 <?php
                     if(isset($_SESSION['emailError'])){
                         echo $_SESSION['emailError'];
+                    }
+                    if(isset($_SESSION['usernameError'])){
+                        echo $_SESSION['usernameError'];
                     }
                 ?>
             </div>
