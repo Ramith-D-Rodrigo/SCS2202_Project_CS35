@@ -41,21 +41,21 @@ class User{
         `password`, 
         `user_role`) 
         VALUES 
-        (UUID_TO_BIN('%s', true),'%s','%s','user')",
-        $database -> real_escape_string($this-> userID),
+        (UUID_TO_BIN('%s', 1),'%s','%s','user')",
+        $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> password))); 
 
         if ($result === TRUE) {
-            echo "New record created successfully";
+            echo "New record created successfully\n";
         }
         else{
-            echo "Error";
+            echo "Error\n";
         }
     }
 
-    private function create_user_entry($database){
-        $result = $database -> write_query(sprintf("INSERT INTO `user`
+    private function create_user_entry($database){  //Create entry in user table
+        $result = $database -> query(sprintf("INSERT INTO `user`
         (`user_id`, 
         `first_name`, 
         `last_name`, 
@@ -67,8 +67,9 @@ class User{
         `register_date`, 
         `height`, 
         `weight`) 
-        VALUES ('UUID_TO_BIN(%s, true)','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
-        $database -> real_escape_string($this-> userID),
+        VALUES 
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+        $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> firstName),
         $database -> real_escape_string($this -> lastName),
         $database -> real_escape_string($this -> emailAddress),
@@ -81,10 +82,10 @@ class User{
         $database -> real_escape_string($this -> weight))); 
 
         if ($result === TRUE) {
-            echo "New record created successfully";
+            echo "New record created successfully\n";
         }
         else{
-            echo "Error";
+            echo "Error\n";
         }
     }
 
@@ -103,15 +104,21 @@ class User{
                 $result = $database -> query(sprintf("INSERT INTO `user_medical_concern`
                 (`user_id`, 
                 `medical_concern`) 
-                VALUES ('UUID_TO_BIN(%s, true)','%s'", 
+                VALUES 
+                (UUID_TO_BIN('%s', 1),'%s'", 
                 $database -> real_escape_string($this -> userID),
-                $database -> real_escape_string($this -> $i)));
+                $database -> real_escape_string($i)));
+
+                if ($result === TRUE) {
+                    echo "New record created successfully\n";
+                }
+                else{
+                    echo "Error\n";
+                }
             }
         }
-        $this -> create_user_dependents($database);
+        $this -> create_user_dependents($database); //finnaly, create the entries for the dependents
     }
-
 }
-
 
 ?>
