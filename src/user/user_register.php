@@ -142,14 +142,17 @@
                     if(isset($_SESSION['emailError'])){
                         echo $_SESSION['emailError'];
                         echo '<br>';
+                        unset($_SESSION['emailError']);
                     }
                     if(isset($_SESSION['usernameError'])){
                         echo $_SESSION['usernameError'];
                         echo '<br>';
+                        unset($_SESSION['usernameError']);
                     }
-                    if(isset($_SESSION['successMsg'])){
-                        echo $_SESSION['successMsg'];
+                    if(isset($_SESSION['RegsuccessMsg'])){
+                        echo $_SESSION['RegsuccessMsg'];
                         echo '<br>';
+                        unset($_SESSION['RegsuccessMsg']);
                     }
                 ?>
             </div>

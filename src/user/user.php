@@ -37,7 +37,7 @@ class User{
     public function getUserID(){    //userID getter
         return $this -> userID;
     }
-    
+
     private function create_login_details_entry($database){   //first we createe the log in details entry
         $result = $database -> query(sprintf("INSERT INTO `login_details`
         (`user_id`, 
@@ -129,14 +129,14 @@ class User{
     }
 
     public function registerUser($database){    //public function to register the user
+        $this -> registeredDate = date("Y-m-d");
+        $this -> isactive = 1;
         $loginEntry = $this -> create_login_details_entry($database);
         $userEntry = $this -> create_user_entry($database);
         $medicalConcernEntry = $this -> create_user_medicalConcerns($database); 
         $dependentEntry = $this -> create_user_dependents($database); //finally, create the entries for the dependents
 
         if($loginEntry  === TRUE && $userEntry  === TRUE && $medicalConcernEntry  === TRUE && $dependentEntry === TRUE){    //all has to be true (successfully registered)
-            $this -> registeredDate = date("Y-m-d");
-            $this -> isactive = 1;
             return TRUE;
         }
     }
