@@ -21,4 +21,5 @@
         $_SESSION['userid'] = $loginUser -> getUserID();
     }
     header("Location: ./user_login.php");
+    $connection -> close();
 ?>
