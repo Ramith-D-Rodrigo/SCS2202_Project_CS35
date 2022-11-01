@@ -45,11 +45,13 @@
                         if(isset($_SESSION['errMsg'])){
                             echo $_SESSION['errMsg'];
                             echo '<br>';
+                            unset($_SESSION['errMsg']);
                         }
 
-                        if(isset($_SESSION['successMsg'])){
-                            echo $_SESSION['successMsg'];
+                        if(isset($_SESSION['LogInsuccessMsg'])){
+                            echo $_SESSION['LogInsuccessMsg'];
                             echo '<br>';
+                            unset($_SESSION['LogInsuccessMsg']);
                         }
                     ?>
                 </div>
