@@ -52,7 +52,7 @@
             name="homeAddress"
             id="homeAddress" 
             required
-            value=<?php if(isset($_SESSION['homeAddress'])) echo htmlspecialchars($_SESSION['homeAddress'], ENT_QUOTES)?>></textarea>
+            ><?php if(isset($_SESSION['homeAddress'])) echo htmlspecialchars($_SESSION['homeAddress'], ENT_QUOTES)?></textarea>
             <br>
 
             Height : 
@@ -78,8 +78,8 @@
             
             <label for="gender">
                 Gender : 
-                    <input type="radio" name="gender" value="m" required> Male
-                    <input type="radio" name="gender" value="f"> Female <br>
+                    <input type="radio" name="gender" value="m" required <?php if($_SESSION['gender'] === 'm') echo 'checked'?>> Male
+                    <input type="radio" name="gender" value="f"<?php if($_SESSION['gender'] === 'f') echo 'checked'?>> Female <br>
             </label>
 
             Email Address : 
