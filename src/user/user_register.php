@@ -1,3 +1,7 @@
+<?php
+    session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -78,8 +82,8 @@
             
             <label for="gender">
                 Gender : 
-                    <input type="radio" name="gender" value="m" required <?php if($_SESSION['gender'] === 'm') echo 'checked'?>> Male
-                    <input type="radio" name="gender" value="f"<?php if($_SESSION['gender'] === 'f') echo 'checked'?>> Female <br>
+                    <input type="radio" name="gender" value="m" required <?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'm') echo 'checked';}?>> Male
+                    <input type="radio" name="gender" value="f"<?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'f') echo 'checked';}?>> Female <br>
             </label>
 
             Email Address : 
@@ -98,7 +102,7 @@
             required 
             minlength="6" 
             maxlength="15"
-            pattern="^[a-z]([a-z0-9_]){5,14}[a-z]$"
+            pattern="^[a-z]([a-z0-9_]){5,15}"
             name="username"
             id="username"
             title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed"
@@ -136,9 +140,15 @@
                 <?php
                     if(isset($_SESSION['emailError'])){
                         echo $_SESSION['emailError'];
+                        echo '<br>';
                     }
                     if(isset($_SESSION['usernameError'])){
                         echo $_SESSION['usernameError'];
+                        echo '<br>';
+                    }
+                    if(isset($_SESSION['successMsg'])){
+                        echo $_SESSION['successMsg'];
+                        echo '<br>';
                     }
                 ?>
             </div>
