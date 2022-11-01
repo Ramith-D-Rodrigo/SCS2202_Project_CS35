@@ -1,1 +1,1 @@
-<div>powered by Sportude</div>
+<div class="footer">Powered by <img src="/styles/LogoFinal.png" class="logo"></div>
