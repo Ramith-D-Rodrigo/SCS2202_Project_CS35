@@ -17,7 +17,7 @@
             require_once("../general/header.php");
         ?>
         <div>
-            <form>
+            <form action="./login_controller.php" method="post" id="loginForm">
                 Username : 
                 <input
                 type="text" 
@@ -26,8 +26,7 @@
                 maxlength="15"
                 pattern="^[a-z]([a-z0-9_]){5,15}"
                 name="username"
-                id="username"
-                value=<?php if(isset($_SESSION['username'])) echo htmlspecialchars($_SESSION['username'], ENT_QUOTES)?>>
+                id="username">
                 <br>
 
                 <div>
@@ -41,14 +40,10 @@
                     required> 
                     <button id="togglePassword">Show Password</button><br>
                 </div>
-                <div id="errmsg">
+                <div id="msgbox">
                     <?php
-                        if(isset($_SESSION['usernameError'])){
-                            echo $_SESSION['usernameError'];
-                            echo '<br>';
-                        }
-                        if(isset($_SESSION['passwordError'])){
-                            echo $_SESSION['passwordError'];
+                        if(isset($_SESSION['errMsg'])){
+                            echo $_SESSION['errMsg'];
                             echo '<br>';
                         }
 
@@ -67,5 +62,5 @@
         ?>
     </body>
     <script src="/js/user/user_login_handle.js"></script>
-    <script src="/js/user/user_login_validate.js"></script>
+    <script src="/js/user/user_login_validation.js"></script>
 </html>
