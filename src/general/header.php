@@ -1,4 +1,5 @@
 <div>
+    <a href="/index.php">Home</a>
     <a href="/src/general/our_sports.php">Our Sports</a>
     <a href="/src/general/our_branches.php">Our Branches</a>
     <a href="/src/general/reg_coaches.php">Registered Coaches</a>
