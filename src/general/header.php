@@ -19,7 +19,14 @@
         <a href="/src/general/reg_coaches.php">Registered Coaches</a>
         <a href="/src/general/our_feedback.php">Our Feedback</a>
         <a href="/src/general/about_us.php">About Us</a>
-        <a href="/src/general/login.php">Log in</a>
-        <a href="/src/general/register.php">Register</a>
+        <?php
+            if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
+                echo 'Log Out';
+            }
+            else{
+                echo '<a href="/src/general/login.php">Log in</a>
+                    <a href="/src/general/register.php">Register</a>';
+            }
+            ?>
     </div>
 </div>
