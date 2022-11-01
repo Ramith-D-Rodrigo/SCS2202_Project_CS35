@@ -48,12 +48,13 @@ class User{
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> password))); 
 
-        if ($result === TRUE) {
+/*         if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
         }
         else{
             echo "Error<br>";
-        }
+        } */
+        return $result;
     }
 
     private function create_user_entry($database){  //Create entry in user table
@@ -85,20 +86,28 @@ class User{
         $database -> real_escape_string($this -> weight),
         $database -> real_escape_string($this -> isactive))); 
 
-        if ($result === TRUE) {
+        return $result;
+/*         if ($result === TRUE) {
             echo "New user record created successfully<br>";
         }
         else{
             echo "Error<br>";
-        }
+        } */
     }
 
     private function create_user_dependents($database){ //Create entries for all the user dependents
+        $flag = TRUE;
         foreach($this -> dependents as $dependent){
-            $dependent -> create_entry($database);
+            $result = $dependent -> create_entry($database);
+            if($result === FALSE){
+                return FALSE;
+            }
         }
+        return $flag;
     }
+
     private function create_user_medicalConcerns($database){
+        $flag = TRUE;
         if(count($this -> medicalConcerns) != 0){   //has medical concerns
             foreach($this -> medicalConcerns as $i){
                 $result = $database -> query(sprintf("INSERT INTO `user_medical_concern`
@@ -109,21 +118,23 @@ class User{
                 $database -> real_escape_string($this -> userID),
                 $database -> real_escape_string($i)));
 
-                if ($result === TRUE) {
-                    echo "New  medical concern record created successfully<br>";
-                }
-                else{
-                    echo "Error<br>";
+                if ($result === FALSE) {    //got an error
+                    return FALSE;
                 }
             }
         }
+        return $flag;
     }
 
     public function registerUser($database){    //public function to register the user
-        $this -> create_login_details_entry($database);
-        $this -> create_user_entry($database);
-        $this -> create_user_medicalConcerns($database); 
-        $this -> create_user_dependents($database); //finally, create the entries for the dependents
+        $loginEntry = $this -> create_login_details_entry($database);
+        $userEntry = $this -> create_user_entry($database);
+        $medicalConcernEntry = $this -> create_user_medicalConcerns($database); 
+        $dependentEntry = $this -> create_user_dependents($database); //finally, create the entries for the dependents
+
+        if($loginEntry  === TRUE && $userEntry  === TRUE && $medicalConcernEntry  === TRUE && $dependentEntry === TRUE){    //all has to be true
+            return TRUE;
+        }
     }
 }
 
