@@ -27,12 +27,13 @@ class UserDependent{
         $database -> real_escape_string($this->relationship), 
         $database -> real_escape_string($this->contactNo)));
 
-        if ($result === TRUE) {
+/*         if ($result === TRUE) {
             echo "New user dependent record created successfully<br>";
         }
         else{
             echo "Error\n";
-        }
+        } */
+        return $result;
     }
 }
 
