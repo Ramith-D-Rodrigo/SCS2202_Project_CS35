@@ -17,7 +17,7 @@ class User{
     private $gender;
     private $isactive;
 
-    public function __construct($fName, $lName, $email, $address, $contactNo, $dob, $uid, $dependents, $height, $weight, $medicalConcerns, $username, $password, $gender){
+    public function setDetails($fName='', $lName='', $email='', $address='', $contactNo='', $dob='', $uid='', $dependents='', $height='', $weight='', $medicalConcerns='', $username='', $password='', $gender=''){
         $this -> userID = $uid;
         $this -> firstName = $fName;
         $this -> lastName = $lName;
@@ -28,14 +28,16 @@ class User{
         $this -> height = $height;
         $this -> weight = $weight;
         $this -> medicalConcerns = $medicalConcerns;
-        $this -> registeredDate = date("Y-m-d");
         $this -> dependents = $dependents;
         $this -> username = $username;
         $this -> password = $password;
         $this -> gender = $gender;
-        $this -> isactive = 1;
     }
 
+    public function getUserID(){    //userID getter
+        return $this -> userID;
+    }
+    
     private function create_login_details_entry($database){   //first we createe the log in details entry
         $result = $database -> query(sprintf("INSERT INTO `login_details`
         (`user_id`, 
@@ -132,9 +134,39 @@ class User{
         $medicalConcernEntry = $this -> create_user_medicalConcerns($database); 
         $dependentEntry = $this -> create_user_dependents($database); //finally, create the entries for the dependents
 
-        if($loginEntry  === TRUE && $userEntry  === TRUE && $medicalConcernEntry  === TRUE && $dependentEntry === TRUE){    //all has to be true
+        if($loginEntry  === TRUE && $userEntry  === TRUE && $medicalConcernEntry  === TRUE && $dependentEntry === TRUE){    //all has to be true (successfully registered)
+            $this -> registeredDate = date("Y-m-d");
+            $this -> isactive = 1;
             return TRUE;
         }
+    }
+
+    public function login($username, $password, $database){
+        $sql = sprintf("SELECT BIN_TO_UUID(`user_id`, true) AS uuid, 
+        `username`, 
+        `password`, 
+        `user_role` 
+        FROM `login_details`  
+        WHERE `username` = '%s'", 
+        $database -> real_escape_string($username));
+
+        $result = $database -> query($sql);
+
+        $rows = $result -> fetch_object();
+
+        if($rows === NULL){ //no result. hence no user
+            return ["No Such User Exists"];
+        }
+
+        $hash = $rows -> password;
+        if(password_verify($password, $hash) === FALSE){    //Incorrect Password
+            return ["Incorrect Password"];
+        }
+
+        //setting user data for session
+        $this -> userID = $rows -> uuid;    
+
+        return ["Successfully Logged In", $rows -> user_role];  //return the message and role
     }
 }
 

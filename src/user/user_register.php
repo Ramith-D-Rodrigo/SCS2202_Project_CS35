@@ -8,6 +8,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/styles/general/styles.css">
         <title>User Registration</title>
     </head>
     <body>
@@ -17,7 +18,7 @@
 
     <div>
         <form action="./register_controller.php" method="post">
-            Name:
+            Name :
             <input type="text" 
             pattern="[a-zA-Z]+" 
             name="firstName"

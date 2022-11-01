@@ -141,4 +141,6 @@
         $_SESSION['successMsg'] = 'Registered Successfully';
         header("Location: ./user_register.php");
     }
+
+    $connection -> close(); //close the database connection
 ?>
