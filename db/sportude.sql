@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 31, 2022 at 05:32 PM
+-- Generation Time: Nov 01, 2022 at 03:21 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -77,7 +77,7 @@ CREATE TABLE `coach` (
   `home_address` varchar(250) NOT NULL,
   `email_address` varchar(100) NOT NULL,
   `gender` char(1) NOT NULL,
-  `contact_num` int NOT NULL,
+  `contact_num` varchar(15) NOT NULL,
   `photo` mediumblob NOT NULL,
   `sport` binary(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -127,6 +127,14 @@ CREATE TABLE `login_details` (
   `user_role` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `login_details`
+--
+
+INSERT INTO `login_details` (`user_id`, `username`, `password`, `user_role`) VALUES
+(0x11ed59ea897760fdb1c40a0027000004, 'johndoe', '$2y$10$aMSXNdKDJYL6lNo5oK4OxOi9yHI47AyLzYlLcF8..NZoFt4WOvC52', 'user'),
+(0x11ed59eddbe16fffb1c40a0027000004, 'ramith_rodrigo', '$2y$10$c.L2T0TrwvjCmmH0hdPK2.TJog.TXkWf8YhgCHI7KbIKHPmy2pTU6', 'user');
+
 -- --------------------------------------------------------
 
 --
@@ -145,7 +153,7 @@ CREATE TABLE `manager` (
 
 CREATE TABLE `owner` (
   `owner_id` binary(16) NOT NULL,
-  `contact_no` int NOT NULL,
+  `contact_no` varchar(15) NOT NULL,
   `email_address` varchar(100) NOT NULL,
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL
@@ -216,7 +224,7 @@ CREATE TABLE `sports_court` (
 CREATE TABLE `staff` (
   `staff_id` binary(16) NOT NULL,
   `email_address` varchar(100) NOT NULL,
-  `contact_number` int NOT NULL,
+  `contact_number` varchar(15) NOT NULL,
   `gender` char(1) NOT NULL,
   `date_of_birth` date NOT NULL,
   `first_name` varchar(50) NOT NULL,
@@ -314,13 +322,21 @@ CREATE TABLE `user` (
   `email_address` varchar(100) NOT NULL,
   `gender` char(1) NOT NULL,
   `home_address` varchar(250) NOT NULL,
-  `contact_num` int NOT NULL,
+  `contact_num` varchar(15) NOT NULL,
   `birthday` date NOT NULL,
   `register_date` date NOT NULL,
   `height` double DEFAULT NULL,
   `weight` double DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `email_address`, `gender`, `home_address`, `contact_num`, `birthday`, `register_date`, `height`, `weight`, `is_active`) VALUES
+(0x11ed59ea897760fdb1c40a0027000004, 'John', 'Doe', 'johndoe@gmail.com', 'm', 'No.234/4A, Reid Avenue, Colombo', '0714563211', '2000-05-09', '2022-11-01', 157, NULL, 1),
+(0x11ed59eddbe16fffb1c40a0027000004, 'Ramith', 'Rodrigo', 'ramith@yahoo.com', 'f', 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-10-13', '2022-11-01', 2, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -347,8 +363,18 @@ CREATE TABLE `user_dependent` (
   `owner_id` binary(16) NOT NULL,
   `name` varchar(50) NOT NULL,
   `relationship` varchar(25) NOT NULL,
-  `contact_num` int NOT NULL
+  `contact_num` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `user_dependent`
+--
+
+INSERT INTO `user_dependent` (`owner_id`, `name`, `relationship`, `contact_num`) VALUES
+(0x11ed59ea897760fdb1c40a0027000004, 'David', 'father', '0147852345'),
+(0x11ed59ea897760fdb1c40a0027000004, 'Kelly', 'mother', '0786542387'),
+(0x11ed59ea897760fdb1c40a0027000004, 'Kenny', 'sibling', '9856374128'),
+(0x11ed59eddbe16fffb1c40a0027000004, 'Dulsara', 'Sibling', '0233654782');
 
 -- --------------------------------------------------------
 
@@ -360,6 +386,16 @@ CREATE TABLE `user_medical_concern` (
   `user_id` binary(16) NOT NULL,
   `medical_concern` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `user_medical_concern`
+--
+
+INSERT INTO `user_medical_concern` (`user_id`, `medical_concern`) VALUES
+(0x11ed59ea897760fdb1c40a0027000004, 'back pains'),
+(0x11ed59ea897760fdb1c40a0027000004, 'chest pains'),
+(0x11ed59ea897760fdb1c40a0027000004, 'leg cramps'),
+(0x11ed59ea897760fdb1c40a0027000004, 'poor eyesights');
 
 --
 -- Indexes for dumped tables
