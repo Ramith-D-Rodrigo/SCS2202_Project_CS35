@@ -23,4 +23,5 @@
         echo $_SESSION['successMsg'];
     }
     header("Location: ./user_login.php");
+    
 ?>

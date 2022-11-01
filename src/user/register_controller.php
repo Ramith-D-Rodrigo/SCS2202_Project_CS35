@@ -25,11 +25,15 @@
     $hasEmailsql = sprintf("SELECT * FROM USER WHERE email_address = '%s'", $connection -> real_escape_string(htmlspecialchars($_POST['emailAddress'], ENT_QUOTES)));    
     $hasEmailResult = $connection -> query($hasEmailsql);
 
-    $flag = true; //flag to check the account availability (username and email)
+    if(isset($_SESSION['successMsg'])){ //same user is trying to register (in the same session) We have to unset the message
+        unset($_SESSION['successMsg']);
+    }
 
     if($hasEmailResult -> num_rows > 0){    //account already exists
         $_SESSION['emailError'] = "Account with same Email Address exists.";
-        $flag = false;
+        header("Location: ./user_register.php");
+        $connection -> close(); //close the database connection
+        exit(); //exit the registration
     }
     else{
         unset($_SESSION['emailError']); //email is available, hence unset the error message
@@ -41,14 +45,14 @@
 
     if($hasUsernameResult -> num_rows > 0){    //account already exists
         $_SESSION['usernameError'] = "Account with same Username exists.";
-        $flag = false;
+        header("Location: ./user_register.php");
+        $connection -> close(); //close the database connection
+        exit(); //exit the registration
     }
     else{
         unset($_SESSION['usernameError']); //username is available, hence unset the error message
     }
-    if($flag === false){
-        header("Location: ./user_register.php");  //go back to the form since errors are caught
-    }
+
 
     //can create a account
 
@@ -126,7 +130,9 @@
         }
         $j = $j + 1;
     }
-    $new_user = new User($fName, $lName, $email, $address, $contactNo, $bday, $userid, $user_dependents, $height, $weight, $medical_concerns, $username, $password, $gender);
+
+    $new_user = new User();
+    $new_user -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $user_dependents, $height, $weight, $medical_concerns, $username, $password, $gender);
     $result = $new_user -> registerUser($connection);
 
     if($result === TRUE){   //successfully registered
