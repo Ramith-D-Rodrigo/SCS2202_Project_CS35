@@ -1,5 +1,5 @@
-<div class='header'>
-    <div class='header-title'>
+<header>
+    <div class='header-top'>
         <div> <!-- For the current visiting page of the site -->
             <?php
                 if($_SERVER['REQUEST_URI'] === '/index.php'){    //home page
@@ -8,11 +8,15 @@
             ?>
         </div>
         <div> <!--- sports complex name -->
-            <t>Sports Complex</t>
+           Example Sports Complex
+        </div>
+        <div>
+            <button class="btn">REGISTER</button>
+            <button class="btn">LOG IN</button>
         </div>
     </div>
 
-    <div class="header-links">
+    <nav class="header-links">
         <a href="/index.php">Home</a>
         <a href="/src/general/our_sports.php">Our Sports</a>
         <a href="/src/general/our_branches.php">Our Branches</a>
@@ -32,5 +36,5 @@
         <?php
             }
         ?>
-    </div>
-</div>
+    </nav>
+</header>

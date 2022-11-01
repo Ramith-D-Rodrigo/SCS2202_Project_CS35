@@ -15,7 +15,9 @@
         <?php
             require_once("./src/general/header.php");
         ?>
-        Home page 
+        <div class="body-container">
+            Home page 
+        </div>
         <?php
             require_once("./src/general/footer.php");
         ?>

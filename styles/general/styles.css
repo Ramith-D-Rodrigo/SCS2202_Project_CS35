@@ -4,15 +4,20 @@
     margin: 0;
     padding :0;
     box-sizing: border-box;
+    font-family: 'Inter';
+    font-weight: 650;
+    font-size: 20px;
+    font-style: normal;
 }
 
 body{
-    font-family: 'Inter';
+
 }
 
 a{
     color:white;
     text-decoration: none;
+    padding: 0 15px;
 }
 
 a:hover{
@@ -20,35 +25,71 @@ a:hover{
     text-decoration: none;
 }
 
-.header{
-    width:auto;
+header{
+    padding: 8px 0;
+    position: sticky;
+    height:auto;
+    width:100vw;
     background-color: black;
     color: white;
 }
 
-.body-container{
-
+.header-top{
+    display:flex;
+    color: white;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0 15px;
+    margin: auto;
 }
 
-.header-title{
-    display:flex;
-    flex-direction:row;
-    color: white;
+.header-top > div {
+    width: 260px;
+    height: auto;
 }
 
 .header-links{
     
 }
 
-.footer{
-    height:auto;
-    width:auto;
-    background-color: black;
-    color:white;
-    text-align: center;
+.body-container{
+
 }
 
 
+
+footer{
+    padding: 10px 0;
+    position:absolute;
+    height:auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width:100vw;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-text{
+    color:white;
+    margin-right: 10px;
+    font-size: 25px;
+}
+
 .logo{
-    object-fit: contain;
+    height: 36px;
+    width: auto;
+}
+
+.btn{
+    background-color: #000956;
+    color: #FFD700;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.btn:hover{
+    cursor: pointer;
 }
