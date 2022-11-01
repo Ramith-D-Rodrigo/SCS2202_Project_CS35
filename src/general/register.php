@@ -12,6 +12,8 @@
             require_once("header.php");
         ?>
         <a href="../user/user_register.php"> Register as an User</a>
+        <br>
+        <a href="../coach/coach_register.php"> Register as Coach</a>
 
         <?php
             require_once("footer.php");
