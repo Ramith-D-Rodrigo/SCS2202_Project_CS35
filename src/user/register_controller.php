@@ -144,7 +144,7 @@
         } */
         session_unset(); //free all current session variables 
 
-        $_SESSION['successMsg'] = 'Registered Successfully';
+        $_SESSION['RegsuccessMsg'] = 'Registered Successfully';
         header("Location: ./user_register.php");
     }
 
