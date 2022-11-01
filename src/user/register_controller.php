@@ -47,7 +47,7 @@
         unset($_SESSION['usernameError']); //username is available, hence unset the error message
     }
     if($flag === false){
-        return require_once './user_register.php';  //go back to the form since errors are caught
+        header("Location: ./user_register.php");  //go back to the form since errors are caught
     }
 
     //can create a account
@@ -127,5 +127,18 @@
         $j = $j + 1;
     }
     $new_user = new User($fName, $lName, $email, $address, $contactNo, $bday, $userid, $user_dependents, $height, $weight, $medical_concerns, $username, $password, $gender);
-    $new_user -> registerUser($connection);
+    $result = $new_user -> registerUser($connection);
+
+    if($result === TRUE){   //successfully registered
+            echo "Successfully registered";
+/*         foreach($inputFields as $i){    //store session details
+            if(isset($_SESSION[$i])){   //unsetting input values
+                session_unset($i);
+            }
+        } */
+        session_unset(); //free all current session variables 
+
+        $_SESSION['successMsg'] = 'Registered Successfully';
+        header("Location: ./user_register.php");
+    }
 ?>
