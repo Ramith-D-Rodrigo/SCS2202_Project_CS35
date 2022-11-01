@@ -1,7 +1,7 @@
 verbose = true; //for debugging
 
 function validateForm(event){
-    const errMsg = document.getElementById("errmsg");    //For Displaying the Error messages
+    const errMsg = document.getElementById("msgbox");    //For Displaying the Error messages
     errMsg.innerHTML = '' //empty before the validation
 
     const loginForm = document.getElementById("loginForm"); //get login form
