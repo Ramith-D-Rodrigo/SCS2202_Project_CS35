@@ -17,7 +17,7 @@
             require_once("../general/header.php");
         ?>
         <div>
-            <form action="./login_controller.php" method="post" id="loginForm">
+            <form action="/src/user/login_controller.php" method="post" id="loginForm">
                 Username : 
                 <input
                 type="text" 
@@ -50,15 +50,31 @@
 
                         if(isset($_SESSION['LogInsuccessMsg'])){
                             echo $_SESSION['LogInsuccessMsg'];
-                            echo '<br>';
+                            echo '<br> You will be Redirected to the Home page. Please Wait';
                             unset($_SESSION['LogInsuccessMsg']);
+                            header("Refresh: 3; URL =/index.php");
                         }
                     ?>
                 </div>
-                <button type="submit" id="login"  name= "loginSubmitBtn" value="submit" onclick="return validateForm(event)"> LOG IN </button>
+                <button type="submit" 
+                    id="login"  
+                    name= "loginSubmitBtn" 
+                    value="submit" 
+                    onclick="return validateForm(event)"
+                    <?php
+                    if(isset($_SESSION['userrole'])){
+                    ?>
+                        disabled
+                    <?php
+                    }
+                    else{
+                    ?> 
+                        
+                    <?php
+                    }
+                    ?>> LOG IN </button>
             </form>
         </div>
-
         <?php
             require_once("../general/footer.php");
         ?>

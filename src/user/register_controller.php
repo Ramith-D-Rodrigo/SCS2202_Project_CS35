@@ -31,7 +31,7 @@
 
     if($hasEmailResult -> num_rows > 0){    //account already exists
         $_SESSION['emailError'] = "Account with same Email Address exists.";
-        header("Location: ./user_register.php");
+        header("Location: /public/user/user_register.php");
         $connection -> close(); //close the database connection
         exit(); //exit the registration
     }
@@ -45,7 +45,7 @@
 
     if($hasUsernameResult -> num_rows > 0){    //account already exists
         $_SESSION['usernameError'] = "Account with same Username exists.";
-        header("Location: ./user_register.php");
+        header("Location: /public/user/user_register.php");
         $connection -> close(); //close the database connection
         exit(); //exit the registration
     }
@@ -145,7 +145,7 @@
         session_unset(); //free all current session variables 
 
         $_SESSION['RegsuccessMsg'] = 'Registered Successfully';
-        header("Location: ./user_register.php");
+        header("Location: /public/user/user_register.php");
     }
 
     $connection -> close(); //close the database connection

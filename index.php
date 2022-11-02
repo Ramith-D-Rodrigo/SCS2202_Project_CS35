@@ -13,7 +13,7 @@
     </head>
     <body>
         <?php
-            require_once("./src/general/header.php");
+            require_once("./public/general/header.php");
         ?>
         <div class="body-container">
             Home page 
@@ -23,7 +23,7 @@
             </form>
         </div>
         <?php
-            require_once("./src/general/footer.php");
+            require_once("./public/general/footer.php");
         ?>
     </body>
     <script src="/js/general/search_validation.js"></script>
