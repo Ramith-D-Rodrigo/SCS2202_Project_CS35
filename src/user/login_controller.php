@@ -20,6 +20,6 @@
         $_SESSION['userrole'] =  $resultmsg[1];
         $_SESSION['userid'] = $loginUser -> getUserID();
     }
-    header("Location: ./user_login.php");
+    header("Location: /public/user/user_login.php");
     $connection -> close();
 ?>

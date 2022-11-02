@@ -5,25 +5,25 @@
                 if($_SERVER['REQUEST_URI'] === '/index.php'){    //home page
                     echo "Welcome";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/src/general/login.php' || $_SERVER['REQUEST_URI'] === '/src/user/user_login.php'){    //login
+                else if($_SERVER['REQUEST_URI'] === '/public/general/login.php' || $_SERVER['REQUEST_URI'] === '/public/user/user_login.php'){    //login
                     echo "Log In";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/src/general/register.php'){   //register
+                else if($_SERVER['REQUEST_URI'] === '/public/general/register.php'){   //register
                     echo "Register";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/src/user/user_register.php'){ //user register
+                else if($_SERVER['REQUEST_URI'] === '/public/user/user_register.php'){ //user register
                     echo "User Registration";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/src/general/our_branches.php'){ //user register
+                else if($_SERVER['REQUEST_URI'] === '/public/general/our_branches.php'){ //user register
                     echo "Our Branches";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/src/general/our_feedback.php'){ //user register
+                else if($_SERVER['REQUEST_URI'] === 'public/general/our_feedback.php'){ //user register
                     echo "Our Feedback";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/src/general/reg_caoches.php'){ //user register
+                else if($_SERVER['REQUEST_URI'] === '/public/general/reg_caoches.php'){ //user register
                     echo "Registered Coaches";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/src/general/about_us.php'){ //user register
+                else if($_SERVER['REQUEST_URI'] === '/public/general/about_us.php'){ //user register
                     echo "About Us";
                 }
             ?>
@@ -39,8 +39,8 @@
             }
             else{
         ?>
-            <button class="btn" onclick="window.location.href='/src/general/register.php'">REGISTER</button>
-            <button class="btn" onclick="window.location.href='/src/general/login.php'">LOG IN</button>
+            <button class="btn" onclick="window.location.href='/public/general/register.php'">REGISTER</button>
+            <button class="btn" onclick="window.location.href='/public/general/login.php'">LOG IN</button>
         <?php
             }
         ?>
