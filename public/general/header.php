@@ -26,6 +26,9 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/general/about_us.php'){ //user register
                     echo "About Us";
                 }
+                else if($_SERVER['REQUEST_URI'] === '/public/general/search_results.php'){  //search sport
+                    echo "Search a Sport";
+                }
             ?>
         </div>
         <div> <!--- sports complex name -->
