@@ -38,8 +38,8 @@ header{
     display:flex;
     color: white;
     justify-content: space-between;
-    align-items: baseline;
     padding: 0 15px;
+    align-items: center;
     margin: auto;
 }
 
