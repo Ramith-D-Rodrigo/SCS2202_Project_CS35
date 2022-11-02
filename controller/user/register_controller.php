@@ -1,8 +1,8 @@
 <?php
     session_start();
-    require_once("./user.php");
-    require_once("./user_dependent.php");
-    require_once("./dbconnection.php");
+    require_once("../../src/user/user.php");
+    require_once("../../src/user/user_dependent.php");
+    require_once("../../src/user/dbconnection.php");
 
 
     //all possible inputs for prefilling

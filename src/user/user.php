@@ -168,6 +168,19 @@ class User{
 
         return ["Successfully Logged In", $rows -> user_role];  //return the message and role
     }
+
+    public function searchSport($sportName, $database){
+        $sql = sprintf("SELECT BIN_TO_UUID(`sport_id`, true) AS sport_id,
+        `description`  
+        FROM `sport` 
+        WHERE `sport_name` 
+        LIKE '%%%s%%'", //to escape % in sprintf, we need to add % again
+        $database -> real_escape_string($sportName));
+
+        $result = $database -> query($sql);
+
+        return $result;
+    }
 }
 
 ?>
