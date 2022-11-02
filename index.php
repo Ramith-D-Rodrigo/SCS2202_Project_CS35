@@ -17,9 +17,14 @@
         ?>
         <div class="body-container">
             Home page 
+            <form action="" method="post" id="searchBar">
+                <input type="text" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
+                <button type="submit" onclick="return searchValidation(event)">Search</button>
+            </form>
         </div>
         <?php
             require_once("./src/general/footer.php");
         ?>
     </body>
+    <script src="/js/general/search_validation.js"></script>
 </html>
