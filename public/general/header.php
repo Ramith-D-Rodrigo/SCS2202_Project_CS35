@@ -49,10 +49,10 @@
 
     <nav class="header-links">
         <a href="/index.php">Home</a>
-        <a href="/src/general/our_sports.php">Our Sports</a>
-        <a href="/src/general/our_branches.php">Our Branches</a>
-        <a href="/src/general/reg_coaches.php">Registered Coaches</a>
-        <a href="/src/general/our_feedback.php">Our Feedback</a>
-        <a href="/src/general/about_us.php">About Us</a>
+        <a href="/public/general/our_sports.php">Our Sports</a>
+        <a href="/public/general/our_branches.php">Our Branches</a>
+        <a href="/public/general/reg_coaches.php">Registered Coaches</a>
+        <a href="/public/general/our_feedback.php">Our Feedback</a>
+        <a href="/public/general/about_us.php">About Us</a>
     </nav>
 </header>
