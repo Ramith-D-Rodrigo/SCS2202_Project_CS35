@@ -17,7 +17,7 @@
     ?>
 
     <div>
-        <form action="/src/user/register_controller.php" method="post">
+        <form action="/controller/user/register_controller.php" method="post">
             Name :
             <input type="text" 
             pattern="[a-zA-Z]+" 

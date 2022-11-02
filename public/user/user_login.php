@@ -17,7 +17,7 @@
             require_once("../general/header.php");
         ?>
         <div>
-            <form action="/src/user/login_controller.php" method="post" id="loginForm">
+            <form action="/controller/user/login_controller.php" method="post" id="loginForm">
                 Username : 
                 <input
                 type="text" 
