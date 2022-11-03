@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 03, 2022 at 06:42 AM
+-- Generation Time: Nov 03, 2022 at 12:22 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -239,6 +239,18 @@ CREATE TABLE `sports_court` (
   `branch_id` binary(16) NOT NULL,
   `added_manager` binary(16) DEFAULT NULL,
   `request_status` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sports_court_photo`
+--
+
+CREATE TABLE `sports_court_photo` (
+  `court_photo_id` binary(16) NOT NULL,
+  `court_id` binary(16) NOT NULL,
+  `court_photo` mediumblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -546,6 +558,13 @@ ALTER TABLE `sports_court`
   ADD KEY `branch_id` (`branch_id`);
 
 --
+-- Indexes for table `sports_court_photo`
+--
+ALTER TABLE `sports_court_photo`
+  ADD PRIMARY KEY (`court_photo_id`),
+  ADD KEY `court_id` (`court_id`);
+
+--
 -- Indexes for table `staff`
 --
 ALTER TABLE `staff`
@@ -711,6 +730,12 @@ ALTER TABLE `sports_court`
   ADD CONSTRAINT `sports_court_ibfk_1` FOREIGN KEY (`sport_id`) REFERENCES `sport` (`sport_id`),
   ADD CONSTRAINT `sports_court_ibfk_2` FOREIGN KEY (`added_manager`) REFERENCES `manager` (`manager_id`),
   ADD CONSTRAINT `sports_court_ibfk_3` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`);
+
+--
+-- Constraints for table `sports_court_photo`
+--
+ALTER TABLE `sports_court_photo`
+  ADD CONSTRAINT `sports_court_photo_ibfk_1` FOREIGN KEY (`court_id`) REFERENCES `sports_court` (`court_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `staff`
