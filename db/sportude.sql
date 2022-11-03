@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 01, 2022 at 03:21 PM
+-- Generation Time: Nov 03, 2022 at 06:42 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -30,11 +30,14 @@ SET time_zone = "+00:00";
 CREATE TABLE `branch` (
   `branch_id` binary(16) NOT NULL,
   `address` varchar(250) NOT NULL,
+  `city` varchar(50) NOT NULL,
   `opening_time` time NOT NULL,
   `closing_time` time NOT NULL,
   `opening_date` date NOT NULL,
   `revenue` double DEFAULT NULL,
-  `owner_id` binary(16) NOT NULL
+  `owner_id` binary(16) DEFAULT NULL,
+  `owner_request_date` date DEFAULT NULL,
+  `request_status` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -103,6 +106,17 @@ CREATE TABLE `coaching_session` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `coach_qualification`
+--
+
+CREATE TABLE `coach_qualification` (
+  `coach_id` binary(16) NOT NULL,
+  `qualification` varchar(75) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `discount`
 --
 
@@ -133,7 +147,9 @@ CREATE TABLE `login_details` (
 
 INSERT INTO `login_details` (`user_id`, `username`, `password`, `user_role`) VALUES
 (0x11ed59ea897760fdb1c40a0027000004, 'johndoe', '$2y$10$aMSXNdKDJYL6lNo5oK4OxOi9yHI47AyLzYlLcF8..NZoFt4WOvC52', 'user'),
-(0x11ed59eddbe16fffb1c40a0027000004, 'ramith_rodrigo', '$2y$10$c.L2T0TrwvjCmmH0hdPK2.TJog.TXkWf8YhgCHI7KbIKHPmy2pTU6', 'user');
+(0x11ed59eddbe16fffb1c40a0027000004, 'ramith_rodrigo', '$2y$10$c.L2T0TrwvjCmmH0hdPK2.TJog.TXkWf8YhgCHI7KbIKHPmy2pTU6', 'user'),
+(0x11ed5a7184099e16b1c40a0027000004, 'ramith_rodrigo1', '$2y$10$D5iPPqHlKfI8KFezwKS3mOPz6btyV.XRtjGDFK2Iepi9Ds.nDMfwm', 'user'),
+(0x11ed5a7a3d2b7497b1c40a0027000004, 'david_mil', '$2y$10$NWxJneTJj2WMcKcRsNxq.eg5Rz5YJLYAlxMSTvOeIC8UXAw/24TJG', 'user');
 
 -- --------------------------------------------------------
 
@@ -180,11 +196,13 @@ CREATE TABLE `reservation` (
   `date` date NOT NULL,
   `starting_time` time NOT NULL,
   `ending_time` time NOT NULL,
+  `no_of_people` int NOT NULL,
   `payment_amount` double NOT NULL,
   `sport_court` binary(16) NOT NULL,
   `user_id` binary(16) DEFAULT NULL,
   `formal_manager_id` binary(16) DEFAULT NULL,
-  `onsite_receptionist_id` binary(16) DEFAULT NULL
+  `onsite_receptionist_id` binary(16) DEFAULT NULL,
+  `status` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -201,6 +219,13 @@ CREATE TABLE `sport` (
   `min_coaching_session_price` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `sport`
+--
+
+INSERT INTO `sport` (`sport_id`, `sport_name`, `description`, `reservation_price`, `min_coaching_session_price`) VALUES
+(0x11ed5a8c43820cccb1c40a0027000004, 'badminton', 'badminton is fun', 350, 600);
+
 -- --------------------------------------------------------
 
 --
@@ -212,7 +237,8 @@ CREATE TABLE `sports_court` (
   `sport_id` binary(16) NOT NULL,
   `court_name` varchar(5) NOT NULL,
   `branch_id` binary(16) NOT NULL,
-  `added_manager` binary(16) DEFAULT NULL
+  `added_manager` binary(16) DEFAULT NULL,
+  `request_status` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -336,7 +362,9 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `email_address`, `gender`, `home_address`, `contact_num`, `birthday`, `register_date`, `height`, `weight`, `is_active`) VALUES
 (0x11ed59ea897760fdb1c40a0027000004, 'John', 'Doe', 'johndoe@gmail.com', 'm', 'No.234/4A, Reid Avenue, Colombo', '0714563211', '2000-05-09', '2022-11-01', 157, NULL, 1),
-(0x11ed59eddbe16fffb1c40a0027000004, 'Ramith', 'Rodrigo', 'ramith@yahoo.com', 'f', 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-10-13', '2022-11-01', 2, 3, 1);
+(0x11ed59eddbe16fffb1c40a0027000004, 'Ramith', 'Rodrigo', 'ramith@yahoo.com', 'f', 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-10-13', '2022-11-01', 2, 3, 1),
+(0x11ed5a7184099e16b1c40a0027000004, 'Kevin', 'Park', 'john2doe@gmail.com', 'm', 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-09-10', '2022-11-02', NULL, NULL, 1),
+(0x11ed5a7a3d2b7497b1c40a0027000004, 'David', 'Miller', 'david20mil@yahoo.com', 'm', 'New york, America', '0996547821', '2000-01-01', '2022-11-02', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -374,7 +402,9 @@ INSERT INTO `user_dependent` (`owner_id`, `name`, `relationship`, `contact_num`)
 (0x11ed59ea897760fdb1c40a0027000004, 'David', 'father', '0147852345'),
 (0x11ed59ea897760fdb1c40a0027000004, 'Kelly', 'mother', '0786542387'),
 (0x11ed59ea897760fdb1c40a0027000004, 'Kenny', 'sibling', '9856374128'),
-(0x11ed59eddbe16fffb1c40a0027000004, 'Dulsara', 'Sibling', '0233654782');
+(0x11ed59eddbe16fffb1c40a0027000004, 'Dulsara', 'Sibling', '0233654782'),
+(0x11ed5a7184099e16b1c40a0027000004, 'Mason', 'Father', '0741658932'),
+(0x11ed5a7a3d2b7497b1c40a0027000004, 'Aaron', 'Sibling', '0445217864');
 
 -- --------------------------------------------------------
 
@@ -395,7 +425,21 @@ INSERT INTO `user_medical_concern` (`user_id`, `medical_concern`) VALUES
 (0x11ed59ea897760fdb1c40a0027000004, 'back pains'),
 (0x11ed59ea897760fdb1c40a0027000004, 'chest pains'),
 (0x11ed59ea897760fdb1c40a0027000004, 'leg cramps'),
-(0x11ed59ea897760fdb1c40a0027000004, 'poor eyesights');
+(0x11ed59ea897760fdb1c40a0027000004, 'poor eyesights'),
+(0x11ed5a7a3d2b7497b1c40a0027000004, 'leg cramps');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_request_coaching_session`
+--
+
+CREATE TABLE `user_request_coaching_session` (
+  `user_id` binary(16) NOT NULL,
+  `session_id` binary(16) NOT NULL,
+  `request_date` date NOT NULL,
+  `message` varchar(150) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Indexes for dumped tables
@@ -437,6 +481,12 @@ ALTER TABLE `coaching_session`
   ADD PRIMARY KEY (`session_id`),
   ADD KEY `court_ID` (`court_id`),
   ADD KEY `coach_id` (`coach_id`);
+
+--
+-- Indexes for table `coach_qualification`
+--
+ALTER TABLE `coach_qualification`
+  ADD PRIMARY KEY (`coach_id`,`qualification`);
 
 --
 -- Indexes for table `discount`
@@ -572,6 +622,13 @@ ALTER TABLE `user_medical_concern`
   ADD PRIMARY KEY (`user_id`,`medical_concern`);
 
 --
+-- Indexes for table `user_request_coaching_session`
+--
+ALTER TABLE `user_request_coaching_session`
+  ADD PRIMARY KEY (`user_id`,`session_id`),
+  ADD KEY `session_id` (`session_id`);
+
+--
 -- Constraints for dumped tables
 --
 
@@ -607,6 +664,12 @@ ALTER TABLE `coach`
 ALTER TABLE `coaching_session`
   ADD CONSTRAINT `coaching_session_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`coach_id`),
   ADD CONSTRAINT `coaching_session_ibfk_2` FOREIGN KEY (`court_id`) REFERENCES `sports_court` (`court_id`);
+
+--
+-- Constraints for table `coach_qualification`
+--
+ALTER TABLE `coach_qualification`
+  ADD CONSTRAINT `coach_qualification_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`coach_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `discount`
@@ -719,6 +782,13 @@ ALTER TABLE `user_dependent`
 --
 ALTER TABLE `user_medical_concern`
   ADD CONSTRAINT `user_medical_concern_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Constraints for table `user_request_coaching_session`
+--
+ALTER TABLE `user_request_coaching_session`
+  ADD CONSTRAINT `user_request_coaching_session_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `coaching_session` (`session_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `user_request_coaching_session_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
