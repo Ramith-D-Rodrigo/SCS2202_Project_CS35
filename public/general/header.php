@@ -37,7 +37,7 @@
         <div>
         <?php
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
-        ?>  <button class ="btn" onclick="window.location.href='/src/general/logout.php'" style="float:right">LOG OUT</button>
+        ?>  <button class ="btn" onclick="window.location.href='/controller/general/logout.php'" style="float:right">LOG OUT</button>
         <?php
             }
             else{
