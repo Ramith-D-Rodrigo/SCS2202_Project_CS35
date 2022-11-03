@@ -3,6 +3,7 @@
     require_once("../../src/user/user.php");
     require_once("../../src/user/user_dependent.php");
     require_once("../../src/user/dbconnection.php");
+    require_once("../../src/user/credentials_availability.php");
 
 
     //all possible inputs for prefilling
@@ -21,9 +22,8 @@
     
     //Checking if the account already exists
 
-    //email availability
-    $hasEmailsql = sprintf("SELECT * FROM USER WHERE email_address = '%s'", $connection -> real_escape_string(htmlspecialchars($_POST['emailAddress'], ENT_QUOTES)));    
-    $hasEmailResult = $connection -> query($hasEmailsql);
+    //email availability   
+    $hasEmailResult = checkEmail($_POST['emailAddress'], $connection);
 
     if(isset($_SESSION['successMsg'])){ //same user is trying to register (in the same session) We have to unset the message
         unset($_SESSION['successMsg']);
@@ -39,9 +39,8 @@
         unset($_SESSION['emailError']); //email is available, hence unset the error message
     }
     
-    //username availability
-    $hasUsernamesql = sprintf("SELECT * FROM `login_details` WHERE `username` = '%s'", $connection -> real_escape_string(htmlspecialchars($_POST['username'], ENT_QUOTES)));    
-    $hasUsernameResult = $connection -> query($hasUsernamesql);
+    //username availability    
+    $hasUsernameResult = checkUsername($_POST['username'], $connection);
 
     if($hasUsernameResult -> num_rows > 0){    //account already exists
         $_SESSION['usernameError'] = "Account with same Username exists.";
