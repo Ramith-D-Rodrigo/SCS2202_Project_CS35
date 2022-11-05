@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 03, 2022 at 12:22 PM
+-- Generation Time: Nov 05, 2022 at 04:15 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `branch` (
   `branch_id` binary(16) NOT NULL,
   `address` varchar(250) NOT NULL,
+  `branch_email` int NOT NULL,
   `city` varchar(50) NOT NULL,
   `opening_time` time NOT NULL,
   `closing_time` time NOT NULL,
@@ -164,6 +165,26 @@ CREATE TABLE `manager` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `notification`
+--
+
+CREATE TABLE `notification` (
+  `notification_id` binary(16) NOT NULL,
+  `subject` varchar(25) NOT NULL,
+  `status` varchar(10) NOT NULL,
+  `description` varchar(50) NOT NULL,
+  `date` date NOT NULL,
+  `lifetime` time DEFAULT NULL,
+  `staff_id` binary(16) DEFAULT NULL,
+  `user_id` binary(16) DEFAULT NULL,
+  `coach_id` binary(16) DEFAULT NULL,
+  `owner_id` binary(16) DEFAULT NULL,
+  `admin_id` binary(16) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `owner`
 --
 
@@ -216,15 +237,16 @@ CREATE TABLE `sport` (
   `sport_name` varchar(25) NOT NULL,
   `description` varchar(100) NOT NULL,
   `reservation_price` double NOT NULL,
-  `min_coaching_session_price` double NOT NULL
+  `min_coaching_session_price` double NOT NULL,
+  `max_no_of_students` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `sport`
 --
 
-INSERT INTO `sport` (`sport_id`, `sport_name`, `description`, `reservation_price`, `min_coaching_session_price`) VALUES
-(0x11ed5a8c43820cccb1c40a0027000004, 'badminton', 'badminton is fun', 350, 600);
+INSERT INTO `sport` (`sport_id`, `sport_name`, `description`, `reservation_price`, `min_coaching_session_price`, `max_no_of_students`) VALUES
+(0x11ed5a8c43820cccb1c40a0027000004, 'badminton', 'badminton is fun', 350, 600, NULL);
 
 -- --------------------------------------------------------
 
@@ -359,6 +381,7 @@ CREATE TABLE `user` (
   `last_name` varchar(100) NOT NULL,
   `email_address` varchar(100) NOT NULL,
   `gender` char(1) NOT NULL,
+  `profile_photo` mediumblob,
   `home_address` varchar(250) NOT NULL,
   `contact_num` varchar(15) NOT NULL,
   `birthday` date NOT NULL,
@@ -372,11 +395,11 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `email_address`, `gender`, `home_address`, `contact_num`, `birthday`, `register_date`, `height`, `weight`, `is_active`) VALUES
-(0x11ed59ea897760fdb1c40a0027000004, 'John', 'Doe', 'johndoe@gmail.com', 'm', 'No.234/4A, Reid Avenue, Colombo', '0714563211', '2000-05-09', '2022-11-01', 157, NULL, 1),
-(0x11ed59eddbe16fffb1c40a0027000004, 'Ramith', 'Rodrigo', 'ramith@yahoo.com', 'f', 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-10-13', '2022-11-01', 2, 3, 1),
-(0x11ed5a7184099e16b1c40a0027000004, 'Kevin', 'Park', 'john2doe@gmail.com', 'm', 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-09-10', '2022-11-02', NULL, NULL, 1),
-(0x11ed5a7a3d2b7497b1c40a0027000004, 'David', 'Miller', 'david20mil@yahoo.com', 'm', 'New york, America', '0996547821', '2000-01-01', '2022-11-02', NULL, NULL, 1);
+INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `email_address`, `gender`, `profile_photo`, `home_address`, `contact_num`, `birthday`, `register_date`, `height`, `weight`, `is_active`) VALUES
+(0x11ed59ea897760fdb1c40a0027000004, 'John', 'Doe', 'johndoe@gmail.com', 'm', NULL, 'No.234/4A, Reid Avenue, Colombo', '0714563211', '2000-05-09', '2022-11-01', 157, NULL, 1),
+(0x11ed59eddbe16fffb1c40a0027000004, 'Ramith', 'Rodrigo', 'ramith@yahoo.com', 'f', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-10-13', '2022-11-01', 2, 3, 1),
+(0x11ed5a7184099e16b1c40a0027000004, 'Kevin', 'Park', 'john2doe@gmail.com', 'm', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-09-10', '2022-11-02', NULL, NULL, 1),
+(0x11ed5a7a3d2b7497b1c40a0027000004, 'David', 'Miller', 'david20mil@yahoo.com', 'm', NULL, 'New york, America', '0996547821', '2000-01-01', '2022-11-02', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -462,6 +485,7 @@ CREATE TABLE `user_request_coaching_session` (
 --
 ALTER TABLE `branch`
   ADD PRIMARY KEY (`branch_id`),
+  ADD UNIQUE KEY `branch_email` (`branch_email`),
   ADD KEY `owner_id` (`owner_id`);
 
 --
@@ -518,6 +542,16 @@ ALTER TABLE `login_details`
 --
 ALTER TABLE `manager`
   ADD PRIMARY KEY (`manager_id`);
+
+--
+-- Indexes for table `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`notification_id`),
+  ADD KEY `admin_id` (`admin_id`),
+  ADD KEY `coach_id` (`coach_id`),
+  ADD KEY `owner_id` (`owner_id`),
+  ADD KEY `staff_id` (`staff_id`);
 
 --
 -- Indexes for table `owner`
@@ -703,6 +737,15 @@ ALTER TABLE `manager`
   ADD CONSTRAINT `manager_ibfk_1` FOREIGN KEY (`manager_id`) REFERENCES `staff` (`staff_id`);
 
 --
+-- Constraints for table `notification`
+--
+ALTER TABLE `notification`
+  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `system_admin` (`admin_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `notification_ibfk_2` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`coach_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `notification_ibfk_3` FOREIGN KEY (`owner_id`) REFERENCES `owner` (`owner_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `notification_ibfk_4` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `owner`
 --
 ALTER TABLE `owner`
@@ -800,7 +843,7 @@ ALTER TABLE `user_branch_feedback`
 -- Constraints for table `user_dependent`
 --
 ALTER TABLE `user_dependent`
-  ADD CONSTRAINT `user_dependent_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `user_dependent_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user_medical_concern`
