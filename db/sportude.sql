@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2022 at 04:15 AM
+-- Generation Time: Nov 05, 2022 at 12:18 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -113,6 +113,21 @@ CREATE TABLE `coaching_session` (
 CREATE TABLE `coach_qualification` (
   `coach_id` binary(16) NOT NULL,
   `qualification` varchar(75) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `court_maintenance`
+--
+
+CREATE TABLE `court_maintenance` (
+  `court_id` binary(16) NOT NULL,
+  `starting_date` date NOT NULL,
+  `ending_date` date NOT NULL,
+  `status` varchar(15) NOT NULL,
+  `decision` char(1) NOT NULL,
+  `requested_receptionist` binary(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -492,7 +507,7 @@ ALTER TABLE `branch`
 -- Indexes for table `branch_maintenance`
 --
 ALTER TABLE `branch_maintenance`
-  ADD PRIMARY KEY (`branch_id`),
+  ADD PRIMARY KEY (`branch_id`,`starting_date`),
   ADD KEY `requested_receptionist` (`requested_receptionist`);
 
 --
@@ -523,6 +538,13 @@ ALTER TABLE `coaching_session`
 --
 ALTER TABLE `coach_qualification`
   ADD PRIMARY KEY (`coach_id`,`qualification`);
+
+--
+-- Indexes for table `court_maintenance`
+--
+ALTER TABLE `court_maintenance`
+  ADD PRIMARY KEY (`court_id`,`starting_date`),
+  ADD KEY `requested_receptionist` (`requested_receptionist`);
 
 --
 -- Indexes for table `discount`
@@ -695,8 +717,8 @@ ALTER TABLE `branch`
 -- Constraints for table `branch_maintenance`
 --
 ALTER TABLE `branch_maintenance`
-  ADD CONSTRAINT `branch_maintenance_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`),
-  ADD CONSTRAINT `branch_maintenance_ibfk_2` FOREIGN KEY (`requested_receptionist`) REFERENCES `receptionist` (`receptionist_id`);
+  ADD CONSTRAINT `branch_maintenance_ibfk_2` FOREIGN KEY (`requested_receptionist`) REFERENCES `receptionist` (`receptionist_id`),
+  ADD CONSTRAINT `branch_maintenance_ibfk_3` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `branch_photo`
@@ -723,6 +745,13 @@ ALTER TABLE `coaching_session`
 --
 ALTER TABLE `coach_qualification`
   ADD CONSTRAINT `coach_qualification_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`coach_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `court_maintenance`
+--
+ALTER TABLE `court_maintenance`
+  ADD CONSTRAINT `court_maintenance_ibfk_1` FOREIGN KEY (`court_id`) REFERENCES `sports_court` (`court_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `court_maintenance_ibfk_2` FOREIGN KEY (`requested_receptionist`) REFERENCES `receptionist` (`receptionist_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `discount`
