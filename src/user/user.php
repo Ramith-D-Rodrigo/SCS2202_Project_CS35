@@ -16,6 +16,7 @@ class User{
     private $password;
     private $gender;
     private $isactive;
+    private $profilePic;
 
     public function setDetails($fName='', $lName='', $email='', $address='', $contactNo='', $dob='', $uid='', $dependents='', $height='', $weight='', $medicalConcerns='', $username='', $password='', $gender=''){
         $this -> userID = $uid;
@@ -32,6 +33,10 @@ class User{
         $this -> username = $username;
         $this -> password = $password;
         $this -> gender = $gender;
+    }
+
+    public function setProfilePic($profilePic){
+        $this -> profilePic = $profilePic;
     }
 
     public function getUserID(){    //userID getter
@@ -72,9 +77,10 @@ class User{
         `register_date`, 
         `height`, 
         `weight`,
-        `is_active`) 
+        `is_active`,
+        `profile_photo`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), '%s')",
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), '%s', NULLIF('%s', 'NULL'))",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> firstName),
         $database -> real_escape_string($this -> lastName),
@@ -86,7 +92,8 @@ class User{
         $database -> real_escape_string($this -> registeredDate),
         $database -> real_escape_string($this -> height),
         $database -> real_escape_string($this -> weight),
-        $database -> real_escape_string($this -> isactive))); 
+        $database -> real_escape_string($this -> isactive),
+        $database -> real_escape_string($this -> profilePic))); 
 
         return $result;
 /*         if ($result === TRUE) {
@@ -138,6 +145,9 @@ class User{
 
         if($loginEntry  === TRUE && $userEntry  === TRUE && $medicalConcernEntry  === TRUE && $dependentEntry === TRUE){    //all has to be true (successfully registered)
             return TRUE;
+        }
+        else{
+            return FALSE;
         }
     }
 

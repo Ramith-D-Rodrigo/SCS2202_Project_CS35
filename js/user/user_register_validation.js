@@ -1,3 +1,12 @@
+function pictureSize(size){
+    if(size > 2097152){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
 function validateForm(event){
     const errMsg = document.getElementById("errmsg");   //For Displaying the Error messages
     errMsg.innerHTML = '';
@@ -12,6 +21,23 @@ function validateForm(event){
         return false;
     }
     else{   //Form is valid from HTML perspective
+
+        //image size
+        const uploadedPic = document.getElementById("user_profile_pic");
+
+        if(verbose){
+            console.log("Uploaded File Size : " + uploadedPic.files[0].size);
+        }
+
+        if(pictureSize(uploadedPic.files[0].size) === false){   //image too big
+            errMsg.innerHTML = errMsg.innerHTML + "Uploaded Image is Too Big";
+            return false;  
+        }   
+        //uploaded size is okay
+/*         else{
+            errMsg.innerHTML = errMsg.innerHTML + "Uploaded Image is okay";
+            return false;
+        } */
     
     //have to check input values validity (similary)
         let flag = true;    //for final validation

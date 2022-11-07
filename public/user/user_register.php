@@ -17,7 +17,7 @@
     ?>
 
     <div>
-        <form action="/controller/user/register_controller.php" method="post">
+        <form action="/controller/user/register_controller.php" method="post" enctype="multipart/form-data">
             Name :
             <input type="text" 
             pattern="[a-zA-Z]+" 
@@ -128,6 +128,9 @@
                 Medical Concerns : (Maximum of 5 | Please Add one Concern per Field)<br>
                 <button id="medConbtn"> Add </button>
             </div>
+            Upload a Profile Picture
+            <input type=file name="user_pic" accept=".jpg, .jpeg, .png" id="user_profile_pic" title="Maximum File Size 10MB. Only Accepts JPG, PNG">
+
             <div id="emergencyDetails">
                 Emergency Contact Details: <br>
                 Name: <input type="text" name="name1" required value=<?php if(isset($_SESSION['name1'])) echo htmlspecialchars($_SESSION['name1'], ENT_QUOTES) ?>> <br>
@@ -148,6 +151,11 @@
                         echo $_SESSION['usernameError'];
                         echo '<br>';
                         unset($_SESSION['usernameError']);
+                    }
+                    if(isset($_SESSION['RegUnsuccessMsg'])){
+                        echo $_SESSION['RegUnsuccessMsg'];
+                        echo '<br>';
+                        unset($_SESSION['RegUnsuccessMsg']);
                     }
                     if(isset($_SESSION['RegsuccessMsg'])){
                         echo $_SESSION['RegsuccessMsg'];

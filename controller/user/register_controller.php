@@ -130,12 +130,32 @@
         $j = $j + 1;
     }
 
+    //profile picture
+    $profilePicFlag = false;
+    echo $_FILES['user_pic']['name'];
+    echo "<br>";
+    echo $_FILES['user_pic']['tmp_name'];
+
+    if(!empty($_FILES['user_pic']['name'])){    //user has uploaded a picture
+        $profilePicFlag = true;
+        $pic = $_FILES['user_pic']['tmp_name'];   //the image
+        $picContent = addslashes(file_get_contents($pic));  //file content of the image     
+    }
+
     $new_user = new User();
     $new_user -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $user_dependents, $height, $weight, $medical_concerns, $username, $password, $gender);
+
+    if($profilePicFlag === true){    //has uploaded a profile pic
+        $new_user -> setProfilePic($picContent);
+    }
+    else{
+        $new_user -> setProfilePic("NULL");
+    }
+
     $result = $new_user -> registerUser($connection);
 
     if($result === TRUE){   //successfully registered
-            echo "Successfully registered";
+        echo "Successfully registered";
 /*         foreach($inputFields as $i){    //store session details
             if(isset($_SESSION[$i])){   //unsetting input values
                 session_unset($i);
@@ -144,6 +164,11 @@
         session_unset(); //free all current session variables 
 
         $_SESSION['RegsuccessMsg'] = 'Registered Successfully';
+        header("Location: /public/user/user_register.php");
+    }
+    else{
+        echo "Error Registering the Account";
+        $_SESSION['RegUnsuccessMsg'] = 'Error Registering the Account';
         header("Location: /public/user/user_register.php");
     }
 
