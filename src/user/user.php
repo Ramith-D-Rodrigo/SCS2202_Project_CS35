@@ -180,15 +180,33 @@ class User{
     }
 
     public function searchSport($sportName, $database){
-        $sql = sprintf("SELECT BIN_TO_UUID(`sport_id`, true) AS sport_id,
-        `description`  
+        $sportSql = sprintf("SELECT `sport_id`,
+        `sport_name`
         FROM `sport` 
         WHERE `sport_name` 
         LIKE '%%%s%%'", //to escape % in sprintf, we need to add % again
         $database -> real_escape_string($sportName));
 
-        $result = $database -> query($sql);
+        $sportResult = $database -> query($sportSql);   //get the sports results
 
+        if($sportResult -> num_rows === 0){ //no such sport found
+            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+        }
+
+        $result = [];
+        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table
+            $courtBranchSql = sprintf("SELECT DISTINCT `branch_id`   
+            FROM `sports_court`
+            WHERE `sport_id` 
+            LIKE '%s'", $database -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
+            $branchResult = $database -> query($courtBranchSql);
+
+            while($branchRow = $branchResult -> fetch_object()){   //getting all the branches
+                $branch = $branchRow -> branch_id;
+
+                array_push($result, ['branch' => $branch, 'sport_name' => $row['sport_name'], 'sport_id' => $row['sport_id']]); //create a branch sport pair
+            }
+        }
         return $result;
     }
 }

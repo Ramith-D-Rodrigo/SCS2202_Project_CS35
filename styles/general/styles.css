@@ -105,6 +105,8 @@ button{
 
 button:hover{
     cursor: pointer;
+    filter:drop-shadow(0px 0px 25px rgba(0, 0, 0, 0.25));
+    transform: scale(1.05);
 }
 
 input{
@@ -137,4 +139,14 @@ textarea{
     margin: 25px;
     filter:drop-shadow(0px 0px 25px rgba(0, 0, 0, 0.25));
     border-radius: 25px;
+    flex-direction: column;
+}
+
+.search_result{
+    margin: 10px;
+}
+
+.err-msg{
+    color: red;
+    text-align: center;
 }

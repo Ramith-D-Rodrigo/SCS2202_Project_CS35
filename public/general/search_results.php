@@ -27,12 +27,26 @@
 
                 <?php
                     if(isset($_SESSION['searchErrorMsg'])){
-                        echo $_SESSION['searchErrorMsg'];
-                        unset($_SESSION['searchErrorMsg']); //Unset for future searching
+                ?>      <div class="err-msg"><?php echo $_SESSION['searchErrorMsg']; ?></div>
+                <?php
+                        //unset($_SESSION['searchErrorMsg']); //Unset for future searching
                     }
-                    else if(isset($_SESSION['description'])){
-                        echo $_SESSION['description'];
-                        unset($_SESSION['description']);    //unset for future searching
+                    else if(isset($_SESSION['searchResult'])){
+                        foreach($_SESSION['searchResult'] as $result){ //traverse the result
+                ?>
+                        <div class ="search_result">
+                            Branch : <?php echo $result['location']; ?>
+                            <br>
+                            Sport : <?php echo $result['sport_name']; ?>
+                            <br>
+                            Number of Courts : <?php echo $result['num_of_courts']; ?>
+                            <button class="btn" style="margin-left:10px">Make a Reservation</button>
+                            <br>
+                        </div>
+                <?php
+                        } 
+                        //print_r($_SESSION['searchResult']);
+                        //unset($_SESSION['searchResult']);    //unset for future searching
                     }
                 ?>
             </div>
