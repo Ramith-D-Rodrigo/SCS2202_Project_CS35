@@ -53,14 +53,14 @@
                     required
                     value=<?php if(isset($_SESSION['contactNum'])) echo htmlspecialchars($_SESSION['contactNum'], ENT_QUOTES)?>> 
                     <br>
-
-                    Home Address : 
-                    <textarea 
-                    name="homeAddress"
-                    id="homeAddress" 
-                    required
-                    ><?php if(isset($_SESSION['homeAddress'])) echo htmlspecialchars($_SESSION['homeAddress'], ENT_QUOTES)?></textarea>
-                    <br>
+                    <div style="display:flex; flex-direction: row">
+                        Home Address : 
+                        <textarea 
+                        name="homeAddress"
+                        id="homeAddress" 
+                        required
+                        ><?php if(isset($_SESSION['homeAddress'])) echo htmlspecialchars($_SESSION['homeAddress'], ENT_QUOTES)?></textarea>
+                    </div>
 
                     Height : 
                     <input 
@@ -170,8 +170,9 @@
                             }
                         ?>    
                     </div>
-
-                    <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
+                    <div style="display:flex; align-items: center; justify-content: center;">
+                        <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
+                    </div>
                 </form>
             </div>
         </main>

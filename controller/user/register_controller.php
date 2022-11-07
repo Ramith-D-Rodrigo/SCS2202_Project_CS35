@@ -4,6 +4,7 @@
     require_once("../../src/user/user_dependent.php");
     require_once("../../src/user/dbconnection.php");
     require_once("../../src/user/credentials_availability.php");
+    require_once("../../src/general/uuid.php"); //to generate uuids
 
 
     //all possible inputs for prefilling
@@ -56,12 +57,7 @@
     //can create a account
 
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    //hash the password
-    $useridsql = 'SELECT UUID()';   //create an user id using uuid function
-    $userIDResult = $connection -> query($useridsql); //get the result from query
-
-    foreach($userIDResult as $row){   //get the user id
-        $userid = $row['UUID()'];
-    }
+    $userid = generateUUID($connection);    //get the uuid
 
     $username = htmlspecialchars($_POST['username'], ENT_QUOTES);
     $email = htmlspecialchars($_POST['emailAddress'], ENT_QUOTES);
