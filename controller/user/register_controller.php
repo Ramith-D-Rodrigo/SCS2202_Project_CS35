@@ -132,9 +132,9 @@
 
     //profile picture
     $profilePicFlag = false;
-    echo $_FILES['user_pic']['name'];
+/*     echo $_FILES['user_pic']['name'];
     echo "<br>";
-    echo $_FILES['user_pic']['tmp_name'];
+    echo $_FILES['user_pic']['tmp_name']; */
 
     if(!empty($_FILES['user_pic']['name'])){    //user has uploaded a picture
         $profilePicFlag = true;

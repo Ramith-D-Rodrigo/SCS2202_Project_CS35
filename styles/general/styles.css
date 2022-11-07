@@ -1,21 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
 *{
     margin: 0;
     padding :0;
     box-sizing: border-box;
-    font-family: 'Inter';
+    font-family: 'Open Sans', sans-serif;
     font-weight: 650;
     font-size: 20px;
     font-style: normal;
 }
 
-body{
+textarea { height: auto; }
 
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
 }
 
 a{
-    color:white;
+    color:black;
     text-decoration: none;
     padding: 0 15px;
 }
@@ -26,17 +31,18 @@ a:hover{
 }
 
 header{
+    flex: none;
     padding: 8px 0;
     position: sticky;
     height:auto;
     width:100vw;
-    background-color: black;
+    background-color: #FFD700;
     color: white;
 }
 
 .header-top{
     display:flex;
-    color: white;
+    color: black;
     justify-content: space-between;
     padding: 0 15px;
     align-items: center;
@@ -54,19 +60,25 @@ header{
 
 .body-container{
     font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main {
+    flex: auto;
+    background: linear-gradient(180deg, #FFD700, #033C66);
 }
 
 
-
 footer{
+    flex: none;
     padding: 10px 0;
-    position:absolute;
+    min-height: auto;
+    margin-top: auto;
     height:auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
     width:100vw;
-    background-color: black;
+    background-color: #033C66;
     display: flex;
     align-items: center;
     justify-content: center;
