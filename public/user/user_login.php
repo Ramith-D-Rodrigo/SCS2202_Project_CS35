@@ -33,8 +33,6 @@
                 Password : 
                     <input 
                     type="password"  
-                    pattern="(?=.*\d)(?=.*[A-Z]).{8,}" 
-                    minlength="8"
                     id="password"
                     name="password"
                     required> 

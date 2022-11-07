@@ -16,10 +16,9 @@
     <?php
         require_once("../general/header.php");
     ?>
-
         <main>
             <div class='body-container'>
-                <form action="/controller/user/register_controller.php" method="post" enctype="multipart/form-data" class="reg-form">
+                <form action="/controller/user/register_controller.php" method="post" enctype="multipart/form-data" class="content-box">
                     Name :
                     <input type="text" 
                     pattern="[a-zA-Z]+" 

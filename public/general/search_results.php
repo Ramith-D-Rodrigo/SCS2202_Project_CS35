@@ -16,19 +16,27 @@
         <?php
             require_once("header.php");
         ?>
-        <div>
-            <?php
-                if(isset($_SESSION['searchErrorMsg'])){
-                    echo $_SESSION['searchErrorMsg'];
-                    unset($_SESSION['searchErrorMsg']); //Unset for future searching
-                }
-                else if(isset($_SESSION['description'])){
-                    echo $_SESSION['description'];
-                    unset($_SESSION['description']);    //unset for future searching
-                }
-            ?>
-        </div>
+        <main>
+            <div class="search">
+                    <form action="/controller/general/search_controller.php" method="post" id="searchBar">
+                        <input type="text" name="sportName" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
+                        <button type="submit" onclick="return searchValidation(event)">Search</button>
+                    </form>
+            </div>
+            <div class="content-box">
 
+                <?php
+                    if(isset($_SESSION['searchErrorMsg'])){
+                        echo $_SESSION['searchErrorMsg'];
+                        unset($_SESSION['searchErrorMsg']); //Unset for future searching
+                    }
+                    else if(isset($_SESSION['description'])){
+                        echo $_SESSION['description'];
+                        unset($_SESSION['description']);    //unset for future searching
+                    }
+                ?>
+            </div>
+        </main>
         <?php
             require_once("footer.php");
         ?>

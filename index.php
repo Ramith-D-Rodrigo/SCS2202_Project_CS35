@@ -16,11 +16,12 @@
             require_once("./public/general/header.php");
         ?>
         <main>
-            Home page 
-            <form action="/controller/general/search_controller.php" method="post" id="searchBar">
-                <input type="text" name="sportName" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
-                <button type="submit" onclick="return searchValidation(event)">Search</button>
-            </form>
+            <div class="search">
+                <form action="/controller/general/search_controller.php" method="post" id="searchBar">
+                    <input type="text" name="sportName" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
+                    <button type="submit" onclick="return searchValidation(event)">Search</button>
+                </form>
+            </div>
         </main>
         <?php
             require_once("./public/general/footer.php");
