@@ -9,6 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
+        <link rel="stylesheet" href="/styles/general/reservation_schedule.css">
         <title>Reservation Schedule</title>
     </head>
     <body>
@@ -31,20 +32,24 @@
                         </div>
                     </div>
 
-                    <div class="court-tabs">
-                        <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){?>
-                            <input type="radio" id=<?php echo $courtid ?> name="selectedCourt">
-                            <label for=<?php echo $courtid ?>>Court 1</label>
-                            <div class="court-schedule">
-                                Schedule
-                            </div>
+                    <div>
+                        <ul>
+                            <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){?>
+                                <button id=<?php echo $courtid?> class="courtBtn">Court <?php echo $court['courtName']?></button>
+                            <?php
+                                }
+                            ?>
+                        </ul>
+                            <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){?>
+                        <div class="court-schedule" id="court<?php echo $courtid?>">
+                            Schedule of <?php echo $court['courtName']?>
+                        </div>
                         <?php
                         }
                         ?>
                     </div>
                 <?php
                     }
-
                 ?>                        
 
             </div>
@@ -91,5 +96,6 @@
             require_once("footer.php");
         ?>
     </body>
+    <script src="/js/general/reservation_schedule.js"></script>
     <script src="/js/general/reservation_validation.js"></script>
 </html>

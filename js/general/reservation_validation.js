@@ -16,6 +16,4 @@ reserveStartingTime.addEventListener('change', (e)=>{
     else{
         e.target.style.border = "none";
     }
-
-
-})
+});

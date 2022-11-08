@@ -3,20 +3,24 @@
     require_once("../../src/general/branch.php");
     require_once("../../src/user/dbconnection.php");
     require_once("../../src/general/sport_court.php");
+    require_once("../../src/general/uuid.php");
 
-    $reservationPlace = explode(',',$_POST['reserveBtn']);  //split the branch and sport id branch id -> 0th index, sport id -> 1st index, branch location -> 2nd index, sport name -> 3rd index
+    $reservationPlace = explode(',',$_POST['reserveBtn']);  //split the values
+    //branch id -> 0th index, sport id -> 1st index, branch location -> 2nd index, sport name -> 3rd index
 
-    $branch = new Branch($reservationPlace[0]);
+    $branch = new Branch(uuid_to_bin($reservationPlace[0], $connection));
 
-    $sports_courts = $branch -> getSportCourts($reservationPlace[1], $connection);  //get all the sports court of that branch's sport
+    $sports_courts = $branch -> getSportCourts(uuid_to_bin($reservationPlace[1], $connection), $connection);  //get all the sports court of that branch's sport
 
     $allCourts = [];
 
+
     while($courtResult = $sports_courts -> fetch_object()){ //traverse all the sports courts
-        $tempCourt = new Sports_Court($courtResult -> court_id);
+        $tempCourt = new Sports_Court($courtResult -> court_id);    //no need to convert to bin as we already received uuid in binary format
         $tempSchedule = $tempCourt -> getSchedule($connection); //get the schedule of that particular sport (all the reservations)
 
         $courtSchedule = [];    //to store each court's reservations
+        $courtName = $tempCourt -> getName($connection);
 
         while($scheduleResult = $tempSchedule -> fetch_object()){   //create the array for current schedule reservations
             $reservationDetails = [];   //to store current court's each reservation's details
@@ -29,7 +33,8 @@
 
             $courtSchedule[$scheduleResult -> reservation_id] =  $reservationDetails;   //reservation details stored in courtschedule
         }
-        $allCourts[$courtResult -> court_id] = ['schedule' => $courtSchedule, 'courtName' => $courtResult -> court_name];  //reservation schedule of the court is sotred in the courts array
+        $allCourts[bin_to_uuid($courtResult -> court_id, $connection)] = ['schedule' => $courtSchedule, 'courtName' => $courtName];  //reservation schedule of the court is sotred in the courts array
+        unset($tempCourt);
     }
     print_r($allCourts);
 

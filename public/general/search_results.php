@@ -40,7 +40,7 @@
                             Sport : <?php echo $result['sport_name']; ?>
                             <br>
                             Number of Courts : <?php echo $result['num_of_courts']; ?>
-                            <button class="btn" style="margin-left:10px" type ="submit" name ="reserveBtn" value="<?php echo $result['branch_id']?>,<?php echo $result['sport_id']?>, <?php echo $result['location']?>,<?php echo $result['sport_name']?>">Make a Reservation</button>
+                            <button style="margin-left:10px" type ="submit" name ="reserveBtn" value="<?php echo $result['branch_id']?>,<?php echo $result['sport_id']?>,<?php echo $result['location']?>,<?php echo $result['sport_name']?>">Make a Reservation</button>
                         </form>
                 <?php
                         } 

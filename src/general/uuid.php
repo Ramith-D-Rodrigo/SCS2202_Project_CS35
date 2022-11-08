@@ -22,7 +22,7 @@
     }
 
     function bin_to_uuid($uuid, $database){
-        $sql = sprintf("SELECT BIN_TO_UUID(%s, true) AS uuid", $database -> real_escape_string($uuid));
+        $sql = sprintf("SELECT BIN_TO_UUID('%s', true) AS uuid", $database -> real_escape_string($uuid));
 
         $result = $database -> query($sql);
 

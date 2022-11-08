@@ -150,3 +150,14 @@ textarea{
     color: red;
     text-align: center;
 }
+
+.btn{
+    all: unset;
+    margin: 0 10px;
+}
+
+.acc-img{
+    margin: 0 5px -5px 5px;
+    height: 29px;
+    width: 29px;
+}
