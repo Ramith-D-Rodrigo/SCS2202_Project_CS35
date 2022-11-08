@@ -181,7 +181,8 @@ class User{
 
     public function searchSport($sportName, $database){
         $sportSql = sprintf("SELECT `sport_id`,
-        `sport_name`
+        `sport_name`,
+        `reservation_price`
         FROM `sport` 
         WHERE `sport_name` 
         LIKE '%%%s%%'", //to escape % in sprintf, we need to add % again
@@ -204,7 +205,7 @@ class User{
             while($branchRow = $branchResult -> fetch_object()){   //getting all the branches
                 $branch = $branchRow -> branch_id;
 
-                array_push($result, ['branch' => $branch, 'sport_name' => $row['sport_name'], 'sport_id' => $row['sport_id']]); //create a branch sport pair
+                array_push($result, ['branch' => $branch, 'sport_name' => $row['sport_name'], 'sport_id' => $row['sport_id'], 'reserve_price' => $row['reservation_price']]); //create a branch sport pair
             }
         }
         return $result;

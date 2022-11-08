@@ -6,7 +6,7 @@
     require_once("../../src/general/uuid.php");
 
     $reservationPlace = explode(',',$_POST['reserveBtn']);  //split the values
-    //branch id -> 0th index, sport id -> 1st index, branch location -> 2nd index, sport name -> 3rd index
+    //branch id -> 0th index, sport id -> 1st index, branch location -> 2nd index, sport name -> 3rd index, opening time -> 4th index, closing time -> 5th index, reservation price -> 6th index
 
     $branch = new Branch(uuid_to_bin($reservationPlace[0], $connection));
 
@@ -40,6 +40,9 @@
 
     $_SESSION['reservingBranch'] = $reservationPlace[2];    //reserving branch
     $_SESSION['reservingSport'] = $reservationPlace[3]; //reserving sport
+    $_SESSION['opening_time'] = $reservationPlace[4];
+    $_SESSION['closing_time'] = $reservationPlace[5];
+    $_SESSION['reserve_price'] = $reservationPlace[6]; 
     $_SESSION['branch_reservation_schedule'] = $allCourts;
 
     header("Location: /public/general/reservation_schedule.php");

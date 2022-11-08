@@ -26,8 +26,11 @@
 
             array_push($final_result, 
             ['location' => $branchResult -> city, 
-            'num_of_courts' => $numOfCourts -> num_rows, 
+            'num_of_courts' => $numOfCourts -> num_rows,
+            'opening_time' => $branchResult -> opening_time,
+            'closing_time' => $branchResult -> closing_time, 
             'sport_name' => $i['sport_name'],
+            'reserve_price' => $i['reserve_price'],
             'branch_id' => bin_to_uuid($i['branch'], $connection),
             'sport_id' => bin_to_uuid($i['sport_id'], $connection)]);
 

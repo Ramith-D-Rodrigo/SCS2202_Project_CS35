@@ -7,6 +7,8 @@
         private $email;
         private $manager;
         private $receptionist;
+        private $opening_time;
+        private $closing_time;
 
         public function __construct($branch_binary_id){    //use the binary id to construct
             $this -> branchID = $branch_binary_id;

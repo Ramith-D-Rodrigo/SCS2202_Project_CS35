@@ -30,9 +30,12 @@
                         <div>
                             Branch : <?php echo $_SESSION['reservingBranch'] ?>
                         </div>
+                        <div>
+                            Reservation Price : Rs.<?php echo $_SESSION['reserve_price'] ?> per Hour
+                        </div>
                     </div>
 
-                    <div>
+                    <div style="margin-top:10px">
                         <ul>
                             <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){?>
                                 <button id=<?php echo $courtid?> class="courtBtn">Court <?php echo $court['courtName']?></button>
@@ -68,25 +71,27 @@
                         </div>
 
                         <div style ="flex-basis: 33.333333%">
-                            Sport Court : <input value =<?php echo $_SESSION['reservingBranch']?> readonly>
+                            Sport Court : <input id="selectedSportCourt" readonly>
                         </div>
 
                         <div style ="flex-basis: 33.333333%">
-                            Date : <input type="date" required>
+                            Date : <input type="date" id="reservationDate" required>
                         </div>
                             
                         <div style ="flex-basis: 33.333333%">
-                            Starting Time : <input type="time" step="1800" required id="reserveStartingTime">
+                            Starting Time : <input type="time" required id="reserveStartingTime" min= <?php echo substr($_SESSION['opening_time'],0,5)?> max= <?php echo substr($_SESSION['closing_time'],0,5)?>>
                             
                         </div>
 
                         <div style ="flex-basis: 33.333333%">
-                            Ending Time : <input type="time" step="1800" required id="reserveStartingTime">
+                            Ending Time : <input type="time" required id="reserveEndingTime" min= <?php echo substr($_SESSION['opening_time'],0,5)?> max= <?php echo substr($_SESSION['closing_time'],0,5)?>>
                         </div>
-
                     </div>
                     <div class="err-msg" id="errMsg">
 
+                    </div>
+                    <div style="text-align:center">
+                        Reservation Price : <input readonly id="reservationPrice">
                     </div>
             </div>
 

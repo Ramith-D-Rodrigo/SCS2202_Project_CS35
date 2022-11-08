@@ -7,6 +7,10 @@ for(i = 1; i < schedules.length; i++){  //starting from 1 because we are going t
 
 const courtBtns = document.getElementsByClassName('courtBtn');
 
+const selectedCourt = document.getElementById("selectedSportCourt");    //Selected Sports Court
+
+selectedCourt.value = courtBtns[0].innerHTML;   //at the start, the first court is the selected
+
 for(i = 0; i < courtBtns.length; i++){
 
     const btn = document.getElementById(courtBtns[i].id);
@@ -21,6 +25,6 @@ for(i = 0; i < courtBtns.length; i++){
         const scheduleid = "court" + btn.id;    //get the pressed court's id
         const schedule = document.getElementById(scheduleid);   //get the element
         schedule.style.display = 'block';
-    })
+        selectedCourt.value = btn.innerHTML;
+    });
 }
-

@@ -40,7 +40,12 @@
                             Sport : <?php echo $result['sport_name']; ?>
                             <br>
                             Number of Courts : <?php echo $result['num_of_courts']; ?>
-                            <button style="margin-left:10px" type ="submit" name ="reserveBtn" value="<?php echo $result['branch_id']?>,<?php echo $result['sport_id']?>,<?php echo $result['location']?>,<?php echo $result['sport_name']?>">Make a Reservation</button>
+                            <br>
+                            Reservation Price : <?php echo $result['reserve_price']; ?> per hour
+                            <button style="margin-left:10px" 
+                            type ="submit" 
+                            name ="reserveBtn" 
+                            value="<?php echo $result['branch_id']?>,<?php echo $result['sport_id']?>,<?php echo $result['location']?>,<?php echo $result['sport_name']?>,<?php echo $result['opening_time']?>,<?php echo $result['closing_time']?>,<?php echo $result['reserve_price']?>">Make a Reservation</button>
                         </form>
                 <?php
                         } 
