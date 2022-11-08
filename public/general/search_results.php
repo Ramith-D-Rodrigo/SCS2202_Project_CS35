@@ -34,15 +34,14 @@
                     else if(isset($_SESSION['searchResult'])){
                         foreach($_SESSION['searchResult'] as $result){ //traverse the result
                 ?>
-                        <div class ="search_result">
+                        <form class ="search_result" action="/controller/general/reservation_schedule_controller.php" method="post">
                             Branch : <?php echo $result['location']; ?>
                             <br>
                             Sport : <?php echo $result['sport_name']; ?>
                             <br>
                             Number of Courts : <?php echo $result['num_of_courts']; ?>
-                            <button class="btn" style="margin-left:10px">Make a Reservation</button>
-                            <br>
-                        </div>
+                            <button class="btn" style="margin-left:10px" type ="submit" name ="reserveBtn" value="<?php echo $result['branch_id']?>,<?php echo $result['sport_id']?>, <?php echo $result['location']?>,<?php echo $result['sport_name']?>">Make a Reservation</button>
+                        </form>
                 <?php
                         } 
                         //print_r($_SESSION['searchResult']);

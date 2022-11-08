@@ -21,9 +21,15 @@
             $branchDetails = $branch -> getDetails($connection);    //get branch details
             $branchResult = $branchDetails -> fetch_object();
 
-            $numOfCourts = $branch -> numOfSportCourts($i['sport_id'], $connection);    //get the number of courts of the current considering branch
+            $numOfCourts = $branch -> getSportCourts($i['sport_id'], $connection);    //get the number of courts of the current considering branch
 
-            array_push($final_result, ['location' => $branchResult -> city, 'num_of_courts' => $numOfCourts -> fetch_object() -> courtCount, 'sport_name' => $i['sport_name']]);
+            array_push($final_result, 
+            ['location' => $branchResult -> city, 
+            'num_of_courts' => $numOfCourts -> num_rows, 
+            'sport_name' => $i['sport_name'],
+            'branch_id' => $i['branch'],
+            'sport_id' => $i['sport_id']]);
+
             unset($branch); //remove the reference
         }
 
