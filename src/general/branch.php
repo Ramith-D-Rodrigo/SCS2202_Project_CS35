@@ -8,11 +8,11 @@
         private $manager;
         private $receptionist;
 
-        function __construct($branch_binary_id){    //use the binary id to construct
+        public function __construct($branch_binary_id){    //use the binary id to construct
             $this -> branchID = $branch_binary_id;
         }
 
-        function getDetails($database){
+        public function getDetails($database){
             $sql = sprintf("SELECT * FROM `branch`
             WHERE 
             `branch_id` 
@@ -22,8 +22,8 @@
             return $result;
         }
 
-        function numOfSportCourts($sportID, $database){
-            $sql = sprintf("SELECT COUNT(`court_id`) AS courtCount
+        public function getSportCourts($sportID, $database){
+            $sql = sprintf("SELECT `court_id`
             FROM
             `sports_court`
             WHERE 
