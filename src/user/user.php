@@ -1,4 +1,5 @@
 <?php
+    require_once("../../src/general/uuid.php");
 class User{
     private $userID;
     private $firstName;
@@ -215,6 +216,32 @@ class User{
         $newReservation = new Reservation();
         $result = $newReservation -> onlineReservation($date, $st, $et, $people, $payment, $court, $this -> userID, $database);
         unset($newReservation);
+        return $result;
+    }
+
+    public function getReservationHistory($database){   //Joining sport, sport court, branch, reservation tables
+        $sql = sprintf("SELECT `r`.`reservation_id`, 
+        `r`.`date`, 
+        `r`.`starting_time`, 
+        `r`.`ending_time`, 
+        `r`.`no_of_people`, 
+        `r`.`payment_amount`, 
+        `r`.`status`, 
+        `b`.`city`, 
+        `s`.`sport_name`,
+        `sc`.`court_name` 
+        FROM `reservation` `r`
+        INNER JOIN `sports_court` `sc` 
+        ON `r`.`sport_court` = `sc`.`court_id`
+        INNER JOIN `sport` `s` 
+        ON `s`.`sport_id` = `sc`.`sport_id`
+        INNER JOIN `branch` `b` 
+        ON `sc`.`branch_id` = `b`.`branch_id`
+        WHERE `r`.`user_id` = '%s'
+        ORDER BY `r`.`date`",
+        $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
+
+        $result = $database -> query($sql);
         return $result;
     }
 }
