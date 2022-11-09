@@ -1,5 +1,9 @@
 <?php
     session_start();
+    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is logged in
+        header("Location: /index.php"); //the user shouldn't be able to access the register page
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
