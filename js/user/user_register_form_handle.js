@@ -116,11 +116,24 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     inputName.setAttribute('name', 'name' + currID);
     inputName.setAttribute('required', '');
 
-    const inputRelationship = document.createElement("input");
-    inputRelationship.setAttribute('type', 'text');
+    const inputRelationship = document.createElement("select");
     inputRelationship.setAttribute('name', 'relationship' + currID);
     inputRelationship.setAttribute('required', '');
-    inputRelationship.setAttribute('pattern', '[a-zA-Z]{3,15}');
+
+    const relationshipOptions = ["Mother", "Father", "Sibling 1", "Sibling 2", "Friend 1", "Friend 2", "Partner"];
+
+    const initialOption = document.createElement("option");
+    initialOption.setAttribute('value','');
+    initialOption.innerHTML = "Choose One";
+    inputRelationship.appendChild(initialOption);
+
+
+    for(i = 0; i < 7; i++){
+        const optionField = document.createElement("option");
+        optionField.setAttribute('value',relationshipOptions[i]);
+        optionField.innerHTML = relationshipOptions[i];
+        inputRelationship.appendChild(optionField); //append the child option
+    }
 
     const inputContactNum = document.createElement("input");
     inputContactNum.setAttribute('type', 'text');
@@ -201,3 +214,16 @@ if(verbose){
 
 const minDate = new Date(minYear).toISOString().split("T")[0];
 bday.min = minDate;
+
+//message focues
+
+const errMsg = document.getElementById("errmsg");
+console.log(errMsg.innerHTML.length);
+if(errMsg.innerHTML.length !== 0){
+    window.location.hash = '#errmsg';
+}
+
+const successMsg = document.getElementById('successmsg');
+if(successMsg.innerHTML.length !== 0){
+    window.location.hash ="#successmsg";
+}

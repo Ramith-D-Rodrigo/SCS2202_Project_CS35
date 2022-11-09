@@ -1,5 +1,11 @@
 <?php
     session_start();
+    foreach($_SESSION as $key => $value){
+        if($key === 'userrole' || $key === 'userid'){   //unset other variables like register prefillings
+            continue;
+        }
+        unset($_SESSION[$key]);
+    }
 ?>
 
 <!DOCTYPE html>
@@ -15,13 +21,14 @@
         <?php
             require_once("./public/general/header.php");
         ?>
-        <div class="body-container">
-            Home page 
-            <form action="/controller/general/search_controller.php" method="post" id="searchBar">
-                <input type="text" name="sportName" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
-                <button type="submit" onclick="return searchValidation(event)">Search</button>
-            </form>
-        </div>
+        <main>
+            <div class="search">
+                <form action="/controller/general/search_controller.php" method="post" id="searchBar">
+                    <input type="text" name="sportName" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
+                    <button type="submit" onclick="return searchValidation(event)">Search</button>
+                </form>
+            </div>
+        </main>
         <?php
             require_once("./public/general/footer.php");
         ?>

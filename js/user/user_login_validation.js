@@ -13,6 +13,7 @@ function validateForm(event){
     if(loginForm.reportValidity() === false){   //has errors
         errMsg.innerHTML = 'Please Enter valid information';
         event.preventDefault(); //do not submit
+        return false;
     }
     else{   //can submit
         return true;

@@ -4,6 +4,7 @@
     require_once("../../src/user/user_dependent.php");
     require_once("../../src/user/dbconnection.php");
     require_once("../../src/user/credentials_availability.php");
+    require_once("../../src/general/uuid.php"); //to generate uuids
 
 
     //all possible inputs for prefilling
@@ -56,12 +57,7 @@
     //can create a account
 
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    //hash the password
-    $useridsql = 'SELECT UUID()';   //create an user id using uuid function
-    $userIDResult = $connection -> query($useridsql); //get the result from query
-
-    foreach($userIDResult as $row){   //get the user id
-        $userid = $row['UUID()'];
-    }
+    $userid = generateUUID($connection);    //get the uuid
 
     $username = htmlspecialchars($_POST['username'], ENT_QUOTES);
     $email = htmlspecialchars($_POST['emailAddress'], ENT_QUOTES);
@@ -130,12 +126,32 @@
         $j = $j + 1;
     }
 
+    //profile picture
+    $profilePicFlag = false;
+/*     echo $_FILES['user_pic']['name'];
+    echo "<br>";
+    echo $_FILES['user_pic']['tmp_name']; */
+
+    if(!empty($_FILES['user_pic']['name'])){    //user has uploaded a picture
+        $profilePicFlag = true;
+        $pic = $_FILES['user_pic']['tmp_name'];   //the image
+        $picContent = addslashes(file_get_contents($pic));  //file content of the image     
+    }
+
     $new_user = new User();
     $new_user -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $user_dependents, $height, $weight, $medical_concerns, $username, $password, $gender);
+
+    if($profilePicFlag === true){    //has uploaded a profile pic
+        $new_user -> setProfilePic($picContent);
+    }
+    else{
+        $new_user -> setProfilePic("NULL");
+    }
+
     $result = $new_user -> registerUser($connection);
 
     if($result === TRUE){   //successfully registered
-            echo "Successfully registered";
+        echo "Successfully registered";
 /*         foreach($inputFields as $i){    //store session details
             if(isset($_SESSION[$i])){   //unsetting input values
                 session_unset($i);
@@ -144,6 +160,11 @@
         session_unset(); //free all current session variables 
 
         $_SESSION['RegsuccessMsg'] = 'Registered Successfully';
+        header("Location: /public/user/user_register.php");
+    }
+    else{
+        echo "Error Registering the Account";
+        $_SESSION['RegUnsuccessMsg'] = 'Error Registering the Account';
         header("Location: /public/user/user_register.php");
     }
 

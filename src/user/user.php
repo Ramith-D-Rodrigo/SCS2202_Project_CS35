@@ -16,6 +16,7 @@ class User{
     private $password;
     private $gender;
     private $isactive;
+    private $profilePic;
 
     public function setDetails($fName='', $lName='', $email='', $address='', $contactNo='', $dob='', $uid='', $dependents='', $height='', $weight='', $medicalConcerns='', $username='', $password='', $gender=''){
         $this -> userID = $uid;
@@ -32,6 +33,10 @@ class User{
         $this -> username = $username;
         $this -> password = $password;
         $this -> gender = $gender;
+    }
+
+    public function setProfilePic($profilePic){
+        $this -> profilePic = $profilePic;
     }
 
     public function getUserID(){    //userID getter
@@ -72,9 +77,10 @@ class User{
         `register_date`, 
         `height`, 
         `weight`,
-        `is_active`) 
+        `is_active`,
+        `profile_photo`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), '%s')",
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), '%s', NULLIF('%s', 'NULL'))",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> firstName),
         $database -> real_escape_string($this -> lastName),
@@ -86,7 +92,8 @@ class User{
         $database -> real_escape_string($this -> registeredDate),
         $database -> real_escape_string($this -> height),
         $database -> real_escape_string($this -> weight),
-        $database -> real_escape_string($this -> isactive))); 
+        $database -> real_escape_string($this -> isactive),
+        $database -> real_escape_string($this -> profilePic))); 
 
         return $result;
 /*         if ($result === TRUE) {
@@ -139,6 +146,9 @@ class User{
         if($loginEntry  === TRUE && $userEntry  === TRUE && $medicalConcernEntry  === TRUE && $dependentEntry === TRUE){    //all has to be true (successfully registered)
             return TRUE;
         }
+        else{
+            return FALSE;
+        }
     }
 
     public function login($username, $password, $database){
@@ -170,15 +180,41 @@ class User{
     }
 
     public function searchSport($sportName, $database){
-        $sql = sprintf("SELECT BIN_TO_UUID(`sport_id`, true) AS sport_id,
-        `description`  
+        $sportSql = sprintf("SELECT `sport_id`,
+        `sport_name`,
+        `reservation_price`
         FROM `sport` 
         WHERE `sport_name` 
         LIKE '%%%s%%'", //to escape % in sprintf, we need to add % again
         $database -> real_escape_string($sportName));
 
-        $result = $database -> query($sql);
+        $sportResult = $database -> query($sportSql);   //get the sports results
 
+        if($sportResult -> num_rows === 0){ //no such sport found
+            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+        }
+
+        $result = [];
+        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table
+            $courtBranchSql = sprintf("SELECT DISTINCT `branch_id`   
+            FROM `sports_court`
+            WHERE `sport_id` 
+            LIKE '%s'", $database -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
+            $branchResult = $database -> query($courtBranchSql);
+
+            while($branchRow = $branchResult -> fetch_object()){   //getting all the branches
+                $branch = $branchRow -> branch_id;
+
+                array_push($result, ['branch' => $branch, 'sport_name' => $row['sport_name'], 'sport_id' => $row['sport_id'], 'reserve_price' => $row['reservation_price']]); //create a branch sport pair
+            }
+        }
+        return $result;
+    }
+
+    public function makeReservation($date, $st, $et, $people, $payment, $court, $database){
+        $newReservation = new Reservation();
+        $result = $newReservation -> onlineReservation($date, $st, $et, $people, $payment, $court, $this -> userID, $database);
+        unset($newReservation);
         return $result;
     }
 }
