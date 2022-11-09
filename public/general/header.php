@@ -38,7 +38,7 @@
         <?php
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
         ?>  
-            <div style="float:right">
+            <div style="float:right" id="logout">
                 <button class ="btn" onclick="window.location.href='/controller/general/logout.php'"><img src="/styles/icons/profile_icon.svg" class="acc-img"></button>
                 <button class ="btn" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
             </div>
@@ -46,7 +46,7 @@
             }
             else{
         ?>
-            <div style="float:right">
+            <div style="float:right" id="login">
                 <button class="btn" onclick="window.location.href='/public/general/register.php'">Register<img src="/styles/icons/register_icon.svg" class="acc-img"></button>
                 <button class="btn" onclick="window.location.href='/public/general/login.php'">Log in<img src="/styles/icons/login_icon.svg" class="acc-img"></button>
             </div>

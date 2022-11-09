@@ -61,38 +61,42 @@
                     <div style="text-align:center; margin-bottom: 20px">
                         Make a Reservation
                     </div>
-                    <div style="display:flex; flex-direction: row; flex-wrap: wrap; justify-content:space-around">
-                        <div style ="flex-basis: 33.333333%">
-                            Sport : <input value= <?php echo $_SESSION['reservingSport'] ?> readonly> 
-                        </div>
+                    <form method="post" action="">
+                        <div style="display:flex; flex-direction: row; flex-wrap: wrap; justify-content:space-around">
+                            <div style ="flex-basis: 33.333333%">
+                                Sport : <input name ="reservingSport" value= <?php echo $_SESSION['reservingSport'] ?> readonly> 
+                            </div>
 
-                        <div style ="flex-basis: 33.333333%">
-                            Branch : <input value= <?php echo $_SESSION['reservingBranch']?> readonly>
-                        </div>
+                            <div style ="flex-basis: 33.333333%">
+                                Branch : <input name = "reservingBranch" value= <?php echo $_SESSION['reservingBranch']?> readonly>
+                            </div>
 
-                        <div style ="flex-basis: 33.333333%">
-                            Sport Court : <input id="selectedSportCourt" readonly>
-                        </div>
+                            <div style ="flex-basis: 33.333333%">
+                                Sport Court : <input name="reservingSportCourt" id="selectedSportCourt" readonly>
+                            </div>
 
-                        <div style ="flex-basis: 33.333333%">
-                            Date : <input type="date" id="reservationDate" required>
-                        </div>
-                            
-                        <div style ="flex-basis: 33.333333%">
-                            Starting Time : <input type="time" required id="reserveStartingTime" min= <?php echo substr($_SESSION['opening_time'],0,5)?> max= <?php echo substr($_SESSION['closing_time'],0,5)?>>
-                            
-                        </div>
+                            <div style ="flex-basis: 33.333333%">
+                                Date : <input type="date" name="reservingDate" id="reservationDate" required>
+                            </div>
+                                
+                            <div style ="flex-basis: 33.333333%">
+                                Starting Time : <input type="time" name="reservingStartTime" required id="reserveStartingTime" min= <?php echo substr($_SESSION['opening_time'],0,5)?> max= <?php echo substr($_SESSION['closing_time'],0,5)?>>
+                                
+                            </div>
 
-                        <div style ="flex-basis: 33.333333%">
-                            Ending Time : <input type="time" required id="reserveEndingTime" min= <?php echo substr($_SESSION['opening_time'],0,5)?> max= <?php echo substr($_SESSION['closing_time'],0,5)?>>
+                            <div style ="flex-basis: 33.333333%">
+                                Ending Time : <input type="time" required name="reservingEndTime" id="reserveEndingTime" min= <?php echo substr($_SESSION['opening_time'],0,5)?> max= <?php echo substr($_SESSION['closing_time'],0,5)?>>
+                            </div>
                         </div>
-                    </div>
-                    <div class="err-msg" id="errMsg">
-
-                    </div>
-                    <div style="text-align:center">
-                        Reservation Price : <input readonly id="reservationPrice">
-                    </div>
+                        <div class="err-msg" id="errMsg">
+                        </div>
+                        <div style="text-align:center">
+                            Reservation Price : <input readonly id="reservationPrice" min=<?php echo $_SESSION['reserve_price']?>>
+                        </div>
+                        <div style="display:flex; align-items: center; justify-content: center;">
+                            <button type="submit" name="makeReserveBtn" onclick="return validateForm(event)" style="margin-top:10px;">Make Reservation</button>
+                        </div>
+                    </form>
             </div>
 
         </main>
