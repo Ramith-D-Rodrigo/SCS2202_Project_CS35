@@ -39,14 +39,17 @@
                         required> 
                         <button id="togglePassword">Show Password</button><br>
                     </div>
-                    <div id="msgbox">
+                    <div class='err-msg' id="msgbox">
                         <?php
                             if(isset($_SESSION['errMsg'])){
                                 echo $_SESSION['errMsg'];
                                 echo '<br>';
                                 unset($_SESSION['errMsg']);
                             }
-
+                        ?>
+                    </div>
+                    <div class='success-msg'>
+                        <?php
                             if(isset($_SESSION['LogInsuccessMsg'])){
                                 echo $_SESSION['LogInsuccessMsg'];
                                 echo '<br> You will be Redirected to the Home page. Please Wait';
@@ -76,7 +79,7 @@
                     </div>
                 </form>
                 <div class="btn-container">
-                    New User? <button >Register</button>
+                    New User? <button onclick="window.location.href='/public/general/register.php'">Register</button>
                 </div>
             </div>
         </main>

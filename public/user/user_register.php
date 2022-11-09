@@ -200,15 +200,13 @@
                                 echo '';
                             }
                         ?></div>
-                    <div id="successmsg" class="success-msg">
-                        <?php
+                    <div id="successmsg" class="success-msg"><?php
                             if(isset($_SESSION['RegsuccessMsg'])){
                                 echo $_SESSION['RegsuccessMsg'];
                                 echo '<br>';
                                 unset($_SESSION['RegsuccessMsg']);
                             }
-                        ?>    
-                    </div>
+                        ?></div>
                     <div class="btn-container">
                         <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
                     </div>

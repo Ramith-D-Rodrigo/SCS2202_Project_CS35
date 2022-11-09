@@ -133,6 +133,11 @@ input{
     margin: 10px;
 }
 
+input::placeholder{
+    color:rgb(107, 106, 106);
+    text-align: center;
+}
+
 textarea{
     background-color: #033C66;
     border-radius: 10px;
@@ -175,5 +180,10 @@ textarea{
     margin: 0 5px -5px 5px;
     height: 29px;
     width: 29px;
+}
+
+.success-msg{
+    color: green;
+    text-align: center;
 }
 
