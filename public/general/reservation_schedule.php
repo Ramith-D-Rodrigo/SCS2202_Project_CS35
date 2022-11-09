@@ -48,7 +48,7 @@
                                 <?php foreach($court['schedule'] as $schedule){
                                     echo "Reservation Date : ". $schedule['date']."<br>";
                                     echo "Start Time : ".$schedule['starting_time']."<br>";
-                                    echo "End Time : ".$schedule['ending_time']."<br>";
+                                    echo "End Time : ".$schedule['ending_time']."<br><br>";
                                 }
                                 ?>
                         </div>

@@ -56,6 +56,7 @@ reservationDate.max = maxDate;
 //price calculation
 
 reserveStartingTime.addEventListener('change', (e)=>{
+    const errorMsg = document.getElementById("errMsg");
     if(reserveEndingTime.value === ""){
         return;
     }
@@ -72,8 +73,12 @@ reserveStartingTime.addEventListener('change', (e)=>{
 
     const timeDiffMilli = end - start;
     if(timeDiffMilli <= 0){ //ending time is lower than starting time
+        reservationPrice.value = "";
+        errorMsg.innerHTML = "Invalid Time Range";
         return;
     }
+    errorMsg.innerHTML = "";
+
     if(e.target.style.border === "medium solid red" || reserveEndingTime.style.border === "medium solid red"){  //invalid time input
         reservationPrice.value = "";
         return;
@@ -81,6 +86,17 @@ reserveStartingTime.addEventListener('change', (e)=>{
 
     const timeDiffHours = ((timeDiffMilli/1000)/60)/60;
     console.log(timeDiffHours);
+
+    if(timeDiffHours < 1){  //minimum reservation time period
+        errorMsg.innerHTML = "Selected Time Period is lesser than Minimum Reservation Period";
+        reservationPrice.value = "";
+        return;
+    }
+    else if(timeDiffHours > 6){ //maximum reservation time period
+        errorMsg.innerHTML = "Selected Time Period is greater than Maximum Reservation Period";
+        reservationPrice.value = "";
+        return;
+    }
     
     const minRevPrice = reservationPrice.min;
     calulatedPrice = minRevPrice * timeDiffHours;
@@ -88,6 +104,7 @@ reserveStartingTime.addEventListener('change', (e)=>{
 });
 
 reserveEndingTime.addEventListener('change', (e)=>{
+    const errorMsg = document.getElementById("errMsg");
     if(reserveStartingTime.value === ""){
         return;
     }
@@ -102,17 +119,32 @@ reserveEndingTime.addEventListener('change', (e)=>{
     end.setHours(endingTime[0])
     end.setMinutes(endingTime[1]);
 
-    const timeDiffMilli = end - start;
-    if(timeDiffMilli <= 0){ //ending time is lower than starting time
-        return;
-    }
+
 
     if(e.target.style.border === "medium solid red" || reserveStartingTime.style.border === "medium solid red"){  //invalid time input
         reservationPrice.value = "";
         return;
     }
-
+    const timeDiffMilli = end - start;
+    if(timeDiffMilli <= 0){ //ending time is lower than starting time
+        errorMsg.innerHTML = "Invalid Time Range";
+        reservationPrice.value = "";
+        return;
+    }
+    errorMsg.innerHTML = "";
     const timeDiffHours = ((timeDiffMilli/1000)/60)/60;
+
+    if(timeDiffHours < 1){  //minimum reservation time period
+        errorMsg.innerHTML = "Selected Time Period is lesser than Minimum Reservation Period";
+        reservationPrice.value = "";
+        return;
+    }
+    else if(timeDiffHours > 6){ //maximum reservation time period
+        errorMsg.innerHTML = "Selected Time Period is greater than Maximum Reservation Period";
+        reservationPrice.value = "";
+        return;
+    }
+    errorMsg.innerHTML = "";
     console.log(timeDiffHours);
     
     const minRevPrice = reservationPrice.min;
