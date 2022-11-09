@@ -20,4 +20,5 @@
             require_once("footer.php");
         ?>
     </body>
+    <script src="/js/user/account_links.js"></script>
 </html>

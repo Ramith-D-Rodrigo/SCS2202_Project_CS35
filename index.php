@@ -34,4 +34,5 @@
         ?>
     </body>
     <script src="/js/general/search_validation.js"></script>
+    <script src="/js/user/account_links.js"></script>
 </html>

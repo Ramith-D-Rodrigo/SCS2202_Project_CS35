@@ -39,7 +39,7 @@
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
         ?>  
             <div style="float:right" id="logout">
-                <button class ="btn" onclick="window.location.href='/controller/general/logout.php'"><img src="/styles/icons/profile_icon.svg" class="acc-img"></button>
+                <button class ="btn" id='profileBtn'><img src="/styles/icons/profile_icon.svg" class="acc-img"></button>
                 <button class ="btn" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
             </div>
         <?php
@@ -63,5 +63,11 @@
         <a href="/public/general/reg_coaches.php">Registered Coaches</a>
         <a href="/public/general/our_feedback.php">Our Feedback</a>
         <a href="/public/general/about_us.php">About Us</a>
+        <div id="profile-links" style="float:right; margin-right:20px; display:none">
+            <a href="/index.php">Ongoing Sessions</a>
+            <a href="/index.php">Left Sessions</a>
+            <a href="/index.php">Reservation History</a>
+            <a href="/index.php">Edit Profile</a>
+        </div>
     </nav>
 </header>
