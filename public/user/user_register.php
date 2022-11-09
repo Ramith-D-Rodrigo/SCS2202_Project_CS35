@@ -169,7 +169,7 @@
                             }
                         ?>    
                     </div>
-                    <div style="display:flex; align-items: center; justify-content: center;">
+                    <div class="btn-container">
                         <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
                     </div>
                 </form>

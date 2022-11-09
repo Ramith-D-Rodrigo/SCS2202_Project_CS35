@@ -97,7 +97,8 @@
                                 unset($_SESSION['reservationFail']);
                             }
                             ?>
-                        <div class="success-msg"></div>
+                        </div>
+                        <div class="success-msg">
                         <?php if(isset($_SESSION['reservationSuccess'])){
                             echo $_SESSION['reservationSuccess'];
                             unset($_SESSION['reservationSuccess']);
