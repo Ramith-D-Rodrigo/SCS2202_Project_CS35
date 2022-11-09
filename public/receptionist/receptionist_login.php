@@ -9,7 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
-        <title>User Log In</title>
+        <title>Receptionist Log In</title>
     </head>
 
     <body>
@@ -17,7 +17,7 @@
             require_once("../general/header.php");
         ?>
         <div>
-            <form action="/controller/user/login_controller.php" method="post" id="loginForm">
+            <form action="/controller/receptionist/login_controller.php" method="post" id="loginForm">
                 Username : 
                 <input
                 type="text" 
@@ -50,9 +50,9 @@
 
                         if(isset($_SESSION['LogInsuccessMsg'])){
                             echo $_SESSION['LogInsuccessMsg'];
-                            echo '<br> You will be Redirected to the Home page. Please Wait';
+                            echo '<br> You will be Redirected to the Dashboard. Please Wait';
                             unset($_SESSION['LogInsuccessMsg']);
-                            header("Refresh: 3; URL =/index.php");
+                            header("Refresh: 3; URL =/index.php");   //have to change
                         }
                     ?>
                 </div>
@@ -79,6 +79,6 @@
             require_once("../general/footer.php");
         ?>
     </body>
-    <script src="/js/user/user_login_handle.js"></script>
-    <script src="/js/user/user_login_validation.js"></script>
+    <script src="/js/receptionist/receptionist_login_handle.js"></script>
+    <script src="/js/receptionist/receptionist_login_validation.js"></script>
 </html>

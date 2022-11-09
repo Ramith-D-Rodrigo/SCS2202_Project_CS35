@@ -9,15 +9,30 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
-        <title>User Registration</title>
+        <title>Register Staff</title>
     </head>
     <body>
-    <?php
-        require_once("../general/header.php");
-    ?>
 
     <div>
-        <form action="/controller/user/register_controller.php" method="post">
+        <form action="/controller/system_admin/register_controller.php" method="post">
+
+            <!-- Staff role and registering branch has to be displayed as dropdowns -->
+            Branch Name : 
+            <input type="text" 
+            pattern="[a-zA-Z]+" 
+            name="branchName"
+            id="branchName" 
+            required placeholder="Branch Name"
+            value=<?php if(isset($_SESSION['branchName'])) echo htmlspecialchars($_SESSION['branchName'], ENT_QUOTES)?>>
+            <br>
+            Staff Role : 
+            <input type="text" 
+            pattern="[a-zA-Z]+" 
+            name="staffRole"
+            id="staffRole" 
+            required placeholder="Staff Role"
+            value=<?php if(isset($_SESSION['staffRole'])) echo htmlspecialchars($_SESSION['staffRole'], ENT_QUOTES)?>>
+            <br>
             Name :
             <input type="text" 
             pattern="[a-zA-Z]+" 
@@ -47,55 +62,26 @@
             <input type="text"
             pattern="[0-9]{10,11}" 
             name="contactNum"
-            id="usercontact"
+            id="staffcontact"
             required
             value=<?php if(isset($_SESSION['contactNum'])) echo htmlspecialchars($_SESSION['contactNum'], ENT_QUOTES)?>> 
             <br>
 
-            Home Address : 
-            <textarea 
-            name="homeAddress"
-            id="homeAddress" 
-            required
-            ><?php if(isset($_SESSION['homeAddress'])) echo htmlspecialchars($_SESSION['homeAddress'], ENT_QUOTES)?></textarea>
-            <br>
-
-            Height : 
-            <input 
-            type="text" 
-            placeholder="Optional (centimeters)" 
-            min="0" 
-            pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
-            id="height"
-            name="height"
-            value=<?php if(isset($_SESSION['height'])) echo htmlspecialchars($_SESSION['height'], ENT_QUOTES)?>>
-
-            Weight : 
-            <input 
-            type="text" 
-            placeholder="Optional (kilograms)" 
-            min="0"
-            pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
-            id="weight"
-            name="weight"
-            value=<?php if(isset($_SESSION['weight'])) echo htmlspecialchars($_SESSION['weight'], ENT_QUOTES)?>> 
-            <br>
-            
-            <label for="gender">
-                Gender : 
-                    <input type="radio" name="gender" value="m" required <?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'm') echo 'checked';}?>> Male
-                    <input type="radio" name="gender" value="f"<?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'f') echo 'checked';}?>> Female <br>
-            </label>
-
             Email Address : 
             <!-- pattern indicates that it must follow somename@topleveldomain.domain-->
-            <input 
-            type="email" 
+            <input type="email" 
+            pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/."
             name="emailAddress"
             id="emailAddress"
             required
             value=<?php if(isset($_SESSION['emailAddress'])) echo htmlspecialchars($_SESSION['emailAddress'], ENT_QUOTES)?>> 
             <br>
+
+            <label for="gender">
+                Gender : 
+                    <input type="radio" name="gender" value="m" required <?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'm') echo 'checked';}?>> Male
+                    <input type="radio" name="gender" value="f"<?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'f') echo 'checked';}?>> Female <br>
+            </label>
 
             Username : 
             <input 
@@ -124,19 +110,6 @@
             <div>
                 Confirm Password : <input type="password" required> <button class="togglePassword"> Show Password</button> <br>
             </div>
-            <div id="medCon">
-                Medical Concerns : (Maximum of 5 | Please Add one Concern per Field)<br>
-                <button id="medConbtn"> Add </button>
-            </div>
-            <div id="emergencyDetails">
-                Emergency Contact Details: <br>
-                Name: <input type="text" name="name1" required value=<?php if(isset($_SESSION['name1'])) echo htmlspecialchars($_SESSION['name1'], ENT_QUOTES) ?>> <br>
-                Relationship: <input type="text" name="relationship1" required pattern="[a-zA-Z]{3,15}" value=<?php if(isset($_SESSION['relationship1'])) echo htmlspecialchars($_SESSION['relationship1'], ENT_QUOTES) ?>> <br>
-                Contact Number: <input type="text" min="0" name="emgcontactNum1" required pattern="[0-9]{10,11}" value=<?php if(isset($_SESSION['emgcontactNum1'])) echo htmlspecialchars($_SESSION['emgcontactNum1'], ENT_QUOTES) ?>> <br>
-                Want to Add More? (Maximum of 3)
-                <br>
-                <button id="emergencyDetailsbtn">Add More</button>
-            </div>
             <div id="errmsg">
                 <?php
                     if(isset($_SESSION['emailError'])){
@@ -157,7 +130,7 @@
                 ?>
             </div>
 
-            <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
+            <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register Staff</button>
         </form>
     </div>
 
@@ -167,6 +140,6 @@
     ?>
 
     </body>
-    <script src="/js/user/user_register_form_handle.js"></script>
-    <script src="/js/user/user_register_validation.js"></script>
+    <script src="/js/system_admin/staff_register_form_handle.js"></script>
+    <script src="/js/system_admin/staff_register_validation.js"></script>
 </html>

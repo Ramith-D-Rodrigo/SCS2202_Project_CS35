@@ -1,15 +1,15 @@
 <?php
     session_start();
-    require_once("../../src/user/user.php");
-    require_once("../../src/user/dbconnection.php");
+    require_once("../../src/system_admin/admin.php");
+    require_once("../../src/system_admin/dbconnection.php");
 
 
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $loginUser = new User();
+    $loginAdmin = new Admin();
 
-    $resultmsg = $loginUser -> login($username, $password, $connection);
+    $resultmsg = $loginAdmin -> login($username, $password, $connection);
 
     if(count($resultmsg) === 1){    //login failed
         $_SESSION['errMsg'] = $resultmsg[0];
