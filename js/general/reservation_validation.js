@@ -3,6 +3,7 @@ verbose = true;
 const reserveStartingTime = document.getElementById("reserveStartingTime");
 const reserveEndingTime = document.getElementById("reserveEndingTime");
 const reservationPrice = document.getElementById("reservationPrice");
+const numOfPeople = document.getElementById("numOfPeople");
 
 reserveStartingTime.addEventListener('change', (e)=>{
     const min = e.target.value.split(":")[1];
@@ -129,7 +130,8 @@ function validateForm(e){
     }
     errorMsg.innerHTML = "";    //reset the error message
 
-    if(reservationPrice.value === ""){
+    const form = document.querySelector("form");
+    if(reservationPrice.value === "" || form.reportValidity() === false){
         errorMsg.innerHTML = "Please Enter Information Correctly";
         return false;
     }

@@ -210,6 +210,13 @@ class User{
         }
         return $result;
     }
+
+    public function makeReservation($date, $st, $et, $people, $payment, $court, $database){
+        $newReservation = new Reservation();
+        $result = $newReservation -> onlineReservation($date, $st, $et, $people, $payment, $court, $this -> userID, $database);
+        unset($newReservation);
+        return $result;
+    }
 }
 
 ?>

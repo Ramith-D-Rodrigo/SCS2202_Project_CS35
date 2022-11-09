@@ -61,7 +61,7 @@
                     <div style="text-align:center; margin-bottom: 20px">
                         Make a Reservation
                     </div>
-                    <form method="post" action="">
+                    <form method="post" action="/controller/user/make_reservation_controller.php">
                         <div style="display:flex; flex-direction: row; flex-wrap: wrap; justify-content:space-around">
                             <div style ="flex-basis: 33.333333%">
                                 Sport : <input name ="reservingSport" value= <?php echo $_SESSION['reservingSport'] ?> readonly> 
@@ -87,14 +87,28 @@
                             <div style ="flex-basis: 33.333333%">
                                 Ending Time : <input type="time" required name="reservingEndTime" id="reserveEndingTime" min= <?php echo substr($_SESSION['opening_time'],0,5)?> max= <?php echo substr($_SESSION['closing_time'],0,5)?>>
                             </div>
+                            <div style ="flex:auto">
+                                Number of People : <input type="text" required name="numOfPeople" id="numOfPeople" min="0" pattern="[0-9]+">
+                            </div>
                         </div>
                         <div class="err-msg" id="errMsg">
+                            <?php if(isset($_SESSION['reservationFail'])){
+                                echo $_SESSION['reservationFail'];
+                                unset($_SESSION['reservationFail']);
+                            }
+                            ?>
+                        <div class="success-msg"></div>
+                        <?php if(isset($_SESSION['reservationSuccess'])){
+                            echo $_SESSION['reservationSuccess'];
+                            unset($_SESSION['reservationSuccess']);
+                        }
+                        ?>
                         </div>
                         <div style="text-align:center">
-                            Reservation Price : <input readonly id="reservationPrice" min=<?php echo $_SESSION['reserve_price']?>>
+                            Reservation Price : <input readonly id="reservationPrice" min=<?php echo $_SESSION['reserve_price']?> name="reservationPrice">
                         </div>
                         <div style="display:flex; align-items: center; justify-content: center;">
-                            <button type="submit" name="makeReserveBtn" onclick="return validateForm(event)" style="margin-top:10px;">Make Reservation</button>
+                            <button type="submit" name="makeReserveBtn" id="makeReserveBtn" onclick="return validateForm(event)" style="margin-top:10px;">Make Reservation</button>
                         </div>
                     </form>
             </div>
