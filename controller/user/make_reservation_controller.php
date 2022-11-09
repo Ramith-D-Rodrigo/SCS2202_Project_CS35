@@ -69,7 +69,6 @@
         $_SESSION['reservationFail'] = "Reservation has not been made";
     }
     header("Location: /controller/general/reservation_schedule_controller.php");
-    header("Location: /public/general/reservation_schedule.php");
     unset($reservingUser);
     $connection -> close();
 ?>

@@ -32,6 +32,7 @@
                         //unset($_SESSION['searchErrorMsg']); //Unset for future searching
                     }
                     else if(isset($_SESSION['searchResult'])){
+                        $j = 1; //for each result
                         foreach($_SESSION['searchResult'] as $result){ //traverse the result
                 ?>
                         <form class ="search_result" action="/controller/general/reservation_schedule_controller.php" method="post">
@@ -45,9 +46,11 @@
                             <button style="margin-left:10px" 
                             type ="submit" 
                             name ="reserveBtn" 
-                            value="<?php echo $result['branch_id']?>,<?php echo $result['sport_id']?>,<?php echo $result['location']?>,<?php echo $result['sport_name']?>,<?php echo $result['opening_time']?>,<?php echo $result['closing_time']?>,<?php echo $result['reserve_price']?>">Make a Reservation</button>
+                            value="<?php echo "result".$j?>">Make a Reservation</button>
                         </form>
                 <?php
+                        $_SESSION['result'.$j] = [$result['branch_id'],$result['sport_id'],$result['location'],$result['sport_name'],$result['opening_time'],$result['closing_time'],$result['reserve_price']];
+                        $j++;    //for the next result
                         } 
                         //print_r($_SESSION['searchResult']);
                         //unset($_SESSION['searchResult']);    //unset for future searching

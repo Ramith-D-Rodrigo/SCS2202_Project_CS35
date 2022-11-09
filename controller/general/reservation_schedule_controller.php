@@ -5,7 +5,14 @@
     require_once("../../src/general/sport_court.php");
     require_once("../../src/general/uuid.php");
 
-    $reservationPlace = explode(',',$_POST['reserveBtn']);  //split the values
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){  //we are coming from a post request
+        $reservationPlace = $_SESSION[$_POST['reserveBtn']];    //get the array
+        $_SESSION['reservationPlace'] = $reservationPlace;  //assign the array to session
+    }
+    else{
+        $reservationPlace = $_SESSION['reservationPlace'];
+    }
+
     //branch id -> 0th index, sport id -> 1st index, branch location -> 2nd index, sport name -> 3rd index, opening time -> 4th index, closing time -> 5th index, reservation price -> 6th index
 
     $branch = new Branch(uuid_to_bin($reservationPlace[0], $connection));
