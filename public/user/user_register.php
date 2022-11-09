@@ -135,14 +135,52 @@
                     <div id="emergencyDetails">
                         Emergency Contact Details: <br>
                         Name: <input type="text" name="name1" required value=<?php if(isset($_SESSION['name1'])) echo htmlspecialchars($_SESSION['name1'], ENT_QUOTES) ?>> <br>
-                        Relationship: <input type="text" name="relationship1" required pattern="[a-zA-Z]{3,15}" value=<?php if(isset($_SESSION['relationship1'])) echo htmlspecialchars($_SESSION['relationship1'], ENT_QUOTES) ?>> <br>
+                        Relationship: 
+                        <select required name="relationship1">
+                            <option value="">Choose One</option>
+                            <option value="Mother" <?php if(isset($_SESSION['relationship1'])){
+                                    if($_SESSION['relationship1'] === "Mother"){
+                                        echo 'selected';
+                                    }
+                                }?>>Mother</option>
+                            <option value="Father" <?php if(isset($_SESSION['relationship1'])){
+                                    if($_SESSION['relationship1'] === "Father"){
+                                        echo 'selected';
+                                    }
+                                }?>>Father</option>
+                            <option value="Sibling 1" <?php if(isset($_SESSION['relationship1'])){
+                                    if($_SESSION['relationship1'] === "Sibling 1"){
+                                        echo 'selected';
+                                    }
+                                }?>>Sibling 1</option>
+                            <option value="Sibling 2" <?php if(isset($_SESSION['relationship1'])){
+                                    if($_SESSION['relationship1'] === "Sibling 2"){
+                                        echo 'selected';
+                                    }
+                                }?>>Sibling 2</option>
+                            <option value="Friend 1" <?php if(isset($_SESSION['relationship1'])){
+                                    if($_SESSION['relationship1'] === "Friend 1"){
+                                        echo 'selected';
+                                    }
+                                }?>>Friend 1</option>
+                            <option value="Friend 2" <?php if(isset($_SESSION['relationship1'])){
+                                    if($_SESSION['relationship1'] === "Friend 2"){
+                                        echo 'selected';
+                                    }
+                                }?>>Friend 2</option>
+                            <option value="Partner" <?php if(isset($_SESSION['relationship1'])){
+                                    if($_SESSION['relationship1'] === "Partner"){
+                                        echo 'selected';
+                                    }
+                                }?>>Partner</option>
+                        </select>
+                        <br>
                         Contact Number: <input type="text" min="0" name="emgcontactNum1" required pattern="[0-9]{10,11}" value=<?php if(isset($_SESSION['emgcontactNum1'])) echo htmlspecialchars($_SESSION['emgcontactNum1'], ENT_QUOTES) ?>> <br>
                         Want to Add More? (Maximum of 3)
                         <br>
                         <button id="emergencyDetailsbtn">Add More</button>
                     </div>
-                    <div id="errmsg" class="err-msg">
-                        <?php
+                    <div id="errmsg" class="err-msg"><?php
                             if(isset($_SESSION['emailError'])){
                                 echo $_SESSION['emailError'];
                                 echo '<br>';
@@ -158,9 +196,11 @@
                                 echo '<br>';
                                 unset($_SESSION['RegUnsuccessMsg']);
                             }
-                        ?>
-                    </div>
-                    <div class="success-msg">
+                            else{
+                                echo '';
+                            }
+                        ?></div>
+                    <div id="successmsg" class="success-msg">
                         <?php
                             if(isset($_SESSION['RegsuccessMsg'])){
                                 echo $_SESSION['RegsuccessMsg'];

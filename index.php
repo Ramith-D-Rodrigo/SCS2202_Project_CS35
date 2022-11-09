@@ -1,5 +1,11 @@
 <?php
     session_start();
+    foreach($_SESSION as $key => $value){
+        if($key === 'userrole' || $key === 'userid'){   //unset other variables like register prefillings
+            continue;
+        }
+        unset($_SESSION[$key]);
+    }
 ?>
 
 <!DOCTYPE html>

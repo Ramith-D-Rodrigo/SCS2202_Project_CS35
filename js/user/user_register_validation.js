@@ -21,18 +21,20 @@ function validateForm(event){
         return false;
     }
     else{   //Form is valid from HTML perspective
-
         //image size
         const uploadedPic = document.getElementById("user_profile_pic");
-
-        if(verbose){
-            console.log("Uploaded File Size : " + uploadedPic.files[0].size);
+        if(uploadedPic.value !== ""){   //has uploaded a file
+            if(verbose){
+                console.log("Uploaded File Size : " + uploadedPic.files[0].size);
+            }
+    
+            if(pictureSize(uploadedPic.files[0].size) === false){   //image too big
+                errMsg.innerHTML = errMsg.innerHTML + "Uploaded Image is Too Big";
+                return false;  
+            } 
         }
 
-        if(pictureSize(uploadedPic.files[0].size) === false){   //image too big
-            errMsg.innerHTML = errMsg.innerHTML + "Uploaded Image is Too Big";
-            return false;  
-        }   
+  
         //uploaded size is okay
 /*         else{
             errMsg.innerHTML = errMsg.innerHTML + "Uploaded Image is okay";
@@ -54,7 +56,7 @@ function validateForm(event){
 
         //1st one (Compulsary)
         contactNum[0] = emergencyDetailsChildren[5].value;   
-        relationship[0] = emergencyDetailsChildren[3].value;
+        relationship[0] = emergencyDetailsChildren[3].value.toLowerCase();
         names[0] = emergencyDetailsChildren[1].value.toLowerCase();
 
         if(emergencyDetailsChildren.length == 10){    //has 2 emergency contact details
@@ -93,11 +95,11 @@ function validateForm(event){
             if(verbose){
                 console.log("Duplicate Contact Details");
             }
-            errMsg.innerHTML = errMsg.innerHTML + "Duplicate Contact Details<br>";
+            errMsg.innerHTML = errMsg.innerHTML + "Duplicate Contact Number Details<br>";
             flag = false;
         }
         else{
-            errMsg.innerHTML.replace("Duplicate Contact Details<br>", '');  //Remove Contact Details Error Message
+            errMsg.innerHTML.replace("Duplicate Contact Number Details<br>", '');  //Remove Contact Details Error Message
         }
 
         if(new Set(relationship).size !== relationship.length){ //check for duplicate relationships
@@ -111,7 +113,7 @@ function validateForm(event){
             errMsg.innerHTML.replace("Duplicate Relationship Details<br>", '');  //Remove relationship Error Message
         }
 
-        if(new Set(names).size !== names.length){ //check for duplicate relationships
+        if(new Set(names).size !== names.length){ //check for duplicate names
             if(verbose){
                 console.log("Duplicate Emergency Contact Detail Names");
             }
@@ -150,7 +152,6 @@ function validateForm(event){
         else{
             errMsg.innerHTML.replace("Duplicate Medical Concern Details<br>", '');  //Remove Contact Details Error Message
         }
-
         if(flag === false){ //Has invalid inputs
             return false;
         }
@@ -158,5 +159,6 @@ function validateForm(event){
             return true;
         }
     }
+    return false;
     
 }

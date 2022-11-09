@@ -24,7 +24,7 @@
 
         while($scheduleResult = $tempSchedule -> fetch_object()){   //create the array for current schedule reservations
             $reservationDetails = [];   //to store current court's each reservation's details
-            if($scheduleResult -> date > date("Y-m-d")){    //no need to check for previous reservations
+            if($scheduleResult -> date < date("Y-m-d")){    //no need to check for previous reservations
                 continue;
             }
             $reservationDetails['date'] = $scheduleResult -> date;
