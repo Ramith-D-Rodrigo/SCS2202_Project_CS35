@@ -38,17 +38,27 @@
         <?php
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
         ?>  
-            <div style="float:right" id="logout">
-                <button class ="btn" id='profileBtn'><img src="/styles/icons/profile_icon.svg" class="acc-img"></button>
-                <button class ="btn" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
+            <div style="float:right" id="accountIcons">
+                <?php if(isset($_SESSION['userProfilePic'])){?>
+                    
+                    <button class ="btn" id='profileBtn'><img src="/public/user/profile_images/<?php echo $_SESSION['userProfilePic']?>" class="acc-img"></button>
+                <?php
+                }
+                else{
+                ?>
+                    <button class ="btn" id='profileBtn'><img src="/styles/icons/profile_icon.svg" class="acc-img"></button>
+                <?php
+                }
+                ?>
+                <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
             </div>
         <?php
             }
             else{
         ?>
-            <div style="float:right" id="login">
-                <button class="btn" onclick="window.location.href='/public/general/register.php'">Register<img src="/styles/icons/register_icon.svg" class="acc-img"></button>
-                <button class="btn" onclick="window.location.href='/public/general/login.php'">Log in<img src="/styles/icons/login_icon.svg" class="acc-img"></button>
+            <div style="float:right" id="userOptions">
+                <button class="btn" id ="register" onclick="window.location.href='/public/general/register.php'">Register<img src="/styles/icons/register_icon.svg" class="acc-img"></button>
+                <button class="btn" id="login" onclick="window.location.href='/public/general/login.php'">Log in<img src="/styles/icons/login_icon.svg" class="acc-img"></button>
             </div>
         <?php
             }

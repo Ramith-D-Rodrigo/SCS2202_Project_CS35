@@ -18,6 +18,11 @@
         unset($_SESSION['errMsg']);
         $_SESSION['LogInsuccessMsg'] = $resultmsg[0];
         $_SESSION['userrole'] =  $resultmsg[1];
+        $profilePic = $loginUser -> getProfilePic();
+        
+        if($profilePic !== ''){ //user has set an profile pic
+            $_SESSION['userProfilePic'] = $profilePic;
+        }
         $_SESSION['userid'] = $loginUser -> getUserID();
     }
     header("Location: /public/user/user_login.php");

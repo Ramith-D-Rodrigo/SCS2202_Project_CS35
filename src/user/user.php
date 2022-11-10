@@ -44,6 +44,10 @@ class User{
         return $this -> userID;
     }
 
+    public function getProfilePic(){
+        return $this -> profilePic;
+    }
+
     private function create_login_details_entry($database){   //first we createe the log in details entry
         $result = $database -> query(sprintf("INSERT INTO `login_details`
         (`user_id`, 
@@ -175,8 +179,23 @@ class User{
         }
 
         //setting user data for session
-        $this -> userID = $rows -> uuid;    
+        $this -> userID = $rows -> uuid;  
+        
+        //get the profile pic from the datbase and store in the object's attribute
+        $sqlPic = sprintf("SELECT `profile_photo` 
+        FROM `user` 
+        WHERE `user_id` = '%s'",
+        $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
 
+        $result = $database -> query($sqlPic);
+        $picRow = $result -> fetch_object();
+        if($picRow === NULL){
+            $this -> profilePic = '';
+        }
+        else{
+            $this -> profilePic =  $picRow -> profile_photo;
+        }
+        $this -> getProfilePic($database);  
         return ["Successfully Logged In", $rows -> user_role];  //return the message and role
     }
 
