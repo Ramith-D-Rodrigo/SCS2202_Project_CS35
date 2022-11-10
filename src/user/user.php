@@ -243,7 +243,6 @@ class User{
         `r`.`date`, 
         `r`.`starting_time`, 
         `r`.`ending_time`, 
-        `r`.`no_of_people`, 
         `r`.`payment_amount`, 
         `r`.`status`, 
         `b`.`city`, 

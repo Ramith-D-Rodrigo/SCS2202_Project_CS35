@@ -11,14 +11,30 @@
     }
     require_once("../../src/user/user.php");
     require_once("../../src/user/dbconnection.php");
+    require_once("../../src/general/uuid.php");
     
     $user = new User();
     $user -> setDetails(uid: $_SESSION['userid']);
     $reservationHistory = $user -> getReservationHistory($connection);
-    while($row = $reservationHistory -> fetch_object()){
-        print_r($row);
+    
+    $reservations = [];
+
+    if($reservationHistory -> num_rows !== 0){  //has reservations
+        while($row = $reservationHistory -> fetch_object()){    //travserse each reservation
+            $row -> reservation_id = bin_to_uuid($row -> reservation_id, $connection);  //convert the uuid
+
+            $startingTime = $row -> starting_time;
+            $endingTime = $row -> ending_time;
+
+            $row -> {"time_period"} = $startingTime . " to " . $endingTime;
+
+            array_push($reservations, $row);
+        }
+        $_SESSION['reservationHistory'] = $reservations;
     }
+
     unset($user);
+    header("Location: /public/user/reservation_history.php");    
     $connection -> close();
 
 ?>
