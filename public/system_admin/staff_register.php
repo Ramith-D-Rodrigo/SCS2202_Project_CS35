@@ -1,5 +1,6 @@
 <?php
     session_start();
+    require_once("../../src/system_admin/dbconnection.php");
 ?>
 
 <!DOCTYPE html>
@@ -9,29 +10,42 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
+        <link rel="stylesheet" href="/styles/system_admin/staff_register.css">
         <title>Register Staff</title>
     </head>
     <body>
-
+    <?php
+        require_once("dashboard_header.php");
+    ?>
     <div>
-        <form action="/controller/system_admin/register_controller.php" method="post">
+        <form class ='reg-form' action="/controller/system_admin/register_controller.php" method="post">
 
             <!-- Staff role and registering branch has to be displayed as dropdowns -->
             Branch Name : 
-            <input type="text" 
-            pattern="[a-zA-Z]+" 
-            name="branchName"
-            id="branchName" 
-            required placeholder="Branch Name"
-            value=<?php if(isset($_SESSION['branchName'])) echo htmlspecialchars($_SESSION['branchName'], ENT_QUOTES)?>>
+            <?php 
+                $sql = "SELECT * FROM `branch`";
+                $brNames = mysqli_query($connection,$sql);
+            ?>
+            <select name="branchName">
+                <?php
+                while ($brName = mysqli_fetch_array(
+                $brNames,MYSQLI_ASSOC)):;
+                ?>
+                <option value="<?php echo $brName['city'];
+                ?>">
+                <?php echo $brName['city'];
+                ?>
+                </option>
+                <?php
+                endwhile;
+                ?>
+                </select>           
             <br>
             Staff Role : 
-            <input type="text" 
-            pattern="[a-zA-Z]+" 
-            name="staffRole"
-            id="staffRole" 
-            required placeholder="Staff Role"
-            value=<?php if(isset($_SESSION['staffRole'])) echo htmlspecialchars($_SESSION['staffRole'], ENT_QUOTES)?>>
+            <select id="cars" name="staffRole">
+                <option value="Receptionist">Receptionist</option>
+                <option value="Manager">Manager</option>
+            </select>
             <br>
             Name :
             <input type="text" 
@@ -69,8 +83,8 @@
 
             Email Address : 
             <!-- pattern indicates that it must follow somename@topleveldomain.domain-->
-            <input type="email" 
-            pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/."
+            <input 
+            type="email" 
             name="emailAddress"
             id="emailAddress"
             required

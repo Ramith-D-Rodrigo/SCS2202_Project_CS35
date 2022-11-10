@@ -26,6 +26,7 @@ function togglePassword(element){
 
 
 
+
 //BirthDay maxDate and minDate
 
 //maxDate
@@ -33,7 +34,7 @@ const bDay = document.getElementById("bday");
 const today = new Date().toISOString().split("T")[0];
 const maxYear = today.split("-");
 
-maxYear[0] = (maxYear[0] - 20).toString();  //Must be atleast age of 14
+maxYear[0] = (maxYear[0] - 20).toString();  //Must be atleast age of 20
 if(verbose){
     console.log("Birthday Max Date = " + maxYear);
 }
@@ -45,7 +46,7 @@ bday.max = maxDate;
 //minDate
 const minYear = today.split("-");
 
-minYear[0] = (minYear[0] - 60).toString();  //Must be atleast age of 14
+minYear[0] = (minYear[0] - 55).toString();  //Must be maximum age of 55
 if(verbose){
     console.log("Birthday Min Date = " + minYear);
 }

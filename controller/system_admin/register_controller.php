@@ -2,8 +2,8 @@
     session_start();
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/manager/manager.php");
-    require_once("../../src/admin/dbconnection.php");
-    require_once("../../src/admin/credentials_availability.php");
+    require_once("../../src/system_admin/dbconnection.php");
+    require_once("../../src/system_admin/credentials_availability.php");
 
 
     //all possible inputs for prefilling
@@ -23,11 +23,11 @@
 
     //email availability
     $hasEmailResult = null;
-    if(htmlspecialchars($_POST['staffRole'], ENT_QUOTES)=='Receptionist'){
-        $hasEmailResult = checkReceptionistEmail($_POST['emailAddress'], $connection);
+    if(htmlspecialchars($_POST['staffRole'], ENT_QUOTES)==='Receptionist'){
+        $hasEmailResult = checkStaffEmail($_POST['emailAddress'], $connection);
     }  
     else {
-        $hasEmailResult = checkManagerEmail($_POST['emailAddress'], $connection);
+        $hasEmailResult = checkStaffEmail($_POST['emailAddress'], $connection);
     }
 
     if(isset($_SESSION['successMsg'])){ //same user is trying to register (in the same session) We have to unset the message
@@ -64,7 +64,7 @@
     $useridsql = 'SELECT UUID()';   //create an user id using uuid function
     $userIDResult = $connection -> query($useridsql); //get the result from query
 
-    foreach($userIDResult as $row){   //get the user id  || what is happening here??
+    foreach($userIDResult as $row){   //get the user id 
         $userid = $row['UUID()'];
     }
 
@@ -76,11 +76,18 @@
     $bday = htmlspecialchars($_POST['birthday'], ENT_QUOTES);
     $gender = htmlspecialchars($_POST['gender'], ENT_QUOTES);
     $staffRole = htmlspecialchars($_POST['staffRole'], ENT_QUOTES);
-    $branchID = htmlspecialchars($_POST['branchID'], ENT_QUOTES);
+    $branchName = htmlspecialchars($_POST['branchName'], ENT_QUOTES);
 
+    echo $branchName;
+    $uuids = sprintf("SELECT (branch_id) as UUID FROM branch WHERE city='%s'",$connection -> real_escape_string($branchName));   //create an user id using uuid function
+    $branchIDResult = $connection -> query($uuids); //get the result from query
 
+    foreach($branchIDResult as $row){   //get the branch id  
+        $branchID = $row['UUID'];
+    }
+    echo $branchID;
     $result = false;
-    if($staffRole == 'Receptionist') {
+    if($staffRole === 'Receptionist') {
         $new_receptionist = new Receptionist();
         $new_receptionist -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
         $result = $new_receptionist -> registerReceptionist($connection);
@@ -93,7 +100,7 @@
     
 
     if($result === TRUE){   //successfully registered
-            echo "Successfully registered";
+            echo "Successfully Registered";
 /*         foreach($inputFields as $i){    //store session details
             if(isset($_SESSION[$i])){   //unsetting input values
                 session_unset($i);

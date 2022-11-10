@@ -56,6 +56,17 @@ class Receptionist{
     }
 
     private function create_staff_entry($database){  //enter details to the staff table
+        // echo $this -> receptionistID ;
+        // echo $this -> firstName;
+        // echo $this -> lastName;
+        // echo $this -> emailAddress;
+        // echo $this -> contactNum ;
+        // echo $this -> dateOfBirth ;
+        // echo $this -> gender;
+        // echo $this -> username ;
+        // echo $this -> password ;
+        // echo $this -> branchID ;
+        echo $this -> staffRole = 'receptionist';
         $result = $database -> query(sprintf("INSERT INTO `staff`
         (`staff_id`,  
         `email_address`,  
@@ -82,13 +93,13 @@ class Receptionist{
         $database -> real_escape_string($this -> branchID),
         $database -> real_escape_string($this -> staffRole))); 
 
-        return $result;
-/*         if ($result === TRUE) {
-            echo "New user record created successfully<br>";
+        if ($result === TRUE) {
+            echo "New log in details record created successfully<br>";
         }
         else{
             echo "Error<br>";
-        } */
+        } 
+        return $result;
     }
 
 
