@@ -17,10 +17,13 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/general/our_branches.php'){ //user register
                     echo "Our Branches";
                 }
+                else if($_SERVER['REQUEST_URI'] === '/public/general/our_sports.php'){ //user register
+                    echo "Our Sports";
+                }
                 else if($_SERVER['REQUEST_URI'] === 'public/general/our_feedback.php'){ //user register
                     echo "Our Feedback";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/general/reg_caoches.php'){ //user register
+                else if($_SERVER['REQUEST_URI'] === '/public/general/reg_coaches.php'){ //user register
                     echo "Registered Coaches";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/general/about_us.php'){ //user register
@@ -28,6 +31,12 @@
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/general/search_results.php'){  //search sport
                     echo "Search a Sport";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/general/reservation_schedule.php'){  //Reservation Schedule
+                    echo "Reservation Schedule";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/user/reservation_history.php'){  //reservation history
+                    echo "Reservation History";
                 }
             ?>
         </div>
