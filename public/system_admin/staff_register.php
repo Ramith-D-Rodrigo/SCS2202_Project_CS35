@@ -17,6 +17,7 @@
     <?php
         require_once("dashboard_header.php");
     ?>
+    <main>
     <div>
         <form class ='reg-form' action="/controller/system_admin/register_controller.php" method="post">
 
@@ -24,7 +25,7 @@
             Branch Name : 
             <?php 
                 $sql = "SELECT * FROM `branch`";
-                $brNames = mysqli_query($connection,$sql);
+                $brNames = $connection->query($sql);
             ?>
             <select name="branchName">
                 <?php
@@ -147,7 +148,7 @@
             <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register Staff</button>
         </form>
     </div>
-
+    </main>
 
     <?php
         require_once("../general/footer.php");

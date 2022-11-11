@@ -142,6 +142,95 @@ class Receptionist{
         return ["Successfully Logged In", $rows -> user_role];  //return the message and role
     }
 
+    public function reqMaintenance($reason,$sportName,$courtName,$startDate,$endDate,$database) {
+
+        // $brnchID = sprintf("SELECT branch_id from staff where staff_id=UUID_To_BIN(%s,1)",$database -> real_escape_string($staffID));
+        // $id = $database -> query($brnchID);
+        // foreach($id as $row){   //get the user id 
+        //     $brnchid = $row['branch_id'];
+        // }
+        echo $sportName;
+        echo $courtName;
+        $stfID = '0x11ed60c6bc55d9b8b16d34e6d70e248d';
+        $crtID = sprintf("SELECT `sports_court`.`court_id` 
+        from `sports_court` INNER JOIN 
+        `sport` ON 
+        `sports_court`.`sport_id` = `sport`.`sport_id` INNER JOIN 
+        `staff` ON 
+        `sports_court`.`branch_id` = `staff`.`branch_id` 
+        WHERE `staff`.`staff_id` = '%s' AND `sports_court`.`court_name` = '%s' AND `sport`.`sport_name`= '%s' ",
+        $database -> real_escape_string($stfID),
+        $database -> real_escape_string($courtName),
+        $database -> real_escape_string($sportName));
+
+        $crtIDS = $database -> query($crtID);
+        $courtID = '';
+        foreach($crtIDS as $row){   //get the court id 
+            $courtID = $row['court_id'];
+        }
+        echo $courtID;
+        $results = sprintf("INSERT INTO court_maintenance 
+        (`court_id`,
+        `strating_date`,
+        `ending_date`,
+        `status`,
+        `decision`
+        `requested_receptionist`) VALUES 
+        ('%s','%s','%s','pending','p','%s')",
+        $database -> real_escape_string($courtID),
+        $database -> real_escape_string($startDate),
+        $database -> real_escape_string($endDate),
+        $database -> real_escape_string($stfID));
+        // $database -> real_escape_string($staffID));
+
+        if ($results === TRUE) {
+            echo "Submitted successfully<br>";
+        }
+        else{
+            echo "Error<br>";
+        } 
+        return $results;
+    }
+
+    public function editBranch($staffID,$database) {
+        
+        $branchSql = sprintf("SELECT `branch`.`location`, 
+        `branch`.`branch_email` ,
+        `branch`.`branch_id` ,
+        from `branch` INNER JOIN `staff` ON
+        `branch`.`branch_id` = `staff`.`branch_id`
+        WHERE `staff`.`branch_id` = '%s'",
+        $database -> real_escape_string($staffID));
+
+        $branchResult = $database -> query($branchSql);   //get the branch results
+        
+        foreach($branchResult as $row){   //get the branch details
+            $branchLoc = $row['location'];
+            $branchEmail = $row['branch_email'];
+            $branchID = $row['branch_id'];
+        }
+        $branchNum = sprintf("SELECT `staff`.`contact_number`, 
+        from `staff` 
+        WHERE `staff`.`branch_id` = '%s'",
+        $database -> real_escape_string($branchID));
+
+        $numResult = $database -> query($branchNum);   //get the branch results
+        
+        $numResult = [];
+        foreach($numResult as $row){   //get the branch details
+            $number = $row['contact_number'];
+            array_push($numResult,$number);
+        }
+        $result = [];
+        array_push($result,$branchLoc,$branchEmail,$numResult);
+
+        if(count($result) === 0){   //couldn't find any branch that provide the searched sport
+            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+        }
+
+        return $result;
+    }
+
 }
 
 ?>
