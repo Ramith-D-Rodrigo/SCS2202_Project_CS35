@@ -61,5 +61,25 @@
             $result = $database -> query($sql);
             return $result;
         }
+
+        public function setID($reserveID){
+            $this -> reservationID = $reserveID;
+        }
+
+        public function cancelReservation($user_id, $database){
+
+            $uid_bin = uuid_to_bin(($user_id), $database);
+            $reserve_bin = uuid_to_bin(($this -> reservationID), $database);
+
+            $sql = sprintf("DELETE FROM `reservation` 
+            WHERE `reservation_id` = '%s' 
+            AND `user_id` = '%s'",
+            $database -> real_escape_string($reserve_bin),
+            $database -> real_escape_string($uid_bin));
+
+            $result = $database -> query($sql);
+
+            return $result;
+        }
     }
 ?>

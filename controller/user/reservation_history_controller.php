@@ -19,6 +19,10 @@
     
     $reservations = [];
 
+    if(isset($_SESSION['reservationHistory'])){ //previous reservation history clear
+        unset($_SESSION['reservationHistory']);
+    }
+
     if($reservationHistory -> num_rows !== 0){  //has reservations
         while($row = $reservationHistory -> fetch_object()){    //travserse each reservation
             $row -> reservation_id = bin_to_uuid($row -> reservation_id, $connection);  //convert the uuid

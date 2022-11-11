@@ -268,6 +268,11 @@ class User{
         $result = $database -> query($sql);
         return $result;
     }
+
+    public function cancelReservation($reservation, $database){
+        $result = $reservation -> cancelReservation($this ->userID, $database);
+        return $result;
+    }
 }
 
 ?>
