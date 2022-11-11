@@ -1,3 +1,9 @@
+<?php
+    session_start();
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -17,4 +23,5 @@
                 require_once("footer.php");
             ?>
     </body>
+    <script src="/js/user/account_links.js"></script>
 </html>

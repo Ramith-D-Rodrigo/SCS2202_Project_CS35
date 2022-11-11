@@ -116,6 +116,9 @@
                         <div style="display:flex; align-items: center; justify-content: center;">
                             <button type="submit" name="makeReserveBtn" id="makeReserveBtn" onclick="return validateForm(event)" style="margin-top:10px;">Make Reservation</button>
                         </div>
+                        <div style="text-align:center; font-style:italic; margin-top:10px; font-size:smaller">
+                            Contact Relevant branch manager for Formal reservations incase of holding events
+                        </div>
                     </form>
             </div>
 
@@ -127,4 +130,5 @@
     </body>
     <script src="/js/general/reservation_schedule.js"></script>
     <script src="/js/general/reservation_validation.js"></script>
+    <script src="/js/user/account_links.js"></script>
 </html>

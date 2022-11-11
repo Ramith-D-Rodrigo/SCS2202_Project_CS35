@@ -135,14 +135,21 @@
     if(!empty($_FILES['user_pic']['name'])){    //user has uploaded a picture
         $profilePicFlag = true;
         $pic = $_FILES['user_pic']['tmp_name'];   //the image
-        $picContent = addslashes(file_get_contents($pic));  //file content of the image     
+        $picName = $_FILES['user_pic']['name'];
+        $picExtension = explode('.', $picName);
+        $picExtension = strtolower(end($picExtension)); //get image extension
+
+        $picNewName = uniqid($username);    //create a new name for the image
+        $picNewName = $picNewName . '.' . $picExtension; //concat the extension
+        
+        move_uploaded_file($pic, '../../public/user/profile_images/'.$picNewName);  //move the file to this directory
     }
 
     $new_user = new User();
     $new_user -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $user_dependents, $height, $weight, $medical_concerns, $username, $password, $gender);
 
     if($profilePicFlag === true){    //has uploaded a profile pic
-        $new_user -> setProfilePic($picContent);
+        $new_user -> setProfilePic($picNewName);
     }
     else{
         $new_user -> setProfilePic("NULL");

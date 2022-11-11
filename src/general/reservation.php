@@ -31,6 +31,9 @@
         }
 
         private function create_online_reservation_entry($database){
+            $reserve_bin = uuid_to_bin($this -> reservationID, $database);
+            $court_bin = uuid_to_bin($this -> sport_court, $database);
+            $user_bin = uuid_to_bin($this -> user_id, $database);
             //echo"<br>";
             $sql = sprintf("INSERT INTO `reservation`
             (`reservation_id`, 
@@ -43,19 +46,39 @@
             `user_id`,
             `status`) 
             VALUES 
-            (UUID_TO_BIN('%s', true),'%s','%s','%s','%s','%s',UUID_TO_BIN('%s', true),UUID_TO_BIN('%s', true),'%s')", 
-            $this -> reservationID,
-            $this -> date,
-            $this -> startingTime,
-            $this -> endingTime,
-            $this -> numOfPeople,
-            $this -> paymentAmount,
-            $this -> sport_court,
-            $this -> user_id,
-            $this -> status);
+            ('%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
+            $database -> real_escape_string($reserve_bin),
+            $database -> real_escape_string($this -> date),
+            $database -> real_escape_string($this -> startingTime),
+            $database -> real_escape_string($this -> endingTime),
+            $database -> real_escape_string($this -> numOfPeople),
+            $database -> real_escape_string($this -> paymentAmount),
+            $database -> real_escape_string($court_bin),
+            $database -> real_escape_string($user_bin),
+            $database -> real_escape_string($this -> status));
             //print_r($sql);
 
             $result = $database -> query($sql);
+            return $result;
+        }
+
+        public function setID($reserveID){
+            $this -> reservationID = $reserveID;
+        }
+
+        public function cancelReservation($user_id, $database){
+
+            $uid_bin = uuid_to_bin(($user_id), $database);
+            $reserve_bin = uuid_to_bin(($this -> reservationID), $database);
+
+            $sql = sprintf("DELETE FROM `reservation` 
+            WHERE `reservation_id` = '%s' 
+            AND `user_id` = '%s'",
+            $database -> real_escape_string($reserve_bin),
+            $database -> real_escape_string($uid_bin));
+
+            $result = $database -> query($sql);
+
             return $result;
         }
     }

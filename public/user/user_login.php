@@ -1,5 +1,9 @@
 <?php
     session_start();
+    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']) && !isset($_SESSION['LogInsuccessMsg']))){  //if the user is logged in previously (not at the login time)
+        header("Location: /index.php"); //the user shouldn't be able to access the login page
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -39,14 +43,17 @@
                         required> 
                         <button id="togglePassword">Show Password</button><br>
                     </div>
-                    <div id="msgbox">
+                    <div class='err-msg' id="errmsgbox">
                         <?php
                             if(isset($_SESSION['errMsg'])){
                                 echo $_SESSION['errMsg'];
                                 echo '<br>';
                                 unset($_SESSION['errMsg']);
                             }
-
+                        ?>
+                    </div>
+                    <div class='success-msg' id='successmsgbox'>
+                        <?php
                             if(isset($_SESSION['LogInsuccessMsg'])){
                                 echo $_SESSION['LogInsuccessMsg'];
                                 echo '<br> You will be Redirected to the Home page. Please Wait';
@@ -57,7 +64,7 @@
                     </div>
                     <div class="btn-container">
                         <button type="submit" 
-                            id="login"  
+                            id="loginBtn"  
                             name= "loginSubmitBtn" 
                             value="submit" 
                             onclick="return validateForm(event)"
@@ -76,7 +83,7 @@
                     </div>
                 </form>
                 <div class="btn-container">
-                    New User? <button >Register</button>
+                    New User? <button onclick="window.location.href='/public/general/register.php'">Register</button>
                 </div>
             </div>
         </main>
