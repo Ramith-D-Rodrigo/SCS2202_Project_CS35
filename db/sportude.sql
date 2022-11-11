@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2022 at 12:18 PM
+-- Generation Time: Nov 10, 2022 at 01:29 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `branch` (
   `branch_id` binary(16) NOT NULL,
   `address` varchar(250) NOT NULL,
-  `branch_email` int NOT NULL,
+  `branch_email` varchar(50) NOT NULL,
   `city` varchar(50) NOT NULL,
   `opening_time` time NOT NULL,
   `closing_time` time NOT NULL,
@@ -40,6 +40,14 @@ CREATE TABLE `branch` (
   `owner_request_date` date DEFAULT NULL,
   `request_status` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `branch`
+--
+
+INSERT INTO `branch` (`branch_id`, `address`, `branch_email`, `city`, `opening_time`, `closing_time`, `opening_date`, `revenue`, `owner_id`, `owner_request_date`, `request_status`) VALUES
+(0x11ed5ea66b492747b1c40a0027000004, 'Branch Address 1, Colombo', 'colombobranch@sp.com', 'Colombo', '08:00:00', '18:00:00', '2022-11-07', 0, NULL, NULL, 1),
+(0x11ed5ea69c453168b1c40a0027000004, 'Branch Address 2, Kiribathgoda', 'kirbathgodabranch@sp.com', 'Kiribathgoda', '09:00:00', '20:00:00', '2022-11-07', 0, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -65,7 +73,7 @@ CREATE TABLE `branch_maintenance` (
 CREATE TABLE `branch_photo` (
   `branch_photo_id` binary(16) NOT NULL,
   `branch_id` binary(16) NOT NULL,
-  `photo` mediumblob NOT NULL
+  `photo` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -82,7 +90,7 @@ CREATE TABLE `coach` (
   `email_address` varchar(100) NOT NULL,
   `gender` char(1) NOT NULL,
   `contact_num` varchar(15) NOT NULL,
-  `photo` mediumblob NOT NULL,
+  `photo` varchar(100) NOT NULL,
   `sport` binary(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -162,10 +170,9 @@ CREATE TABLE `login_details` (
 --
 
 INSERT INTO `login_details` (`user_id`, `username`, `password`, `user_role`) VALUES
-(0x11ed59ea897760fdb1c40a0027000004, 'johndoe', '$2y$10$aMSXNdKDJYL6lNo5oK4OxOi9yHI47AyLzYlLcF8..NZoFt4WOvC52', 'user'),
 (0x11ed59eddbe16fffb1c40a0027000004, 'ramith_rodrigo', '$2y$10$c.L2T0TrwvjCmmH0hdPK2.TJog.TXkWf8YhgCHI7KbIKHPmy2pTU6', 'user'),
-(0x11ed5a7184099e16b1c40a0027000004, 'ramith_rodrigo1', '$2y$10$D5iPPqHlKfI8KFezwKS3mOPz6btyV.XRtjGDFK2Iepi9Ds.nDMfwm', 'user'),
-(0x11ed5a7a3d2b7497b1c40a0027000004, 'david_mil', '$2y$10$NWxJneTJj2WMcKcRsNxq.eg5Rz5YJLYAlxMSTvOeIC8UXAw/24TJG', 'user');
+(0x11ed604d6f2489c0b1c40a0027000004, 'dihan_hansaja', '$2y$10$NkNFBMd8VhmhWjq4Hw8oLupFr5pSADhrGGXKAcx8ZZIaStL53Z8vK', 'user'),
+(0x11ed60a98d7173a5b1c40a0027000004, 'ramith_dulsara', '$2y$10$/SpxuByD0jbH7ogRdkjIC.nFap48IObS9/Vb0EJ7lT33RJgcBUPU6', 'user');
 
 -- --------------------------------------------------------
 
@@ -196,6 +203,13 @@ CREATE TABLE `notification` (
   `owner_id` binary(16) DEFAULT NULL,
   `admin_id` binary(16) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `notification`
+--
+
+INSERT INTO `notification` (`notification_id`, `subject`, `status`, `description`, `date`, `lifetime`, `staff_id`, `user_id`, `coach_id`, `owner_id`, `admin_id`) VALUES
+(0x11ed6035dc9c4516b1c40a0027000004, 'test', 'pending', 'asdadsa', '2020-09-22', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -241,6 +255,24 @@ CREATE TABLE `reservation` (
   `status` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `reservation`
+--
+
+INSERT INTO `reservation` (`reservation_id`, `date`, `starting_time`, `ending_time`, `no_of_people`, `payment_amount`, `sport_court`, `user_id`, `formal_manager_id`, `onsite_receptionist_id`, `status`) VALUES
+(0x11ed5fe4ee1c1ad5b1c40a0027000004, '2022-11-23', '12:30:00', '14:30:00', 5, 700, 0x11ed5ebbfa362095b1c40a0027000004, 0x11ed59eddbe16fffb1c40a0027000004, NULL, NULL, 'Pending'),
+(0x11ed5fe5a58864a9b1c40a0027000004, '2022-11-24', '13:30:00', '14:30:00', 5, 350, 0x11ed5ebbfa362095b1c40a0027000004, 0x11ed59eddbe16fffb1c40a0027000004, NULL, NULL, 'Pending'),
+(0x11ed5ff36700d9fbb1c40a0027000004, '2022-11-30', '15:30:00', '17:00:00', 3, 525, 0x11ed5f2b8158bd0ab1c40a0027000004, 0x11ed59eddbe16fffb1c40a0027000004, NULL, NULL, 'Pending'),
+(0x11ed5ff38ca12669b1c40a0027000004, '2022-12-09', '09:00:00', '10:00:00', 2, 350, 0x11ed5f2b8158bd0ab1c40a0027000004, 0x11ed59eddbe16fffb1c40a0027000004, NULL, NULL, 'Pending'),
+(0x11ed5ff525e17c7ab1c40a0027000004, '2022-11-28', '12:00:00', '14:00:00', 4, 700, 0x11ed5ebbfa362095b1c40a0027000004, 0x11ed59eddbe16fffb1c40a0027000004, NULL, NULL, 'Pending'),
+(0x11ed5ff61b5f1558b1c40a0027000004, '2022-11-12', '10:30:00', '17:30:00', 4, 2450, 0x11ed5ebbfa362095b1c40a0027000004, 0x11ed59eddbe16fffb1c40a0027000004, NULL, NULL, 'Pending'),
+(0x11ed603891bf2a2cb1c40a0027000004, '2022-11-28', '12:00:00', '14:00:00', 2, 700, 0x11ed5f2b8158bd0ab1c40a0027000004, 0x11ed59eddbe16fffb1c40a0027000004, NULL, NULL, 'Pending'),
+(0x11ed6039c8a12a02b1c40a0027000004, '2022-11-15', '16:30:00', '17:30:00', 1, 350, 0x11ed5ebbfa362095b1c40a0027000004, 0x11ed59eddbe16fffb1c40a0027000004, NULL, NULL, 'Pending'),
+(0x11ed603cb027df13b1c40a0027000004, '2022-11-23', '11:30:00', '13:30:00', 3, 700, 0x11ed5ebba056e35fb1c40a0027000004, 0x11ed59eddbe16fffb1c40a0027000004, NULL, NULL, 'Pending'),
+(0x11ed603d47d75dadb1c40a0027000004, '2022-11-23', '14:00:00', '16:30:00', 8, 875, 0x11ed5ebba056e35fb1c40a0027000004, 0x11ed59eddbe16fffb1c40a0027000004, NULL, NULL, 'Pending'),
+(0x11ed604da06d5514b1c40a0027000004, '2022-11-23', '18:00:00', '19:30:00', 2, 525, 0x11ed5ebbfa362095b1c40a0027000004, 0x11ed604d6f2489c0b1c40a0027000004, NULL, NULL, 'Pending'),
+(0x11ed60d326052673b1c40a0027000004, '2022-11-22', '09:00:00', '12:00:00', 5, 1500, 0x11ed5ebbcfd61c81b1c40a0027000004, 0x11ed59eddbe16fffb1c40a0027000004, NULL, NULL, 'Pending');
+
 -- --------------------------------------------------------
 
 --
@@ -261,7 +293,8 @@ CREATE TABLE `sport` (
 --
 
 INSERT INTO `sport` (`sport_id`, `sport_name`, `description`, `reservation_price`, `min_coaching_session_price`, `max_no_of_students`) VALUES
-(0x11ed5a8c43820cccb1c40a0027000004, 'badminton', 'badminton is fun', 350, 600, NULL);
+(0x11ed5a8c43820cccb1c40a0027000004, 'Badminton', 'badminton is fun', 350, 600, NULL),
+(0x11ed5ea6e1819685b1c40a0027000004, 'Basketball', 'Basketball is amazing', 500, 750, NULL);
 
 -- --------------------------------------------------------
 
@@ -278,6 +311,16 @@ CREATE TABLE `sports_court` (
   `request_status` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `sports_court`
+--
+
+INSERT INTO `sports_court` (`court_id`, `sport_id`, `court_name`, `branch_id`, `added_manager`, `request_status`) VALUES
+(0x11ed5ebba056e35fb1c40a0027000004, 0x11ed5a8c43820cccb1c40a0027000004, 'A', 0x11ed5ea66b492747b1c40a0027000004, NULL, 1),
+(0x11ed5ebbcfd61c81b1c40a0027000004, 0x11ed5ea6e1819685b1c40a0027000004, 'A', 0x11ed5ea66b492747b1c40a0027000004, NULL, 1),
+(0x11ed5ebbfa362095b1c40a0027000004, 0x11ed5a8c43820cccb1c40a0027000004, 'A', 0x11ed5ea69c453168b1c40a0027000004, NULL, 1),
+(0x11ed5f2b8158bd0ab1c40a0027000004, 0x11ed5a8c43820cccb1c40a0027000004, 'B', 0x11ed5ea69c453168b1c40a0027000004, NULL, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -287,7 +330,7 @@ CREATE TABLE `sports_court` (
 CREATE TABLE `sports_court_photo` (
   `court_photo_id` binary(16) NOT NULL,
   `court_id` binary(16) NOT NULL,
-  `court_photo` mediumblob NOT NULL
+  `court_photo` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -396,7 +439,7 @@ CREATE TABLE `user` (
   `last_name` varchar(100) NOT NULL,
   `email_address` varchar(100) NOT NULL,
   `gender` char(1) NOT NULL,
-  `profile_photo` mediumblob,
+  `profile_photo` varchar(100) DEFAULT NULL,
   `home_address` varchar(250) NOT NULL,
   `contact_num` varchar(15) NOT NULL,
   `birthday` date NOT NULL,
@@ -411,10 +454,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `email_address`, `gender`, `profile_photo`, `home_address`, `contact_num`, `birthday`, `register_date`, `height`, `weight`, `is_active`) VALUES
-(0x11ed59ea897760fdb1c40a0027000004, 'John', 'Doe', 'johndoe@gmail.com', 'm', NULL, 'No.234/4A, Reid Avenue, Colombo', '0714563211', '2000-05-09', '2022-11-01', 157, NULL, 1),
 (0x11ed59eddbe16fffb1c40a0027000004, 'Ramith', 'Rodrigo', 'ramith@yahoo.com', 'f', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-10-13', '2022-11-01', 2, 3, 1),
-(0x11ed5a7184099e16b1c40a0027000004, 'Kevin', 'Park', 'john2doe@gmail.com', 'm', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-09-10', '2022-11-02', NULL, NULL, 1),
-(0x11ed5a7a3d2b7497b1c40a0027000004, 'David', 'Miller', 'david20mil@yahoo.com', 'm', NULL, 'New york, America', '0996547821', '2000-01-01', '2022-11-02', NULL, NULL, 1);
+(0x11ed604d6f2489c0b1c40a0027000004, 'Dihan', 'Hansaja', 'dihanhansaja@gmail.com', 'm', NULL, 'Dihan&amp;#039;s Address', '0786542891', '2000-07-18', '2022-11-09', 174, 50, 1),
+(0x11ed60a98d7173a5b1c40a0027000004, 'Ramith', 'Dulsara', 'ramithdulsara@gmail.com', 'm', 'ramith_dulsara636c72e5adc60.jpg', 'Ramith Address', '0767275867', '2008-05-17', '2022-11-10', 178, 60, 1);
 
 -- --------------------------------------------------------
 
@@ -449,12 +491,10 @@ CREATE TABLE `user_dependent` (
 --
 
 INSERT INTO `user_dependent` (`owner_id`, `name`, `relationship`, `contact_num`) VALUES
-(0x11ed59ea897760fdb1c40a0027000004, 'David', 'father', '0147852345'),
-(0x11ed59ea897760fdb1c40a0027000004, 'Kelly', 'mother', '0786542387'),
-(0x11ed59ea897760fdb1c40a0027000004, 'Kenny', 'sibling', '9856374128'),
 (0x11ed59eddbe16fffb1c40a0027000004, 'Dulsara', 'Sibling', '0233654782'),
-(0x11ed5a7184099e16b1c40a0027000004, 'Mason', 'Father', '0741658932'),
-(0x11ed5a7a3d2b7497b1c40a0027000004, 'Aaron', 'Sibling', '0445217864');
+(0x11ed604d6f2489c0b1c40a0027000004, 'De Silva', 'Sibling 1', '0774123654'),
+(0x11ed604d6f2489c0b1c40a0027000004, 'Sujith', 'Sibling 2', '0741369852'),
+(0x11ed60a98d7173a5b1c40a0027000004, 'Ajith', 'Father', '0714831744');
 
 -- --------------------------------------------------------
 
@@ -472,11 +512,8 @@ CREATE TABLE `user_medical_concern` (
 --
 
 INSERT INTO `user_medical_concern` (`user_id`, `medical_concern`) VALUES
-(0x11ed59ea897760fdb1c40a0027000004, 'back pains'),
-(0x11ed59ea897760fdb1c40a0027000004, 'chest pains'),
-(0x11ed59ea897760fdb1c40a0027000004, 'leg cramps'),
-(0x11ed59ea897760fdb1c40a0027000004, 'poor eyesights'),
-(0x11ed5a7a3d2b7497b1c40a0027000004, 'leg cramps');
+(0x11ed604d6f2489c0b1c40a0027000004, 'short sighted'),
+(0x11ed60a98d7173a5b1c40a0027000004, 'headaches');
 
 -- --------------------------------------------------------
 
@@ -878,7 +915,7 @@ ALTER TABLE `user_dependent`
 -- Constraints for table `user_medical_concern`
 --
 ALTER TABLE `user_medical_concern`
-  ADD CONSTRAINT `user_medical_concern_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `user_medical_concern_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user_request_coaching_session`
