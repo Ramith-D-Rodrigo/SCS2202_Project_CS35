@@ -215,13 +215,13 @@ class User{
         }
 
         $result = [];
-        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = 1 -> branch is active, request status = 0 -> branch request of owner
+        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of receptionist (pending request)
             $courtBranchSql = sprintf("SELECT DISTINCT `branch_id`   
             FROM `sports_court`
             WHERE `sport_id` 
             LIKE '%s'
             AND
-            `request_status` = 1", $database -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
+            `request_status` = 'a'", $database -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
             $branchResult = $database -> query($courtBranchSql);
 
             while($branchRow = $branchResult -> fetch_object()){   //getting all the branches

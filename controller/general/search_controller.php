@@ -21,6 +21,11 @@
             $branch = new Branch($i['branch']);
             $branchDetails = $branch -> getDetails($connection);    //get branch details
             $branchResult = $branchDetails -> fetch_object();
+            
+            if($branchResult -> request_status === 'p'){    //branch is still a pending request from the owner
+                unset($branch);
+                continue;
+            }
 
             $numOfCourts = $branch -> getSportCourts($i['sport_id'], $connection);    //get the number of courts of the current considering branch
 
