@@ -215,11 +215,13 @@ class User{
         }
 
         $result = [];
-        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table
+        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = 1 -> branch is active, request status = 0 -> branch request of owner
             $courtBranchSql = sprintf("SELECT DISTINCT `branch_id`   
             FROM `sports_court`
             WHERE `sport_id` 
-            LIKE '%s'", $database -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
+            LIKE '%s'
+            AND
+            `request_status` = 1", $database -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
             $branchResult = $database -> query($courtBranchSql);
 
             while($branchRow = $branchResult -> fetch_object()){   //getting all the branches
@@ -228,6 +230,10 @@ class User{
                 array_push($result, ['branch' => $branch, 'sport_name' => $row['sport_name'], 'sport_id' => $row['sport_id'], 'reserve_price' => $row['reservation_price']]); //create a branch sport pair
             }
         }
+        if(count($result) === 0){   //couldn't find any branch that provide the searched sport
+            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+        }
+
         return $result;
     }
 
