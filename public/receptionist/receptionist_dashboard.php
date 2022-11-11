@@ -35,7 +35,7 @@
             </div>
             <div class=tabs>
                 <div>Request Maintenance</div> 
-                <div> <button href="/controller/receptionist/edit_branch_controller.php"> Add </button> </div>
+                <div> <button onclick="window.location.href='/controller/receptionist/edit_branch_controller.php'" > Add </button> </div>
             </div>  
         </div>
     </div>
