@@ -1,12 +1,63 @@
 .main-body{
-    width: 80%;
+    width: 96%;
     height: 80vh;
     margin: 0;
-    margin-left:10% ;
+    margin-left: 2%;
     padding: 0%;
+    margin-top: 2%;
 
-    background:red;
+    /* background:green; */
+    display: flex;
+    flex-direction: row;
+    justify-content:space-evenly;
+    
 }
 .today-Session{
+    width: 35%;
+    background:red;
+    height: 100%;
+    border-radius: 4%;
+    padding: 2%;
+    padding-bottom: 3.%;
+    
+
+
+}
+.payment-income{
+    width: 25%;
+    background:yellow;
+    height: 100%;
+    border-radius: 4%;
+    padding: 2%;
+
+
+}
+.feedback{
+    width: 25%;
+    background:blue;
+    height: 100%;
+    border-radius: 4%;
+    padding: 2%;
+
+}
+.header{
+    text-align: center;
+    background-color: green;
+    height: 10%;
+
+}
+
+.contentSection{
+    margin-top: 10%;
+    text-align: center;
+    margin-bottom: 10%;
+    background-color: aqua;
+    height: 70%;
+}
+.viewMoreButton{
+background-color: blueviolet;
+    display: flex;
+   justify-content: center;
+   
     
 }

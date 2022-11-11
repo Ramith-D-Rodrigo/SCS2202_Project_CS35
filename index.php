@@ -27,8 +27,12 @@
                     <input type="text" name="sportName" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
                     <button type="submit" onclick="return searchValidation(event)">Search</button>
                 </form>
+
+                <!-- <button class ="btn" onclick="window.location.href='/SCS2202_Project_CS35/public/owner/owner_dashboard.php'">test</button> -->
             </div>
         </main>
+
+        
         <?php
             require_once("./public/general/footer.php");
         ?>

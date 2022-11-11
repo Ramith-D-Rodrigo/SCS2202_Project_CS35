@@ -31,8 +31,8 @@
                 }
             ?>
         </div>
-        <div> <!--- sports complex name -->
-           Dashboard
+        <div > <!--- sports complex name -->
+           Welcome_______
         </div>
         <div>
         <?php
@@ -48,7 +48,6 @@
         ?>
             <div style="float:right" id="login">
                 <button class="btn" onclick="window.location.href='/public/general/register.php'">Notification</button>
-                <button class="btn" onclick="window.location.href='/public/general/login.php'">Profile</button>
                 <button class="btn" onclick="window.location.href='/public/general/login.php'">Logout</button>
             </div>
         <?php
@@ -57,11 +56,4 @@
         </div>
     </div>
 
-    <nav class="header-links">
-        <a href="/public/general/our_sports.php">Our Sports</a>
-        <a href="/public/general/our_branches.php">Our Branches</a>
-        <a href="/public/general/reg_coaches.php">Registered Coaches</a>
-        <a href="/public/general/our_feedback.php">Our Feedback</a>
-        <a href="/public/general/about_us.php">About Us</a>
-    </nav>
 </header>
