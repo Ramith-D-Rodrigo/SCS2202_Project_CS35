@@ -1,7 +1,7 @@
 <?php
     session_start();
-    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is logged in
-        header("Location: /index.php"); //the user shouldn't be able to access the register page
+    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']) && !isset($_SESSION['LogInsuccessMsg']))){  //if the user is logged in previously (not at the login time)
+        header("Location: /index.php"); //the user shouldn't be able to access the login page
         exit();
     }
 ?>
@@ -43,7 +43,7 @@
                         required> 
                         <button id="togglePassword">Show Password</button><br>
                     </div>
-                    <div class='err-msg' id="msgbox">
+                    <div class='err-msg' id="errmsgbox">
                         <?php
                             if(isset($_SESSION['errMsg'])){
                                 echo $_SESSION['errMsg'];
@@ -52,7 +52,7 @@
                             }
                         ?>
                     </div>
-                    <div class='success-msg'>
+                    <div class='success-msg' id='successmsgbox'>
                         <?php
                             if(isset($_SESSION['LogInsuccessMsg'])){
                                 echo $_SESSION['LogInsuccessMsg'];
@@ -64,7 +64,7 @@
                     </div>
                     <div class="btn-container">
                         <button type="submit" 
-                            id="login"  
+                            id="loginBtn"  
                             name= "loginSubmitBtn" 
                             value="submit" 
                             onclick="return validateForm(event)"
