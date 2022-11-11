@@ -274,5 +274,4 @@ class User{
         return $result;
     }
 }
-
 ?>

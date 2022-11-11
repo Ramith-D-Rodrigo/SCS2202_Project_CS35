@@ -1,12 +1,12 @@
 <?php
-    //User connection to the database
+    //admin connection to the database
     $serverName = "localhost";
     $username = "root";
     $password = "";
     $db = "sportude";
 
 
-    $connection = new mysqli($serverName, $username, $password, $db);    //establish the connection to the server
+    $connection = new mysqli($serverName, $username, $password, $db);    ////establish the connection with the database
 
     // Checking connection
     if ($connection -> connect_error){
