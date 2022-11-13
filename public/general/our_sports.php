@@ -23,13 +23,13 @@
                     if(isset($_SESSION['our_Sports'])){
                         foreach($_SESSION['our_Sports'] as $sport){
                 ?>
-                        <form class="search_result">
+                        <form class="search_result" method="post" action="/controller/general/user_selection_controller.php">
                             Sport : <?php echo $sport['sport_name'] ?>
                             <br>
                             Reservation Price : Rs .<?php echo $sport['reserve_price'] ?> per hour
                             <br>
                             Available Branches : 
-                            <select required>
+                            <select required name="selected_branch">
                                 <option value=""></option>
                                 <?php foreach($sport['providing_branches'] as $branches){
                                 ?>
@@ -39,7 +39,7 @@
                             ?>
                             </select>
                             <br>
-                            <button type="submit">Make a Reservation</button>
+                            <button type="submit" name="selectedSportBtn" value="<?php echo $sport['sport_id']?>">Make a Reservation</button>
                         </form>
                 <?php
                         }   

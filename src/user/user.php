@@ -195,7 +195,7 @@ class User{
         else{
             $this -> profilePic =  $picRow -> profile_photo;
         }
-        $this -> getProfilePic($database);  
+        //$this -> getProfilePic();  
         return ["Successfully Logged In", $rows -> user_role];  //return the message and role
     }
 
