@@ -7,12 +7,15 @@
     }
 
     function branchesWithThatSport($sportID, $database){
-        $sql = sprintf("SELECT DISTINCT BIN_TO_UUID(`branch_id`, 1)
-        FROM `sports_court` 
-        WHERE `sport_id` 
+        $sql = sprintf("SELECT DISTINCT BIN_TO_UUID(`sc`.`branch_id`, 1) AS `branch_id`,
+        `b`.`city` AS `branch_name`
+        FROM `sports_court` `sc`
+        INNER JOIN `branch` `b`
+        ON `sc`.`branch_id` = `b`.`branch_id`
+        WHERE `sc`.`sport_id` 
         LIKE '%s' 
         AND 
-        `request_status` ='a'", $database -> real_escape_string($sportID));   //requested status a means accepted
+        `sc`.`request_status` ='a'", $database -> real_escape_string($sportID));   //requested status a means accepted
 
         $result = $database -> query($sql);
 

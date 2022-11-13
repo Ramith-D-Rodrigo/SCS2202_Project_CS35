@@ -17,8 +17,13 @@
             $result -> free_result();
             continue;
         }
-        $branches = $result -> fetch_all(); //the branches who provide that sport
-        array_push($returningResult, ['sport_id' => bin_to_uuid($sport_id, $connection), 'sport_name' => $row ->sport_name, 'res_price' => $row -> reservation_price, 'providing_branches' => $branches]);
+        $branches = []; //the branches who provide that sport
+        while($currBranch = $result -> fetch_object()){ 
+            $branchID = $currBranch -> branch_id;
+            $branchName = $currBranch -> branch_name;
+            array_push($branches, ['branch_name' => $branchName, 'branch_id' => $branchID]);
+        }
+        array_push($returningResult, ['sport_id' => bin_to_uuid($sport_id, $connection), 'sport_name' => $row ->sport_name, 'reserve_price' => $row -> reservation_price, 'providing_branches' => $branches]);
         $result -> free_result();
     }
 
