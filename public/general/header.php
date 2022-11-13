@@ -50,7 +50,7 @@
             <div style="float:right" id="accountIcons">
                 <?php if(isset($_SESSION['userProfilePic'])){?>
                     
-                    <button class ="btn" id='profileBtn'><img src="/public/user/profile_images/<?php echo $_SESSION['userProfilePic']?>" class="acc-img"></button>
+                    <button class ="btn" id='profileBtn'><img src="/public/user/profile_images/<?php echo $_SESSION['userProfilePic']?>" class="acc-img" style="border: solid thin black"></button>
                 <?php
                 }
                 else{
