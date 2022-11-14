@@ -29,7 +29,7 @@
 
     $_SESSION['our_Sports'] = $returningResult;
     unset($returningResult);
-    print_r($_SESSION);
+    //print_r($_SESSION);
     $allsports -> free_result();
 
     header("Location: /public/general/our_sports.php");
