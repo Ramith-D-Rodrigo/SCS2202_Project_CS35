@@ -1,4 +1,5 @@
 <?php
+    require_once("../../src/general/uuid.php");
 class User{
     private $userID;
     private $firstName;
@@ -41,6 +42,10 @@ class User{
 
     public function getUserID(){    //userID getter
         return $this -> userID;
+    }
+
+    public function getProfilePic(){
+        return $this -> profilePic;
     }
 
     private function create_login_details_entry($database){   //first we createe the log in details entry
@@ -174,8 +179,23 @@ class User{
         }
 
         //setting user data for session
-        $this -> userID = $rows -> uuid;    
+        $this -> userID = $rows -> uuid;  
+        
+        //get the profile pic from the datbase and store in the object's attribute
+        $sqlPic = sprintf("SELECT `profile_photo` 
+        FROM `user` 
+        WHERE `user_id` = '%s'",
+        $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
 
+        $result = $database -> query($sqlPic);
+        $picRow = $result -> fetch_object();
+        if($picRow === NULL){
+            $this -> profilePic = '';
+        }
+        else{
+            $this -> profilePic =  $picRow -> profile_photo;
+        }
+        $this -> getProfilePic($database);  
         return ["Successfully Logged In", $rows -> user_role];  //return the message and role
     }
 
@@ -195,11 +215,13 @@ class User{
         }
 
         $result = [];
-        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table
+        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of receptionist (pending request)
             $courtBranchSql = sprintf("SELECT DISTINCT `branch_id`   
             FROM `sports_court`
             WHERE `sport_id` 
-            LIKE '%s'", $database -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
+            LIKE '%s'
+            AND
+            `request_status` = 'a'", $database -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
             $branchResult = $database -> query($courtBranchSql);
 
             while($branchRow = $branchResult -> fetch_object()){   //getting all the branches
@@ -208,6 +230,10 @@ class User{
                 array_push($result, ['branch' => $branch, 'sport_name' => $row['sport_name'], 'sport_id' => $row['sport_id'], 'reserve_price' => $row['reservation_price']]); //create a branch sport pair
             }
         }
+        if(count($result) === 0){   //couldn't find any branch that provide the searched sport
+            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+        }
+
         return $result;
     }
 
@@ -217,6 +243,35 @@ class User{
         unset($newReservation);
         return $result;
     }
-}
 
+    public function getReservationHistory($database){   //Joining sport, sport court, branch, reservation tables
+        $sql = sprintf("SELECT `r`.`reservation_id`, 
+        `r`.`date`, 
+        `r`.`starting_time`, 
+        `r`.`ending_time`, 
+        `r`.`payment_amount`, 
+        `r`.`status`, 
+        `b`.`city`, 
+        `s`.`sport_name`,
+        `sc`.`court_name` 
+        FROM `reservation` `r`
+        INNER JOIN `sports_court` `sc` 
+        ON `r`.`sport_court` = `sc`.`court_id`
+        INNER JOIN `sport` `s` 
+        ON `s`.`sport_id` = `sc`.`sport_id`
+        INNER JOIN `branch` `b` 
+        ON `sc`.`branch_id` = `b`.`branch_id`
+        WHERE `r`.`user_id` = '%s'
+        ORDER BY `r`.`date`",
+        $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
+
+        $result = $database -> query($sql);
+        return $result;
+    }
+
+    public function cancelReservation($reservation, $database){
+        $result = $reservation -> cancelReservation($this ->userID, $database);
+        return $result;
+    }
+}
 ?>

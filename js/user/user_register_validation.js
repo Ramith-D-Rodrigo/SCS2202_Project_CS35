@@ -1,4 +1,4 @@
-function pictureSize(size){
+function pictureSize(size){ //max size 2mb
     if(size > 2097152){
         return false;
     }
@@ -21,7 +21,8 @@ function validateForm(event){
         return false;
     }
     else{   //Form is valid from HTML perspective
-        //image size
+        //image size and type
+        let flag = true;    //for final validation
         const uploadedPic = document.getElementById("user_profile_pic");
         if(uploadedPic.value !== ""){   //has uploaded a file
             if(verbose){
@@ -29,9 +30,24 @@ function validateForm(event){
             }
     
             if(pictureSize(uploadedPic.files[0].size) === false){   //image too big
-                errMsg.innerHTML = errMsg.innerHTML + "Uploaded Image is Too Big";
-                return false;  
-            } 
+                errMsg.innerHTML = errMsg.innerHTML + "Uploaded Image is Too Big<br>";
+                flag = false;  
+            }
+            else{
+                errMsg.innerHTML.replace("Uploaded Image is Too Big<br>", "");
+            }
+
+            if(verbose){
+                console.log(uploadedPic.files[0].type);
+            }
+
+            if(uploadedPic.files[0].type !== 'image/png' && uploadedPic.files[0].type !== 'image/jpeg' && uploadedPic.files[0].type !== 'image/jpg'){
+                errMsg.innerHTML = errMsg.innerHTML + "Uploaded File is Not Supported. Check the File Type<br>";
+                flag = false;
+            }
+            else{
+                errMsg.innerHTML.replace("Uploaded File is Not Supported. Check the File Type<br>", "");
+            }
         }
 
   
@@ -42,7 +58,7 @@ function validateForm(event){
         } */
     
     //have to check input values validity (similary)
-        let flag = true;    //for final validation
+
         const emergencyDetails = document.getElementById("emergencyDetails");
         const emergencyDetailsChildren = emergencyDetails.children;
         
@@ -158,7 +174,5 @@ function validateForm(event){
         else{   //valid to submit the data
             return true;
         }
-    }
-    return false;
-    
+    } 
 }
