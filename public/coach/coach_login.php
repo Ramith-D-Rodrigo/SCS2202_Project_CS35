@@ -13,7 +13,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
-        <title>User Log In</title>
+        <title>Coach Log In</title>
     </head>
 
     <body>
@@ -22,7 +22,7 @@
         ?>
         <main class="body-container">
             <div class="content-box">
-                <form action="/controller/user/login_controller.php" method="post" id="loginForm">
+                <form action="/controller/coach/login_controller.php" method="post" id="loginForm">
                     Username : 
                     <input
                     type="text" 

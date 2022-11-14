@@ -35,7 +35,7 @@
     <th>Country</th>
     <th>Country</th>
     <th>Country</th>
-    <th>Country</th>
+    <th></th>
 
 
   </tr>
@@ -46,7 +46,7 @@
     <td>Germany</td>
     <td>Germany</td>
     <td>Germany</td>
-    <td>Germany</td>
+    <td><button>View profile</button></td>
     
   </tr>
   <tr>
@@ -56,7 +56,7 @@
     <td>Mexico</td>
     <td>Mexico</td>
     <td>Mexico</td>
-    <td>Mexico</td>
+    <td><button>View profile</button></td>
 
   </tr>
   <tr>
@@ -66,7 +66,7 @@
     <td>Austria</td>
     <td>Austria</td>
     <td>Austria</td>
-    <td>Austria</td>
+    <td><button>View profile</button></td>
 
 
   </tr>
@@ -77,7 +77,7 @@
     <td>UK</td>
     <td>UK</td>
     <td>UK</td>
-    <td>UK</td>
+    <td><button>View profile</button></td>
 
 
   </tr>
