@@ -238,9 +238,7 @@ class User{
     }
 
     public function makeReservation($date, $st, $et, $people, $payment, $court, $database){
-        $newReservation = new Reservation();
-        $result = $newReservation -> onlineReservation($date, $st, $et, $people, $payment, $court, $this -> userID, $database);
-        unset($newReservation);
+        $result = $court -> createReservation($this -> userID, $date, $st, $et, $payment, $people, $database);
         return $result;
     }
 
