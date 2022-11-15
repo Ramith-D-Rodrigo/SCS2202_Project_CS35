@@ -1,0 +1,9 @@
+.form-type{
+    text-align: left;
+    background-color: transparent;
+}
+td,th{
+    padding: 10px;
+    border: none;
+ 
+}
