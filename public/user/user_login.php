@@ -18,7 +18,7 @@
 
     <body>
         <?php
-            require_once("../general/header.php");
+         require_once("../general/header.php");
         ?>
         <main class="body-container">
             <div class="content-box">
