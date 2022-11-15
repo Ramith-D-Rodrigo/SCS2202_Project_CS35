@@ -58,7 +58,7 @@
                                 echo $_SESSION['LogInsuccessMsg'];
                                 echo '<br> You will be Redirected to the Home page. Please Wait';
                                 unset($_SESSION['LogInsuccessMsg']);
-                                header("Refresh: 3; URL =/index.php");
+                                header("Refresh: 3; URL =/public/coach/coach_dashboard.php");
                             }
                         ?>
                     </div>

@@ -7,7 +7,7 @@
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $loginUser = new User();
+    $loginUser = new coach();
 
     $resultmsg = $loginUser -> login($username, $password, $connection);
 

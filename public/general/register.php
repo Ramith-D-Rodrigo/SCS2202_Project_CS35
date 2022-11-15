@@ -34,7 +34,7 @@
                         <div class="register-option">
                             <img src="/styles/icons/coach.svg" class="register-imgs">
                             Register as a Coach
-                            <button>REGISTER</button>
+                            <button onclick="window.location.href='/controller/coach/register_entry_controller.php'">REGISTER</button>
                         </div>
                     </div>
                 </div>

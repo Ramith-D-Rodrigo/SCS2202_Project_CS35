@@ -8,7 +8,7 @@
 
     //all possible inputs for prefilling
     $inputFields = ['firstName', 'lastName', 'emailAddress', 'homeAddress', 'firstName', 'lastName', 'birthday', 'contactNum', 'username', 'gender',
-     'password', 'coach_qualifications1', 'coach_qualifications2', 'coach_qualifications3', 'coach_qualifications4', 'coach_qualifications5' ];
+     'password', 'coach_qualification1', 'coach_qualification2', 'coach_qualification3', 'coach_qualification4', 'coach_qualification5' ];
 
     //Compulsary Details
 
@@ -65,13 +65,15 @@
     $lName = htmlspecialchars($_POST['lastName'], ENT_QUOTES);
     $bday = htmlspecialchars($_POST['birthday'], ENT_QUOTES);
     $gender = htmlspecialchars($_POST['gender'], ENT_QUOTES);
+    $sport = htmlspecialchars($_POST['sport'], ENT_QUOTES);
+
 
     
     //coach Qualifications
     $coach_qualifications = [];
 
     foreach($inputFields as $i){
-        if(preg_match("/coach_qualifications[1-5]/", $i)){   //found a match 
+        if(preg_match("/coach_qualification[1-5]/", $i)){   //found a match 
             if(isset($_POST[$i])){
                 array_push($coach_qualifications, htmlspecialchars($_POST[$i], ENT_QUOTES));
             }
@@ -100,10 +102,9 @@
     }
 
     $new_coach = new Coach();
-    $new_coach -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $coach_qualifications, $username, $password, $gender);
+    $new_coach -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $coach_qualifications, $username, $password, $gender,$sport);
 
     $new_coach -> setProfilePic($picNewName);
-    
     $result = $new_coach -> registercoach($connection);
 
     if($result === TRUE){   //successfully registered
@@ -121,7 +122,7 @@
     else{
         echo "Error Registering the Account";
         $_SESSION['RegUnsuccessMsg'] = 'Error Registering the Account';
-        header("Location: /public/coach/coach_register.php");
+         header("Location: /public/coach/coach_register.php");
     }
 
     $connection -> close(); //close the database connection

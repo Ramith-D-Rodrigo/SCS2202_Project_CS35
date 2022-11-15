@@ -40,13 +40,13 @@ qualificationBtn.addEventListener('click',(e)=>{
     removeBtn.setAttribute('id', 'removebtn' + currID);
 
     removeBtn.addEventListener('click', (e)=>{
-        qualificationCount--;
+        qualificationcount--;
         if(verbose){
             console.log("Qualification Remove button clicked -> count = " + qualificationcount);
         }
         e.preventDefault();
         const freedID = removeBtn.id.slice(-1);
-        medicalinputID.push(freedID);
+        qualificationsinputID.push(freedID);
         const parent = removeBtn.parentElement;
         parent.remove();
         if(qualificationcount < 5){

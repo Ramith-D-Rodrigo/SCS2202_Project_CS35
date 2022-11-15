@@ -15,8 +15,9 @@ class coach{
     private $gender;
     private $isactive;
     private $profilePic;
+    private $sport;
 
-    public function setDetails($fName='', $lName='', $email='', $address='', $contactNo='', $dob='', $uid='',$qualifications='', $username='', $password='', $gender=''){
+    public function setDetails($fName='', $lName='', $email='', $address='', $contactNo='', $dob='', $uid='',$qualifications='', $username='', $password='', $gender='',$sport=''){
         $this -> userID = $uid;
         $this -> firstName = $fName;
         $this -> lastName = $lName;
@@ -28,6 +29,7 @@ class coach{
         $this -> username = $username;
         $this -> password = $password;
         $this -> gender = $gender;
+        $this -> sport = $sport;
     }
 
     public function setProfilePic($profilePic){
@@ -54,7 +56,10 @@ class coach{
         (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','coach')",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
-        $database -> real_escape_string($this -> password))); 
+        $database -> real_escape_string($this -> password),
+        $database -> real_escape_string($this -> emailAddress),
+        $database -> real_escape_string($this -> isactive),
+    )); 
 
 /*         if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
@@ -66,29 +71,30 @@ class coach{
     }
 
     private function create_coach_entry($database){  //Create entry in coach table
-        $result = $database -> query(sprintf("INSERT INTO `coach`
+       $result = $database -> query(sprintf("INSERT INTO `coach`
         (`coach_id`, 
         `first_name`, 
-        `last_name`,  
-        `gender`, 
+        `last_name`,
         `home_address`, 
-        `contact_num`, 
         `birthday`, 
-        `register_date`, 
-        `profile_photo`) 
-        VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s','%s'",
-        $database -> real_escape_string($this -> userID),
-        $database -> real_escape_string($this -> firstName),
-        $database -> real_escape_string($this -> lastName),
-        $database -> real_escape_string($this -> emailAddress),
-        $database -> real_escape_string($this -> gender),
-        $database -> real_escape_string($this -> homeAddress),
-        $database -> real_escape_string($this -> contactNum),
-        $database -> real_escape_string($this -> dateOfBirth),
-        $database -> real_escape_string($this -> registeredDate),
-        $database -> real_escape_string($this -> isactive),
-        $database -> real_escape_string($this -> profilePic))); 
+        `gender`, 
+        `contact_num`, 
+        `photo`,
+         `sport`,
+          `register_date`)
+           VALUES 
+           (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s',UUID_TO_BIN('%s', 1),'%s')",
+            $database -> real_escape_string($this -> userID),
+            $database -> real_escape_string($this -> firstName),
+            $database -> real_escape_string($this -> lastName),
+            $database -> real_escape_string($this -> homeAddress),
+            $database -> real_escape_string($this -> dateOfBirth),
+            $database -> real_escape_string($this -> gender),
+            $database -> real_escape_string($this -> contactNum),
+            $database -> real_escape_string($this -> profilePic),
+            $database -> real_escape_string($this -> sport),
+            $database -> real_escape_string($this -> registeredDate)));
+       
 
         return $result;
 /*         if ($result === TRUE) {
@@ -104,9 +110,9 @@ class coach{
         $flag = TRUE;
         if(count($this -> qualifications) != 0){   //has qualifications
             foreach($this -> qualifications as $i){
-                $result = $database -> query(sprintf("INSERT INTO `coach_qualifications`
+                $result = $database -> query(sprintf("INSERT INTO `coach_qualification`
                 (`coach_id`, 
-                `coach_qualifications`) 
+                `qualification`) 
                 VALUES 
                 (UUID_TO_BIN('%s', 1),'%s')", 
                 $database -> real_escape_string($this -> userID),
@@ -124,8 +130,17 @@ class coach{
         $this -> registeredDate = date("Y-m-d");
         $this -> isactive = 1;
         $loginEntry = $this -> create_login_details_entry($database);
+        if( $loginEntry===false){
+            return false;
+        }
         $userEntry = $this -> create_coach_entry($database);
+        if( $userEntry===false){
+            return false;
+        }
         $qualificationsEntry = $this -> create_coach_qualifications($database); 
+        if( $qualificationsEntry===false){
+            return false;
+        }
         
 
         if($loginEntry  === TRUE && $userEntry  === TRUE && $qualificationsEntry  === TRUE ){   

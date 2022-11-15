@@ -1,9 +1,9 @@
 <?php
-    // session_start();
-    // if((isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is logged in
-    //     header("Location: /index.php"); //the user shouldn't be able to access the register page
-    //     exit();
-    // }
+    session_start();
+     if((isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is logged in
+         header("Location: /index.php"); //the user shouldn't be able to access the register page
+         exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -25,13 +25,19 @@
         <main>
             <div class='body-container'>
                 <div class="content-box">
-                    <form action="/controller/coach/coach_controller.php" method="post" enctype="multipart/form-data">
+                    <form action="/controller/coach/register_controller.php" method="post" enctype="multipart/form-data">
 
                     Coaching Sport : 
-                        <select names ="Coaching Sport" id="Coaching Sport">
-                            <option value ="Coaching Sport 1">Coaching Sport 1</option>
-                            <option value ="Coaching Sport 2">Coaching Sport 2</option>
-                            <option value ="Coaching Sport 3">Coaching Sport 3</option>
+                        <select name ="sport" id="sport">
+                            <?php
+                            foreach( $_SESSION["sports"] as $sport){
+                              ?>  
+                              <option value=<?php echo $sport[0]?>><?php echo $sport[1]?></option>
+                              <?php 
+                            }
+
+                            ?>
+                            
 
                         </select> 
                         <br>
