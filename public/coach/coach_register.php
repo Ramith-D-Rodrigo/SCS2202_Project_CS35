@@ -26,6 +26,16 @@
             <div class='body-container'>
                 <div class="content-box">
                     <form action="/controller/coach/coach_controller.php" method="post" enctype="multipart/form-data">
+
+                    Coaching Sport : 
+                        <select names ="Coaching Sport" id="Coaching Sport">
+                            <option value ="Coaching Sport 1">Coaching Sport 1</option>
+                            <option value ="Coaching Sport 2">Coaching Sport 2</option>
+                            <option value ="Coaching Sport 3">Coaching Sport 3</option>
+
+                        </select> 
+                        <br>
+
                         Name :
                         <input type="text" 
                         pattern="[a-zA-Z]+" 

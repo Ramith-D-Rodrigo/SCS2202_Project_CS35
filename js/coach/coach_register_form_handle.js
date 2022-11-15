@@ -8,7 +8,7 @@ const qualificationContainer = document.getElementById("quali");
 const qualificationBtn = document.getElementById("qualification");
 
 var qualificationcount = 0;   //no of qualifications of the coach
-let qualificationinputID = [];
+let qualificationsinputID = [];
 
 for(i = 1; i <=5; i++){ //array of qualifiactionsIDs
     qualificationsinputID.push(i);
@@ -19,7 +19,7 @@ if(verbose){
 
 
 qualificationBtn.addEventListener('click',(e)=>{
-    qualificationCount++;
+    qualificationcount++;
     if(verbose){
         console.log("Qualifiaction Add button clicked -> count = " + qualificationcount);
     }
@@ -27,11 +27,11 @@ qualificationBtn.addEventListener('click',(e)=>{
 
     const inputDiv = document.createElement("div"); //new qualification
     //inputDiv.setAttribute('id', 'concern' + qualificationCount);
-    const currID = qualificationinputID.pop();    //Assigning ID
+    const currID = qualificationsinputID.pop();    //Assigning ID
     const inputField = document.createElement("input");
     inputField.setAttribute('type', 'text');
     inputField.setAttribute('name', 'coach_qualification' + currID);
-    inputField.setAttribute('placeholder', 'ex: Have back pains');
+    inputField.setAttribute('placeholder', 'ex: Qualification');
     inputField.setAttribute('required', '');
     inputField.setAttribute('pattern',"[a-zA-Z ]+");
 
@@ -57,8 +57,8 @@ qualificationBtn.addEventListener('click',(e)=>{
     inputDiv.appendChild(inputField);
     inputDiv.appendChild(removeBtn);
 
-    qualificationContaine.appendChild(inputDiv);
-    if(qualificationCount == 5){
+    qualificationContainer.appendChild(inputDiv);
+    if(qualificationcount == 5){
         qualificationBtn.style.display = 'none';
     }
 });
@@ -95,7 +95,7 @@ const bDay = document.getElementById("bday");
 const today = new Date().toISOString().split("T")[0];
 const maxYear = today.split("-");
 
-maxYear[0] = (maxYear[0] - 14).toString();  //Must be atleast age of 14
+maxYear[0] = (maxYear[0] - 18).toString();  //Must be atleast age of 18
 if(verbose){
     console.log("Birthday Max Date = " + maxYear);
 }
@@ -107,7 +107,7 @@ bday.max = maxDate;
 //minDate
 const minYear = today.split("-");
 
-minYear[0] = (minYear[0] - 100).toString();  //Must be atleast age of 14
+minYear[0] = (minYear[0] - 100).toString();  //Must be atleast age of 18
 if(verbose){
     console.log("Birthday Min Date = " + minYear);
 }
