@@ -12,21 +12,20 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../../styles/coach//coach_register.css">
-        <!-- <link rel="stylesheet" href="/styles/general/styles.css"> -->
-        <!-- <link rel="stylesheet" href="/styles/user/user_register.css"> -->
+        <link rel="stylesheet" href="../../styles/general/styles.css">
+         <link rel="stylesheet" href="/styles/coach/coach_register.css"> 
         <title>coach Registration</title>
     </head>
     <body>
     <?php
-        // require_once("../general/header.php");
+         
         require_once("../general/header.php");
 
     ?>
         <main>
             <div class='body-container'>
                 <div class="content-box">
-                    <form action="/controller/user/register_controller.php" method="post" enctype="multipart/form-data">
+                    <form action="/controller/coach/coach_controller.php" method="post" enctype="multipart/form-data">
                         Name :
                         <input type="text" 
                         pattern="[a-zA-Z]+" 
@@ -69,26 +68,8 @@
                             ><?php if(isset($_SESSION['homeAddress'])) echo htmlspecialchars($_SESSION['homeAddress'], ENT_QUOTES)?></textarea>
                         </div>
 
-                        Height : 
-                        <input 
-                        type="text" 
-                        placeholder="Optional (centimeters)" 
-                        min="0" 
-                        pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
-                        id="height"
-                        name="height"
-                        value=<?php if(isset($_SESSION['height'])) echo htmlspecialchars($_SESSION['height'], ENT_QUOTES)?>>
-
-                        Weight : 
-                        <input 
-                        type="text" 
-                        placeholder="Optional (kilograms)" 
-                        min="0"
-                        pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
-                        id="weight"
-                        name="weight"
-                        value=<?php if(isset($_SESSION['weight'])) echo htmlspecialchars($_SESSION['weight'], ENT_QUOTES)?>> 
-                        <br>
+                       
+                        
                         
                         <label for="gender">
                             Gender : 
@@ -133,61 +114,18 @@
                         <div>
                             Confirm Password : <input type="password" required> <button class="togglePassword"> Show Password</button> <br>
                         </div>
-                        <div id="medCon">
-                            Medical Concerns : (Maximum of 5 | Please Add one Concern per Field)<br>
-                            <button id="medConbtn"> Add </button>
+
+                        <div id="quali">
+                            Qualifications : (Maximum of 5 | Please Add one Qualifications per Field)<br>
+                            <button id="qualification"> Add </button>
                         </div>
+
                         Upload a Profile Picture
                         <input type=file name="user_pic" accept=".jpg, .jpeg, .png" id="user_profile_pic" title="Maximum File Size 2MB. Only Accepts JPG, PNG">
 
-                        <div id="emergencyDetails">
-                            Emergency Contact Details: <br>
-                            Name: <input type="text" name="name1" required value=<?php if(isset($_SESSION['name1'])) echo htmlspecialchars($_SESSION['name1'], ENT_QUOTES) ?>> <br>
-                            Relationship: 
-                            <select required name="relationship1">
-                                <option value="">Choose One</option>
-                                <option value="Mother" <?php if(isset($_SESSION['relationship1'])){
-                                        if($_SESSION['relationship1'] === "Mother"){
-                                            echo 'selected';
-                                        }
-                                    }?>>Mother</option>
-                                <option value="Father" <?php if(isset($_SESSION['relationship1'])){
-                                        if($_SESSION['relationship1'] === "Father"){
-                                            echo 'selected';
-                                        }
-                                    }?>>Father</option>
-                                <option value="Sibling 1" <?php if(isset($_SESSION['relationship1'])){
-                                        if($_SESSION['relationship1'] === "Sibling 1"){
-                                            echo 'selected';
-                                        }
-                                    }?>>Sibling 1</option>
-                                <option value="Sibling 2" <?php if(isset($_SESSION['relationship1'])){
-                                        if($_SESSION['relationship1'] === "Sibling 2"){
-                                            echo 'selected';
-                                        }
-                                    }?>>Sibling 2</option>
-                                <option value="Friend 1" <?php if(isset($_SESSION['relationship1'])){
-                                        if($_SESSION['relationship1'] === "Friend 1"){
-                                            echo 'selected';
-                                        }
-                                    }?>>Friend 1</option>
-                                <option value="Friend 2" <?php if(isset($_SESSION['relationship1'])){
-                                        if($_SESSION['relationship1'] === "Friend 2"){
-                                            echo 'selected';
-                                        }
-                                    }?>>Friend 2</option>
-                                <option value="Partner" <?php if(isset($_SESSION['relationship1'])){
-                                        if($_SESSION['relationship1'] === "Partner"){
-                                            echo 'selected';
-                                        }
-                                    }?>>Partner</option>
-                            </select>
-                            <br>
-                            Contact Number: <input type="text" min="0" name="emgcontactNum1" required pattern="[0-9]{10,11}" value=<?php if(isset($_SESSION['emgcontactNum1'])) echo htmlspecialchars($_SESSION['emgcontactNum1'], ENT_QUOTES) ?>> <br>
-                            Want to Add More? (Maximum of 3)
-                            <br>
-                            <button id="emergencyDetailsbtn">Add More</button>
-                        </div>
+                        
+                           
+                        
                         <div id="errmsg" class="err-msg"><?php
                                 if(isset($_SESSION['emailError'])){
                                     echo $_SESSION['emailError'];
@@ -228,6 +166,6 @@
     ?>
 
     </body>
-    <script src="/js/user/user_register_form_handle.js"></script>
-    <script src="/js/user/user_register_validation.js"></script>
+    <script src="/js/coach/coach_register_form_handle.js"></script>
+    <script src="/js/coach/coach_register_validation.js"></script>
 </html>

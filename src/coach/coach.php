@@ -7,17 +7,16 @@ class User{
     private $emailAddress;
     private $homeAddress;
     private $contactNum;
-    private $height;
-    private $weight;
     private $registeredDate;
     private $dateOfBirth;
+    private $qualifications;
     private $username;
     private $password;
     private $gender;
     private $isactive;
     private $profilePic;
 
-    public function setDetails($fName='', $lName='', $email='', $address='', $contactNo='', $dob='', $uid='', $height='', $weight='', $username='', $password='', $gender=''){
+    public function setDetails($fName='', $lName='', $email='', $address='', $contactNo='', $dob='', $uid='',$qualifications='', $username='', $password='', $gender=''){
         $this -> userID = $uid;
         $this -> firstName = $fName;
         $this -> lastName = $lName;
@@ -25,8 +24,7 @@ class User{
         $this -> homeAddress = $address;
         $this -> contactNum = $contactNo;
         $this -> dateOfBirth = $dob;
-        $this -> height = $height;
-        $this -> weight = $weight;
+        $this -> qualifications = $qualifications;
         $this -> username = $username;
         $this -> password = $password;
         $this -> gender = $gender;
@@ -48,10 +46,12 @@ class User{
         $result = $database -> query(sprintf("INSERT INTO `login_details`
         (`user_id`, 
         `username`, 
-        `password`, 
+        `password`,
+        `email_address`, 
+        `is_active`,
         `user_role`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','user')",
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','coach')",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> password))); 
@@ -65,23 +65,19 @@ class User{
         return $result;
     }
 
-    private function create_user_entry($database){  //Create entry in user table
-        $result = $database -> query(sprintf("INSERT INTO `user`
-        (`user_id`, 
+    private function create_coach_entry($database){  //Create entry in coach table
+        $result = $database -> query(sprintf("INSERT INTO `coach`
+        (`coach_id`, 
         `first_name`, 
-        `last_name`, 
-        `email_address`, 
+        `last_name`,  
         `gender`, 
         `home_address`, 
         `contact_num`, 
         `birthday`, 
         `register_date`, 
-        `height`, 
-        `weight`,
-        `is_active`,
         `profile_photo`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), '%s', NULLIF('%s', 'NULL'))",
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s','%s'",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> firstName),
         $database -> real_escape_string($this -> lastName),
@@ -91,8 +87,6 @@ class User{
         $database -> real_escape_string($this -> contactNum),
         $database -> real_escape_string($this -> dateOfBirth),
         $database -> real_escape_string($this -> registeredDate),
-        $database -> real_escape_string($this -> height),
-        $database -> real_escape_string($this -> weight),
         $database -> real_escape_string($this -> isactive),
         $database -> real_escape_string($this -> profilePic))); 
 
@@ -103,17 +97,38 @@ class User{
         else{
             echo "Error<br>";
         } */
+   
     }
 
-   
+    private function create_coach_qualifications($database){
+        $flag = TRUE;
+        if(count($this -> qualifications) != 0){   //has qualifications
+            foreach($this -> qualifications as $i){
+                $result = $database -> query(sprintf("INSERT INTO `coach_qualifications`
+                (`coach_id`, 
+                `coach_qualifications`) 
+                VALUES 
+                (UUID_TO_BIN('%s', 1),'%s')", 
+                $database -> real_escape_string($this -> userID),
+                $database -> real_escape_string($i)));
 
-    public function registerUser($database){    //public function to register the user
+                if ($result === FALSE) {    //got an error
+                    return FALSE;
+                }
+            }
+        }
+        return $flag;
+    }
+
+    public function registercoach($database){    //public function to register the coach
         $this -> registeredDate = date("Y-m-d");
         $this -> isactive = 1;
         $loginEntry = $this -> create_login_details_entry($database);
-        $userEntry = $this -> create_user_entry($database);
+        $userEntry = $this -> create_coach_entry($database);
+        $qualificationsEntry = $this -> create_coach_qualifications($database); 
+        
 
-        if($loginEntry  === TRUE && $userEntry  === TRUE ){    //all has to be true (successfully registered)
+        if($loginEntry  === TRUE && $userEntry  === TRUE && $qualificationsEntry  === TRUE ){   
             return TRUE;
         }
         else{
@@ -162,81 +177,6 @@ class User{
         }
         $this -> getProfilePic($database);  
         return ["Successfully Logged In", $rows -> user_role];  //return the message and role
-    }
-
-    public function searchSport($sportName, $database){
-        $sportSql = sprintf("SELECT `sport_id`,
-        `sport_name`,
-        `reservation_price`
-        FROM `sport` 
-        WHERE `sport_name` 
-        LIKE '%%%s%%'", //to escape % in sprintf, we need to add % again
-        $database -> real_escape_string($sportName));
-
-        $sportResult = $database -> query($sportSql);   //get the sports results
-
-        if($sportResult -> num_rows === 0){ //no such sport found
-            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
-        }
-
-        $result = [];
-        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of receptionist (pending request)
-            $courtBranchSql = sprintf("SELECT DISTINCT `branch_id`   
-            FROM `sports_court`
-            WHERE `sport_id` 
-            LIKE '%s'
-            AND
-            `request_status` = 'a'", $database -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
-            $branchResult = $database -> query($courtBranchSql);
-
-            while($branchRow = $branchResult -> fetch_object()){   //getting all the branches
-                $branch = $branchRow -> branch_id;
-
-                array_push($result, ['branch' => $branch, 'sport_name' => $row['sport_name'], 'sport_id' => $row['sport_id'], 'reserve_price' => $row['reservation_price']]); //create a branch sport pair
-            }
-        }
-        if(count($result) === 0){   //couldn't find any branch that provide the searched sport
-            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
-        }
-
-        return $result;
-    }
-
-    public function makeReservation($date, $st, $et, $people, $payment, $court, $database){
-        $newReservation = new Reservation();
-        $result = $newReservation -> onlineReservation($date, $st, $et, $people, $payment, $court, $this -> userID, $database);
-        unset($newReservation);
-        return $result;
-    }
-
-    public function getReservationHistory($database){   //Joining sport, sport court, branch, reservation tables
-        $sql = sprintf("SELECT `r`.`reservation_id`, 
-        `r`.`date`, 
-        `r`.`starting_time`, 
-        `r`.`ending_time`, 
-        `r`.`payment_amount`, 
-        `r`.`status`, 
-        `b`.`city`, 
-        `s`.`sport_name`,
-        `sc`.`court_name` 
-        FROM `reservation` `r`
-        INNER JOIN `sports_court` `sc` 
-        ON `r`.`sport_court` = `sc`.`court_id`
-        INNER JOIN `sport` `s` 
-        ON `s`.`sport_id` = `sc`.`sport_id`
-        INNER JOIN `branch` `b` 
-        ON `sc`.`branch_id` = `b`.`branch_id`
-        WHERE `r`.`user_id` = '%s'
-        ORDER BY `r`.`date`",
-        $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
-
-        $result = $database -> query($sql);
-        return $result;
-    }
-
-    public function cancelReservation($reservation, $database){
-        $result = $reservation -> cancelReservation($this ->userID, $database);
-        return $result;
-    }
+    }    
 }
 ?>
