@@ -52,12 +52,14 @@ class User{
         $result = $database -> query(sprintf("INSERT INTO `login_details`
         (`user_id`, 
         `username`, 
+        `email_address`,
         `password`, 
         `user_role`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','user')",
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','user')",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
+        $database -> real_escape_string($this -> emailAddress),
         $database -> real_escape_string($this -> password))); 
 
 /*         if ($result === TRUE) {
@@ -73,8 +75,7 @@ class User{
         $result = $database -> query(sprintf("INSERT INTO `user`
         (`user_id`, 
         `first_name`, 
-        `last_name`, 
-        `email_address`, 
+        `last_name`,  
         `gender`, 
         `home_address`, 
         `contact_num`, 
@@ -85,11 +86,10 @@ class User{
         `is_active`,
         `profile_photo`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), '%s', NULLIF('%s', 'NULL'))",
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), '%s', NULLIF('%s', 'NULL'))",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> firstName),
         $database -> real_escape_string($this -> lastName),
-        $database -> real_escape_string($this -> emailAddress),
         $database -> real_escape_string($this -> gender),
         $database -> real_escape_string($this -> homeAddress),
         $database -> real_escape_string($this -> contactNum),
