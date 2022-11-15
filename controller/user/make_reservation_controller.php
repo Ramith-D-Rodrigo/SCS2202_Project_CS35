@@ -3,6 +3,7 @@
     require_once("../../src/user/dbconnection.php");
     require_once("../../src/general/reservation.php");
     require_once("../../src/user/user.php");
+    require_once("../../src/general/sport_court.php");
 
     session_start();
     if($_SESSION['userrole'] !== 'user'){   //not a user
@@ -60,8 +61,10 @@
 
     $reservingUser = new User(); 
     $reservingUser -> setDetails(uid : $user);//create an user with logged in userid
+
+    $reservingCourt = new Sports_Court($court_id);
     
-    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $court_id, $connection);
+    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $reservingCourt, $connection);   //pass the reserving court object to the function
     if($result === TRUE){
         $_SESSION['reservationSuccess'] = "Reservation has been made Successfully";
     }

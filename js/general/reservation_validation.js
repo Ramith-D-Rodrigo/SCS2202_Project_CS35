@@ -88,12 +88,12 @@ reserveStartingTime.addEventListener('change', (e)=>{
     console.log(timeDiffHours);
 
     if(timeDiffHours < 1){  //minimum reservation time period
-        errorMsg.innerHTML = "Selected Time Period is lesser than Minimum Reservation Period";
+        errorMsg.innerHTML = "Minimum Reservation Period is 1 Hour";
         reservationPrice.value = "";
         return;
     }
     else if(timeDiffHours > 6){ //maximum reservation time period
-        errorMsg.innerHTML = "Selected Time Period is greater than Maximum Reservation Period";
+        errorMsg.innerHTML = "Maximum Reservation Period is 6 Hours";
         reservationPrice.value = "";
         return;
     }
@@ -135,12 +135,12 @@ reserveEndingTime.addEventListener('change', (e)=>{
     const timeDiffHours = ((timeDiffMilli/1000)/60)/60;
 
     if(timeDiffHours < 1){  //minimum reservation time period
-        errorMsg.innerHTML = "Selected Time Period is lesser than Minimum Reservation Period";
+        errorMsg.innerHTML = "Minimum Reservation Period is 1 Hour";
         reservationPrice.value = "";
         return;
     }
     else if(timeDiffHours > 6){ //maximum reservation time period
-        errorMsg.innerHTML = "Selected Time Period is greater than Maximum Reservation Period";
+        errorMsg.innerHTML = "Maximum Reservation Period is 6 Hours";
         reservationPrice.value = "";
         return;
     }

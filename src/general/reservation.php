@@ -71,7 +71,8 @@
             $uid_bin = uuid_to_bin(($user_id), $database);
             $reserve_bin = uuid_to_bin(($this -> reservationID), $database);
 
-            $sql = sprintf("DELETE FROM `reservation` 
+            $sql = sprintf("UPDATE `reservation` 
+            SET `status`='Cancelled'
             WHERE `reservation_id` = '%s' 
             AND `user_id` = '%s'",
             $database -> real_escape_string($reserve_bin),
