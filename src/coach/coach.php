@@ -1,6 +1,6 @@
 <?php
     require_once("../../src/general/uuid.php");
-class User{
+class coach{
     private $userID;
     private $firstName;
     private $lastName;
@@ -162,20 +162,15 @@ class User{
         $this -> userID = $rows -> uuid;  
         
         //get the profile pic from the datbase and store in the object's attribute
-        $sqlPic = sprintf("SELECT `profile_photo` 
-        FROM `user` 
-        WHERE `user_id` = '%s'",
+        $sqlPic = sprintf("SELECT `photo` 
+        FROM `coach` 
+        WHERE `coach_id` = '%s'",
         $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
 
         $result = $database -> query($sqlPic);
         $picRow = $result -> fetch_object();
-        if($picRow === NULL){
-            $this -> profilePic = '';
-        }
-        else{
-            $this -> profilePic =  $picRow -> profile_photo;
-        }
-        $this -> getProfilePic($database);  
+        $this -> profilePic =  $picRow -> profile_photo;
+       
         return ["Successfully Logged In", $rows -> user_role];  //return the message and role
     }    
 }

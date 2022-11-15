@@ -121,7 +121,7 @@
                         </div>
 
                         Upload a Profile Picture
-                        <input type=file name="user_pic" accept=".jpg, .jpeg, .png" id="user_profile_pic" title="Maximum File Size 2MB. Only Accepts JPG, PNG">
+                        <input type=file name="coach_pic" accept=".jpg, .jpeg, .png" id="coach_profile_pic" title="Maximum File Size 2MB. Only Accepts JPG, PNG" required>
 
                         
                            

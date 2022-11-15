@@ -99,17 +99,12 @@
         move_uploaded_file($pic, '../../public/coach/profile_images/'.$picNewName);  //move the file to this directory
     }
 
-    $new_coach = new User();
+    $new_coach = new Coach();
     $new_coach -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $coach_qualifications, $username, $password, $gender);
 
-    if($profilePicFlag === true){    //has uploaded a profile pic
-        $new_coach -> setProfilePic($picNewName);
-    }
-    else{
-        $new_coach -> setProfilePic("NULL");
-    }
-
-    $result = $new_coach -> registerUser($connection);
+    $new_coach -> setProfilePic($picNewName);
+    
+    $result = $new_coach -> registercoach($connection);
 
     if($result === TRUE){   //successfully registered
         echo "Successfully registered";

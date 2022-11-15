@@ -1,7 +1,7 @@
 <?php
 
     function checkEmail($email, $database){
-        $hasEmailsql = sprintf("SELECT * FROM COACH WHERE email_address = '%s'", $database -> real_escape_string(htmlspecialchars($email, ENT_QUOTES)));     //sql query
+        $hasEmailsql = sprintf("SELECT * FROM `login_details` WHERE email_address = '%s'", $database -> real_escape_string(htmlspecialchars($email, ENT_QUOTES)));     //sql query
         $result = $database -> query($hasEmailsql);
         return $result;
     }
