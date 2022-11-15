@@ -54,13 +54,15 @@ class User{
         `username`, 
         `email_address`,
         `password`, 
-        `user_role`) 
+        `user_role`,
+        `is_active`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','user')",
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','user', '%s')",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> emailAddress),
-        $database -> real_escape_string($this -> password))); 
+        $database -> real_escape_string($this -> password),
+        $database -> real_escape_string($this -> isactive))); 
 
 /*         if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
@@ -83,10 +85,9 @@ class User{
         `register_date`, 
         `height`, 
         `weight`,
-        `is_active`,
         `profile_photo`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), '%s', NULLIF('%s', 'NULL'))",
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), NULLIF('%s', 'NULL'))",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> firstName),
         $database -> real_escape_string($this -> lastName),
@@ -97,7 +98,6 @@ class User{
         $database -> real_escape_string($this -> registeredDate),
         $database -> real_escape_string($this -> height),
         $database -> real_escape_string($this -> weight),
-        $database -> real_escape_string($this -> isactive),
         $database -> real_escape_string($this -> profilePic))); 
 
         return $result;
