@@ -31,7 +31,7 @@
 
         while($scheduleResult = $tempSchedule -> fetch_object()){   //create the array for current schedule reservations
             $reservationDetails = [];   //to store current court's each reservation's details
-            if($scheduleResult -> date < date("Y-m-d")){    //no need to check for previous reservations
+            if($scheduleResult -> date < date("Y-m-d") || $scheduleResult -> status === 'Cancelled'){    //no need to check for previous reservations and cancelled ones
                 continue;
             }
             $reservationDetails['date'] = $scheduleResult -> date;
@@ -43,7 +43,7 @@
         $allCourts[bin_to_uuid($courtResult -> court_id, $connection)] = ['schedule' => $courtSchedule, 'courtName' => $courtName];  //reservation schedule of the court is sotred in the courts array
         unset($tempCourt);
     }
-    print_r($allCourts);
+    //print_r($allCourts);
 
     $_SESSION['reservingBranch'] = $reservationPlace[2];    //reserving branch
     $_SESSION['reservingSport'] = $reservationPlace[3]; //reserving sport

@@ -62,12 +62,24 @@
                                     <td><?php echo "Rs.".$row -> payment_amount?></td>
                                     <td><?php echo $row -> status?></td>
                                     <td>
-                                        <div style="display:flex; flex-direction:column">
+                                    <?php
+                                        if($row -> status === 'Pending'){   //if its pending, the user can cancel but can't give feedback
+                                    ?>
+
                                             <form action="/controller/user/cancel_reservation_controller.php" method="post">
                                                 <button type="submit" name="cancelBtn" value=<?php echo "userReserveHis".$i; ?>>Cancel</button>
                                             </form>
+                                    <?php
+                                        }
+                                        else if($row -> status === 'Cancelled'){    //the user cannot cancel nor give feedback
+                                    
+                                        }
+                                        else if($row -> status === 'Checked In' || $row -> status === 'Declined'){   //the user cannot cancel anymore, but can give feedback
+                                    ?>
                                             <button>Give Feedback</button>
-                                        </div>
+                                    <?php
+                                        }
+                                    ?>
                                     </td>
                                 </tr>
                             <?php

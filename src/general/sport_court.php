@@ -1,5 +1,7 @@
 <?php
     //make sure to use UUID FUNCTIONS
+    require_once("reservation.php");
+
     class Sports_Court{
         private $courtID;
         private $courtName;
@@ -31,8 +33,11 @@
             return $result -> fetch_object() -> court_name;
         }
 
-        public function makeReservation($database){
-
+        public function createReservation($user, $date, $starting_time, $ending_time, $payment, $num_of_people, $database){
+            $reservation = new Reservation();
+            $result = $reservation -> onlineReservation($date, $starting_time, $ending_time, $num_of_people, $payment, $this -> courtID, $user, $database);
+            unset($reservation);
+            return $result;
         }
     }
 
