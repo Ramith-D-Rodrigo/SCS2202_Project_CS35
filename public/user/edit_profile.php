@@ -37,7 +37,9 @@
                                 Date of Birth 
                             </td>
                             <td>
-                            <?php echo $infoObject -> dob?>
+                                <div style="margin-left:10px">
+                                    <?php echo $infoObject -> dob?>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -53,7 +55,7 @@
                                 Home Address 
                             </td>
                             <td>
-                                <textarea name="homeAddress"><?php echo $infoObject -> homeAddress?></textarea>
+                                <textarea name="homeAddress"><?php echo htmlspecialchars_decode($infoObject -> homeAddress, ENT_QUOTES)?></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -77,7 +79,9 @@
                                 Gender  
                             </td>
                             <td>
-                            <?php if($infoObject -> gender === 'm'){ echo 'Male';}else{ echo 'Female';}?>
+                                <div style="margin-left:10px">
+                                    <?php if($infoObject -> gender === 'm'){ echo 'Male';}else{ echo 'Female';}?>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -85,7 +89,9 @@
                                 Current Email Address  
                             </td>
                             <td>
-                            <?php echo $infoObject -> email?>
+                                <div style="margin-left:10px">
+                                    <?php echo $infoObject -> email?>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -101,7 +107,9 @@
                                 Username  
                             </td>
                             <td>
-                                <?php echo $infoObject -> username?>
+                                <div style="margin-left:10px">
+                                    <?php echo $infoObject -> username?>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -128,8 +136,22 @@
                             </td>
                         </tr>
                         <tr>
+                            <td colspan = "2">
+                                Profile Picture
+                            </td>
+                        </tr>
+                        <tr>
                             <td>
-                                Profile Picture 
+                                <?php
+                                if(isset($infoObject -> profilePic)){
+                                ?>
+                                    <img src="/public/user/profile_images/<?php echo $infoObject -> profilePic?>" style="width:200px; display:block;"/>
+                                <?php
+                                }
+                                else{
+                                    echo "Not uploaded";
+                                }
+                                ?>
                             </td>
                             <td>
                                 <input type="file" name="profilePic">
