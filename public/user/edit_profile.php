@@ -25,7 +25,7 @@
                                 Name  
                             </td>
                             <td>
-                                : Example name
+                                Example name
                             </td>
                         </tr>
                         <tr>
@@ -33,7 +33,7 @@
                                 Date of Birth 
                             </td>
                             <td>
-                                : Example Birthday
+                                Example Birthday
                             </td>
                         </tr>
                         <tr>
@@ -41,7 +41,7 @@
                                 Contact Number 
                             </td>
                             <td>
-                                : <input type="text">
+                                <input type="text" name="contactNum">
                             </td>
                         </tr>
                         <tr>
@@ -49,7 +49,7 @@
                                 Home Address 
                             </td>
                             <td>
-                                : <textarea></textarea>
+                                <textarea name="homeAddress"></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -57,7 +57,7 @@
                                 Weight 
                             </td>
                             <td>
-                                : <input type="text">
+                                <input type="text" name="weight">
                             </td>
                         </tr>
                         <tr>
@@ -65,7 +65,7 @@
                                 Height  
                             </td>
                             <td>
-                                : <input type="text">
+                                <input type="text" name="height">
                             </td>
                         </tr>
                         <tr>
@@ -73,7 +73,7 @@
                                 Gender  
                             </td>
                             <td>
-                                : Example Gender
+                                Example Gender
                             </td>
                         </tr>
                         <tr>
@@ -81,7 +81,7 @@
                                 Current Email Address  
                             </td>
                             <td>
-                                : Example Email
+                                Example Email
                             </td>
                         </tr>
                         <tr>
@@ -89,7 +89,7 @@
                                 New Email Address  
                             </td>
                             <td>
-                                : <input type="text">
+                                <input type="text" name="newEmail">
                             </td>
                         </tr>
                         <tr>
@@ -97,7 +97,7 @@
                                 Username  
                             </td>
                             <td>
-                                : Example Username
+                                Example Username
                             </td>
                         </tr>
                         <tr>
@@ -105,7 +105,7 @@
                                 New Password
                             </td>
                             <td>
-                                : <input type="text"><button>Show Password</button>
+                                <input type="password" name="newPassword"><button class="togglePassword">Show Password</button>
                             </td>
                         </tr>
                         <tr>
@@ -113,17 +113,62 @@
                                 Confirm New Password
                             </td>
                             <td>
-                                : <input type="text"><button>Show Password</button>
+                                <input type="password" name="newPasswordConfirm"><button class="togglePassword">Show Password</button>
                             </td>
                         </tr>
                         <tr>
                             <td colspan = "2">
-                                Medical Concerns : 
+                                Medical Concerns  <button>Add</button>
                                 <br>
                                 Example medical concern
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                Profile Picture 
+                            </td>
+                            <td>
+                                <input type="file" name="profilePic">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan = "2">
+                                Emergency Contact Details 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Name
+                            </td>
+                            <td>
+                                <input type="text" name="emgName1">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Relationship
+                            </td>
+                            <td>
+                                <input type="text" name="emgRelation1">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Contact Number
+                            </td>
+                            <td>
+                                <input type="text" name="emgContact1">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan = "2">
+                                Want to Add More ? <button>Add More</button>
+                            </td>
+                        </tr>
                     </table>
+                    <div class="btn-container">
+                        <button>Save Changes</button>
+                    </div>
                 </div>                
             </div>
 
@@ -131,5 +176,6 @@
 
         <?php require_once("../../public/general/footer.php"); ?>
     </body>
+    <script src="/js/user/edit_profile_handle.js"></script>
     <script src="/js/user/account_links.js"></script>
 </html>
