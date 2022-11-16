@@ -1,6 +1,7 @@
 <?php
     session_start();
 
+    $infoObject = json_decode($_SESSION['profileInfo']);
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +26,10 @@
                                 Name  
                             </td>
                             <td>
-                                Example name
+                                <div style="margin-left:10px">
+                                    <?php echo $infoObject -> fName . " " . $infoObject -> lName?>
+                                </div>
+                                
                             </td>
                         </tr>
                         <tr>
@@ -33,7 +37,7 @@
                                 Date of Birth 
                             </td>
                             <td>
-                                Example Birthday
+                            <?php echo $infoObject -> dob?>
                             </td>
                         </tr>
                         <tr>
@@ -41,7 +45,7 @@
                                 Contact Number 
                             </td>
                             <td>
-                                <input type="text" name="contactNum">
+                                <input type="text" name="contactNum" value="<?php echo $infoObject -> contactNo?>">
                             </td>
                         </tr>
                         <tr>
@@ -49,7 +53,7 @@
                                 Home Address 
                             </td>
                             <td>
-                                <textarea name="homeAddress"></textarea>
+                                <textarea name="homeAddress"><?php echo $infoObject -> homeAddress?></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -57,7 +61,7 @@
                                 Weight 
                             </td>
                             <td>
-                                <input type="text" name="weight">
+                                <input type="text" name="weight" value="<?php echo $infoObject -> weight?>">
                             </td>
                         </tr>
                         <tr>
@@ -65,7 +69,7 @@
                                 Height  
                             </td>
                             <td>
-                                <input type="text" name="height">
+                                <input type="text" name="height" value="<?php echo $infoObject -> height?>">
                             </td>
                         </tr>
                         <tr>
@@ -73,7 +77,7 @@
                                 Gender  
                             </td>
                             <td>
-                                Example Gender
+                            <?php if($infoObject -> gender === 'm'){ echo 'Male';}else{ echo 'Female';}?>
                             </td>
                         </tr>
                         <tr>
@@ -81,7 +85,7 @@
                                 Current Email Address  
                             </td>
                             <td>
-                                Example Email
+                            <?php echo $infoObject -> email?>
                             </td>
                         </tr>
                         <tr>
@@ -97,7 +101,7 @@
                                 Username  
                             </td>
                             <td>
-                                Example Username
+                                <?php echo $infoObject -> username?>
                             </td>
                         </tr>
                         <tr>
