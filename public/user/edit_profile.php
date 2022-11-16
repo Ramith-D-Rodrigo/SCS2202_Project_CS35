@@ -131,8 +131,22 @@
                         <tr>
                             <td colspan = "2">
                                 Medical Concerns  <button>Add</button>
-                                <br>
-                                Example medical concern
+                            </td>
+                        </tr>
+                        <tr>                       
+                            <td colspan="2">
+                                <ol style="margin-left:25px">
+                                <?php
+                                    foreach($infoObject -> medicalConcerns as $concern){
+                                ?>
+                                    <li>
+                                        <?php echo $concern -> medical_concern;?>
+                                        <button>Remove</button>
+                                    </li>
+                                <?php
+                                    }
+                                ?>
+                                </ol>
                             </td>
                         </tr>
                         <tr>
@@ -167,7 +181,7 @@
                                 Name
                             </td>
                             <td>
-                                <input type="text" name="emgName1">
+                                <input type="text" name="emgName1" value="<?php echo $infoObject -> dependents[0] -> name?>">
                             </td>
                         </tr>
                         <tr>
@@ -175,7 +189,7 @@
                                 Relationship
                             </td>
                             <td>
-                                <input type="text" name="emgRelation1">
+                                <input type="text" name="emgRelation1" value="<?php echo $infoObject -> dependents[0] -> relationship?>">
                             </td>
                         </tr>
                         <tr>
@@ -183,7 +197,7 @@
                                 Contact Number
                             </td>
                             <td>
-                                <input type="text" name="emgContact1">
+                                <input type="text" name="emgContact1" value="<?php echo $infoObject -> dependents[0] -> contact_num?>">
                             </td>
                         </tr>
                         <tr>
