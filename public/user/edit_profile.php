@@ -47,7 +47,11 @@
                                 Contact Number 
                             </td>
                             <td>
-                                <input type="text" name="contactNum" value="<?php echo $infoObject -> contactNo?>">
+                                <input type="text" name="contactNum"
+                                pattern="[0-9]{10,11}" 
+                                id="usercontact"
+                                required 
+                                value="<?php echo $infoObject -> contactNo?>">
                             </td>
                         </tr>
                         <tr>
@@ -60,18 +64,29 @@
                         </tr>
                         <tr>
                             <td>
-                                Weight 
+                                Weight (kg)
                             </td>
                             <td>
-                                <input type="text" name="weight" value="<?php echo $infoObject -> weight?>">
+                                <input type="text" 
+                                name="weight" 
+                                placeholder="Optional (kilograms)" 
+                                min="0"
+                                pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
+                                id="weight"
+                                value="<?php echo $infoObject -> weight?>">
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                Height  
+                                Height (cm)
                             </td>
                             <td>
-                                <input type="text" name="height" value="<?php echo $infoObject -> height?>">
+                                <input type="text" 
+                                name="height" 
+                                min="0" 
+                                pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
+                                id="height"
+                                value="<?php echo $infoObject -> height?>">
                             </td>
                         </tr>
                         <tr>
@@ -99,7 +114,9 @@
                                 New Email Address  
                             </td>
                             <td>
-                                <input type="text" name="newEmail">
+                                <input type="email" 
+                                name="emailAddress"
+                                id="emailAddress">
                             </td>
                         </tr>
                         <tr>
@@ -130,23 +147,22 @@
                         </tr>
                         <tr>
                             <td colspan = "2">
-                                Medical Concerns  <button>Add</button>
+                                Medical Concerns  <button id="medicalConcernBtn">Add</button>
                             </td>
                         </tr>
                         <tr>                       
                             <td colspan="2">
-                                <ol style="margin-left:25px">
-                                <?php
-                                    foreach($infoObject -> medicalConcerns as $concern){
-                                ?>
+                                <ol style="margin-left:25px" id="medicalConcernList"><?php
+                                    $i = 1;
+                                    foreach($infoObject -> medicalConcerns as $concern){?>
                                     <li>
-                                        <?php echo $concern -> medical_concern;?>
-                                        <button>Remove</button>
+                                        <?php 
+                                            echo $concern -> medical_concern;             
+                                        ?><button class ="concernRemoveBtn" id="concernRemoveBtn<?php echo $i++?>">Remove</button>
                                     </li>
                                 <?php
                                     }
-                                ?>
-                                </ol>
+                                ?></ol>
                             </td>
                         </tr>
                         <tr>
@@ -168,7 +184,7 @@
                                 ?>
                             </td>
                             <td>
-                                <input type="file" name="profilePic">
+                                <input type="file" name="profilePic" accept=".jpg, .jpeg, .png" id="user_profile_pic" title="Maximum File Size 2MB. Only Accepts JPG, PNG">
                             </td>
                         </tr>
                         <tr>

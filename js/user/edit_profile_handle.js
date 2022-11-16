@@ -19,3 +19,32 @@ function togglePassword(element){
         }
     });
 }
+
+
+const addMedicalConcernBtn = document.getElementById("medicalConcernBtn");
+let numberOfMedicalConcerns = document.getElementById("medicalConcernList").children.length;
+
+console.log(numberOfMedicalConcerns);
+
+if(numberOfMedicalConcerns === 5){  //do not display as maximum is 5
+    addMedicalConcernBtn.style.display = "none";
+}
+
+let concernRemoveBtns = null;
+
+if(numberOfMedicalConcerns !== 0){ //has medical concerns
+    concernRemoveBtns = document.getElementsByClassName("concernRemoveBtn");
+
+    for(i = 0; i < concernRemoveBtns.length; i++){
+        const currBtn = concernRemoveBtns.item(i);
+        currBtn.addEventListener('click', ()=>{
+            console.log("remove button pressed");
+            numberOfMedicalConcerns--;
+            const parent = currBtn.parentElement;
+            parent.remove();
+            if(numberOfMedicalConcerns < 5){
+                addMedicalConcernBtn.style.display = "block";
+            }
+        });
+    }
+}
