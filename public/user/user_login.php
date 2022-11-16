@@ -71,7 +71,7 @@
                             <?php
                             if(isset($_SESSION['userrole'])){
                             ?>
-                                disabled
+                                hidden
                             <?php
                             }
                             else{
@@ -82,7 +82,19 @@
                             ?>> Log in </button>
                     </div>
                 </form>
-                <div class="btn-container">
+                <div class="btn-container"
+                    <?php
+                    if(isset($_SESSION['userrole'])){
+                    ?>
+                        style="display:none"
+                    <?php
+                    }
+                    else{
+                    ?>
+                        style="display:flex"
+                    <?php
+                    }
+                    ?>>
                     New User? <button onclick="window.location.href='/public/general/register.php'">Register</button>
                 </div>
             </div>
