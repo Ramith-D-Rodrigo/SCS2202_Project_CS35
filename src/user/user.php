@@ -1,6 +1,6 @@
 <?php
     require_once("../../src/general/uuid.php");
-class User{
+class User implements JsonSerializable{
     private $userID;
     private $firstName;
     private $lastName;
@@ -52,13 +52,17 @@ class User{
         $result = $database -> query(sprintf("INSERT INTO `login_details`
         (`user_id`, 
         `username`, 
+        `email_address`,
         `password`, 
-        `user_role`) 
+        `user_role`,
+        `is_active`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','user')",
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','user', '%s')",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
-        $database -> real_escape_string($this -> password))); 
+        $database -> real_escape_string($this -> emailAddress),
+        $database -> real_escape_string($this -> password),
+        $database -> real_escape_string($this -> isactive))); 
 
 /*         if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
@@ -73,8 +77,7 @@ class User{
         $result = $database -> query(sprintf("INSERT INTO `user`
         (`user_id`, 
         `first_name`, 
-        `last_name`, 
-        `email_address`, 
+        `last_name`,  
         `gender`, 
         `home_address`, 
         `contact_num`, 
@@ -82,14 +85,12 @@ class User{
         `register_date`, 
         `height`, 
         `weight`,
-        `is_active`,
         `profile_photo`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), '%s', NULLIF('%s', 'NULL'))",
+        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), NULLIF('%s', 'NULL'))",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> firstName),
         $database -> real_escape_string($this -> lastName),
-        $database -> real_escape_string($this -> emailAddress),
         $database -> real_escape_string($this -> gender),
         $database -> real_escape_string($this -> homeAddress),
         $database -> real_escape_string($this -> contactNum),
@@ -97,7 +98,6 @@ class User{
         $database -> real_escape_string($this -> registeredDate),
         $database -> real_escape_string($this -> height),
         $database -> real_escape_string($this -> weight),
-        $database -> real_escape_string($this -> isactive),
         $database -> real_escape_string($this -> profilePic))); 
 
         return $result;
@@ -195,7 +195,7 @@ class User{
         else{
             $this -> profilePic =  $picRow -> profile_photo;
         }
-        $this -> getProfilePic($database);  
+        //$this -> getProfilePic();  
         return ["Successfully Logged In", $rows -> user_role];  //return the message and role
     }
 
@@ -238,9 +238,7 @@ class User{
     }
 
     public function makeReservation($date, $st, $et, $people, $payment, $court, $database){
-        $newReservation = new Reservation();
-        $result = $newReservation -> onlineReservation($date, $st, $et, $people, $payment, $court, $this -> userID, $database);
-        unset($newReservation);
+        $result = $court -> createReservation($this -> userID, $date, $st, $et, $payment, $people, $database);
         return $result;
     }
 
@@ -272,6 +270,71 @@ class User{
     public function cancelReservation($reservation, $database){
         $result = $reservation -> cancelReservation($this ->userID, $database);
         return $result;
+    }
+
+    public function getProfileDetails($database){   //get the profile details and store in the object
+        $detailsSql = sprintf("SELECT * FROM `user` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //user details
+
+        $loginSql = sprintf("SELECT * FROM `login_details` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));  //login details
+
+        $medicalConcernsSql = sprintf("SELECT `medical_concern` FROM `user_medical_concern` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //medical concerns
+
+        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contact_num` FROM `user_dependent` WHERE `owner_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //user dependents
+
+        $detailsResult = $database -> query($detailsSql);
+        $detailsrow = $detailsResult -> fetch_object();
+
+        $loginResult = $database -> query($loginSql);
+        $loginrow = $loginResult -> fetch_object();
+
+        $medicalConcernResult = $database -> query($medicalConcernsSql);
+        $medicalConcernsArr = $medicalConcernResult -> fetch_all(MYSQLI_ASSOC);
+
+        $dependentResult = $database -> query($dependentsSql);
+        $dependentArr = $dependentResult -> fetch_all(MYSQLI_ASSOC);
+
+
+        //set details (need to add dependents and medical concerns)
+        $this -> setDetails(
+            fName: $detailsrow -> first_name,
+            lName: $detailsrow -> last_name,
+            gender: $detailsrow -> gender,
+            address: $detailsrow -> home_address,
+            contactNo: $detailsrow -> contact_num,
+            dob: $detailsrow -> birthday,
+            height: $detailsrow -> height,
+            weight: $detailsrow -> weight,
+            email: $loginrow -> email_address,
+            password: $loginrow -> password,
+            username: $loginrow -> username,
+            medicalConcerns: $medicalConcernsArr,
+            dependents: $dependentArr);
+
+        $this -> setProfilePic($detailsrow -> profile_photo);   //set profile pic
+
+        $detailsResult -> free_result();    //free the query results
+        $medicalConcernResult -> free_result();
+        $dependentResult -> free_result();
+        $loginResult -> free_result();
+    }
+
+    public function jsonSerialize(){    //to json encode
+        return [
+            'username' => $this -> username,
+            'password' => $this -> password,
+            'fName' => $this -> firstName,
+            'lName' => $this -> lastName,
+            'homeAddress' => $this -> homeAddress,
+            'gender' => $this -> gender,
+            'dob' => $this -> dateOfBirth,
+            'height' => $this -> height,
+            'weight' => $this -> weight,
+            'profilePic' => $this -> profilePic,
+            'email' => $this -> emailAddress,
+            'contactNo' => $this -> contactNum,
+            'medicalConcerns' => $this -> medicalConcerns,
+            'dependents' => $this -> dependents
+        ];
     }
 }
 ?>

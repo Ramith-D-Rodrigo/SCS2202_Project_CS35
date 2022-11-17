@@ -13,6 +13,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
+        <link rel="stylesheet" href="/styles/general/register_page.css">
         <title></title>
     </head>
 
@@ -20,10 +21,25 @@
         <?php
             require_once("header.php");
         ?>
-        <a href="../user/user_register.php" style="color:black"> Register as an User</a>
-        <br>
-        <a href="../coach/coach_register.php"style="color:black"> Register as Coach</a>
-
+        <main style="display:flex; justify-content:center; align-items:center">
+            <div class="content-box">
+                <div>
+                    <div style="text-align:center; margin: 20px;">Which One?</div>
+                    <div class="register-options-container">
+                        <div class="register-option">
+                            <img src="/styles/icons/user.svg" class="register-imgs">
+                            Register as an User
+                            <button onclick="window.location.href='/public/user/user_register.php'">REGISTER</button>
+                        </div>
+                        <div class="register-option">
+                            <img src="/styles/icons/coach.svg" class="register-imgs">
+                            Register as a Coach
+                            <button>REGISTER</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
         <?php
             require_once("footer.php");
         ?>

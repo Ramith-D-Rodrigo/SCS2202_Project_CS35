@@ -153,3 +153,4 @@ class Manager{
         return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details
     }
 }
+?>

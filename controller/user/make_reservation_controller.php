@@ -3,6 +3,7 @@
     require_once("../../src/user/dbconnection.php");
     require_once("../../src/general/reservation.php");
     require_once("../../src/user/user.php");
+    require_once("../../src/general/sport_court.php");
 
     session_start();
     if($_SESSION['userrole'] !== 'user'){   //not a user
@@ -10,7 +11,7 @@
         exit();
     }
 
-    print_r($_POST);
+    //print_r($_POST);
 
     //store the reservation details
 
@@ -26,7 +27,7 @@
 
     $consideringSchedule = $_SESSION['branch_reservation_schedule'][$court_id]['schedule'];  //get the schedule of the currently reserving court
     foreach($consideringSchedule as $reservation){
-        print_r($reservation);
+        //print_r($reservation);
         if($reservation['date'] === $date){
             if(strtotime($startingTime) < strtotime($reservation['starting_time']) && strtotime($endingTime) > strtotime($reservation['ending_time'])){ //current reserving time slot is over an already reserved time slot
                 $_SESSION['reservationFail'] = "Entered Time Period is already Reserved";
@@ -60,8 +61,10 @@
 
     $reservingUser = new User(); 
     $reservingUser -> setDetails(uid : $user);//create an user with logged in userid
+
+    $reservingCourt = new Sports_Court($court_id);
     
-    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $court_id, $connection);
+    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $reservingCourt, $connection);   //pass the reserving court object to the function
     if($result === TRUE){
         $_SESSION['reservationSuccess'] = "Reservation has been made Successfully";
     }

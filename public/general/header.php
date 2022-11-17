@@ -50,7 +50,7 @@
             <div style="float:right" id="accountIcons">
                 <?php if(isset($_SESSION['userProfilePic'])){?>
                     
-                    <button class ="btn" id='profileBtn'><img src="/public/user/profile_images/<?php echo $_SESSION['userProfilePic']?>" class="acc-img"></button>
+                    <button class ="btn" id='profileBtn'><img src="/public/user/profile_images/<?php echo $_SESSION['userProfilePic']?>" class="acc-img" style="border: solid thin black"></button>
                 <?php
                 }
                 else{
@@ -77,7 +77,7 @@
 
     <nav class="header-links">
         <a href="/index.php">Home</a>
-        <a href="/public/general/our_sports.php">Our Sports</a>
+        <a onclick="window.location.href='/controller/general/our_sports_controller.php'">Our Sports</a>
         <a href="/public/general/our_branches.php">Our Branches</a>
         <a href="/public/general/reg_coaches.php">Registered Coaches</a>
         <a href="/public/general/our_feedback.php">Our Feedback</a>
@@ -86,7 +86,7 @@
             <a href="/index.php">Ongoing Sessions</a>
             <a href="/index.php">Left Sessions</a>
             <a href="/controller/user/reservation_history_controller.php">Reservation History</a>
-            <a href="/index.php">Edit Profile</a>
+            <a href="/controller/user/edit_profile_entry_controller.php">Edit Profile</a>
         </div>
     </nav>
 </header>
