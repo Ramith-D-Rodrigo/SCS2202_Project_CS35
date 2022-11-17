@@ -75,15 +75,10 @@
                                 ?>> Log in </button>
                     </div>
                 </form>
-<!--        <div class="btn-container">-->
-<!--            New User? <button >Register</button>-->
-<!--        </div>-->
             </div>
         </main>
         <?php
             require_once("../general/footer.php");
         ?>
     </body>
-    <script src="/js/manager/manager_login_handle.js"></script>
-    <script src="/js/manager/manager_login_validation.js"></script>
 </html>
