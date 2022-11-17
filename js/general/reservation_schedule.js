@@ -59,7 +59,8 @@ for(i = 0; i < schedules.length; i++){
 
         const userReservation = {
             startingTime : startingTimeDateObj,
-            endingTime : endingTimeDateObj
+            endingTime : endingTimeDateObj,
+            timeDiff : (((endingTimeDateObj - startingTimeDateObj)/1000)/60)/30    //time difference in 30 min slots
         };
 
         currCourtReservations.push(userReservation);
@@ -87,12 +88,18 @@ for(i = 0; i < schedulesArr.length; i++){
         currDay.innerHTML = weekdays[j];
         tableRow.appendChild(currDay);
     } */
+    let reservationCells = [];
 
     for(j = 0; j < schedulesArr[i].length; j++){
         const res = schedulesArr[i][j];
         const resDate = res.startingTime.toISOString().split("T")[0];
         const resHead = tableRow.insertCell();
         resHead.innerText = resDate;
+        const cell = document.createElement("td");
+        cell.rowSpan = res.timeDiff;
+        cell.innerText = "Reserved";
+        cell.style.backgroundColor = "Red";
+        reservationCells.push(cell);
     }
 
     const openingTime = new Date();
@@ -116,10 +123,23 @@ for(i = 0; i < schedulesArr.length; i++){
 
         currTime.setMinutes(currTime.getMinutes() + 30);    //append time period by 30 minutes
         const periodEnd = currTime.toLocaleTimeString();
-        for(j = 0; j < schedulesArr[i].length; j++){
-            tableRow.insertCell();
-        }
         timePeriod.innerText = periodStart + " - " + periodEnd;
+
+        for(j = 0; j < schedulesArr[i].length; j++){    //adding the reservation
+            const currRes = schedulesArr[i][j];
+            if(periodStart === currRes.startingTime.toLocaleTimeString() && table.ariaRowIndex){  //found the reservation starting point
+                tableRow.appendChild(reservationCells[j]);
+            }
+            else if(true){    //within a reservation block
+                console.log("hello");
+                continue;   //do not enter any cell
+            }
+            else{
+                const cell = tableRow.insertCell();
+            }
+            //console.log(cell.cellIndex);
+        }
+
     }
 
     schedules.item(i).appendChild(table);
