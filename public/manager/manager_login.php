@@ -18,7 +18,7 @@
         ?>
         <main class="body-container">
             <div class="content-box">
-                <form action="/controller/manager/login_controller.php" method="post" id="loginForm">
+                <form action="/controller/manager/manager_login_controller.php" method="post" id="loginForm">
                     Username :
                     <input
                     type="text"
@@ -39,19 +39,21 @@
                        required>
                        <button id="togglePassword">Show Password</button><br>
                     </div>
-                    <div id="msgbox">
+                    <div class='err_msg' id="errmsgbox">
                         <?php
                            if(isset($_SESSION['errMsg'])){
                                echo $_SESSION['errMsg'];
                                echo '<br>';
                                unset($_SESSION['errMsg']);
                            }
-
+                        ?>
+                    <div class='successful_msg' id="successfulmsgbox">
+                        <?php
                            if(isset($_SESSION['LogInsuccessMsg'])){
                               echo $_SESSION['LogInsuccessMsg'];
-                              echo '<br> You will be Redirected to the Home page. Please Wait';
+                              echo '<br> You will be Redirected to the Manager dashboard. Please Wait';
                               unset($_SESSION['LogInsuccessMsg']);
-                              header("Refresh: 3; URL =/index.php");
+                             // header("Refresh: 3; URL =/index.php");
                            }
                         ?>
                     </div>
@@ -64,7 +66,7 @@
                                 <?php
                                 if(isset($_SESSION['userrole'])){
                                 ?>
-                                     disabled
+                                    disabled
                                 <?php
                                 }
                                 else{
@@ -81,4 +83,6 @@
             require_once("../general/footer.php");
         ?>
     </body>
+    <script src="/js/manager/manager_login_handle.js"></script>
+    <script src="/js/manager/manager_login_validation.js"></script>
 </html>

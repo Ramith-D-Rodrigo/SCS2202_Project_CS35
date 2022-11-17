@@ -1,41 +1,57 @@
-<?php
-    session_start();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <link rel="stylesheet" href="/styles/general/styles.css">
-      <title>Manager Dashboard</title>
-    </head>
- 
+<head>
+  <meta charset="UTF-8" />
+  <title>Manager Dashboard</title>
+  <link rel="stylesheet" href="/styles/manager/manager_dashboard.css" />
+  <link rel="stylesheet" href="/styles/general/styles.css" />
+</head>
 <body>
-    <?php
-        require_once("../general/header.php");
-    ?>
-    <form action="validate.php" method="post">
-        <div class="login-box">
-            <h1>Login</h1>
- 
-            <div class="textbox">
-                <i class="fa fa-user" aria-hidden="true"></i>
-                <input type="text" placeholder="Username"
-                         name="username" value="">
-            </div>
- 
-            <div class="textbox">
-                <i class="fa fa-lock" aria-hidden="true"></i>
-                <input type="password" placeholder="Password"
-                         name="password" value="">
-            </div>
- 
-            <input class="button" type="submit"
-                     name="login" value="Sign In">
-        </div>
-    </form>
+<?php
+    require_once("manager_dashboard_header.php");
+?>
+<main>
+    <div class="flex-container">
+        <div class=tabs>
+            <div>Revenue for this Month</div> 
+            <div>Rs.________</div>
+            <div> <button>Add New Discount </button>
+            <div> <button> View More </button> </div>
+         </div>
+
+         <div class=tabs>
+            <div>Branch Status</div> 
+            <div>Open/Closed/Maintanance</div> 
+            <div> <button> Edit Time </button> </div>
+         </div>
+         
+         <div class=tabs>
+            <div> Sports Courts</div> 
+            <div> <button> Add New </button> </div>
+            <div> <button> View More</button> </div>
+         </div> 
+    </div>     
+    <div class="flex-container">
+        <div class=tabs>
+            <div>User Feedback and Reviews</div> 
+            <div> <button> View More </button> </div>
+         </div>
+
+         <div class=tabs>
+            <div>Registerde Coaches</div> 
+            <div> <button> View More </button> </div>
+         </div>
+         
+         <div class=tabs>
+            <div> Maintanance Request</div> 
+            <div> <button> View More</button> </div>
+         </div> 
+    </div>    
+    
+</main>
+
+<?php
+    require_once("../general/footer.php");
+?>
 </body>
- 
 </html>

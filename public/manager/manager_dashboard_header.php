@@ -1,6 +1,11 @@
+<?php
+    session_start();
+?>
 <header>
     <div class='header-top'>
-      
+        <div>
+            Welcome,___ Branch:___
+        </div>
         <div>
         <?php
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
