@@ -51,12 +51,19 @@
                                 }
                             ?>
                         </ul>
-                            <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){?>
+                            <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){
+                                $i = 1;
+                            
+                            ?>
                         <div class="court-schedule" id="court<?php echo $courtid?>">
-                                <?php foreach($court['schedule'] as $schedule){
-                                    echo "Reservation Date : ". $schedule['date']."<br>";
-                                    echo "Start Time : ".$schedule['starting_time']."<br>";
-                                    echo "End Time : ".$schedule['ending_time']."<br><br>";
+                                <?php foreach($court['schedule'] as $schedule){?>
+                                <div class="reservationInfo" id="reservation<?php echo $i?>">
+                                    <div class="date"><?php echo $schedule['date'] ?></div> 
+                                    <div class="st"><?php echo $schedule['starting_time'] ?></div>
+                                    <div class="et"><?php echo $schedule['ending_time'] ?></div>  
+                                </div>
+                                <?php
+                                    $i++;
                                 }
                                 ?>
                         </div>
@@ -101,7 +108,7 @@
                                 Ending Time : <input type="time" required name="reservingEndTime" id="reserveEndingTime" min= <?php echo substr($_SESSION['opening_time'],0,5)?> max= <?php echo substr($_SESSION['closing_time'],0,5)?>>
                             </div>
                             <div style ="flex:auto">
-                                Number of People : <input type="text" required name="numOfPeople" id="numOfPeople" min="0" pattern="[0-9]+">
+                                Number of People : <input type="text" required name="numOfPeople" id="numOfPeople" min="1" pattern="[0-9]+">
                             </div>
                         </div>
                         <div class="err-msg" id="errMsg">

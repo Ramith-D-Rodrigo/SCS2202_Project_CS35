@@ -15,11 +15,12 @@
             <?php
                 require_once("header.php");
             ?>
-            Our Branches
+            <div id="example"></div>
             <br>
             <?php
                 require_once("footer.php");
             ?>
     </body>
     <script src="/js/user/account_links.js"></script>
+    <script src="/js/general/our_branchs.js"></script>
 </html>
