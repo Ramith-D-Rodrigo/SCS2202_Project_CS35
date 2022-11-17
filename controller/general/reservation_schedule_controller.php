@@ -52,6 +52,10 @@
     $_SESSION['reserve_price'] = $reservationPlace[6]; 
     $_SESSION['branch_reservation_schedule'] = $allCourts;
 
+    //sending opening and closing times as a json response to be received by Javascript
+/*     $arr = ["openingTime" => $reservationPlace[4], "closingTime" => $reservationPlace[5]];
+    echo json_encode($arr); */
+
     header("Location: /public/general/reservation_schedule.php");
     $connection -> close();
 
