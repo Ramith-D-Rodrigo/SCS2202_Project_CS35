@@ -1,3 +1,8 @@
+
+<?php
+    session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +27,7 @@
             </div>
             <div class=tabs>
                 <div>Branch Details</div> 
-                <div> <button> Edit </button> </div>
+                <div> <button onclick="window.location.href='/controller/receptionist/edit_branch_controller.php'"> Edit </button> </div>
             </div>   
         </div>
         <div class="flex-container">
@@ -35,7 +40,7 @@
             </div>
             <div class=tabs>
                 <div>Request Maintenance</div> 
-                <div> <button onclick="window.location.href='/controller/receptionist/edit_branch_controller.php'" > Add </button> </div>
+                <div> <button onclick="window.location.href='/controller/receptionist/drop_down_list_controller.php'" > Add </button> </div>
             </div>  
         </div>
     </div>

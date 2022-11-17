@@ -24,61 +24,71 @@
 
     <body>
         <?php
-            require_once("../general/header.php");
+             require_once("dashboard_header.php");
         ?>
-        <div>
+        <main class="body-container">
+        <div class="content-box">
             <form action="/controller/receptionist/req_maintenance_controller.php" method="post" id="reqForm">
-                <label> Maintenance Reason : </label> 
-                <textarea 
-                rows='5' 
+                <label> Maintenance Reason : 
+                <!-- <textarea 
+                rows='1' 
                 name='reason' 
                 id='reason' 
-                required > </textarea>    
-                
+                required > </textarea>     -->
+                <input 
+                name="reason" 
+                id="reason" 
+                required> </input>
+                </label> 
                 <br>
+            <?php
+                if(isset($_SESSION['searchErrorMsg'])){
+            ?>      <div class="err-msg"><?php echo $_SESSION['searchErrorMsg']; ?></div>
+            <?php
+                }
+                else if(isset($_SESSION['sportResult'])){
+            ?>
+                    Sport Name :  
+                    <select name="sportName" id="sportName" onchange="checkAll()">
                     <?php 
-                        $sql = "SELECT DISTINCT sport.sport_name from sport INNER JOIN sports_court ON sport.sport_id = sports_court.sport_id INNER JOIN staff ON sports_court.branch_id = staff.branch_id WHERE staff.staff_id = 0x11ed60c6bc55d9b8b16d34e6d70e248d";
-                        $sportNames = mysqli_query($connection,$sql);
-                    ?>
-                    Sport Name :
-                    
-                    <select name="sportName">
-                        <?php
-                            while ($spName = mysqli_fetch_array(
-                            $sportNames,MYSQLI_ASSOC)):;
-                        ?>
-                        <option value="<?php echo $spName['sport_name'];
-                        ?>">
-                        <?php echo $spName['sport_name'];
-                        ?>
+                    $nameArray =  $_SESSION['sportResult'];
+                    foreach($nameArray as $name) {
+                        ?> 
+                        <option id="sportOption" value="<?php echo $name; ?>">                            
+                        <?php echo $name; ?>                           
                         </option>
-                        <?php
-                        endwhile;
-                        ?>
-                        <option value="">NULL</option>
-                    </select>
+                        
+                    <?php
+                    }
+                }
+                    ?> 
+                        <option id="sportAllOption"  value="">ALL</option>
+                    </select>  
                     <br>
+                    <?php
+                if(isset($_SESSION['searchErrorMsg'])){
+            ?>      <div class="err-msg"><?php echo $_SESSION['searchErrorMsg']; ?></div>
+            <?php
+                }
+                else if(isset($_SESSION['courtResult'])){
+            ?>
+                    Sport Court Name :  
+                    <select name="courtName" id="courtName">
                     <?php 
-                        $sql = "SELECT DISTINCT sports_court.court_name from sport INNER JOIN sports_court ON sport.sport_id = sports_court.sport_id INNER JOIN staff ON sports_court.branch_id = staff.branch_id WHERE staff.staff_id = 0x11ed60c6bc55d9b8b16d34e6d70e248d ";
-                        $coNames = mysqli_query($connection,$sql);
-                    ?>
-                    Sport Court Name :
-                    
-                    <select name="courtName">
-                        <?php
-                            while ($coName = mysqli_fetch_array(
-                            $coNames,MYSQLI_ASSOC)):;
-                        ?>
-                        <option value="<?php echo $coName['court_name'];
-                        ?>">
-                        <?php echo $coName['court_name'];
-                        ?>
+                    $courtArray =  $_SESSION['courtResult'];
+                    foreach($courtArray as $court) {
+                        ?> 
+                        <option id="courtOption" value="<?php echo $court; ?>">                            
+                        <?php echo $court; ?>                           
                         </option>
-                        <?php
-                        endwhile;
-                        ?>
-                        <option value="">NULL</option>
-                    </select>    
+                        
+                    <?php
+                    }
+                }
+                    ?> 
+                        <option id="courtAllOption" value="">ALL</option>
+                    </select>  
+                    <br>   
                 <div>
                 Starting Date :
                 <input type="date"
@@ -106,7 +116,7 @@
                             echo $_SESSION['LogInsuccessMsg'];
                             echo '<br> You will be Redirected to the Dashboard. Please Wait';
                             unset($_SESSION['LogInsuccessMsg']);
-                            header("Refresh: 3; URL =/index.php");   //have to change
+                            header("Refresh: 3; URL =/public/receptionist/receptionist_dashboard.php");   //have to change
                         }
                     ?>
                 </div>
@@ -118,6 +128,7 @@
                 > Submit </button>
             </form>
         </div>
+        </main>
         <?php
             require_once("../general/footer.php");
         ?>
