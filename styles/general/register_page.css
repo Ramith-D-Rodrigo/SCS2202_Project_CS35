@@ -1,0 +1,19 @@
+.register-imgs{
+    border-radius: 50%;
+    object-fit:cover;
+    height: 400px;
+    width: 400px;
+    margin: 20px;
+    background-color: white;
+}
+
+.register-option{
+    display:flex; 
+    flex-direction: column; 
+    align-items:center;
+}
+
+.register-options-container{
+    display:flex; 
+    flex-direction:row;
+}

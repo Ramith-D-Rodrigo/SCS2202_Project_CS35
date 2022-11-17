@@ -21,7 +21,7 @@
                 <?php
                     if(isset($_SESSION['branch_reservation_schedule'])){    //get the reservation schedule
                 ?>
-                    <div style="display:flex; flex-direction:row; justify-content:space-around">
+                    <div style="display:flex; flex-direction:row; justify-content:space-around;">
 
                         <div>
                             Sport : <?php echo $_SESSION['reservingSport'] ?>
@@ -32,6 +32,14 @@
                         </div>
                         <div>
                             Reservation Price : Rs.<?php echo $_SESSION['reserve_price'] ?> per Hour
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; display:flex; flex-direction:row; justify-content:space-around;">
+                        <div>
+                            Branch Opening Time : <?php echo $_SESSION['opening_time'] ?>
+                        </div>
+                        <div>
+                            Branch Closing Time : <?php echo $_SESSION['closing_time'] ?>
                         </div>
                     </div>
 

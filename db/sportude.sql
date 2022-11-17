@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2022 at 06:43 AM
+-- Generation Time: Nov 15, 2022 at 09:10 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -91,7 +91,8 @@ CREATE TABLE `coach` (
   `gender` char(1) NOT NULL,
   `contact_num` varchar(15) NOT NULL,
   `photo` varchar(100) NOT NULL,
-  `sport` binary(16) NOT NULL
+  `sport` binary(16) NOT NULL,
+  `register_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -165,18 +166,20 @@ CREATE TABLE `login_details` (
   `username` varchar(100) NOT NULL,
   `email_address` varchar(100) NOT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `user_role` varchar(20) NOT NULL
+  `user_role` varchar(20) NOT NULL,
+  `is_active` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `login_details`
 --
 
-INSERT INTO `login_details` (`user_id`, `username`, `email_address`, `password`, `user_role`) VALUES
-(0x11ed59eddbe16fffb1c40a0027000004, 'ramith_rodrigo', 'ramith@yahoo.com', '$2y$10$c.L2T0TrwvjCmmH0hdPK2.TJog.TXkWf8YhgCHI7KbIKHPmy2pTU6', 'user'),
-(0x11ed604d6f2489c0b1c40a0027000004, 'dihan_hansaja', 'dihanhansaja@gmail.com', '$2y$10$NkNFBMd8VhmhWjq4Hw8oLupFr5pSADhrGGXKAcx8ZZIaStL53Z8vK', 'user'),
-(0x11ed60a98d7173a5b1c40a0027000004, 'ramith_dulsara', 'ramithdulsara@gmail.com', '$2y$10$/SpxuByD0jbH7ogRdkjIC.nFap48IObS9/Vb0EJ7lT33RJgcBUPU6', 'user'),
-(0x11ed64a743d47e3fbf8b0a0027000004, 'john_doe', 'johndoe@gmail.com', '$2y$10$sdM2kRu2KNCcpUfhhcwsq.laI2Ju6jUBc.AdQj1rsxsUdgyUALrzq', 'user');
+INSERT INTO `login_details` (`user_id`, `username`, `email_address`, `password`, `user_role`, `is_active`) VALUES
+(0x11ed59eddbe16fffb1c40a0027000004, 'ramith_rodrigo', 'ramith@yahoo.com', '$2y$10$c.L2T0TrwvjCmmH0hdPK2.TJog.TXkWf8YhgCHI7KbIKHPmy2pTU6', 'user', 1),
+(0x11ed604d6f2489c0b1c40a0027000004, 'dihan_hansaja', 'dihanhansaja@gmail.com', '$2y$10$NkNFBMd8VhmhWjq4Hw8oLupFr5pSADhrGGXKAcx8ZZIaStL53Z8vK', 'user', 1),
+(0x11ed60a98d7173a5b1c40a0027000004, 'ramith_dulsara', 'ramithdulsara@gmail.com', '$2y$10$/SpxuByD0jbH7ogRdkjIC.nFap48IObS9/Vb0EJ7lT33RJgcBUPU6', 'user', 1),
+(0x11ed64a743d47e3fbf8b0a0027000004, 'john_doe', 'johndoe@gmail.com', '$2y$10$sdM2kRu2KNCcpUfhhcwsq.laI2Ju6jUBc.AdQj1rsxsUdgyUALrzq', 'user', 1),
+(0x11ed64bca96ac9fabf8b0a0027000004, 'dhanuka_iroshan', 'dhanukairoshan@gmail.com', '$2y$10$ULH8ID8rZo.J9OU/juVs8.9zEN3kH4/jW3XM61etC/NEm7.bnV5j6', 'user', 1);
 
 -- --------------------------------------------------------
 
@@ -442,19 +445,19 @@ CREATE TABLE `user` (
   `birthday` date NOT NULL,
   `register_date` date NOT NULL,
   `height` double DEFAULT NULL,
-  `weight` double DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL
+  `weight` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `gender`, `profile_photo`, `home_address`, `contact_num`, `birthday`, `register_date`, `height`, `weight`, `is_active`) VALUES
-(0x11ed59eddbe16fffb1c40a0027000004, 'Ramith', 'Rodrigo', 'f', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-10-13', '2022-11-01', 2, 3, 1),
-(0x11ed604d6f2489c0b1c40a0027000004, 'Dihan', 'Hansaja', 'm', NULL, 'Dihan&amp;#039;s Address', '0786542891', '2000-07-18', '2022-11-09', 174, 50, 1),
-(0x11ed60a98d7173a5b1c40a0027000004, 'Ramith', 'Dulsara', 'm', 'ramith_dulsara636c72e5adc60.jpg', 'Ramith Address', '0767275867', '2008-05-17', '2022-11-10', 178, 60, 1),
-(0x11ed64a743d47e3fbf8b0a0027000004, 'John', 'Doe', 'm', NULL, '102/3B, Kiribathgoda', '07542136549', '1995-07-22', '2022-11-15', 166, 65, 1);
+INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `gender`, `profile_photo`, `home_address`, `contact_num`, `birthday`, `register_date`, `height`, `weight`) VALUES
+(0x11ed59eddbe16fffb1c40a0027000004, 'Ramith', 'Rodrigo', 'f', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-10-13', '2022-11-01', 2, 3),
+(0x11ed604d6f2489c0b1c40a0027000004, 'Dihan', 'Hansaja', 'm', NULL, 'Dihan&amp;#039;s Address', '0786542891', '2000-07-18', '2022-11-09', 174, 50),
+(0x11ed60a98d7173a5b1c40a0027000004, 'Ramith', 'Dulsara', 'm', 'ramith_dulsara636c72e5adc60.jpg', 'Ramith Address', '0767275867', '2008-05-17', '2022-11-10', 178, 60),
+(0x11ed64a743d47e3fbf8b0a0027000004, 'John', 'Doe', 'm', NULL, '102/3B, Kiribathgoda', '07542136549', '1995-07-22', '2022-11-15', 166, 65),
+(0x11ed64bca96ac9fabf8b0a0027000004, 'Dhanuka', 'Iroshan', 'm', NULL, 'Dhanuka address', '0755412365', '1999-06-18', '2022-11-15', 175, 64);
 
 -- --------------------------------------------------------
 
@@ -493,7 +496,9 @@ INSERT INTO `user_dependent` (`owner_id`, `name`, `relationship`, `contact_num`)
 (0x11ed604d6f2489c0b1c40a0027000004, 'De Silva', 'Sibling 1', '0774123654'),
 (0x11ed604d6f2489c0b1c40a0027000004, 'Sujith', 'Sibling 2', '0741369852'),
 (0x11ed60a98d7173a5b1c40a0027000004, 'Ajith', 'Father', '0714831744'),
-(0x11ed64a743d47e3fbf8b0a0027000004, 'Kevin', 'Friend 1', '0365482154');
+(0x11ed64a743d47e3fbf8b0a0027000004, 'Kevin', 'Friend 1', '0365482154'),
+(0x11ed64bca96ac9fabf8b0a0027000004, 'Test', 'Sibling 1', '0236541258'),
+(0x11ed64bca96ac9fabf8b0a0027000004, 'Test two', 'Sibling 2', '0785412368');
 
 -- --------------------------------------------------------
 
@@ -512,7 +517,9 @@ CREATE TABLE `user_medical_concern` (
 
 INSERT INTO `user_medical_concern` (`user_id`, `medical_concern`) VALUES
 (0x11ed604d6f2489c0b1c40a0027000004, 'short sighted'),
-(0x11ed60a98d7173a5b1c40a0027000004, 'headaches');
+(0x11ed60a98d7173a5b1c40a0027000004, 'headaches'),
+(0x11ed64bca96ac9fabf8b0a0027000004, 'another concern'),
+(0x11ed64bca96ac9fabf8b0a0027000004, 'concern');
 
 -- --------------------------------------------------------
 
