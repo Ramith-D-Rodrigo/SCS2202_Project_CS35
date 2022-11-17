@@ -51,12 +51,19 @@
                                 }
                             ?>
                         </ul>
-                            <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){?>
+                            <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){
+                                $i = 1;
+                            
+                            ?>
                         <div class="court-schedule" id="court<?php echo $courtid?>">
-                                <?php foreach($court['schedule'] as $schedule){
-                                    echo "Reservation Date : ". $schedule['date']."<br>";
-                                    echo "Start Time : ".$schedule['starting_time']."<br>";
-                                    echo "End Time : ".$schedule['ending_time']."<br><br>";
+                                <?php foreach($court['schedule'] as $schedule){?>
+                                <div class="reservationInfo" id="reservation<?php echo $i?>">
+                                    <div class="date"><?php echo $schedule['date'] ?></div> 
+                                    <div class="st"><?php echo $schedule['starting_time'] ?></div>
+                                    <div class="et"><?php echo $schedule['ending_time'] ?></div>  
+                                </div>
+                                <?php
+                                    $i++;
                                 }
                                 ?>
                         </div>
