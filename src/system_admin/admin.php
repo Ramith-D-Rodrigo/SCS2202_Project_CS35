@@ -2,7 +2,11 @@
 class Admin{
     private $adminID;
 
-    public function getadminID(){    //adminID getter
+    public function getInstance() {
+        return $this;
+    }
+
+    public function getAdminID(){    //adminID getter
         return $this -> adminID;
     }
 
@@ -31,7 +35,26 @@ class Admin{
         //setting admin data for session
         $this -> adminID = $rows -> uuid;    
 
-        return ["Successfully Logged In", $rows -> user_role];  //return the message and role
+        return ["Successfully Logged In", $rows -> user_role, $rows -> username];  //return the message and role
+    }
+
+    public function getAllBranches($database){
+        $result = $database -> query("SELECT `city` from `branch` ");
+
+        $branches = [];
+        while($rows = $result -> fetch_object()){
+            array_push($branches,$rows -> city);
+        }
+
+        return $branches;
+    }
+
+    public function getBranchID($branchName,$database){
+        $sql = sprintf("SELECT BIN_TO_UUID(`branch_id`,1) AS UUID FROM `branch` WHERE `city`= '%s'",$database -> real_escape_string($branchName));
+        $result = $database -> query($sql);
+
+        $branchID = $result -> fetch_object() -> UUID;
+        return $branchID;
     }
 
 }

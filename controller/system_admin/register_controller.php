@@ -2,13 +2,15 @@
     session_start();
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/manager/manager.php");
+    require_once("../../src/system_admin/admin.php");
+    require_once("../../src/general/uuid.php");
     require_once("../../src/system_admin/dbconnection.php");
     require_once("../../src/system_admin/credentials_availability.php");
 
 
     //all possible inputs for prefilling
     $inputFields = [`email_address`, `contact_number`, `gender`, `date_of_birth`, `first_name`, 
-                                `last_name`];
+                                `last_name`,`branchName`];
 
     //Compulsary Details
 
@@ -23,12 +25,7 @@
 
     //email availability
     $hasEmailResult = null;
-    if(htmlspecialchars($_POST['staffRole'], ENT_QUOTES)==='Receptionist'){
-        $hasEmailResult = checkStaffEmail($_POST['emailAddress'], $connection);
-    }  
-    else {
-        $hasEmailResult = checkStaffEmail($_POST['emailAddress'], $connection);
-    }
+    $hasEmailResult = checkStaffEmail($_POST['emailAddress'], $connection);
 
     if(isset($_SESSION['successMsg'])){ //same user is trying to register (in the same session) We have to unset the message
         unset($_SESSION['successMsg']);
@@ -57,16 +54,44 @@
         unset($_SESSION['usernameError']); //username is available, hence unset the error message
     }
 
+    $branchName = htmlspecialchars($_POST['branchName'], ENT_QUOTES);
+    $staffRole = htmlspecialchars($_POST['staffRole'], ENT_QUOTES);
 
+    if($staffRole === 'Receptionist') {
+        $hasReceptionist = checkReceptionist($branchName,$connection);
+
+        if($hasReceptionist -> num_rows > 0){    //receptionist already exists
+            $_SESSION['staffError'] = "Receptionist exists in the particular branch.";
+            header("Location: /public/system_admin/staff_register.php");
+            $connection -> close(); //close the database connection
+            exit(); //exit the registration
+        }
+        else{
+            unset($_SESSION['staffError']); //staff role is available, hence unset the error message
+        }
+    }else {
+        $hasManager = checkManager($branchName,$connection);
+
+        if($hasManager -> num_rows > 0){    //manager already exists
+            $_SESSION['staffError'] = "Manager exists in the particular branch.";
+            header("Location: /public/system_admin/staff_register.php");
+            $connection -> close(); //close the database connection
+            exit(); //exit the registration
+        }
+        else{
+            unset($_SESSION['staffError']); //staff role is available, hence unset the error message
+        }
+    }
+    
     //can create a account
 
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    //hash the password
-    $useridsql = 'SELECT UUID()';   //create an user id using uuid function
-    $userIDResult = $connection -> query($useridsql); //get the result from query
+    $userid = generateUUID($connection);   //create an user id using uuid function
+    // $userIDResult = $connection -> query($useridsql); //get the result from query
 
-    foreach($userIDResult as $row){   //get the user id 
-        $userid = $row['UUID()'];
-    }
+    // foreach($userIDResult as $row){   //get the user id 
+    //     $userid = $row['UUID()'];
+    // }
 
     $username = htmlspecialchars($_POST['username'], ENT_QUOTES);
     $email = htmlspecialchars($_POST['emailAddress'], ENT_QUOTES);
@@ -75,41 +100,36 @@
     $lName = htmlspecialchars($_POST['lastName'], ENT_QUOTES);
     $bday = htmlspecialchars($_POST['birthday'], ENT_QUOTES);
     $gender = htmlspecialchars($_POST['gender'], ENT_QUOTES);
-    $staffRole = htmlspecialchars($_POST['staffRole'], ENT_QUOTES);
-    $branchName = htmlspecialchars($_POST['branchName'], ENT_QUOTES);
+    
+    
 
-    echo $branchName;
-    $uuids = sprintf("SELECT (branch_id) as UUID FROM branch WHERE city='%s'",$connection -> real_escape_string($branchName));   //create an user id using uuid function
-    $branchIDResult = $connection -> query($uuids); //get the result from query
-
-    foreach($branchIDResult as $row){   //get the branch id  
-        $branchID = $row['UUID'];
-    }
-    echo $branchID;
+    $admin = new Admin();
+    $branchID = $admin -> getBranchID($branchName,$connection);
+    
     $result = false;
     if($staffRole === 'Receptionist') {
         $new_receptionist = new Receptionist();
         $new_receptionist -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
         $result = $new_receptionist -> registerReceptionist($connection);
     }
-    // else {                 Manager Part
-    //     $new_manager = new Manager();
-    //     $new_manager -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
-    //     $result = $new_manager -> registerManager($connection);
-    // }
+    else {                 
+        $new_manager = new Manager();
+        $new_manager -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
+        $result = $new_manager -> registerManager($connection);
+    }
     
 
     if($result === TRUE){   //successfully registered
             echo "Successfully Registered";
-/*         foreach($inputFields as $i){    //store session details
-            if(isset($_SESSION[$i])){   //unsetting input values
-                session_unset($i);
-            }
-        } */
+        // foreach($inputFields as $i){    //store session details
+        //     if(isset($_SESSION[$i])){   //unsetting input values
+        //         session_unset($i);
+        //     }
+        // } 
         session_unset(); //free all current session variables 
 
         $_SESSION['RegsuccessMsg'] = 'Registered Successfully';
-        header("Location: /public/system_admin/staff_register.php");
+        header("Location: /public/system_admin/admin_dashboard.php");
     }
 
     $connection -> close(); //close the database connection

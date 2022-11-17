@@ -1,21 +1,21 @@
 <header>
     <div class='header-top'>
-        <div>
-            Register Staff
-        </div>
-        <div>
         <?php
-            if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
-        ?>  <button class ="btn" onclick="window.location.href='/controller/general/logout.php'" style="float:right">LOG OUT</button>
+           
+            if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //admin logged in
+        ?>        
+            <!-- <h4>Welcome, </h4> -->
+        <?php       
+            echo "Welcome, ".$_SESSION['username'];
+        ?>  
+            <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
         <?php
             }
             else{
         ?>
-            <button class="btn" onclick="window.location.href='/public/general/register.php'">REGISTER</button>
-            <button class="btn" onclick="window.location.href='/public/general/login.php'">LOG IN</button>
+            <button style="float:right" class="btn" id="login" onclick="window.location.href='/public/general/login.php'">Log in<img src="/styles/icons/login_icon.svg" class="acc-img"></button>
         <?php
             }
         ?>
-        </div>
     </div>
 </header>

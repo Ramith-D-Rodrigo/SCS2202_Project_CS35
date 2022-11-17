@@ -2,9 +2,24 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-  }
- 
-.tabs {
+}
+
+.long-container {
+    display: flex;
+}
+
+.long-container > div {
+    background-color: #ecfcff;
+    margin: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
+    align-items: center;
+    font-size: 30px;
+    height: 200px;
+    width : 1200px;
+}
+.tabs ,.longTab {
     display:flex;
     border-radius: 10px;
     flex-direction: column;
@@ -18,5 +33,5 @@
     align-items: center;
     font-size: 30px;
     height: 200px;
-    width : 400px;
+    width : 1200px;
 }

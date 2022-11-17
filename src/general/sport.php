@@ -18,6 +18,14 @@
         public function setID($id){
             $this -> sportID = $id;
         }
+
+        public function getSportID($spName,$database) {
+            $sql = sprintf("SELECT `sport_id` FROM `sport` 
+            WHERE `sport_name`
+            LIKE '%s'", $database -> real_escape_string($spName));
+            $result = $database -> query($sql);
+            return $result;
+        }
     }
 
 

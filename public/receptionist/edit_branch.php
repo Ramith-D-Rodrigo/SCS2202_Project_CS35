@@ -14,9 +14,9 @@
 
     <body>
         <?php
-            require_once("../general/header.php");
+            require_once("dashboard_header.php");
         ?>
-        <main>
+        <main class="body-container">
         <div class="content-box">
             <?php
                 if(isset($_SESSION['searchErrorMsg'])){
@@ -24,16 +24,21 @@
             <?php
                 }
                 else if(isset($_SESSION['searchResult'])){
-                    foreach($_SESSION['searchResult'] as $result){ //traverse the result
+                    // foreach($_SESSION['searchResult'] as $result){ //traverse the result
             ?>
                     <form class ="edit_branch" action="/controller/receptionist/edit_branch_controller.php" method="post">
-                        Branch Location: <?php echo $result[0]; ?>
+                        Branch Location: <output> <?php echo $_SESSION['searchResult'][0]; ?> </output>
                         <br>
-                        Branch Contact Number(s) : <?php echo $result[2][0]; ?> 
+                        Branch Contact Number(s) :  <?php 
+                        $numArray =  $_SESSION['searchResult'][2];
+                        foreach($numArray as $number) {
+                            ?> <output> <?php echo $number; ?> </output> <?php
+                        }
+                         ?>  
                         <button type ="submit" 
-                        name ="AddBtn"> Add </button>
+                        name ="AddBtn"> Add New</button>
                         <br>
-                        Branch Email : <?php echo $result[1]; ?>
+                        Branch Email : <output> <?php echo $_SESSION['searchResult'][1]; ?> </output>
                         <button type ="submit" 
                         name ="ChangeBtn"> Change </button>
                         <br>
@@ -46,7 +51,7 @@
                         value="submit">Apply Changes</button>
                     </form>
             <?php
-                    }     
+                        
                 }
             ?>
             </div>

@@ -18,8 +18,9 @@
         unset($_SESSION['errMsg']);
         $_SESSION['LogInsuccessMsg'] = $resultmsg[0];
         $_SESSION['userrole'] =  $resultmsg[1];
-        $_SESSION['userid'] = $loginUser -> getUserID();
+        $_SESSION['username'] =  $resultmsg[2];
+        $_SESSION['userid'] = $loginAdmin -> getAdminID();
     }
-    header("Location: /public/user/user_login.php");
+    header("Location: /public/system_admin/admin_login.php");
     $connection -> close();
 ?>
