@@ -101,7 +101,7 @@
                                 Ending Time : <input type="time" required name="reservingEndTime" id="reserveEndingTime" min= <?php echo substr($_SESSION['opening_time'],0,5)?> max= <?php echo substr($_SESSION['closing_time'],0,5)?>>
                             </div>
                             <div style ="flex:auto">
-                                Number of People : <input type="text" required name="numOfPeople" id="numOfPeople" min="0" pattern="[0-9]+">
+                                Number of People : <input type="text" required name="numOfPeople" id="numOfPeople" min="1" pattern="[0-9]+">
                             </div>
                         </div>
                         <div class="err-msg" id="errMsg">
