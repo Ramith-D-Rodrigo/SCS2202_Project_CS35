@@ -99,6 +99,8 @@ for(i = 0; i < schedulesArr.length; i++){
         cell.rowSpan = res.timeDiff;
         cell.innerText = "Reserved";
         cell.style.backgroundColor = "Red";
+        cell.style.color = "white";
+        cell.style.borderRadius = "10px";
         reservationCells.push(cell);
     }
 
@@ -119,19 +121,29 @@ for(i = 0; i < schedulesArr.length; i++){
     while(currTime < closingTime){
         const tableRow = table.insertRow();
         const timePeriod = tableRow.insertCell();
-        const periodStart = currTime.toLocaleTimeString();
+
+        const periodStartPrint = currTime.toLocaleTimeString(); //print to print in the page
+        const periodStartCompare = currTime.toTimeString(); //compare to compare the times
 
         currTime.setMinutes(currTime.getMinutes() + 30);    //append time period by 30 minutes
-        const periodEnd = currTime.toLocaleTimeString();
-        timePeriod.innerText = periodStart + " - " + periodEnd;
+
+        const periodEndPrint = currTime.toLocaleTimeString();
+        const periodEndCompare = currTime.toTimeString();
+
+        timePeriod.innerText = periodStartPrint + " - " + periodEndPrint;
 
         for(j = 0; j < schedulesArr[i].length; j++){    //adding the reservation
             const currRes = schedulesArr[i][j];
-            if(periodStart === currRes.startingTime.toLocaleTimeString() && table.ariaRowIndex){  //found the reservation starting point
+            const currResDate = currRes.startingTime.toISOString().split("T")[0];
+
+            //get the time in hours format
+            const currResST = currRes.startingTime.toTimeString();
+            const currResET = currRes.endingTime.toTimeString();
+
+            if(periodStartCompare === currResST && table.rows[0].cells[j+1].innerText === currResDate){  //found the reservation starting point
                 tableRow.appendChild(reservationCells[j]);
             }
-            else if(true){    //within a reservation block
-                console.log("hello");
+            else if(table.rows[0].cells[j+1].innerText === currResDate && periodStartCompare >= currResST && periodEndCompare <= currResET){    //within a reservation block
                 continue;   //do not enter any cell
             }
             else{
