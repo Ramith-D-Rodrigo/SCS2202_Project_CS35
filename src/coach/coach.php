@@ -1,6 +1,6 @@
 <?php
     require_once("../../src/general/uuid.php");
-class coach{
+class Coach{
     private $userID;
     private $firstName;
     private $lastName;
@@ -177,16 +177,50 @@ class coach{
         $this -> userID = $rows -> uuid;  
         
         //get the profile pic from the datbase and store in the object's attribute
-        $sqlPic = sprintf("SELECT `photo` 
+        $sqlPic = sprintf("SELECT `photo` , `sport` 
         FROM `coach` 
         WHERE `coach_id` = '%s'",
         $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
 
         $result = $database -> query($sqlPic);
-        $picRow = $result -> fetch_object();
-        $this -> profilePic =  $picRow -> profile_photo;
+        $resultRow = $result -> fetch_object();
+        $this -> profilePic =  $resultRow -> photo;
+        $this -> sport = (bin_to_uuid( $resultRow -> sport, $database));
        
         return ["Successfully Logged In", $rows -> user_role];  //return the message and role
+
     }    
+
+    public function getBranchesWithCourts($database){
+         $sql = sprintf("SELECT  
+        `sc`.`court_id`, 
+        `sc`.`court_name`, 
+        `b`.`branch_id`, 
+        `b`.`city`, 
+        `b`.`opening_time`, 
+        `b`.`closing_time`, 
+        `s`.`sport_name`,
+        `s`.`min_coaching_session_price` 
+        FROM `sports_court` `sc`
+        INNER JOIN  `branch` `b`
+        ON `b`.`branch_id` = `sc`.`branch_id`
+        INNER JOIN `sport` `s` 
+        ON `s`.`sport_id` = `sc`.`sport_id`
+
+        WHERE `s`.`sport_id` = '%s'
+        AND `b`.`request_status`= 'a' 
+        AND `sc`.`request_status`='a'",
+        $database -> real_escape_string(uuid_to_bin($this -> sport, $database)));
+
+        $result = $database -> query($sql);
+        return $result;
+
+       
+    }
+
+    public function getSport(){
+
+        return $this->sport;
+    }
 }
 ?>

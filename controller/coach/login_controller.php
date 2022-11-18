@@ -7,7 +7,7 @@
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $loginUser = new coach();
+    $loginUser = new Coach();
 
     $resultmsg = $loginUser -> login($username, $password, $connection);
 
@@ -24,6 +24,7 @@
             $_SESSION['userProfilePic'] = $profilePic;
         }
         $_SESSION['userid'] = $loginUser -> getUserID();
+        $_SESSION['coachsportid'] = $loginUser -> getSport();
     }
     header("Location: /public/coach/coach_login.php");
     $connection -> close();

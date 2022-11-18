@@ -20,6 +20,7 @@
                 require_once("header.php");
             ?>
             <a href="../user/user_login.php" style="color:black"> Log in as an User</a>
+            <a href="../coach/coach_login.php" style="color:black"> Log in as an Coach</a>
             <br>
             <?php
                 require_once("footer.php");
