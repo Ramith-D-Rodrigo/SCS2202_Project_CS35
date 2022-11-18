@@ -111,7 +111,8 @@ for(i = 0; i < schedulesArr.length; i++){
         cell.style.backgroundColor = "Red";
         cell.style.color = "white";
         cell.style.borderRadius = "10px";
-        reservationCells[i + "," + resDate + "," + res.startingTime.toLocaleTimeString()] = cell;  //key is => "Court , Reservation Date, Starting Time"
+        cell.id = i + "," + resDate + "," + res.startingTime.toLocaleTimeString() + "," + res.endingTime.toLocaleTimeString();
+        reservationCells[i + "," + resDate + "," + res.startingTime.toLocaleTimeString() + "," + res.endingTime.toLocaleTimeString()] = cell;  //key is => "Court , Reservation Date, Starting Time, Ending Time"
     }
     //console.log(datesWithReservations);
 
@@ -147,53 +148,52 @@ for(i = 0; i < schedulesArr.length; i++){
         timePeriod.innerText = periodStartPrint + " - " + periodEndPrint;
 
         for(let key in datesWithReservations){    //adding the reservation to the table
-/*             const resOnThatDate = datesWithReservations[key];
-            //console.log(currRes);
-            //const currResDate = currRes.startingTime.toISOString().split("T")[0];
-
-            //get the time in hours format
-            const reservations = resOnThatDate.map(i => [i.startingTime.toTimeString(), i.endingTime.toTimeString()]); //map it to pairs
-
-            //console.log(currResST, currResET);
-
-            if(reservations.map(i => i[0]).includes(periodStartCompare)){  //found the reservation starting point
-                //console.log(key + " " + periodStartPrint);
-                tableRow.appendChild(reservationCells[key + " " + periodStartPrint]);
-            }
-            else if(true){    //within a reservation block
-                continue;   //do not enter any cell
-            }
-            else{
-                const cell = tableRow.insertCell();
-            } */
             //console.log(cell.cellIndex);
             const cell = tableRow.insertCell();
 
-            cell.id = i + "," + key  + "," + periodStartPrint;  //unique cell id
+            cell.id = i + "," + key  + "," + periodStartPrint + "," + periodEndPrint;  //unique cell id
             //console.log(cell.id.length + " " + cell.id);
         }
 
     }
-
+    
     schedules.item(i).appendChild(table);
 
     for(cell in reservationCells){
-        const insertingCell = document.getElementById(cell);
+        const temp = cell.split(",");
+        const searchingCellID = temp[0] + "," + temp[1] + "," + temp[2];    // court, date, starting_time
+        //console.log("Finding the time slot for : " + searchingCellID);
+
+        const insertingCell = document.querySelector('[id^="'+searchingCellID+'"]');    //get the cell
+        //console.log("FOUND : " + insertingCell);
+
+        const rowSpan = reservationCells[cell].rowSpan; //get the rowSpan
+
         const row = insertingCell.parentNode;
-        reservationCells[cell].id = insertingCell.id;
-        const cellID = insertingCell.cellIndex;
-        row.replaceChild(reservationCells[cell], insertingCell);
+        //console.log("His parent : " + row);
 
-        const rowSpan = reservationCells[cell].rowSpan;
-        var i = 1;
-        var curRow = row;
+        const cellIndex = insertingCell.cellIndex;
+        //console.log("Cell Index :" + cellIndex);
 
-        while(i < rowSpan){
-            const sibling = curRow.nextSibling;
-            console.log(sibling.childNodes.item(cellID));
-            sibling.removeChild(sibling.childNodes.item(cellID));
-            curRow = sibling;
-            i++;
+        insertingCell.style.backgroundColor = "red";    //color the first block
+        insertingCell.innerText = "Reserved";
+        insertingCell.style.color = "white";
+
+        var m = 1;
+        var traversingRow = row;
+        while(m < rowSpan){ //remove the spanning extra cells
+            var sibling = traversingRow.nextSibling;
+            //console.log("Sibling is : " + sibling);
+            //console.log("Removing : " + sibling.childNodes.item(cellIndex).id);
+
+            sibling.childNodes.item(cellIndex).style.backgroundColor = "red";   //color the sibling cells
+            sibling.childNodes.item(cellIndex).innerText = "Reserved";
+            sibling.childNodes.item(cellIndex).style.color = "white";
+            //sibling.removeChild(sibling.childNodes.item(cellIndex));    //remove the child at the same column
+            traversingRow = sibling;    //next row
+            m++;
         }
+
+        //row.replaceChild(reservationCells[cell], insertingCell);
     }
 }
