@@ -19,7 +19,7 @@
             require_once("header.php");
         ?>
         <main style="display:flex; justify-content:center; align-items:center;">
-            <div class="content-box sports-content-box">
+            <div class="content-box">
                 <?php
                     if(isset($_SESSION['our_Sports'])){
                         foreach($_SESSION['our_Sports'] as $sport){

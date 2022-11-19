@@ -77,6 +77,16 @@
             $result = $database -> query($sql);
             return $result;
         }
+
+        public function getBranchPictures($database){
+            $sql = sprintf("SELECT `photo`
+            FROM branch_photo
+            WHERE branch_id = '%s'",
+            $database -> real_escape_string($this -> branchID));
+
+            $result = $database -> query($sql);
+            return $result;
+        }
     }
 
 ?>

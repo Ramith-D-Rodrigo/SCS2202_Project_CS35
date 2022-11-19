@@ -15,8 +15,11 @@
             <?php
                 require_once("header.php");
             ?>
-            <div id="example"></div>
-            <br>
+            <main style="display:flex; justify-content:center; align-items:center;">
+                <div class="content-box">
+
+                </div>
+            </main>
             <?php
                 require_once("footer.php");
             ?>
