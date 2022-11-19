@@ -1,7 +1,7 @@
 <?php
     require_once("../../src/general/uuid.php");
 
-    class Branch{
+    class Branch implements JsonSerializable{
         private $branchID;
         private $city;
         private $address;
@@ -11,9 +11,15 @@
         private $receptionist;
         private $opening_time;
         private $closing_time;
+        private $photos;
+        private $branchUUID;
 
         public function __construct($branch_binary_id){    //use the binary id to construct
             $this -> branchID = $branch_binary_id;
+        }
+
+        public function setUUID($database){ //convert branch id from binary to uuid to store (for JSON encoding)
+            $this -> branchUUID = bin_to_uuid($this -> branchID, $database);
         }
 
         public function getDetails($database){
@@ -24,6 +30,53 @@
             $database -> real_escape_string($this -> branchID));
             $result =  $database -> query($sql);
             return $result;
+        }
+
+        public function setDetails($city = '', $address = '', $contactNum = '', $email = '', $manager = '', $receptionist = '', $opening_time = '', $closing_time = ''){
+            $this -> city = $city;
+            $this -> address = $address;
+            $this -> contactNum = $contactNum;
+            $this -> email = $email;
+            $this -> manager = $manager;
+            $this -> receptionist = $receptionist;
+            $this -> opening_time = $opening_time;
+            $this -> closing_time = $closing_time;
+        }
+
+        public function getManager($database){  //get Manager ID
+            if(isset($this -> manager)){
+                return $this -> manager;
+            }
+
+            $sql = sprintf("SELECT staff_id
+            FROM staff
+            WHERE branch_id = '%s'
+            AND staff_role = 'manager'",
+            $database -> real_escape_string($this -> branchID));
+
+            $result = $database -> query($sql);
+
+            $manager = $result -> fetch_object();
+            $this -> manager = $manager;
+            return $manager;
+        }
+
+        public function getReceptionist($database){  //get Receptionist ID
+            if(isset($this -> receptionist)){
+                return $this -> receptionist;
+            }
+
+            $sql = sprintf("SELECT staff_id
+            FROM staff
+            WHERE branch_id = '%s'
+            AND staff_role = 'receptionist'",
+            $database -> real_escape_string($this -> branchID));
+
+            $result = $database -> query($sql);
+
+            $receptionist = $result -> fetch_object();
+            $this -> receptionist = $receptionist;
+            return $receptionist;
         }
 
         public function getAllSports($userID,$database){
@@ -78,15 +131,43 @@
             return $result;
         }
 
-        public function getBranchPictures($database){
+        public function getBranchPictures($database){   //function get branch photos and store in the object
+
+            if(isset($this -> photos)){ //if the object has photos set
+                return $this -> photos;
+            }
+            //if the object doesn't have photos set
             $sql = sprintf("SELECT `photo`
             FROM branch_photo
             WHERE branch_id = '%s'",
             $database -> real_escape_string($this -> branchID));
 
             $result = $database -> query($sql);
-            return $result;
+            
+            while($row = $result -> fetch_object()){
+                if($row !== NULL){  //has photos
+                    array_push($this -> photos, $row -> photo);
+                }
+            }
+            return $this -> photos;
+        }
+
+        public function jsonSerialize(){
+            return [
+                'branchID' => $this -> branchUUID,
+                'city' => $this -> city,
+                'address' => $this -> address,
+                'contactNum' => $this -> contactNum,
+                'email' => $this -> email,
+                'manager' => $this -> manager,
+                'receptionist' => $this -> receptionist,
+                'opening_time' => $this -> opening_time,
+                'closing_time' => $this -> closing_time,
+                'photos' => $this -> photos
+            ];
         }
     }
+
+
 
 ?>

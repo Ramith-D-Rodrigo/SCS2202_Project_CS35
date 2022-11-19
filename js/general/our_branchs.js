@@ -1,12 +1,12 @@
 let queryResults = null;
-const result = document.getElementById("example");
+const result = document.getElementById("branches");
 
 fetch("../../controller/general/our_branches_controller.php")
     .then((res) => res.json())
     .then((data) => {
-        console.log(data);
-        queryResults = JSON.stringify(data);
-        result.innerText = data;
+        for(i = 0; i < data.length; i++){
+            console.log(JSON.parse(data[i]));
+        }
     });
 
 
