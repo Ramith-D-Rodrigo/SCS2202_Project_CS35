@@ -41,11 +41,30 @@ while($row = $result->fetch_object()){
 
     }
 
+    if(!isset($_SESSION["min_coaching_session_price"])){
+
+        $_SESSION["min_coaching_session_price"] = $row->min_coaching_session_price;
+    }
+
+    if(!isset($_SESSION["reservation_price"])){
+
+        $_SESSION["reservation_price"] = $row->reservation_price;
+    }
+
+    if(!isset($_SESSION["max_no_of_students"])){
+
+        $_SESSION["max_no_of_students"] = $row->max_no_of_students;
+    }
+
+
     
 }
 
 print_r($branches);
 
 $_SESSION['BranchesWithCourts'] = $branches;
+
+header("Location: /public/coach/coach_addsession.php");
+
 
 ?>

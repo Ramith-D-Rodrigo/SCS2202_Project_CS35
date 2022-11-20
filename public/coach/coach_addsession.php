@@ -1,5 +1,12 @@
+<?php
+    session_start();
+
+    $BranchesWithCourts = $_SESSION['BranchesWithCourts'];
+
+    ?>
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
@@ -23,10 +30,12 @@
         <form action="/controller/coach/add_new_session_controller.php" method="POST">
             <label>Select Branch : 
                 <select names ="branch" id="branch">
-                        <option value ="branch 1">branch 1</option>
-                        <option value ="branch 2">branch 2</option>
-                        <option value ="branch 3">branch 3</option>
-
+                        <?php
+                        foreach($BranchesWithCourts as $i){
+                            ?> <option value=<?php echo $i[0]['id'] ?>><?php echo $i[0]['city'] ?></option>
+                            <?php
+                        }
+                        ?> 
                 </select>
             </label>
                 
@@ -58,18 +67,21 @@
 
                     <br>
 
-            <label>Select timeslot : 
-                <select names ="timeslot" id="timeslot">
-                        <option value ="0800-1000">0800-1000</option>
-                        <option value ="1200-1400">1200-1400</option>
-                        <option value ="1500-1800">1500-1800</option>
+            <label> 
+                Starting Time : 
+                <input type="time" name="StartingTime" required id="StartingTime" min="08:00 AM" max="04:00 PM">
 
-                </select> 
+            </label>
+
+            <label>  
+                Ending Time : 
+                <input type="time" name="EndingTime" required id="EndingTime" min="08:00 AM" max="04:00 PM">
+
             </label>
 
             <br>
 
-            <label>Enter session fee : <input type="number" name "session_fee" > </label>
+            <label>Enter session fee : 
             <input type="text"
                         pattern="[0-9]" 
                         name="session_fee"
@@ -79,12 +91,31 @@
                 
             <br>
                 
-            <label> Monthly payment :  ______________ </label>
+            <label id="monthly_payment"> Monthly payment : <input type="text" name="monthly_payment" required id="monthly_payment" > </label>
             
             <br>
             <br>
 
             <h5>Only limited (number) students can join the sessionn</h5>
+            
+            <div id="errmsg" class="err-msg"><?php
+                    
+                    ?>          
+                               
+            </div>
+
+            <div id="min_coaching_session_price" hidden ><?php echo $BranchesWithCourts["min_coaching_session_price"]?></div>
+
+            <div id="reservation_price" hidden ><?php echo $BranchesWithCourts["reservation_price"]?></div>
+
+            <div id="max_no_of_students" hidden ><?php echo $BranchesWithCourts["max_no_of_students"]?></div>
+
+            
+                
+            <div id="successmsg" class="success-msg"><?php
+                    
+                ?>
+            </div>
 
             
             <button type="submit">
@@ -112,6 +143,7 @@
             require_once("../general/footer.php");
         ?>
 
+    <script src="/js/coach/add_session_validation.js"></script>
 </body>
 
 </html>

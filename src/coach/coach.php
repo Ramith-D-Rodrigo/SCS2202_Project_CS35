@@ -200,7 +200,9 @@ class Coach{
         `b`.`opening_time`, 
         `b`.`closing_time`, 
         `s`.`sport_name`,
-        `s`.`min_coaching_session_price` 
+        `s`.`min_coaching_session_price`,
+        `s`.`reservation_price` ,
+        `s`.`max_no_of_students`  
         FROM `sports_court` `sc`
         INNER JOIN  `branch` `b`
         ON `b`.`branch_id` = `sc`.`branch_id`
