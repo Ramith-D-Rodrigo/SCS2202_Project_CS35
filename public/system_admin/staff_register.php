@@ -17,37 +17,40 @@
     <?php
         require_once("dashboard_header.php");
     ?>
-    <main>
-    <div>
-        <form class ='reg-form' action="/controller/system_admin/register_controller.php" method="post">
-
-            <!-- Staff role and registering branch has to be displayed as dropdowns -->
-            Branch Name : 
-            <?php 
-                $sql = "SELECT * FROM `branch`";
-                $brNames = $connection->query($sql);
-            ?>
-            <select name="branchName">
-                <?php
-                while ($brName = mysqli_fetch_array(
-                $brNames,MYSQLI_ASSOC)):;
-                ?>
-                <option value="<?php echo $brName['city'];
-                ?>">
-                <?php echo $brName['city'];
-                ?>
-                </option>
-                <?php
-                endwhile;
-                ?>
-                </select>           
-            <br>
+    <main class="body-container">
+    <div class="content-box">
+    <form  action="/controller/system_admin/register_controller.php" method="post">
             Staff Role : 
-            <select id="cars" name="staffRole">
+            <select id="roles" name="staffRole">
                 <option value="Receptionist">Receptionist</option>
                 <option value="Manager">Manager</option>
             </select>
             <br>
+        <?php
+                if(isset($_SESSION['searchErrorMsg'])){
+            ?>      <div class="err-msg"><?php echo $_SESSION['searchErrorMsg']; ?></div>
+            <?php
+                }
+                else if(isset($_SESSION['allBranchResult'])){
+            ?>
+        
+                    Registering Branch :  
+                    <select name="branchName" id="branchName">
+                    <?php 
+                    $nameArray =  $_SESSION['allBranchResult'];
+                    foreach($nameArray as $name) {
+                    ?> 
+                        <option value="<?php echo $name; ?>">                            
+                        <?php echo $name; ?>                           
+                        </option> 
+                    <?php
+                    }
+                    ?>
+                    </select>
+                    <?php
+                } 
+            ?> 
+            <br>      
             Name :
             <input type="text" 
             pattern="[a-zA-Z]+" 
@@ -125,7 +128,7 @@
             <div>
                 Confirm Password : <input type="password" required> <button class="togglePassword"> Show Password</button> <br>
             </div>
-            <div id="errmsg">
+            <div  id="errmsg" class="err-msg">
                 <?php
                     if(isset($_SESSION['emailError'])){
                         echo $_SESSION['emailError'];
@@ -137,12 +140,22 @@
                         echo '<br>';
                         unset($_SESSION['usernameError']);
                     }
+                    if(isset($_SESSION['staffError'])){
+                        echo $_SESSION['staffError'];
+                        echo '<br>';
+                        unset($_SESSION['staffError']);
+                    }
+                    ?>
+                    
+            <div id="successmsg" class="success-msg">
+                <?php
                     if(isset($_SESSION['RegsuccessMsg'])){
                         echo $_SESSION['RegsuccessMsg'];
                         echo '<br>';
                         unset($_SESSION['RegsuccessMsg']);
                     }
                 ?>
+                </div>
             </div>
 
             <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register Staff</button>

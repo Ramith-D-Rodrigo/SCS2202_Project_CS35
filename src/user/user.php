@@ -1,6 +1,6 @@
 <?php
     require_once("../../src/general/uuid.php");
-class User{
+class User implements JsonSerializable{
     private $userID;
     private $firstName;
     private $lastName;
@@ -270,6 +270,71 @@ class User{
     public function cancelReservation($reservation, $database){
         $result = $reservation -> cancelReservation($this ->userID, $database);
         return $result;
+    }
+
+    public function getProfileDetails($database){   //get the profile details and store in the object
+        $detailsSql = sprintf("SELECT * FROM `user` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //user details
+
+        $loginSql = sprintf("SELECT * FROM `login_details` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));  //login details
+
+        $medicalConcernsSql = sprintf("SELECT `medical_concern` FROM `user_medical_concern` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //medical concerns
+
+        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contact_num` FROM `user_dependent` WHERE `owner_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //user dependents
+
+        $detailsResult = $database -> query($detailsSql);
+        $detailsrow = $detailsResult -> fetch_object();
+
+        $loginResult = $database -> query($loginSql);
+        $loginrow = $loginResult -> fetch_object();
+
+        $medicalConcernResult = $database -> query($medicalConcernsSql);
+        $medicalConcernsArr = $medicalConcernResult -> fetch_all(MYSQLI_ASSOC);
+
+        $dependentResult = $database -> query($dependentsSql);
+        $dependentArr = $dependentResult -> fetch_all(MYSQLI_ASSOC);
+
+
+        //set details (need to add dependents and medical concerns)
+        $this -> setDetails(
+            fName: $detailsrow -> first_name,
+            lName: $detailsrow -> last_name,
+            gender: $detailsrow -> gender,
+            address: $detailsrow -> home_address,
+            contactNo: $detailsrow -> contact_num,
+            dob: $detailsrow -> birthday,
+            height: $detailsrow -> height,
+            weight: $detailsrow -> weight,
+            email: $loginrow -> email_address,
+            password: $loginrow -> password,
+            username: $loginrow -> username,
+            medicalConcerns: $medicalConcernsArr,
+            dependents: $dependentArr);
+
+        $this -> setProfilePic($detailsrow -> profile_photo);   //set profile pic
+
+        $detailsResult -> free_result();    //free the query results
+        $medicalConcernResult -> free_result();
+        $dependentResult -> free_result();
+        $loginResult -> free_result();
+    }
+
+    public function jsonSerialize(){    //to json encode
+        return [
+            'username' => $this -> username,
+            'password' => $this -> password,
+            'fName' => $this -> firstName,
+            'lName' => $this -> lastName,
+            'homeAddress' => $this -> homeAddress,
+            'gender' => $this -> gender,
+            'dob' => $this -> dateOfBirth,
+            'height' => $this -> height,
+            'weight' => $this -> weight,
+            'profilePic' => $this -> profilePic,
+            'email' => $this -> emailAddress,
+            'contactNo' => $this -> contactNum,
+            'medicalConcerns' => $this -> medicalConcerns,
+            'dependents' => $this -> dependents
+        ];
     }
 }
 ?>

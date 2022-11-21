@@ -11,7 +11,7 @@
         exit();
     }
 
-    print_r($_POST);
+    //print_r($_POST);
 
     //store the reservation details
 
@@ -27,7 +27,7 @@
 
     $consideringSchedule = $_SESSION['branch_reservation_schedule'][$court_id]['schedule'];  //get the schedule of the currently reserving court
     foreach($consideringSchedule as $reservation){
-        print_r($reservation);
+        //print_r($reservation);
         if($reservation['date'] === $date){
             if(strtotime($startingTime) < strtotime($reservation['starting_time']) && strtotime($endingTime) > strtotime($reservation['ending_time'])){ //current reserving time slot is over an already reserved time slot
                 $_SESSION['reservationFail'] = "Entered Time Period is already Reserved";

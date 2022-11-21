@@ -5,8 +5,8 @@
     require_once("../../src/receptionist/dbconnection.php");
 
     $recep = new Receptionist();
-
-    $result = $recep -> editBranch($staffID, $connection);  //search the branch to edit
+    
+    $result = $recep -> editBranch($_SESSION['userid'], $_SESSION['branchid'],$connection);  //search the branch to edit
 
     if(isset($result['errMsg'])){   //no branch was found
         $_SESSION['searchErrorMsg'] = $result['errMsg'];

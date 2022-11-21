@@ -19,6 +19,17 @@ function validateForm(event){
     }
 }
 
+function checkAll() {
+    const spName = document.getElementById("sportName");
+    const crtName = document.getElementById("courtName");
+    const crtOption = document.getElementById("courtOption");
+
+    if(spName.value == 'ALL') {
+        crtOption.innerText = 'Disalbed';
+        crtName.value = 'ALL';
+    }
+    
+}
 
 const sDate = document.getElementById("sDate");
 const eDate = document.getElementById("eDate");

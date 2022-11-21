@@ -1,5 +1,9 @@
 <?php
     session_start();
+    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']) && !isset($_SESSION['LogInsuccessMsg']))){  //if the user is logged in previously (not at the login time)
+        header("Location: /index.php");  //the user shouldn't be able to access the login page
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -16,21 +20,23 @@
         <?php
             require_once("../general/header.php");
         ?>
-        <div>
+        <main class="body-container">
+        <div class="content-box">
             <form action="/controller/receptionist/login_controller.php" method="post" id="loginForm">
-                Username : 
-                <input
-                type="text" 
-                required 
-                minlength="6" 
-                maxlength="15"
-                pattern="^[a-z]([a-z0-9_]){5,15}"
-                name="username"
-                id="username">
+                <div>   
+                    Username : 
+                    <input
+                    type="text" 
+                    required 
+                    minlength="6" 
+                    maxlength="15"
+                    pattern="^[a-z]([a-z0-9_]){5,15}"
+                    name="username"
+                    id="username">
+                </div> 
                 <br>
-
                 <div>
-                Password : 
+                    Password : 
                     <input 
                     type="password"  
                     pattern="(?=.*\d)(?=.*[A-Z]).{8,}" 
@@ -40,41 +46,47 @@
                     required> 
                     <button id="togglePassword">Show Password</button><br>
                 </div>
-                <div id="msgbox">
+                <div class = 'err-msg' id="msgbox">
                     <?php
                         if(isset($_SESSION['errMsg'])){
                             echo $_SESSION['errMsg'];
                             echo '<br>';
                             unset($_SESSION['errMsg']);
                         }
-
+                    ?>
+                </div>
+                <div class = 'success-msg' id="msgbox">
+                    <?php
                         if(isset($_SESSION['LogInsuccessMsg'])){
                             echo $_SESSION['LogInsuccessMsg'];
-                            echo '<br> You will be Redirected to the Dashboard. Please Wait';
+                            echo '<br> You will be Redirected to the Dashboard. Please Wait...';
                             unset($_SESSION['LogInsuccessMsg']);
-                            header("Refresh: 3; URL =/index.php");   //have to change
+                            header("Refresh: 3; URL =/public/receptionist/receptionist_dashboard.php");   
                         }
                     ?>
                 </div>
-                <button type="submit" 
-                    id="login"  
-                    name= "loginSubmitBtn" 
-                    value="submit" 
-                    onclick="return validateForm(event)"
-                    <?php
-                    if(isset($_SESSION['userrole'])){
-                    ?>
-                        disabled
-                    <?php
-                    }
-                    else{
-                    ?> 
-                        
-                    <?php
-                    }
+                <div class="btn-container">
+                    <button type="submit" 
+                        id="login"  
+                        name= "loginSubmitBtn" 
+                        value="submit" 
+                        onclick="return validateForm(event)"
+                        <?php
+                        if(isset($_SESSION['userrole'])){
+                        ?>
+                            disabled
+                        <?php
+                        }
+                        else{
+                        ?> 
+                            
+                        <?php
+                        }
                     ?>> LOG IN </button>
+                </div>    
             </form>
         </div>
+        </main>
         <?php
             require_once("../general/footer.php");
         ?>

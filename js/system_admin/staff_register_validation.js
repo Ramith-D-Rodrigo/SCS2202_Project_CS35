@@ -11,16 +11,5 @@ function validateForm(event){
         errMsg.innerHTML = errMsg.innerHTML + "Please Add Valid Information";
         return false;
     }
-    else{   //Form is valid from HTML perspective
-    
-    //have to check input values validity
-        let flag = true;    //for final validation
-        if(flag === false){ //Has invalid inputs
-            return false;
-        }
-        else{   //valid to submit the data
-            return true;
-        }
-    }
     
 }

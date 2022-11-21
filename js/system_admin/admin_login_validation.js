@@ -11,7 +11,7 @@ function validateForm(event){
     }
 
     if(loginForm.reportValidity() === false){   //has errors
-        errMsg.innerHTML = 'Please Enter valid information';
+        errMsg.innerHTML = 'Please Enter Valid Information';
         event.preventDefault(); //do not submit
     }
     else{   //can submit
