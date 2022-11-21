@@ -60,7 +60,7 @@ while($row = $result->fetch_object()){
     
 }
 
-print_r($branches);
+//print_r($branches);
 
 $_SESSION['BranchesWithCourts'] = $branches;
 

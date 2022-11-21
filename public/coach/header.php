@@ -5,41 +5,43 @@
                 if($_SERVER['REQUEST_URI'] === '/index.php'){    //home page
                     echo "Welcome";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/general/login.php' || $_SERVER['REQUEST_URI'] === '/public/user/user_login.php'){    //login
+                else if($_SERVER['REQUEST_URI'] === '/public/general/login.php' || $_SERVER['REQUEST_URI'] === '/public/coach/coach_login.php'){    //login
                     echo "Log In";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/general/register.php'){   //register
                     echo "Register";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/user/user_register.php'){ //user register
-                    echo "User Registration";
+                else if($_SERVER['REQUEST_URI'] === '/public/coach/coach_register.php'){ //coach register
+                    echo "Coach Registration";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/general/our_branches.php'){ //user register
+                else if($_SERVER['REQUEST_URI'] === '/public/general/our_branches.php'){ //our_branches
                     echo "Our Branches";
                 }
-                else if($_SERVER['REQUEST_URI'] === 'public/general/our_feedback.php'){ //user register
+                else if($_SERVER['REQUEST_URI'] === 'public/general/our_feedback.php'){ //our_feedback
                     echo "Our Feedback";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/general/reg_caoches.php'){ //user register
+                else if($_SERVER['REQUEST_URI'] === '/public/general/reg_caoches.php'){ //registered_caoches
                     echo "Registered Coaches";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/general/about_us.php'){ //user register
+                else if($_SERVER['REQUEST_URI'] === '/public/general/about_us.php'){ //about_us
                     echo "About Us";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/general/search_results.php'){  //search sport
                     echo "Search a Sport";
                 }
+                else if($_SERVER['REQUEST_URI'] === '/public/coach/coach_dashboard.php'){
+                    echo "Welcome, ".$_SESSION['username'];
+                }
             ?>
-        </div>
-        <div> <!--- sports complex name -->
-           Dashboard
         </div>
         <div>
         <?php
-            if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
-        ?>  
+            if(isset($_SESSION['username']) && isset($_SESSION['userrole'])){ //coach logged in
+        ?>     
             <div style="float:right" id="logout">
-                <button class ="btn" onclick="window.location.href='/controller/general/logout.php'"><img src="/styles/icons/profile_icon.svg" class="acc-img"></button>
+                <button class ="btn" onclick="window.location.href='/public/coach/coach_dashboard.php'"><img src="/styles/icons/search_icon.svg" class="acc-img"></button>
+
+                <button class ="btn"><img src="/styles/icons/profile_icon.svg" class="acc-img"></button>
                 <button class ="btn" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
             </div>
         <?php
@@ -47,9 +49,9 @@
             else{
         ?>
             <div style="float:right" id="login">
-                <button class="btn" onclick="window.location.href='/public/general/register.php'">Notification</button>
-                <button class="btn" onclick="window.location.href='/public/general/login.php'">Profile</button>
-                <button class="btn" onclick="window.location.href='/public/general/login.php'">Logout</button>
+                
+                <button class="btn" onclick="window.location.href='/public/general/login.php'">Register</button>
+                <button class="btn" onclick="window.location.href='/public/general/login.php'">Login</button>
             </div>
         <?php
             }

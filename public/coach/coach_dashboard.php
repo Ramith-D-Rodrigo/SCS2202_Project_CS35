@@ -1,3 +1,13 @@
+<?php
+    session_start();
+    if(!(isset($_SESSION['username']) && isset($_SESSION['userrole']) && $_SESSION['userrole'] === 'coach')){
+        header("Location: /index.php");
+        exit();
+    }
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +15,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../styles/coach/styles.css">
+    <link rel="stylesheet" href="../../styles/general/styles.css">
     <link rel="stylesheet" href="../../styles/coach/coach_dashboard.css">
 
     <title>Dashboard</title>
@@ -24,71 +34,30 @@
 
 
 
-        <div class="today-Session">
-            <div class="header">
-                <h2>Today Session</h2>
+        <div class="flex-container">
+            <div class="tabs">
+                <div>Today Session</div>
+                <div><button onclick="window.location.href='/controller/coach/add_new_session_entry_controller.php'">View more</button></div>
             </div>
 
-            <div class="contentSection">
-                <ul>
-                    <li>Coffee</li>
-                    <li>Tea</li>
-                    <li>Milk</li>
-                </ul>
-
+            <div class="tabs">
+                <div>Payment</div>
+                <div><button>View more</button></div>
             </div>
 
-            <div class="viewMoreButton">
-                <button>
-                    View More Info
-                </button>
+            <div class="tabs">
+                <div>Feedback</div>
+                <div><button>View more</button></div>
             </div>
 
         </div>
 
 
-        <div class="payment-income">
-            <div class="header">
-                <h2> payment & Income </h2>
-            </div>
-
-            <div class="contentSection">
-                <ul>
-                    <li>Coffee</li>
-                    <li>Tea</li>
-                    <li>Milk</li>
-                </ul>
-            </div>
-
-            <div class="viewMoreButton">
-                <button>
-                    View More Info
-                </button>
-            </div>
-
-        </div>
 
 
-        <div class="feedback">
-            <div class="header">
-                <h2> feedback & Reviews </h2>
-            </div>
+        
 
-
-            <div class="contentSection">
-                <ul>
-                    <li>Coffee</li>
-                    <li>Tea</li>
-                    <li>Milk</li>
-                </ul>
-            </div>
-
-            <div class="viewMoreButton">
-                <button>
-                    View More Info
-                </button>
-            </div>
-        </div>
+           
 
     </div>
     </main>

@@ -24,6 +24,7 @@
             $_SESSION['userProfilePic'] = $profilePic;
         }
         $_SESSION['userid'] = $loginUser -> getUserID();
+        $_SESSION['username'] = $resultmsg[2];
         $_SESSION['coachsportid'] = $loginUser -> getSport();
     }
     header("Location: /public/coach/coach_login.php");

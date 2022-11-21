@@ -38,15 +38,20 @@
                         ?> 
                 </select>
             </label>
-                
+                 
                     <br>
 
             <label>Select Court :
                 <select names ="Court" id="Court">
-                        <option value ="Court 1">Court 1</option>
-                        <option value ="Court 2">Court 2</option>
-                        <option value ="Court 3">Court 3</option>
-
+                <?php
+                        foreach($BranchesWithCourts as $i){
+                            foreach($i['courts'] as $j){
+                            ?> <option value=<?php echo $j['id']?>><?php echo $j['name']?></option>
+                            <?php
+                                $k++;
+                            }
+                        }
+                        ?> 
                 </select> 
             </label>
 

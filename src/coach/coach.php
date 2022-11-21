@@ -187,7 +187,7 @@ class Coach{
         $this -> profilePic =  $resultRow -> photo;
         $this -> sport = (bin_to_uuid( $resultRow -> sport, $database));
        
-        return ["Successfully Logged In", $rows -> user_role];  //return the message and role
+        return ["Successfully Logged In", $rows -> user_role, $rows -> username];  //return the message and role
 
     }    
 
