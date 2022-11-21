@@ -11,7 +11,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
-        <link rel="stylesheet" href="/styles/general/content_icons.css">
+        <link rel="stylesheet" href="/styles/general/our_sports.css">
         <title>Our Sports</title>
     </head>
     <body>

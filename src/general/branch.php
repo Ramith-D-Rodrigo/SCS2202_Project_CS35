@@ -5,7 +5,6 @@
         private $branchID;
         private $city;
         private $address;
-        private $contactNum;
         private $email;
         private $manager;
         private $receptionist;
@@ -32,10 +31,9 @@
             return $result;
         }
 
-        public function setDetails($city = '', $address = '', $contactNum = '', $email = '', $manager = '', $receptionist = '', $opening_time = '', $closing_time = ''){
+        public function setDetails($city = '', $address = '', $email = '', $manager = '', $receptionist = '', $opening_time = '', $closing_time = ''){
             $this -> city = $city;
             $this -> address = $address;
-            $this -> contactNum = $contactNum;
             $this -> email = $email;
             $this -> manager = $manager;
             $this -> receptionist = $receptionist;
@@ -157,7 +155,6 @@
                 'branchID' => $this -> branchUUID,
                 'city' => $this -> city,
                 'address' => $this -> address,
-                'contactNum' => $this -> contactNum,
                 'email' => $this -> email,
                 'manager' => $this -> manager,
                 'receptionist' => $this -> receptionist,
