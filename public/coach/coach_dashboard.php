@@ -37,7 +37,7 @@
         <div class="flex-container">
             <div class="tabs">
                 <div>Today Session</div>
-                <div><button onclick="window.location.href='/controller/coach/add_new_session_entry_controller.php'">View more</button></div>
+                <div><button onclick="window.location.href='/controller/coach/coaching_session_controller.php'">View more</button></div>
             </div>
 
             <div class="tabs">
