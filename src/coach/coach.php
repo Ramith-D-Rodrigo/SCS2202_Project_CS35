@@ -220,9 +220,30 @@ class Coach{
        
     }
 
+    public function getSessionDetail($database){
+        $sql = sprintf("SELECT `cs`.`session_id`, 
+       `cs`.`starting_time`, 
+       `cs`.`ending_time`,
+       `cs`.`day`, 
+       `cs`.`coach_monthly_payment`, 
+       `sc`.`court_name`, 
+       `b`.`city` 
+       FROM `coaching_session` `cs`
+       INNER JOIN  `sports_court` `sc`
+       ON `cs`.`court_id` = `sc`.`court_id`
+       INNER JOIN `branch` `b` 
+       ON `sc`.`branch_id` = `b`.`branch_id`
+       INNER JOIN `coach` `c` 
+       ON `c`.`coach_id` = `cs`.`coach_id`
+       WHERE `c`.`coach_id` = '%s'",
+       $database -> real_escape_string(uuid_to_bin($this ->userID, $database)));
+
+       $result = $database -> query($sql);
+       return $result;
+}
     public function getSport(){
 
         return $this->sport;
     }
 }
-?>
+
