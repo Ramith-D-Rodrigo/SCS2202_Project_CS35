@@ -1,7 +1,5 @@
 <?php
     session_start();
-
-    $infoObject = json_decode($_SESSION['profileInfo']);
 ?>
 
 <!DOCTYPE html>
@@ -20,14 +18,13 @@
         <main>
             <div class="body-container">
                 <div class="content-box">
-                    <table class="form-type">
+                    <table class="form-type" id="profileInfoTable">
                         <tr>
                             <td>
                                 Name  
                             </td>
                             <td>
-                                <div style="margin-left:10px">
-                                    <?php echo $infoObject -> fName . " " . $infoObject -> lName?>
+                                <div style="margin-left:10px" id="nameField">
                                 </div>
                                 
                             </td>
@@ -37,8 +34,7 @@
                                 Date of Birth 
                             </td>
                             <td>
-                                <div style="margin-left:10px">
-                                    <?php echo $infoObject -> dob?>
+                                <div style="margin-left:10px" id="birthdayField">
                                 </div>
                             </td>
                         </tr>
@@ -50,8 +46,7 @@
                                 <input type="text" name="contactNum"
                                 pattern="[0-9]{10,11}" 
                                 id="usercontact"
-                                required 
-                                value="<?php echo $infoObject -> contactNo?>">
+                                required>
                             </td>
                         </tr>
                         <tr>
@@ -59,7 +54,7 @@
                                 Home Address 
                             </td>
                             <td>
-                                <textarea name="homeAddress"><?php echo htmlspecialchars_decode($infoObject -> homeAddress, ENT_QUOTES)?></textarea>
+                                <textarea name="homeAddress" id="userHomeAddress"></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -72,8 +67,7 @@
                                 placeholder="Optional (kilograms)" 
                                 min="0"
                                 pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
-                                id="weight"
-                                value="<?php echo $infoObject -> weight?>">
+                                id="weight">
                             </td>
                         </tr>
                         <tr>
@@ -85,8 +79,7 @@
                                 name="height" 
                                 min="0" 
                                 pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
-                                id="height"
-                                value="<?php echo $infoObject -> height?>">
+                                id="height">
                             </td>
                         </tr>
                         <tr>
@@ -94,8 +87,7 @@
                                 Gender  
                             </td>
                             <td>
-                                <div style="margin-left:10px">
-                                    <?php if($infoObject -> gender === 'm'){ echo 'Male';}else{ echo 'Female';}?>
+                                <div style="margin-left:10px" id="genderField">
                                 </div>
                             </td>
                         </tr>
@@ -104,8 +96,7 @@
                                 Current Email Address  
                             </td>
                             <td>
-                                <div style="margin-left:10px">
-                                    <?php echo $infoObject -> email?>
+                                <div style="margin-left:10px" id="currentEmailField">
                                 </div>
                             </td>
                         </tr>
@@ -124,8 +115,7 @@
                                 Username  
                             </td>
                             <td>
-                                <div style="margin-left:10px">
-                                    <?php echo $infoObject -> username?>
+                                <div style="margin-left:10px" id="usernameField">
                                 </div>
                             </td>
                         </tr>
@@ -152,17 +142,11 @@
                         </tr>
                         <tr>                       
                             <td colspan="2">
-                                <ol style="margin-left:25px" id="medicalConcernList"><?php
-                                    $i = 1;
-                                    foreach($infoObject -> medicalConcerns as $concern){?>
-                                    <li>
-                                        <?php 
-                                            echo $concern -> medical_concern;             
-                                        ?><button class ="concernRemoveBtn" id="concernRemoveBtn<?php echo $i++?>">Remove</button>
+                                <ol style="margin-left:25px" id="medicalConcernList">
+                                    <li>           
+                                        <button class ="concernRemoveBtn">Remove</button>
                                     </li>
-                                <?php
-                                    }
-                                ?></ol>
+                                </ol>
                             </td>
                         </tr>
                         <tr>
@@ -233,5 +217,6 @@
         <?php require_once("../../public/general/footer.php"); ?>
     </body>
     <script src="/js/user/edit_profile_handle.js"></script>
+    <script src="/js/user/edit_profile_getdetails.js"></script>
     <script src="/js/user/account_links.js"></script>
 </html>
