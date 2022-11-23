@@ -84,10 +84,11 @@ for(i = 0; i < schedulesArr.length; i++){
     const tableRow = table.insertRow();
     const tableCell = tableRow.insertCell();    //first empty cell
 
-/*     for(j = 0; j < weekdays.length; j++){   //adding days to the header
-        const currDay = document.createElement("th");
-        currDay.innerHTML = weekdays[j];
-        tableRow.appendChild(currDay);
+
+/*     for(j = 0;  j < weekdays.length; j++){   //adding days to the header of the table
+        const weekdayTab = tableRow.insertCell();
+        weekdayTab.innerHTML = weekdays[j];
+        
     } */
     let reservationCells = [];
     let datesWithReservations = []; //array to store the dates that has reservations
@@ -127,6 +128,7 @@ for(i = 0; i < schedulesArr.length; i++){
     closingTime.setMinutes(branchClosingTime[1]);
     closingTime.setSeconds(0);
     //console.log(closingTime);
+
 
     let currTime = openingTime; //starting the time periods
 

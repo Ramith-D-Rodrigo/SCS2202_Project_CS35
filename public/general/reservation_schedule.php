@@ -44,13 +44,18 @@
                     </div>
 
                     <div style="margin-top:10px">
-                        <ul>
+                        
                             <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){?>
                                 <button id=<?php echo $courtid?> class="courtBtn">Court <?php echo $court['courtName']?></button>
                             <?php
                                 }
                             ?>
-                        </ul>
+                            <div style="float:right">
+                                <button id="prevBtn">Previous</button>
+                                <button id="nextBtn">Next</button>
+                            </div>
+
+
                             <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){
                                 $i = 1;
                             
