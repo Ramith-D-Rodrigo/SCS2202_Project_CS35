@@ -7,3 +7,18 @@ td,th{
     border: none;
  
 }
+
+.row-container{
+    display:flex; 
+    justify-content:space-around; 
+    flex-direction:row;
+}
+
+.left-field{
+    width: 50%;
+    margin: 10px auto;
+}
+
+.right-field{
+    width: 50%;
+}

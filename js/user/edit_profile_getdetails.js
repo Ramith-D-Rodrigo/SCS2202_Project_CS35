@@ -53,5 +53,22 @@ fetch("/controller/user/edit_profile_entry_controller.php")
 
         currentPassword = data['password'];
 
+        if(data['medicalConcerns'] !== 0){   //the user has medical concerns
+            const medicalConcernsField = document.getElementById("medicalConcernsField");
+        }
+
+        const currProfilePicField = document.getElementById("profilePicField");
+        const profilePicImg = document.createElement("img");
+        profilePicImg.style.maxWidth = "25%";
+
+        if(data['profilePic'] !== null){    //has a profile picture  
+            profilePicImg.src = "profile_images/" + data['profilePic'];
+        }
+        else{
+            profilePicImg.src = "/styles/icons/profile_icon.svg";
+        }
+        profilePicImg.style.borderRadius = "50%";
+        currProfilePicField.appendChild(profilePicImg);  
+
 
     })
