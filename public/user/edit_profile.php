@@ -134,7 +134,7 @@
                     </div>
 
                     <div class="row-container">
-                        <div class="left-field">
+                        <div class="left-field" style="width:100%">
                             Medical Concerns <button id="medicalConcernBtn">Add</button>
                         </div>
                     </div>
@@ -144,7 +144,7 @@
                     </div>
 
                     <div class="row-container">
-                        <div class="left-field">
+                        <div class="left-field" style="width:100%">
                             Emergency Contact Details
                         </div>
                     </div>
