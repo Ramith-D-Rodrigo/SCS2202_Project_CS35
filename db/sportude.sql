@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2022 at 02:19 AM
+-- Generation Time: Nov 26, 2022 at 02:30 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -406,7 +406,7 @@ CREATE TABLE `user_branch_feedback` (
 --
 
 CREATE TABLE `user_dependent` (
-  `user_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `owner_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `relationship` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `contact_num` varchar(15) NOT NULL
@@ -627,7 +627,7 @@ ALTER TABLE `user_branch_feedback`
 -- Indexes for table `user_dependent`
 --
 ALTER TABLE `user_dependent`
-  ADD PRIMARY KEY (`user_id`,`name`);
+  ADD PRIMARY KEY (`owner_id`,`name`);
 
 --
 -- Indexes for table `user_medical_concern`
@@ -808,7 +808,7 @@ ALTER TABLE `user_branch_feedback`
 -- Constraints for table `user_dependent`
 --
 ALTER TABLE `user_dependent`
-  ADD CONSTRAINT `user_dependent_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `user_dependent_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `user_medical_concern`
