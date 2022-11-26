@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2022 at 02:30 AM
+-- Generation Time: Nov 26, 2022 at 03:07 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -36,10 +36,17 @@ CREATE TABLE `branch` (
   `closing_time` time NOT NULL,
   `opening_date` date NOT NULL,
   `revenue` double DEFAULT NULL,
-  `owner_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `owner_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `owner_request_date` date DEFAULT NULL,
   `request_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `branch`
+--
+
+INSERT INTO `branch` (`branch_id`, `address`, `branch_email`, `city`, `opening_time`, `closing_time`, `opening_date`, `revenue`, `owner_id`, `owner_request_date`, `request_status`) VALUES
+('kiri987521', 'Example Road, Kiribathgoda', 'kribathgodabr@sp.com', 'Kiribathgoda', '08:00:00', '19:30:00', '2022-11-26', NULL, NULL, NULL, 'a');
 
 -- --------------------------------------------------------
 
@@ -162,6 +169,13 @@ CREATE TABLE `login_details` (
   `is_active` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `login_details`
+--
+
+INSERT INTO `login_details` (`user_id`, `username`, `email_address`, `password`, `user_role`, `is_active`) VALUES
+('ramRod63816dc9007b4', 'ramith_rodrigo', 'ramithrodrigo@hotmail.com', '$2y$10$jfRHNtfvrSuC8CSAuxrUgOETAPpPglg7KDQ2JHo5zhNxAuivvNaEa', 'user', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -246,6 +260,13 @@ CREATE TABLE `sport` (
   `max_no_of_students` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `sport`
+--
+
+INSERT INTO `sport` (`sport_id`, `sport_name`, `description`, `reservation_price`, `min_coaching_session_price`, `max_no_of_students`) VALUES
+('bad65421', 'Badminton', 'Fun game to play with friends', 350, 1000, 10);
+
 -- --------------------------------------------------------
 
 --
@@ -258,8 +279,16 @@ CREATE TABLE `sports_court` (
   `court_name` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `branch_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `request_status` char(1) NOT NULL,
-  `added_manager` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `added_manager` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `sports_court`
+--
+
+INSERT INTO `sports_court` (`court_id`, `sport_id`, `court_name`, `branch_id`, `request_status`, `added_manager`) VALUES
+('badcourt1212', 'bad65421', 'A', 'kiri987521', 'a', NULL),
+('badcourt1213', 'bad65421', 'B', 'kiri987521', 'a', NULL);
 
 -- --------------------------------------------------------
 
@@ -384,6 +413,13 @@ CREATE TABLE `user` (
   `weight` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `gender`, `profile_photo`, `home_address`, `contact_num`, `birthday`, `register_date`, `height`, `weight`) VALUES
+('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', 'ramith_rodrigo63816dc90092f.jpg', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', 178, 56);
+
 -- --------------------------------------------------------
 
 --
@@ -412,6 +448,14 @@ CREATE TABLE `user_dependent` (
   `contact_num` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `user_dependent`
+--
+
+INSERT INTO `user_dependent` (`owner_id`, `name`, `relationship`, `contact_num`) VALUES
+('ramRod63816dc9007b4', 'Ajith', 'Father', '0714831556'),
+('ramRod63816dc9007b4', 'Champa', 'Mother', '0776512846');
+
 -- --------------------------------------------------------
 
 --
@@ -422,6 +466,14 @@ CREATE TABLE `user_medical_concern` (
   `user_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `medical_concern` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `user_medical_concern`
+--
+
+INSERT INTO `user_medical_concern` (`user_id`, `medical_concern`) VALUES
+('ramRod63816dc9007b4', 'concern one'),
+('ramRod63816dc9007b4', 'concern two');
 
 -- --------------------------------------------------------
 
