@@ -49,7 +49,7 @@ class Manager{
         $database -> real_escape_string($this -> emailAddress),
         $database -> real_escape_string($this -> password))); 
 
-/*         if ($result === TRUE) {
+/*      if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
         }
         else{
@@ -94,14 +94,14 @@ class Manager{
         return $result;
     }
 
-    public function registerManager($database){    //public function to register the user
+    public function registerManager($database){    //public function to register the manager
         $this -> joinDate = date("Y-m-d");
         $this -> leaveDate = '';
         $loginEntry = $this -> create_login_details_entry($database);
         $staffEntry = $this -> create_staff_entry($database);
-        $receptionistEntry = $this -> create_manager_entry($database);
+        $managerEntry = $this -> create_manager_entry($database);
 
-        if($loginEntry  === TRUE && $staffEntry  === TRUE && $receptionistEntry === TRUE){    //all has to be true (successfully registered)
+        if($loginEntry  === TRUE && $staffEntry  === TRUE && $managerEntry === TRUE){    //all has to be true (successfully registered)
             return TRUE;
         }
     }
@@ -120,7 +120,7 @@ class Manager{
         $rows = $result -> fetch_object();  //get the resulting row
 
         if($rows === NULL){ //no result. hence no user
-            return ["No Such User Exists"];
+            return ["No Such Manager Exists"];
         }
 
         $hash = $rows -> password;
@@ -151,6 +151,11 @@ class Manager{
         $branchName = $brNameResult -> fetch_object();   //get the branch_city
     
         return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details
+    }
+
+    public function add_new_sports_court($database){
+
+
     }
 }
 ?>

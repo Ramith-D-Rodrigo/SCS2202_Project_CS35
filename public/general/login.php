@@ -22,6 +22,7 @@
             <a href="../user/user_login.php" style="color:black"> Log in as an User</a>
             <a href="../receptionist/receptionist_login.php" style="color:black"> Log in as a Receptionist</a>
             <a href="../system_admin/admin_login.php" style="color:black"> Log in as the System Admin</a>
+            <a href="../manager/manager_login.php" style="color:black"> Log in as Manager</a>
             <br>
             <?php
                 require_once("footer.php");

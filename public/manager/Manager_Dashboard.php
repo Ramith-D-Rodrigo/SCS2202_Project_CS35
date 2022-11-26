@@ -1,3 +1,7 @@
+<?php
+  session_start(); 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,8 +19,10 @@
         <div class=tabs>
             <div>Revenue for this Month</div> 
             <div>Rs.________</div>
-            <div> <button>Add New Discount </button>
-            <div> <button> View More </button> </div>
+            <div>
+                <button>Add New Discount </button>
+                <button> View More </button>
+             </div>
          </div>
 
          <div class=tabs>
@@ -27,7 +33,6 @@
          
          <div class=tabs>
             <div> Sports Courts</div> 
-            <div> <button> Add New </button> </div>
             <div> <button> View More</button> </div>
          </div> 
     </div>     

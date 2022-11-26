@@ -4,12 +4,13 @@
     require_once("../../src/manager/manager_dbconnection.php");
 
 
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    // $username = $_POST['username'];
+    // $password = $_POST['password'];
 
-    $loginManager = new Manager();
 
-    $resultmsg = $loginManager -> login($username, $password, $connection);
+    $addCourt = new Court();
+
+    $resultmsg = $addCourt -> ($username, $password, $connection);
 
     if(count($resultmsg) === 1){    //login failed
         $_SESSION['errMsg'] = $resultmsg[0];

@@ -3,8 +3,8 @@
     <div>
         <?php
            
-            if(isset($_SESSION['userid']) && isset($_SESSION['branchID'])){ //manager logged in       
-                echo "Welcome, ".$_SESSION['username'];
+            if (isset($_SESSION['branchID'])){  
+                echo "Add New Court "
         ?> 
     </div>
     <div>         
