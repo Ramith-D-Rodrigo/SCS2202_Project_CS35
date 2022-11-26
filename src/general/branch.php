@@ -11,14 +11,9 @@
         private $opening_time;
         private $closing_time;
         private $photos;
-        private $branchUUID;
 
         public function __construct($branch_id){    //use the binary id to construct
             $this -> branchID = $branch_id;
-        }
-
-        public function setUUID($database){ //convert branch id from binary to uuid to store (for JSON encoding)
-            $this -> branchUUID = bin_to_uuid($this -> branchID, $database);
         }
 
         public function getDetails($database){
@@ -152,7 +147,7 @@
 
         public function jsonSerialize(){
             return [
-                'branchID' => $this -> branchUUID,
+                'branchID' => $this -> branchID,
                 'city' => $this -> city,
                 'address' => $this -> address,
                 'email' => $this -> email,

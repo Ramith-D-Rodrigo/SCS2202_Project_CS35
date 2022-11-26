@@ -11,7 +11,6 @@
     while($row = $allBranches -> fetch_object()){   //travser all the branches (result)
 
         $tempBranch = new Branch($row -> branch_id);    //create new branch object
-        $tempBranch -> setUUID($connection);
 
         $branch_photos = $tempBranch -> getBranchPictures($connection); //get branch photos
 
