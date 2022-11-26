@@ -1,0 +1,21 @@
+.branch-image{
+    border-radius: 50%;
+    background: linear-gradient(180deg, #dac340, #e6800d);
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+}
+
+.branch-image-container{
+    height: 250px;
+    width: 250px;
+    margin: 0 20px;
+    border-radius: 50%;
+}
+
+.branch-row{
+    margin: 25px;
+    display:flex; 
+    flex-direction:row; 
+    width:100%;
+}

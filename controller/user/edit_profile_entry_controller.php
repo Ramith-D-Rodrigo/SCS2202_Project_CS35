@@ -12,8 +12,10 @@
     
     $user -> getProfileDetails($connection);
 
-    $_SESSION['profileInfo'] = json_encode($user);  //convert user details to json
+    //$_SESSION['profileInfo'] = ;  //convert user details to json
 
-    header("Location: /public/user/edit_profile.php");
-    $connection -> close();
+    echo json_encode($user);
+
+    //header("Location: /public/user/edit_profile.php");
+    //$connection -> close();
 ?>

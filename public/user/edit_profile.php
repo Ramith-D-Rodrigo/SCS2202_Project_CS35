@@ -1,7 +1,5 @@
 <?php
     session_start();
-
-    $infoObject = json_decode($_SESSION['profileInfo']);
 ?>
 
 <!DOCTYPE html>
@@ -20,208 +18,162 @@
         <main>
             <div class="body-container">
                 <div class="content-box">
-                    <table class="form-type">
-                        <tr>
-                            <td>
-                                Name  
-                            </td>
-                            <td>
-                                <div style="margin-left:10px">
-                                    <?php echo $infoObject -> fName . " " . $infoObject -> lName?>
-                                </div>
-                                
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Date of Birth 
-                            </td>
-                            <td>
-                                <div style="margin-left:10px">
-                                    <?php echo $infoObject -> dob?>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Contact Number 
-                            </td>
-                            <td>
-                                <input type="text" name="contactNum"
+
+                    <div>
+                        <div id="profilePicField" style="display:flex; justify-content:center; margin: 10px 0"></div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Name
+                        </div>
+                        <div class="right-field" id="nameField">
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Date of Birth
+                        </div>
+                        <div class="right-field" id="birthdayField">
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Contact Number
+                        </div>
+                        <input class="right-field" type="text" name="contactNum"
                                 pattern="[0-9]{10,11}" 
                                 id="usercontact"
-                                required 
-                                value="<?php echo $infoObject -> contactNo?>">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Home Address 
-                            </td>
-                            <td>
-                                <textarea name="homeAddress"><?php echo htmlspecialchars_decode($infoObject -> homeAddress, ENT_QUOTES)?></textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Weight (kg)
-                            </td>
-                            <td>
-                                <input type="text" 
+                                required>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Home Address
+                        </div>
+                        <textarea class="right-field" name="homeAddress" id="userHomeAddress"></textarea>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Weight (kg)
+                        </div>
+                        <input type="text" 
                                 name="weight" 
                                 placeholder="Optional (kilograms)" 
                                 min="0"
                                 pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
                                 id="weight"
-                                value="<?php echo $infoObject -> weight?>">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Height (cm)
-                            </td>
-                            <td>
-                                <input type="text" 
+                                class="right-field">
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Weight (cm)
+                        </div>
+                        <input type="text" 
+                                class="right-field"
                                 name="height" 
                                 min="0" 
                                 pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
-                                id="height"
-                                value="<?php echo $infoObject -> height?>">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Gender  
-                            </td>
-                            <td>
-                                <div style="margin-left:10px">
-                                    <?php if($infoObject -> gender === 'm'){ echo 'Male';}else{ echo 'Female';}?>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Current Email Address  
-                            </td>
-                            <td>
-                                <div style="margin-left:10px">
-                                    <?php echo $infoObject -> email?>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                New Email Address  
-                            </td>
-                            <td>
-                                <input type="email" 
+                                id="height">
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Gender
+                        </div>
+                        <div class="right-field" id="genderField">
+                    </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Current Email Address
+                        </div>
+                        <div class="right-field" id="currentEmailField">
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            New Email Address
+                        </div>
+                        <input type="email" 
                                 name="emailAddress"
-                                id="emailAddress">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Username  
-                            </td>
-                            <td>
-                                <div style="margin-left:10px">
-                                    <?php echo $infoObject -> username?>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                New Password
-                            </td>
-                            <td>
-                                <input type="password" name="newPassword"><button class="togglePassword">Show Password</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Confirm New Password
-                            </td>
-                            <td>
-                                <input type="password" name="newPasswordConfirm"><button class="togglePassword">Show Password</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan = "2">
-                                Medical Concerns  <button id="medicalConcernBtn">Add</button>
-                            </td>
-                        </tr>
-                        <tr>                       
-                            <td colspan="2">
-                                <ol style="margin-left:25px" id="medicalConcernList"><?php
-                                    $i = 1;
-                                    foreach($infoObject -> medicalConcerns as $concern){?>
-                                    <li>
-                                        <?php 
-                                            echo $concern -> medical_concern;             
-                                        ?><button class ="concernRemoveBtn" id="concernRemoveBtn<?php echo $i++?>">Remove</button>
-                                    </li>
-                                <?php
-                                    }
-                                ?></ol>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan = "2">
-                                Profile Picture
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <?php
-                                if(isset($infoObject -> profilePic)){
-                                ?>
-                                    <img src="/public/user/profile_images/<?php echo $infoObject -> profilePic?>" style="width:200px; display:block;"/>
-                                <?php
-                                }
-                                else{
-                                    echo "Not uploaded";
-                                }
-                                ?>
-                            </td>
-                            <td>
-                                <input type="file" name="profilePic" accept=".jpg, .jpeg, .png" id="user_profile_pic" title="Maximum File Size 2MB. Only Accepts JPG, PNG">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan = "2">
-                                Emergency Contact Details 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Name
-                            </td>
-                            <td>
-                                <input type="text" name="emgName1" value="<?php echo $infoObject -> dependents[0] -> name?>">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Relationship
-                            </td>
-                            <td>
-                                <input type="text" name="emgRelation1" value="<?php echo $infoObject -> dependents[0] -> relationship?>">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Contact Number
-                            </td>
-                            <td>
-                                <input type="text" name="emgContact1" value="<?php echo $infoObject -> dependents[0] -> contact_num?>">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan = "2">
-                                Want to Add More ? <button>Add More</button>
-                            </td>
-                        </tr>
-                    </table>
+                                id="emailAddress"
+                                class="right-field">
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Username
+                        </div>
+                        <div class="right-field" id="usernameField">
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            New Password
+                        </div>
+                        <div class="right-field">
+                            <input type="password" name="newPassword"><button class="togglePassword">Show Password</button>
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Confirm New Password
+                        </div>
+                        <div class="right-field">
+                            <input type="password" name="newPasswordConfirm"><button class="togglePassword">Show Password</button>
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field" style="width:100%">
+                            Medical Concerns <button id="medicalConcernBtn">Add</button>
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field" id="medicalConcernsField"></div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field" style="width:100%">
+                            Emergency Contact Details
+                        </div>
+                    </div>
+                    <div class="row-container">
+                        <div class="left-field">
+                            Name
+                        </div>
+                        <div class="right-field">
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Relationship
+                        </div>
+                        <div class="right-field">
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Contact Number
+                        </div>
+                        <div class="right-field">
+                        </div>
+                    </div>
+
+                    <div>Want to Add More ? <button>Add More</button></div>
+
                     <div class="btn-container">
                         <button>Save Changes</button>
                     </div>
@@ -233,5 +185,6 @@
         <?php require_once("../../public/general/footer.php"); ?>
     </body>
     <script src="/js/user/edit_profile_handle.js"></script>
+    <script src="/js/user/edit_profile_getdetails.js"></script>
     <script src="/js/user/account_links.js"></script>
 </html>
