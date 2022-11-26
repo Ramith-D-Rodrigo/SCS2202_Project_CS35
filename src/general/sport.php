@@ -10,7 +10,7 @@
         public function getDetails($database){
             $sql = sprintf("SELECT * FROM `sport` 
             WHERE `sport_id`
-            LIKE '%s'", $database -> real_escape_string(uuid_to_bin($this -> sportID, $database)));
+            LIKE '%s'", $database -> real_escape_string($this -> sportID));
             $result = $database -> query($sql);
             return $result;
         }

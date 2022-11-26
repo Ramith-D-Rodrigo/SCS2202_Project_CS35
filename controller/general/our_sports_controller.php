@@ -23,7 +23,7 @@
             $branchName = $currBranch -> branch_name;
             array_push($branches, ['branch_name' => $branchName, 'branch_id' => $branchID]);
         }
-        array_push($returningResult, ['sport_id' => bin_to_uuid($sport_id, $connection), 'sport_name' => $row ->sport_name, 'reserve_price' => $row -> reservation_price, 'providing_branches' => $branches]);
+        array_push($returningResult, ['sport_id' => $sport_id, 'sport_name' => $row ->sport_name, 'reserve_price' => $row -> reservation_price, 'providing_branches' => $branches]);
         $result -> free_result();
     }
 

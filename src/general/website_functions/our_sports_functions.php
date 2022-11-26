@@ -7,7 +7,7 @@
     }
 
     function branchesWithThatSport($sportID, $database){
-        $sql = sprintf("SELECT DISTINCT BIN_TO_UUID(`sc`.`branch_id`, 1) AS `branch_id`,
+        $sql = sprintf("SELECT DISTINCT `sc`.`branch_id` AS `branch_id`,
         `b`.`city` AS `branch_name`
         FROM `sports_court` `sc`
         INNER JOIN `branch` `b`
