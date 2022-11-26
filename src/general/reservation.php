@@ -72,15 +72,12 @@
 
         public function cancelReservation($user_id, $database){
 
-            $uid_bin = uuid_to_bin(($user_id), $database);
-            $reserve_bin = uuid_to_bin(($this -> reservationID), $database);
-
             $sql = sprintf("UPDATE `reservation` 
             SET `status`='Cancelled'
             WHERE `reservation_id` = '%s' 
             AND `user_id` = '%s'",
-            $database -> real_escape_string($reserve_bin),
-            $database -> real_escape_string($uid_bin));
+            $database -> real_escape_string($this -> reservationID),
+            $database -> real_escape_string($user_id));
 
             $result = $database -> query($sql);
 
