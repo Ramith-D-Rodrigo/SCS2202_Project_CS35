@@ -25,8 +25,6 @@
 
     if($reservationHistory -> num_rows !== 0){  //has reservations
         while($row = $reservationHistory -> fetch_object()){    //travserse each reservation
-            $row -> reservation_id = bin_to_uuid($row -> reservation_id, $connection);  //convert the uuid
-
             $startingTime = $row -> starting_time;
             $endingTime = $row -> ending_time;
 

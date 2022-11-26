@@ -261,7 +261,7 @@ class User implements JsonSerializable{
         ON `sc`.`branch_id` = `b`.`branch_id`
         WHERE `r`.`user_id` = '%s'
         ORDER BY `r`.`date`",
-        $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
+        $database -> real_escape_string($this -> userID));
 
         $result = $database -> query($sql);
         return $result;
