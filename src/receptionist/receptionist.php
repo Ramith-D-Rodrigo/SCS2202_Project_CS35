@@ -110,7 +110,7 @@ class Receptionist{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT `user_id` AS uuid, 
+        $sql = sprintf("SELECT `user_id` 
         `username`, 
         `password`, 
         `user_role` 
@@ -132,7 +132,7 @@ class Receptionist{
         }
 
         //setting user data for session
-        $this -> receptionistID = $rows -> uuid;
+        $this -> receptionistID = $rows -> user_id;
 
         $getBranch = sprintf("SELECT `branch_id` AS brid  
         FROM `staff`  
