@@ -36,8 +36,8 @@
             'closing_time' => $branchResult -> closing_time, 
             'sport_name' => $i['sport_name'],
             'reserve_price' => $i['reserve_price'],
-            'branch_id' => bin_to_uuid($i['branch'], $connection),
-            'sport_id' => bin_to_uuid($i['sport_id'], $connection)]);
+            'branch_id' => $i['branch'],
+            'sport_id' => $i['sport_id']]);
 
             unset($branch); //remove the reference
         }
