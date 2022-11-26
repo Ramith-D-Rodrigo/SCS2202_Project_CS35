@@ -273,13 +273,13 @@ class User implements JsonSerializable{
     }
 
     public function getProfileDetails($database){   //get the profile details and store in the object
-        $detailsSql = sprintf("SELECT * FROM `user` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //user details
+        $detailsSql = sprintf("SELECT * FROM `user` WHERE `user_id` = '%s'", $database -> real_escape_string($this -> userID)); //user details
 
-        $loginSql = sprintf("SELECT * FROM `login_details` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));  //login details
+        $loginSql = sprintf("SELECT * FROM `login_details` WHERE `user_id` = '%s'", $database -> real_escape_string($this -> userID));  //login details
 
-        $medicalConcernsSql = sprintf("SELECT `medical_concern` FROM `user_medical_concern` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //medical concerns
+        $medicalConcernsSql = sprintf("SELECT `medical_concern` FROM `user_medical_concern` WHERE `user_id` = '%s'", $database -> real_escape_string($this -> userID)); //medical concerns
 
-        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contact_num` FROM `user_dependent` WHERE `owner_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //user dependents
+        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contact_num` FROM `user_dependent` WHERE `owner_id` = '%s'", $database -> real_escape_string($this -> userID)); //user dependents
 
         $detailsResult = $database -> query($detailsSql);
         $detailsrow = $detailsResult -> fetch_object();
