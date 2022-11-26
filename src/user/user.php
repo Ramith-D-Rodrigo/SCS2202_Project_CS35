@@ -157,7 +157,7 @@ class User implements JsonSerializable{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT BIN_TO_UUID(`user_id`, true) AS uuid, 
+        $sql = sprintf("SELECT `user_id`, 
         `username`, 
         `password`, 
         `user_role` 
@@ -179,13 +179,13 @@ class User implements JsonSerializable{
         }
 
         //setting user data for session
-        $this -> userID = $rows -> uuid;  
+        $this -> userID = $rows -> user_id;  
         
         //get the profile pic from the datbase and store in the object's attribute
         $sqlPic = sprintf("SELECT `profile_photo` 
         FROM `user` 
         WHERE `user_id` = '%s'",
-        $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
+        $database -> real_escape_string($this -> userID));
 
         $result = $database -> query($sqlPic);
         $picRow = $result -> fetch_object();
