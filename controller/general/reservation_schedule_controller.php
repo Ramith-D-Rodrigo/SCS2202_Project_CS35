@@ -15,15 +15,15 @@
 
     //branch id -> 0th index, sport id -> 1st index, branch location -> 2nd index, sport name -> 3rd index, opening time -> 4th index, closing time -> 5th index, reservation price -> 6th index
 
-    $branch = new Branch(uuid_to_bin($reservationPlace[0], $connection));
+    $branch = new Branch($reservationPlace[0]);
 
-    $sports_courts = $branch -> getSportCourts(uuid_to_bin($reservationPlace[1], $connection), $connection);  //get all the sports court of that branch's sport
+    $sports_courts = $branch -> getSportCourts($reservationPlace[1], $connection);  //get all the sports court of that branch's sport
 
     $allCourts = [];
 
 
     while($courtResult = $sports_courts -> fetch_object()){ //traverse all the sports courts
-        $tempCourt = new Sports_Court($courtResult -> court_id);    //no need to convert to bin as we already received uuid in binary format
+        $tempCourt = new Sports_Court($courtResult -> court_id); 
         $tempSchedule = $tempCourt -> getSchedule($connection); //get the schedule of that particular sport (all the reservations)
 
         $courtSchedule = [];    //to store each court's reservations
@@ -40,7 +40,7 @@
 
             $courtSchedule[$scheduleResult -> reservation_id] =  $reservationDetails;   //reservation details stored in courtschedule
         }
-        $allCourts[bin_to_uuid($courtResult -> court_id, $connection)] = ['schedule' => $courtSchedule, 'courtName' => $courtName];  //reservation schedule of the court is sotred in the courts array
+        $allCourts[$courtResult -> court_id] = ['schedule' => $courtSchedule, 'courtName' => $courtName];  //reservation schedule of the court is sotred in the courts array
         unset($tempCourt);
     }
     //print_r($allCourts);
