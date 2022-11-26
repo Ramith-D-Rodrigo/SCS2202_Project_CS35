@@ -110,7 +110,7 @@ class Receptionist{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT BIN_TO_UUID(`user_id`, 1) AS uuid, 
+        $sql = sprintf("SELECT `user_id` AS uuid, 
         `username`, 
         `password`, 
         `user_role` 
@@ -134,9 +134,9 @@ class Receptionist{
         //setting user data for session
         $this -> receptionistID = $rows -> uuid;
 
-        $getBranch = sprintf("SELECT BIN_TO_UUID(`branch_id`, 1) AS brid  
+        $getBranch = sprintf("SELECT `branch_id` AS brid  
         FROM `staff`  
-        WHERE `staff_id` = UUID_TO_BIN('%s',1)", 
+        WHERE `staff_id` = '%s'", 
         $database -> real_escape_string($this -> receptionistID));
 
         $brResult = $database -> query($getBranch);
@@ -146,7 +146,7 @@ class Receptionist{
 
         $getBrName = sprintf("SELECT `city`  
         FROM `branch`  
-        WHERE `branch_id` = UUID_TO_BIN('%s',1)", 
+        WHERE `branch_id` = '%s'", 
         $database -> real_escape_string($this -> branchID));
 
         $brNameResult = $database -> query($getBrName);
