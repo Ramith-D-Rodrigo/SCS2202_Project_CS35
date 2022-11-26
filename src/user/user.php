@@ -57,7 +57,7 @@ class User implements JsonSerializable{
         `user_role`,
         `is_active`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','user', '%s')",
+        ('%s','%s','%s','%s','user', '%s')",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> emailAddress),
@@ -87,7 +87,7 @@ class User implements JsonSerializable{
         `weight`,
         `profile_photo`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), NULLIF('%s', 'NULL'))",
+        ('%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), NULLIF('%s', 'NULL'))",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> firstName),
         $database -> real_escape_string($this -> lastName),
@@ -128,7 +128,7 @@ class User implements JsonSerializable{
                 (`user_id`, 
                 `medical_concern`) 
                 VALUES 
-                (UUID_TO_BIN('%s', 1),'%s')", 
+                ('%s','%s')", 
                 $database -> real_escape_string($this -> userID),
                 $database -> real_escape_string($i)));
 

@@ -57,7 +57,6 @@
     //can create a account
 
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    //hash the password
-    $userid = generateUUID($connection);    //get the uuid
 
     $username = htmlspecialchars($_POST['username'], ENT_QUOTES);
     $email = htmlspecialchars($_POST['emailAddress'], ENT_QUOTES);
@@ -67,6 +66,11 @@
     $lName = htmlspecialchars($_POST['lastName'], ENT_QUOTES);
     $bday = htmlspecialchars($_POST['birthday'], ENT_QUOTES);
     $gender = htmlspecialchars($_POST['gender'], ENT_QUOTES);
+
+    //creating userid
+    $prefix1 = substr($username, 0, 3);
+    $prefix2 = substr($lName, 0, 3);
+    $userid = uniqid($prefix1.$prefix2);
 
     if(isset($_POST['height'])){
         $height = htmlspecialchars($_POST['height'], ENT_QUOTES);

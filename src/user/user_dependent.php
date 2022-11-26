@@ -21,7 +21,7 @@ class UserDependent{
         `relationship`, 
         `contact_num`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s')", 
+        ('%s','%s','%s','%s')", 
         $database -> real_escape_string($this->ownerID), 
         $database -> real_escape_string($this->name), 
         $database -> real_escape_string($this->relationship), 
