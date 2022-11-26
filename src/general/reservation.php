@@ -15,14 +15,21 @@
         private $status;     //pending //checked_in //cancelled //declined  //completed
 
         public function onlineReservation($date, $st, $et, $people, $payment, $court, $user, $database){
-            $this -> reservationID = generateUUID($database);
+            $this -> user_id = $user;
+
+            //unique id prefixes
+            $prefix1 = "Res-";
+            $prefix2 = substr($this -> user_id, 0, 3);
+
+            $this -> reservationID = uniqid($prefix1.$prefix2);
+            
             $this -> date = $date;
             $this -> startingTime = $st;
             $this -> endingTime = $et;
             $this -> numOfPeople = $people;
             $this -> paymentAmount = $payment;
             $this -> sport_court = $court;
-            $this -> user_id = $user;
+
             $this -> status = 'Pending';
             $this -> formal_manager_id = '';
             $this -> onsite_receptionist_id = '';
@@ -31,9 +38,6 @@
         }
 
         private function create_online_reservation_entry($database){
-            $reserve_bin = uuid_to_bin($this -> reservationID, $database);
-            $court_bin = uuid_to_bin($this -> sport_court, $database);
-            $user_bin = uuid_to_bin($this -> user_id, $database);
             //echo"<br>";
             $sql = sprintf("INSERT INTO `reservation`
             (`reservation_id`, 
@@ -47,14 +51,14 @@
             `status`) 
             VALUES 
             ('%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
-            $database -> real_escape_string($reserve_bin),
+            $database -> real_escape_string($this -> reservationID),
             $database -> real_escape_string($this -> date),
             $database -> real_escape_string($this -> startingTime),
             $database -> real_escape_string($this -> endingTime),
             $database -> real_escape_string($this -> numOfPeople),
             $database -> real_escape_string($this -> paymentAmount),
-            $database -> real_escape_string($court_bin),
-            $database -> real_escape_string($user_bin),
+            $database -> real_escape_string($this -> sport_court),
+            $database -> real_escape_string($this -> user_id),
             $database -> real_escape_string($this -> status));
             //print_r($sql);
 
