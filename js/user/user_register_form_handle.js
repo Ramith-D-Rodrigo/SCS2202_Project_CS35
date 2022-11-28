@@ -148,7 +148,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
 
     removeBtn.addEventListener('click', (e)=>{
         e.preventDefault();
-        const parent = removeBtn.parentElement;
+        const parent = removeBtn.parentElement.parentElement.parentElement; //first parent is right field, grandparent is row container, 3rd one is the inputDiv
         emergencyCount--;
 
         const freedID = removeBtn.id.slice(-1);
@@ -162,13 +162,47 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
         }
     });
 
-    const breakpoint1 = document.createElement("br");
-    const breakpoint2 = document.createElement("br");
-    const nameField = document.createTextNode("Name: ");
-    const relationshipField = document.createTextNode("Relationship: ");
-    const contactNoField = document.createTextNode("Contact Number: ");
+/*     const breakpoint1 = document.createElement("br");
+    const breakpoint2 = document.createElement("br"); */
+    const nameField = document.createTextNode("Name : ");
+    const relationshipField = document.createTextNode("Relationship :");
+    const contactNoField = document.createTextNode("Contact Number :");
     
-    inputDiv.appendChild(nameField);
+    for(info = 1; info <= 3; info++){
+        const row = document.createElement("div");
+        row.className = "row-container";
+    
+        const leftField = document.createElement("div");
+        leftField.className = "left-field";
+    
+        const rightField = document.createElement("div");
+        rightField.className = "right-field";
+
+        if(info === 1){
+            leftField.appendChild(nameField);
+            rightField.appendChild(inputName);
+
+            row.appendChild(leftField);
+            row.appendChild(rightField);
+        }
+        else if(info === 2){
+            leftField.appendChild(relationshipField);
+            rightField.appendChild(inputRelationship);
+
+            row.appendChild(leftField);
+            row.appendChild(rightField);
+        }
+        else if(info === 3){
+            leftField.appendChild(contactNoField);
+            rightField.appendChild(inputContactNum);
+            rightField.appendChild(removeBtn);
+
+            row.appendChild(leftField);
+            row.appendChild(rightField);
+        }
+        inputDiv.appendChild(row);
+    }
+/*     inputDiv.appendChild(nameField);
     inputDiv.appendChild(inputName);
     inputDiv.appendChild(breakpoint1);
 
@@ -178,7 +212,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
 
     inputDiv.appendChild(contactNoField);
     inputDiv.appendChild(inputContactNum);
-    inputDiv.appendChild(removeBtn);
+    inputDiv.appendChild(removeBtn); */
 
     emergencyDetailsContainer.appendChild(inputDiv);
     if(emergencyCount == 3){
