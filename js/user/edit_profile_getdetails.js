@@ -9,6 +9,19 @@ let currentHeight = null;
 let currentEmailAddress = null;
 let currentPassword = null;
 
+function decodeHtml(str)    //function to decode escaped html special characters
+{
+    var map =
+    {
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        '&#039;': "'"
+    };
+    return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
+}
+
 
 fetch("/controller/user/edit_profile_entry_controller.php")
     .then((res) => res.json())
@@ -25,7 +38,7 @@ fetch("/controller/user/edit_profile_entry_controller.php")
         currentUserContact = data['contactNo']; //store the current value
 
         const homeAddress = document.getElementById("userHomeAddress");
-        homeAddress.innerHTML = data['homeAddress'];
+        homeAddress.innerHTML = decodeHtml(data['homeAddress']);
         currentHomeAddress = data['homeAddress'];
 
         const weight = document.getElementById("weight");
