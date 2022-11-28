@@ -1,6 +1,9 @@
 <?php
     session_start();
-    require_once("../../src/system_admin/dbconnection.php");
+    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
+        header("Location: /public/system_admin/admin_login.php");
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -111,7 +114,7 @@
             name="username"
             id="username"
             title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed"
-            value=<?php if(isset($_SESSION['username'])) echo htmlspecialchars($_SESSION['username'], ENT_QUOTES)?>>
+            >
             <br>
             
             <div>
@@ -153,6 +156,7 @@
                         echo $_SESSION['RegsuccessMsg'];
                         echo '<br>';
                         unset($_SESSION['RegsuccessMsg']);
+                        unset($_SESSION['allBranchResult']);
                     }
                 ?>
                 </div>

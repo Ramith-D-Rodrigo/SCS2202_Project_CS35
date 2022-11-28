@@ -1,6 +1,9 @@
 <?php
     require_once("../../src/general/uuid.php");
-class Receptionist{
+    require_once("../../src/general/sport_court.php");
+    require_once("../../src/system_admin/staffMember.php");
+
+class Receptionist implements StaffMember{
     private $receptionistID;
     private $firstName;
     private $lastName;
@@ -97,7 +100,7 @@ class Receptionist{
         return $result;
     }
 
-    public function registerReceptionist($database){    //public function to register the user
+    public function register($database){    //public function to register the user
         $this -> joinDate = date("Y-m-d");
         $this -> leaveDate = '';
         $loginEntry = $this -> create_login_details_entry($database);
@@ -134,7 +137,7 @@ class Receptionist{
         //setting user data for session
         $this -> receptionistID = $rows -> uuid;
 
-        $getBranch = sprintf("SELECT BIN_TO_UUID(`branch_id`, 1) AS brid  
+        $getBranch = sprintf("SELECT BIN_TO_UUID(`branch_id`, 1) AS brid    
         FROM `staff`  
         WHERE `staff_id` = UUID_TO_BIN('%s',1)", 
         $database -> real_escape_string($this -> receptionistID));
@@ -156,8 +159,28 @@ class Receptionist{
         return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details
     }
 
-    public function reqMaintenance($reason,$sportName,$courtName,$startDate,$endDate,$stfID,$database) {
+    public function branchMaintenance($reason,$startDate,$endDate,$brID,$stfID,$database) {
+        $branchQuery = sprintf("INSERT INTO `branch_maintenance` 
+        (`branch_id`,
+        `starting_date`,
+        `ending_date`,
+        `status`,
+        `message`,
+        `decision`,
+        `requested_receptionist`) VALUES 
+        (UUID_TO_BIN('%s',1),'%s','%s','pending','%s','p',UUID_TO_BIN('%s',1))",
+        $database -> real_escape_string($brID),
+        $database -> real_escape_string($startDate),
+        $database -> real_escape_string($endDate),
+        $database -> real_escape_string($reason),
+        $database -> real_escape_string($stfID));
 
+        $results = $database -> query($branchQuery);
+
+        return $results;
+    }
+    public function reqMaintenance($reason,$sportName,$courtName,$startDate,$endDate,$stfID,$database) {
+        
         $crtID = sprintf("SELECT BIN_TO_UUID(`sports_court`.`court_id`,1) AS court_id
         from `sports_court` INNER JOIN 
         `sport` ON 
@@ -173,10 +196,10 @@ class Receptionist{
         $database -> real_escape_string($sportName));
 
         $crtIDRes = $database -> query($crtID);
-        $row = $crtIDRes -> fetch_object();
-        $courtID = $row -> court_id;             //get the court id     
+        $crtIDResult = $crtIDRes -> fetch_object();
+        $courtID = $crtIDResult -> court_id;             //get the court id     
 
-        $courtQuery = sprintf("INSERT INTO court_maintenance 
+        $courtQuery = sprintf("INSERT INTO `court_maintenance` 
         (`court_id`,
         `starting_date`,
         `ending_date`,
@@ -192,12 +215,12 @@ class Receptionist{
         $database -> real_escape_string($stfID));
 
         $results = $database -> query($courtQuery);
-        if ($results === TRUE) {
-            echo "Request Submitted Successfully<br>";
-        }
-        else{
-            echo "Error<br>";
-        } 
+        // if ($results === TRUE) {
+        //     echo "Request Submitted Successfully<br>";
+        // }
+        // else{
+        //     echo "Error<br>";
+        // } 
         return $results;
     }
 
@@ -217,7 +240,7 @@ class Receptionist{
         $branchLoc = $row -> location;
         $branchEmail = $row -> email;
 
-        $branchNum = sprintf("SELECT DISTINCT `staff`.`contact_number` AS contact_number 
+        $branchNum = sprintf("SELECT DISTINCT `contact_number` AS contact_number 
         from `staff` 
         WHERE `staff`.`branch_id` = UUID_TO_BIN('%s',1) AND `staff`.`leave_date` is NULL",
         $database -> real_escape_string($branchID));
@@ -226,12 +249,28 @@ class Receptionist{
         
         
         $numArray = [];
-        while($row = $numResult -> fetch_object()){   //get the branch details
+        while($row = $numResult -> fetch_object()){   //get the branch numbers one by one
             $number = $row -> contact_number;
             array_push($numArray,$number);
         }
+
+        $branchPhotos = sprintf("SELECT  `photo`
+        from `branch_photo` 
+        WHERE `branch_id` = UUID_TO_BIN('%s',1) ",
+        $database -> real_escape_string($branchID));
+
+        $photoResult = $database -> query($branchPhotos);   //get the branch photos
+        
+        
+        $photoArray = [];
+        while($row = $photoResult -> fetch_object()){   //get the photos one by one
+            $photo = $row -> photo;
+            array_push($photoArray,$photo);
+        }
+
         $result = [];
-        array_push($result,$branchLoc,$branchEmail,$numArray);
+
+        array_push($result,$branchLoc,$branchEmail,$numArray,$photoArray);
 
         if(count($result) === 0){   //couldn't find any branch that provide the searched sport
             return ['errMsg' => "Sorry, Cannot find what you are looking For"];
@@ -240,6 +279,19 @@ class Receptionist{
         return $result;
     }
 
+    public function getAllSports($branchID,$database) {
+        $branch = new Branch(uuid_to_bin($branchID,$database));
+        $sportNames = $branch -> getAllSports($database);
+
+        return $sportNames;
+    }
+
+    public function getAllCourts($branchID,$database) {
+        $branch = new Branch(uuid_to_bin($branchID,$database));
+        $courtNames = $branch -> getAllCourts($database);
+
+        return $courtNames;
+    }
 }
 
 ?>

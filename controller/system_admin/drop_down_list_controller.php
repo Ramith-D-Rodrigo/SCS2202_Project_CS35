@@ -3,7 +3,7 @@
     require_once("../../src/system_admin/admin.php");
     require_once("../../src/system_admin/dbconnection.php");
 
-    $admin = new Admin();
+    $admin = Admin::getInstance();
     $getAllBr = $admin -> getAllBranches($connection);
 
     if(count($getAllBr) === 0) {

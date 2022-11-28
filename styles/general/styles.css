@@ -179,7 +179,17 @@ textarea{
     width: 29px;
     border-radius: 50%;
 }
+.dash-img{
+    margin: 0 5px -5px 5px;
+    height: 29px;
+    width: 29px;
+}
 
+.branch-img{
+    height: 200px;
+    width: 200px;
+    border-radius: 10%;
+}
 .success-msg{
     color: green;
     text-align: center;

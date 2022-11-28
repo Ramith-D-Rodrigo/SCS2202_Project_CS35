@@ -1,6 +1,10 @@
 
 <?php
     session_start();
+    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
+        header("Location: /public/receptionist/receptionist_login.php");
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>

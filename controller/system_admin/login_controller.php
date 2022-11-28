@@ -7,7 +7,7 @@
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $loginAdmin = new Admin();
+    $loginAdmin = Admin::getInstance();
 
     $resultmsg = $loginAdmin -> login($username, $password, $connection);
 

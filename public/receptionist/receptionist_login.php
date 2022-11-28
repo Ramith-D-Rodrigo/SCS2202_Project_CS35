@@ -1,7 +1,7 @@
 <?php
     session_start();
-    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']) && !isset($_SESSION['LogInsuccessMsg']))){  //if the user is logged in previously (not at the login time)
-        header("Location: /index.php");  //the user shouldn't be able to access the login page
+    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']) && !isset($_SESSION['LogInsuccessMsg']))){  //if the receptionist is already logged in 
+        header("Location: /public/receptionist/receptionist_dashboard.php"); //the receptionist shouldn't be able to access the login page
         exit();
     }
 ?>
@@ -18,7 +18,7 @@
 
     <body>
         <?php
-            require_once("../general/header.php");
+            require_once("dashboard_header.php");
         ?>
         <main class="body-container">
         <div class="content-box">

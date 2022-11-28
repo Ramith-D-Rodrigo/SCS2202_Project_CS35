@@ -1,7 +1,7 @@
 verbose = true; //for debugging
 
 function validateForm(event){
-    const errMsg = document.getElementById("msgbox");    //For Displaying the Error messages
+    const errMsg = document.getElementById("errmsg");    //For Displaying the Error messages
     errMsg.innerHTML = '' //empty before the validation
 
     const loginForm = document.getElementById("reqForm"); //get login form
@@ -19,64 +19,109 @@ function validateForm(event){
     }
 }
 
-function checkAll() {
-    const spName = document.getElementById("sportName");
-    const crtName = document.getElementById("courtName");
-    const crtOption = document.getElementById("courtOption");
+const spName = document.getElementById("sportName");
+const crtName = document.getElementById("courtName");
 
-    if(spName.value == 'ALL') {
-        crtOption.innerText = 'Disalbed';
-        crtName.value = 'ALL';
+spName.addEventListener('change',(e) => {
+    const errorMsg = document.getElementById('errmsg2');
+    spVal = e.target.value;
+
+    if((spVal === 'ALL' && crtName.value != 'ALL') || (spVal != 'ALL' && crtName.value === 'ALL')) {
+        errorMsg.innerHTML = "Both the Sport Name and Sport Court Have to be ALL or Neither";
+        return;
     }
-    
-}
+    errorMsg.innerHTML = "";
+})
+
+crtName.addEventListener('change',(e) => {
+    const errorMsg = document.getElementById('errmsg2');
+    crtVal = e.target.value;
+
+    if((crtVal === 'ALL' && spName.value != 'ALL') || (crtVal != 'ALL' && spName.value === 'ALL')) {
+        errorMsg.innerHTML = "Both the Sport Name and Sport Court Have to be ALL or Neither";
+        return;
+    }
+    errorMsg.innerHTML = "";
+
+})
 
 const sDate = document.getElementById("sDate");
 const eDate = document.getElementById("eDate");
 const today = new Date().toISOString().split("T")[0];
 
-const startDate = today.split("-");
-
-
-if(startDate[1]==12) {
-    startDate[0] = (parseInt(startDate[0])+1).toString();
-    startDate[1] = '1';
-}else{
-    startDate[1] = (parseInt(startDate[1])+1).toString();
-}
-const minDate = new Date(startDate).toISOString().split("T")[0];
-sDate.min = minDate;
-if(startDate[1]==12) {
-    startDate[0] = (parseInt(startDate[0])+1).toString();
-    startDate[1] = '1';
-}else{
-    startDate[1] = (parseInt(startDate[1])+1).toString();
-}
-const maxDate = new Date(startDate).toISOString().split("T")[0];
-sDate.max = maxDate;
-
-const endDate = today.split("-");
-if(endDate[1]==11) {
-    endDate[0] = (parseInt(endDate[0])+1).toString();
-    endDate[1] = '1';
-}else if(endDate[1]==12){
-    endDate[0] = (parseInt(endDate[0])+1).toString();
-    endDate[1] = '2';
-}else{
-    endDate[1] = (parseInt(endDate[1])+2).toString();
-}
-const eMinDate = new Date(endDate).toISOString().split("T")[0];
-eDate.min = eMinDate;
-
-// if(endDate[1]==11) {
-//     endDate[0] = (parseInt(endDate[0])+1).toString();
-//     endDate[1] = '1';
-if(endDate[1]==12){
-    endDate[0] = (parseInt(endDate[0])+1).toString();
-    endDate[1] = '1';
-}else{
-    endDate[1] = (parseInt(endDate[1])+1).toString();
+function setMonths(months) {
+    let result = new Date(today);
+    result.setMonth(result.getMonth() + months);
+    return result;
 }
 
-const eMaxDate = new Date(endDate).toISOString().split("T")[0];
-eDate.max = eMaxDate;
+const sminDate = setMonths(1).toISOString().split("T")[0];
+const smaxDate = setMonths(2).toISOString().split("T")[0];
+
+sDate.min = sminDate;
+sDate.max = smaxDate;
+
+const eminDate = sminDate;
+const emaxDate = setMonths(3).toISOString().split("T")[0];
+
+eDate.min = eminDate;
+eDate.max = emaxDate;
+
+sDate.addEventListener('change',(e) => {
+    const errorMsg = document.getElementById('errmsg');
+    if(eDate.value === ''){
+        return;
+    }
+
+    const startDate = e.target.value;
+    stDate = new Date(startDate)
+    const endDate = eDate.value;
+    enDate = new Date(endDate);
+
+    dayDiff = (enDate.getTime()-stDate.getTime())/(1000*3600*24);   //get the difference of days
+    // console.log(dayDiff);
+
+    if(dayDiff <0) {
+        errorMsg.innerHTML = "Invalid Date Range";
+        return;
+    }
+    if(dayDiff <7) {
+        errorMsg.innerHTML = "Date Range should be atleast for 7 days";
+        return;
+    }
+    if(dayDiff > 31){
+        errorMsg.innerHTML = "Date Range should be atmost for 30 days";
+        return;
+    }
+    errorMsg.innerHTML = "";
+})
+
+eDate.addEventListener('change',(e) => {
+    const errorMsg = document.getElementById('errmsg');
+    if(sDate.value === ''){
+        return;
+    }
+
+    const endDate = e.target.value;
+    enDate = new Date(endDate)
+    const startDate = sDate.value;
+    stDate = new Date(startDate);
+
+    dayDiff = (enDate.getTime()-stDate.getTime())/(1000*3600*24);   //get the difference of days
+    // console.log(dayDiff);
+
+    if(dayDiff <0) {
+        errorMsg.innerHTML = "Invalid Date Range";
+        return
+    }
+    if(dayDiff <7) {
+        errorMsg.innerHTML = "Date Range should be atleast for 7 days";
+        return;
+    }
+    if(dayDiff > 31){
+        errorMsg.innerHTML = "Date Range should be atmost for 30 days";
+        return;
+    }
+
+    errorMsg.innerHTML = "";
+})
