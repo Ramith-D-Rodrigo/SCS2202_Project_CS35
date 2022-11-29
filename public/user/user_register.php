@@ -189,7 +189,7 @@
                             Emergency Contact Details:
                             <div class="row-container">
                                 <div class="left-field">Name :</div>
-                                <div class="right-field"><input type="text" name="name1" required value=<?php if(isset($_SESSION['name1'])) echo htmlspecialchars($_SESSION['name1'], ENT_QUOTES) ?>></div>
+                                <div class="right-field"><input type="text" name="name1" pattern ="[a-zA-Z ]+" required value=<?php if(isset($_SESSION['name1'])) echo htmlspecialchars($_SESSION['name1'], ENT_QUOTES) ?>></div>
                             </div>
 
                             <div class="row-container">

@@ -115,6 +115,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     inputName.setAttribute('type', 'text');
     inputName.setAttribute('name', 'name' + currID);
     inputName.setAttribute('required', '');
+    inputName.setAttribute('pattern', '[a-zA-Z ]+');
 
     const inputRelationship = document.createElement("select");
     inputRelationship.setAttribute('name', 'relationship' + currID);
