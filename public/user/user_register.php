@@ -167,7 +167,7 @@
                         <div class="row-container">
                             <div class="left-field">Confirm Password :</div>
                             <div class="right-field">
-                                <input type="password" required> <button class="togglePassword"> Show Password</button>
+                                <input type="password" required name="passwordConfirm"> <button class="togglePassword"> Show Password</button>
                             </div>
                         </div>
 
