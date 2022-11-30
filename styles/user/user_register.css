@@ -33,3 +33,7 @@
     width: 50%;
     margin-right: 10px;
 }
+
+.right-field > input, textarea{
+    max-width:100%;
+}
