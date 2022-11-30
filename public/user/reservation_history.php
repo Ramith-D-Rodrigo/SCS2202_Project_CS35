@@ -25,7 +25,7 @@
             require_once("../../public/general/header.php");
         ?>
         <main>
-            <div class="content-box">
+            <div class="content-box" style="overflow-x:auto;">
                 <?php
                     if(!isset($_SESSION['reservationHistory'])){    //user has not made any reservations ?>
                         <div class="err-msg">
