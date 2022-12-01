@@ -3,30 +3,23 @@
     require_once("../../src/user/dbconnection.php");
     require_once("../../src/general/website_functions/our_branches_functions.php");
     require_once("../../src/general/branch.php");
+    require_once("../../src/manager/manager.php");
     
-    $allBranches = getAllBranches($connection);
+    $allBranches = getAllBranches($connection); //get all branch IDs (in an array)
 
     $branchInfo = [];
     
-    while($row = $allBranches -> fetch_object()){   //travser all the branches (result)
+    foreach($allBranches as $branchID){   //travser all the branch IDs
 
-        $tempBranch = new Branch($row -> branch_id);    //create new branch object
+        $tempBranch = new Branch($branchID);    //create new branch object
 
-        $branch_photos = $tempBranch -> getBranchPictures($connection); //get branch photos
+        $tempBranch -> getDetails($connection);
 
-        $result = $tempBranch -> getDetails($connection);
-        $currBranchInfo = $result -> fetch_object();
+        array_push($branchInfo, $tempBranch);   //push to array;
 
-        $tempBranch -> setDetails(city: $currBranchInfo -> city, 
-            address: $currBranchInfo -> address, 
-            email: $currBranchInfo -> branch_email, 
-            opening_time: $currBranchInfo -> opening_time, 
-            closing_time: $currBranchInfo -> closing_time);
-
-        
-        $branchJSON = json_encode($tempBranch);
-        array_push($branchInfo, $branchJSON);   //push to array;
+        unset($tempBranch);
     }
 
+    $connection -> close();
     echo json_encode($branchInfo);
 ?>

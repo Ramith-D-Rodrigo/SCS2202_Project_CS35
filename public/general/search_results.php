@@ -25,45 +25,13 @@
             </div>
             <div style="display:flex; flex-direction:row; justify-content:space-between">
                 <div class="content-box" style="flex:auto;">
-                <?php
-                if(isset($_SESSION['searchErrorMsg'])){
-                ?>      <div class="err-msg"><?php echo $_SESSION['searchErrorMsg']; ?></div>
-                <?php
-                        //unset($_SESSION['searchErrorMsg']); //Unset for future searching
-                }
-                else if(isset($_SESSION['searchResult'])){
-                    $j = 1; //for each result
-                    foreach($_SESSION['searchResult'] as $result){ //traverse the result
-                ?>
-                        <form class ="search_result" action="/controller/general/reservation_schedule_controller.php" method="post">
-                            Branch : <?php echo $result['location']; ?>
-                            <br>
-                            Sport : <?php echo $result['sport_name']; ?>
-                            <br>
-                            Number of Courts : <?php echo $result['num_of_courts']; ?>
-                            <br>
-                            Reservation Price : <?php echo $result['reserve_price']; ?> per hour
-                            <button style="margin-left:10px" 
-                            type ="submit" 
-                            name ="reserveBtn" 
-                            value="<?php echo "result".$j?>">Make a Reservation</button>
-                        </form>
-                    <?php
-                        $_SESSION['result'.$j] = [$result['branch_id'],$result['sport_id'],$result['location'],$result['sport_name'],$result['opening_time'],$result['closing_time'],$result['reserve_price']];
-                        $j++;    //for the next result
-                    }
-                    ?>
+                    <div class="err-msg" id="err-msg"><?php echo $_SESSION['searchErrorMsg']; ?></div>
+
                     </div>
                     <div class="content-box" style="flex:auto; text-align:center">
                             Coaches
 
                     </div>
-                    <?php
-                            //print_r($_SESSION['searchResult']);
-                            //unset($_SESSION['searchResult']);    //unset for future searching
-
-                        }
-                    ?>
             </div>
 
         </main>
@@ -72,4 +40,5 @@
         ?>
     </body>
     <script src="/js/user/account_links.js"></script>
+    <script src="/js/general/search_results.js"></script>
 </html>

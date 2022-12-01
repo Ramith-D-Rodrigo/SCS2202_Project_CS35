@@ -7,44 +7,43 @@
     require_once("../../src/general/uuid.php");
 
     $user = new User();
-    $sportName = htmlspecialchars($_POST['sportName']);
+    $sportName = htmlspecialchars($_GET['sportName']);
 
     $result = $user -> searchSport($sportName, $connection);  //search the sport
 
     if(isset($result['errMsg'])){   //no sport was found
-        $_SESSION['searchErrorMsg'] = $result['errMsg'];
+       echo json_encode($result);
     }
     else{
-        unset($_SESSION['searchErrorMsg']);
         $final_result = [];
         foreach($result as $i){ //traverse the search result array
             $branch = new Branch($i['branch']);
-            $branchDetails = $branch -> getDetails($connection);    //get branch details
-            $branchResult = $branchDetails -> fetch_object();
+            $branch -> getDetails($connection);    //get branch details
+
+            $courts = $branch -> getSportCourts($i['sport_id'], $connection);    //get the number of courts of the current considering branch
+
+            $branchJSON = json_encode($branch);
+            $neededInfo = json_decode($branchJSON, true);
+
+            unset($neededInfo['manager']);  //do not need manager and receptionist info
+            unset($neededInfo['receptionist']);
             
-            if($branchResult -> request_status === 'p'){    //branch is still a pending request from the owner
-                unset($branch);
-                continue;
-            }
+            //other needed info
+            $neededInfo['num_of_courts'] = sizeof($courts);
+            $neededInfo['reserve_price'] = $i['reserve_price'];
+            $neededInfo['sport_name'] = $i['sport_name'];
+            $neededInfo['sport_id'] = $i['sport_id'];
+            
+            array_push($final_result, $neededInfo);
 
-            $numOfCourts = $branch -> getSportCourts($i['sport_id'], $connection);    //get the number of courts of the current considering branch
-
-            array_push($final_result, 
-            ['location' => $branchResult -> city, 
-            'num_of_courts' => $numOfCourts -> num_rows,
-            'opening_time' => $branchResult -> opening_time,
-            'closing_time' => $branchResult -> closing_time, 
-            'sport_name' => $i['sport_name'],
-            'reserve_price' => $i['reserve_price'],
-            'branch_id' => $i['branch'],
-            'sport_id' => $i['sport_id']]);
-
+            unset($neededInfo);
+            unset($courts);
             unset($branch); //remove the reference
         }
 
         $_SESSION['searchResult'] = $final_result;
+        echo json_encode($_SESSION['searchResult']);
     }
-    //print_r($_SESSION['searchResult']);
-    header("Location: /public/general/search_results.php");
+    //header("Location: /public/general/search_results.php");
     $connection -> close();
 ?>
