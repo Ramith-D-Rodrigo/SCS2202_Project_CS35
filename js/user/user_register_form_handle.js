@@ -93,7 +93,7 @@ const emergencyDetailsBtn = document.getElementById("emergencyDetailsbtn");
 var emergencyCount = 1;   //no of emergency details of the user
 let emergencydetailID = [];
 
-for(i = 2; i <=3; i++){ //array of medicalIDs
+for(i = 2; i <=3; i++){ //array of emergencyIDs
     emergencydetailID.push(i);
 }
 if(verbose){
@@ -108,8 +108,8 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     e.preventDefault(); //so that the page is not going to refresh
 
     const inputDiv = document.createElement("div"); //new emergency concern
-    //inputDiv.setAttribute('id', 'emergencydetail' + emergencyCount);
     const currID = emergencydetailID.pop();    //Assigning ID
+    inputDiv.setAttribute('id', 'emergencydetail' + currID);
 
     const inputName = document.createElement("input");
     inputName.setAttribute('type', 'text');
@@ -159,7 +159,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
         }
         parent.remove();
         if(emergencyCount < 3){
-            emergencyDetailsBtn.style.display = 'block';
+            emergencyDetailsBtn.parentElement.style.display = 'block';
         }
     });
 
@@ -217,7 +217,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
 
     emergencyDetailsContainer.appendChild(inputDiv);
     if(emergencyCount == 3){
-        emergencyDetailsBtn.style.display = 'none';
+        emergencyDetailsBtn.parentElement.style.display = 'none';   //hide the whole div
     }
 });
 

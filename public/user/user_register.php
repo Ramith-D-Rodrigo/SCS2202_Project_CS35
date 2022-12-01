@@ -167,7 +167,7 @@
                         <div class="row-container">
                             <div class="left-field">Confirm Password :</div>
                             <div class="right-field">
-                                <input type="password" required name="passwordConfirm"> <button class="togglePassword"> Show Password</button>
+                                <input type="password" id="passwordConfirm" required name="passwordConfirm"> <button class="togglePassword"> Show Password</button>
                             </div>
                         </div>
 
@@ -187,56 +187,57 @@
 
                         <div id="emergencyDetails">
                             Emergency Contact Details:
-                            <div class="row-container">
-                                <div class="left-field">Name :</div>
-                                <div class="right-field"><input type="text" name="name1" pattern ="[a-zA-Z ]+" required value=<?php if(isset($_SESSION['name1'])) echo htmlspecialchars($_SESSION['name1'], ENT_QUOTES) ?>></div>
-                            </div>
-
-                            <div class="row-container">
-                                <div class="left-field">Relationship :</div>
-                                <div class="right-field">
-                                    <select required name="relationship1">
-                                        <option value="">Choose One</option>
-                                        <option value="Mother" <?php if(isset($_SESSION['relationship1'])){
-                                                if($_SESSION['relationship1'] === "Mother"){
-                                                    echo 'selected';
-                                                }
-                                            }?>>Mother</option>
-                                        <option value="Father" <?php if(isset($_SESSION['relationship1'])){
-                                                if($_SESSION['relationship1'] === "Father"){
-                                                    echo 'selected';
-                                                }
-                                            }?>>Father</option>
-                                        <option value="Sibling 1" <?php if(isset($_SESSION['relationship1'])){
-                                                if($_SESSION['relationship1'] === "Sibling 1"){
-                                                    echo 'selected';
-                                                }
-                                            }?>>Sibling 1</option>
-                                        <option value="Sibling 2" <?php if(isset($_SESSION['relationship1'])){
-                                                if($_SESSION['relationship1'] === "Sibling 2"){
-                                                    echo 'selected';
-                                                }
-                                            }?>>Sibling 2</option>
-                                        <option value="Friend 1" <?php if(isset($_SESSION['relationship1'])){
-                                                if($_SESSION['relationship1'] === "Friend 1"){
-                                                    echo 'selected';
-                                                }
-                                            }?>>Friend 1</option>
-                                        <option value="Friend 2" <?php if(isset($_SESSION['relationship1'])){
-                                                if($_SESSION['relationship1'] === "Friend 2"){
-                                                    echo 'selected';
-                                                }
-                                            }?>>Friend 2</option>
-                                        <option value="Partner" <?php if(isset($_SESSION['relationship1'])){
-                                                if($_SESSION['relationship1'] === "Partner"){
-                                                    echo 'selected';
-                                                }
-                                            }?>>Partner</option>
-                                    </select>
+                            <div id="emergencydetail1">
+                                <div class="row-container">
+                                    <div class="left-field">Name :</div>
+                                    <div class="right-field"><input type="text" name="name1" pattern ="[a-zA-Z ]+" required value=<?php if(isset($_SESSION['name1'])) echo htmlspecialchars($_SESSION['name1'], ENT_QUOTES) ?>></div>
                                 </div>
-                            </div>
-                            
-                            <div class="row-container">
+
+                                <div class="row-container">
+                                    <div class="left-field">Relationship :</div>
+                                    <div class="right-field">
+                                        <select required name="relationship1">
+                                            <option value="">Choose One</option>
+                                            <option value="Mother" <?php if(isset($_SESSION['relationship1'])){
+                                                    if($_SESSION['relationship1'] === "Mother"){
+                                                        echo 'selected';
+                                                    }
+                                                }?>>Mother</option>
+                                            <option value="Father" <?php if(isset($_SESSION['relationship1'])){
+                                                    if($_SESSION['relationship1'] === "Father"){
+                                                        echo 'selected';
+                                                    }
+                                                }?>>Father</option>
+                                            <option value="Sibling 1" <?php if(isset($_SESSION['relationship1'])){
+                                                    if($_SESSION['relationship1'] === "Sibling 1"){
+                                                        echo 'selected';
+                                                    }
+                                                }?>>Sibling 1</option>
+                                            <option value="Sibling 2" <?php if(isset($_SESSION['relationship1'])){
+                                                    if($_SESSION['relationship1'] === "Sibling 2"){
+                                                        echo 'selected';
+                                                    }
+                                                }?>>Sibling 2</option>
+                                            <option value="Friend 1" <?php if(isset($_SESSION['relationship1'])){
+                                                    if($_SESSION['relationship1'] === "Friend 1"){
+                                                        echo 'selected';
+                                                    }
+                                                }?>>Friend 1</option>
+                                            <option value="Friend 2" <?php if(isset($_SESSION['relationship1'])){
+                                                    if($_SESSION['relationship1'] === "Friend 2"){
+                                                        echo 'selected';
+                                                    }
+                                                }?>>Friend 2</option>
+                                            <option value="Partner" <?php if(isset($_SESSION['relationship1'])){
+                                                    if($_SESSION['relationship1'] === "Partner"){
+                                                        echo 'selected';
+                                                    }
+                                                }?>>Partner</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="row-container">
                                     <div class="left-field">Contact Number :</div>
                                     <div class="right-field">
                                         <input 
@@ -247,11 +248,16 @@
                                             pattern="[0-9]{10,11}" 
                                             value=<?php if(isset($_SESSION['emgcontactNum1'])) echo htmlspecialchars($_SESSION['emgcontactNum1'], ENT_QUOTES) ?>>
                                     </div>
+                                </div>
                             </div>
+                        </div>
+
+                        <div>
                             Want to Add More? (Maximum of 3)
                             <br>
                             <button id="emergencyDetailsbtn">Add More</button>
                         </div>
+                        
                         <div id="errmsg" class="err-msg"><?php
                                 if(isset($_SESSION['emailError'])){
                                     echo $_SESSION['emailError'];

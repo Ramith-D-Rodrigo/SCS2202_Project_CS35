@@ -81,10 +81,12 @@
                 }
             }
             else if($i === 'height' || $i === 'weight'){
-                if(!preg_match("/^[1-9][0-9]*(?:\.[1-9][0-9]*)*$/", $_POST[$i])){   //doesn't match the pattern
-                    $_SESSION['RegUnsuccessMsg'] = 'Height/Weight Error';
-                    $validationErrFlag = true;
-                    break;
+                if($_POST[$i] !== ''){  //has entered some value
+                    if(!preg_match("/^[1-9][0-9]*(?:\.[1-9][0-9]*)*$/", $_POST[$i])){   //doesn't match the pattern
+                        $_SESSION['RegUnsuccessMsg'] = 'Height/Weight Error';
+                        $validationErrFlag = true;
+                        break;
+                    }
                 }
             }
             else if($i === 'username'){ //username validation
