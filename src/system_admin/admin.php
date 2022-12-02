@@ -1,9 +1,18 @@
 <?php
+require_once("../../src/system_admin/staff.php");
+
 class Admin{
+
+    private static $admin;
     private $adminID;
 
-    public function getInstance() {
-        return $this;
+    private function __construct() {}
+
+    public static function getInstance() {
+        if(!isset(self::$admin)){
+            $admin = new Admin();
+        }
+        return $admin;
     }
 
     public function getAdminID(){    //adminID getter
@@ -12,11 +21,11 @@ class Admin{
 
     public function login($username, $password, $database){
         $sql = sprintf("SELECT `user_id`
-        `username`, 
-        `password`, 
-        `user_role` 
-        FROM `login_details`  
-        WHERE `username` = '%s'", 
+        `username`,
+        `password`,
+        `user_role`
+        FROM `login_details`
+        WHERE `username` = '%s'",
         $database -> real_escape_string($username));
 
         $result = $database -> query($sql);
@@ -33,9 +42,18 @@ class Admin{
         }
 
         //setting admin data for session
-        $this -> adminID = $rows -> user_id;    
+        $this -> adminID = $rows -> user_id;
 
-        return ["Successfully Logged In", $rows -> user_role, $rows -> username];  //return the message and role
+        return ["Successfully Logged In", $rows -> user_role, $rows -> username];  //return the message, user role and username
+    }
+
+    public function registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$database) {
+        $staffMember = new Staff();
+        $staffMember = $staffMember -> getStaffMemeber($staffRole);
+        $staffMember -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
+
+        return $staffMember -> register($database);
+
     }
 
     public function getAllBranches($database){

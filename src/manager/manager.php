@@ -1,6 +1,7 @@
 <?php
     require_once("../../src/general/uuid.php");
-class Manager{
+    require_once("../../src/system_admin/staffMember.php");
+class Manager implements StaffMember{
     private $managerID;
     private $firstName;
     private $lastName;
@@ -94,7 +95,7 @@ class Manager{
         return $result;
     }
 
-    public function registerManager($database){    //public function to register the user
+    public function register($database){    //public function to register the user
         $this -> joinDate = date("Y-m-d");
         $this -> leaveDate = '';
         $loginEntry = $this -> create_login_details_entry($database);

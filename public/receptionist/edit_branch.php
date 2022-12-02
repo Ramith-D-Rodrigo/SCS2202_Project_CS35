@@ -1,5 +1,9 @@
 <?php
     session_start();
+    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
+        header("Location: /public/receptionist/receptionist_login.php");
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +24,12 @@
         <div class="content-box">
             <?php
                 if(isset($_SESSION['searchErrorMsg'])){
-            ?>      <div class="err-msg"><?php echo $_SESSION['searchErrorMsg']; ?></div>
+            ?>      <div class="err-msg">
+                    <?php 
+                        echo $_SESSION['searchErrorMsg']; 
+                        unset($_SESSION['searchErrorMsg']);
+                    ?>
+                    </div>
             <?php
                 }
                 else if(isset($_SESSION['searchResult'])){
@@ -29,7 +38,8 @@
                     <form class ="edit_branch" action="/controller/receptionist/edit_branch_controller.php" method="post">
                         Branch Location: <output> <?php echo $_SESSION['searchResult'][0]; ?> </output>
                         <br>
-                        Branch Contact Number(s) :  <?php 
+                        Branch Contact Number(s) :  
+                        <?php 
                         $numArray =  $_SESSION['searchResult'][2];
                         foreach($numArray as $number) {
                             ?> <output> <?php echo $number; ?> </output> <?php
@@ -42,7 +52,14 @@
                         <button type ="submit" 
                         name ="ChangeBtn"> Change </button>
                         <br>
-                        Branch Photos : 
+                        Branch Photos :
+                        <br>
+                        <?php 
+                        $photoArray =  $_SESSION['searchResult'][3];
+                        foreach($photoArray as $photo) {
+                            ?> <img class="branch-img" src= <?php echo $photo; ?>> <?php
+                        }
+                        ?>  
                         <br>
                         
                         <button style="margin-left:10px" 

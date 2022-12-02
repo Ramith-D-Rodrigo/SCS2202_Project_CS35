@@ -4,10 +4,12 @@
     require_once("../../src/receptionist/dbconnection.php");
     require_once("../../src/general/branch.php");
     require_once("../../src/general/uuid.php");
+    require_once("../../src/system_admin/staff.php");
 
-    $branch = new Branch(uuid_to_bin($_SESSION['branchid'],$connection));
+    $staffMember = new Staff();
+    $receptionist = $staffMember -> getStaffMemeber($_SESSION['userrole']);
 
-    $spNames = $branch -> getAllSports($_SESSION['userid'],$connection);
+    $spNames = $receptionist -> getAllSports($_SESSION['branchid'],$connection);
    
     if(count($spNames)=== 0) {
         array_push($spNames,['errMsg' => "Sorry, Cannot find what you are looking For"]);
@@ -22,7 +24,7 @@
     }
     //print_r($_SESSION['searchResult']);
 
-    $courtNames = $branch -> getAllCourts($connection);
+    $courtNames = $receptionist -> getAllCourts($_SESSION['branchid'],$connection);
 
     if(count($courtNames)=== 0) {
         array_push($courtNames,['errMsg' => "Sorry, Cannot find what you are looking For"]);

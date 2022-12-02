@@ -20,6 +20,7 @@
             $_SESSION[$i] = $_POST[$i];
         }
     }
+
     
     //Checking if the account already exists
 
@@ -57,7 +58,7 @@
     $branchName = htmlspecialchars($_POST['branchName'], ENT_QUOTES);
     $staffRole = htmlspecialchars($_POST['staffRole'], ENT_QUOTES);
 
-    if($staffRole === 'Receptionist') {
+    if($staffRole === 'receptionist') {
         $hasReceptionist = checkReceptionist($branchName,$connection);
 
         if($hasReceptionist -> num_rows > 0){    //receptionist already exists
@@ -103,33 +104,23 @@
     
     
 
-    $admin = new Admin();
+    $admin = Admin::getInstance();
     $branchID = $admin -> getBranchID($branchName,$connection);
     
     $result = false;
-    if($staffRole === 'Receptionist') {
-        $new_receptionist = new Receptionist();
-        $new_receptionist -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
-        $result = $new_receptionist -> registerReceptionist($connection);
-    }
-    else {                 
-        $new_manager = new Manager();
-        $new_manager -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
-        $result = $new_manager -> registerManager($connection);
-    }
+    $result = $admin -> registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$connection);
     
-
     if($result === TRUE){   //successfully registered
             echo "Successfully Registered";
-        // foreach($inputFields as $i){    //store session details
-        //     if(isset($_SESSION[$i])){   //unsetting input values
-        //         session_unset($i);
-        //     }
-        // } 
-        session_unset(); //free all current session variables 
+        foreach($inputFields as $i){    //store session details
+            if(isset($_SESSION[$i])){   //unsetting input values
+                session_unset($i);
+            }
+        } 
+        // session_unset(); free all current session variables 
 
         $_SESSION['RegsuccessMsg'] = 'Registered Successfully';
-        header("Location: /public/system_admin/admin_dashboard.php");
+        header("Location: /public/system_admin/staff_register.php");
     }
 
     $connection -> close(); //close the database connection
