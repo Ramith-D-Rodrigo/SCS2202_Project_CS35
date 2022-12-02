@@ -12,7 +12,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Receptionist's Dashboard</title>
-  <link rel="stylesheet" href="/styles/receptionist/receptionist_dashboard.css" />
+  <link rel="stylesheet" href="/styles/receptionist/receptionist.css" />
   <link rel="stylesheet" href="/styles/general/styles.css" />
 </head>
 <body>
@@ -39,7 +39,7 @@
                 <div> View Profiles</div> 
                 <div> 
                     <button> View Coach Profiles </button> 
-                    <button> View User Profiles   </button> 
+                    <button onclick="window.location.href='/controller/receptionist/view_sProfiles_controller.php'"> View User Profiles   </button> 
                 </div>
             </div>
             <div class=tabs>

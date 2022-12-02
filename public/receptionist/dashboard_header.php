@@ -14,6 +14,12 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/receptionist/edit_branch.php'){  //edit branch
                     echo "Edit Branch";
                 }
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_user_profiles.php'){  //edit branch
+                    echo "View User Profiles";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/user_profile.php'){  //edit branch
+                    echo "User Profile";
+                }
             ?>
         </div>
         <div style="align-items:center;">

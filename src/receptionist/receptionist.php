@@ -1,7 +1,9 @@
 <?php
     require_once("../../src/general/uuid.php");
     require_once("../../src/general/sport_court.php");
+    require_once("../../src/general/branch.php");
     require_once("../../src/system_admin/staffMember.php");
+    require_once("../../src/user/user.php");
 
 class Receptionist implements StaffMember{
     private $receptionistID;
@@ -291,6 +293,44 @@ class Receptionist implements StaffMember{
         $courtNames = $branch -> getAllCourts($database);
 
         return $courtNames;
+    }
+
+    public function getUserProfiles($database) {
+        $userProResult = $database -> query("SELECT `first_name`,`last_name`,`contact_num`,`profile_photo` FROM `user`");
+        $profileResult = [];
+        while($row = $userProResult->fetch_object()){   //get profiles one by one
+            array_push($profileResult,['fName' => $row->first_name,'lName' => $row ->last_name, 'contactN' => $row -> contact_num, 'profile' => $row->profile_photo]);
+        }
+
+        return $profileResult;
+    }
+
+    public function getWantedUserProfile($fName,$lName,$contactN,$database) {
+        $findUser = sprintf("SELECT * FROM `user` WHERE `first_name` = '%s' 
+        AND `last_name` = '%s' AND `contact_num` = '%s'",
+        $database -> real_escape_string($fName),
+        $database -> real_escape_string($lName),
+        $database -> real_escape_string($contactN));
+
+        $user = $database -> query($findUser) -> fetch_Object() ;  //get the user id of the particular user
+        // $user = new User('uid:$userID');
+        // $user = $user -> getProfileDetails($database);
+        $medicalConcernsSql = sprintf("SELECT `medical_concern` FROM `user_medical_concern` WHERE `user_id` = '%s'", 
+        $database -> real_escape_string($user -> user_id)); //medical concerns
+
+        $medicalConcernResult = $database -> query($medicalConcernsSql);
+        $medicalConcernsArr = $medicalConcernResult -> fetch_all(MYSQLI_ASSOC);
+
+        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contact_num` FROM `user_dependent` WHERE `owner_id` = '%s'", 
+        $database -> real_escape_string($user -> user_id)); //user dependents
+
+        $dependentResult = $database -> query($dependentsSql);
+        $dependentArr = $dependentResult -> fetch_all(MYSQLI_ASSOC);
+
+        $allInfo = [];
+        array_push($allInfo,$user,$medicalConcernsArr,$dependentArr);
+
+        return $allInfo;
     }
 }
 
