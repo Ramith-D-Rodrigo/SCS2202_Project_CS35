@@ -24,14 +24,7 @@
                     </form>
             </div>
             <div style="display:flex; flex-direction:row; justify-content:space-between">
-                <div class="content-box" style="flex:auto;">
-                    <div class="err-msg" id="err-msg"><?php echo $_SESSION['searchErrorMsg']; ?></div>
-
-                    </div>
-                    <div class="content-box" style="flex:auto; text-align:center">
-                            Coaches
-
-                    </div>
+                <div class="content-box" style="flex:auto;" id="searchResult"></div>
             </div>
 
         </main>

@@ -1,55 +1,61 @@
-const errorMsgDiv = document.getElementById("err-msg");
-const sportName = document.URL.split("?")[1];   //get the sportName for get request
+const url = new URL(window.location);   //get the url
+const params = new URLSearchParams(url.search); //search parameters
+//console.log(params);
 
+const sportName = params.get("sportName");
+//console.log(sportName);
+const resultContainer = document.getElementById("searchResult");
 
-fetch("../../controller/general/search_controller.php?".concat(sportName))
+fetch("../../controller/general/search_controller.php?sportName=".concat(sportName))    //call the controller
     .then((res) => res.json())
     .then((data) => {
         console.log(data);
-        if(data['errMsg'] !== undefined){
+        if(data['errMsg'] !== undefined){   //no sport was found
+            const errorMsgDiv = document.createElement("div");
+            errorMsgDiv.className = "err-msg";
+            errorMsgDiv.id = "err-msg";
             errorMsgDiv.innerHTML = data['errMsg'];
+            resultContainer.appendChild(errorMsgDiv);
         }  
         else{
-            for(i = 0; i < data.length; i++){
+            for(i = 0; i < data.length; i++){   //for each branch result
                 const form = document.createElement("form");
                 form.className = "search_result";
-                form.action = "/controller/general/reservation_schedule_controller.php";
-                form.method = "post";
+                form.action = "/public/general/reservation_schedule.php";
+                form.method = "get";
+
+                const sportDiv = document.createElement("div");
+                sportDiv.innerHTML = "Sport : "+ data[i].sport_name;
+                form.appendChild(sportDiv);
 
                 const cityDiv = document.createElement("div");
                 cityDiv.innerHTML = "Branch : " + data[i].city;
                 form.appendChild(cityDiv);
 
-                const sportDiv = document.createElement("div");
-                sportDiv.innerHTML = "Sport : "+ data[i].sport_name;
-                form.appendChild("sportDiv");
-
                 const courtCountDiv = document.createElement("div");
                 courtCountDiv.innerHTML = "Number of Courts : "+ data[i].num_of_courts;
-                form.appendChild("courtCountDiv");
+                form.appendChild(courtCountDiv);
 
                 const reservationPrice = document.createElement("div");
-                reservationPrice.innerHTML = "Reservation Price : "+ data[i].reserve_price;
-                form.appendChild("courtCountDiv");
+                reservationPrice.innerHTML = "Reservation Price : Rs. "+ data[i].reserve_price;
+                form.appendChild(reservationPrice);
 
                 const button = document.createElement("button");
-                button.type = "submit";
                 button.name = "reserveBtn";
-                button.value = "result"
+                button.value = [data[i].branchID, data[i].sport_id];
 
+                button.innerHTML = "Make a Reservation";
+                form.appendChild(button);
+
+                resultContainer.appendChild(form);
             }
-            <form class ="search_result" action="/controller/general/reservation_schedule_controller.php" method="post">
-            Branch : <?php echo $result['location']; ?>
-            <br>
-            Sport : <?php echo $result['sport_name']; ?>
-            <br>
-            Number of Courts : <?php echo $result['num_of_courts']; ?>
-            <br>
-            Reservation Price : <?php echo $result['reserve_price']; ?> per hour
-            <button style="margin-left:10px" 
-            type ="submit" 
-            name ="reserveBtn" 
-            value="<?php echo "result".$j?>">Make a Reservation</button>
-            </form>
+            //creating coach content box
+            const coachResults = document.createElement("div");
+            coachResults.style = "flex:auto; text-align:center";
+            coachResults.id = "coachResults";
+            coachResults.className = "content-box";
+            coachResults.innerHTML = "Coaches";
+            console.log(coachResults);
+            resultContainer.parentNode.appendChild(coachResults);
         }
-    })
+    });
