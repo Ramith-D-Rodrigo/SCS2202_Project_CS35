@@ -58,7 +58,7 @@
     $branchName = htmlspecialchars($_POST['branchName'], ENT_QUOTES);
     $staffRole = htmlspecialchars($_POST['staffRole'], ENT_QUOTES);
 
-    if($staffRole === 'Receptionist') {
+    if($staffRole === 'receptionist') {
         $hasReceptionist = checkReceptionist($branchName,$connection);
 
         if($hasReceptionist -> num_rows > 0){    //receptionist already exists

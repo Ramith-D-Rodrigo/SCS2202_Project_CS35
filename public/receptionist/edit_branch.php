@@ -24,7 +24,12 @@
         <div class="content-box">
             <?php
                 if(isset($_SESSION['searchErrorMsg'])){
-            ?>      <div class="err-msg"><?php echo $_SESSION['searchErrorMsg']; ?></div>
+            ?>      <div class="err-msg">
+                    <?php 
+                        echo $_SESSION['searchErrorMsg']; 
+                        unset($_SESSION['searchErrorMsg']);
+                    ?>
+                    </div>
             <?php
                 }
                 else if(isset($_SESSION['searchResult'])){

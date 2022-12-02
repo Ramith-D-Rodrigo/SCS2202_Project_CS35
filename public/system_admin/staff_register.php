@@ -25,8 +25,8 @@
     <form  action="/controller/system_admin/register_controller.php" method="post">
             Staff Role : 
             <select id="roles" name="staffRole">
-                <option value="Receptionist">Receptionist</option>
-                <option value="Manager">Manager</option>
+                <option value="receptionist">Receptionist</option>
+                <option value="manager">Manager</option>
             </select>
             <br>
         <?php
@@ -50,71 +50,68 @@
                     }
                     ?>
                     </select>
-                    <?php
-                } 
-            ?> 
             <br>      
-            Name :
-            <input type="text" 
-            pattern="[a-zA-Z]+" 
-            name="firstName"
-            id="firstName" 
-            required placeholder="First Name"
-            value=<?php if(isset($_SESSION['firstName'])) echo htmlspecialchars($_SESSION['firstName'], ENT_QUOTES)?>>
+                    Name :
+                    <input type="text" 
+                    pattern="[a-zA-Z]+" 
+                    name="firstName"
+                    id="firstName" 
+                    required placeholder="First Name"
+                    value=<?php if(isset($_SESSION['firstName'])) echo htmlspecialchars($_SESSION['firstName'], ENT_QUOTES)?>>
 
-            <input type="text" 
-            pattern="[a-zA-Z]+" 
-            name="lastName"
-            id="lastName" 
-            required 
-            placeholder="Last Name"
-            value=<?php if(isset($_SESSION['lastName'])) echo htmlspecialchars($_SESSION['lastName'], ENT_QUOTES)?>>
-            <br>
+                    <input type="text" 
+                    pattern="[a-zA-Z]+" 
+                    name="lastName"
+                    id="lastName" 
+                    required 
+                    placeholder="Last Name"
+                    value=<?php if(isset($_SESSION['lastName'])) echo htmlspecialchars($_SESSION['lastName'], ENT_QUOTES)?>>
+                    <br>
 
-            Date of Birth : 
-            <input type="date"
-            id ="bday" 
-            name="birthday" 
-            required
-            value=<?php if(isset($_SESSION['birthday'])) echo htmlspecialchars($_SESSION['birthday'], ENT_QUOTES)?>> 
-            <br>
+                    Date of Birth : 
+                    <input type="date"
+                    id ="bday" 
+                    name="birthday" 
+                    required
+                    value=<?php if(isset($_SESSION['birthday'])) echo htmlspecialchars($_SESSION['birthday'], ENT_QUOTES)?>> 
+                    <br>
 
-            Contact Number : 
-            <input type="text"
-            pattern="[0-9]{10,11}" 
-            name="contactNum"
-            id="staffcontact"
-            required
-            value=<?php if(isset($_SESSION['contactNum'])) echo htmlspecialchars($_SESSION['contactNum'], ENT_QUOTES)?>> 
-            <br>
+                    Contact Number : 
+                    <input type="text"
+                    pattern="[0-9]{10,11}" 
+                    name="contactNum"
+                    id="staffcontact"
+                    required
+                    value=<?php if(isset($_SESSION['contactNum'])) echo htmlspecialchars($_SESSION['contactNum'], ENT_QUOTES)?>> 
+                    <br>
 
-            Email Address : 
-            <!-- pattern indicates that it must follow somename@topleveldomain.domain-->
-            <input 
-            type="email" 
-            name="emailAddress"
-            id="emailAddress"
-            required
-            value=<?php if(isset($_SESSION['emailAddress'])) echo htmlspecialchars($_SESSION['emailAddress'], ENT_QUOTES)?>> 
-            <br>
+                    Email Address : 
+                    <!-- pattern indicates that it must follow somename@topleveldomain.domain-->
+                    <input 
+                    type="email" 
+                    name="emailAddress"
+                    id="emailAddress"
+                    required
+                    value=<?php if(isset($_SESSION['emailAddress'])) echo htmlspecialchars($_SESSION['emailAddress'], ENT_QUOTES)?>> 
+                    <br>
 
-            <label for="gender">
-                Gender : 
-                    <input type="radio" name="gender" value="m" required <?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'm') echo 'checked';}?>> Male
-                    <input type="radio" name="gender" value="f"<?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'f') echo 'checked';}?>> Female <br>
-            </label>
+                    <label for="gender">
+                        Gender : 
+                            <input type="radio" name="gender" value="m" required <?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'm') echo 'checked';}?>> Male
+                            <input type="radio" name="gender" value="f"<?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'f') echo 'checked';}?>> Female <br>
+                    </label>
 
-            Username : 
-            <input 
-            type="text" 
-            required 
-            minlength="6" 
-            maxlength="15"
-            pattern="^[a-z]([a-z0-9_]){5,15}"
-            name="username"
-            id="username"
-            title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed"
-            >
+                    Username : 
+                    <input 
+                    type="text" 
+                    required 
+                    minlength="6" 
+                    maxlength="15"
+                    pattern="^[a-z]([a-z0-9_]){5,15}"
+                    name="username"
+                    id="username"
+                    title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed"
+                    >
             <br>
             
             <div>
@@ -129,8 +126,11 @@
                 <button class="togglePassword"> Show Password</button><br>
             </div>
             <div>
-                Confirm Password : <input type="password" required> <button class="togglePassword"> Show Password</button> <br>
+                Confirm Password : <input type="password" id="cPassword" required> <button class="togglePassword"> Show Password</button> <br>
             </div>
+            <?php
+                }
+            ?>
             <div  id="errmsg" class="err-msg">
                 <?php
                     if(isset($_SESSION['emailError'])){
