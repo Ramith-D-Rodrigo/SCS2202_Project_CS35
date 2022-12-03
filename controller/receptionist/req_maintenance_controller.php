@@ -26,7 +26,7 @@
 
     $results = '';
     $valid = checkAvailableSport($_SESSION['userid'],$courtName,$sportName,$connection);
-    if($valid -> num_rows > 0){
+    if(($valid -> num_rows > 0) || ($sportName === "ALL" && $courtName === "ALL")){
         if($sportName === "ALL" && $courtName === "ALL") {
             $brAvailable = checkBranchMaintenance($_SESSION['branchid'],$sDate,$eDate,$connection);
             if($brAvailable -> num_rows > 0) {

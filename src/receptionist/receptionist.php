@@ -48,7 +48,7 @@ class Receptionist implements StaffMember{
         `user_role`,
         `is_active`)
         VALUES
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','receptionist',1)",
+        ('%s','%s','%s','%s','receptionist',1)",
         $database -> real_escape_string($this -> receptionistID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> emailAddress),
@@ -77,7 +77,7 @@ class Receptionist implements StaffMember{
         `branch_id`,
         `staff_role`)
         VALUES
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), UUID_TO_BIN('%s', 1), '%s')",
+        ('%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), '%s','%s')",
         $database -> real_escape_string($this -> receptionistID),
         $database -> real_escape_string($this -> contactNum),
         $database -> real_escape_string($this -> gender),
@@ -94,7 +94,7 @@ class Receptionist implements StaffMember{
 
     private function create_receptionist_entry($database) {
         $sql = sprintf("INSERT INTO `receptionist` (`receptionist_id`)
-        VALUES (UUID_TO_BIN('%s',1))",
+        VALUES ('%s')",
         $database -> real_escape_string($this -> receptionistID));
 
         $result = $database->query($sql);
@@ -115,7 +115,7 @@ class Receptionist implements StaffMember{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT `user_id`
+        $sql = sprintf("SELECT `user_id`,
         `username`,
         `password`,
         `user_role`
@@ -170,7 +170,7 @@ class Receptionist implements StaffMember{
         `message`,
         `decision`,
         `requested_receptionist`) VALUES
-        (UUID_TO_BIN('%s',1),'%s','%s','pending','%s','p',UUID_TO_BIN('%s',1))",
+        ('%s','%s','%s','pending','%s','p','%s')",
         $database -> real_escape_string($brID),
         $database -> real_escape_string($startDate),
         $database -> real_escape_string($endDate),
@@ -183,13 +183,13 @@ class Receptionist implements StaffMember{
     }
     public function reqMaintenance($reason,$sportName,$courtName,$startDate,$endDate,$stfID,$database) {
 
-        $crtID = sprintf("SELECT BIN_TO_UUID(`sports_court`.`court_id`,1) AS court_id
+        $crtID = sprintf("SELECT `sports_court`.`court_id` AS court_id
         from `sports_court` INNER JOIN
         `sport` ON
         `sports_court`.`sport_id` = `sport`.`sport_id` INNER JOIN
         `staff` ON
         `sports_court`.`branch_id` = `staff`.`branch_id`
-        WHERE `staff`.`staff_id` = UUID_TO_BIN('%s',1)
+        WHERE `staff`.`staff_id` = '%s'
         AND `sports_court`.`court_name` = '%s'
         AND `sport`.`sport_name`= '%s'
         AND `sports_court`.`request_status`='a'",
@@ -209,7 +209,7 @@ class Receptionist implements StaffMember{
         `message`,
         `decision`,
         `requested_receptionist`) VALUES
-        (UUID_TO_BIN('%s',1),'%s','%s','pending','%s','p',UUID_TO_BIN('%s',1))",
+        ('%s','%s','%s','pending','%s','p','%s')",
         $database -> real_escape_string($courtID),
         $database -> real_escape_string($startDate),
         $database -> real_escape_string($endDate),
@@ -232,7 +232,7 @@ class Receptionist implements StaffMember{
         `branch`.`branch_email` AS email
         from `branch` INNER JOIN `staff` ON
         `branch`.`branch_id` = `staff`.`branch_id`
-        WHERE `staff`.`branch_id` = UUID_TO_BIN('%s',1)",
+        WHERE `staff`.`branch_id` = '%s'",
         $database -> real_escape_string($branchID));
 
         $branchResult = $database -> query($branchSql);   //get the branch results
@@ -244,7 +244,7 @@ class Receptionist implements StaffMember{
 
         $branchNum = sprintf("SELECT DISTINCT `contact_number` AS contact_number
         from `staff`
-        WHERE `staff`.`branch_id` = UUID_TO_BIN('%s',1) AND `staff`.`leave_date` is NULL",
+        WHERE `staff`.`branch_id` = '%s' AND `staff`.`leave_date` is NULL",
         $database -> real_escape_string($branchID));
 
         $numResult = $database -> query($branchNum);   //get the branch contact numbers
@@ -258,7 +258,7 @@ class Receptionist implements StaffMember{
 
         $branchPhotos = sprintf("SELECT  `photo`
         from `branch_photo`
-        WHERE `branch_id` = UUID_TO_BIN('%s',1) ",
+        WHERE `branch_id` = '%s'",
         $database -> real_escape_string($branchID));
 
         $photoResult = $database -> query($branchPhotos);   //get the branch photos
@@ -282,14 +282,14 @@ class Receptionist implements StaffMember{
     }
 
     public function getAllSports($branchID,$database) {
-        $branch = new Branch(uuid_to_bin($branchID,$database));
+        $branch = new Branch($branchID);
         $sportNames = $branch -> getAllSports($database);
 
         return $sportNames;
     }
 
     public function getAllCourts($branchID,$database) {
-        $branch = new Branch(uuid_to_bin($branchID,$database));
+        $branch = new Branch($branchID);
         $courtNames = $branch -> getAllCourts($database);
 
         return $courtNames;

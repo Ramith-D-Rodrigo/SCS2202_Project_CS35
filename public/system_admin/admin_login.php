@@ -60,7 +60,7 @@
                             echo $_SESSION['LogInsuccessMsg'];
                             echo '<br> You will be Redirected to the Dashboard. Please Wait...';
                             unset($_SESSION['LogInsuccessMsg']);
-                            header("Refresh: 3; URL =/public/system_admin/admin_dashboard.php");   //have to change
+                            header("Refresh: 3; URL =/public/system_admin/admin_dashboard.php");   
                         }
                     ?>
                 </div>
@@ -70,18 +70,7 @@
                         name= "loginSubmitBtn" 
                         value="submit" 
                         onclick="return validateForm(event)"
-                        <?php
-                        if(isset($_SESSION['userrole'])){
-                        ?>
-                            disabled
-                        <?php
-                        }
-                        else{
-                        ?> 
-                            
-                        <?php
-                        }
-                    ?>> LOG IN </button>
+                        > LOG IN </button>
                 </div>    
             </form>
         </div>

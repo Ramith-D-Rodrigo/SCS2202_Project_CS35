@@ -6,7 +6,7 @@ class Admin{
     private static $admin;
     private $adminID;
 
-    private function __construct() {}
+    private function __construct() {}  //make the construct private so that no new object can be created
 
     public static function getInstance() {
         if(!isset(self::$admin)){
@@ -20,7 +20,7 @@ class Admin{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT `user_id`
+        $sql = sprintf("SELECT `user_id`,
         `username`,
         `password`,
         `user_role`
@@ -68,10 +68,10 @@ class Admin{
     }
 
     public function getBranchID($branchName,$database){
-        $sql = sprintf("SELECT BIN_TO_UUID(`branch_id`,1) AS UUID FROM `branch` WHERE `city`= '%s'",$database -> real_escape_string($branchName));
+        $sql = sprintf("SELECT `branch_id` FROM `branch` WHERE `city`= '%s'",$database -> real_escape_string($branchName));
         $result = $database -> query($sql);
 
-        $branchID = $result -> fetch_object() -> UUID;
+        $branchID = $result -> fetch_object() -> branch_id;
         return $branchID;
     }
 

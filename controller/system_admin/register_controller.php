@@ -87,7 +87,13 @@
     //can create a account
 
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    //hash the password
-    $userid = generateUUID($connection);   //create an user id using uuid function
+    $userid; 
+    if($staffRole === 'receptionist'){
+        $userid = uniqid("rcptnst");
+    }else{
+        $userid = uniqid("mngr");
+    }
+       //create an user id using uuid function
     // $userIDResult = $connection -> query($useridsql); //get the result from query
 
     // foreach($userIDResult as $row){   //get the user id 

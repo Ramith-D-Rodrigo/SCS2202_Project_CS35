@@ -13,6 +13,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
+        <link rel="stylesheet" href="/styles/receptionist/editBranch.css"/>
         <title>Edit Branch</title>
     </head>
 
@@ -36,31 +37,43 @@
                     // foreach($_SESSION['searchResult'] as $result){ //traverse the result
             ?>
                     <form class ="edit_branch" action="/controller/receptionist/edit_branch_controller.php" method="post">
-                        Branch Location: <output> <?php echo $_SESSION['searchResult'][0]; ?> </output>
+                        <div class="row-container">
+                            <div class="left-side"> Branch Location: </div>
+                            <div class="right-side"><output> <?php echo $_SESSION['searchResult'][0]; ?> </output> </div>
+                        </div>
                         <br>
-                        Branch Contact Number(s) :  
-                        <?php 
-                        $numArray =  $_SESSION['searchResult'][2];
-                        foreach($numArray as $number) {
-                            ?> <output> <?php echo $number; ?> </output> <?php
-                        }
-                         ?>  
-                        <button type ="submit" 
-                        name ="AddBtn"> Add New</button>
+                        <div class="row-container">
+                            <div class="left-side"> Branch Contact Number(s) : </div>
+                            <div class="right-side" style="display:flex;flex-direction:column;justify-content:center">
+                            <?php 
+                            $numArray =  $_SESSION['searchResult'][2];
+                            foreach($numArray as $number) {
+                                ?> 
+                                <div style="margin-top:15px;"> <output> <?php echo $number; ?> </output> </div> <?php   
+                            }
+                            ?> 
+                            
+                            </div>
+                        </div>
+                        <div style="margin-left:400px"> <button type ="submit" 
+                            name ="AddBtn"> Change </button> </div>
                         <br>
-                        Branch Email : <output> <?php echo $_SESSION['searchResult'][1]; ?> </output>
-                        <button type ="submit" 
-                        name ="ChangeBtn"> Change </button>
-                        <br>
-                        Branch Photos :
-                        <br>
-                        <?php 
-                        $photoArray =  $_SESSION['searchResult'][3];
-                        foreach($photoArray as $photo) {
-                            ?> <img class="branch-img" src= <?php echo $photo; ?>> <?php
-                        }
-                        ?>  
-                        <br>
+                        <div class="row-container">
+                            <div class="left-side"> Branch Email : </div>
+                            <div class="right-side"> <output> <?php echo $_SESSION['searchResult'][1]; ?> </output> </div>
+                        </div>
+                        <div div style="margin-left:400px"> <button type ="submit" 
+                            name ="ChangeBtn"> Change </button> </div>
+                        <div>
+                            <div> Branch Photos : </div>
+                            <br>
+                            <?php 
+                            $photoArray =  $_SESSION['searchResult'][3];
+                            foreach($photoArray as $photo) {
+                                ?> <img class="branch-img" src= <?php echo $photo; ?>> <?php
+                            }
+                            ?>  
+                        </div>
                         
                         <button style="margin-left:10px" 
                         type ="submit" 
