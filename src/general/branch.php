@@ -72,11 +72,11 @@
             return $receptionist;
         }
 
-        public function getAllSports($userID,$database){
+        public function getAllSports($database){
             $sql = sprintf("SELECT DISTINCT `sport`.`sport_name` from `sport` INNER JOIN `sports_court` 
             ON `sport`.`sport_id` = `sports_court`.`sport_id` INNER JOIN `staff` 
-            ON `sports_court`.`branch_id` = `staff`.`branch_id` WHERE `staff`.`staff_id` = UUID_TO_BIN('%s',1)",
-            $database -> real_escape_string($userID));
+            ON `sports_court`.`branch_id` = `staff`.`branch_id` WHERE `staff`.`branch_id` = '%s'",
+            $database -> real_escape_string($this -> branchID));
 
             $result =  $database -> query($sql);
             $sportNames = [];
