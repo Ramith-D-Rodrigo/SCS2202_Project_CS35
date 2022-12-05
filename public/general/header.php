@@ -29,10 +29,10 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/general/about_us.php'){ //user register
                     echo "About Us";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/general/search_results.php'){  //search sport
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/search_results.php')){  //search sport
                     echo "Search a Sport";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/general/reservation_schedule.php'){  //Reservation Schedule
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/reservation_schedule.php')){  //Reservation Schedule
                     echo "Reservation Schedule";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/user/reservation_history.php'){  //reservation history
