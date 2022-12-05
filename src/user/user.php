@@ -306,7 +306,7 @@ class User implements JsonSerializable{
         $dependentArr = $dependentResult -> fetch_all(MYSQLI_ASSOC);
 
 
-        //set details (need to add dependents and medical concerns)
+        //set details
         $this -> setDetails(
             fName: $detailsrow -> first_name,
             lName: $detailsrow -> last_name,
