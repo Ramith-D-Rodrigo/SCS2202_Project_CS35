@@ -15,7 +15,7 @@
 
     $reservationPlace = explode(",",$_GET['reserveBtn']);
 
-    //branch id -> 0th index, sport id -> 1st index, branch location -> 2nd index, sport name -> 3rd index, opening time -> 4th index, closing time -> 5th index, reservation price -> 6th index
+    //branch id -> 0th index, sport id -> 1st index
 
     $branch = new Branch($reservationPlace[0]);
     $branch -> getDetails($connection);
