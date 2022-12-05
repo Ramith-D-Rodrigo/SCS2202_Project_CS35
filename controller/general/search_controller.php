@@ -41,8 +41,7 @@
             unset($branch); //remove the reference
         }
 
-        $_SESSION['searchResult'] = $final_result;
-        echo json_encode($_SESSION['searchResult']);
+        echo json_encode($final_result);
     }
     //header("Location: /public/general/search_results.php");
     $connection -> close();
