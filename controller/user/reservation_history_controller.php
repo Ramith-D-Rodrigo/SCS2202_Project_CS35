@@ -17,22 +17,12 @@
     $user -> setDetails(uid: $_SESSION['userid']);
     $reservationHistory = $user -> getReservationHistory($connection);
     
-    $reservations = [];
-
     if(isset($_SESSION['reservationHistory'])){ //previous reservation history clear
         unset($_SESSION['reservationHistory']);
     }
 
-    if($reservationHistory -> num_rows !== 0){  //has reservations
-        while($row = $reservationHistory -> fetch_object()){    //travserse each reservation
-            $startingTime = $row -> starting_time;
-            $endingTime = $row -> ending_time;
-
-            $row -> {"time_period"} = $startingTime . " to " . $endingTime;
-
-            array_push($reservations, $row);
-        }
-        $_SESSION['reservationHistory'] = $reservations;
+    if(count($reservationHistory) !== 0){  //has reservations
+        $_SESSION['reservationHistory'] = $reservationHistory;
     }
 
     unset($user);

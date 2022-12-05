@@ -264,7 +264,19 @@ class User implements JsonSerializable{
         $database -> real_escape_string($this -> userID));
 
         $result = $database -> query($sql);
-        return $result;
+
+        $reservations = [];
+        while($row = $result -> fetch_object()){
+
+            $startingTime = $row -> starting_time;
+            $endingTime = $row -> ending_time;
+
+            $row -> {"time_period"} = $startingTime . " to " . $endingTime;
+            array_push($reservations, $row);
+            unset($row);
+        }
+        $result -> free_result();
+        return $reservations;
     }
 
     public function cancelReservation($reservation, $database){
