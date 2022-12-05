@@ -77,7 +77,7 @@
 
     <nav class="header-links">
         <a href="/index.php">Home</a>
-        <a onclick="window.location.href='/controller/general/our_sports_controller.php'">Our Sports</a>
+        <a href="/public/general/our_sports.php">Our Sports</a>
         <a href="/public/general/our_branches.php">Our Branches</a>
         <a href="/public/general/reg_coaches.php">Registered Coaches</a>
         <a href="/public/general/our_feedback.php">Our Feedback</a>
