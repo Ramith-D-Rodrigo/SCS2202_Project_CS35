@@ -226,6 +226,7 @@ class Coach{
        `cs`.`ending_time`,
        `cs`.`day`, 
        `cs`.`coach_monthly_payment`, 
+       `cs`.`no_of_students`,
        `sc`.`court_name`, 
        `b`.`city` 
        FROM `coaching_session` `cs`

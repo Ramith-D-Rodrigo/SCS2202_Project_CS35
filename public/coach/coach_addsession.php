@@ -74,13 +74,13 @@
 
             <label> 
                 Starting Time : 
-                <input type="time" name="StartingTime" required id="StartingTime" min="08:00 AM" max="04:00 PM">
+                <input type="time" name="StartingTime" required id="StartingTime" >
 
             </label>
 
             <label>  
                 Ending Time : 
-                <input type="time" name="EndingTime" required id="EndingTime" min="08:00 AM" max="04:00 PM">
+                <input type="time" name="EndingTime" required id="EndingTime" >
 
             </label>
 
@@ -96,18 +96,21 @@
                 
             <br>
                 
-            <label id="monthly_payment"> Monthly payment : <input type="text" name="monthly_payment" required id="monthly_payment" > </label>
+            <label id="monthly_payment"> Monthly payment : <?php echo"$monthly_payment" ?> </label>
             
             <br>
             <br>
 
-            <h5>Only limited (number) students can join the sessionn</h5>
-            
+           <div> <h5>Only limited <?php echo $_SESSION["max_no_of_students"]?> students can join the sessionn</h5> </div>
+
+     
             <div id="errmsg" class="err-msg"><?php
                     
                     ?>          
                                
             </div>
+
+
 
             <div id="min_coaching_session_price" hidden ><?php echo $BranchesWithCourts["min_coaching_session_price"]?></div>
 
@@ -129,9 +132,10 @@
         
  
         
-            <button>
-                Cancel
-            </button>
+            
+                
+                <button class =" " onclick="window.location.href='/public/coach/coach_dashboard.php'">cancel</button>
+            
             
         </div>
 

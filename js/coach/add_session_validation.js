@@ -2,7 +2,7 @@ verbose = true;
 
 const StartingTime = document.getElementById("StartingTime");
 const EndingTime = document.getElementById("EndingTime");
-const session_fee = document.getElementById("session_fee");
+// const session_fee = document.getElementById("session_fee");
 const monthly_payment = document.getElementById("monthly_payment");
 
 StartingTime.addEventListener('change', (e)=>{
@@ -32,6 +32,21 @@ EndingTime.addEventListener('change', (e)=>{
     }
 
 });
+
+//session_fee validate
+$_SESSION['session_fee'].addEventListener('change', (e)=>{
+    $_SESSION['session_fee'] = e.target.value;
+       
+
+    if(!(min_coaching_session_price.value<=$_SESSION['session_fee'].value) ){
+        e.target.style.border = "medium solid red";
+        errorMsg.innerHTML = "session fee must be greater than minimum coaching session price";
+    }
+    else{
+        e.target.style.border = "none";
+    }
+
+})
 
 
 //price calculation
@@ -79,9 +94,10 @@ StartingTime.addEventListener('change', (e)=>{
         return;
     }
     
-    const minRevPrice = document.getElementById("min_coaching_session_price");
-    calulatedPrice = minRevPrice * timeDifferenceHours *4;
+    const minRevPrice = document.getElementById("reservation_price");
+    calulatedPrice = minRevPrice *(5/4) * timeDifferenceHours *4;
     monthly_payment.value = calulatedPrice;
+    
 });
 
 EndingTime.addEventListener('change', (e)=>{
@@ -128,20 +144,27 @@ EndingTime.addEventListener('change', (e)=>{
     errorMsg.innerHTML = "";
     console.log(timeDifferenceHours);
     
-    const minRevPrice = document.getElementById("min_coaching_session_price");
-    calulatedPrice = minRevPrice * timeDifferenceHours * 4;
-    reservationPrice.value = calulatedPrice;
+    // const minRevPrice = document.getElementById("min_coaching_session_price");
+    // calulatedPrice = minRevPrice * timeDifferenceHours * 4;
+    // monthly_payment.value = calulatedPrice;
 });
 
 
 function validateForm(e){
     const errorMsg = document.getElementById("errMsg");
-    if(StartingTime.value > EndingTime.value){
+    if(StartingTime.value > EndingTime.value ){
         console.log(StartingTime, EndingTime);
         errorMsg.innerHTML = "Time Range is wrong. Please check again";
         return false;
     }
     errorMsg.innerHTML = "";    //reset the error message
+
+   
+    
+    
+    }
+    errorMsg.innerHTML = "";    //reset the error message
+
 
     const form = document.querySelector("form");
     if(monthly_payment.value === "" || form.reportValidity() === false){
@@ -151,4 +174,3 @@ function validateForm(e){
    
 
    
-}
