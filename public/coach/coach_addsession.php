@@ -93,10 +93,13 @@
                         id="session_fee"
                         required
                         value=<?php if(isset($_SESSION['session_fee'])) echo htmlspecialchars($_SESSION['session_fee'], ENT_QUOTES)?>>
+           </label>
                 
             <br>
                 
-            <label id="monthly_payment"> Monthly payment : <?php echo"$monthly_payment" ?> </label>
+            <label id="m_payment"> Monthly payment :
+                        <output id="monthly_payment"></output>
+             </label>
             
             <br>
             <br>
@@ -104,19 +107,21 @@
            <div> <h5>Only limited <?php echo $_SESSION["max_no_of_students"]?> students can join the sessionn</h5> </div>
 
      
-            <div id="errmsg" class="err-msg"><?php
-                    
-                    ?>          
+            <div id="errmsg" class="err-msg">   </div>
                                
-            </div>
+            <div id="errmsg1" class="err-msg"> </div>
 
+                               
+           <div  hidden ><output id="min_coaching_session_price"><?php echo $_SESSION["min_coaching_session_price"]?></output></div>
 
+            <div hidden ><output id="reservation_price" ><?php echo $_SESSION["reservation_price"]?></output></div>
 
-            <div id="min_coaching_session_price" hidden ><?php echo $BranchesWithCourts["min_coaching_session_price"]?></div>
+            <div  hidden ><output id="max_no_of_students"><?php echo $_SESSION["max_no_of_students"]?></output></div>
 
-            <div id="reservation_price" hidden ><?php echo $BranchesWithCourts["reservation_price"]?></div>
+            <div ><output id="opening_time" hidden ><?php echo $_SESSION["opening_time"]?></output></div>
 
-            <div id="max_no_of_students" hidden ><?php echo $BranchesWithCourts["max_no_of_students"]?></div>
+            <div hidden ><output id="closing_time"><?php echo $_SESSION["closing_time"]?></output></div>
+
 
             
                 

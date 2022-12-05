@@ -122,6 +122,8 @@
     else{
         echo "Error Registering the Account";
         $_SESSION['RegUnsuccessMsg'] = 'Error Registering the Account';
+        session_unset(); //free all current session variables 
+
          header("Location: /public/coach/coach_register.php");
     }
 
