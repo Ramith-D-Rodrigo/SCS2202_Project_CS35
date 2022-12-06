@@ -78,8 +78,6 @@ fetch("../../controller/general/our_sports_controller.php")
 
             //finally append the row
             sportsContainer.appendChild(sportsRowDiv);
-
-            const selectOption = document.querySelector("select");
         }
 
         //event listener for the select options
