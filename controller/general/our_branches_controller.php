@@ -14,12 +14,41 @@
         $tempBranch = new Branch($branchID);    //create new branch object
 
         $tempBranch -> getDetails($connection);
+        $branchSports = $tempBranch -> getAllSports($connection);
 
-        array_push($branchInfo, $tempBranch);   //push to array;
+        $branchJSON = json_encode($tempBranch); //encode and decode to unset un-necessary info
+        $branchASSOC = json_decode($branchJSON, true);
+        $branchASSOC['sports'] = $branchSports;
+        //manager un-necessary info
+        unset($branchASSOC['manager']['branchID']);
+        unset($branchASSOC['manager']['dateOfBirth']);
+        unset($branchASSOC['manager']['emailAddress']);
+        unset($branchASSOC['manager']['joinDate']);
+        unset($branchASSOC['manager']['leaveDate']);
+        unset($branchASSOC['manager']['managerID']);
+        unset($branchASSOC['manager']['username']);
+        unset($branchASSOC['manager']['staffRole']);
+        unset($branchASSOC['manager']['password']);
+
+        //receptionist un-necessary info
+        unset($branchASSOC['receptionist']['branchID']);
+        unset($branchASSOC['receptionist']['dateOfBirth']);
+        unset($branchASSOC['receptionist']['emailAddress']);
+        unset($branchASSOC['receptionist']['joinDate']);
+        unset($branchASSOC['receptionist']['leaveDate']);
+        unset($branchASSOC['receptionist']['receptionistID']);
+        unset($branchASSOC['receptionist']['username']);
+        unset($branchASSOC['receptionist']['staffRole']);
+        unset($branchASSOC['receptionist']['password']);
+
+        array_push($branchInfo, $branchASSOC);   //push to array;
 
         unset($tempBranch);
+        unset($branchASSOC);
+        unset($branchJSON);
     }
 
     $connection -> close();
     echo json_encode($branchInfo);
+    unset($branchInfo);
 ?>
