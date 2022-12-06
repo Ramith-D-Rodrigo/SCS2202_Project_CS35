@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2022 at 03:07 AM
+-- Generation Time: Dec 06, 2022 at 06:15 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -37,6 +37,8 @@ CREATE TABLE `branch` (
   `opening_date` date NOT NULL,
   `revenue` double DEFAULT NULL,
   `owner_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `curr_manager` varchar(35) DEFAULT NULL,
+  `curr_receptionist` varchar(35) DEFAULT NULL,
   `owner_request_date` date DEFAULT NULL,
   `request_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -45,8 +47,8 @@ CREATE TABLE `branch` (
 -- Dumping data for table `branch`
 --
 
-INSERT INTO `branch` (`branch_id`, `address`, `branch_email`, `city`, `opening_time`, `closing_time`, `opening_date`, `revenue`, `owner_id`, `owner_request_date`, `request_status`) VALUES
-('kiri987521', 'Example Road, Kiribathgoda', 'kribathgodabr@sp.com', 'Kiribathgoda', '08:00:00', '19:30:00', '2022-11-26', NULL, NULL, NULL, 'a');
+INSERT INTO `branch` (`branch_id`, `address`, `branch_email`, `city`, `opening_time`, `closing_time`, `opening_date`, `revenue`, `owner_id`, `curr_manager`, `curr_receptionist`, `owner_request_date`, `request_status`) VALUES
+('kiri987521', 'Example Road, Kiribathgoda', 'kribathgodabr@sp.com', 'Kiribathgoda', '08:00:00', '19:30:00', '2022-11-26', NULL, NULL, 'managerkiri5436', 'receptionistkiri1241', NULL, 'a');
 
 -- --------------------------------------------------------
 
@@ -174,7 +176,12 @@ CREATE TABLE `login_details` (
 --
 
 INSERT INTO `login_details` (`user_id`, `username`, `email_address`, `password`, `user_role`, `is_active`) VALUES
-('ramRod63816dc9007b4', 'ramith_rodrigo', 'ramithrodrigo@hotmail.com', '$2y$10$jfRHNtfvrSuC8CSAuxrUgOETAPpPglg7KDQ2JHo5zhNxAuivvNaEa', 'user', 1);
+('dihHan6384813878b75', 'dihan_hansaja', 'dihanhansaja@gmail.com', '$2y$10$3uW4pZCt0.MERJKzCxqypuStR38ARbHD8WuuVuZZN8S6jimPS8aXy', 'user', 1),
+('kamPer638656b5362c7', 'kamal_per', 'kamalperera@hotmail.com', '$2y$10$d3CoQvOnHJ4O4VkQwV96s.3LMfjG4.m1G.Kc7agF/aMQW4IsTZ0PG', 'user', 1),
+('managerkiri5436', 'manager_test', 'manager@kiribathgoda.com', 'Test12345', 'manager', 1),
+('nihWij638657d83c715', 'nihal_wij', 'nihal_wije@gmail.com', '$2y$10$dWp4y/hWGGWNICJzgTdM.e0EBAZcd7qUZEOJAQrEQ43ptT3kVcPfK', 'user', 1),
+('ramRod63816dc9007b4', 'ramith_rodrigo', 'ramithrodrigo@hotmail.com', '$2y$10$jfRHNtfvrSuC8CSAuxrUgOETAPpPglg7KDQ2JHo5zhNxAuivvNaEa', 'user', 1),
+('receptionistkiri1241', 'receptionist_test', 'receptionist@kiribathgoda.com', 'Testing54321', 'receptionist', 1);
 
 -- --------------------------------------------------------
 
@@ -185,6 +192,13 @@ INSERT INTO `login_details` (`user_id`, `username`, `email_address`, `password`,
 CREATE TABLE `manager` (
   `manager_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `manager`
+--
+
+INSERT INTO `manager` (`manager_id`) VALUES
+('managerkiri5436');
 
 -- --------------------------------------------------------
 
@@ -225,6 +239,13 @@ CREATE TABLE `receptionist` (
   `receptionist_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `receptionist`
+--
+
+INSERT INTO `receptionist` (`receptionist_id`) VALUES
+('receptionistkiri1241');
+
 -- --------------------------------------------------------
 
 --
@@ -240,10 +261,20 @@ CREATE TABLE `reservation` (
   `payment_amount` double NOT NULL,
   `sport_court` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `status` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `user_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `formal_manager_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `onsite_receptionist_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `user_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `formal_manager_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `onsite_receptionist_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `reservation`
+--
+
+INSERT INTO `reservation` (`reservation_id`, `date`, `starting_time`, `ending_time`, `no_of_people`, `payment_amount`, `sport_court`, `status`, `user_id`, `formal_manager_id`, `onsite_receptionist_id`) VALUES
+('Res-ram6381ff1962f37', '2022-12-03', '09:00:00', '12:00:00', 4, 1050, 'badcourt1213', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL),
+('Res-ram6389552c34f9a', '2022-12-17', '09:00:00', '12:00:00', 3, 1050, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
+('Res-ram638955f9d5247', '2022-12-17', '16:00:00', '18:00:00', 3, 700, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
+('Res-ram6389622caecf9', '2022-12-14', '17:00:00', '18:30:00', 1, 525, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -319,6 +350,14 @@ CREATE TABLE `staff` (
   `staff_role` varchar(15) NOT NULL,
   `branch_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `staff`
+--
+
+INSERT INTO `staff` (`staff_id`, `contact_number`, `gender`, `date_of_birth`, `first_name`, `last_name`, `join_date`, `leave_date`, `staff_role`, `branch_id`) VALUES
+('managerkiri5436', '0785412368', 'm', '1975-10-11', 'Namal', 'Rajapaksa', '2022-10-11', NULL, 'manager', 'kiri987521'),
+('receptionistkiri1241', '0741236585', 'f', '1994-12-09', 'Amali', 'Kulasinghe', '2022-12-01', NULL, 'receptionist', 'kiri987521');
 
 -- --------------------------------------------------------
 
@@ -418,6 +457,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `gender`, `profile_photo`, `home_address`, `contact_num`, `birthday`, `register_date`, `height`, `weight`) VALUES
+('dihHan6384813878b75', 'Dihan', 'Hansaja', 'm', 'dihan_hansaja6384813878ccc.jpg', 'Dihan&amp;#039;s Address, Ambalangoda', '0786541239', '2000-07-04', '2022-11-28', 170, 55),
+('kamPer638656b5362c7', 'Kamal', 'Perera', 'm', NULL, 'Madamulana, Sri Lanka', '0715423658', '2003-05-09', '2022-11-29', 166, 66),
+('nihWij638657d83c715', 'Nihal', 'Wijesinghe', 'm', NULL, 'Some road, Galle', '0789654125', '1996-07-26', '2022-11-29', 177, 69),
 ('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', 'ramith_rodrigo63816dc90092f.jpg', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', 178, 56);
 
 -- --------------------------------------------------------
@@ -453,6 +495,10 @@ CREATE TABLE `user_dependent` (
 --
 
 INSERT INTO `user_dependent` (`owner_id`, `name`, `relationship`, `contact_num`) VALUES
+('dihHan6384813878b75', 'Kamal', 'Sibling 1', '0774532158'),
+('dihHan6384813878b75', 'Ramith', 'Friend 1', '0767275867'),
+('kamPer638656b5362c7', 'Sunil', 'Father', '0716525854'),
+('nihWij638657d83c715', 'Amitha', 'Partner', '0774532174'),
 ('ramRod63816dc9007b4', 'Ajith', 'Father', '0714831556'),
 ('ramRod63816dc9007b4', 'Champa', 'Mother', '0776512846');
 
@@ -472,6 +518,10 @@ CREATE TABLE `user_medical_concern` (
 --
 
 INSERT INTO `user_medical_concern` (`user_id`, `medical_concern`) VALUES
+('dihHan6384813878b75', 'back pain'),
+('dihHan6384813878b75', 'headache'),
+('dihHan6384813878b75', 'my concern'),
+('kamPer638656b5362c7', 'broken and fixed leg'),
 ('ramRod63816dc9007b4', 'concern one'),
 ('ramRod63816dc9007b4', 'concern two');
 
@@ -498,6 +548,8 @@ CREATE TABLE `user_request_coaching_session` (
 ALTER TABLE `branch`
   ADD PRIMARY KEY (`branch_id`),
   ADD UNIQUE KEY `branch_email` (`branch_email`),
+  ADD UNIQUE KEY `curr_manager` (`curr_manager`),
+  ADD UNIQUE KEY `curr_receptionist` (`curr_receptionist`),
   ADD KEY `owner_id` (`owner_id`);
 
 --
@@ -619,6 +671,7 @@ ALTER TABLE `sports_court_photo`
 --
 ALTER TABLE `staff`
   ADD PRIMARY KEY (`staff_id`),
+  ADD UNIQUE KEY `contact_number` (`contact_number`),
   ADD KEY `branch_id` (`branch_id`);
 
 --
@@ -702,7 +755,9 @@ ALTER TABLE `user_request_coaching_session`
 -- Constraints for table `branch`
 --
 ALTER TABLE `branch`
-  ADD CONSTRAINT `branch_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `owner` (`owner_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `branch_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `owner` (`owner_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `branch_ibfk_2` FOREIGN KEY (`curr_manager`) REFERENCES `manager` (`manager_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `branch_ibfk_3` FOREIGN KEY (`curr_receptionist`) REFERENCES `receptionist` (`receptionist_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `branch_maintenance`
