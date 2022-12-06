@@ -1,5 +1,6 @@
 <?php
     require_once("../../src/manager/manager.php");
+    require_once("../../src/receptionist/receptionist.php");
 
     class Branch implements JsonSerializable{
         private $branchID;
@@ -12,7 +13,7 @@
         private $closing_time;
         private $photos;
 
-        public function __construct($branch_id){    //use the binary id to construct
+        public function __construct($branch_id){ 
             $this -> branchID = $branch_id;
         }
 
@@ -32,7 +33,14 @@
             $manager -> setDetails(uid: $managerID);
             $manager -> getDetails($database);
 
-            $this -> setDetails(city: $row -> city, address: $row -> address,email: $row -> branch_email, opening_time: $row -> opening_time, closing_time: $row -> closing_time, manager: $manager);
+            //get receptionist details by setting the receptionist object values
+            $receptionistID = $row -> curr_receptionist;
+            $receptionist = new Receptionist();
+            $receptionist -> setDetails(uid :$receptionistID);
+            $receptionist -> getDetails($database);
+
+
+            $this -> setDetails(city: $row -> city, address: $row -> address,email: $row -> branch_email, opening_time: $row -> opening_time, closing_time: $row -> closing_time, manager: $manager, receptionist: $receptionist);
 
             //set branch photos from database
             $this -> getBranchPictures($database);
@@ -41,13 +49,28 @@
         }
 
         public function setDetails($city = '', $address = '', $email = '', $manager = '', $receptionist = '', $opening_time = '', $closing_time = ''){
-            $this -> city = $city;
-            $this -> address = $address;
-            $this -> email = $email;
-            $this -> manager = $manager;
-            $this -> receptionist = $receptionist;
-            $this -> opening_time = $opening_time;
-            $this -> closing_time = $closing_time;
+            //conditions to check if the property is set or passing the default value
+            if(!isset($this -> city) || $city  !== ''){
+                $this -> city = $city;
+            }
+            if(!isset($this -> address) || $address  === ''){
+                $this -> address = $address;
+            }
+            if(!isset($this -> email) || $email  === ''){
+                $this -> email = $email;
+            }
+            if(!isset($this -> manager) || $manager  === ''){
+                $this -> manager = $manager;
+            }
+            if(!isset($this -> receptionist) || $receptionist  === ''){
+                $this -> receptionist = $receptionist;
+            }
+            if(!isset($this -> opening_time) || $opening_time  === ''){
+                $this -> opening_time = $opening_time;
+            }
+            if(!isset($this -> closing_time) || $closing_time  === ''){
+                $this -> closing_time = $closing_time;
+            }
         }
 
 /*         public function getManager($database){      //get manager Info
@@ -118,18 +141,24 @@
             return $receptionist;
         }
 
-        public function getAllSports($userID,$database){
-            $sql = sprintf("SELECT DISTINCT `sport`.`sport_name` from `sport` INNER JOIN `sports_court` 
-            ON `sport`.`sport_id` = `sports_court`.`sport_id` INNER JOIN `staff` 
-            ON `sports_court`.`branch_id` = `staff`.`branch_id` WHERE `staff`.`staff_id` = UUID_TO_BIN('%s',1)",
-            $database -> real_escape_string($userID));
+        public function getAllSports($database){    //only courts with accepted status
+            $sql = sprintf("SELECT DISTINCT `s`.`sport_id`,`s`.`sport_name` from `sport` `s` 
+            INNER JOIN `sports_court` `sc`
+            ON `s`.`sport_id` = `sc`.`sport_id` 
+            INNER JOIN `branch` `b` 
+            ON `b`.`branch_id` = `sc`.`branch_id` 
+            WHERE `b`.`branch_id` = '%s'
+            AND `sc`.`request_status` = 'a'",
+            $database -> real_escape_string($this -> branchID));
 
             $result =  $database -> query($sql);
-            $sportNames = [];
+            $sports = [];
             while($row = $result -> fetch_object()) {
-                array_push($sportNames,$row -> sport_name);
+                array_push($sports,$row);
+                unset($row);
             }
-            return $sportNames;
+            $result -> free_result();
+            return $sports;
         }
 
         public function getAllCourts($database) {
