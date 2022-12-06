@@ -144,6 +144,11 @@
             ?>
             <div  id="errmsg" class="err-msg">
                 <?php
+                    if(isset($_SESSION['numberError'])){
+                        echo($_SESSION['numberError']);
+                        echo '<br>';
+                        unset($_SESSION['numberError']);
+                    }
                     if(isset($_SESSION['emailError'])){
                         echo $_SESSION['emailError'];
                         echo '<br>';

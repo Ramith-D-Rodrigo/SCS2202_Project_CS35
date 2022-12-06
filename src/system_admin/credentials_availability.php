@@ -1,5 +1,9 @@
 <?php
 
+    function checkContactNumber($contactN,$database){
+        $result = $database -> query("SELECT `contact_number` FROM `staff`");
+        return $result;
+    }
     function checkStaffEmail($email, $database){
         $hasEmailsql = sprintf("SELECT * FROM `login_details` WHERE `email_address` = '%s'", $database -> real_escape_string(htmlspecialchars($email, ENT_QUOTES)));     //check existing same email
         $result = $database -> query($hasEmailsql);

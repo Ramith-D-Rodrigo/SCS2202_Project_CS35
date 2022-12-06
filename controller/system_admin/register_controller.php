@@ -42,6 +42,18 @@
         unset($_SESSION['emailError']); //email is available, hence unset the error message
     }
     
+    //contact number availability
+    $hasContactNumber = checkContactNumber($_POST['contact_number'],$connection);
+
+    if($hasContactNumber -> num_rows > 0){    //contact number already exists
+        $_SESSION['numberError'] = "Contact Number already exists.";
+        header("Location: /public/system_admin/staff_register.php");
+        $connection -> close(); //close the database connection
+        exit(); //exit the registration
+    }
+    else{
+        unset($_SESSION['numberError']); //contact number is available, hence unset the error message
+    }
     //username availability    
     $hasUsernameResult = checkUsername($_POST['username'], $connection);
 
