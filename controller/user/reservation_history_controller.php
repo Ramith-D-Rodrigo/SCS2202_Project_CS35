@@ -17,16 +17,30 @@
     $user -> setDetails(uid: $_SESSION['userid']);
     $reservationHistory = $user -> getReservationHistory($connection);
     
-    if(isset($_SESSION['reservationHistory'])){ //previous reservation history clear
+/*     if(isset($_SESSION['reservationHistory'])){ //previous reservation history clear
         unset($_SESSION['reservationHistory']);
-    }
+    } */
+    $neededInfo = [];
 
     if(count($reservationHistory) !== 0){  //has reservations
-        $_SESSION['reservationHistory'] = $reservationHistory;
+        $reservationJSON = json_encode($reservationHistory);
+        $reservationASSOC = json_decode($reservationJSON, true);
+        foreach($reservationASSOC as $i){
+            //echo($i['user_id']);
+            unset($i["user_id"]);
+            unset($i['formal_manager_id']);
+            unset($i['onsite_receptionist_id']);
+            array_push($neededInfo, $i);
+        }
+        unset($reservationASSOC);
+        unset($reservationJSON);
+        //$_SESSION['reservationHistory'] = $reservationHistory;
     }
+    unset($reservationHistory);
+
 
     unset($user);
-    header("Location: /public/user/reservation_history.php");    
+    //header("Location: /public/user/reservation_history.php");    
     $connection -> close();
-
+    echo json_encode($neededInfo);
 ?>
