@@ -1,5 +1,5 @@
 <?php
-    require_once("../../src/general/uuid.php");
+    require_once("../../src/general/reservation.php");
 class User implements JsonSerializable{
     private $userID;
     private $firstName;
@@ -243,36 +243,29 @@ class User implements JsonSerializable{
     }
 
     public function getReservationHistory($database){   //Joining sport, sport court, branch, reservation tables
-        $sql = sprintf("SELECT `r`.`reservation_id`, 
-        `r`.`date`, 
-        `r`.`starting_time`, 
-        `r`.`ending_time`, 
-        `r`.`payment_amount`, 
-        `r`.`status`, 
-        `b`.`city`, 
-        `s`.`sport_name`,
-        `sc`.`court_name` 
-        FROM `reservation` `r`
-        INNER JOIN `sports_court` `sc` 
-        ON `r`.`sport_court` = `sc`.`court_id`
-        INNER JOIN `sport` `s` 
-        ON `s`.`sport_id` = `sc`.`sport_id`
-        INNER JOIN `branch` `b` 
-        ON `sc`.`branch_id` = `b`.`branch_id`
-        WHERE `r`.`user_id` = '%s'
-        ORDER BY `r`.`date`",
+        //get all the reservations
+        $sql = sprintf("SELECT `reservation_id`
+        FROM `reservation`
+        WHERE `user_id` = '%s'
+        ORDER BY `date`",
         $database -> real_escape_string($this -> userID));
 
         $result = $database -> query($sql);
 
         $reservations = [];
         while($row = $result -> fetch_object()){
+            $reservationID = $row -> reservation_id;
+            $currReservation = new Reservation();
+            $currReservation -> setID($reservationID);
 
-            $startingTime = $row -> starting_time;
-            $endingTime = $row -> ending_time;
+/*             $startingTime = $row -> starting_time;
+            $endingTime = $row -> ending_time; */
 
-            $row -> {"time_period"} = $startingTime . " to " . $endingTime;
-            array_push($reservations, $row);
+            //$row -> {"time_period"} = $startingTime . " to " . $endingTime;
+            $currReservation -> getDetails($database);  //get the reservation details
+
+            array_push($reservations, $currReservation);
+            unset($currReservation);
             unset($row);
         }
         $result -> free_result();
