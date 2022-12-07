@@ -86,7 +86,8 @@ fetch("../../controller/user/reservation_history_controller.php")
 
                     const cancelBtn = document.createElement("button");
                     cancelBtn.type = "submit";
-                    cancelBtn.name = data[i].reservationID;
+                    cancelBtn.name = "cancelBtn";
+                    cancelBtn.value = data[i].reservationID;
                     cancelBtn.innerHTML = "Cancel";
 
                     cancelForm.appendChild(cancelBtn);
@@ -103,61 +104,6 @@ fetch("../../controller/user/reservation_history_controller.php")
                 currRow.appendChild(currAction);
 
                 tBody.appendChild(currRow); //append the row
-/*
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <th>Reservation ID</th>
-                                    <th>Date</th>
-                                    <th>Time Period</th>
-                                    <th>Sport</th>
-                                    <th>Branch</th>
-                                    <th>Court</th>
-                                    <th>Payment Amount</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            <?php foreach($_SESSION['reservationHistory'] as $row){
-                                    
-                                    ?>
-                                <tr>
-                                    <td><?php echo $row -> reservation_id?></td>
-                                    <td><?php echo $row -> date?></td>
-                                    <td><?php echo $row -> time_period?></td>
-                                    <td><?php echo $row -> sport_name?></td>
-                                    <td><?php echo $row -> city?></td>
-                                    <td><?php echo $row -> court_name?></td>
-                                    <td><?php echo "Rs.".$row -> payment_amount?></td>
-                                    <td><?php echo $row -> status?></td>
-                                    <td>
-                                    <?php
-                                        if($row -> status === 'Pending'){   //if its pending, the user can cancel but can't give feedback
-                                    ?>
-
-                                            <form action="/controller/user/cancel_reservation_controller.php" method="post">
-                                                <button type="submit" name="cancelBtn" value=<?php echo "userReserveHis".$i; ?>>Cancel</button>
-                                            </form>
-                                    <?php
-                                        }
-                                        else if($row -> status === 'Cancelled'){    //the user cannot cancel nor give feedback
-                                    
-                                        }
-                                        else if($row -> status === 'Checked In' || $row -> status === 'Declined'){   //the user cannot cancel anymore, but can give feedback
-                                    ?>
-                                            <button>Give Feedback</button>
-                                    <?php
-                                        }
-                                    ?>
-                                    </td>
-                                </tr>
-                            <?php
-                                $_SESSION["userReserveHis".$i] = $row -> reservation_id;    //get the reservationID for each for buttons 
-                                $i++;
-                            }
-                            ?>
-                            </tbody>
-                        </table>
-*/
             }
             reservationTable.appendChild(tBody);
             reservationHistory.appendChild(reservationTable);
