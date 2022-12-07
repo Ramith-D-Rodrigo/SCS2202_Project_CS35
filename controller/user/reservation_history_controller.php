@@ -30,6 +30,8 @@
             unset($i["user_id"]);
             unset($i['formal_manager_id']);
             unset($i['onsite_receptionist_id']);
+            unset($i['numOfPeople']);
+            unset($i['sport_court']);
             array_push($neededInfo, $i);
         }
         unset($reservationASSOC);
