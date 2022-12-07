@@ -85,7 +85,7 @@
         <div id="profile-links" style="float:right; margin-right:20px; display:none">
             <a href="/index.php">Ongoing Sessions</a>
             <a href="/index.php">Left Sessions</a>
-            <a href="/controller/user/reservation_history_controller.php">Reservation History</a>
+            <a href="/public/user/reservation_history.php">Reservation History</a>
             <a href="/public/user/edit_profile.php">Edit Profile</a>
         </div>
     </nav>

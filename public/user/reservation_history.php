@@ -25,73 +25,7 @@
             require_once("../../public/general/header.php");
         ?>
         <main>
-            <div class="content-box" style="overflow-x:auto;">
-                <?php
-                    if(!isset($_SESSION['reservationHistory'])){    //user has not made any reservations ?>
-                        <div class="err-msg">
-                            You have not made any reservations yet.
-                        </div>
-                    <?php
-                    }
-                    else{
-                        $i = 1; //for each user reservation
-                    ?>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <th>Reservation ID</th>
-                                    <th>Date</th>
-                                    <th>Time Period</th>
-                                    <th>Sport</th>
-                                    <th>Branch</th>
-                                    <th>Court</th>
-                                    <th>Payment Amount</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            <?php foreach($_SESSION['reservationHistory'] as $row){
-                                    
-                                    ?>
-                                <tr>
-                                    <td><?php echo $row -> reservation_id?></td>
-                                    <td><?php echo $row -> date?></td>
-                                    <td><?php echo $row -> time_period?></td>
-                                    <td><?php echo $row -> sport_name?></td>
-                                    <td><?php echo $row -> city?></td>
-                                    <td><?php echo $row -> court_name?></td>
-                                    <td><?php echo "Rs.".$row -> payment_amount?></td>
-                                    <td><?php echo $row -> status?></td>
-                                    <td>
-                                    <?php
-                                        if($row -> status === 'Pending'){   //if its pending, the user can cancel but can't give feedback
-                                    ?>
-
-                                            <form action="/controller/user/cancel_reservation_controller.php" method="post">
-                                                <button type="submit" name="cancelBtn" value=<?php echo "userReserveHis".$i; ?>>Cancel</button>
-                                            </form>
-                                    <?php
-                                        }
-                                        else if($row -> status === 'Cancelled'){    //the user cannot cancel nor give feedback
-                                    
-                                        }
-                                        else if($row -> status === 'Checked In' || $row -> status === 'Declined'){   //the user cannot cancel anymore, but can give feedback
-                                    ?>
-                                            <button>Give Feedback</button>
-                                    <?php
-                                        }
-                                    ?>
-                                    </td>
-                                </tr>
-                            <?php
-                                $_SESSION["userReserveHis".$i] = $row -> reservation_id;    //get the reservationID for each for buttons 
-                                $i++;
-                            }
-                            ?>
-                            </tbody>
-                        </table>
-                    <?php
-                    }
-                    ?>
+            <div class="content-box" style="overflow-x:auto;" id="reservationHistoryBox">
             </div>
         </main>
         <?php
@@ -109,4 +43,5 @@
         ?>    
     </body>
     <script src="/js/user/account_links.js"></script>
+    <script src="/js/user/reservation_history.js"></script>
 </html>
