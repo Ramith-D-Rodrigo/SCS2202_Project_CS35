@@ -140,7 +140,7 @@
                     </div>
 
                     <div class="row-container">
-                        <div class="left-field" id="medicalConcernsField"></div>
+                        <div class="left-field" id="medicalConcernsField" style="width:100%"></div>
                     </div>
 
                     <div class="row-container">
