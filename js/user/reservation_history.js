@@ -76,8 +76,31 @@ fetch("../../controller/user/reservation_history_controller.php")
                 currStatus.innerHTML = data[i].status;
                 currRow.appendChild(currStatus);
 
-                const actionButton = document.createElement("td");  //action cell
-                currRow.appendChild(actionButton);
+                const currAction = document.createElement("td");  //action cell
+
+
+                if(data[i].status === 'Pending'){   //can cancel
+                    const cancelForm = document.createElement("form");
+                    cancelForm.action = "/controller/user/cancel_reservation_controller.php";
+                    cancelForm.method = "post";
+
+                    const cancelBtn = document.createElement("button");
+                    cancelBtn.type = "submit";
+                    cancelBtn.name = data[i].reservationID;
+                    cancelBtn.innerHTML = "Cancel";
+
+                    cancelForm.appendChild(cancelBtn);
+                    currAction.appendChild(cancelForm);
+                }
+                else if(data[i].status === 'Cancelled'){    
+
+                }
+                else if(data[i].status === 'Checked In' || data[i].status === 'Declined'){  //can give feedback
+                    const feedbackBtn = document.createElement("button");
+                    feedbackBtn.innerHTML = "Give Feedback";
+                    currAction.appendChild(feedbackBtn);
+                }
+                currRow.appendChild(currAction);
 
                 tBody.appendChild(currRow); //append the row
 /*
