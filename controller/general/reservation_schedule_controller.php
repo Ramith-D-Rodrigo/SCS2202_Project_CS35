@@ -67,6 +67,7 @@
     unset($branch);
 
     $connection -> close();
+    header('Content-Type: application/json');    //because we are sending json
     echo json_encode($neededInfo);
     //sending opening and closing times as a json response to be received by Javascript
 /*     $arr = ["openingTime" => $reservationPlace[4], "closingTime" => $reservationPlace[5]];

@@ -49,6 +49,7 @@
     }
 
     $connection -> close();
+    header('Content-Type: application/json;');    //because we are sending json
     echo json_encode($branchInfo);
     unset($branchInfo);
 ?>

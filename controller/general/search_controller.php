@@ -12,7 +12,8 @@
     $result = $user -> searchSport($sportName, $connection);  //search the sport
 
     if(isset($result['errMsg'])){   //no sport was found
-       echo json_encode($result);
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($result);
     }
     else{
         $final_result = [];
@@ -40,7 +41,8 @@
             unset($courts);
             unset($branch); //remove the reference
         }
-
+        
+        header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($final_result);
     }
     //header("Location: /public/general/search_results.php");

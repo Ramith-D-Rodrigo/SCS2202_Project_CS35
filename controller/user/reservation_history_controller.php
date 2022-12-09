@@ -44,5 +44,6 @@
     unset($user);
     //header("Location: /public/user/reservation_history.php");    
     $connection -> close();
+    header('Content-Type: application/json;');    //because we are sending json
     echo json_encode($neededInfo);
 ?>

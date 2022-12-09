@@ -20,6 +20,7 @@
     }
     
     $returningJSON =  json_encode($returningResult);
+    header('Content-Type: application/json;');    //because we are sending json
     echo $returningJSON;
     unset($returningResult);
     unset($allSports);
