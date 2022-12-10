@@ -116,6 +116,11 @@ fetch("../../controller/general/our_branches_controller.php")
             receptionist.innerHTML = "Receptionist : " + receptionistName;
             form.appendChild(receptionist);
 
+            const branchEmail = document.createElement("div");  //branch email
+            branchEmail.className = "info";
+            branchEmail.innerHTML = "Branch Email : " + branches[i].email;
+            form.appendChild(branchEmail);
+
             const receptionist_contact = document.createElement("div"); //branch receptionist contact div
             receptionist_contact.className = "info";    
             receptionist_contact.innerHTML = "Receptionist Contact No : " + branches[i].receptionist['contactNum'];
