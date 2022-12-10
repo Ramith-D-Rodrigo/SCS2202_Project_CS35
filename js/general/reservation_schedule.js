@@ -9,6 +9,15 @@ fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn="
     .then(res => res.json())
     .then(data => createReservationSchedulePage(data));
 
+/* const data = {username : "Hello"};
+
+fetch("../../controller/user/make_reservation_controller.php", {
+    method : 'POST',
+    headers : {
+        'Content-Type' : 'application/json',
+    },
+    body : JSON.stringify(data)
+}).then((res) => res.json()).then((data) => console.log(data)).catch(error => console.error(error)) */
 
 function addReservationInformation(jsonData){   //function to add the reservation details to the page
 

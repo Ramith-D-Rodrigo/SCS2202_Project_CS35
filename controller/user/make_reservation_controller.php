@@ -1,5 +1,9 @@
 <?php
     session_start();
+/*     $requestJSON =  file_get_contents("php://input");   //get the raw json string
+    print_r(json_decode($requestJSON, true));
+    exit(); */
+    $previousPage = $_SESSION['prevPage'];
     //$returningMsg = [];
     if(!isset($_SESSION['userrole']) || !isset($_SESSION['userid'])){  //not logged in
         $_SESSION['reservationFail'] = "Please Log in to make a Reservation";
@@ -25,9 +29,6 @@
         header("Location: /index.php");
         exit();
     }
-
-    $previousPage = $_SESSION['prevPage'];
-    //print_r($_POST);
     
     //store the reservation details
 
