@@ -17,7 +17,7 @@
             <?php
                 require_once("header.php");
             ?>
-            <main style="display:flex; justify-content:center; align-items:center;">
+            <main class="body-container">
                 <div class="content-box" id="branches">
                 </div>
             </main>
