@@ -141,6 +141,7 @@
             return $receptionist;
         }
 
+
         public function getAllSports($database){    //only courts with accepted status
             $sql = sprintf("SELECT DISTINCT `s`.`sport_id`,`s`.`sport_name` from `sport` `s` 
             INNER JOIN `sports_court` `sc`
@@ -149,6 +150,7 @@
             ON `b`.`branch_id` = `sc`.`branch_id` 
             WHERE `b`.`branch_id` = '%s'
             AND `sc`.`request_status` = 'a'",
+
             $database -> real_escape_string($this -> branchID));
 
             $result =  $database -> query($sql);
@@ -206,6 +208,14 @@
             return $courts;
         }
 
+        public function updateBranchEmail($newEmail,$database) {
+            $updateSQL = sprintf("UPDATE `branch` SET `branch_email` = '%s' WHERE `branch`.`branch_id` = '%s'",
+            $database -> real_escape_string($newEmail),
+            $database -> real_escape_string($this-> branchID));
+
+            $result = $database -> query($updateSQL);
+            return $result;
+        }
         public function getBranchPictures($database){   //function get branch photos and store in the object
 
             if(isset($this -> photos)){ //if the object has photos set
