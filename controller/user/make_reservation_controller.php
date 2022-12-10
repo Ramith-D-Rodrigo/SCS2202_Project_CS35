@@ -24,6 +24,8 @@
     require_once("../../src/general/reservation.php");
     require_once("../../src/user/user.php");
     require_once("../../src/general/sport_court.php");
+    require_once("../../src/general/sport.php");
+    require_once("../CONSTANTS.php");
 
     if($_SESSION['userrole'] !== 'user'){   //not a user
         header("Location: /index.php");
@@ -37,12 +39,89 @@
     $startingTime = $_POST['reservingStartTime'];
     $endingTime = $_POST['reservingEndTime'];
     $date = $_POST['reservingDate'];
-    $payment = $_POST['reservationPrice'];
     $user = $_SESSION['userid'];
+    
+    //user inputs validation
+    $validationFlag = false;
+    if($numOfpeople <= 0){  //number of people input
+        $validationFlag = true;
+    }
+
+    if($validationFlag === true){
+        $_SESSION['reservationFail'] = "Reservation Failed";
+        $connection -> close();
+        header("Location: {$previousPage}");
+        exit(); 
+    }
+
+    $startingTimeObj = new DateTime($startingTime);
+    $endingTimeObj = new DateTime($endingTime);
+    $timeDifference = date_diff($startingTimeObj, $endingTimeObj);
+
+    if($startingTimeObj >= $endingTimeObj){ //time range validation
+        $validationFlag = true;
+    }
+    else if($startingTimeObj -> format('i') !== '30' && $startingTimeObj -> format('i') !== '00'){  //minutes should be 0 or 30
+        $validationFlag = true;
+    }
+    else if($endingTimeObj -> format('i') !== '30' && $endingTimeObj -> format('i') !== '00'){  //minutes should be 0 or 30
+        $validationFlag = true;
+    }
+    else if($startingTimeObj -> format('s') != '00'){    //seconds should be 0
+        $validationFlag = true;
+    }
+    else if($endingTimeObj -> format('s') != '00'){    //seconds should be 0
+        $validationFlag = true;
+    }
+    else if($timeDifference -> h < MIN_RESERVATION_TIME_HOURS || $timeDifference -> h > MAX_RESERVATION_TIME_HOURS || ($timeDifference -> h === MAX_RESERVATION_TIME_HOURS && $timeDifference -> i === 30)){ //minimum and maximum reservation time period check
+        $validationFlag = true;
+    }
+    if($validationFlag === true){
+        $_SESSION['reservationFail'] = "Reservation Failed";
+        $connection -> close();
+        header("Location: {$previousPage}");
+        exit(); 
+    }
+    
+    $today = new DateTime();
+    $reservingDateObj = new DateTime($date);
+    $dateDifference = date_diff($today, $reservingDateObj);
+
+    if($today >= $reservingDateObj || $dateDifference -> days < MIN_RESERVATION_DAYS || $dateDifference -> days > MAX_RESERVATION_DAYS){  //reservation date validation
+        $validationFlag = true;
+    }
+
+    if($validationFlag === true){
+        $_SESSION['reservationFail'] = "Reservation Failed";
+        $connection -> close();
+        unset($today);
+        unset($reservingDateObj);
+        header("Location: {$previousPage}");
+        exit(); 
+    }
+
+    //can continue
+
+    $reservingCourt = new Sports_Court($court_id);
+    $sport = $reservingCourt -> getSport($connection);
+    $reservingSport = new Sport();
+    $reservingSport -> setID($sport);
+    $reservationPrice = $reservingSport -> getDetails($connection, 'reservationPrice');
+    $calculation = ($timeDifference -> h + ($timeDifference -> i/60));  //get hours and minutes and convert minutes to hours to get the period in hours
+    $payment = $reservationPrice * $calculation;//calculate the payment
+
 
     //reservation availability check
-    $reservingCourt = new Sports_Court($court_id);
     $schedule = $reservingCourt -> getSchedule($connection);
+
+    if(empty($schedule)){   //no schedule 
+        $_SESSION['reservationFail'] = "Reservation Failed";
+        $connection -> close();
+        unset($reservingCourt);
+        unset($reservingSport);
+        header("Location: {$previousPage}");
+        exit(); 
+    }
 
     foreach($schedule as $reservation){
         //print_r($reservation);
@@ -52,6 +131,8 @@
                 $_SESSION['reservationFail'] = "Entered Time Period is already Reserved";
                 //echo "Over the top"."<br>";
                 $connection -> close();
+                unset($reservingCourt);
+                unset($reservingSport);
                 header("Location: {$previousPage}");
                 //echo json_encode($returningMsg);
                 exit();
@@ -61,6 +142,8 @@
                 $_SESSION['reservationFail'] = "Entered Time Period is already Reserved";
                 //echo "within or same"."<br>";
                 $connection -> close();
+                unset($reservingCourt);
+                unset($reservingSport);
                 header("Location: {$previousPage}");
                 //echo json_encode($returningMsg);
                 exit();
@@ -70,6 +153,8 @@
                 $_SESSION['reservationFail'] = "Entered Time Period is already Reserved";
                 //echo "ending is within or same. starting is outside"."<br>";
                 $connection -> close();
+                unset($reservingCourt);
+                unset($reservingSport);
                 header("Location: {$previousPage}");
                 //echo json_encode($returningMsg);
                 exit();
@@ -79,6 +164,8 @@
                 $_SESSION['reservationFail'] = "Entered Time Period is already Reserved";
                 //echo "starting is within or same. ending is outside"."<br>";
                 $connection -> close();
+                unset($reservingCourt);
+                unset($reservingSport);
                 header("Location: {$previousPage}");
                 //echo json_encode($returningMsg);
                 exit();
@@ -106,6 +193,7 @@
     $sport = $reservingCourt -> getBranch */
     unset($reservingCourt);
     unset($reservingUser);
+    unset($reservingSport);
     $connection -> close();
     header("Location: {$previousPage}");
 ?>
