@@ -7,7 +7,7 @@
         private $minCoachingSessionPrice;
         private $maxNumberOfStudents;
 
-        public function getDetails($database){
+        public function getDetails($database, $wantedProperty = ''){
             $sql = sprintf("SELECT * FROM `sport` 
             WHERE `sport_id`
             LIKE '%s'", $database -> real_escape_string($this -> sportID));
@@ -20,8 +20,19 @@
             $this -> reservationPrice = $row -> reservation_price;
 
             $result -> free_result();
-
-            return $this;
+            
+            if($wantedProperty === 'sportID'){
+                return $this -> sportID;
+            }
+            else if($wantedProperty === 'sportName'){
+                return $this -> sportName;
+            }
+            else if($wantedProperty === 'reservationPrice'){
+                return $this -> reservationPrice;
+            }
+            else{
+                return $this;
+            }
         }
 
         public function setID($id){
