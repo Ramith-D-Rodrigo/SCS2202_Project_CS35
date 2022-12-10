@@ -29,10 +29,10 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/general/about_us.php'){ //user register
                     echo "About Us";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/general/search_results.php'){  //search sport
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/search_results.php')){  //search sport
                     echo "Search a Sport";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/general/reservation_schedule.php'){  //Reservation Schedule
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/reservation_schedule.php')){  //Reservation Schedule
                     echo "Reservation Schedule";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/user/reservation_history.php'){  //reservation history
@@ -77,7 +77,7 @@
 
     <nav class="header-links">
         <a href="/index.php">Home</a>
-        <a onclick="window.location.href='/controller/general/our_sports_controller.php'">Our Sports</a>
+        <a href="/public/general/our_sports.php">Our Sports</a>
         <a href="/public/general/our_branches.php">Our Branches</a>
         <a href="/public/general/reg_coaches.php">Registered Coaches</a>
         <a href="/public/general/our_feedback.php">Our Feedback</a>
@@ -85,7 +85,7 @@
         <div id="profile-links" style="float:right; margin-right:20px; display:none">
             <a href="/index.php">Ongoing Sessions</a>
             <a href="/index.php">Left Sessions</a>
-            <a href="/controller/user/reservation_history_controller.php">Reservation History</a>
+            <a href="/public/user/reservation_history.php">Reservation History</a>
             <a href="/public/user/edit_profile.php">Edit Profile</a>
         </div>
     </nav>

@@ -1,7 +1,9 @@
 <?php
     require_once("../../src/general/uuid.php");
     require_once("../../src/system_admin/staffMember.php");
-class Manager implements StaffMember{
+
+class Manager implements JsonSerializable , StaffMember{
+
     private $managerID;
     private $firstName;
     private $lastName;
@@ -30,9 +32,11 @@ class Manager implements StaffMember{
         $this -> branchID = $brID;
         $this -> staffRole = 'manager';
     }
-
-    public function getManagerID(){    //managerID getter
-        return $this -> managerID;
+ 
+    public function getID($database){    //managerID getter
+        if(isset($this -> managerID) || $this -> managerID !== ''){
+            return $this -> managerID;
+        }
     }
 
     private function create_login_details_entry($database){   //enter details to the login_details table
@@ -152,6 +156,53 @@ class Manager implements StaffMember{
         $branchName = $brNameResult -> fetch_object();   //get the branch_city
     
         return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details
+    }
+
+    public function getDetails($database){
+        $sql = sprintf("SELECT * FROM `staff` 
+        WHERE 
+        `staff_id` = '%s'
+        AND
+        `staff_role` = 'manager'",
+        $database -> real_escape_string($this -> managerID));
+
+        $result = $database -> query($sql);
+        $row = $result -> fetch_object();
+
+        $this -> setDetails(fName: $row -> first_name, 
+            lName: $row -> last_name, 
+            contactNo: $row -> contact_number, 
+            dob: $row -> date_of_birth,
+            brID: $row -> branch_id,
+            gender: $row -> gender);
+
+        $this -> joinDate = $row -> join_date;
+        $this -> leaveDate = $row -> leave_date;
+        $this -> staffRole = $row -> staff_role;
+
+        
+        $result -> free_result();
+        unset($row);
+        return $this;
+    }
+
+    public function jsonSerialize(){
+        return [
+            'managerID' => $this -> managerID,
+            'firstName' => $this -> firstName,
+            'lastName' => $this -> lastName,
+            'emailAddress' => $this -> emailAddress,
+            'contactNum' => $this -> contactNum,
+            'joinDate' => $this -> joinDate,
+            'leaveDate' => $this -> leaveDate,
+            'dateOfBirth' => $this -> dateOfBirth,
+            'username' => $this -> username,
+            'password' => $this -> password,
+            'gender' => $this -> gender,
+            'branchID' => $this -> branchID,
+            'staffRole' => $this -> staffRole 
+        ];
+        
     }
 }
 ?>

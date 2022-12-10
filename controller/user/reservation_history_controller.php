@@ -17,26 +17,33 @@
     $user -> setDetails(uid: $_SESSION['userid']);
     $reservationHistory = $user -> getReservationHistory($connection);
     
-    $reservations = [];
-
-    if(isset($_SESSION['reservationHistory'])){ //previous reservation history clear
+/*     if(isset($_SESSION['reservationHistory'])){ //previous reservation history clear
         unset($_SESSION['reservationHistory']);
-    }
+    } */
+    $neededInfo = [];
 
-    if($reservationHistory -> num_rows !== 0){  //has reservations
-        while($row = $reservationHistory -> fetch_object()){    //travserse each reservation
-            $startingTime = $row -> starting_time;
-            $endingTime = $row -> ending_time;
-
-            $row -> {"time_period"} = $startingTime . " to " . $endingTime;
-
-            array_push($reservations, $row);
+    if(count($reservationHistory) !== 0){  //has reservations
+        $reservationJSON = json_encode($reservationHistory);
+        $reservationASSOC = json_decode($reservationJSON, true);
+        foreach($reservationASSOC as $i){
+            //echo($i['user_id']);
+            unset($i["user_id"]);
+            unset($i['formal_manager_id']);
+            unset($i['onsite_receptionist_id']);
+            unset($i['numOfPeople']);
+            unset($i['sport_court']);
+            array_push($neededInfo, $i);
         }
-        $_SESSION['reservationHistory'] = $reservations;
+        unset($reservationASSOC);
+        unset($reservationJSON);
+        //$_SESSION['reservationHistory'] = $reservationHistory;
     }
+    unset($reservationHistory);
+
 
     unset($user);
-    header("Location: /public/user/reservation_history.php");    
+    //header("Location: /public/user/reservation_history.php");    
     $connection -> close();
-
+    header('Content-Type: application/json;');    //because we are sending json
+    echo json_encode($neededInfo);
 ?>

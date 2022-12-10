@@ -57,8 +57,21 @@ function validateForm(event){
             return false;
         } */
     
-    //have to check input values validity (similary)
+        //passwords matching or not
+        const password = document.getElementById("password");
+        const passwordConfirm = document.getElementById("passwordConfirm");
 
+        if(password.value !== passwordConfirm.value){
+            if(verbose){
+                console.log("Passwords do not match");
+            }
+            errMsg.innerHTML = errMsg.innerHTML + "Passwords do not match<br>";
+            flag = false;
+        }
+        else{
+            errMsg.innerHTML.replace("Passwords do not match<br>", "");
+        }
+    //have to check input values validity (similary)
         const emergencyDetails = document.getElementById("emergencyDetails");
         const emergencyDetailsChildren = emergencyDetails.children;
         
@@ -70,26 +83,23 @@ function validateForm(event){
             console.log(emergencyDetailsChildren);
         }
 
-        //1st one (Compulsary)
-        contactNum[0] = emergencyDetailsChildren[5].value;   
-        relationship[0] = emergencyDetailsChildren[3].value.toLowerCase();
-        names[0] = emergencyDetailsChildren[1].value.toLowerCase();
+        //emergency contact details
 
-        if(emergencyDetailsChildren.length == 10){    //has 2 emergency contact details
-            contactNum[1] = emergencyDetailsChildren[9].children[4].value;   //2nd
-            relationship[1] = emergencyDetailsChildren[9].children[2].value.toLowerCase();
-            names[1] = emergencyDetailsChildren[9].children[0].value.toLowerCase();
+        //emergencyDetailsChildren -> the children of the div container that has all the emergency contact details
+        //each children is a div that contains 3 rows (row container)
+        //each row has 2 children (fields -> left and right (both are divs))
+        //each field has 1 element ( we need the right fields children element for input value)
+
+        //div container -> emgcontact children -> rows -> fields -> field's children
+        for(i = 0; i < emergencyDetailsChildren.length; i++){
+            names[i] = emergencyDetailsChildren[i].children[0].children[1].children[0].value.toLowerCase();
+            relationship[i] = emergencyDetailsChildren[i].children[1].children[1].children[0].value.toLowerCase();
+            contactNum[i] = emergencyDetailsChildren[i].children[2].children[1].children[0].value; 
+        }
+        if(verbose){
+            console.log(names, relationship, contactNum);
         }
 
-        if(emergencyDetailsChildren.length == 11){    //has 3 emergency contact details
-            contactNum[1] = emergencyDetailsChildren[9].children[4].value;   //2nd
-            relationship[1] = emergencyDetailsChildren[9].children[2].value.toLowerCase();
-            names[1] = emergencyDetailsChildren[9].children[0].value.toLowerCase();
-
-            contactNum[2] = emergencyDetailsChildren[10].children[4].value;  //3rd
-            relationship[2] = emergencyDetailsChildren[10].children[2].value.toLowerCase();
-            names[2] = emergencyDetailsChildren[10].children[0].value.toLowerCase();
-        }
         const usercontact = document.getElementById('usercontact').value;   //registering user contact details
         const user = (document.getElementById('firstName').value + " " + document.getElementById('lastName').value).toLowerCase(); //registering user's name
 

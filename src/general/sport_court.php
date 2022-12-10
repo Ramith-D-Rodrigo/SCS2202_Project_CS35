@@ -20,7 +20,13 @@
             $database -> real_escape_string($this -> courtID));
 
             $result = $database -> query($sql);
-            return $result;
+            $reservations = [];
+            while($row = $result -> fetch_object()){
+                array_push($reservations, $row);
+                unset($row);
+            }
+            $result -> free_result();
+            return $reservations;
         }
 
         public function getName($database){ // Get sports court name
@@ -40,6 +46,28 @@
             return $result;
         }
 
-    }
+        public function getBranch($database){
+            $sql = sprintf("SELECT `branch_id` FROM `sports_court`
+            WHERE `court_id`
+            LIKE '%s'",
+            $database -> real_escape_string($this -> courtID));
 
+            $result = $database -> query($sql);
+            $branch = $result -> fetch_object() -> branch_id;
+            $result -> free_result();
+            return $branch;
+        }
+
+        public function getSport($database){
+            $sql = sprintf("SELECT `sport_id` FROM `sports_court`
+            WHERE `court_id`
+            LIKE '%s'",
+            $database -> real_escape_string($this -> courtID));
+
+            $result = $database -> query($sql);
+            $sport = $result -> fetch_object() -> sport_id;
+            $result -> free_result();
+            return $sport;
+        }
+    }
 ?>

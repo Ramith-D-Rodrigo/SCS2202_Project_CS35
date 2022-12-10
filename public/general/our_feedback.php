@@ -13,14 +13,36 @@
         <title>Our Feedback</title>
     </head>
     <body>
-            <?php
-                require_once("header.php");
-            ?>
-            Our Feedback
-            <br>
-            <?php
-                require_once("footer.php");
-            ?>
+        <?php
+            require_once("header.php");
+        ?>
+        <main>
+            <div class="content-box" style="align-items:center">
+                <div>
+                    Filter By :
+                    <select id="branchFilter">
+                        <option value="">Branch</option>
+                    </select>
+                </div>
+                <div id="feedbackTableContainer" style="width:100%">
+                    <table style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Branch</th>
+                                <th>Feedback</th>
+                                <th>Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        <?php
+            require_once("footer.php");
+        ?>
     </body>
     <script src="/js/user/account_links.js"></script>
 </html>

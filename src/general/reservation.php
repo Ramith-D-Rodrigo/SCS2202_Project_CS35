@@ -1,7 +1,5 @@
 <?php
-    require_once("uuid.php");
-
-    class Reservation{
+    class Reservation implements JsonSerializable{
         private $reservationID;
         private $date;
         private $startingTime;
@@ -13,6 +11,9 @@
         private $formal_manager_id;
         private $onsite_receptionist_id;
         private $status;     //pending //checked_in //cancelled //declined  //completed
+        private $branch;
+        private $sport;
+        private $court_name;
 
         public function onlineReservation($date, $st, $et, $people, $payment, $court, $user, $database){
             $this -> user_id = $user;
@@ -82,6 +83,62 @@
             $result = $database -> query($sql);
 
             return $result;
+        }
+
+        public function getDetails($database){
+            $sql = sprintf("SELECT `r`.*,
+            `b`.`city`, 
+            `s`.`sport_name`,
+            `sc`.`court_name`  
+            FROM `reservation` `r`
+            INNER JOIN `sports_court` `sc`
+            ON `sc`.`court_id` = `r`.`sport_court`
+            INNER JOIN `sport` `s`
+            ON `sc`.`sport_id` = `s`.`sport_id`
+            INNER JOIN `branch` `b`
+            ON `b`.`branch_id` = `sc`.`branch_id`
+            WHERE `reservation_id` = '%s'",
+            $database -> real_escape_string($this -> reservationID));
+
+            $result = $database -> query($sql);
+
+            $resultObj = $result -> fetch_object();
+            
+            $this -> date = $resultObj -> date;
+            $this -> startingTime = $resultObj -> starting_time;
+            $this -> endingTime = $resultObj -> ending_time;
+            $this -> numOfPeople = $resultObj -> no_of_people;
+            $this -> paymentAmount = $resultObj -> payment_amount;
+            $this -> sport_court = $resultObj -> sport_court;
+            $this -> status = $resultObj -> status;
+            $this -> user_id = $resultObj -> user_id;
+            $this -> formal_manager_id = $resultObj -> formal_manager_id;
+            $this -> onsite_receptionist_id = $resultObj -> onsite_receptionist_id;
+            $this -> branch = $resultObj -> city;
+            $this -> sport = $resultObj -> sport_name;
+            $this -> court_name = $resultObj -> court_name;
+
+            $result -> free_result();
+            unset($resultObj);
+            return $this;
+        }
+        public function JsonSerialize(){
+            return [
+                "reservationID" => $this -> reservationID,
+                "date" => $this -> date,
+                "startingTime" => $this -> startingTime,
+                "endingTime" => $this -> endingTime,
+                "numOfPeople" => $this -> numOfPeople,
+                "paymentAmount" => $this -> paymentAmount,
+                "sport_court" => $this -> sport_court,
+                "user_id" => $this -> user_id,
+                "formal_manager_id" => $this -> formal_manager_id,
+                "onsite_receptionist_id" => $this -> onsite_receptionist_id,
+                "status" => $this -> status,     //pending //checked_in //cancelled //declined  //completed
+                "branch" => $this -> branch,
+                "sport" => $this -> sport,
+                "court_name" => $this -> court_name
+            ];
         }
     }
 ?>

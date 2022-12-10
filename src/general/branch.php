@@ -1,5 +1,6 @@
 <?php
-    require_once("../../src/general/uuid.php");
+    require_once("../../src/manager/manager.php");
+    require_once("../../src/receptionist/receptionist.php");
 
     class Branch implements JsonSerializable{
         private $branchID;
@@ -12,39 +13,82 @@
         private $closing_time;
         private $photos;
 
-        public function __construct($branch_id){    //use the binary id to construct
+        public function __construct($branch_id){ 
             $this -> branchID = $branch_id;
         }
 
         public function getDetails($database){
-            $sql = sprintf("SELECT * FROM `branch`
+            $branchSql = sprintf("SELECT * FROM `branch`
             WHERE 
             `branch_id` 
             LIKE '%s'", 
             $database -> real_escape_string($this -> branchID));
-            $result =  $database -> query($sql);
-            return $result;
+            $result =  $database -> query($branchSql);
+            
+            $row = $result -> fetch_object();
+
+            $managerID = $row -> curr_manager;
+            //get manager details by setting the manager object values
+            $manager = new Manager();
+            $manager -> setDetails(uid: $managerID);
+            $manager -> getDetails($database);
+
+            //get receptionist details by setting the receptionist object values
+            $receptionistID = $row -> curr_receptionist;
+            $receptionist = new Receptionist();
+            $receptionist -> setDetails(uid :$receptionistID);
+            $receptionist -> getDetails($database);
+
+
+            $this -> setDetails(city: $row -> city, address: $row -> address,email: $row -> branch_email, opening_time: $row -> opening_time, closing_time: $row -> closing_time, manager: $manager, receptionist: $receptionist);
+
+            //set branch photos from database
+            $this -> getBranchPictures($database);
+
+            return $this;
         }
 
         public function setDetails($city = '', $address = '', $email = '', $manager = '', $receptionist = '', $opening_time = '', $closing_time = ''){
-            $this -> city = $city;
-            $this -> address = $address;
-            $this -> email = $email;
-            $this -> manager = $manager;
-            $this -> receptionist = $receptionist;
-            $this -> opening_time = $opening_time;
-            $this -> closing_time = $closing_time;
+            //conditions to check if the property is set or passing the default value
+            if(!isset($this -> city) || $city  !== ''){
+                $this -> city = $city;
+            }
+            if(!isset($this -> address) || $address  === ''){
+                $this -> address = $address;
+            }
+            if(!isset($this -> email) || $email  === ''){
+                $this -> email = $email;
+            }
+            if(!isset($this -> manager) || $manager  === ''){
+                $this -> manager = $manager;
+            }
+            if(!isset($this -> receptionist) || $receptionist  === ''){
+                $this -> receptionist = $receptionist;
+            }
+            if(!isset($this -> opening_time) || $opening_time  === ''){
+                $this -> opening_time = $opening_time;
+            }
+            if(!isset($this -> closing_time) || $closing_time  === ''){
+                $this -> closing_time = $closing_time;
+            }
         }
 
-        public function getManager($database){  //get Manager ID
-            if(isset($this -> manager)){
+/*         public function getManager($database){      //get manager Info
+            if(isset($this -> manager) || $this -> manager !== ''){
                 return $this -> manager;
             }
 
-            $sql = sprintf("SELECT staff_id
-            FROM staff
-            WHERE branch_id = '%s'
-            AND staff_role = 'manager'",
+            $this -> manager = new Manager();
+            $managerID = $this -> manager -> getID($database);
+            $this -> manager -> setDetails(uid: $managerID, brID: $this -> branchID);
+            $this -> manager -> getDetails($database);  //get details of the manager
+
+
+            $sql = sprintf("SELECT `staff_id`
+            FROM `staff`
+            WHERE `branch_id` = '%s'
+            AND `leave_date` IS NULL
+            AND `staff_role` = 'manager'",
             $database -> real_escape_string($this -> branchID));
 
             $result = $database -> query($sql);
@@ -54,7 +98,32 @@
             return $manager;
         }
 
-        public function getReceptionist($database){  //get Receptionist ID
+        public function getManagerID($database){ //get Manager ID (currently working)
+            if(isset($this -> manager) || $this -> manager !== ''){ //the manager is set
+                return $this -> manager -> getID($database);
+            }
+
+            $sql = sprintf("SELECT `staff_id`
+            FROM `staff`
+            WHERE `branch_id` = '%s'
+            AND `leave_date` IS NULL
+            AND `staff_role` = 'manager'",
+            $database -> real_escape_string($this -> branchID));
+
+            $result = $database -> query($sql);
+            $row = $result -> fetch_object();
+
+
+            $manager = new Manager();
+            $managerID = $row -> staff_id;
+            $manager -> setDetails(uid: $managerID, brID: $this -> branchID);
+            $this -> manager = $manager;    //for future use
+            unset($row);
+            $result -> free_result();
+            return $managerID;
+        } */
+
+        public function getReceptionistID($database){  //get Receptionist ID
             if(isset($this -> receptionist)){
                 return $this -> receptionist;
             }
@@ -72,18 +141,26 @@
             return $receptionist;
         }
 
-        public function getAllSports($database){
-            $sql = sprintf("SELECT DISTINCT `sport`.`sport_name` from `sport` INNER JOIN `sports_court` 
-            ON `sport`.`sport_id` = `sports_court`.`sport_id` INNER JOIN `staff` 
-            ON `sports_court`.`branch_id` = `staff`.`branch_id` WHERE `staff`.`branch_id` = '%s'",
+
+        public function getAllSports($database){    //only courts with accepted status
+            $sql = sprintf("SELECT DISTINCT `s`.`sport_id`,`s`.`sport_name` from `sport` `s` 
+            INNER JOIN `sports_court` `sc`
+            ON `s`.`sport_id` = `sc`.`sport_id` 
+            INNER JOIN `branch` `b` 
+            ON `b`.`branch_id` = `sc`.`branch_id` 
+            WHERE `b`.`branch_id` = '%s'
+            AND `sc`.`request_status` = 'a'",
+
             $database -> real_escape_string($this -> branchID));
 
             $result =  $database -> query($sql);
-            $sportNames = [];
+            $sports = [];
             while($row = $result -> fetch_object()) {
-                array_push($sportNames,$row -> sport_name);
+                array_push($sports,$row);
+                unset($row);
             }
-            return $sportNames;
+            $result -> free_result();
+            return $sports;
         }
 
         public function getAllCourts($database) {
@@ -100,8 +177,9 @@
             $courtNames = [];
             while($row = $result -> fetch_object()) {
                 array_push($courtNames,$row -> court_name);
+                unset($row);
             }
-
+            $result -> free_result();
             return $courtNames;
         }
 
@@ -118,10 +196,16 @@
             LIKE 
             '%s'", 
             $database -> real_escape_string($this -> branchID),
-            $database -> real_escape_string($sportID));     //get the number of sports courts in a branch when the sport id is given
+            $database -> real_escape_string($sportID)); 
 
             $result = $database -> query($sql);
-            return $result;
+            $courts = [];
+            while($row = $result -> fetch_object()){
+                array_push($courts, $row -> court_id);
+                unset($row);
+            }
+            $result -> free_result();
+            return $courts;
         }
 
         public function updateBranchEmail($newEmail,$database) {
@@ -149,7 +233,9 @@
                 if($row !== NULL){  //has photos
                     array_push($this -> photos, $row -> photo);
                 }
+                unset($row);
             }
+            $result -> free_result();
             return $this -> photos;
         }
 

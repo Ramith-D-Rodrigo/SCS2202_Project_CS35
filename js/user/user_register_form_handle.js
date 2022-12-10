@@ -93,7 +93,7 @@ const emergencyDetailsBtn = document.getElementById("emergencyDetailsbtn");
 var emergencyCount = 1;   //no of emergency details of the user
 let emergencydetailID = [];
 
-for(i = 2; i <=3; i++){ //array of medicalIDs
+for(i = 2; i <=3; i++){ //array of emergencyIDs
     emergencydetailID.push(i);
 }
 if(verbose){
@@ -108,13 +108,14 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     e.preventDefault(); //so that the page is not going to refresh
 
     const inputDiv = document.createElement("div"); //new emergency concern
-    //inputDiv.setAttribute('id', 'emergencydetail' + emergencyCount);
     const currID = emergencydetailID.pop();    //Assigning ID
+    inputDiv.setAttribute('id', 'emergencydetail' + currID);
 
     const inputName = document.createElement("input");
     inputName.setAttribute('type', 'text');
     inputName.setAttribute('name', 'name' + currID);
     inputName.setAttribute('required', '');
+    inputName.setAttribute('pattern', '[a-zA-Z ]+');
 
     const inputRelationship = document.createElement("select");
     inputRelationship.setAttribute('name', 'relationship' + currID);
@@ -148,7 +149,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
 
     removeBtn.addEventListener('click', (e)=>{
         e.preventDefault();
-        const parent = removeBtn.parentElement;
+        const parent = removeBtn.parentElement.parentElement.parentElement; //first parent is right field, grandparent is row container, 3rd one is the inputDiv
         emergencyCount--;
 
         const freedID = removeBtn.id.slice(-1);
@@ -158,17 +159,51 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
         }
         parent.remove();
         if(emergencyCount < 3){
-            emergencyDetailsBtn.style.display = 'block';
+            emergencyDetailsBtn.parentElement.style.display = 'block';
         }
     });
 
-    const breakpoint1 = document.createElement("br");
-    const breakpoint2 = document.createElement("br");
-    const nameField = document.createTextNode("Name: ");
-    const relationshipField = document.createTextNode("Relationship: ");
-    const contactNoField = document.createTextNode("Contact Number: ");
+/*     const breakpoint1 = document.createElement("br");
+    const breakpoint2 = document.createElement("br"); */
+    const nameField = document.createTextNode("Name : ");
+    const relationshipField = document.createTextNode("Relationship :");
+    const contactNoField = document.createTextNode("Contact Number :");
     
-    inputDiv.appendChild(nameField);
+    for(info = 1; info <= 3; info++){
+        const row = document.createElement("div");
+        row.className = "row-container";
+    
+        const leftField = document.createElement("div");
+        leftField.className = "left-field";
+    
+        const rightField = document.createElement("div");
+        rightField.className = "right-field";
+
+        if(info === 1){
+            leftField.appendChild(nameField);
+            rightField.appendChild(inputName);
+
+            row.appendChild(leftField);
+            row.appendChild(rightField);
+        }
+        else if(info === 2){
+            leftField.appendChild(relationshipField);
+            rightField.appendChild(inputRelationship);
+
+            row.appendChild(leftField);
+            row.appendChild(rightField);
+        }
+        else if(info === 3){
+            leftField.appendChild(contactNoField);
+            rightField.appendChild(inputContactNum);
+            rightField.appendChild(removeBtn);
+
+            row.appendChild(leftField);
+            row.appendChild(rightField);
+        }
+        inputDiv.appendChild(row);
+    }
+/*     inputDiv.appendChild(nameField);
     inputDiv.appendChild(inputName);
     inputDiv.appendChild(breakpoint1);
 
@@ -178,11 +213,11 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
 
     inputDiv.appendChild(contactNoField);
     inputDiv.appendChild(inputContactNum);
-    inputDiv.appendChild(removeBtn);
+    inputDiv.appendChild(removeBtn); */
 
     emergencyDetailsContainer.appendChild(inputDiv);
     if(emergencyCount == 3){
-        emergencyDetailsBtn.style.display = 'none';
+        emergencyDetailsBtn.parentElement.style.display = 'none';   //hide the whole div
     }
 });
 
