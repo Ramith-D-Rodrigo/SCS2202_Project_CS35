@@ -11,7 +11,7 @@ class Admin{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT BIN_TO_UUID(`user_id`, true) AS uuid, 
+        $sql = sprintf("SELECT `user_id`
         `username`, 
         `password`, 
         `user_role` 
@@ -33,7 +33,7 @@ class Admin{
         }
 
         //setting admin data for session
-        $this -> adminID = $rows -> uuid;    
+        $this -> adminID = $rows -> user_id;    
 
         return ["Successfully Logged In", $rows -> user_role, $rows -> username];  //return the message and role
     }

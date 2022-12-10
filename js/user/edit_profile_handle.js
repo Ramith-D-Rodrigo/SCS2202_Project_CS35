@@ -22,7 +22,7 @@ function togglePassword(element){
 
 
 const addMedicalConcernBtn = document.getElementById("medicalConcernBtn");
-let numberOfMedicalConcerns = document.getElementById("medicalConcernList").children.length;
+let numberOfMedicalConcerns = document.getElementById("medicalConcernsField").children.length;
 
 console.log(numberOfMedicalConcerns);
 

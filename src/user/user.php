@@ -1,5 +1,5 @@
 <?php
-    require_once("../../src/general/uuid.php");
+    require_once("../../src/general/reservation.php");
 class User implements JsonSerializable{
     private $userID;
     private $firstName;
@@ -57,7 +57,7 @@ class User implements JsonSerializable{
         `user_role`,
         `is_active`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','user', '%s')",
+        ('%s','%s','%s','%s','user', '%s')",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> emailAddress),
@@ -87,7 +87,7 @@ class User implements JsonSerializable{
         `weight`,
         `profile_photo`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), NULLIF('%s', 'NULL'))",
+        ('%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), NULLIF('%s', 'NULL'))",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> firstName),
         $database -> real_escape_string($this -> lastName),
@@ -128,7 +128,7 @@ class User implements JsonSerializable{
                 (`user_id`, 
                 `medical_concern`) 
                 VALUES 
-                (UUID_TO_BIN('%s', 1),'%s')", 
+                ('%s','%s')", 
                 $database -> real_escape_string($this -> userID),
                 $database -> real_escape_string($i)));
 
@@ -157,7 +157,7 @@ class User implements JsonSerializable{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT BIN_TO_UUID(`user_id`, true) AS uuid, 
+        $sql = sprintf("SELECT `user_id`, 
         `username`, 
         `password`, 
         `user_role` 
@@ -179,13 +179,13 @@ class User implements JsonSerializable{
         }
 
         //setting user data for session
-        $this -> userID = $rows -> uuid;  
+        $this -> userID = $rows -> user_id;  
         
         //get the profile pic from the datbase and store in the object's attribute
         $sqlPic = sprintf("SELECT `profile_photo` 
         FROM `user` 
         WHERE `user_id` = '%s'",
-        $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
+        $database -> real_escape_string($this -> userID));
 
         $result = $database -> query($sqlPic);
         $picRow = $result -> fetch_object();
@@ -243,28 +243,33 @@ class User implements JsonSerializable{
     }
 
     public function getReservationHistory($database){   //Joining sport, sport court, branch, reservation tables
-        $sql = sprintf("SELECT `r`.`reservation_id`, 
-        `r`.`date`, 
-        `r`.`starting_time`, 
-        `r`.`ending_time`, 
-        `r`.`payment_amount`, 
-        `r`.`status`, 
-        `b`.`city`, 
-        `s`.`sport_name`,
-        `sc`.`court_name` 
-        FROM `reservation` `r`
-        INNER JOIN `sports_court` `sc` 
-        ON `r`.`sport_court` = `sc`.`court_id`
-        INNER JOIN `sport` `s` 
-        ON `s`.`sport_id` = `sc`.`sport_id`
-        INNER JOIN `branch` `b` 
-        ON `sc`.`branch_id` = `b`.`branch_id`
-        WHERE `r`.`user_id` = '%s'
-        ORDER BY `r`.`date`",
-        $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
+        //get all the reservations
+        $sql = sprintf("SELECT `reservation_id`
+        FROM `reservation`
+        WHERE `user_id` = '%s'
+        ORDER BY `date`",
+        $database -> real_escape_string($this -> userID));
 
         $result = $database -> query($sql);
-        return $result;
+
+        $reservations = [];
+        while($row = $result -> fetch_object()){
+            $reservationID = $row -> reservation_id;
+            $currReservation = new Reservation();
+            $currReservation -> setID($reservationID);
+
+/*             $startingTime = $row -> starting_time;
+            $endingTime = $row -> ending_time; */
+
+            //$row -> {"time_period"} = $startingTime . " to " . $endingTime;
+            $currReservation -> getDetails($database);  //get the reservation details
+
+            array_push($reservations, $currReservation);
+            unset($currReservation);
+            unset($row);
+        }
+        $result -> free_result();
+        return $reservations;
     }
 
     public function cancelReservation($reservation, $database){
@@ -273,13 +278,13 @@ class User implements JsonSerializable{
     }
 
     public function getProfileDetails($database){   //get the profile details and store in the object
-        $detailsSql = sprintf("SELECT * FROM `user` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //user details
+        $detailsSql = sprintf("SELECT * FROM `user` WHERE `user_id` = '%s'", $database -> real_escape_string($this -> userID)); //user details
 
-        $loginSql = sprintf("SELECT * FROM `login_details` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));  //login details
+        $loginSql = sprintf("SELECT * FROM `login_details` WHERE `user_id` = '%s'", $database -> real_escape_string($this -> userID));  //login details
 
-        $medicalConcernsSql = sprintf("SELECT `medical_concern` FROM `user_medical_concern` WHERE `user_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //medical concerns
+        $medicalConcernsSql = sprintf("SELECT `medical_concern` FROM `user_medical_concern` WHERE `user_id` = '%s'", $database -> real_escape_string($this -> userID)); //medical concerns
 
-        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contact_num` FROM `user_dependent` WHERE `owner_id` = '%s'", $database -> real_escape_string(uuid_to_bin($this -> userID, $database))); //user dependents
+        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contact_num` FROM `user_dependent` WHERE `owner_id` = '%s'", $database -> real_escape_string($this -> userID)); //user dependents
 
         $detailsResult = $database -> query($detailsSql);
         $detailsrow = $detailsResult -> fetch_object();
@@ -294,7 +299,7 @@ class User implements JsonSerializable{
         $dependentArr = $dependentResult -> fetch_all(MYSQLI_ASSOC);
 
 
-        //set details (need to add dependents and medical concerns)
+        //set details
         $this -> setDetails(
             fName: $detailsrow -> first_name,
             lName: $detailsrow -> last_name,

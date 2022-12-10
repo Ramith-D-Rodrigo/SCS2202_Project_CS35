@@ -1,6 +1,6 @@
 <?php
     require_once("../../src/general/uuid.php");
-class Receptionist{
+class Receptionist implements JsonSerializable{
     private $receptionistID;
     private $firstName;
     private $lastName;
@@ -28,6 +28,33 @@ class Receptionist{
         $this -> password = $password;
         $this -> branchID = $brID;
         $this -> staffRole = 'receptionist';
+    }
+
+    public function getDetails($database){
+        $sql = sprintf("SELECT * FROM `staff` 
+        WHERE 
+        `staff_id` = '%s'
+        AND
+        `staff_role` = 'receptionist'",
+        $database -> real_escape_string($this -> receptionistID));
+
+        $result = $database -> query($sql);
+        $row = $result -> fetch_object();
+
+        $this -> setDetails(fName: $row -> first_name, 
+            lName: $row -> last_name, 
+            contactNo: $row -> contact_number, 
+            dob: $row -> date_of_birth,
+            brID: $row -> branch_id,
+            gender: $row -> gender);
+
+        $this -> joinDate = $row -> join_date;
+        $this -> leaveDate = $row -> leave_date;
+        $this -> staffRole = $row -> staff_role;
+        
+        $result -> free_result();
+        unset($row);
+        return $this;
     }
 
     public function getReceptionistID(){    //receptionistID getter
@@ -110,7 +137,7 @@ class Receptionist{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT BIN_TO_UUID(`user_id`, 1) AS uuid, 
+        $sql = sprintf("SELECT `user_id` 
         `username`, 
         `password`, 
         `user_role` 
@@ -132,11 +159,11 @@ class Receptionist{
         }
 
         //setting user data for session
-        $this -> receptionistID = $rows -> uuid;
+        $this -> receptionistID = $rows -> user_id;
 
-        $getBranch = sprintf("SELECT BIN_TO_UUID(`branch_id`, 1) AS brid  
+        $getBranch = sprintf("SELECT `branch_id` AS brid  
         FROM `staff`  
-        WHERE `staff_id` = UUID_TO_BIN('%s',1)", 
+        WHERE `staff_id` = '%s'", 
         $database -> real_escape_string($this -> receptionistID));
 
         $brResult = $database -> query($getBranch);
@@ -146,7 +173,7 @@ class Receptionist{
 
         $getBrName = sprintf("SELECT `city`  
         FROM `branch`  
-        WHERE `branch_id` = UUID_TO_BIN('%s',1)", 
+        WHERE `branch_id` = '%s'", 
         $database -> real_escape_string($this -> branchID));
 
         $brNameResult = $database -> query($getBrName);
@@ -238,6 +265,25 @@ class Receptionist{
         }
 
         return $result;
+    }
+
+    public function jsonSerialize(){
+        return [
+            'receptionistID' => $this -> receptionistID,
+            'firstName' => $this -> firstName,
+            'lastName' => $this -> lastName,
+            'emailAddress' => $this -> emailAddress,
+            'contactNum' => $this -> contactNum,
+            'joinDate' => $this -> joinDate,
+            'leaveDate' => $this -> leaveDate,
+            'dateOfBirth' => $this -> dateOfBirth,
+            'username' => $this -> username,
+            'password' => $this -> password,
+            'gender' => $this -> gender,
+            'branchID' => $this -> branchID,
+            'staffRole' => $this -> staffRole 
+        ];
+        
     }
 
 }

@@ -17,7 +17,7 @@
 
     $cancellingUser = new User();
     $cancellingUser -> setDetails(uid: $_SESSION['userid']);
-    $selectedReservation = $_SESSION[$_POST['cancelBtn']];  //get the cancel button'value which is the reservation id
+    $selectedReservation = $_POST['cancelBtn'];  //get the cancel button'value which is the reservation id
 
     $cancellingReservation = new Reservation();
     $cancellingReservation -> setID($selectedReservation);
@@ -31,10 +31,9 @@
         $_SESSION['reserveCancelError'] = "Could Not Cancel the Reservation";
     }
 
-    unset($_SESSION[$_POST['cancelBtn']]);
     unset($cancellingReservation);
     unset($cancellingUser);
     $connection -> close();
-    header("Location: /controller/user/reservation_history_controller.php");
+    header("Location: /public/user/reservation_history.php");
 
 ?>
