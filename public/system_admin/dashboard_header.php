@@ -1,21 +1,38 @@
 <header>
     <div class='header-top'>
-        <?php
-           
-            if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //admin logged in
-        ?>        
-            <!-- <h4>Welcome, </h4> -->
-        <?php       
-            echo "Welcome, ".$_SESSION['username'];
-        ?>  
-            <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
-        <?php
+        <div style="align-items:flex-start"> <!-- For the current visiting page of the site -->
+            <?php
+                if($_SERVER['REQUEST_URI'] === '/public/system_admin/admin_dashboard.php'){  //admin dashboard
+                    echo "Welcome, ".$_SESSION['username'];
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/admin_login.php'){  //admin login
+                    echo "Admin Login";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/staff_register.php'){  //staff register
+                    echo "Staff Register";
+                }
+            ?>
+        </div>
+        <div style="align-items:flex-end">
+            <?php
+            
+            if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){    //admin logged in     
+              
+                if($_SERVER['REQUEST_URI'] === '/public/system_admin/admin_dashboard.php'){    //Check whether the admin is in the dashboard
+            ?>
+                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
+                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href=''">Settings<img src="/styles/icons/settings_icon.svg" class="acc-img"></button>
+                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
+            <?php 
+                } else { 
+            ?>
+                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
+                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/public/system_admin/admin_dashboard.php'">Dashboard<img src="/styles/icons/dashboard_icon.svg" class="dash-img"></button>
+                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
+            <?php
+                }
             }
-            else{
-        ?>
-            <button style="float:right" class="btn" id="login" onclick="window.location.href='/public/general/login.php'">Log in<img src="/styles/icons/login_icon.svg" class="acc-img"></button>
-        <?php
-            }
-        ?>
+            ?>
+        </div>    
     </div>
 </header>

@@ -1,5 +1,9 @@
 <?php 
     session_start();
+    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
+        header("Location: /public/system_admin/admin_login.php");
+        exit();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">

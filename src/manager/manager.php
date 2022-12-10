@@ -1,6 +1,9 @@
 <?php
     require_once("../../src/general/uuid.php");
-class Manager implements JsonSerializable{
+    require_once("../../src/system_admin/staffMember.php");
+
+class Manager implements JsonSerializable , StaffMember{
+
     private $managerID;
     private $firstName;
     private $lastName;
@@ -45,7 +48,7 @@ class Manager implements JsonSerializable{
         `user_role`,
         `is_active`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','manager',1)",
+        ('%s','%s','%s','%s','manager',1)",
         $database -> real_escape_string($this -> managerID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> emailAddress),
@@ -74,7 +77,7 @@ class Manager implements JsonSerializable{
         `branch_id`,
         `staff_role`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), UUID_TO_BIN('%s', 1), '%s')",
+        ('%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), '%s', '%s')",
         $database -> real_escape_string($this -> managerID),
         $database -> real_escape_string($this -> contactNum),
         $database -> real_escape_string($this -> gender),
@@ -90,13 +93,13 @@ class Manager implements JsonSerializable{
     }
 
     private function create_manager_entry($database) {
-        $result = $database->query(sprintf("INSERT INTO `manager` (`manager_id`) VALUES (UUID_TO_BIN('%s',1))",
+        $result = $database->query(sprintf("INSERT INTO `manager` (`manager_id`) VALUES ('%s')",
         $database -> real_escape_string($this -> managerID)));
 
         return $result;
     }
 
-    public function registerManager($database){    //public function to register the user
+    public function register($database){    //public function to register the user
         $this -> joinDate = date("Y-m-d");
         $this -> leaveDate = '';
         $loginEntry = $this -> create_login_details_entry($database);
@@ -109,7 +112,7 @@ class Manager implements JsonSerializable{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT BIN_TO_UUID(`user_id`, 1) AS uuid, 
+        $sql = sprintf("SELECT `user_id`, 
         `username`, 
         `password`, 
         `user_role` 
@@ -133,9 +136,9 @@ class Manager implements JsonSerializable{
         //setting user data for session
         $this -> managerID = $rows -> uuid;
 
-        $getBranch = sprintf("SELECT BIN_TO_UUID(`branch_id`, 1) AS brid  
+        $getBranch = sprintf("SELECT `branch_id` AS brid  
         FROM `staff`  
-        WHERE `staff_id` = UUID_TO_BIN('%s',1)", 
+        WHERE `staff_id` = '%s'", 
         $database -> real_escape_string($this -> managerID));
 
         $brResult = $database -> query($getBranch);
@@ -145,7 +148,7 @@ class Manager implements JsonSerializable{
 
         $getBrName = sprintf("SELECT `city`  
         FROM `branch`  
-        WHERE `branch_id` = UUID_TO_BIN('%s',1)", 
+        WHERE `branch_id` = '%s'", 
         $database -> real_escape_string($this -> branchID));
 
         $brNameResult = $database -> query($getBrName);

@@ -169,5 +169,5 @@ function validateForm(e){
     }
 
     errorMsg.innerHTML = "";
-    return true;
+    return tr
 }
