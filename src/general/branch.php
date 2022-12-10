@@ -124,6 +124,14 @@
             return $result;
         }
 
+        public function updateBranchEmail($newEmail,$database) {
+            $updateSQL = sprintf("UPDATE `branch` SET `branch_email` = '%s' WHERE `branch`.`branch_id` = '%s'",
+            $database -> real_escape_string($newEmail),
+            $database -> real_escape_string($this-> branchID));
+
+            $result = $database -> query($updateSQL);
+            return $result;
+        }
         public function getBranchPictures($database){   //function get branch photos and store in the object
 
             if(isset($this -> photos)){ //if the object has photos set

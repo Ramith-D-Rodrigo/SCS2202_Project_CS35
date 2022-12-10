@@ -1,12 +1,22 @@
 <?php
 
     function checkContactNumber($contactN,$database){
-        $result = $database -> query("SELECT `contact_number` FROM `staff`");
+        $sql = sprintf("SELECT * FROM `staff` WHERE `contact_number` ='%s'",
+        $database -> real_escape_string($contactN));
+
+        $result = $database -> query($sql);
         return $result;
     }
+
+    function checkBranchEmail($email, $database){
+        $hasEmailsql = sprintf("SELECT * FROM `branch` WHERE `branch_email` = '%s'", $database -> real_escape_string(htmlspecialchars($email, ENT_QUOTES)));     //check existing same email
+        $result = $database -> query($hasEmailsql);    
+        return $result;
+    }
+
     function checkStaffEmail($email, $database){
         $hasEmailsql = sprintf("SELECT * FROM `login_details` WHERE `email_address` = '%s'", $database -> real_escape_string(htmlspecialchars($email, ENT_QUOTES)));     //check existing same email
-        $result = $database -> query($hasEmailsql);
+        $result = $database -> query($hasEmailsql);    
         return $result;
     }
 

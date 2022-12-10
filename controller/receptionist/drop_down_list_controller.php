@@ -3,7 +3,6 @@
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/receptionist/dbconnection.php");
     require_once("../../src/general/branch.php");
-    require_once("../../src/general/uuid.php");
     require_once("../../src/system_admin/staff.php");
 
     $staffMember = new Staff();

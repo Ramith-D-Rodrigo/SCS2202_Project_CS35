@@ -332,6 +332,34 @@ class Receptionist implements StaffMember{
 
         return $allInfo;
     }
+
+    public function updateBranchEmail($branchID,$email,$database) {
+        $branch = new Branch($branchID);
+        $result = $branch -> updateBranchEmail($email,$database);
+
+        return $result;
+    }
+
+    public function updateContactNumber($recepID,$number,$database){
+        $updateSQL = sprintf("UPDATE `staff` SET `contact_number` = '%s' WHERE `staff`.`staff_id` = '%s'",
+        $database -> real_escape_string($number),
+        $database -> real_escape_string($recepID));
+
+        $result = $database -> query($updateSQL);
+        return $result;
+    }
+
+    public function updateBranch($recepID,$branchID,$email,$number,$database){
+        $updateEmail = $this -> updateBranchEmail($branchID,$email,$database);
+        $updateNumber = $this -> updateContactNumber($recepID,$number,$database);
+
+        if($updateEmail === TRUE && $updateNumber === TRUE){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+
+    }
 }
 
 ?>
