@@ -1,6 +1,7 @@
 <?php
     require_once("../../src/manager/manager.php");
     require_once("../../src/receptionist/receptionist.php");
+    require_once("../../src/general/branch_feedback.php");
 
     class Branch implements JsonSerializable{
         private $branchID;
@@ -17,35 +18,54 @@
             $this -> branchID = $branch_id;
         }
 
-        public function getDetails($database){
-            $branchSql = sprintf("SELECT * FROM `branch`
-            WHERE 
-            `branch_id` 
-            LIKE '%s'", 
-            $database -> real_escape_string($this -> branchID));
-            $result =  $database -> query($branchSql);
-            
-            $row = $result -> fetch_object();
+        public function getDetails($database, $wantedProperty = ''){
+            if($wantedProperty === 'branch_id'){
+                return $this -> branchID;
+            }
+            else if($wantedProperty === ''){
+                $branchSql = sprintf("SELECT * FROM `branch`
+                WHERE 
+                `branch_id` 
+                LIKE '%s'", 
+                $database -> real_escape_string($this -> branchID));
+                $result =  $database -> query($branchSql);
+                
+                $row = $result -> fetch_object();
+                $result -> free_result();
+    
+                $managerID = $row -> curr_manager;
+                //get manager details by setting the manager object values
+                $manager = new Manager();
+                $manager -> setDetails(uid: $managerID);
+                $manager -> getDetails($database);
+    
+                //get receptionist details by setting the receptionist object values
+                $receptionistID = $row -> curr_receptionist;
+                $receptionist = new Receptionist();
+                $receptionist -> setDetails(uid :$receptionistID);
+                $receptionist -> getDetails($database);
+    
+    
+                $this -> setDetails(city: $row -> city, address: $row -> address,email: $row -> branch_email, opening_time: $row -> opening_time, closing_time: $row -> closing_time, manager: $manager, receptionist: $receptionist);
+    
+                //set branch photos from database
+                $this -> getBranchPictures($database);
+    
+                return $this;
+            }
+            else{
+                $sql = sprintf("SELECT `%s` as `wanted_property` FROM `branch` WHERE `branch_id` LIKE '%s'", 
+                $database -> real_escape_string($wantedProperty),
+                $database -> real_escape_string($this -> branchID));
 
-            $managerID = $row -> curr_manager;
-            //get manager details by setting the manager object values
-            $manager = new Manager();
-            $manager -> setDetails(uid: $managerID);
-            $manager -> getDetails($database);
+                $result = $database -> query($sql);
+                $row = $result -> fetch_object();
+                $wantedInfo = $row -> wanted_property;
+                unset($row);
+                $result -> free_result();
+                return $wantedInfo;
+            }
 
-            //get receptionist details by setting the receptionist object values
-            $receptionistID = $row -> curr_receptionist;
-            $receptionist = new Receptionist();
-            $receptionist -> setDetails(uid :$receptionistID);
-            $receptionist -> getDetails($database);
-
-
-            $this -> setDetails(city: $row -> city, address: $row -> address,email: $row -> branch_email, opening_time: $row -> opening_time, closing_time: $row -> closing_time, manager: $manager, receptionist: $receptionist);
-
-            //set branch photos from database
-            $this -> getBranchPictures($database);
-
-            return $this;
         }
 
         public function setDetails($city = '', $address = '', $email = '', $manager = '', $receptionist = '', $opening_time = '', $closing_time = ''){
@@ -237,6 +257,28 @@
             }
             $result -> free_result();
             return $this -> photos;
+        }
+
+        public function getBranchFeedback($database){
+            $sql = sprintf("SELECT `userfeedback_id` FROM `user_branch_feedback` WHERE `branch_id` = '%s'",
+            $database -> real_escape_string($this -> branchID));    //sql to get the feedback ids
+
+            $result = $database -> query($sql);
+
+            $allFeedbacks = [];
+
+            while($row = $result -> fetch_object()){    //traverse each result
+                $currFeedbackID = $row -> userfeedback_id;
+                $tempFeedback = new Branch_Feedback();  //create an feedback object for each result
+                $tempFeedback -> setDetails(userfeedback_id: $currFeedbackID);
+
+                $tempFeedback -> getDetails($database); //get feedback details
+                array_push($allFeedbacks, $tempFeedback);
+                unset($tempFeedback);
+                unset($row);
+            }
+
+            return $allFeedbacks;
         }
 
         public function jsonSerialize(){
