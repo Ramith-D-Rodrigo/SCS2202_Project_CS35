@@ -19,9 +19,9 @@
         <main>
             <div class="content-box" style="align-items:center">
                 <div>
-                    Filter By :
+                    Filter By Branch:
                     <select id="branchFilter">
-                        <option value="">Branch</option>
+                        <option value="">All</option>
                     </select>
                 </div>
                 <div id="feedbackTableContainer" style="width:100%">
@@ -45,4 +45,5 @@
         ?>
     </body>
     <script src="/js/user/account_links.js"></script>
+    <script src="/js/general/our_feedback.js"></script>
 </html>
