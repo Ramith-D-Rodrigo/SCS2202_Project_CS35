@@ -1,5 +1,6 @@
 <?php
     session_start();
+    $_SESSION['prevPage'] = $_SERVER['REQUEST_URI'];
 ?>
 
 <!DOCTYPE html>
@@ -18,68 +19,34 @@
         ?>
         <main>
             <div class='content-box'>
-                <?php
-                    if(isset($_SESSION['branch_reservation_schedule'])){    //get the reservation schedule
-                ?>
-                    <div style="display:flex; flex-direction:row; justify-content:space-around;">
+                <div style="display:flex; flex-direction:row; justify-content:space-between;">
 
-                        <div>
-                            Sport : <?php echo $_SESSION['reservingSport'] ?>
-                        </div>
-
-                        <div>
-                            Branch : <?php echo $_SESSION['reservingBranch'] ?>
-                        </div>
-                        <div>
-                            Reservation Price : Rs.<?php echo $_SESSION['reserve_price'] ?> per Hour
-                        </div>
-                    </div>
-                    <div style="margin-top: 10px; display:flex; flex-direction:row; justify-content:space-around;">
-                        <div>
-                            Branch Opening Time : <?php echo $_SESSION['opening_time'] ?>
-                        </div>
-                        <div>
-                            Branch Closing Time : <?php echo $_SESSION['closing_time'] ?>
-                        </div>
+                    <div id="reservingSportName">
+                        Sport :
                     </div>
 
-                    <div style="margin-top:10px">
-                        
-                            <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){?>
-                                <button id=<?php echo $courtid?> class="courtBtn">Court <?php echo $court['courtName']?></button>
-                            <?php
-                                }
-                            ?>
-                            <div style="float:right">
-                                <button id="prevBtn">Previous</button>
-                                <button id="nextBtn">Next</button>
-                            </div>
-
-
-                            <?php foreach($_SESSION['branch_reservation_schedule'] as $courtid => $court){
-                                $i = 1;
-                            
-                            ?>
-                        <div class="court-schedule" id="court<?php echo $courtid?>">
-                                <?php foreach($court['schedule'] as $schedule){?>
-                                <div class="reservationInfo" id="reservation<?php echo $i?>">
-                                    <div class="date"><?php echo $schedule['date'] ?></div> 
-                                    <div class="st"><?php echo $schedule['starting_time'] ?></div>
-                                    <div class="et"><?php echo $schedule['ending_time'] ?></div>  
-                                </div>
-                                <?php
-                                    $i++;
-                                }
-                                ?>
-                        </div>
-                        <?php
-                        }
-                        ?>
+                    <div id="reservingBranchLocation">
+                        Branch : 
                     </div>
-                <?php
-                    }
-                ?>                        
+                    <div id="reservationPriceDisplay">
+                        Reservation Price :
+                    </div>
+                </div>
+                <div style="margin-top: 10px; display:flex; flex-direction:row; justify-content:space-between;">
+                    <div id="branchOpeningTime">
+                        Branch Opening Time :
+                    </div>
+                    <div id="branchClosingTime">
+                        Branch Closing Time :
+                    </div>
+                </div>
 
+                <div style="margin-top:10px"  id="allScheduleDetails">
+                    <div style="float:right" id="scheduleNavBtns">
+                        <button id="prevBtn">Previous</button>
+                        <button id="nextBtn">Next</button>
+                    </div>
+                </div>                      
             </div>
 
             <div class='content-box'>
@@ -89,11 +56,11 @@
                     <form method="post" action="/controller/user/make_reservation_controller.php">
                         <div style="display:flex; flex-direction: row; flex-wrap: wrap; justify-content:space-around">
                             <div style ="flex-basis: 33.333333%">
-                                Sport : <input name ="reservingSport" value= <?php echo $_SESSION['reservingSport'] ?> readonly> 
+                                Sport : <input name ="reservingSport" readonly id="reservingSportInput"> 
                             </div>
 
                             <div style ="flex-basis: 33.333333%">
-                                Branch : <input name = "reservingBranch" value= <?php echo $_SESSION['reservingBranch']?> readonly>
+                                Branch : <input name = "reservingBranch" readonly id="reservingBranchInput">
                             </div>
 
                             <div style ="flex-basis: 33.333333%">
@@ -105,12 +72,12 @@
                             </div>
                                 
                             <div style ="flex-basis: 33.333333%">
-                                Starting Time : <input type="time" name="reservingStartTime" required id="reserveStartingTime" min= <?php echo substr($_SESSION['opening_time'],0,5)?> max= <?php echo substr($_SESSION['closing_time'],0,5)?>>
+                                Starting Time : <input type="time" name="reservingStartTime" required id="reserveStartingTime">
                                 
                             </div>
 
                             <div style ="flex-basis: 33.333333%">
-                                Ending Time : <input type="time" required name="reservingEndTime" id="reserveEndingTime" min= <?php echo substr($_SESSION['opening_time'],0,5)?> max= <?php echo substr($_SESSION['closing_time'],0,5)?>>
+                                Ending Time : <input type="time" required name="reservingEndTime" id="reserveEndingTime">
                             </div>
                             <div style ="flex:auto">
                                 Number of People : <input type="text" required name="numOfPeople" id="numOfPeople" min="1" pattern="[0-9]+">
@@ -131,7 +98,7 @@
                         ?>
                         </div>
                         <div style="text-align:center">
-                            Reservation Price : <input readonly id="reservationPrice" min=<?php echo $_SESSION['reserve_price']?> name="reservationPrice">
+                            Reservation Price : <input readonly id="reservationPrice" name="reservationPrice">
                         </div>
                         <div style="display:flex; align-items: center; justify-content: center;">
                             <button type="submit" name="makeReserveBtn" id="makeReserveBtn" onclick="return validateForm(event)" style="margin-top:10px;">Make Reservation</button>

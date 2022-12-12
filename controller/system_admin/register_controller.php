@@ -20,6 +20,7 @@
             $_SESSION[$i] = $_POST[$i];
         }
     }
+
     
     //Checking if the account already exists
 
@@ -41,6 +42,18 @@
         unset($_SESSION['emailError']); //email is available, hence unset the error message
     }
     
+    //contact number availability
+    $hasContactNumber = checkContactNumber($_POST['contact_number'],$connection);
+
+    if($hasContactNumber -> num_rows > 0){    //contact number already exists
+        $_SESSION['numberError'] = "Contact Number already exists.";
+        header("Location: /public/system_admin/staff_register.php");
+        $connection -> close(); //close the database connection
+        exit(); //exit the registration
+    }
+    else{
+        unset($_SESSION['numberError']); //contact number is available, hence unset the error message
+    }
     //username availability    
     $hasUsernameResult = checkUsername($_POST['username'], $connection);
 
@@ -57,7 +70,7 @@
     $branchName = htmlspecialchars($_POST['branchName'], ENT_QUOTES);
     $staffRole = htmlspecialchars($_POST['staffRole'], ENT_QUOTES);
 
-    if($staffRole === 'Receptionist') {
+    if($staffRole === 'receptionist') {
         $hasReceptionist = checkReceptionist($branchName,$connection);
 
         if($hasReceptionist -> num_rows > 0){    //receptionist already exists
@@ -86,7 +99,13 @@
     //can create a account
 
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    //hash the password
-    $userid = generateUUID($connection);   //create an user id using uuid function
+    $userid; 
+    if($staffRole === 'receptionist'){
+        $userid = uniqid("rcptnst");
+    }else{
+        $userid = uniqid("mngr");
+    }
+       //create an user id using uuid function
     // $userIDResult = $connection -> query($useridsql); //get the result from query
 
     // foreach($userIDResult as $row){   //get the user id 
@@ -103,33 +122,23 @@
     
     
 
-    $admin = new Admin();
+    $admin = Admin::getInstance();
     $branchID = $admin -> getBranchID($branchName,$connection);
     
     $result = false;
-    if($staffRole === 'Receptionist') {
-        $new_receptionist = new Receptionist();
-        $new_receptionist -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
-        $result = $new_receptionist -> registerReceptionist($connection);
-    }
-    else {                 
-        $new_manager = new Manager();
-        $new_manager -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
-        $result = $new_manager -> registerManager($connection);
-    }
+    $result = $admin -> registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$connection);
     
-
     if($result === TRUE){   //successfully registered
             echo "Successfully Registered";
-        // foreach($inputFields as $i){    //store session details
-        //     if(isset($_SESSION[$i])){   //unsetting input values
-        //         session_unset($i);
-        //     }
-        // } 
-        session_unset(); //free all current session variables 
+        foreach($inputFields as $i){    //store session details
+            if(isset($_SESSION[$i])){   //unsetting input values
+                session_unset($i);
+            }
+        } 
+        // session_unset(); free all current session variables 
 
         $_SESSION['RegsuccessMsg'] = 'Registered Successfully';
-        header("Location: /public/system_admin/admin_dashboard.php");
+        header("Location: /public/system_admin/staff_register.php");
     }
 
     $connection -> close(); //close the database connection

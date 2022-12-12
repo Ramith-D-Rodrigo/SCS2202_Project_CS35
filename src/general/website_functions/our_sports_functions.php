@@ -1,9 +1,15 @@
 <?php
 
     function getAllSports($database){
-        $sql = sprintf("SELECT * FROM `sport`");   //sport id in binary
+        $sql = sprintf("SELECT * FROM `sport`");
         $result = $database -> query($sql);
-        return $result;
+        $sports = [];
+        while($row = $result -> fetch_object()){
+            array_push($sports, $row);
+            unset($row);
+        }
+        $result -> free_result();
+        return $sports;
     }
 
     function branchesWithThatSport($sportID, $database){
@@ -19,7 +25,15 @@
 
         $result = $database -> query($sql);
 
-        return $result;
+        $branches = [];
+
+        while($row = $result -> fetch_object()){
+            array_push($branches, $row);
+            unset($row);
+        }
+        
+        $result -> free_result();
+        return $branches;
     }
 
 ?>
