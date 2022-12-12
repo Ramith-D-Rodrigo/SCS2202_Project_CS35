@@ -7,14 +7,22 @@ function sortByDate(row1, row2){    //sort feedback rows by dates (rows are tabl
     const date2 = new Date(dateCell2.innerHTML);
     
     if(date1 < date2){
-        return -1;
+        return 1;
     }
     else if(date1 === date2){
         return 0;
     }
     else{
-        return 1;
+        return -1;
     }
+}
+
+function filterBranch(e){
+    const tableCells = Array.from(document.querySelectorAll("tr"));
+    const filteredCells = tableCells.filter(i => i.id === e.target.id);
+
+    const filteredRows = filteredCells.filter(i => i.parentElement);
+    console.log(filteredRows);
 }
 
 
@@ -78,11 +86,11 @@ fetch("../../controller/general/our_feedback_controller.php")
         
         //console.log(branchFeedbacks);
         branchFeedbacks.sort(sortByDate);
-        //console.log(branchFeedbacks);
+        console.log(branchFeedbacks);
 
-        for(i = 0; i < data.length; i++){   //for each branch
+        branchFeedbacks.forEach(i => tableBody.appendChild(i)); //append the table rows
 
-        }
+        
 
     })
     .catch(err => console.error(err));
