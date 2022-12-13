@@ -65,7 +65,7 @@ fetch("../../controller/general/our_feedback_controller.php")
             //console.log(data[dataKeys[i]]);
 
             for(j = 0; j < data[dataKeys[i]].length; j++){    //traversing each feedback for a particular branch
-                //console.log(data[dataKeys[i]][j].description);
+                console.log(data[dataKeys[i]].length);
                 const feedbackRow = document.createElement("tr");   //feedback row
                 feedbackRow.className = currBranch.branchID;    //same class to identify feedback rows for each branch
 
@@ -82,19 +82,17 @@ fetch("../../controller/general/our_feedback_controller.php")
                 feedbackRow.appendChild(feedbackCell);
 
                 const ratingCell = document.createElement("td");    //rating cell
-                const userRating = data[dataKeys[i]][j].rating;
-
-                //ratingCell.innerHTML = data[dataKeys[i]][j].rating;
-                
+                const userRating = parseInt(data[dataKeys[i]][j].rating);
+               
                 if(userRating === 5){   //5 stars
-                    for(i = 0; i < 5; i++){
+                    for(k = 0; k < 5; k++){
                         const star = document.createElement("span");
                         star.className = "fa fa-star checked";
                         ratingCell.appendChild(star);
                     }
                 }
                 else if(userRating === 4){  //4 stars
-                    for(i = 0; i < 4; i++){
+                    for(k = 0; k < 4; k++){
                         const star = document.createElement("span");
                         star.className = "fa fa-star checked";
                         ratingCell.appendChild(star);
@@ -104,24 +102,24 @@ fetch("../../controller/general/our_feedback_controller.php")
                     ratingCell.appendChild(star);
                 }
                 else if(userRating === 3){  //3 stars
-                    for(i = 0; i < 3; i++){
+                    for(k = 0; k < 3; k++){
                         const star = document.createElement("span");
                         star.className = "fa fa-star checked";
                         ratingCell.appendChild(star);
                     }
-                    for(i = 0; i < 2; i++){
+                    for(k = 0; k < 2; k++){
                         const star = document.createElement("span");
                         star.className = "fa fa-star";
                         ratingCell.appendChild(star);
                     }
                 }
                 else if(userRating === 2){  //2 stars
-                    for(i = 0; i < 2; i++){
+                    for(k = 0; k < 2; k++){
                         const star = document.createElement("span");
                         star.className = "fa fa-star checked";
                         ratingCell.appendChild(star);
                     }
-                    for(i = 0; i < 3; i++){
+                    for(k = 0; k < 3; k++){
                         const star = document.createElement("span");
                         star.className = "fa fa-star";
                         ratingCell.appendChild(star);
@@ -131,14 +129,14 @@ fetch("../../controller/general/our_feedback_controller.php")
                     const star = document.createElement("span");
                     star.className = "fa fa-star checked";
                     ratingCell.appendChild(star);
-                    for(i = 0; i < 4; i++){
+                    for(k = 0; k < 4; k++){
                         const star = document.createElement("span");
                         star.className = "fa fa-star";
                         ratingCell.appendChild(star);
                     }
                 }
                 else{   //0 stars
-                    for(i = 0; i < 5; i++){
+                    for(k = 0; k < 5; k++){
                         const star = document.createElement("span");
                         star.className = "fa fa-star";
                         ratingCell.appendChild(star);
