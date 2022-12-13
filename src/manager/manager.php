@@ -168,7 +168,10 @@ class Manager implements JsonSerializable , StaffMember{
 
         $result = $database -> query($sql);
         $row = $result -> fetch_object();
-
+        
+        if($row === NULL){
+            return FALSE;
+        }
         $this -> setDetails(fName: $row -> first_name, 
             lName: $row -> last_name, 
             contactNo: $row -> contact_number, 
