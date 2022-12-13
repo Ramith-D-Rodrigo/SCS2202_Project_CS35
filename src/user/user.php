@@ -301,19 +301,19 @@ class User implements JsonSerializable{
 
         //set details
         $this -> setDetails(
-            'fName: $detailsrow -> first_name',
-            'lName: $detailsrow -> last_name',
-            'gender: $detailsrow -> gender',
-            'address: $detailsrow -> home_address',
-            'contactNo: $detailsrow -> contact_num',
-            'dob: $detailsrow -> birthday',
-            'height: $detailsrow -> height',
-            'weight: $detailsrow -> weight',
-            'email: $loginrow -> email_address',
-            'password: $loginrow -> password',
-            'username: $loginrow -> username',
-            'medicalConcerns: $medicalConcernsArr',
-            'dependents: $dependentArr');
+            fName: $detailsrow -> first_name,
+            lName: $detailsrow -> last_name,
+            gender: $detailsrow -> gender,
+            address: $detailsrow -> home_address,
+            contactNo: $detailsrow -> contact_num,
+            dob: $detailsrow -> birthday,
+            height: $detailsrow -> height,
+            weight: $detailsrow -> weight,
+            email: $loginrow -> email_address,
+            password: $loginrow -> password,
+            username: $loginrow -> username,
+            medicalConcerns: $medicalConcernsArr,
+            dependents: $dependentArr);
 
         $this -> setProfilePic($detailsrow -> profile_photo);   //set profile pic
 
