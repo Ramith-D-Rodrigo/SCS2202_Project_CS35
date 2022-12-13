@@ -77,12 +77,73 @@ fetch("../../controller/general/our_feedback_controller.php")
                 branchCell.innerHTML = currBranch.branchCity;
                 feedbackRow.appendChild(branchCell);
 
-                const feedbackCell = document.createElement("td");    //rating cell
+                const feedbackCell = document.createElement("td");    //description cell
                 feedbackCell.innerHTML = data[dataKeys[i]][j].description;
                 feedbackRow.appendChild(feedbackCell);
 
                 const ratingCell = document.createElement("td");    //rating cell
-                ratingCell.innerHTML = data[dataKeys[i]][j].rating;
+                const userRating = data[dataKeys[i]][j].rating;
+
+                //ratingCell.innerHTML = data[dataKeys[i]][j].rating;
+                
+                if(userRating === 5){   //5 stars
+                    for(i = 0; i < 5; i++){
+                        const star = document.createElement("span");
+                        star.className = "fa fa-star checked";
+                        ratingCell.appendChild(star);
+                    }
+                }
+                else if(userRating === 4){  //4 stars
+                    for(i = 0; i < 4; i++){
+                        const star = document.createElement("span");
+                        star.className = "fa fa-star checked";
+                        ratingCell.appendChild(star);
+                    }
+                    const star = document.createElement("span");
+                    star.className = "fa fa-star";
+                    ratingCell.appendChild(star);
+                }
+                else if(userRating === 3){  //3 stars
+                    for(i = 0; i < 3; i++){
+                        const star = document.createElement("span");
+                        star.className = "fa fa-star checked";
+                        ratingCell.appendChild(star);
+                    }
+                    for(i = 0; i < 2; i++){
+                        const star = document.createElement("span");
+                        star.className = "fa fa-star";
+                        ratingCell.appendChild(star);
+                    }
+                }
+                else if(userRating === 2){  //2 stars
+                    for(i = 0; i < 2; i++){
+                        const star = document.createElement("span");
+                        star.className = "fa fa-star checked";
+                        ratingCell.appendChild(star);
+                    }
+                    for(i = 0; i < 3; i++){
+                        const star = document.createElement("span");
+                        star.className = "fa fa-star";
+                        ratingCell.appendChild(star);
+                    }
+                }
+                else if(userRating === 1){  //1 star
+                    const star = document.createElement("span");
+                    star.className = "fa fa-star checked";
+                    ratingCell.appendChild(star);
+                    for(i = 0; i < 4; i++){
+                        const star = document.createElement("span");
+                        star.className = "fa fa-star";
+                        ratingCell.appendChild(star);
+                    }
+                }
+                else{   //0 stars
+                    for(i = 0; i < 5; i++){
+                        const star = document.createElement("span");
+                        star.className = "fa fa-star";
+                        ratingCell.appendChild(star);
+                    }
+                }
                 feedbackRow.appendChild(ratingCell);
 
                 branchFeedbacks.push(feedbackRow);
