@@ -1,4 +1,4 @@
-import { verbose, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, MAX_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS } from "../CONSTANTS";
+import { verbose, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, MAX_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS } from "../CONSTANTS.js";
 
 const reserveStartingTime = document.getElementById("reserveStartingTime");
 const reserveEndingTime = document.getElementById("reserveEndingTime");

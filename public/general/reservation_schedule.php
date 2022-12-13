@@ -116,6 +116,6 @@
         ?>
     </body>
     <script src="/js/general/reservation_schedule.js"></script>
-    <script src="/js/general/reservation_validation.js"></script>
+    <script type="module" src="/js/general/reservation_validation.js"></script>
     <script src="/js/user/account_links.js"></script>
 </html>
