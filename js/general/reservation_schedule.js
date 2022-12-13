@@ -103,7 +103,7 @@ function createReservationTable(schedules, scheduleObjs, jsonData){
         const tableCell = tableRow.insertCell();    //first empty cell
     
     
-    /*     for(j = 0;  j < weekdays.length; j++){   //adding days to the header of the table
+/*         for(j = 0;  j < weekdays.length; j++){   //adding days to the header of the table
             const weekdayTab = tableRow.insertCell();
             weekdayTab.innerHTML = weekdays[j];
             
