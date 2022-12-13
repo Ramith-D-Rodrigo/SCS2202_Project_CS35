@@ -91,7 +91,7 @@ reserveStartingTime.addEventListener('change', (e)=>{
     }
     
     const minRevPrice = reservationPrice.min;
-    calulatedPrice = minRevPrice * timeDiffHours;
+    const calulatedPrice = minRevPrice * timeDiffHours;
     reservationPrice.value = calulatedPrice;
 });
 
@@ -140,7 +140,7 @@ reserveEndingTime.addEventListener('change', (e)=>{
     console.log(timeDiffHours);
     
     const minRevPrice = reservationPrice.min;
-    calulatedPrice = minRevPrice * timeDiffHours;
+    const calulatedPrice = minRevPrice * timeDiffHours;
     reservationPrice.value = calulatedPrice;
 });
 
