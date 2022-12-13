@@ -27,7 +27,7 @@
                 <div id="feedbackTableContainer" style="width:100%">
                     <table style="width:100%">
                         <thead>
-                            <tr>
+                            <tr class="headRow">
                                 <th>Date</th>
                                 <th>Branch</th>
                                 <th>Feedback</th>

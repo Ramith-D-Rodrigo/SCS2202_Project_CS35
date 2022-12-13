@@ -12,6 +12,14 @@ function changeBtnValue(e){
     //console.log(reseveBtn.value);
 }
 
+function viewFeedback(e){
+    e.preventDefault();
+    const branchID = e.target.parentElement.id;
+    console.log(branchID);
+    localStorage.setItem("feedbackBranch", branchID);
+    window.location.href = "/public/general/our_feedback.php";
+}
+
 fetch("../../controller/general/our_branches_controller.php")
     .then((res) => res.json())
     .then((data) => {
@@ -99,7 +107,8 @@ fetch("../../controller/general/our_branches_controller.php")
 
             const feedbackBtn = document.createElement("button");//branch feedback button
             feedbackBtn.innerHTML = "View Feedback";
-            feedbackBtn.disabled = true;    //for now it is disabled
+            //feedbackBtn.disabled = true;    //for now it is disabled
+            feedbackBtn.addEventListener("click", viewFeedback);
             form.appendChild(feedbackBtn);
 
             const receptionist = document.createElement("div"); //branch receptionist div
