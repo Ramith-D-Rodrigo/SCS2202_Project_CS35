@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 
   .flex-container {
     display: flex;
@@ -23,7 +23,6 @@
     height: 200px;
     width : 400px;
 } 
-=======
 body {
     flex: auto;
     background: linear-gradient(180deg, #FFD700, #033C66);
@@ -50,4 +49,5 @@ body {
     height: 200px;
     width : 400px;
 }
->>>>>>> 4da80e1f819495a719565fb1e30b74c7fe320b65
+
+
