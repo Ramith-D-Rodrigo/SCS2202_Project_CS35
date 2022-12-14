@@ -19,7 +19,7 @@
      
     $sport = new Sport();
     $sport -> setID($sport_id);
-    $branch = new Branch(uuid_to_bin($branch_id, $connection));
+    $branch = new Branch($branch_id);
 
     $branchDetails = $branch -> getDetails($connection) -> fetch_object();
     $sportDetails = $sport -> getDetails($connection) -> fetch_object();

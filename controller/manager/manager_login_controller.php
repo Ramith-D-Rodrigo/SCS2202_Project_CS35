@@ -18,7 +18,7 @@
         unset($_SESSION['errMsg']);
         $_SESSION['LogInsuccessMsg'] = $resultmsg[0];
         $_SESSION['userrole'] =  $resultmsg[1];
-        $_SESSION['userid'] = $loginManager -> getManagerID();
+        $_SESSION['userid'] = $loginManager -> getID();
         $_SESSION['city'] = $resultmsg[2];
         $_SESSION['branchID'] = $resultmsg[3];
         $_SESSION['username'] = $resultmsg[4];

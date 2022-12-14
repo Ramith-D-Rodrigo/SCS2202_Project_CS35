@@ -3,35 +3,27 @@
     require_once("../../src/user/dbconnection.php");
     require_once("../../src/general/sport_court.php");
     require_once("../../src/general/branch.php");
-    require_once("../../src/general/uuid.php");
     require_once("../../src/general/sport.php");
     require_once("../../src/general/website_functions/our_sports_functions.php");
 
-    $allsports = getAllSports($connection); //get all sports
+    $allSports = getAllSports($connection); //get all sports
 
     $returningResult = [];
-    while($row = $allsports -> fetch_object()){
-        $sport_id = $row -> sport_id;
-        $result = branchesWithThatSport($sport_id, $connection);
-        if($result -> num_rows === 0){ //there are no sport that provide the current considering sport
-            $result -> free_result();
+    foreach($allSports as $currSport){
+        $sport_id = $currSport -> sport_id;
+        $allBranches = branchesWithThatSport($sport_id, $connection);
+        if(count($allBranches) === 0){ //there are no branch that provide the current considering sport
             continue;
         }
-        $branches = []; //the branches who provide that sport
-        while($currBranch = $result -> fetch_object()){ 
-            $branchID = $currBranch -> branch_id;
-            $branchName = $currBranch -> branch_name;
-            array_push($branches, ['branch_name' => $branchName, 'branch_id' => $branchID]);
-        }
-        array_push($returningResult, ['sport_id' => bin_to_uuid($sport_id, $connection), 'sport_name' => $row ->sport_name, 'reserve_price' => $row -> reservation_price, 'providing_branches' => $branches]);
-        $result -> free_result();
+        array_push($returningResult, ['sport_id' => $sport_id, 'sport_name' => $currSport -> sport_name, 'reserve_price' => $currSport -> reservation_price, 'providing_branches' => $allBranches]);
+        unset($allBranches);
     }
-
-    $_SESSION['our_Sports'] = $returningResult;
+    
+    $returningJSON =  json_encode($returningResult);
+    header('Content-Type: application/json;');    //because we are sending json
+    echo $returningJSON;
     unset($returningResult);
-    //print_r($_SESSION);
-    $allsports -> free_result();
-
-    header("Location: /public/general/our_sports.php");
+    unset($allSports);
+    //header("Location: /public/general/our_sports.php");
     $connection -> close();
 ?>

@@ -1,4 +1,9 @@
+
 <?php
+    //    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']) && !isset($_SESSION['LogInsuccessMsg']))){  //if the manager is already logged in 
+    //     header("Location: /public/manager/manager_dashboard.php"); //the manager shouldn't be able to access the login page
+    //     exit();
+    // }
     session_start();
 ?>
 
@@ -87,3 +92,4 @@
     <script src="/js/manager/manager_login_handle.js"></script>
     <script src="/js/manager/manager_login_validation.js"></script>
 </html>
+

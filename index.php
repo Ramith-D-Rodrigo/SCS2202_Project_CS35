@@ -17,7 +17,7 @@
         ?>
         <main>
             <div class="search">
-                <form action="/controller/general/search_controller.php" method="post" id="searchBar" style="min-width:80%">
+                <form action="/public/general/search_results.php" method="get" id="searchBar" style="min-width:80%">
                     <input class="search-input" type="text" name="sportName" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
                     <button class ="search-icon-btn" type="submit" onclick="return searchValidation(event)">Search</button>
                 </form>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <header>
 <div class='header-top'>
     <div>
@@ -25,4 +26,29 @@
     </div>
          
 </div>
+=======
+<?php
+    session_start();
+?>
+<header>
+    <div class='header-top'>
+        <div>
+            Welcome,___ Branch:___
+        </div>
+        <div>
+        <?php
+            if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
+        ?>  <button class ="btn" onclick="window.location.href='/controller/general/logout.php'" style="float:right">LOG OUT</button>
+        <?php
+            }
+            else{
+        ?>
+           
+            <button class="btn" onclick="window.location.href='/public/general/login.php'">LOG IN</button>
+        <?php
+            }
+        ?>
+        </div>
+    </div>
+>>>>>>> 4da80e1f819495a719565fb1e30b74c7fe320b65
 </header>

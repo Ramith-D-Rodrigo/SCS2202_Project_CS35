@@ -3,8 +3,10 @@
 
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/receptionist/dbconnection.php");
+    require_once("../../src/system_admin/staff.php");
 
-    $recep = new Receptionist();
+    $staffMember = new Staff();
+    $recep = $staffMember -> getStaffMemeber('receptionist');          //$_SESSION['userrole']
     
     $result = $recep -> editBranch($_SESSION['userid'], $_SESSION['branchid'],$connection);  //search the branch to edit
 

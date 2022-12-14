@@ -1,11 +1,11 @@
-verbose = true;
+import { verbose, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, MAX_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS } from "../CONSTANTS";
 
 const reserveStartingTime = document.getElementById("reserveStartingTime");
 const reserveEndingTime = document.getElementById("reserveEndingTime");
 const reservationPrice = document.getElementById("reservationPrice");
 const numOfPeople = document.getElementById("numOfPeople");
 
-reserveStartingTime.addEventListener('change', (e)=>{
+function userInputTimeCheck(e){ //this function check for valid time input (30, 00 minutes check and the max and min time check (opening and closing time))
     const min = e.target.value.split(":")[1];
     if(verbose){
         //console.log(e.target.value);
@@ -18,23 +18,15 @@ reserveStartingTime.addEventListener('change', (e)=>{
     else{
         e.target.style.border = "none";
     }
-});
+}
 
-reserveEndingTime.addEventListener('change', (e)=>{
-    const min = e.target.value.split(":")[1];
-    if(verbose){
-        //console.log(e.target.value);
-        //console.log(min)   //get the minutes
-    }
+function reservationTimePeriodCheck(e){
 
-    if(!(min == '00' || min == '30') || !(e.target.min <= e.target.value && e.target.max >= e.target.value)){
-        e.target.style.border = "medium solid red";
-    }
-    else{
-        e.target.style.border = "none";
-    }
+}
 
-});
+reserveStartingTime.addEventListener('change', userInputTimeCheck);
+
+reserveEndingTime.addEventListener('change', userInputTimeCheck);
 
 //date constraints    -->  atleast 3 days before, at most a month
 
@@ -47,8 +39,8 @@ function addDays(date, days){   //function to add days
 const today = new Date().toISOString().split("T")[0];
 const reservationDate = document.getElementById("reservationDate");
 
-const minDate = addDays(today, 3).toISOString().split("T")[0];
-const maxDate = addDays(today, 30).toISOString().split("T")[0];
+const minDate = addDays(today, MIN_RESERVATION_DAYS).toISOString().split("T")[0];
+const maxDate = addDays(today, MAX_RESERVATION_DAYS).toISOString().split("T")[0];
 
 reservationDate.min = minDate;
 reservationDate.max = maxDate;
@@ -87,12 +79,12 @@ reserveStartingTime.addEventListener('change', (e)=>{
     const timeDiffHours = ((timeDiffMilli/1000)/60)/60;
     console.log(timeDiffHours);
 
-    if(timeDiffHours < 1){  //minimum reservation time period
+    if(timeDiffHours < MIN_RESERVATION_TIME_HOURS){  //minimum reservation time period
         errorMsg.innerHTML = "Minimum Reservation Period is 1 Hour";
         reservationPrice.value = "";
         return;
     }
-    else if(timeDiffHours > 6){ //maximum reservation time period
+    else if(timeDiffHours > MAX_RESERVATION_TIME_HOURS){ //maximum reservation time period
         errorMsg.innerHTML = "Maximum Reservation Period is 6 Hours";
         reservationPrice.value = "";
         return;
@@ -134,12 +126,12 @@ reserveEndingTime.addEventListener('change', (e)=>{
     errorMsg.innerHTML = "";
     const timeDiffHours = ((timeDiffMilli/1000)/60)/60;
 
-    if(timeDiffHours < 1){  //minimum reservation time period
+    if(timeDiffHours < MIN_RESERVATION_TIME_HOURS){  //minimum reservation time period
         errorMsg.innerHTML = "Minimum Reservation Period is 1 Hour";
         reservationPrice.value = "";
         return;
     }
-    else if(timeDiffHours > 6){ //maximum reservation time period
+    else if(timeDiffHours > MAX_RESERVATION_TIME_HOURS){ //maximum reservation time period
         errorMsg.innerHTML = "Maximum Reservation Period is 6 Hours";
         reservationPrice.value = "";
         return;
@@ -177,5 +169,5 @@ function validateForm(e){
     }
 
     errorMsg.innerHTML = "";
-    return true;
+    return tr
 }
