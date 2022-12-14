@@ -246,5 +246,10 @@ class Coach{
 
         return $this->sport;
     }
+
+    public function addsession($day, $startingTime, $endingTime, $payment_amount, $coach_monthly_payment, $court, $database){
+        $result  -> createSession($this -> userID, $day, $startingTime, $endingTime, $payment_amount, $court, $coach_monthly_payment,$database);
+        return $result;}
+
 }
 

@@ -12,8 +12,9 @@
 
     //print_r($_POST);
 
-    //store the reservation details
+    //store the session details
 
+     $branch_id = $_POST['branch'];
      $court_id = $_POST['Court'];
      $day = $_POST['Day'];
      $startingTime = $_POST['StartingTime'];

@@ -91,7 +91,7 @@
                         pattern="[0-9]" 
                         name="session_fee"
                         id="session_fee"
-                        required
+                        required  
                         value=<?php if(isset($_SESSION['session_fee'])) echo htmlspecialchars($_SESSION['session_fee'], ENT_QUOTES)?>>
            </label>
                 
@@ -118,7 +118,7 @@
 
             <div  hidden ><output id="max_no_of_students"><?php echo $_SESSION["max_no_of_students"]?></output></div>
 
-            <div ><output id="opening_time" hidden ><?php echo $_SESSION["opening_time"]?></output></div>
+            <div  hidden><output id="opening_time"  ><?php echo $_SESSION["opening_time"]?></output></div>
 
             <div hidden ><output id="closing_time"><?php echo $_SESSION["closing_time"]?></output></div>
 
@@ -131,11 +131,8 @@
             </div>
 
             
-            <button type="submit">
-                ADD
-            </button>
-        
- 
+            
+                <button class =" " onclick="window.location.href='/controller/coach/add_new_session_controller.php'">ADD</button>
         
             
                 
@@ -158,6 +155,8 @@
         ?>
 
     <script src="/js/coach/add_session_validation.js"></script>
+    <!-- <script src="/js/coach/add_new_session_controller.js"></script> -->
+
 </body>
 
 </html>

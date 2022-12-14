@@ -124,8 +124,8 @@ StartingTime.addEventListener('change', (e)=>{
         return;
     }
     
-    const minRevPrice = document.getElementById("reservation_price");
-    calulatedPrice = minRevPrice *(5/4) * timeDifferenceHours *4;
+   // const minRevPrice = document.getElementById("session_fee"); ;
+    calulatedPrice = ses_fee *(5/4) * timeDifferenceHours *4;
     monthly_payment.value = calulatedPrice;
     
 });
