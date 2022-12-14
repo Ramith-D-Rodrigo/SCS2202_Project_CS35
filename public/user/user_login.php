@@ -103,6 +103,6 @@
             require_once("../general/footer.php");
         ?>
     </body>
-    <script src="/js/user/user_login_handle.js"></script>
-    <script src="/js/user/user_login_validation.js"></script>
+    <script src="/js/coach/coach_login_handle.js"></script>
+    <script src="/js/coach/coach_login_validation.js"></script>
 </html>
