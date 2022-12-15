@@ -42,23 +42,23 @@ EndingTime.addEventListener('change', (e)=>{
 const min_fee =document.getElementById("min_coaching_session_price");
 const ses_fee =document.getElementById("session_fee");
 
-    ses_fee.addEventListener('change', (e)=>{
-    const errorMsg = document.getElementById("errmsg");
-        console.log(min_fee.value);
-        if(e.target.value===''){
-            return;
-        }
-    
-        if(min_fee.value>e.target.value){
+ses_fee.addEventListener('change', (e)=>{
+const errorMsg = document.getElementById("errmsg");
+    // console.log(ses_fee.value);
+    if(e.target.value===''){
+        return;
+    }
+
+    if(1000>e.target.value){
         e.target.style.border = "medium solid red";
         errorMsg.innerHTML = "Session fee must be greater than minimum coaching session price";
-          return;
-        }
-            else{
-                 e.target.style.border = "none";
-                 errorMsg.innerHTML = "";
+        return;
+    }
+    else{
+        e.target.style.border = "none";
+        errorMsg.innerHTML = "";
 
-        }
+    }
 
 })
 
@@ -69,11 +69,12 @@ StartingTime.addEventListener('change', (e)=>{
     const errorMsg = document.getElementById("errmsg");
     const errorMsg1 = document.getElementById("errmsg1");
     const BranchOpeningTime = document.getElementById("opening_time")
+    // console.log(e.target.value);
 
     if(EndingTime.value === ""){
         return;
     }
-    if(BranchOpeningTime.value>e.target.value)
+    if("08:00">e.target.value)
        { errorMsg1.innerHTML = "Should be withing branch opening hours";
             return; } 
             errorMsg1.innerHTML = "";
@@ -125,8 +126,8 @@ StartingTime.addEventListener('change', (e)=>{
     }
     
    // const minRevPrice = document.getElementById("session_fee"); ;
-    calulatedPrice = ses_fee *(5/4) * timeDifferenceHours *4;
-    monthly_payment.value = calulatedPrice;
+   calulatedPrice = 350 *(5/4) * timeDifferenceHours *4;
+   monthly_payment.value = calulatedPrice;
     
 });
 
@@ -134,12 +135,12 @@ EndingTime.addEventListener('change', (e)=>{
     const errorMsg = document.getElementById("errmsg");
     const errorMsg1 = document.getElementById("errmsg1");
     const BranchClosingTime = document.getElementById("closing_time")
-
+    // console.log(e.target.value);
 
     if(StartingTime.value === ""){
         return;
     }
-   if(BranchClosingTime.value<e.target.value)
+   if("19:30"<e.target.value)
        { errorMsg1.innerHTML = "Should be withing branch opening hours";
             return; } 
             errorMsg1.innerHTML = "";
@@ -190,10 +191,9 @@ EndingTime.addEventListener('change', (e)=>{
     console.log(timeDifferenceHours);
     
     // const minRevPrice = document.getElementById("min_coaching_session_price");
-    // calulatedPrice = minRevPrice * timeDifferenceHours * 4;
-    // monthly_payment.value = calulatedPrice;
+    calulatedPrice = 350 *(5/4) * timeDifferenceHours *4;
+    monthly_payment.value = calulatedPrice;
 });
-
 
 // function validateForm(e){
 //     const errorMsg = document.getElementById("errMsg");
