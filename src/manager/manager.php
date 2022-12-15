@@ -158,6 +158,59 @@ class Manager implements JsonSerializable , StaffMember{
         return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details
     }
 
+
+    public function add_court($database, $court_name ,$sport_id, $branch_id){
+        $result = $database -> query(sprintf("INSERT INTO `sports_court`
+        (`court_id`,   
+        `sport_id`, 
+        `court_name`,
+        `branch_id`,
+        `request_status`) 
+        VALUES 
+        (generateUUID( $database),'%s','%s','%s','a')",
+        // $database -> real_escape_string($this -> managerID),
+        // $database -> real_escape_string($this -> contactNum),
+        $database -> real_escape_string($sport_id),
+        $database -> real_escape_string($court_name), 
+        $database -> real_escape_string($branch_id))); 
+        
+
+        return $result;
+
+    }
+
+    public function getSportID($sportName, $database){
+        $sportSql = sprintf("SELECT `sport_id`
+        FROM `sport` 
+        WHERE `sport_name` = '%s'", //to escape % in sprintf, we need to add % again
+        $database -> real_escape_string($sportName));
+
+        $sportResult = $database -> query($sportSql);
+        $sportR = mysqli_fetch_assoc($sportResult);
+        return  $sportR['sport_id'];  //get the sports results
+
+        if($sportResult -> num_rows === 0){ //no such sport found
+            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+        }
+    }
+
+    public function getBranchID( $database, $branch){
+        $sportSql = sprintf("SELECT `branch_id`
+        FROM `branch` 
+        WHERE `city` = '%s'",
+        $database -> real_escape_string($branch)); //to escape % in sprintf, we need to add % again
+        // $database -> real_escape_string($sportName));
+
+        $sportResult = $database -> query($sportSql);
+        $sportR = mysqli_fetch_assoc($sportResult);
+        return  $sportR['branch_id'];  //get the sports results
+
+        if($sportResult -> num_rows === 0){ //no such sport found
+            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+        }
+    }
+
+
     public function getDetails($database){
         $sql = sprintf("SELECT * FROM `staff` 
         WHERE 
@@ -207,5 +260,6 @@ class Manager implements JsonSerializable , StaffMember{
         ];
         
     }
+
 }
 ?>
