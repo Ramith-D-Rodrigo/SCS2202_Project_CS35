@@ -247,9 +247,44 @@ class Coach{
         return $this->sport;
     }
 
-    public function addsession($day, $startingTime, $endingTime, $payment_amount, $coach_monthly_payment, $court, $database){
-        $result  -> createSession($this -> userID, $day, $startingTime, $endingTime, $payment_amount, $court, $coach_monthly_payment,$database);
-        return $result;}
+    public function addsession($sessionID,$coach_monthly_payment, $startingTime, $endingTime, $no_of_students,$coach_id,$court_id,$day,$payment_amount,$database){
+        $startingTimeObj = new DateTime($startingTime);
+        $endingTimeObj = new DateTime($endingTime);
 
+        $timeDuration = $endingTimeObj -> diff($startingTimeObj);
+
+        $hours = $timeDuration -> h;
+        $minutes = $timeDuration -> i;
+
+        $timePeriod = new DateTime();
+        $timePeriod ->setTime($hours, $minutes);
+
+        $sql = sprintf("INSERT INTO `coaching_session` 
+        (`session_id`, 
+        `coach_monthly_payment`, 
+        `time_period`, 
+        `no_of_students`, 
+        `coach_id`, 
+        `court_id`, 
+        `day`, 
+        `starting_time`, 
+        `ending_time`, 
+        `payment_amount`) 
+        VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+        $database -> real_escape_string($sessionID),
+        $database -> real_escape_string($coach_monthly_payment),
+        $database -> real_escape_string($timePeriod -> format("H:i:s")),
+        $database -> real_escape_string($no_of_students),
+        $database -> real_escape_string($coach_id),
+        $database -> real_escape_string($court_id),
+        $database -> real_escape_string($day),
+        $database -> real_escape_string($startingTime),
+        $database -> real_escape_string($endingTime),
+        $database -> real_escape_string($payment_amount));
+
+        $result = $database -> query($sql);
+        return $result;
+    }
 }
+
 

@@ -29,7 +29,7 @@
     <div class="content-box">
         <form action="/controller/coach/add_new_session_controller.php" method="POST">
             <label>Select Branch : 
-                <select names ="branch" id="branch">
+                <select name ="branch" id="branch">
                         <?php
                         foreach($BranchesWithCourts as $i){
                             ?> <option value=<?php echo $i[0]['id'] ?>><?php echo $i[0]['city'] ?></option>
@@ -42,7 +42,7 @@
                     <br>
 
             <label>Select Court :
-                <select names ="Court" id="Court">
+                <select name ="court" id="Court">
                 <?php
                         foreach($BranchesWithCourts as $i){
                             foreach($i['courts'] as $j){
@@ -58,7 +58,7 @@
                     <br>
 
             <label>Select Day : 
-                <select names ="Day" id="Day">
+                <select name ="day" id="Day">
                         <option value ="monday">Monday</option>
                         <option value ="tuesday">Tuesday</option>
                         <option value ="wednesday">Wednesday</option>
@@ -72,13 +72,13 @@
 
                     <br>
 
-            <label> 
+            <label for="StartingTime"> 
                 Starting Time : 
                 <input type="time" name="StartingTime" required id="StartingTime" >
 
             </label>
 
-            <label>  
+            <label for ="EndingTime">  
                 Ending Time : 
                 <input type="time" name="EndingTime" required id="EndingTime" >
 
@@ -86,9 +86,9 @@
 
             <br>
 
-            <label>Enter session fee : 
+            <label for="session_fee">Enter session fee : 
             <input type="text"
-                        pattern="[0-9]" 
+                        pattern="[0-9]+" 
                         name="session_fee"
                         id="session_fee"
                         required  
@@ -97,8 +97,8 @@
                 
             <br>
                 
-            <label id="m_payment"> Monthly payment :
-                        <output id="monthly_payment"></output>
+            <label id="m_payment" for="monthly_payment"> Monthly payment :
+                        <input name= "monthly_payment" id="monthly_payment"></input>
              </label>
             
             <br>
@@ -112,7 +112,7 @@
             <div id="errmsg1" class="err-msg"> </div>
 
                                
-           <div  hidden ><output id="min_coaching_session_price"><?php echo $_SESSION["min_coaching_session_price"]?></output></div>
+           <div>Minimum Coaching Session Price : <output id="min_coaching_session_price"><?php echo $_SESSION["min_coaching_session_price"]?></output></div>
 
             <div hidden ><output id="reservation_price" ><?php echo $_SESSION["reservation_price"]?></output></div>
 
@@ -132,16 +132,13 @@
 
             
             
-                <button class =" " onclick="window.location.href='/controller/coach/add_new_session_controller.php'">ADD</button>
-        
+                <button class =" " type="submit" value="submit">ADD</button>   
+                <button class =" " onclick="window.location.href='/public/coach/coach_session.php'">Cancel</button>
             
-                
-                <button class =" " onclick="window.location.href='/public/coach/coach_dashboard.php'">cancel</button>
-            
-            
+        </form>  
         </div>
 
-    </form>
+    
     
 
 
