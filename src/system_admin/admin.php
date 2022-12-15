@@ -52,7 +52,15 @@ class Admin{
         $staffMember = $staffMember -> getStaffMemeber($staffRole);
         $staffMember -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
 
-        return $staffMember -> register($database);
+        $result1 = $staffMember -> register($database);
+        if($result1 === TRUE){
+            $branch = new Branch($branchID);
+            $result2 = $branch -> updateCurrentStaff($userid, $staffRole, $database);
+            return $result2;
+        }
+        else{
+            return FALSE;
+        }
 
     }
 
