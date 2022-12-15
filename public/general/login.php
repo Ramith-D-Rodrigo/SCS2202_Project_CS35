@@ -25,6 +25,7 @@
             <a href="../coach/coach_login.php" style="color:black"> Log in as an Coach</a>
             <a href="../owner/owner_login.php" style="color:black"> Log in as an Owner</a>
 
+            <a href="../manager/manager_login.php" style="color:black"> Log in as Manager</a>
             <br>
             <?php
                 require_once("footer.php");

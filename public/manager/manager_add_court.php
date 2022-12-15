@@ -13,7 +13,7 @@
 
    <body>
       <?php
-        require_once("manager_add_court_header.php");
+        require_once("manager_header.php");
       ?>
         <main class="body_container">
           <div class="content_box">
@@ -31,11 +31,6 @@
                   echo 'selected';
                 }
               }?>>Basketball</option>
-              <option value="Tennis" <?php if(isset($_SESSION['sport'])){
-                if($_SESSION['sport'] === "Tennis"){
-                  echo 'selected';
-                }
-              }?>>Tennis</option>
             </select>
           </div>
          
@@ -51,7 +46,15 @@
           </div>
           <div>
             <button type="submit" id="but_Add">Add</button>
-            <button id="but_Cancel">Cancel</button>
+            <button onclick="window.location.href='sport_court.php'"id="but_Cancel">Cancel</button>
+          </div>
+          <div class="success-msg">
+              <?php
+                if(isset($_SESSION['resultMsg'])){
+                  echo $_SESSION['resultMsg'];
+                  unset($_SESSION['resultMsg']);
+                }
+              ?>
           </div>
           </form>
           </div>
