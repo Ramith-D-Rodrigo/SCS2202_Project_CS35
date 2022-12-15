@@ -23,7 +23,7 @@
         WHERE `s`.`sport_id` = '%s'
         AND `b`.`requrst_status`= `a` ,
         AND `sc`.`request_status=`a`",
-        $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
+        $database -> real_escape_string($this -> userID));
 
         $result = $database -> query($sql);
         return $result;
