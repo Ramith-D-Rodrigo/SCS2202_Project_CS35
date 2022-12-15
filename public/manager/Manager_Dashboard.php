@@ -33,7 +33,7 @@
          
          <div class=tabs>
             <div> Sports Courts</div> 
-            <div> <button onclick="window.location.href='sport_court.php'"> View More</button> </div>
+            <div> <button onclick="window.location.href='/controller/manager/view_sport_court_controller.php'"> View More</button> </div>
          </div> 
     </div>     
     <div class="flex-container">

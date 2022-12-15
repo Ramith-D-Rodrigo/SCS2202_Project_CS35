@@ -18,21 +18,18 @@
         require_once("manager_header.php");
       ?>
         <main class="body_container">
-          <div class="content_box">
-          <div id="but_Filt">Filter by:</div>
-          <div id="but_Choose">
-            <select required name="sport">
-              <option value="">Choose </option>
-            </select>
-          </div>
-          <div>
-          <button onclick="window.location.href='manager_add_court.php'"id="but_AddCourt">  Add New Court</button>
-          </div>
-          
-          
-         <div>
-         </div>
-         <?php
+          <div class="content_box" style="overflow:scroll">
+            <div id="but_Filt">Filter by:</div>
+            <div id="but_Choose">
+              <select required name="sport">
+                <option value="">Choose </option>
+              </select>
+            </div>
+            <div>
+              <button onclick="window.location.href='manager_add_court.php'"id="but_AddCourt">  Add New Court</button>
+            </div>
+         
+            <?php
               if(isset($_SESSION['branchCourts'])){
                 foreach($_SESSION['branchCourts'] as $currCourt){
                   echo "Sport : ".$currCourt['sport']."<br>";
