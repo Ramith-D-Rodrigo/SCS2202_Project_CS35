@@ -1,10 +1,8 @@
-body {
-    flex: auto;
-    background: linear-gradient(180deg, #FFD700, #033C66);
-}
-.flex-container {
+
+
+  .flex-container {
     display: flex;
-    flex-direction: row;
+  flex-direction: row;
     justify-content: space-around;
   }
  
@@ -15,6 +13,7 @@ body {
     justify-content: space-between;
     align-items: center;
 }
+
 .flex-container > div {
     background-color: #ecfcff;
     margin: 10px;
@@ -23,4 +22,12 @@ body {
     font-size: 30px;
     height: 200px;
     width : 400px;
+} 
+body {
+    flex: auto;
+    background: linear-gradient(180deg, #FFD700, #033C66);
 }
+
+
+
+

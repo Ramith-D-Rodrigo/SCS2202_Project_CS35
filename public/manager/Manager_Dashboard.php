@@ -1,3 +1,7 @@
+<?php
+  session_start(); 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,15 +12,17 @@
 </head>
 <body>
 <?php
-    require_once("manager_dashboard_header.php");
+    require_once("manager_header.php");
 ?>
 <main>
     <div class="flex-container">
         <div class=tabs>
             <div>Revenue for this Month</div> 
             <div>Rs.________</div>
-            <div> <button>Add New Discount </button>
-            <div> <button> View More </button> </div>
+            <div>
+                <button id="AddDiscount">Add New Discount </button>
+                <button id="viewMore"> View More </button>
+             </div>
          </div>
 
          <div class=tabs>
@@ -27,8 +33,7 @@
          
          <div class=tabs>
             <div> Sports Courts</div> 
-            <div> <button> Add New </button> </div>
-            <div> <button> View More</button> </div>
+            <div> <button onclick="window.location.href='sport_court.php'"> View More</button> </div>
          </div> 
     </div>     
     <div class="flex-container">
@@ -38,7 +43,7 @@
          </div>
 
          <div class=tabs>
-            <div>Registerde Coaches</div> 
+            <div>Registered Coaches</div> 
             <div> <button> View More </button> </div>
          </div>
          

@@ -33,7 +33,7 @@ class Manager implements JsonSerializable , StaffMember{
         $this -> staffRole = 'manager';
     }
  
-    public function getID($database){    //managerID getter
+    public function getID(){    //managerID getter
         if(isset($this -> managerID) || $this -> managerID !== ''){
             return $this -> managerID;
         }
@@ -54,7 +54,7 @@ class Manager implements JsonSerializable , StaffMember{
         $database -> real_escape_string($this -> emailAddress),
         $database -> real_escape_string($this -> password))); 
 
-/*         if ($result === TRUE) {
+/*      if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
         }
         else{
@@ -104,9 +104,9 @@ class Manager implements JsonSerializable , StaffMember{
         $this -> leaveDate = '';
         $loginEntry = $this -> create_login_details_entry($database);
         $staffEntry = $this -> create_staff_entry($database);
-        $receptionistEntry = $this -> create_manager_entry($database);
+        $managerEntry = $this -> create_manager_entry($database);
 
-        if($loginEntry  === TRUE && $staffEntry  === TRUE && $receptionistEntry === TRUE){    //all has to be true (successfully registered)
+        if($loginEntry  === TRUE && $staffEntry  === TRUE && $managerEntry === TRUE){    //all has to be true (successfully registered)
             return TRUE;
         }
     }
@@ -125,7 +125,7 @@ class Manager implements JsonSerializable , StaffMember{
         $rows = $result -> fetch_object();  //get the resulting row
 
         if($rows === NULL){ //no result. hence no user
-            return ["No Such User Exists"];
+            return ["No Such Manager Exists"];
         }
 
         $hash = $rows -> password;
@@ -134,7 +134,7 @@ class Manager implements JsonSerializable , StaffMember{
         }
 
         //setting user data for session
-        $this -> managerID = $rows -> uuid;
+        $this -> managerID = $rows -> user_id;
 
         $getBranch = sprintf("SELECT `branch_id` AS brid  
         FROM `staff`  
@@ -207,5 +207,60 @@ class Manager implements JsonSerializable , StaffMember{
         ];
         
     }
+
+    public function add_court($database, $court_name ,$sport_id, $branch_id, $courtID, $managerID){
+        $result = $database -> query(sprintf("INSERT INTO `sports_court`
+        (`court_id`,   
+        `sport_id`, 
+        `court_name`,
+        `branch_id`,
+        `request_status`,
+        `added_manager`) 
+        VALUES 
+        ('%s','%s','%s','%s','p','%s')",
+        // $database -> real_escape_string($this -> managerID),
+        // $database -> real_escape_string($this -> contactNum),
+        $database -> real_escape_string($courtID),
+        $database -> real_escape_string($sport_id),
+        $database -> real_escape_string($court_name), 
+        $database -> real_escape_string($branch_id),
+        $database -> real_escape_string($managerID))); 
+        
+        return $result;
+
+    }
+
+    
+    // public function getSportID($sportName, $database){
+    //     $sportSql = sprintf("SELECT `sport_id`
+    //     FROM `sport` 
+    //     WHERE `sport_name` = '%s'", //to escape % in sprintf, we need to add % again
+    //     $database -> real_escape_string($sportName));
+
+    //     $sportResult = $database -> query($sportSql);
+    //     $sportR = mysqli_fetch_assoc($sportResult);
+    //     return  $sportR['sport_id'];  //get the sports results
+
+    //     if($sportResult -> num_rows === 0){ //no such sport found
+    //         return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+    //     }
+    // }
+
+    // public function getBranchID( $database, $branch){
+    //     $sportSql = sprintf("SELECT `branch_id`
+    //     FROM `branch` 
+    //     WHERE `city` = '%s'",
+    //     $database -> real_escape_string($branch)); //to escape % in sprintf, we need to add % again
+    //     // $database -> real_escape_string($sportName));
+
+    //     $sportResult = $database -> query($sportSql);
+    //     $sportR = mysqli_fetch_assoc($sportResult);
+    //     return  $sportR['branch_id'];  //get the sports results
+
+    //     if($sportResult -> num_rows === 0){ //no such sport found
+    //         return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+    //     }
+    // }
+
 }
 ?>
