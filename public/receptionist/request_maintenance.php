@@ -155,6 +155,7 @@
                             unset($_SESSION['RequestsuccessMsg']);
                             unset($_SESSION['courtResult']);
                             unset($_SESSION['sportResult']);
+                            header_remove();
                             header("Refresh: 3; URL =/public/receptionist/receptionist_dashboard.php");  //redirect to dashboard
                         }
                     ?>
