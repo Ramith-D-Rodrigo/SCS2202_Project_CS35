@@ -280,6 +280,7 @@
             }
 
             return $allFeedbacks;
+        }
 
         public function updateCurrentStaff($staffID, $staffRole, $database){
             $updatingColumn = '';
