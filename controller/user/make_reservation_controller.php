@@ -104,6 +104,15 @@
 
     $reservingCourt = new Sports_Court($court_id);
     $sport = $reservingCourt -> getSport($connection);
+
+    if($sport === false){   //no sport
+        $_SESSION['reservationFail'] = "Reservation Failed";
+        $connection -> close();
+        unset($reservingCourt);
+        header("Location: {$previousPage}");
+        exit(); 
+    }
+    
     $reservingSport = new Sport();
     $reservingSport -> setID($sport);
     $reservationPrice = $reservingSport -> getDetails($connection, 'reservationPrice');
@@ -113,15 +122,6 @@
 
     //reservation availability check
     $schedule = $reservingCourt -> getSchedule($connection);
-
-    if(empty($schedule)){   //no schedule 
-        $_SESSION['reservationFail'] = "Reservation Failed";
-        $connection -> close();
-        unset($reservingCourt);
-        unset($reservingSport);
-        header("Location: {$previousPage}");
-        exit(); 
-    }
 
     foreach($schedule as $reservation){
         //print_r($reservation);
