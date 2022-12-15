@@ -1,4 +1,4 @@
-<?php
+ <?php
     require_once("../../src/general/uuid.php");
 class Owner{
     private $ownerID;
@@ -35,7 +35,7 @@ class Owner{
         `user_role`,
         `is_active`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','owner',1)",
+        '%s','%s','%s','%s','owner',1)",
         $database -> real_escape_string($this -> ownerID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> emailAddress),
@@ -56,7 +56,7 @@ class Owner{
          `contact_no`,
          `first_name`, 
          `last_name`) 
-        VALUES (UUID_TO_BIN('%s',1),'%s','%s','%s','%s')",
+        VALUES '%s','%s','%s','%s','%s')",
         $database -> real_escape_string($this -> ownerID),
         $database -> real_escape_string($this -> contactNum),
         $database -> real_escape_string($this -> firstName),
@@ -80,7 +80,7 @@ class Owner{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT BIN_TO_UUID(`user_id`, 1) AS uuid, 
+        $sql = sprintf("SELECT `user_id`,  
         `username`, 
         `password`, 
         `user_role` 
@@ -102,7 +102,7 @@ class Owner{
         }
 
         //setting user data for session
-        $this -> ownerID = $rows -> uuid;
+        $this -> ownerID = $rows -> usrer_id;
 
         // $getBranch = sprintf("SELECT BIN_TO_UUID(`branch_id`, 1) AS brid  
         // FROM `staff`  

@@ -18,7 +18,7 @@ while($row = $result->fetch_object()){
     // print_r($row);
     $court_info = [];
     
-         $court_info["id"] = bin_to_uuid($row->court_id,$connection);
+         $court_info["id"] = $row->court_id;
          $court_info["name"] = $row->court_name;
 
          
@@ -27,7 +27,7 @@ while($row = $result->fetch_object()){
      $branch_info["city"] = $row->city;
      $branch_info["opening_time"] = $row->opening_time;
      $branch_info["closing_time"] = $row->closing_time;
-     $branch_info["id"] = bin_to_uuid ($row->branch_id,$connection);
+     $branch_info["id"] = $row->branch_id;
 
     //  array_push($branches,$branch_info);
 

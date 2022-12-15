@@ -20,7 +20,7 @@
     $sessions = [];
 
     while($row = $sessionDetails -> fetch_object()){
-        $row -> session_id =bin_to_uuid($row ->session_id,$connection);
+        $row -> session_id = $row ->session_id;
 
         array_push($sessions,$row);
        

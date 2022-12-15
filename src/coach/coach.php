@@ -53,7 +53,7 @@ class Coach{
         `is_active`,
         `user_role`) 
         VALUES 
-        (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','coach')",
+        ('%s','%s','%s','%s','%s','coach')",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> password),
@@ -83,7 +83,7 @@ class Coach{
          `sport`,
           `register_date`)
            VALUES 
-           (UUID_TO_BIN('%s', 1),'%s','%s','%s','%s','%s','%s','%s',UUID_TO_BIN('%s', 1),'%s')",
+           ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
             $database -> real_escape_string($this -> userID),
             $database -> real_escape_string($this -> firstName),
             $database -> real_escape_string($this -> lastName),
@@ -114,7 +114,7 @@ class Coach{
                 (`coach_id`, 
                 `qualification`) 
                 VALUES 
-                (UUID_TO_BIN('%s', 1),'%s')", 
+                ('%s','%s')", 
                 $database -> real_escape_string($this -> userID),
                 $database -> real_escape_string($i)));
 
@@ -152,7 +152,7 @@ class Coach{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT BIN_TO_UUID(`user_id`, true) AS uuid, 
+        $sql = sprintf("SELECT `user_id`, 
         `username`, 
         `password`, 
         `user_role` 
@@ -174,18 +174,18 @@ class Coach{
         }
 
         //setting user data for session
-        $this -> userID = $rows -> uuid;  
+        $this -> userID = $rows -> user_id;  
         
         //get the profile pic from the datbase and store in the object's attribute
         $sqlPic = sprintf("SELECT `photo` , `sport` 
         FROM `coach` 
         WHERE `coach_id` = '%s'",
-        $database -> real_escape_string(uuid_to_bin($this -> userID, $database)));
+        $database -> real_escape_string ($this -> userID));
 
         $result = $database -> query($sqlPic);
         $resultRow = $result -> fetch_object();
         $this -> profilePic =  $resultRow -> photo;
-        $this -> sport = (bin_to_uuid( $resultRow -> sport, $database));
+        $this -> sport = ( $resultRow -> sport);
        
         return ["Successfully Logged In", $rows -> user_role, $rows -> username];  //return the message and role
 
@@ -212,7 +212,7 @@ class Coach{
         WHERE `s`.`sport_id` = '%s'
         AND `b`.`request_status`= 'a' 
         AND `sc`.`request_status`='a'",
-        $database -> real_escape_string(uuid_to_bin($this -> sport, $database)));
+        $database -> real_escape_string($this -> sport));
 
         $result = $database -> query($sql);
         return $result;
@@ -237,7 +237,7 @@ class Coach{
        INNER JOIN `coach` `c` 
        ON `c`.`coach_id` = `cs`.`coach_id`
        WHERE `c`.`coach_id` = '%s'",
-       $database -> real_escape_string(uuid_to_bin($this ->userID, $database)));
+       $database -> real_escape_string($this ->userID));
 
        $result = $database -> query($sql);
        return $result;

@@ -55,7 +55,11 @@
     //can create a account
 
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    //hash the password
-    $userid = generateUUID($connection);    //get the uuid
+   
+    //create user id
+    $prefix1 = "coach _";
+    $prefix2 = substr($username , 0,3);
+    $userid = uniqid($prefix1,$prefix2);
 
     $username = htmlspecialchars($_POST['username'], ENT_QUOTES);
     $email = htmlspecialchars($_POST['emailAddress'], ENT_QUOTES);

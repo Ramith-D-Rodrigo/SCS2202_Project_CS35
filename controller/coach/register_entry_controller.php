@@ -1,6 +1,6 @@
 <?php
      session_start();
-         require_once("../../src/general/uuid.php");
+       
          require_once("../../src/coach/dbconnection.php");
          require_once("../../src/general/website_functions/our_sports_functions.php");
 
@@ -8,12 +8,12 @@
     $allsports = getAllSports($connection); //get all sports
 
     $sport_info = [];
-    while($row = $allsports -> fetch_object()){
-        if($row -> min_coaching_session_price===null )
+    foreach($allsports as $min_coaching_session_price){
+        if( $min_coaching_session_price===null )
         {
             continue;
         }
-        $sport_id =  bin_to_uuid($row -> sport_id, $connection);
+        $sport_id =   $min_coaching_session_price -> sport_id;
         $sport_name = $row -> sport_name;
 
 
