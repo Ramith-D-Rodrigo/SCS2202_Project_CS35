@@ -54,13 +54,6 @@
 
     //can create a account
 
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    //hash the password
-   
-    //create user id
-    $prefix1 = "coach _";
-    $prefix2 = substr($username , 0,3);
-    $userid = uniqid($prefix1,$prefix2);
-
     $username = htmlspecialchars($_POST['username'], ENT_QUOTES);
     $email = htmlspecialchars($_POST['emailAddress'], ENT_QUOTES);
     $address = htmlspecialchars($_POST['homeAddress'], ENT_QUOTES);
@@ -71,7 +64,13 @@
     $gender = htmlspecialchars($_POST['gender'], ENT_QUOTES);
     $sport = htmlspecialchars($_POST['sport'], ENT_QUOTES);
 
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    //hash the password
+   
 
+    //create user id
+    $prefix1 = "coach_";
+    $prefix2 = substr($username , 0,3);
+    $userid = uniqid($prefix1,$prefix2);
     
     //coach Qualifications
     $coach_qualifications = [];
