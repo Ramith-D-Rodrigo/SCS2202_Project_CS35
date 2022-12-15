@@ -23,7 +23,7 @@
     </head>
     <body>
         <?php
-            require_once("../../public/general/header.php");
+            require_once("dashboard_header.php");
         ?>
         <main>
         <div class="flex-container">
