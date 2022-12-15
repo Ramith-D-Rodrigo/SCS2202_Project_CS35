@@ -1,29 +1,39 @@
 <?php
     session_start();
     require_once("../../src/manager/manager.php");
+    require_once("../../src/general/sport.php");
     require_once("../../src/manager/manager_dbconnection.php");
+    require_once("../../src/general/branch.php");
 
+    
+    $sport = $_POST['sport'];
+    $courtName = $_POST['courtName'];
+    
 
-    // $username = $_POST['username'];
-    // $password = $_POST['password'];
+    
+    $sport_obj = new Sport();
+    $manager_obj = new Manager();
+    $branch_obj = new Branch($_SESSION['branchID']);
+    $manager_obj -> setDetails(uid: $_SESSION['userid']);
 
+    $sport_id = $sport_obj -> getSportID($sport, $connection) -> fetch_object() -> sport_id;
+    $sport_obj -> setID($sport_id);
 
-    $addCourt = new Court();
+    $courtID = uniqid(substr($sport, 0, 3)."court");
 
-    $resultmsg = $addCourt -> ($username, $password, $connection);
-
-    if(count($resultmsg) === 1){    //login failed
-        $_SESSION['errMsg'] = $resultmsg[0];
+    
+    $result = $manager_obj -> add_court($connection, $courtName, $sport_id, $_SESSION['branchID'], $courtID, $_SESSION['userid']);
+    
+    if($result === TRUE){
+        $resultmsg = "Request sent to the owner Successfully";
     }
-    else{   //log in success
-        unset($_SESSION['errMsg']);
-        $_SESSION['LogInsuccessMsg'] = $resultmsg[0];
-        $_SESSION['userrole'] =  $resultmsg[1];
-        $_SESSION['userid'] = $loginManager -> getManagerID();
-        $_SESSION['city'] = $resultmsg[2];
-        $_SESSION['branchID'] = $resultmsg[3];
-        $_SESSION['username'] = $resultmsg[4];
+    else{
+        $resultmsg = "Error Sending the request";
     }
-    header("Location: /public/manager/manager_login.php");
+
+    $_SESSION['resultMsg'] = $resultmsg;
+    // $resultmsg = $addCourt -> ($sport, $courtName);
+
+    header("Location: /public/manager/manager_add_court.php");
     $connection -> close();
 ?>

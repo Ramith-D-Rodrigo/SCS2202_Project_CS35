@@ -69,5 +69,16 @@
             $result -> free_result();
             return $sport;
         }
+
+        public function getStatus($database){
+            $sql = sprintf("SELECT request_status FROM `sports_court` 
+            WHERE `court_id`
+            LIKE '%s'",
+            $database -> real_escape_string($this -> courtID));
+
+            $result = $database -> query($sql);
+
+            return $result -> fetch_object() -> request_status;
+        }
     }
 ?>

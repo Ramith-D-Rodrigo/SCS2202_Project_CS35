@@ -204,5 +204,60 @@ class Manager implements JsonSerializable , StaffMember{
         ];
         
     }
+
+    public function add_court($database, $court_name ,$sport_id, $branch_id, $courtID, $managerID){
+        $result = $database -> query(sprintf("INSERT INTO `sports_court`
+        (`court_id`,   
+        `sport_id`, 
+        `court_name`,
+        `branch_id`,
+        `request_status`,
+        `added_manager`) 
+        VALUES 
+        ('%s','%s','%s','%s','p','%s')",
+        // $database -> real_escape_string($this -> managerID),
+        // $database -> real_escape_string($this -> contactNum),
+        $database -> real_escape_string($courtID),
+        $database -> real_escape_string($sport_id),
+        $database -> real_escape_string($court_name), 
+        $database -> real_escape_string($branch_id),
+        $database -> real_escape_string($managerID))); 
+        
+        return $result;
+
+    }
+
+    
+    // public function getSportID($sportName, $database){
+    //     $sportSql = sprintf("SELECT `sport_id`
+    //     FROM `sport` 
+    //     WHERE `sport_name` = '%s'", //to escape % in sprintf, we need to add % again
+    //     $database -> real_escape_string($sportName));
+
+    //     $sportResult = $database -> query($sportSql);
+    //     $sportR = mysqli_fetch_assoc($sportResult);
+    //     return  $sportR['sport_id'];  //get the sports results
+
+    //     if($sportResult -> num_rows === 0){ //no such sport found
+    //         return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+    //     }
+    // }
+
+    // public function getBranchID( $database, $branch){
+    //     $sportSql = sprintf("SELECT `branch_id`
+    //     FROM `branch` 
+    //     WHERE `city` = '%s'",
+    //     $database -> real_escape_string($branch)); //to escape % in sprintf, we need to add % again
+    //     // $database -> real_escape_string($sportName));
+
+    //     $sportResult = $database -> query($sportSql);
+    //     $sportR = mysqli_fetch_assoc($sportResult);
+    //     return  $sportR['branch_id'];  //get the sports results
+
+    //     if($sportResult -> num_rows === 0){ //no such sport found
+    //         return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+    //     }
+    // }
+
 }
 ?>
