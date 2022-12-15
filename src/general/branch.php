@@ -239,6 +239,28 @@
             return $this -> photos;
         }
 
+        public function updateCurrentStaff($staffID, $staffRole, $database){
+            $updatingColumn = '';
+            if($staffRole === 'receptionist'){
+                $updatingColumn = 'curr_receptionist';
+            }
+            else if($staffRole === 'manager'){
+                $updatingColumn = 'curr_manager';
+            }
+            else{
+                return FALSE;
+            }
+
+            $sql = sprintf("UPDATE `branch` SET '%s'= '%s' WHERE branch_id = '%s'",
+            $database -> real_escape_string($updatingColumn),
+            $database -> real_escape_string($staffID),
+            $database -> real_escape_string($this -> branchID));
+
+            $result  = $database -> query($sql);
+
+            return $result;
+        }
+
         public function jsonSerialize(){
             return [
                 'branchID' => $this -> branchID,
