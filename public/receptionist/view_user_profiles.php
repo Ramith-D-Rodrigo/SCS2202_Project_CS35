@@ -40,7 +40,7 @@
                 <div class="row-container">
                     <div class="left-side">
                         <?php if(isset($row['profile'])){?>
-                            <img src="/styles/icons/sports/basketball.jpg" class="branch-img" style="border: solid thin black">
+                            <img src="/styles/icons/<?php echo $row['profile']?>" class="branch-img" style="border: solid thin black">
                         <?php
                         }
                         else{

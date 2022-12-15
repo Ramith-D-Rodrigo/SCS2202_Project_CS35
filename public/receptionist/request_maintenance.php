@@ -62,11 +62,11 @@
                     <div class="left-side"> Sport Name :  </div>
                     <div class="right-side"> <select name="sportName" id="sportName">
                     <?php 
-                    $nameArray =  $_SESSION['sportResult'];
-                    foreach($nameArray as $name) {
+                    $sportArray =  $_SESSION['sportResult'];
+                    foreach($sportArray as $sport) {
                         ?> 
-                         <option id="sportOption" value="<?php echo $name; ?>">                            
-                        <?php echo $name; ?>                           
+                         <option id="sportOption" value="<?php echo $sport -> sport_name; ?>">                            
+                        <?php echo $sport -> sport_name; ?>                           
                         </option>  
                     <?php
                     }

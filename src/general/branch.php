@@ -14,7 +14,7 @@
         private $closing_time;
         private $photos;
 
-        public function __construct($branch_id){ 
+        public function __construct($branch_id){
             $this -> branchID = $branch_id;
         }
 
@@ -24,37 +24,37 @@
             }
             else if($wantedProperty === ''){
                 $branchSql = sprintf("SELECT * FROM `branch`
-                WHERE 
-                `branch_id` 
-                LIKE '%s'", 
+                WHERE
+                `branch_id`
+                LIKE '%s'",
                 $database -> real_escape_string($this -> branchID));
                 $result =  $database -> query($branchSql);
-                
+
                 $row = $result -> fetch_object();
                 $result -> free_result();
-    
+
                 $managerID = $row -> curr_manager;
                 //get manager details by setting the manager object values
                 $manager = new Manager();
                 $manager -> setDetails(uid: $managerID);
                 $manager -> getDetails($database);
-    
+
                 //get receptionist details by setting the receptionist object values
                 $receptionistID = $row -> curr_receptionist;
                 $receptionist = new Receptionist();
                 $receptionist -> setDetails(uid :$receptionistID);
                 $receptionist -> getDetails($database);
-    
-    
+
+
                 $this -> setDetails(city: $row -> city, address: $row -> address,email: $row -> branch_email, opening_time: $row -> opening_time, closing_time: $row -> closing_time, manager: $manager, receptionist: $receptionist);
-    
+
                 //set branch photos from database
                 $this -> getBranchPictures($database);
-    
+
                 return $this;
             }
             else{
-                $sql = sprintf("SELECT `%s` as `wanted_property` FROM `branch` WHERE `branch_id` LIKE '%s'", 
+                $sql = sprintf("SELECT `%s` as `wanted_property` FROM `branch` WHERE `branch_id` LIKE '%s'",
                 $database -> real_escape_string($wantedProperty),
                 $database -> real_escape_string($this -> branchID));
 
@@ -163,11 +163,11 @@
 
 
         public function getAllSports($database){    //only courts with accepted status
-            $sql = sprintf("SELECT DISTINCT `s`.`sport_id`,`s`.`sport_name` from `sport` `s` 
+            $sql = sprintf("SELECT DISTINCT `s`.`sport_id`,`s`.`sport_name` from `sport` `s`
             INNER JOIN `sports_court` `sc`
-            ON `s`.`sport_id` = `sc`.`sport_id` 
-            INNER JOIN `branch` `b` 
-            ON `b`.`branch_id` = `sc`.`branch_id` 
+            ON `s`.`sport_id` = `sc`.`sport_id`
+            INNER JOIN `branch` `b`
+            ON `b`.`branch_id` = `sc`.`branch_id`
             WHERE `b`.`branch_id` = '%s'
             AND `sc`.`request_status` = 'a'",
 
@@ -187,10 +187,10 @@
             $sql = sprintf("SELECT `court_name`
             FROM
             `sports_court`
-            WHERE 
+            WHERE
             `branch_id`
             LIKE
-            '%s' ", 
+            '%s' ",
             $database -> real_escape_string($this -> branchID));     //get the number of sports courts in a branch when the sport id is given
 
             $result = $database -> query($sql);
@@ -207,16 +207,16 @@
             $sql = sprintf("SELECT `court_id`
             FROM
             `sports_court`
-            WHERE 
+            WHERE
             `branch_id`
             LIKE
-            '%s' 
-            AND 
+            '%s'
+            AND
             `sport_id`
-            LIKE 
-            '%s'", 
+            LIKE
+            '%s'",
             $database -> real_escape_string($this -> branchID),
-            $database -> real_escape_string($sportID)); 
+            $database -> real_escape_string($sportID));
 
             $result = $database -> query($sql);
             $courts = [];
@@ -248,7 +248,7 @@
             $database -> real_escape_string($this -> branchID));
 
             $result = $database -> query($sql);
-            
+
             while($row = $result -> fetch_object()){
                 if($row !== NULL){  //has photos
                     array_push($this -> photos, $row -> photo);
@@ -258,6 +258,7 @@
             $result -> free_result();
             return $this -> photos;
         }
+
 
         public function getBranchFeedback($database){
             $sql = sprintf("SELECT `userfeedback_id` FROM `user_branch_feedback` WHERE `branch_id` = '%s'",
@@ -279,6 +280,28 @@
             }
 
             return $allFeedbacks;
+
+        public function updateCurrentStaff($staffID, $staffRole, $database){
+            $updatingColumn = '';
+            if($staffRole === 'receptionist'){
+                $updatingColumn = 'curr_receptionist';
+            }
+            else if($staffRole === 'manager'){
+                $updatingColumn = 'curr_manager';
+            }
+            else{
+                return FALSE;
+            }
+
+            $sql = sprintf("UPDATE `branch` SET '%s'= '%s' WHERE branch_id = '%s'",
+            $database -> real_escape_string($updatingColumn),
+            $database -> real_escape_string($staffID),
+            $database -> real_escape_string($this -> branchID));
+
+            $result  = $database -> query($sql);
+
+            return $result;
+
         }
 
         public function jsonSerialize(){
