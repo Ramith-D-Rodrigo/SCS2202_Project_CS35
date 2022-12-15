@@ -294,11 +294,10 @@
                 return FALSE;
             }
 
-            $sql = sprintf("UPDATE `branch` SET '%s'= '%s' WHERE branch_id = '%s'",
+            $sql = sprintf("UPDATE `branch` SET `%s`= '%s' WHERE `branch_id` = '%s'",
             $database -> real_escape_string($updatingColumn),
             $database -> real_escape_string($staffID),
             $database -> real_escape_string($this -> branchID));
-
             $result  = $database -> query($sql);
 
             return $result;

@@ -128,10 +128,10 @@
     $result = $admin -> registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$connection);
     
     if($result === TRUE){   //successfully registered
-            echo "Successfully Registered";
+            // echo "Successfully Registered";
         foreach($inputFields as $i){    //store session details
             if(isset($_SESSION[$i])){   //unsetting input values
-                session_unset($i);
+                unset($_SESSION[$i]);
             }
         } 
         // session_unset(); free all current session variables 
