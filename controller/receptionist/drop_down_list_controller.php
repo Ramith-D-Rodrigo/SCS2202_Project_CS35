@@ -34,6 +34,9 @@
     }
     else{
         unset($_SESSION['searchErrorMsg']);
+        // foreach($courtNames as $courtName){
+        //     echo $courtName;
+        // }
         $_SESSION['courtResult'] = $courtNames;
     }
     header("Location: /public/receptionist/request_maintenance.php");
