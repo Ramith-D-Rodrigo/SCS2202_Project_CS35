@@ -16,19 +16,54 @@
         <title>Log in page</title>
     </head>
     <body>
-            <?php
-                require_once("header.php");
-            ?>
-            <a href="../user/user_login.php" style="color:black"> Log in as an User</a>
-            <a href="../receptionist/receptionist_login.php" style="color:black"> Log in as a Receptionist</a>
-            <a href="../system_admin/admin_login.php" style="color:black"> Log in as the System Admin</a>
-            <a href="../coach/coach_login.php" style="color:black"> Log in as an Coach</a>
-            <a href="../owner/owner_login.php" style="color:black"> Log in as an Owner</a>
+        <?php
+         require_once("../general/header.php");
+        ?>
+        <main class="body-container">
+            <div class="content-box">
+                <form action="/controller/general/login_controller.php" method="post" id="loginForm">
+                    Username : 
+                    <input
+                    type="text" 
+                    required 
+                    minlength="6" 
+                    maxlength="15"
+                    pattern="^[a-z]([a-z0-9_]){5,15}"
+                    name="username"
+                    id="username">
+                    <br>
 
-            <a href="../manager/manager_login.php" style="color:black"> Log in as Manager</a>
-            <br>
-            <?php
-                require_once("footer.php");
-            ?>
+                    <div>
+                    Password : 
+                        <input 
+                        type="password"  
+                        id="password"
+                        name="password"
+                        required> 
+                        <button id="togglePassword">Show Password</button><br>
+                    </div>
+                    <div class='err-msg' id="errmsgbox">
+                    </div>
+                    <div class='success-msg' id='successmsgbox'>
+                    </div>
+                    <div class="btn-container">
+                        <button type="submit" 
+                            id="loginBtn"  
+                            name= "loginSubmitBtn" 
+                            value="submit" 
+                            onclick="return validateForm(event)"> Log in </button>
+                    </div>
+                </form>
+                <div class="btn-container">
+                    New User? <button onclick="window.location.href='/public/general/register.php'" id="regBtn">Register</button>
+                </div>
+            </div>
+        </main>
+        <?php
+            require_once("../general/footer.php");
+        ?>
     </body>
+    <script src="/js/general/login_form.js"></script>
+    <script src="/js/user/user_login_handle.js"></script>
+    <script src="/js/user/user_login_validation.js"></script>
 </html>
