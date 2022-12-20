@@ -22,7 +22,7 @@ class User extends Actor implements JsonSerializable{
             $this -> userID = $actor -> getUserID();
             $this -> username = $actor -> getUsername();
         }
-        require_once("dbconnection.php");   //get the user connection to the db
+        require("dbconnection.php");   //get the user connection to the db
         $this -> connection = $connection;
     }
 
@@ -68,8 +68,8 @@ class User extends Actor implements JsonSerializable{
         return $this -> profilePic;
     }
 
-    private function create_login_details_entry($database){   //first we createe the log in details entry
-        $result = $database -> query(sprintf("INSERT INTO `login_details`
+    private function create_login_details_entry(){   //first we createe the log in details entry
+        $result = $this -> connection -> query(sprintf("INSERT INTO `login_details`
         (`user_id`, 
         `username`, 
         `email_address`,
@@ -78,11 +78,11 @@ class User extends Actor implements JsonSerializable{
         `is_active`) 
         VALUES 
         ('%s','%s','%s','%s','user', '%s')",
-        $database -> real_escape_string($this -> userID),
-        $database -> real_escape_string($this -> username),
-        $database -> real_escape_string($this -> emailAddress),
-        $database -> real_escape_string($this -> password),
-        $database -> real_escape_string($this -> isactive))); 
+        $this -> connection -> real_escape_string($this -> userID),
+        $this -> connection -> real_escape_string($this -> username),
+        $this -> connection -> real_escape_string($this -> emailAddress),
+        $this -> connection -> real_escape_string($this -> password),
+        $this -> connection -> real_escape_string($this -> isactive))); 
 
 /*         if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
@@ -93,8 +93,8 @@ class User extends Actor implements JsonSerializable{
         return $result;
     }
 
-    private function create_user_entry($database){  //Create entry in user table
-        $result = $database -> query(sprintf("INSERT INTO `user`
+    private function create_user_entry(){  //Create entry in user table
+        $result = $this -> connection -> query(sprintf("INSERT INTO `user`
         (`user_id`, 
         `first_name`, 
         `last_name`,  
@@ -108,17 +108,17 @@ class User extends Actor implements JsonSerializable{
         `profile_photo`) 
         VALUES 
         ('%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), NULLIF('%s', 'NULL'))",
-        $database -> real_escape_string($this -> userID),
-        $database -> real_escape_string($this -> firstName),
-        $database -> real_escape_string($this -> lastName),
-        $database -> real_escape_string($this -> gender),
-        $database -> real_escape_string($this -> homeAddress),
-        $database -> real_escape_string($this -> contactNum),
-        $database -> real_escape_string($this -> dateOfBirth),
-        $database -> real_escape_string($this -> registeredDate),
-        $database -> real_escape_string($this -> height),
-        $database -> real_escape_string($this -> weight),
-        $database -> real_escape_string($this -> profilePic))); 
+        $this -> connection -> real_escape_string($this -> userID),
+        $this -> connection -> real_escape_string($this -> firstName),
+        $this -> connection -> real_escape_string($this -> lastName),
+        $this -> connection -> real_escape_string($this -> gender),
+        $this -> connection -> real_escape_string($this -> homeAddress),
+        $this -> connection -> real_escape_string($this -> contactNum),
+        $this -> connection -> real_escape_string($this -> dateOfBirth),
+        $this -> connection -> real_escape_string($this -> registeredDate),
+        $this -> connection -> real_escape_string($this -> height),
+        $this -> connection -> real_escape_string($this -> weight),
+        $this -> connection -> real_escape_string($this -> profilePic))); 
 
         return $result;
 /*         if ($result === TRUE) {
@@ -129,10 +129,10 @@ class User extends Actor implements JsonSerializable{
         } */
     }
 
-    private function create_user_dependents($database){ //Create entries for all the user dependents
+    private function create_user_dependents(){ //Create entries for all the user dependents
         $flag = TRUE;
         foreach($this -> dependents as $dependent){
-            $result = $dependent -> create_entry($database);
+            $result = $dependent -> create_entry($this -> connection);
             if($result === FALSE){
                 return FALSE;
             }
@@ -140,17 +140,17 @@ class User extends Actor implements JsonSerializable{
         return $flag;
     }
 
-    private function create_user_medicalConcerns($database){
+    private function create_user_medicalConcerns(){
         $flag = TRUE;
         if(count($this -> medicalConcerns) != 0){   //has medical concerns
             foreach($this -> medicalConcerns as $i){
-                $result = $database -> query(sprintf("INSERT INTO `user_medical_concern`
+                $result = $this -> connection -> query(sprintf("INSERT INTO `user_medical_concern`
                 (`user_id`, 
                 `medical_concern`) 
                 VALUES 
                 ('%s','%s')", 
-                $database -> real_escape_string($this -> userID),
-                $database -> real_escape_string($i)));
+                $this -> connection -> real_escape_string($this -> userID),
+                $this -> connection -> real_escape_string($i)));
 
                 if ($result === FALSE) {    //got an error
                     return FALSE;
@@ -160,13 +160,13 @@ class User extends Actor implements JsonSerializable{
         return $flag;
     }
 
-    public function registerUser($database){    //public function to register the user
+    public function registerUser(){    //public function to register the user
         $this -> registeredDate = date("Y-m-d");
         $this -> isactive = 1;
-        $loginEntry = $this -> create_login_details_entry($database);
-        $userEntry = $this -> create_user_entry($database);
-        $medicalConcernEntry = $this -> create_user_medicalConcerns($database); 
-        $dependentEntry = $this -> create_user_dependents($database); //finally, create the entries for the dependents
+        $loginEntry = $this -> create_login_details_entry();
+        $userEntry = $this -> create_user_entry();
+        $medicalConcernEntry = $this -> create_user_medicalConcerns(); 
+        $dependentEntry = $this -> create_user_dependents(); //finally, create the entries for the dependents
 
         if($loginEntry  === TRUE && $userEntry  === TRUE && $medicalConcernEntry  === TRUE && $dependentEntry === TRUE){    //all has to be true (successfully registered)
             return TRUE;

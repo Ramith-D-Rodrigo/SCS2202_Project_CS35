@@ -4,7 +4,6 @@
     require_once("../../src/user/user_dependent.php");
     require_once("../../src/user/dbconnection.php");
     require_once("../../src/user/credentials_availability.php");
-    require_once("../../src/general/uuid.php"); //to generate uuids
 
 
     //all possible inputs for prefilling
@@ -286,7 +285,7 @@
         $new_user -> setProfilePic("NULL");
     }
 
-    $result = $new_user -> registerUser($connection);
+    $result = $new_user -> registerUser();
 
     if($result === TRUE){   //successfully registered
         //echo "Successfully registered";
