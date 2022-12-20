@@ -1,10 +1,10 @@
 <?php
     require_once("../../src/general/reservation.php");
-class User implements JsonSerializable{
-    private $userID;
+    require_once("../../src/general/actor.php");
+
+class User extends Actor implements JsonSerializable{
     private $firstName;
     private $lastName;
-    private $emailAddress;
     private $homeAddress;
     private $contactNum;
     private $height;
@@ -13,11 +13,18 @@ class User implements JsonSerializable{
     private $dateOfBirth;
     private $dependents;
     private $medicalConcerns;
-    private $username;
-    private $password;
     private $gender;
     private $isactive;
     private $profilePic;
+
+    public function __construct($actor = null){
+        if($actor !== null){
+            $this -> userID = $actor -> getUserID();
+            $this -> username = $actor -> getUsername();
+        }
+        require_once("dbconnection.php");   //get the user connection to the db
+        $this -> connection = $connection;
+    }
 
     public function setDetails($fName='', $lName='', $email='', $address='', $contactNo='', $dob='', $uid='', $dependents='', $height='', $weight='', $medicalConcerns='', $username='', $password='', $gender=''){
         $this -> userID = $uid;
@@ -45,6 +52,19 @@ class User implements JsonSerializable{
     }
 
     public function getProfilePic(){
+        $sqlPic = sprintf("SELECT `profile_photo` 
+        FROM `user` 
+        WHERE `user_id` = '%s'",
+        $this -> connection -> real_escape_string($this -> userID));
+
+        $result = $this -> connection -> query($sqlPic);
+        $picRow = $result -> fetch_object();
+        if($picRow === NULL){
+            $this -> profilePic = '';
+        }
+        else{
+            $this -> profilePic =  $picRow -> profile_photo;
+        }
         return $this -> profilePic;
     }
 
@@ -156,7 +176,7 @@ class User implements JsonSerializable{
         }
     }
 
-    public function login($username, $password, $database){
+/*     public function login($username, $password){
         $sql = sprintf("SELECT `user_id`, 
         `username`, 
         `password`, 
@@ -197,7 +217,7 @@ class User implements JsonSerializable{
         }
         //$this -> getProfilePic();  
         return ["Successfully Logged In", $rows -> user_role];  //return the message and role
-    }
+    } */
 
     public function searchSport($sportName, $database){
         $sportSql = sprintf("SELECT `sport_id`,
