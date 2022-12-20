@@ -151,12 +151,12 @@
                     <?php
                         if(isset($_SESSION['RequestsuccessMsg'])){
                             echo $_SESSION['RequestsuccessMsg'];
-                            echo '<br> You will be Redirected to the Dashboard. Please Wait';
+                            //echo '<br> You will be Redirected to the Dashboard. Please Wait';
                             unset($_SESSION['RequestsuccessMsg']);
                             unset($_SESSION['courtResult']);
                             unset($_SESSION['sportResult']);
-                            header_remove();
-                            header("Refresh: 3; URL =/public/receptionist/receptionist_dashboard.php");  //redirect to dashboard
+                            //header_remove();
+                            //header("Refresh: 3; URL =/public/receptionist/receptionist_dashboard.php");  //redirect to dashboard
                         }
                     ?>
                 </div>
