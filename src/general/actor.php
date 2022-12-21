@@ -64,5 +64,17 @@
         public function getConnection(){    //to get the connection of the actor
             return $this -> connection;
         }
+
+        public function logout(){
+            session_start();
+            $result1 = session_unset();
+            $result2 = session_destroy();
+            if($result1 === true && $result2 === true){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
     }
 ?>
