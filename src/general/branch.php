@@ -203,20 +203,24 @@
             return $courtNames;
         }
 
-        public function getSportCourts($sportID, $database){
+        public function getSportCourts($sportID, $database, $status = ''){
+
+            if($status === ''){ //want all the courts of that sportID
+                $status = '%';  //wildcard
+            }
+
             $sql = sprintf("SELECT `court_id`
             FROM
             `sports_court`
             WHERE
-            `branch_id`
-            LIKE
-            '%s'
+            `branch_id` LIKE '%s'
             AND
-            `sport_id`
-            LIKE
-            '%s'",
+            `sport_id` LIKE '%s'
+            AND
+            `request_status` LIKE '%s'",
             $database -> real_escape_string($this -> branchID),
-            $database -> real_escape_string($sportID));
+            $database -> real_escape_string($sportID),
+            $database -> real_escape_string($status));
 
             $result = $database -> query($sql);
             $courts = [];

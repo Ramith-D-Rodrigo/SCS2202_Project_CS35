@@ -21,7 +21,7 @@
             $branch = new Branch($i['branch']);
             $branch -> getDetails($connection);    //get branch details
 
-            $courts = $branch -> getSportCourts($i['sport_id'], $connection);    //get the number of courts of the current considering branch
+            $courts = $branch -> getSportCourts($i['sport_id'], $connection, 'a');    //get the number of courts of the current considering branch (request status should be accepted)
 
             $branchJSON = json_encode($branch);
             $neededInfo = json_decode($branchJSON, true);
@@ -47,4 +47,5 @@
     }
     //header("Location: /public/general/search_results.php");
     $connection -> close();
+    unset($user);
 ?>

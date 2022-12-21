@@ -19,7 +19,7 @@
 
     $branch = new Branch($reservationPlace[0]);
     $branch -> getDetails($connection);
-    $sports_courts = $branch -> getSportCourts($reservationPlace[1], $connection);  //get all the sports court of that branch's sport
+    $sports_courts = $branch -> getSportCourts($reservationPlace[1], $connection, 'a');  //get all the sports court of that branch's sport (request status should be accepted)
 
     $sport = new Sport();   //to get sport details
     $sport -> setID($reservationPlace[1]);
