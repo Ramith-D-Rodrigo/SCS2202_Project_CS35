@@ -21,7 +21,7 @@
         ?>
         <main class="body-container">
             <div class="content-box">
-                <form action="/controller/general/login_controller.php" method="post" id="loginForm">
+                <form id="loginForm">
                     Username : 
                     <input
                     type="text" 
