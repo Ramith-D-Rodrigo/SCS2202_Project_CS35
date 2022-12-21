@@ -176,59 +176,16 @@ class User extends Actor implements JsonSerializable{
         }
     }
 
-/*     public function login($username, $password){
-        $sql = sprintf("SELECT `user_id`, 
-        `username`, 
-        `password`, 
-        `user_role` 
-        FROM `login_details`  
-        WHERE `username` = '%s'", 
-        $database -> real_escape_string($username));
-
-        $result = $database -> query($sql);
-
-        $rows = $result -> fetch_object();
-
-        if($rows === NULL){ //no result. hence no user
-            return ["No Such User Exists"];
-        }
-
-        $hash = $rows -> password;
-        if(password_verify($password, $hash) === FALSE){    //Incorrect Password
-            return ["Incorrect Password"];
-        }
-
-        //setting user data for session
-        $this -> userID = $rows -> user_id;  
-        
-        //get the profile pic from the datbase and store in the object's attribute
-        $sqlPic = sprintf("SELECT `profile_photo` 
-        FROM `user` 
-        WHERE `user_id` = '%s'",
-        $database -> real_escape_string($this -> userID));
-
-        $result = $database -> query($sqlPic);
-        $picRow = $result -> fetch_object();
-        if($picRow === NULL){
-            $this -> profilePic = '';
-        }
-        else{
-            $this -> profilePic =  $picRow -> profile_photo;
-        }
-        //$this -> getProfilePic();  
-        return ["Successfully Logged In", $rows -> user_role];  //return the message and role
-    } */
-
-    public function searchSport($sportName, $database){
+    public function searchSport($sportName){
         $sportSql = sprintf("SELECT `sport_id`,
         `sport_name`,
         `reservation_price`
         FROM `sport` 
         WHERE `sport_name` 
         LIKE '%%%s%%'", //to escape % in sprintf, we need to add % again
-        $database -> real_escape_string($sportName));
+        $this -> connection -> real_escape_string($sportName));
 
-        $sportResult = $database -> query($sportSql);   //get the sports results
+        $sportResult = $this -> connection -> query($sportSql);   //get the sports results
 
         if($sportResult -> num_rows === 0){ //no such sport found
             return ['errMsg' => "Sorry, Cannot find what you are looking For"];
@@ -241,8 +198,8 @@ class User extends Actor implements JsonSerializable{
             WHERE `sport_id` 
             LIKE '%s'
             AND
-            `request_status` = 'a'", $database -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
-            $branchResult = $database -> query($courtBranchSql);
+            `request_status` = 'a'", $this -> connection -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
+            $branchResult = $this -> connection -> query($courtBranchSql);
 
             while($branchRow = $branchResult -> fetch_object()){   //getting all the branches
                 $branch = $branchRow -> branch_id;
