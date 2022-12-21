@@ -8,6 +8,12 @@
     require_once("../../src/user/user.php");
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
+
+    if($requestJSON === ''){ //if the json string is empty
+        header("Location: /index.php"); //the user shouldn't be able to access the login page
+        exit();
+    }
+
     $userInput = json_decode($requestJSON, true);
     $username = $userInput['username'];
     $password = $userInput['password'];
