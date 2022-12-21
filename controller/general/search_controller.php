@@ -9,7 +9,7 @@
     $user = new User();
     $sportName = htmlspecialchars($_GET['sportName']);
 
-    $result = $user -> searchSport($sportName, $connection);  //search the sport
+    $result = $user -> searchSport($sportName);  //search the sport
 
     if(isset($result['errMsg'])){   //no sport was found
         header('Content-Type: application/json;');    //because we are sending json
