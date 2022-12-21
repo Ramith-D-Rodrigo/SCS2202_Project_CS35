@@ -60,7 +60,7 @@
                 <?php
                 }
                 ?>
-                <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
+                <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
             </div>
         <?php
             }
