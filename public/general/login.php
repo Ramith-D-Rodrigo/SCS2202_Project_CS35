@@ -64,6 +64,6 @@
         ?>
     </body>
     <script src="/js/general/login_form.js"></script>
-    <script src="/js/user/user_login_handle.js"></script>
-    <script src="/js/user/user_login_validation.js"></script>
+    <script src="/js/general/login_handle.js"></script>
+    <script src="/js/general/login_validation.js"></script>
 </html>
