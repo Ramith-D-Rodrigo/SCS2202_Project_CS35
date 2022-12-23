@@ -31,15 +31,13 @@
                                         pattern="[a-zA-Z]+" 
                                         name="firstName"
                                         id="firstName" 
-                                        required placeholder="First Name"
-                                        value=<?php if(isset($_SESSION['firstName'])) echo htmlspecialchars($_SESSION['firstName'], ENT_QUOTES)?>>
+                                        required placeholder="First Name">
                                 <input type="text" 
                                         pattern="[a-zA-Z]+" 
                                         name="lastName"
                                         id="lastName" 
                                         required 
-                                        placeholder="Last Name"
-                                        value=<?php if(isset($_SESSION['lastName'])) echo htmlspecialchars($_SESSION['lastName'], ENT_QUOTES)?>>
+                                        placeholder="Last Name">
                             </div>
                         </div>
                         
@@ -50,8 +48,7 @@
                                 <input type="date"
                                         id ="bday" 
                                         name="birthday" 
-                                        required
-                                        value=<?php if(isset($_SESSION['birthday'])) echo htmlspecialchars($_SESSION['birthday'], ENT_QUOTES)?> style="flex:none"> 
+                                        required style="flex:none"> 
                             </div>
                         </div>
 
@@ -62,8 +59,7 @@
                                     pattern="[0-9]{10,11}" 
                                     name="contactNum"
                                     id="usercontact"
-                                    required
-                                    value=<?php if(isset($_SESSION['contactNum'])) echo htmlspecialchars($_SESSION['contactNum'], ENT_QUOTES)?>>
+                                    required>
                             </div>
                         </div>
 
@@ -74,7 +70,7 @@
                                     name="homeAddress"
                                     id="homeAddress" 
                                     required
-                                    ><?php if(isset($_SESSION['homeAddress'])) echo htmlspecialchars($_SESSION['homeAddress'], ENT_QUOTES)?></textarea>
+                                    ></textarea>
                             </div>
                         </div>
 
@@ -87,8 +83,7 @@
                                     min="0" 
                                     pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
                                     id="height"
-                                    name="height"
-                                    value=<?php if(isset($_SESSION['height'])) echo htmlspecialchars($_SESSION['height'], ENT_QUOTES)?>>
+                                    name="height">
                             </div>
                         </div>
                         
@@ -102,8 +97,7 @@
                                     min="0"
                                     pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
                                     id="weight"
-                                    name="weight"
-                                    value=<?php if(isset($_SESSION['weight'])) echo htmlspecialchars($_SESSION['weight'], ENT_QUOTES)?>>
+                                    name="weight">
                             </div>
                         </div>
 
@@ -111,10 +105,10 @@
                             <div class="left-field">Gender :</div>
                             <div class="right-field">
                                 <label>
-                                    <input type="radio" name="gender" value="m" required <?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'm') echo 'checked';}?>> Male
+                                    <input type="radio" name="gender" value="m" required> Male
                                 </label>
                                 <label>
-                                    <input type="radio" name="gender" value="f"<?php if(isset($_SESSION['gender'])){if($_SESSION['gender'] === 'f') echo 'checked';}?>> Female
+                                    <input type="radio" name="gender" value="f"> Female
                                 </label>
                             </div>
                         </div>
@@ -127,8 +121,7 @@
                                     type="email" 
                                     name="emailAddress"
                                     id="emailAddress"
-                                    required
-                                    value=<?php if(isset($_SESSION['emailAddress'])) echo htmlspecialchars($_SESSION['emailAddress'], ENT_QUOTES)?>> 
+                                    required> 
                             </div>
                          </div>    
 
@@ -144,8 +137,7 @@
                                     pattern="^[a-z]([a-z0-9_]){5,15}"
                                     name="username"
                                     id="username"
-                                    title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed"
-                                    value=<?php if(isset($_SESSION['username'])) echo htmlspecialchars($_SESSION['username'], ENT_QUOTES)?>>
+                                    title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed">
                             </div>
                         </div>
                          
@@ -190,7 +182,7 @@
                             <div id="emergencydetail1">
                                 <div class="row-container">
                                     <div class="left-field">Name :</div>
-                                    <div class="right-field"><input type="text" name="name1" pattern ="[a-zA-Z ]+" required value=<?php if(isset($_SESSION['name1'])) echo htmlspecialchars($_SESSION['name1'], ENT_QUOTES) ?>></div>
+                                    <div class="right-field"><input type="text" name="name1" pattern ="[a-zA-Z ]+" required></div>
                                 </div>
 
                                 <div class="row-container">
@@ -198,41 +190,13 @@
                                     <div class="right-field">
                                         <select required name="relationship1">
                                             <option value="">Choose One</option>
-                                            <option value="Mother" <?php if(isset($_SESSION['relationship1'])){
-                                                    if($_SESSION['relationship1'] === "Mother"){
-                                                        echo 'selected';
-                                                    }
-                                                }?>>Mother</option>
-                                            <option value="Father" <?php if(isset($_SESSION['relationship1'])){
-                                                    if($_SESSION['relationship1'] === "Father"){
-                                                        echo 'selected';
-                                                    }
-                                                }?>>Father</option>
-                                            <option value="Sibling 1" <?php if(isset($_SESSION['relationship1'])){
-                                                    if($_SESSION['relationship1'] === "Sibling 1"){
-                                                        echo 'selected';
-                                                    }
-                                                }?>>Sibling 1</option>
-                                            <option value="Sibling 2" <?php if(isset($_SESSION['relationship1'])){
-                                                    if($_SESSION['relationship1'] === "Sibling 2"){
-                                                        echo 'selected';
-                                                    }
-                                                }?>>Sibling 2</option>
-                                            <option value="Friend 1" <?php if(isset($_SESSION['relationship1'])){
-                                                    if($_SESSION['relationship1'] === "Friend 1"){
-                                                        echo 'selected';
-                                                    }
-                                                }?>>Friend 1</option>
-                                            <option value="Friend 2" <?php if(isset($_SESSION['relationship1'])){
-                                                    if($_SESSION['relationship1'] === "Friend 2"){
-                                                        echo 'selected';
-                                                    }
-                                                }?>>Friend 2</option>
-                                            <option value="Partner" <?php if(isset($_SESSION['relationship1'])){
-                                                    if($_SESSION['relationship1'] === "Partner"){
-                                                        echo 'selected';
-                                                    }
-                                                }?>>Partner</option>
+                                            <option value="Mother">Mother</option>
+                                            <option value="Father">Father</option>
+                                            <option value="Sibling 1">Sibling 1</option>
+                                            <option value="Sibling 2">Sibling 2</option>
+                                            <option value="Friend 1">Friend 1</option>
+                                            <option value="Friend 2">Friend 2</option>
+                                            <option value="Partner">Partner</option>
                                         </select>
                                     </div>
                                 </div>
@@ -245,8 +209,7 @@
                                             min="0" 
                                             name="emgcontactNum1" 
                                             required 
-                                            pattern="[0-9]{10,11}" 
-                                            value=<?php if(isset($_SESSION['emgcontactNum1'])) echo htmlspecialchars($_SESSION['emgcontactNum1'], ENT_QUOTES) ?>>
+                                            pattern="[0-9]{10,11}">
                                     </div>
                                 </div>
                             </div>
@@ -258,33 +221,8 @@
                             <button id="emergencyDetailsbtn">Add More</button>
                         </div>
                         
-                        <div id="errmsg" class="err-msg"><?php
-                                if(isset($_SESSION['emailError'])){
-                                    echo $_SESSION['emailError'];
-                                    echo '<br>';
-                                    unset($_SESSION['emailError']);
-                                }
-                                if(isset($_SESSION['usernameError'])){
-                                    echo $_SESSION['usernameError'];
-                                    echo '<br>';
-                                    unset($_SESSION['usernameError']);
-                                }
-                                if(isset($_SESSION['RegUnsuccessMsg'])){
-                                    echo $_SESSION['RegUnsuccessMsg'];
-                                    echo '<br>';
-                                    unset($_SESSION['RegUnsuccessMsg']);
-                                }
-                                else{
-                                    echo '';
-                                }
-                            ?></div>
-                        <div id="successmsg" class="success-msg"><?php
-                                if(isset($_SESSION['RegsuccessMsg'])){
-                                    echo $_SESSION['RegsuccessMsg'];
-                                    echo '<br>';
-                                    unset($_SESSION['RegsuccessMsg']);
-                                }
-                            ?></div>
+                        <div id="errmsg" class="err-msg"></div>
+                        <div id="successmsg" class="success-msg"></div>
                         <div class="btn-container">
                             <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
                         </div>
@@ -298,6 +236,7 @@
     ?>
 
     </body>
+    <script src="/js/user/user_register_form.js"></script>
     <script src="/js/user/user_register_form_handle.js"></script>
     <script src="/js/user/user_register_validation.js"></script>
 </html>
