@@ -12,7 +12,7 @@
     class Mailer{
         public static function sendMail($recipient, $recipient_name, $subject, $body){  //no need to create an object to call this function
             try{
-                $mail = new PHPMailer();    //Create a new PHPMailer instance
+                $mail = new PHPMailer(true);    //Create a new PHPMailer instance
                 $mail -> isSMTP();     // Set mailer to use SMTP
                 $mail -> Host = PHPMAILER_HOST;    // Specify main and backup SMTP servers
                 $mail -> SMTPAuth = "true";     // Enable SMTP authentication
@@ -34,6 +34,16 @@
                 //echo "Message could not be sent. Mailer Error: {$this -> mail -> ErrorInfo}";
                 return false;
             }
+        }
+
+        public static function registerAccount($recipientEmail, $recipient_name, $mailVerificationCode){   //this function is used to send the verification code to the user's email upon registration
+            $subject = "Account Registration";
+            $body = "<p>Hi $recipient_name,</p>
+                    <p>Thank you for registering with us. Your account is not registered yet. Please use the following verification code to activate your account.</p>
+                    <p>Code : {$mailVerificationCode} </p>
+                    <p>If you did not register with us, please ignore this email.</p>
+                    <p>Regards,<br>Sportude Support</p>";
+            return self::sendMail($recipientEmail, $recipient_name, $subject, $body);
         }
     }
 ?>

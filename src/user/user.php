@@ -162,7 +162,7 @@ class User extends Actor implements JsonSerializable{
 
     public function registerUser(){    //public function to register the user
         $this -> registeredDate = date("Y-m-d");
-        $this -> isactive = 1;
+        $this -> isactive = 0;  //still pending, has to verify using the email
         $loginEntry = $this -> create_login_details_entry();
         $userEntry = $this -> create_user_entry();
         $medicalConcernEntry = $this -> create_user_medicalConcerns(); 
@@ -174,6 +174,90 @@ class User extends Actor implements JsonSerializable{
         else{
             return FALSE;
         }
+    }
+
+    //deleting user entries functions
+
+    private function delete_login_details_entry(){  //delete login details entry
+        $result = $this -> connection -> query(sprintf("DELETE FROM `login_details`
+        WHERE `user_id` = '%s'",
+        $this -> connection -> real_escape_string($this -> userID))); 
+
+        return $result;
+    }
+
+    private function delete_user_entry(){  //Delete entry in user table
+        $result = $this -> connection -> query(sprintf("DELETE FROM `user`
+        WHERE `user_id` = '%s'",
+        $this -> connection -> real_escape_string($this -> userID))); 
+
+        return $result;
+    }
+
+    private function delete_user_medicalConcerns(){ //Delete entries for the user medical concerns
+        $flag = TRUE;
+        if(count($this -> medicalConcerns) != 0){   //has medical concerns
+            foreach($this -> medicalConcerns as $i){
+                $result = $this -> connection -> query(sprintf("DELETE FROM `user_medical_concern`
+                WHERE `user_id` = '%s' AND `medical_concern` = '%s'",
+                $this -> connection -> real_escape_string($this -> userID),
+                $this -> connection -> real_escape_string($i)));
+
+                if ($result === FALSE) {    //got an error
+                    return FALSE;
+                }
+            }
+        }
+        return $flag;
+    }
+
+    private function delete_user_dependents(){  //Delete entries for all the user dependents
+        $flag = TRUE;
+        foreach($this -> dependents as $dependent){
+            $result = $dependent -> delete_entry($this -> connection);
+            if($result === FALSE){
+                return FALSE;
+            }
+        }
+        return $flag;
+    }
+
+    public function deleteUser(){   //we need to delete in the reverse order
+        $dependentEntry = $this -> delete_user_dependents();
+        if($dependentEntry == FALSE){  //coudln't delete the dependents
+            return FALSE;
+        }
+
+        $medicalConcernEntry = $this -> delete_user_medicalConcerns();
+        if($medicalConcernEntry == FALSE){ //coudln't delete the medical concerns
+            return FALSE;
+        }
+
+        $userEntry = $this -> delete_user_entry();
+        if($userEntry == FALSE){   //coudln't delete the user entry
+            return FALSE;
+        }
+
+        $loginEntry = $this -> delete_login_details_entry();
+        if($loginEntry == FALSE){  //coudln't delete the login details
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
+    public function activateAccount(){
+        $this -> isactive = 1;
+        $sql = sprintf("UPDATE `login_details` SET `isactive` = '%s' WHERE `user_id` = '%s'",
+        $this -> connection -> real_escape_string($this -> isactive),
+        $this -> connection -> real_escape_string($this -> userID));
+
+        $result = $this -> connection -> query($sql);
+        
+        if($result === FALSE){
+            return FALSE;
+        }
+        return TRUE;
     }
 
     public function searchSport($sportName){

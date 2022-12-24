@@ -1,5 +1,4 @@
 <?php
-    session_start();
     require_once("../../src/user/user.php");
     require_once("../../src/user/user_dependent.php");
     require_once("../../src/general/dbconnection.php");
@@ -27,7 +26,7 @@
 
     $returnMsg = [];    //to echo the json response
 
-    foreach($inputFields as $i){    //store session details and validation
+    foreach($inputFields as $i){    //validation
         if(isset($_POST[$i])){  //the user has entered it
             if(($i === 'firstName' || $i === 'lastName')){    //first name and last name validation
                 if(!preg_match("/^[a-zA-Z]+$/", $_POST[$i])){ //doesn't match the pattern
@@ -275,15 +274,28 @@
 
     $result = $new_user -> registerUser();
 
-    unset($new_user);
-
     if($result === TRUE){   //successfully registered
-        $returnMsg['RegSuccessMsg'] = 'Registered Successfully';
-        echo json_encode($returnMsg);
+        //time for email verification and account activation
+        require_once("email_verification_controller.php");
+        if($emailResult === FALSE){ //check email sent successfully or not
+            $returnMsg['RegUnsuccessMsg'] = 'Error Registering the Account, Please check your email address';
+    
+            do{
+                $deleteResult = $new_user -> deleteUser(); //delete the user
+            }
+            while($deleteResult != TRUE);   
+            echo json_encode($returnMsg);
+        }
+        else{
+            $returnMsg['RegSuccessMsg'] = 'An email has been sent to your email address, please verify your account using the code sent to your email address.';
+            echo json_encode($returnMsg);
+        }
     }
     else{
         //echo "Error Registering the Account";
         $returnMsg['RegUnsuccessMsg'] = 'Error Registering the Account';
         echo json_encode($returnMsg);
     }
+
+    unset($new_user);
 ?>

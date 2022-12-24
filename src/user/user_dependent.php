@@ -35,6 +35,20 @@ class UserDependent{
         } */
         return $result;
     }
+
+    public function delete_entry($database){
+        $result = $database -> query(sprintf("DELETE FROM `user_dependent` 
+        WHERE `owner_id` = '%s' 
+        AND `name` = '%s' 
+        AND `relationship` = '%s' 
+        AND `contact_num` = '%s'", 
+        $database -> real_escape_string($this->ownerID), 
+        $database -> real_escape_string($this->name), 
+        $database -> real_escape_string($this->relationship), 
+        $database -> real_escape_string($this->contactNo)));
+
+        return $result;
+    }
 }
 
 
