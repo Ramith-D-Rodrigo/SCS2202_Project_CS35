@@ -248,7 +248,7 @@ class User extends Actor implements JsonSerializable{
 
     public function activateAccount(){
         $this -> isactive = 1;
-        $sql = sprintf("UPDATE `login_details` SET `isactive` = '%s' WHERE `user_id` = '%s'",
+        $sql = sprintf("UPDATE `login_details` SET `is_active` = '%s' WHERE `user_id` = '%s'",
         $this -> connection -> real_escape_string($this -> isactive),
         $this -> connection -> real_escape_string($this -> userID));
 

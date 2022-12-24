@@ -9,6 +9,9 @@
 
     $userid = $_SESSION['verifyUserID'];
     $mailVerificationCode = $_SESSION['mailVerificationCode'];    //get the verification code from the session
+    $fName = $_SESSION['fName'];    //get the user's first name from the session
+    $lName = $_SESSION['lName'];    //get the user's last name from the session
+    $email = $_SESSION['email'];    //get the user's email from the session
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
 
@@ -22,7 +25,7 @@
 
     if($verificationCode !== $mailVerificationCode){    //if the verification code is incorrect
         require_once('email_verification_controller.php');    //send a new verification code to the user's email
-        $returnJSON['errMsg'] = 'Verification code is incorrect, Please enter the new verification code that has been sent to your email';
+        $returnJSON['errMsg'] = 'Verification code is incorrect.<br>Please enter the new verification code that has been sent to your email';
         echo json_encode($returnJSON);
     }
     else{   //if the verification code is correct
@@ -34,6 +37,8 @@
         }
         else{   //if the account activation is successful
             $returnJSON['successMsg'] = 'Account activated successfully';
+            session_unset();
+            session_destroy();
         }
         unset($verifyingUser);
         echo json_encode($returnJSON);

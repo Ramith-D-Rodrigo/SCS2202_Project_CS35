@@ -220,11 +220,11 @@
                             <br>
                             <button id="emergencyDetailsbtn">Add More</button>
                         </div>
-                        
+                        <div id="mailVerificationBox"></div>
                         <div id="errmsg" class="err-msg"></div>
                         <div id="successmsg" class="success-msg"></div>
                         <div class="btn-container">
-                            <button type="submit" id="register"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
+                            <button type="submit" id="registerBtn"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
                         </div>
                     </form>                    
                 </div>

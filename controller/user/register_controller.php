@@ -276,6 +276,10 @@
 
     if($result === TRUE){   //successfully registered
         //time for email verification and account activation
+        session_start();
+        $_SESSION['fName'] = $fName;    //for resending the mail
+        $_SESSION['lName'] = $lName;
+        $_SESSION['email'] = $email;
         require_once("email_verification_controller.php");
         if($emailResult === FALSE){ //check email sent successfully or not
             $returnMsg['RegUnsuccessMsg'] = 'Error Registering the Account, Please check your email address';
@@ -287,7 +291,7 @@
             echo json_encode($returnMsg);
         }
         else{
-            $returnMsg['RegSuccessMsg'] = 'An email has been sent to your email address, please verify your account using the code sent to your email address.';
+            $returnMsg['RegSuccessMsg'] = 'An email has been sent to your email address. <br>Please verify your account using the code sent to your email address.';
             echo json_encode($returnMsg);
         }
     }
