@@ -9,7 +9,7 @@
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
 
-    if($requestJSON === ''){ //if the json string is empty
+    if($requestJSON === '' || $requestJSON === false){ //if the json string is empty
         header("Location: /index.php"); //the user shouldn't be able to access the login page
         exit();
     }
