@@ -22,9 +22,22 @@
 
     $userInput = json_decode($requestJSON, true);
     $verificationCode = $userInput['verificationCode'];
+    $activationType = $userInput['activationType'];
 
     if($verificationCode !== $mailVerificationCode){    //if the verification code is incorrect
         require_once('email_verification_controller.php');    //send a new verification code to the user's email
+        $emailResult = '';
+        if($activationType === 'registration'){ //registration activation
+            $emailResult = Mailer::registerAccount($email, $fName . ' ' . $lName, $mailVerificationCode);    //send the email
+        }
+        else if($activationType === 'activate'){    //account activation (other than registration)
+            $emailResult = Mailer::activateAccount($email, $fName . ' ' . $lName, $mailVerificationCode);    //send the email
+        }
+        if($emailResult === false){ //if the email sending is unsuccessful
+            $returnJSON['errMsg'] = 'Verification code is incorrect.<br>Failed to send a new verification code to your email.<br>Please try again later.';
+            echo json_encode($returnJSON);
+            exit();
+        }
         $returnJSON['errMsg'] = 'Verification code is incorrect.<br>Please enter the new verification code that has been sent to your email';
         echo json_encode($returnJSON);
     }
