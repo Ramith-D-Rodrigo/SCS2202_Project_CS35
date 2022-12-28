@@ -54,6 +54,7 @@
                             onclick="return validateForm(event)"> Log in </button>
                     </div>
                 </form>
+                <div id="accActivationBox"></div>
                 <div class="btn-container">
                     New User? <button onclick="window.location.href='/public/general/register.php'" id="regBtn">Register</button>
                 </div>
