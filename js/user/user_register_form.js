@@ -56,7 +56,7 @@ regForm.addEventListener("submit", (e) => {
                 const verificationData = new FormData(verifyForm);
                 const userCode = verificationData.get("verificationCode");
 
-                const request = {"verificationCode" : userCode};    //create a json object to send to the server
+                const request = {"verificationCode" : userCode, "activationType" : "registration"};    //create a json object to send to the server
                 fetch("../../controller/user/account_activation_controller.php", {
                     method: "POST",
                     header: {
