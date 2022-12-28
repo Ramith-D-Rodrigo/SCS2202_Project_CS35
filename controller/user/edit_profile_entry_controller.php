@@ -10,7 +10,7 @@
     $user = new User();
     $user -> setDetails(uid: $userID);
     
-    $user -> getProfileDetails($connection);
+    $user -> getProfileDetails();
 
     //$_SESSION['profileInfo'] = ;  //convert user details to json
 

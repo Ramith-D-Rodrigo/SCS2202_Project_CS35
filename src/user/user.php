@@ -338,25 +338,38 @@ class User extends Actor implements JsonSerializable{
         return $result;
     }
 
-    public function getProfileDetails($database){   //get the profile details and store in the object
-        $detailsSql = sprintf("SELECT * FROM `user` WHERE `user_id` = '%s'", $database -> real_escape_string($this -> userID)); //user details
+    public function getProfileDetails($wantedProperty = ''){   //get the profile details and store in the object
+        if($wantedProperty !== ''){ //when needed only single property
+            $detailsSql = sprintf("SELECT `%s` FROM `user` WHERE `user_id` = '%s'", 
+            $this -> connection -> real_escape_string($wantedProperty), 
+            $this -> connection -> real_escape_string($this -> userID)); //user details
 
-        $loginSql = sprintf("SELECT * FROM `login_details` WHERE `user_id` = '%s'", $database -> real_escape_string($this -> userID));  //login details
+            $result = $this -> connection -> query($detailsSql);
+            $resultObj = $result -> fetch_object();
+            $returnVal = $resultObj -> {$wantedProperty};
+            $result -> free_result();
+            unset($resultObj);
+            return $returnVal;
+        }
 
-        $medicalConcernsSql = sprintf("SELECT `medical_concern` FROM `user_medical_concern` WHERE `user_id` = '%s'", $database -> real_escape_string($this -> userID)); //medical concerns
+        $detailsSql = sprintf("SELECT * FROM `user` WHERE `user_id` = '%s'", $this -> connection -> real_escape_string($this -> userID)); //user details
 
-        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contact_num` FROM `user_dependent` WHERE `owner_id` = '%s'", $database -> real_escape_string($this -> userID)); //user dependents
+        $loginSql = sprintf("SELECT * FROM `login_details` WHERE `user_id` = '%s'", $this -> connection -> real_escape_string($this -> userID));  //login details
 
-        $detailsResult = $database -> query($detailsSql);
+        $medicalConcernsSql = sprintf("SELECT `medical_concern` FROM `user_medical_concern` WHERE `user_id` = '%s'", $this -> connection -> real_escape_string($this -> userID)); //medical concerns
+
+        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contact_num` FROM `user_dependent` WHERE `owner_id` = '%s'", $this -> connection -> real_escape_string($this -> userID)); //user dependents
+
+        $detailsResult = $this -> connection -> query($detailsSql);
         $detailsrow = $detailsResult -> fetch_object();
 
-        $loginResult = $database -> query($loginSql);
+        $loginResult = $this -> connection -> query($loginSql);
         $loginrow = $loginResult -> fetch_object();
 
-        $medicalConcernResult = $database -> query($medicalConcernsSql);
+        $medicalConcernResult = $this -> connection -> query($medicalConcernsSql);
         $medicalConcernsArr = $medicalConcernResult -> fetch_all(MYSQLI_ASSOC);
 
-        $dependentResult = $database -> query($dependentsSql);
+        $dependentResult = $this -> connection -> query($dependentsSql);
         $dependentArr = $dependentResult -> fetch_all(MYSQLI_ASSOC);
 
 
