@@ -15,6 +15,4 @@
     $_SESSION['lName'] = $lName;    //store the user's last name in the session
     $_SESSION['email'] = $email;    //store the user's email in the session
 
-    $emailResult = Mailer::registerAccount($email, $fName . ' ' . $lName, $mailVerificationCode);    //send the email
-
 ?>

@@ -281,6 +281,7 @@
         $_SESSION['lName'] = $lName;
         $_SESSION['email'] = $email;
         require_once("email_verification_controller.php");
+        $emailResult = Mailer::registerAccount($email, $fName . ' ' . $lName, $mailVerificationCode);    //send the email
         if($emailResult === FALSE){ //check email sent successfully or not
             $returnMsg['RegUnsuccessMsg'] = 'Error Registering the Account, Please check your email address';
     
