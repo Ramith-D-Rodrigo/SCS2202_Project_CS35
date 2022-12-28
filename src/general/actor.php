@@ -22,6 +22,14 @@
             return $this -> username;
         }
 
+        public function getUserRole(){
+            return $this -> userRole;
+        }
+
+        public function getEmailAddress(){
+            return $this -> emailAddress;
+        }
+
         public function login($inputUsername, $inputPassword){
             $sql = sprintf("SELECT * FROM `login_details` 
             WHERE username = '%s'", 
@@ -41,18 +49,19 @@
                 return ["Incorrect Password"];
             }
 
+            //set the object variables
+            $this -> userID = $resultRow -> user_id;
+            $this -> username = $resultRow -> username;
+            $this -> userRole = $resultRow -> user_role;
+            $this -> emailAddress = $resultRow -> email_address;
+
             if($resultRow -> is_active == 0 && ($resultRow -> user_role === 'user' || $resultRow -> user_role === 'coach')){   //user is not active
-                //has to send the email code
+                //has to send the email code              
                 return ["Account is not active<br>Please Activate your account using the code that has been sent to your email"];
             }
             else if($resultRow -> is_active == 0 && ($resultRow -> user_role === 'manager' || $resultRow -> user_role === 'owner' || $resultRow -> user_role === 'receptionist')){   //staff is not active
                 return ["Account is not active<br>Please contact the admin to activate your account"];
             }
-
-            //set the object variables
-            $this -> userID = $resultRow -> user_id;
-            $this -> username = $resultRow -> username;
-            $this -> userRole = $resultRow -> user_role;
 
             return ["Successfully Logged In", $this -> userRole];          
         }
