@@ -5,19 +5,11 @@ const params = new URLSearchParams(url.search); //search parameters
 const getReq = params.get("reserveBtn");
 //console.log(getReq);
 
+let schedulesArr = [];  //array to store the reservation info of each court
+
 fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn=".concat(getReq))
     .then(res => res.json())
     .then(data => createReservationSchedulePage(data));
-
-/* const data = {username : "Hello"};
-
-fetch("../../controller/user/make_reservation_controller.php", {
-    method : 'POST',
-    headers : {
-        'Content-Type' : 'application/json',
-    },
-    body : JSON.stringify(data)
-}).then((res) => res.json()).then((data) => console.log(data)).catch(error => console.error(error)) */
 
 function addReservationInformation(jsonData){   //function to add the reservation details to the page
 
@@ -39,8 +31,6 @@ function addReservationInformation(jsonData){   //function to add the reservatio
 
 function createScheduleObjects(jsonData){   //function to create objects to all the reservations
     const allScheduleDetailsDiv = document.getElementById("allScheduleDetails");
-
-    let schedulesArr = [];  //array to store the reservation info of each court
 
     for(var key in jsonData.branch_reservation_schedule){   //to create the buttons and store reservation details
         const courtBtn = document.createElement("button");
@@ -69,7 +59,7 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
             const userReservation = {
                 startingTime : startingTimeDateObj,
                 endingTime : endingTimeDateObj,
-                timeDiff : (((endingTimeDateObj - startingTimeDateObj)/1000)/60)/30    //time difference in 30 min slots
+                timeDiff : (((endingTimeDateObj - startingTimeDateObj)/1000)/60)/60    //time difference in 1 hour slots
             };
     
             currCourtReservations.push(userReservation);
@@ -97,43 +87,17 @@ function createReservationTable(schedules, scheduleObjs, jsonData){
     const branchClosingTime = jsonData.closing_time.split(":");   //branch closing time
     //console.log(branchOpeningTime, branchClosingTime);
     
-    for(i = 0; i < scheduleObjs.length; i++){
+    for(i = 0; i < scheduleObjs.length; i++){//going through each reservation schedule of the courts
         const table = document.createElement("table");  //initial table
         const tableRow = table.insertRow();
         const tableCell = tableRow.insertCell();    //first empty cell
     
-    
-/*         for(j = 0;  j < weekdays.length; j++){   //adding days to the header of the table
+        for(j = 0;  j < 10; j++){   //adding days to the header of the table
             const weekdayTab = tableRow.insertCell();
-            weekdayTab.innerHTML = weekdays[j];
-            
-        } */
-        let reservationCells = [];
-        let datesWithReservations = []; //array to store the dates that has reservations
-    
-        for(j = 0; j < scheduleObjs[i].length; j++){
-            const res = scheduleObjs[i][j];
-            const resDate = res.startingTime.toISOString().split("T")[0];
-    
-            if(!Object.keys(datesWithReservations).includes(resDate)){ //current Reservation is not in the datesWithReservation (first reservation that is found for that date)
-                const resHead = tableRow.insertCell();
-                resHead.innerText = resDate;
-                datesWithReservations[resDate] = [res];   //add the date and the corresponding reservation to the array
-            }
-            else{
-                datesWithReservations[resDate].push(res);   //add the reservation of same date to the array
-            }
-    
-            const cell = document.createElement("td");
-            cell.rowSpan = res.timeDiff;
-            cell.innerText = "Reserved";
-            cell.style.backgroundColor = "Red";
-            cell.style.color = "white";
-            cell.style.borderRadius = "10px";
-            cell.id = i + "," + resDate + "," + res.startingTime.toLocaleTimeString() + "," + res.endingTime.toLocaleTimeString();
-            reservationCells[i + "," + resDate + "," + res.startingTime.toLocaleTimeString() + "," + res.endingTime.toLocaleTimeString()] = cell;  //key is => "Court , Reservation Date, Starting Time, Ending Time"
+            const tempDate = new Date();
+            tempDate.setDate(tempDate.getDate() + j);
+            weekdayTab.innerHTML =  tempDate.toLocaleDateString() +"<br>" + weekdays[tempDate.getDay()];
         }
-        //console.log(datesWithReservations);
     
         const openingTime = new Date();
         openingTime.setHours(branchOpeningTime[0]);
@@ -154,70 +118,64 @@ function createReservationTable(schedules, scheduleObjs, jsonData){
             const tableRow = table.insertRow();
     
             const timePeriod = tableRow.insertCell();
-    
+
             const periodStartPrint = currTime.toLocaleTimeString(); //print to print in the page
             const periodStartCompare = currTime.toTimeString(); //compare to compare the times
     
-            currTime.setMinutes(currTime.getMinutes() + 30);    //append time period by 30 minutes
+            currTime.setMinutes(currTime.getMinutes() + 60);    //append time period by 60 minutes
     
             const periodEndPrint = currTime.toLocaleTimeString();
             const periodEndCompare = currTime.toTimeString();
-    
-            tableRow.id = i + "," + periodStartPrint + "," + periodEndPrint;
-    
-            timePeriod.innerText = periodStartPrint + " - " + periodEndPrint;
-    
-            for(let key in datesWithReservations){    //adding the reservation to the table
-                //console.log(cell.cellIndex);
+
+            for(j = 0; j < 10; j++){
                 const cell = tableRow.insertCell();
-    
-                cell.id = i + "," + key  + "," + periodStartPrint + "," + periodEndPrint;  //unique cell id
-                //console.log(cell.id.length + " " + cell.id);
+                const tempDate = new Date();
+                tempDate.setDate(tempDate.getDate() + j);
+                cell.id = "court" + i +tempDate.toLocaleDateString().replaceAll("/", "-") + periodStartPrint.replaceAll(" ", '');   //id is => "Court , Reservation Date, Starting Time"
+
             }
+            tableRow.id = "court" + i + periodStartPrint.replaceAll(" ", '') + periodEndPrint.replaceAll(" ", '');
     
+            timePeriod.innerText = periodStartPrint + " - " + periodEndPrint;    
         }
-        
-        schedules.item(i).appendChild(table);
-    
-        for(cell in reservationCells){
-            const temp = cell.split(",");
-            const searchingCellID = temp[0] + "," + temp[1] + "," + temp[2];    // court, date, starting_time
-            //console.log("Finding the time slot for : " + searchingCellID);
-    
-            const insertingCell = document.querySelector('[id^="'+searchingCellID+'"]');    //get the cell
-            //console.log("FOUND : " + insertingCell);
-    
-            const rowSpan = reservationCells[cell].rowSpan; //get the rowSpan
-    
-            const row = insertingCell.parentNode;
-            //console.log("His parent : " + row);
-    
-            const cellIndex = insertingCell.cellIndex;
-            //console.log("Cell Index :" + cellIndex);
-    
-            insertingCell.style.backgroundColor = "red";    //color the first block
-            insertingCell.innerText = "Reserved";
-            insertingCell.style.color = "white";
-    
-            var m = 1;
-            var traversingRow = row;
-            while(m < rowSpan){ //remove the spanning extra cells
-                var sibling = traversingRow.nextSibling;
-                //console.log("Sibling is : " + sibling);
-                //console.log("Removing : " + sibling.childNodes.item(cellIndex).id);
-    
-                sibling.childNodes.item(cellIndex).style.backgroundColor = "red";   //color the sibling cells
-                sibling.childNodes.item(cellIndex).innerText = "Reserved";
-                sibling.childNodes.item(cellIndex).style.color = "white";
-                //sibling.removeChild(sibling.childNodes.item(cellIndex));    //remove the child at the same column
-                traversingRow = sibling;    //next row
-                m++;
+       
+        schedules.item(i).appendChild(table);   //add the table to the schedule div
+   
+        for(j = 0; j < scheduleObjs[i].length; j++){    //replace the empty cells with reserved cells
+            const res = scheduleObjs[i][j];
+            const resDate = res.startingTime.toLocaleDateString();
+   
+            const cell = document.createElement("td");
+            cell.rowSpan = res.timeDiff;
+            cell.innerText = "Reserved";
+            cell.style.backgroundColor = "Red";
+            cell.style.color = "white";
+            cell.style.borderRadius = "10px";
+            const namingID  = "court" + i + resDate.replaceAll("/", "-") + res.startingTime.toLocaleTimeString().replaceAll(" ", "");
+            cell.id = namingID;
+
+            const replacingCell = document.getElementById(namingID);
+            if(replacingCell != null){
+                const parent = replacingCell.parentNode;    //get the parent
+                const prevSibling = replacingCell.previousSibling;  //get the previous sibling
+                //we need to remove the cells according to the span
+                let currParent = parent;    //current parent (we go down the table)
+                for(k = 0; k < res.timeDiff; k++){
+                    const nextStart = new Date();
+                    nextStart.setHours(res.startingTime.getHours() + k); //increment the starting time by 1 hour for the next cell
+                    nextStart.setMinutes(res.startingTime.getMinutes());
+                    nextStart.setSeconds(0);
+                    const nextID = "court" + i + resDate.replaceAll("/", "-") + nextStart.toLocaleTimeString().replaceAll(" ", "");
+                    const removingCell = document.getElementById(nextID);
+                    //console.log(removingCell);
+                    //const removingCell = parent.childNodes[replacingCell.cellIndex + k];
+                    currParent.removeChild(removingCell);
+                    currParent = currParent.nextSibling;
+                }
+                prevSibling.after(cell);    //add the reservation cell after the sibling
             }
-    
-            //row.replaceChild(reservationCells[cell], insertingCell);
         }
     }
-
 }
 
 function makeReservationBox(jsonData){
@@ -247,12 +205,17 @@ function makeReservationBox(jsonData){
     
     selectedCourt.value = courtBtns[0].innerHTML;   //at the start, the first court is the selected
     reserveBtn.value = courtBtns[0].id;
+    courtBtns[0].style.backgroundColor = "darkorange";
     
     //court button to display the schedule of each court when pressed
     for(i = 0; i < courtBtns.length; i++){
     
         const btn = document.getElementById(courtBtns[i].id);
         btn.addEventListener('click', ()=>{
+            for(j = 0; j < courtBtns.length; j++){  //changing back to default color
+                courtBtns[j].style.backgroundColor = "";
+            }
+            btn.style.backgroundColor = "darkorange";
     
             const allSchedules = document.getElementsByClassName('court-schedule'); //get all the schedule divs
     
@@ -270,16 +233,18 @@ function makeReservationBox(jsonData){
 }
 
 function createReservationSchedulePage(jsonData){
-    console.log(jsonData);
+    //console.log(jsonData);
     //first we insert the data we got from the server into the html 
     addReservationInformation(jsonData);
 
     //creating the schedules
     const schedulesArr = createScheduleObjects(jsonData);
 
-    console.log(schedulesArr);
+    //console.log(schedulesArr);
 
     const schedules = document.getElementsByClassName('court-schedule');
+
+
 
     for(i = 1; i < schedules.length; i++){  //starting from 1 because we are going to ignore the 0th element
         schedules[i].style.display = 'none';

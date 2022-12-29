@@ -5,14 +5,14 @@ const reserveEndingTime = document.getElementById("reserveEndingTime");
 const reservationPrice = document.getElementById("reservationPrice");
 const numOfPeople = document.getElementById("numOfPeople");
 
-function userInputTimeCheck(e){ //this function check for valid time input (30, 00 minutes check and the max and min time check (opening and closing time))
+function userInputTimeCheck(e){ //this function check for valid time input (00 minutes check and the max and min time check (opening and closing time))
     const min = e.target.value.split(":")[1];
     if(verbose){
         //console.log(e.target.value);
         //console.log(min)   //get the minutes
     }
 
-    if(!(min == '00' || min == '30') || !(e.target.min <= e.target.value && e.target.max >= e.target.value)){
+    if(!(min == '00') || !(e.target.min <= e.target.value && e.target.max >= e.target.value)){
         e.target.style.border = "medium solid red";
     }
     else{
@@ -28,7 +28,7 @@ reserveStartingTime.addEventListener('change', userInputTimeCheck);
 
 reserveEndingTime.addEventListener('change', userInputTimeCheck);
 
-//date constraints    -->  atleast 3 days before, at most a month
+//date constraints
 
 function addDays(date, days){   //function to add days
     let result = new Date(date);
@@ -36,15 +36,19 @@ function addDays(date, days){   //function to add days
     return result;
 }
 
-const today = new Date().toISOString().split("T")[0];
+const today = new Date().toLocaleDateString();
 const reservationDate = document.getElementById("reservationDate");
 
-const minDate = addDays(today, MIN_RESERVATION_DAYS).toISOString().split("T")[0];
-const maxDate = addDays(today, MAX_RESERVATION_DAYS).toISOString().split("T")[0];
+const minDateObj = addDays(today, MIN_RESERVATION_DAYS);
+minDateObj.setHours(12);    //set the time to 12:00 to avoid the date change
+const minDate = minDateObj.toISOString().split("T")[0];
+
+const maxDateObj = addDays(today, MAX_RESERVATION_DAYS);
+maxDateObj.setHours(12);    //set the time to 12:00 to avoid the date change
+const maxDate = maxDateObj.toISOString().split("T")[0];
 
 reservationDate.min = minDate;
 reservationDate.max = maxDate;
-
 //price calculation
 
 reserveStartingTime.addEventListener('change', (e)=>{
