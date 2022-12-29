@@ -61,10 +61,10 @@
     if($startingTimeObj >= $endingTimeObj){ //time range validation
         $validationFlag = true;
     }
-    else if($startingTimeObj -> format('i') !== '30' && $startingTimeObj -> format('i') !== '00'){  //minutes should be 0 or 30
+    else if($startingTimeObj -> format('i') !== '00'){  //minutes should be 0
         $validationFlag = true;
     }
-    else if($endingTimeObj -> format('i') !== '30' && $endingTimeObj -> format('i') !== '00'){  //minutes should be 0 or 30
+    else if($endingTimeObj -> format('i') !== '00'){  //minutes should be 0
         $validationFlag = true;
     }
     else if($startingTimeObj -> format('s') != '00'){    //seconds should be 0
