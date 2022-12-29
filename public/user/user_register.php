@@ -23,7 +23,7 @@
         <main>
             <div class='body-container'>
                 <div class="content-box">
-                    <form action="/controller/user/register_controller.php" method="post" enctype="multipart/form-data">
+                    <form>
                         <div class="row-container">
                             <div class="left-field">Name :</div>
                             <div class="right-field">
