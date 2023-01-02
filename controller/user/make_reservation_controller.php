@@ -1,26 +1,27 @@
 <?php
     session_start();
-/*     $requestJSON =  file_get_contents("php://input");   //get the raw json string
-    print_r(json_decode($requestJSON, true));
-    exit(); */
+
     $previousPage = $_SESSION['prevPage'];
-    //$returningMsg = [];
+    $returningMsg = [];
+
+    $requestJSON =  file_get_contents("php://input");   //get the raw json string
+    $reservationDetails = json_decode($requestJSON, true);
+
     if(!isset($_SESSION['userrole']) || !isset($_SESSION['userid'])){  //not logged in
-        $_SESSION['reservationFail'] = "Please Log in to make a Reservation";
-        header("Location: {$previousPage}");
-/*         header('Content-Type: application/json;');    //because we are sending json
-        $returningMsg['msg'] = "Please Log in to make a Reservation";
-        echo json_encode($returningMsg); */
+        //$_SESSION['reservationFail'] = "Please Log in to make a Reservation";
+        $returningMsg['errMsg'] = "Please Log in to make a Reservation";
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($returningMsg);
         exit();
     }
 
-    if(empty($_POST)){ //have not made the reservation
-        //$returningMsg['msg'] = "Not made any reservations yet";
-        header("Location: {$previousPage}");
+    if(empty($requestJSON) || $requestJSON == null){ //have not made the reservation
+        $returningMsg['errMsg'] = "Not made any reservations yet";
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($returningMsg);
         exit();
     }
 
-    require_once("../../src/user/dbconnection.php");
     require_once("../../src/general/reservation.php");
     require_once("../../src/user/user.php");
     require_once("../../src/general/sport_court.php");
@@ -34,11 +35,11 @@
     
     //store the reservation details
 
-    $court_id = $_POST['makeReserveBtn'];
-    $numOfpeople = htmlspecialchars($_POST['numOfPeople'], ENT_QUOTES);
-    $startingTime = $_POST['reservingStartTime'];
-    $endingTime = $_POST['reservingEndTime'];
-    $date = $_POST['reservingDate'];
+    $court_id = $reservationDetails['makeReserveBtn'];
+    $numOfpeople = htmlspecialchars($reservationDetails['numOfPeople'], ENT_QUOTES);
+    $startingTime = $reservationDetails['reservingStartTime'];
+    $endingTime = $reservationDetails['reservingEndTime'];
+    $date = $reservationDetails['reservingDate'];
     $user = $_SESSION['userid'];
     
     //user inputs validation
@@ -48,10 +49,10 @@
     }
 
     if($validationFlag === true){
-        $_SESSION['reservationFail'] = "Reservation Failed";
-        $connection -> close();
-        header("Location: {$previousPage}");
-        exit(); 
+        $returningMsg['errMsg'] = "Invalid Inputs";
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($returningMsg);
+        exit();
     }
 
     $startingTimeObj = new DateTime($startingTime);
@@ -77,10 +78,10 @@
         $validationFlag = true;
     }
     if($validationFlag === true){
-        $_SESSION['reservationFail'] = "Reservation Failed";
-        $connection -> close();
-        header("Location: {$previousPage}");
-        exit(); 
+        $returningMsg['errMsg'] = "Invalid Inputs";
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($returningMsg);
+        exit();
     }
     
     $today = new DateTime();
@@ -92,108 +93,88 @@
     }
 
     if($validationFlag === true){
-        $_SESSION['reservationFail'] = "Reservation Failed";
-        $connection -> close();
-        unset($today);
-        unset($reservingDateObj);
-        header("Location: {$previousPage}");
-        exit(); 
+        $returningMsg['errMsg'] = "Invalid Inputs";
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($returningMsg);
+        exit();
     }
 
     //can continue
+    $reservingUser = new User(); 
+    $reservingUser -> setDetails(uid : $user);//create an user with logged in userid
 
     $reservingCourt = new Sports_Court($court_id);
-    $sport = $reservingCourt -> getSport($connection);
+    $sport = $reservingCourt -> getSport($reservingUser -> getConnection());
 
     if($sport === false){   //no sport
-        $_SESSION['reservationFail'] = "Reservation Failed";
-        $connection -> close();
-        unset($reservingCourt);
-        header("Location: {$previousPage}");
-        exit(); 
+        $returningMsg['errMsg'] = "Invalid Inputs";
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($returningMsg);
+        exit();
     }
     
     $reservingSport = new Sport();
     $reservingSport -> setID($sport);
-    $reservationPrice = $reservingSport -> getDetails($connection, 'reservationPrice');
+    $reservationPrice = $reservingSport -> getDetails($reservingUser -> getConnection(), 'reservationPrice');
     $calculation = ($timeDifference -> h + ($timeDifference -> i/60));  //get hours and minutes and convert minutes to hours to get the period in hours
     $payment = $reservationPrice * $calculation;//calculate the payment
 
 
     //reservation availability check
-    $schedule = $reservingCourt -> getSchedule($connection);
+    $schedule = $reservingCourt -> getSchedule($reservingUser -> getConnection());
 
     foreach($schedule as $reservation){
         //print_r($reservation);
         if($reservation -> date === $date && $reservation -> status === 'Pending'){ //only need the reservations that are pending
             if(strtotime($startingTime) < strtotime($reservation -> starting_time) && strtotime($endingTime) > strtotime($reservation -> ending_time)){ //current reserving time slot is over an already reserved time slot
-                //$returningMsg['reservationFailMsg'] = "Entered Time Period is already Reserved";
-                $_SESSION['reservationFail'] = "Entered Time Period is already Reserved";
-                //echo "Over the top"."<br>";
-                $connection -> close();
-                unset($reservingCourt);
-                unset($reservingSport);
-                header("Location: {$previousPage}");
-                //echo json_encode($returningMsg);
+                $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
+                header('Content-Type: application/json;');    //because we are sending json
+                echo json_encode($returningMsg);
                 exit();
+                //echo "Over the top"."<br>";
             }
             else if(strtotime($startingTime) >= strtotime($reservation -> starting_time) && strtotime($endingTime) <= strtotime($reservation -> ending_time)){    //current reserving time slot is within an already reserved time slot
-                //$returningMsg['reservationFailMsg'] = "Entered Time Period is already Reserved";
-                $_SESSION['reservationFail'] = "Entered Time Period is already Reserved";
-                //echo "within or same"."<br>";
-                $connection -> close();
-                unset($reservingCourt);
-                unset($reservingSport);
-                header("Location: {$previousPage}");
-                //echo json_encode($returningMsg);
+                $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
+                header('Content-Type: application/json;');    //because we are sending json
+                echo json_encode($returningMsg);
                 exit();
+                //echo "within or same"."<br>";
             }
             else if(strtotime($startingTime) < strtotime($reservation -> starting_time) && (strtotime($endingTime) <= strtotime($reservation -> ending_time) && strtotime($endingTime) > strtotime($reservation -> starting_time))){    //ending time is within an already resevred slot
-                //$returningMsg['reservationFailMsg'] = "Entered Time Period is already Reserved";
-                $_SESSION['reservationFail'] = "Entered Time Period is already Reserved";
-                //echo "ending is within or same. starting is outside"."<br>";
-                $connection -> close();
-                unset($reservingCourt);
-                unset($reservingSport);
-                header("Location: {$previousPage}");
-                //echo json_encode($returningMsg);
+                $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
+                header('Content-Type: application/json;');    //because we are sending json
+                echo json_encode($returningMsg);
                 exit();
+                //echo "ending is within or same. starting is outside"."<br>";
             }
             else if((strtotime($startingTime) >= strtotime($reservation -> starting_time) && strtotime($startingTime) < strtotime($reservation -> ending_time)) && strtotime($endingTime) > strtotime($reservation -> ending_time)){   //starting time is within an already reserved slot
-                //$returningMsg['reservationFailMsg'] = "Entered Time Period is already Reserved";
-                $_SESSION['reservationFail'] = "Entered Time Period is already Reserved";
-                //echo "starting is within or same. ending is outside"."<br>";
-                $connection -> close();
-                unset($reservingCourt);
-                unset($reservingSport);
-                header("Location: {$previousPage}");
-                //echo json_encode($returningMsg);
+                $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
+                header('Content-Type: application/json;');    //because we are sending json
+                echo json_encode($returningMsg);
                 exit();
+                //echo "starting is within or same. ending is outside"."<br>";
             }
             else{
                 continue;   //can be reserved
             }
         }
     }
-    //now making the reservation
-    $reservingUser = new User(); 
-    $reservingUser -> setDetails(uid : $user);//create an user with logged in userid
 
-    
-    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $reservingCourt, $connection);   //pass the reserving court object to the function
+    //now making the reservation
+    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $reservingCourt);   //pass the reserving court object to the function
     if($result === TRUE){
-        $_SESSION['reservationSuccess'] = "Reservation has been made Successfully";
-        //$returningMsg['reservationSuccessMsg'] = "Reservation has been made Successfully";
+        $returningMsg['successMsg'] = "Reservation has been made Successfully";
+        echo json_encode($returningMsg);
     }
     else{
-        $_SESSION['reservationFail'] = "Reservation has not been made";
-        //$returningMsg['reservationFailMsg'] = "Reservation has not been made";
+        $returningMsg['errMsg'] = "Reservation has not been made";
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($returningMsg);
     }
 /*     $branch = $reservingCourt -> getBranch($connection);
     $sport = $reservingCourt -> getBranch */
     unset($reservingCourt);
     unset($reservingUser);
     unset($reservingSport);
-    $connection -> close();
-    header("Location: {$previousPage}");
+
 ?>
