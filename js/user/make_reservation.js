@@ -1,5 +1,7 @@
 const reservationForm = document.querySelector('form');
 
+import {updateTheReservationTables, createScheduleObjects} from '../general/reservation_schedule_functions.js';
+
 reservationForm.addEventListener('submit', (event) => {
     event.preventDefault(); // Prevent the form from submitting
     const formData = new FormData(reservationForm);
@@ -29,6 +31,21 @@ reservationForm.addEventListener('submit', (event) => {
             successMsgBox.innerHTML = "";
             errMsgBox.innerHTML = "";
             successMsgBox.innerHTML = data.successMsg;
+
+            //update the table
+            const url = new URL(window.location);   //get the url
+            const params = new URLSearchParams(url.search); //search parameters
+            //console.log(params);
+            const getReq = params.get("reserveBtn");
+            //console.log(getReq);
+
+            let schedulesArr = [];  //array to store the reservation info of each court
+            fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn=".concat(getReq))
+                .then(res => res.json())
+                .then(data => {
+                    const scheduleObjs = createScheduleObjects(data);
+                    updateTheReservationTables(scheduleObjs);
+                });
         }
         else if(data.errMsg !== undefined){  //reservation failed
             const successMsgBox = document.getElementById("successMsg");
