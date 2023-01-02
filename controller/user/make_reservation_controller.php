@@ -85,6 +85,7 @@
     }
     
     $today = new DateTime();
+    $today -> setTime(0, 0, 0); //so that we can compare the dates correctly
     $reservingDateObj = new DateTime($date);
     $dateDifference = date_diff($today, $reservingDateObj);
 
