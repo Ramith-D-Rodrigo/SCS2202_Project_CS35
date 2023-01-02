@@ -20,10 +20,6 @@ function userInputTimeCheck(e){ //this function check for valid time input (00 m
     }
 }
 
-function reservationTimePeriodCheck(e){
-
-}
-
 reserveStartingTime.addEventListener('change', userInputTimeCheck);
 
 reserveEndingTime.addEventListener('change', userInputTimeCheck);
@@ -173,5 +169,7 @@ function validateForm(e){
     }
 
     errorMsg.innerHTML = "";
-    return tr
+    return true;
 }
+
+window.validateForm = validateForm; //export the function to be used in the html file
