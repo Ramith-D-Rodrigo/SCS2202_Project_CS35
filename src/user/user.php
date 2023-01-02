@@ -298,8 +298,8 @@ class User extends Actor implements JsonSerializable{
         return $result;
     }
 
-    public function makeReservation($date, $st, $et, $people, $payment, $court, $database){
-        $result = $court -> createReservation($this -> userID, $date, $st, $et, $payment, $people, $database);
+    public function makeReservation($date, $st, $et, $people, $payment, $court){
+        $result = $court -> createReservation($this -> userID, $date, $st, $et, $payment, $people, $this -> connection);
         return $result;
     }
 

@@ -4,7 +4,7 @@
         protected $username;
         protected $userID;
         protected $userRole;
-        protected $passwordHash;
+        protected $password;
         protected $connection;
 
         public function __construct($userRole = ''){    //establish the database connection according to the given user role
