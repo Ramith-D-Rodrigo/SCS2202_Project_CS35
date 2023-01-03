@@ -39,11 +39,12 @@ reservationForm.addEventListener('submit', (event) => {
             const getReq = params.get("reserveBtn");
             //console.log(getReq);
 
-            let schedulesArr = [];  //array to store the reservation info of each court
             fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn=".concat(getReq))
                 .then(res => res.json())
                 .then(data => {
                     const scheduleObjs = createScheduleObjects(data);
+                    sessionStorage.removeItem("schedule");   //remove the previous schedule
+                    sessionStorage.setItem("schedule", JSON.stringify(scheduleObjs));
                     updateTheReservationTables(scheduleObjs);
                 });
         }

@@ -9,6 +9,8 @@ function createReservationSchedulePage(jsonData){
     const schedulesArr = createScheduleObjects(jsonData);
 
     //console.log(schedulesArr);
+    //store the schedules in the sessionStorage
+    sessionStorage.setItem("schedule", JSON.stringify(schedulesArr));    //convert to string it can be stored
 
     const schedules = document.getElementsByClassName('court-schedule');
 
@@ -16,7 +18,11 @@ function createReservationSchedulePage(jsonData){
         schedules[i].style.display = 'none';
     }
     
-    createReservationTable(schedules, schedulesArr, jsonData);  //create the tables
+    const tables = createReservationTable(schedulesArr, jsonData);  //create the tables and return the elements
+
+    for(let i = 0; i < tables.length; i++){
+        schedules.item(i).appendChild(tables[i]);   //add the table to the schedule div
+    }
 
     updateTheReservationTables(schedulesArr);   //updae the table according to the reservations
     //make reservation box
@@ -94,7 +100,7 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
     return schedulesArr;
 }
 
-function createReservationTable(schedules, scheduleObjs, jsonData){
+function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
     //creating the reservation schedule table
         
     //creating schedule tables    
@@ -103,15 +109,19 @@ function createReservationTable(schedules, scheduleObjs, jsonData){
     const branchOpeningTime = jsonData.opening_time.split(":");   //branch opening time
     const branchClosingTime = jsonData.closing_time.split(":");   //branch closing time
     //console.log(branchOpeningTime, branchClosingTime);
-    
+    let createdTables = [];
+
     for(let i = 0; i < scheduleObjs.length; i++){//going through each reservation schedule of the courts
         const table = document.createElement("table");  //initial table
         const tableRow = table.insertRow();
         const tableCell = tableRow.insertCell();    //first empty cell
     
-        for(let j = 0;  j < 10; j++){   //adding days to the header of the table
+        for(let j = 0;  j < 10; j++){   //adding days to the header of the table (only 10 days)
             const weekdayTab = tableRow.insertCell();
             const tempDate = new Date();
+            if(dateIncrement !== ''){    //not the initial table (the user has pressed the navigation buttons)
+                tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
+            }
             tempDate.setDate(tempDate.getDate() + j);
             weekdayTab.innerHTML =  tempDate.toLocaleDateString() +"<br>" + weekdays[tempDate.getDay()];
         }
@@ -147,6 +157,9 @@ function createReservationTable(schedules, scheduleObjs, jsonData){
             for(let j = 0; j < 10; j++){
                 const cell = tableRow.insertCell();
                 const tempDate = new Date();
+                if(dateIncrement !== ''){    //not the initial table (the user has pressed the navigation buttons)
+                    tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
+                }
                 tempDate.setDate(tempDate.getDate() + j);
                 cell.id = "court" + i +tempDate.toLocaleDateString().replaceAll("/", "-") + periodStartPrint.replaceAll(" ", '');   //id is => "Court , Reservation Date, Starting Time"
 
@@ -155,15 +168,19 @@ function createReservationTable(schedules, scheduleObjs, jsonData){
     
             timePeriod.innerText = periodStartPrint + " - " + periodEndPrint;    
         }
-       
-        schedules.item(i).appendChild(table);   //add the table to the schedule div
+        createdTables.push(table);
     }
+    return createdTables;
 }
 
 function updateTheReservationTables(scheduleObjs){
     for(let i = 0; i < scheduleObjs.length; i++){   //go through each schedule
         for(let j = 0; j < scheduleObjs[i].length; j++){    //replace the empty cells with reserved cells
-            const res = scheduleObjs[i][j];
+            let res = scheduleObjs[i][j];
+            if(typeof res.startingTime === "string"){   //if the reservation is a string, it means that it is a stringified date object
+                res.startingTime = new Date(res.startingTime);
+                res.endingTime = new Date(res.endingTime);
+            }
             const resDate = res.startingTime.toLocaleDateString();
     
             const cell = document.createElement("td");
@@ -253,6 +270,6 @@ function makeReservationBox(jsonData){
     }
 }
 
-//we can export updateTheReservationTables function and the createScheduleObjects function aswell to use them to update the table after a reservation is made
+//we can export updateTheReservationTables, createScheduleObjects, and createReservationTable functions aswell to use them to update the table after a reservation is made
 
-export {updateTheReservationTables, createScheduleObjects, createReservationSchedulePage};
+export {updateTheReservationTables, createScheduleObjects, createReservationSchedulePage, createReservationTable};
