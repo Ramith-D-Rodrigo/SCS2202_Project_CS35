@@ -1,3 +1,6 @@
+import { MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS } from "../CONSTANTS.js";
+
+
 function createReservationSchedulePage(jsonData){
     //console.log(jsonData);
     //first we insert the data we got from the server into the html 
@@ -119,6 +122,7 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
         for(let j = 0;  j < 10; j++){   //adding days to the header of the table (only 10 days)
             const weekdayTab = tableRow.insertCell();
             const tempDate = new Date();
+            tempDate.setDate(tempDate.getDate() + 1);   //ignoring the current day
             if(dateIncrement !== ''){    //not the initial table (the user has pressed the navigation buttons)
                 tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
             }
@@ -157,6 +161,7 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
             for(let j = 0; j < 10; j++){
                 const cell = tableRow.insertCell();
                 const tempDate = new Date();
+                tempDate.setDate(tempDate.getDate() + 1);   //ignoring the current day
                 if(dateIncrement !== ''){    //not the initial table (the user has pressed the navigation buttons)
                     tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
                 }

@@ -7,6 +7,8 @@ const getReq = params.get("reserveBtn");
 
 //import the functions from the other js files
 import {createReservationSchedulePage, createScheduleObjects, createReservationTable, updateTheReservationTables} from '../general/reservation_schedule_functions.js';
+//import the date constraints
+import { MAX_RESERVATION_DAYS } from '../CONSTANTS.js';
 
 //store in window object so that we can access it from other js files
 window.createReservationSchedulePage = createReservationSchedulePage;
@@ -25,7 +27,7 @@ fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn="
         nextBtn.addEventListener("click", ()=>{
              //get the schedule from the session storage
             const schedules = JSON.parse(sessionStorage.getItem("schedule"));
-            if(navDateIncrement === 20){    //if the limit is reached, then return
+            if(navDateIncrement >= MAX_RESERVATION_DAYS - 10){    //if the limit is reached, then return
                 return;
             }
             navDateIncrement += 10;   //because we are displaying the schedule for the next 10 days
@@ -52,7 +54,7 @@ fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn="
             //console.log(tableParents);
             updateTheReservationTables(schedules);  //update the reservations
 
-            if(navDateIncrement === 20){  //now reached the limit (disable the button)
+            if(navDateIncrement >= MAX_RESERVATION_DAYS - 10){  //now reached the limit (disable the button)
                 nextBtn.disabled = true;
                 nextBtn.style.backgroundColor = "grey";
             }
@@ -67,7 +69,7 @@ fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn="
                 return;
             }
             navDateIncrement -= 10;   //because we are displaying the schedule for the previous 10 days (more like going back)
-            if(navDateIncrement < 20){ //re-enable the next button
+            if(navDateIncrement < MAX_RESERVATION_DAYS - 10){ //re-enable the next button
                 nextBtn.disabled = false;
                 nextBtn.style.backgroundColor = "";
             }

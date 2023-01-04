@@ -32,19 +32,30 @@ function addDays(date, days){   //function to add days
     return result;
 }
 
-const today = new Date().toLocaleDateString();
+//function to add leading zeros to the date
+function addLeadingZeros(date){
+    let result = date;
+    if(date < 10){
+        result = "0" + date;
+    }
+    return result;
+}
+
+const today = new Date();
+today.setHours(0,0,0,0); //set the time to 00:00:00:000 to avoid the date change
 const reservationDate = document.getElementById("reservationDate");
 
 const minDateObj = addDays(today, MIN_RESERVATION_DAYS);
-minDateObj.setHours(12);    //set the time to 12:00 to avoid the date change
-const minDate = minDateObj.toISOString().split("T")[0];
+const minDateStr = minDateObj.getFullYear() + "-" + addLeadingZeros(minDateObj.getMonth() + 1) + "-" + addLeadingZeros(minDateObj.getDate());
+console.log(minDateStr);
 
 const maxDateObj = addDays(today, MAX_RESERVATION_DAYS);
-maxDateObj.setHours(12);    //set the time to 12:00 to avoid the date change
-const maxDate = maxDateObj.toISOString().split("T")[0];
+const maxDateStr = maxDateObj.getFullYear() + "-" + addLeadingZeros(maxDateObj.getMonth() + 1) + "-" + addLeadingZeros(maxDateObj.getDate());
+console.log(maxDateStr);
 
-reservationDate.min = minDate;
-reservationDate.max = maxDate;
+reservationDate.min = minDateStr;
+reservationDate.max = maxDateStr;
+
 //price calculation
 
 reserveStartingTime.addEventListener('change', (e)=>{
