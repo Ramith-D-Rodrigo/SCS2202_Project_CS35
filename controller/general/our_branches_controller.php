@@ -1,6 +1,6 @@
 <?php
     $resultArr = [];
-    require_once("../../src/user/dbconnection.php");
+    require_once("../../src/general/dbconnection.php");
     require_once("../../src/general/website_functions/our_branches_functions.php");
     require_once("../../src/general/branch.php");
     require_once("../../src/manager/manager.php");
@@ -15,10 +15,12 @@
 
         $tempBranch -> getDetails($connection);
         $branchSports = $tempBranch -> getAllSports($connection);
+        $branchRating = $tempBranch -> getBranchRating($connection);
 
         $branchJSON = json_encode($tempBranch); //encode and decode to unset un-necessary info
         $branchASSOC = json_decode($branchJSON, true);
         $branchASSOC['sports'] = $branchSports;
+        $branchASSOC['rating'] = $branchRating;
         //manager un-necessary info
         unset($branchASSOC['manager']['branchID']);
         unset($branchASSOC['manager']['dateOfBirth']);
