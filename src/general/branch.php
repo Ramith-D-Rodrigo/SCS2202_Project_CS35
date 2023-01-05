@@ -241,11 +241,7 @@
             return $result;
         }
         public function getBranchPictures($database){   //function get branch photos and store in the object
-
-            if(isset($this -> photos)){ //if the object has photos set
-                return $this -> photos;
-            }
-            //if the object doesn't have photos set
+            $this -> photos = [];
             $sql = sprintf("SELECT `photo`
             FROM branch_photo
             WHERE branch_id = '%s'",
@@ -306,6 +302,26 @@
 
             return $result;
 
+        }
+
+        public function getBranchRating($database){
+            $sql = sprintf("SELECT `rating` FROM `user_branch_feedback` WHERE `branch_id` = '%s'",
+            $database -> real_escape_string($this -> branchID));
+
+            $result = $database -> query($sql);
+
+            $totalRating = 0;
+            $count = 0;
+            while($row = $result -> fetch_object()){
+                $totalRating += $row -> rating;
+                $count++;
+                unset($row);
+            }
+            $result -> free_result();
+            if($count === 0){   //no ratings
+                return 0;
+            }
+            return $totalRating / $count;   //return average rating
         }
 
         public function jsonSerialize(){
