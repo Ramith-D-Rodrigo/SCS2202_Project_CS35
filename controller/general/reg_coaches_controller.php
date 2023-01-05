@@ -7,12 +7,38 @@
 
     $coaches = getAllCoaches($connection);
     
+    $result = array();
+
     foreach($coaches as $currCoach){
         $tempCoach = new Coach();
         $tempCoach -> setDetails(uid: $currCoach -> coach_id, sport: $currCoach -> sport);
-        $tempCoach -> getDetails(['first_name', 'last_name', 'email_address', 'phone_number', 'profile_picture']);
+        $fName = $tempCoach -> getDetails('first_name');
+        $lName = $tempCoach -> getDetails('last_name');
+        $gender = $tempCoach -> getDetails('gender');
+        $photo = $tempCoach -> getDetails('photo');
+        $rating = $tempCoach -> getRating();
+
+        $sport = new Sport();
+        $sport -> setID($currCoach -> sport);
+        $sportName = $sport -> getDetails($connection, 'sportName');
+
+        $result[] = array(
+            "coachID" => $currCoach -> coach_id,
+            "sport" => $sportName,
+            "firstName" => $fName,
+            "lastName" => $lName,
+            "gender" => $gender,
+            "rating" => $rating,
+            "photo" => $photo);
+
+        unset($tempCoach);
+        unset($sport);
     }
 
+    unset($coaches);
+    $connection -> close();
 
-
+    //echo the result as a json
+    header("application/json");
+    echo json_encode($result);
 ?>

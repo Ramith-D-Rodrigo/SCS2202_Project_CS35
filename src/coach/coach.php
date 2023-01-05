@@ -249,13 +249,66 @@ class Coach extends Actor implements JsonSerializable{
         return $result;
     }
 
-    public function getDetails(){
-        $sql = sprintf("SELECT * FROM coach WHERE coach_id = '%s'",
+    public function getDetails($wantedProperty = ''){
+        if($wantedProperty == ''){
+            $sql = sprintf("SELECT * FROM coach WHERE coach_id = '%s'",
+            $this -> connection -> real_escape_string($this -> userID));
+    
+            $result = $this -> connection -> query($sql);
+            $obj = $result -> fetch_object();
+            $this -> firstName = $obj -> first_name;
+            $this -> lastName = $obj -> last_name;
+            $this -> homeAddress = $obj -> home_address;
+            $this -> dateOfBirth = $obj -> birth_day;
+            $this -> gender = $obj -> gender;
+            $this -> contactNum = $obj -> contact_num;
+            $this -> emailAddress = $obj -> email_address;
+            $this -> sportID = $obj -> sport;
+            $this -> username = $obj -> username;
+            $this -> profilePic = $obj -> photo;
+
+            unset($obj);
+            $result -> free_result();
+            //get qualifications
+            $sql = sprintf("SELECT `qualification` FROM `coach_qualification` WHERE `coach_id` = '%s'",
+            $this -> connection -> real_escape_string($this -> userID));
+
+            $result = $this -> connection -> query($sql);
+            $this -> qualifications = array();
+            while($obj = $result -> fetch_object()){
+                array_push($this -> qualifications, $obj -> qualification);
+                unset($obj);
+            }
+            $result -> free_result();
+            return $this;
+
+        }
+        else{
+            $sql = sprintf("SELECT `%s` FROM coach WHERE coach_id = '%s'",
+            $this -> connection -> real_escape_string($wantedProperty),
+            $this -> connection -> real_escape_string($this -> userID));
+
+            $result = $this -> connection -> query($sql);
+            $obj = $result -> fetch_object();
+            $result -> free_result();
+            return $obj -> $wantedProperty;
+        }        
+    }
+
+    public function getRating(){
+        $sql = sprintf("SELECT AVG(`rating`) AS `rating` FROM `student_coach_feedback` WHERE `coach_id` = '%s'",
         $this -> connection -> real_escape_string($this -> userID));
 
         $result = $this -> connection -> query($sql);
         $obj = $result -> fetch_object();
-        
+        $result -> free_result();
+        $rating = $obj -> rating;
+
+        if($rating === null){
+            return 0;
+        }
+        unset($obj);
+        return $rating;
     }
 
     public function jsonSerialize(){

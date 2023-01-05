@@ -6,7 +6,7 @@
         $result = $database -> query($sql);
 
         $coaches = [];
-        while($row = $result -> fetch_oject()){
+        while($row = $result -> fetch_object()){
             array_push($coaches, $row);
             unset($row);
         }

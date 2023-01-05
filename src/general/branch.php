@@ -305,23 +305,20 @@
         }
 
         public function getBranchRating($database){
-            $sql = sprintf("SELECT `rating` FROM `user_branch_feedback` WHERE `branch_id` = '%s'",
+            $sql = sprintf("SELECT AVG(`rating`) as `rating` FROM `user_branch_feedback` WHERE `branch_id` = '%s'",
             $database -> real_escape_string($this -> branchID));
 
             $result = $database -> query($sql);
 
-            $totalRating = 0;
-            $count = 0;
-            while($row = $result -> fetch_object()){
-                $totalRating += $row -> rating;
-                $count++;
-                unset($row);
-            }
+            $row = $result -> fetch_object();
+            $rating = $row -> rating;
             $result -> free_result();
-            if($count === 0){   //no ratings
+            unset($row);
+
+            if($rating === NULL){   //no rating
                 return 0;
             }
-            return $totalRating / $count;   //return average rating
+            return $rating;
         }
 
         public function jsonSerialize(){
