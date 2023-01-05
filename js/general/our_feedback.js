@@ -84,63 +84,13 @@ fetch("../../controller/general/our_feedback_controller.php")
                 const ratingCell = document.createElement("td");    //rating cell
                 const userRating = parseInt(data[dataKeys[i]][j].rating);
                
-                if(userRating === 5){   //5 stars
-                    for(k = 0; k < 5; k++){
-                        const star = document.createElement("span");
-                        star.className = "fa fa-star checked";
-                        ratingCell.appendChild(star);
-                    }
-                }
-                else if(userRating === 4){  //4 stars
-                    for(k = 0; k < 4; k++){
-                        const star = document.createElement("span");
-                        star.className = "fa fa-star checked";
-                        ratingCell.appendChild(star);
-                    }
-                    const star = document.createElement("span");
-                    star.className = "fa fa-star";
-                    ratingCell.appendChild(star);
-                }
-                else if(userRating === 3){  //3 stars
-                    for(k = 0; k < 3; k++){
-                        const star = document.createElement("span");
-                        star.className = "fa fa-star checked";
-                        ratingCell.appendChild(star);
-                    }
-                    for(k = 0; k < 2; k++){
-                        const star = document.createElement("span");
-                        star.className = "fa fa-star";
-                        ratingCell.appendChild(star);
-                    }
-                }
-                else if(userRating === 2){  //2 stars
-                    for(k = 0; k < 2; k++){
-                        const star = document.createElement("span");
-                        star.className = "fa fa-star checked";
-                        ratingCell.appendChild(star);
-                    }
-                    for(k = 0; k < 3; k++){
-                        const star = document.createElement("span");
-                        star.className = "fa fa-star";
-                        ratingCell.appendChild(star);
-                    }
-                }
-                else if(userRating === 1){  //1 star
+                for(let k = 1; k <= 5; k++){ //create the stars
                     const star = document.createElement("span");
                     star.className = "fa fa-star checked";
+                    if(k > userRating){    //if the k has exceeded the user rating, change the star to empty
+                        star.className = "fa fa-star";
+                    }
                     ratingCell.appendChild(star);
-                    for(k = 0; k < 4; k++){
-                        const star = document.createElement("span");
-                        star.className = "fa fa-star";
-                        ratingCell.appendChild(star);
-                    }
-                }
-                else{   //0 stars
-                    for(k = 0; k < 5; k++){
-                        const star = document.createElement("span");
-                        star.className = "fa fa-star";
-                        ratingCell.appendChild(star);
-                    }
                 }
                 feedbackRow.appendChild(ratingCell);
 
