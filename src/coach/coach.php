@@ -1,21 +1,28 @@
 <?php
-    require_once("../../src/general/uuid.php");
-class Coach{
-    private $userID;
+    require_once("../../src/general/actor.php");
+    require_once("../../src/general/sport.php");
+class Coach extends Actor implements JsonSerializable{
     private $firstName;
     private $lastName;
-    private $emailAddress;
     private $homeAddress;
     private $contactNum;
     private $registeredDate;
     private $dateOfBirth;
     private $qualifications;
-    private $username;
-    private $password;
     private $gender;
     private $isactive;
     private $profilePic;
+    private $sportID;
     private $sport;
+
+    public function __construct($actor = null){
+        if($actor !== null){
+            $this -> userID = $actor -> getUserID();
+            $this -> username = $actor -> getUsername();
+        }
+        require("dbconnection.php");   //get the user connection to the db
+        $this -> connection = $connection;
+    }
 
     public function setDetails($fName='', $lName='', $email='', $address='', $contactNo='', $dob='', $uid='',$qualifications='', $username='', $password='', $gender='',$sport=''){
         $this -> userID = $uid;
@@ -29,15 +36,11 @@ class Coach{
         $this -> username = $username;
         $this -> password = $password;
         $this -> gender = $gender;
-        $this -> sport = $sport;
+        $this -> sportID = $sport;
     }
 
     public function setProfilePic($profilePic){
         $this -> profilePic = $profilePic;
-    }
-
-    public function getUserID(){    //userID getter
-        return $this -> userID;
     }
 
     public function getProfilePic(){
@@ -92,7 +95,7 @@ class Coach{
             $database -> real_escape_string($this -> gender),
             $database -> real_escape_string($this -> contactNum),
             $database -> real_escape_string($this -> profilePic),
-            $database -> real_escape_string($this -> sport),
+            $database -> real_escape_string($this -> sportID),
             $database -> real_escape_string($this -> registeredDate)));
        
 
@@ -151,46 +154,6 @@ class Coach{
         }
     }
 
-    public function login($username, $password, $database){
-        $sql = sprintf("SELECT `user_id`, 
-        `username`, 
-        `password`, 
-        `user_role` 
-        FROM `login_details`  
-        WHERE `username` = '%s'", 
-        $database -> real_escape_string($username));
-
-        $result = $database -> query($sql);
-
-        $rows = $result -> fetch_object();
-
-        if($rows === NULL){ //no result. hence no user
-            return ["No Such User Exists"];
-        }
-
-        $hash = $rows -> password;
-        if(password_verify($password, $hash) === FALSE){    //Incorrect Password
-            return ["Incorrect Password"];
-        }
-
-        //setting user data for session
-        $this -> userID = $rows -> user_id;  
-        
-        //get the profile pic from the datbase and store in the object's attribute
-        $sqlPic = sprintf("SELECT `photo` , `sport` 
-        FROM `coach` 
-        WHERE `coach_id` = '%s'",
-        $database -> real_escape_string ($this -> userID));
-
-        $result = $database -> query($sqlPic);
-        $resultRow = $result -> fetch_object();
-        $this -> profilePic =  $resultRow -> photo;
-        $this -> sport = ( $resultRow -> sport);
-       
-        return ["Successfully Logged In", $rows -> user_role, $rows -> username];  //return the message and role
-
-    }    
-
     public function getBranchesWithCourts($database){
          $sql = sprintf("SELECT  
         `sc`.`court_id`, 
@@ -212,7 +175,7 @@ class Coach{
         WHERE `s`.`sport_id` = '%s'
         AND `b`.`request_status`= 'a' 
         AND `sc`.`request_status`='a'",
-        $database -> real_escape_string($this -> sport));
+        $database -> real_escape_string($this -> sportID));
 
         $result = $database -> query($sql);
         return $result;
@@ -244,7 +207,7 @@ class Coach{
 }
     public function getSport(){
 
-        return $this->sport;
+        return $this->sportID;
     }
 
     public function addsession($sessionID,$coach_monthly_payment, $startingTime, $endingTime, $no_of_students,$coach_id,$court_id,$day,$payment_amount,$database){
@@ -284,6 +247,29 @@ class Coach{
 
         $result = $database -> query($sql);
         return $result;
+    }
+
+    public function getDetails(){
+        $sql = sprintf("SELECT * FROM coach WHERE coach_id = '%s'",
+        $this -> connection -> real_escape_string($this -> userID));
+
+        $result = $this -> connection -> query($sql);
+        $obj = $result -> fetch_object();
+        
+    }
+
+    public function jsonSerialize(){
+      return [
+        "coachID" => $this -> userID,
+        "username" => $this -> username,
+        "emailAddress" => $this -> emailAddress,
+        "firstName" => $this -> firstName,
+        "lastName" => $this -> lastName,
+        "gender" => $this -> gender,
+        "contactNum" => $this -> contactNum,
+        "homeAddress" => $this -> homeAddress,
+        "sport" => $this -> sport
+      ];
     }
 }
 

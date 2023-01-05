@@ -13,14 +13,24 @@
         <title>Registered Coaches</title>
     </head>
     <body>
-            <?php
-                require_once("header.php");
-            ?>
-            Registered Coaches
-            <br>
-            <?php
-                require_once("footer.php");
-            ?>
+        <?php
+            require_once("header.php");
+        ?>
+        <main class="body-container">
+            <div class="content-box">
+                <div id="filter">
+                    Filter By : 
+                    <select id="sportSelect">
+                        <option value=""></option>
+                    </select>
+                </div>
+
+            </div>
+        </main>
+        <?php
+            require_once("footer.php");
+        ?>
     </body>
     <script src="/js/user/account_links.js"></script>
+    <script src="/js/general/reg_coaches.js"></script>
 </html>
