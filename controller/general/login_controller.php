@@ -6,6 +6,7 @@
     }
     require_once("../../src/general/actor.php");
     require_once("../../src/user/user.php");
+    require_once("../../src/coach/coach.php");
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
 
@@ -75,6 +76,36 @@
 
             $_SESSION['userrole'] = 'user';
             $returnJSON['userrole'] = 'user';
+        }
+        else if($result[1] === 'coach'){  //coach login
+            $loginCoach = new Coach($loginActor);
+            $profilePic = $loginCoach -> getProfilePic();
+
+            if($profilePic !== ''){ //coach has set an profile pic
+                $_SESSION['userProfilePic'] = $profilePic;
+            }
+
+            $_SESSION['userid'] = $loginCoach -> getUserID();
+            $loginCoach -> closeConnection();
+            unset($loginCoach);
+            $_SESSION['username'] = $username;  //store the username in the session
+            $_SESSION['userrole'] = 'coach';
+            $returnJSON['userrole'] = 'coach';
+        }
+        else if($result[1] === 'admin'){  //admin login
+
+        }
+        else if($result[1] === 'manager'){  //manager login
+
+        }
+        else if($result[1] === 'owner'){    //owner login
+
+        }
+        else if($result[1] === 'receptionist'){ //receptionist login
+
+        }
+        else{
+            $returnJSON['errMsg'] = "Error Logging in. Please try again later";
         }
     }
     

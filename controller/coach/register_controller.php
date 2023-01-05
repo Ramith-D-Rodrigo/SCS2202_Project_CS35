@@ -70,7 +70,7 @@
     //create user id
     $prefix1 = "coach_";
     $prefix2 = substr($username , 0,3);
-    $userid = uniqid($prefix1,$prefix2);
+    $userid = uniqid($prefix1.$prefix2);
     
     //coach Qualifications
     $coach_qualifications = [];

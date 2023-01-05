@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if(!(isset($_SESSION['username']) && isset($_SESSION['userrole']) && $_SESSION['userrole'] === 'coach')){
+    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']) && $_SESSION['userrole'] === 'coach')){
         header("Location: /index.php");
         exit();
     }
