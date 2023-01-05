@@ -5,6 +5,7 @@
         protected $userID;
         protected $userRole;
         protected $password;
+        protected $isActive;
         protected $connection;
 
         public function __construct($userRole = ''){    //establish the database connection according to the given user role
@@ -72,6 +73,20 @@
 
         public function getConnection(){    //to get the connection of the actor
             return $this -> connection;
+        }
+
+        public function activateAccount(){
+            $this -> isActive = 1;
+            $sql = sprintf("UPDATE `login_details` SET `isActive` = '%s' WHERE `userID` = '%s'",
+            $this -> connection -> real_escape_string($this -> isActive),
+            $this -> connection -> real_escape_string($this -> userID));
+    
+            $result = $this -> connection -> query($sql);
+            
+            if($result === FALSE){
+                return FALSE;
+            }
+            return TRUE;
         }
 
         public function logout(){
