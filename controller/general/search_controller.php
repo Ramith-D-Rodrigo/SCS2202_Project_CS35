@@ -2,7 +2,6 @@
     session_start();
 
     require_once("../../src/user/user.php");
-    require_once("../../src/user/dbconnection.php");
     require_once("../../src/general/branch.php");
     require_once("../../src/coach/coach.php");
     require_once("../../src/general/sport_court.php");
@@ -22,10 +21,11 @@
 
         foreach($result['branches'] as $i){ //traverse the search result array
             $branch = new Branch($i['branch']);
-            $branch -> getDetails($connection);    //get branch details
+            $branch -> getDetails($user -> getConnection());    //get branch details
 
-            $courts = $branch -> getSportCourts($i['sport_id'], $connection, 'a');    //get the number of courts of the current considering branch (request status should be accepted)
-
+            $courts = $branch -> getSportCourts($i['sport_id'], $user -> getConnection(), 'a');    //get the number of courts of the current considering branch (request status should be accepted)
+            $brRating = $branch -> getBranchRating($user -> getConnection());  //get the branch rating
+            $brDiscount = $branch -> getCurrentDiscount($user -> getConnection());    //get the branch discount
             $branchJSON = json_encode($branch);
             $neededInfo = json_decode($branchJSON, true);
 
@@ -49,6 +49,8 @@
             $neededInfo['reserve_price'] = $i['reserve_price'];
             $neededInfo['sport_name'] = $i['sport_name'];
             $neededInfo['sport_id'] = $i['sport_id'];
+            $neededInfo['rating'] = $brRating;
+            $neededInfo['discount'] = $brDiscount;
             
             array_push($branches, $neededInfo);
 
@@ -103,7 +105,5 @@
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($final_result);
     }
-    //header("Location: /public/general/search_results.php");
-    $connection -> close();
     unset($user);
 ?>

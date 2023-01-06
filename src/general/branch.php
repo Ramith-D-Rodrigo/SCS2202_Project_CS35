@@ -321,6 +321,31 @@
             return $rating;
         }
 
+        public function getCurrentDiscount($database){ //function to get the current discount of the branch (available during the current date)
+            $today = date('Y-m-d');
+
+            $sql = sprintf("SELECT `discount_value` 
+            FROM `discount` 
+            WHERE `branch_id` = '%s' 
+            AND `decision` = 'a' 
+            AND `starting_date` <= '%s' 
+            AND `ending_date` >= '%s'",
+            $database -> real_escape_string($this -> branchID),
+            $database -> real_escape_string($today),
+            $database -> real_escape_string($today));
+
+            $result = $database -> query($sql);
+
+            $obj = $result -> fetch_object();
+            if($obj === NULL){
+                return null;
+            }
+            $discount = $obj -> discount_value;
+            $result -> free_result();
+            unset($obj);
+            return $discount;
+        }
+
         public function jsonSerialize() : mixed{
             return [
                 'branchID' => $this -> branchID,

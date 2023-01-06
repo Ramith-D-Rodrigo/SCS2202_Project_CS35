@@ -20,7 +20,12 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
         }  
         else{
             const branches = data.branches;
-            for(i = 0; i < branches.length; i++){   //for each branch result
+            //sort the branches in descending rating order
+            branches.sort((a, b) => {
+                return b.rating - a.rating;
+            });
+
+            for(let i = 0; i < branches.length; i++){   //for each branch result
                 const form = document.createElement("form");
                 form.className = "branch-row";
                 form.action = "/public/general/reservation_schedule.php";
@@ -56,30 +61,63 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
 
                 const branchInfoDiv = document.createElement("div");
 
-                const sportDiv = document.createElement("div");
+                const sportDiv = document.createElement("div"); //sport name
                 sportDiv.innerHTML = "Sport : "+ branches[i].sport_name;
                 sportDiv.className = "result-info";
                 branchInfoDiv.appendChild(sportDiv);
 
-                const cityDiv = document.createElement("div");
+                const cityDiv = document.createElement("div");  //city
                 cityDiv.innerHTML = "Branch : " + branches[i].city;
                 cityDiv.className = "result-info";
                 branchInfoDiv.appendChild(cityDiv);
 
-                const addressDiv = document.createElement("div");
+                const addressDiv = document.createElement("div");   //address
                 addressDiv.innerHTML = "Location : "+ branches[i].address;
                 addressDiv.className = "result-info";
                 branchInfoDiv.appendChild(addressDiv);
 
-                const courtCountDiv = document.createElement("div");
+                const ratingDiv = document.createElement("div");    //rating
+                ratingDiv.innerHTML = "Rating : ";
+                ratingDiv.className = "result-info";
+
+                const rating = document.createElement("span");
+                //add stars
+                for(let j = 1; j <= 5; j++){
+                    const star = document.createElement("i");
+                    star.className = "fa fa-star";
+                    star.style.margin = "0 2px";
+                    star.style.fontSize = "1.5em";
+                    if(j <= branches[i].rating){
+                        star.className = "fa fa-star checked";
+                    }
+                    //decimal values for the rating
+                    if(branches[i].rating % 1 !== 0 && j === Math.ceil(branches[i].rating)){
+                        star.className = "fas fa-star-half-o checked";
+                    }
+                    rating.appendChild(star);
+                }
+                ratingDiv.appendChild(rating);
+                branchInfoDiv.appendChild(ratingDiv);
+
+                const courtCountDiv = document.createElement("div");    //number of courts
                 courtCountDiv.innerHTML = "Number of Courts : "+ branches[i].num_of_courts;
                 courtCountDiv.className = "result-info";
                 branchInfoDiv.appendChild(courtCountDiv);
 
-                const reservationPrice = document.createElement("div");
+                const reservationPrice = document.createElement("div"); //reservation price
                 reservationPrice.innerHTML = "Reservation Price : Rs. "+ branches[i].reserve_price;
                 reservationPrice.className = "result-info";
                 branchInfoDiv.appendChild(reservationPrice);
+
+                const discountDiv = document.createElement("div");  //discount
+                if(branches[i].discount === null){
+                    discountDiv.innerHTML = "Discount : None";
+                }
+                else{
+                    discountDiv.innerHTML = "Discount : "+ branches[i].discount + "% off";
+                }
+                discountDiv.className = "result-info";
+                branchInfoDiv.appendChild(discountDiv);
 
                 const button = document.createElement("button");
                 button.name = "reserveBtn";
@@ -107,16 +145,16 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
             //sort coaches by rating
             coaches.sort((a, b) => (a.rating < b.rating) ? 1 : -1);
 
-            for(i = 0; i < coaches.length; i++){
+            for(let i = 0; i < coaches.length; i++){
                 const form = document.createElement("form");
                 form.action = "/public/general/coach_profile.php";
                 form.method = "get";
                 form.style.margin = "1em 0";
 
-                const coachPicDiv = document.createElement("div");
+                const coachPicDiv = document.createElement("div");  //coach image
                 coachPicDiv.className = "coach-image-container";
 
-                const coachPic = document.createElement("img");
+                const coachPic = document.createElement("img");   //coach image
                 coachPic.className = "coach-image";
                 coachPic.src = coaches[i].profilePic;
 
@@ -124,26 +162,26 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                 coachPicDiv.appendChild(coachPic);
                 form.appendChild(coachPicDiv);
 
-                const coachInfoDiv = document.createElement("div");
+                const coachInfoDiv = document.createElement("div");   //coach info
                 coachInfoDiv.className = "coachInfo";
 
-                const coachNameDiv = document.createElement("div");
+                const coachNameDiv = document.createElement("div");  //coach name
                 coachNameDiv.className ="info";
                 coachNameDiv.innerHTML = "Name : " + coaches[i].coachName;
                 coachInfoDiv.appendChild(coachNameDiv);
 
-                const coachSportDiv = document.createElement("div");
+                const coachSportDiv = document.createElement("div");    //coach sport
                 coachSportDiv.className ="info";
                 coachSportDiv.innerHTML = "Sport : " + coaches[i].sport;
                 coachInfoDiv.appendChild(coachSportDiv);
 
-                const coachRatingDiv = document.createElement("div");
+                const coachRatingDiv = document.createElement("div");   //coach rating
                 coachRatingDiv.className ="info";
                 coachRatingDiv.innerHTML = "Rating : ";
                 const coachRating = document.createElement("span");
 
                 //set the rating
-                for(j = 1; j <= 5; j++){
+                for(let j = 1; j <= 5; j++){
                     const star = document.createElement("i");
                     star.className = "fa fa-star";
                     star.style.margin = "0 0.2em";
@@ -162,7 +200,7 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                 coachInfoDiv.appendChild(coachRatingDiv);
 
                 //hidden input for coach id
-                const coachID = document.createElement("input");
+                const coachID = document.createElement("input");    
                 coachID.type = "hidden";
                 coachID.name = "coachID";
                 coachID.value = coaches[i].coachID;
