@@ -321,7 +321,7 @@
             return $rating;
         }
 
-        public function jsonSerialize(){
+        public function jsonSerialize() : mixed{
             return [
                 'branchID' => $this -> branchID,
                 'city' => $this -> city,

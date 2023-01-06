@@ -47,7 +47,7 @@
             return $result;
         }
 
-        public function jsonSerialize(){
+        public function jsonSerialize() : mixed{
             return [
                 "sportID" => $this -> sportID,
                 "sportName" => $this -> sportName,

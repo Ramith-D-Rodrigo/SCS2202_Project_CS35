@@ -391,7 +391,7 @@ class Receptionist implements JsonSerializable , StaffMember{
         }
 
     }
-    public function jsonSerialize(){
+    public function jsonSerialize() : mixed {
         return [
             'receptionistID' => $this -> receptionistID,
             'firstName' => $this -> firstName,
