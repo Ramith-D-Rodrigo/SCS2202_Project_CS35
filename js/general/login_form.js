@@ -45,6 +45,12 @@ loginForm.addEventListener("submit", (e) => {
                     window.location.href = "/public/coach/coach_dashboard.php";
                 }, 2000);
             }
+            else if(data.userrole === 'manager'){
+                successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to your Dashboard in 2 seconds";
+                setTimeout(() =>{
+                    window.location.href = "/public/manager/Manager_Dashboard.php";
+                }, 2000);
+            }
         }else{  //login failed
             successMsgBox.innerHTML = "";
             errMsgBox.innerHTML = data.errMsg;

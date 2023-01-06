@@ -3,22 +3,21 @@
     require_once("../../src/general/branch.php");
     require_once("../../src/system_admin/staffMember.php");
     require_once("../../src/user/user.php");
+    require_once("../../src/general/actor.php");
 
-class Receptionist implements JsonSerializable , StaffMember{
+class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
     private $receptionistID;
     private $firstName;
     private $lastName;
-    private $emailAddress;
     private $contactNum;
     private $joinDate;
     private $leaveDate;
     private $dateOfBirth;
-    private $username;
-    private $password;
     private $gender;
     private $branchID;
     private $staffRole;
+
 
 
     public function setDetails($fName='', $lName='', $email='', $contactNo='', $dob='', $gender='', $uid='', $username='', $password='', $brID = ''){
@@ -145,32 +144,9 @@ class Receptionist implements JsonSerializable , StaffMember{
         }
     }
 
-    public function login($username, $password, $database){
-        $sql = sprintf("SELECT `user_id`,
-        `username`,
-        `password`,
-        `user_role`
-        FROM `login_details`
-        WHERE `username` = '%s'",
-        $database -> real_escape_string($username));
+    public function login($username, $password){
 
-        $result = $database -> query($sql);
-
-        $rows = $result -> fetch_object();  //get the resulting row
-
-        if($rows === NULL){ //no result. hence no user
-            return ["No Such User Exists"];
-        }
-
-        $hash = $rows -> password;
-        if(password_verify($password, $hash) === FALSE){    //Incorrect Password
-            return ["Incorrect Password"];
-        }
-
-        //setting user data for session
-        $this -> receptionistID = $rows -> user_id;
-
-        $getBranch = sprintf("SELECT `branch_id` AS brid
+/*         $getBranch = sprintf("SELECT `branch_id` AS brid
         FROM `staff`
         WHERE `staff_id` = '%s'",
         $database -> real_escape_string($this -> receptionistID));
@@ -189,7 +165,7 @@ class Receptionist implements JsonSerializable , StaffMember{
 
         $branchName = $brNameResult -> fetch_object();   //get the branch_city
 
-        return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details
+        return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details */
     }
 
     public function branchMaintenance($reason,$startDate,$endDate,$brID,$stfID,$database) {

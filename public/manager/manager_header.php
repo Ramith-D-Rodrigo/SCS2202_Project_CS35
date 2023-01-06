@@ -34,7 +34,7 @@
             ?>
                     <button style="float:right" class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
                     <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/public/manager/manager_dashboard.php'">Dashboard<img src="/styles/icons/dashboard_icon.svg" class="dash-img"></button>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
+                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
             <?php
                 }
             }

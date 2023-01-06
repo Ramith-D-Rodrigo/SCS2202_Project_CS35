@@ -7,6 +7,7 @@
     require_once("../../src/general/actor.php");
     require_once("../../src/user/user.php");
     require_once("../../src/coach/coach.php");
+    require_once("../../src/manager/manager.php");
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
 
@@ -96,7 +97,16 @@
 
         }
         else if($result[1] === 'manager'){  //manager login
-
+            $loginManager = new Manager($loginActor);
+            $result = $loginManager -> login($username, $password);
+            $_SESSION['userid'] = $loginManager -> getUserID();
+            $_SESSION['city'] = $result[0];
+            $_SESSION['branchID'] = $result[1];
+            $_SESSION['username'] = $username;  //store the username in the session
+            $loginManager -> closeConnection();
+            unset($loginManager);
+            $_SESSION['userrole'] = 'manager';
+            $returnJSON['userrole'] = 'manager';
         }
         else if($result[1] === 'owner'){    //owner login
 
