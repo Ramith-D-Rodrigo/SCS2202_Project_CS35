@@ -39,6 +39,6 @@
     $connection -> close();
 
     //echo the result as a json
-    header("application/json");
+    header('Content-Type: application/json;');
     echo json_encode($result);
 ?>
