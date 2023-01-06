@@ -56,6 +56,9 @@
                 </form>
                 <div id="accActivationBox"></div>
                 <div class="btn-container">
+                    Forgot Password? <button onclick="window.location.href='/public/general/password_reset.php'" id="forBtn">Click Here</button>
+                </div>
+                <div class="btn-container">
                     New User? <button onclick="window.location.href='/public/general/register.php'" id="regBtn">Register</button>
                 </div>
             </div>
