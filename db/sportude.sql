@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 06, 2022 at 06:15 PM
+-- Generation Time: Jan 06, 2023 at 05:40 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -73,7 +73,7 @@ CREATE TABLE `branch_maintenance` (
 --
 
 CREATE TABLE `branch_photo` (
-  `photo` varchar(100) NOT NULL,
+  `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `branch_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -92,9 +92,17 @@ CREATE TABLE `coach` (
   `gender` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `sport` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `contact_num` varchar(15) NOT NULL,
-  `photo` varchar(100) NOT NULL,
+  `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `register_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `coach`
+--
+
+INSERT INTO `coach` (`coach_id`, `first_name`, `last_name`, `home_address`, `birthday`, `gender`, `sport`, `contact_num`, `photo`, `register_date`) VALUES
+('coach_63b70ff6dc7152.69619366', 'Seniru', 'Wijesinghe', 'Seniru&amp;#039;s Address', '2002-06-11', 'm', 'bad65421', '0774785153', '../../public/coach/profile_images/seniru_semal63b70ff6de032.png', '2023-01-05'),
+('coach_tha63b71e629627b', 'Tharuka', 'Dileepana', 'THaruka address', '2004-12-30', 'm', 'basket17212', '0778587412', '../../public/coach/profile_images/tharuka_boss63b71e62963b5.png', '2023-01-05');
 
 -- --------------------------------------------------------
 
@@ -153,7 +161,8 @@ CREATE TABLE `discount` (
   `starting_date` date NOT NULL,
   `ending_date` date NOT NULL,
   `decision` char(1) NOT NULL,
-  `discount_value` double NOT NULL
+  `discount_value` double NOT NULL,
+  `branch_id` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -176,11 +185,13 @@ CREATE TABLE `login_details` (
 --
 
 INSERT INTO `login_details` (`user_id`, `username`, `email_address`, `password`, `user_role`, `is_active`) VALUES
+('coach_63b70ff6dc7152.69619366', 'seniru_semal', 'senirusemal@gmail.com', '$2y$10$U7AW9mirbKDOsKUFX89nduIVKRxInT9EHa3SmdSGqXye8gmENS8ci', 'coach', 1),
+('coach_tha63b71e629627b', 'tharuka_boss', 'tharuka@gmail.com', '$2y$10$PzMhfrF/93rjFXlWv/3g.emBXM9JzxJK1335OMwJap9QuffUl7Uri', 'coach', 1),
 ('dihHan6384813878b75', 'dihan_hansaja', 'dihanhansaja@gmail.com', '$2y$10$3uW4pZCt0.MERJKzCxqypuStR38ARbHD8WuuVuZZN8S6jimPS8aXy', 'user', 1),
 ('kamPer638656b5362c7', 'kamal_per', 'kamalperera@hotmail.com', '$2y$10$d3CoQvOnHJ4O4VkQwV96s.3LMfjG4.m1G.Kc7agF/aMQW4IsTZ0PG', 'user', 1),
-('managerkiri5436', 'manager_test', 'manager@kiribathgoda.com', 'Test12345', 'manager', 1),
+('managerkiri5436', 'manager_test', 'manager@kiribathgoda.com', '$2y$10$QuFv7nJToOszzmtRExiTtuUNvBrJjedqetonaCLLKnYlUbstMWsSW', 'manager', 1),
 ('nihWij638657d83c715', 'nihal_wij', 'nihal_wije@gmail.com', '$2y$10$dWp4y/hWGGWNICJzgTdM.e0EBAZcd7qUZEOJAQrEQ43ptT3kVcPfK', 'user', 1),
-('ramRod63816dc9007b4', 'ramith_rodrigo', 'ramithrodrigo@hotmail.com', '$2y$10$jfRHNtfvrSuC8CSAuxrUgOETAPpPglg7KDQ2JHo5zhNxAuivvNaEa', 'user', 1),
+('ramRod63816dc9007b4', 'ramith_rodrigo', 'ramithrodrigo@hotmail.com', '$2y$10$AWdjh.zjhx563bGv6xN1TuBzR4VhvByTOGKWumo5Cg6L.DFijPBxq', 'user', 1),
 ('receptionistkiri1241', 'receptionist_test', 'receptionist@kiribathgoda.com', 'Testing54321', 'receptionist', 1);
 
 -- --------------------------------------------------------
@@ -272,9 +283,9 @@ CREATE TABLE `reservation` (
 
 INSERT INTO `reservation` (`reservation_id`, `date`, `starting_time`, `ending_time`, `no_of_people`, `payment_amount`, `sport_court`, `status`, `user_id`, `formal_manager_id`, `onsite_receptionist_id`) VALUES
 ('Res-ram6381ff1962f37', '2022-12-03', '09:00:00', '12:00:00', 4, 1050, 'badcourt1213', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram6389552c34f9a', '2022-12-17', '09:00:00', '12:00:00', 3, 1050, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram638955f9d5247', '2022-12-17', '16:00:00', '18:00:00', 3, 700, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram6389622caecf9', '2022-12-14', '17:00:00', '18:30:00', 1, 525, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL);
+('Res-ram6389552c34f9a', '2022-12-17', '09:00:00', '12:00:00', 3, 1050, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL),
+('Res-ram638955f9d5247', '2022-12-17', '16:00:00', '18:00:00', 3, 700, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL),
+('Res-ram6389622caecf9', '2022-12-14', '17:00:00', '18:30:00', 1, 525, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -296,7 +307,8 @@ CREATE TABLE `sport` (
 --
 
 INSERT INTO `sport` (`sport_id`, `sport_name`, `description`, `reservation_price`, `min_coaching_session_price`, `max_no_of_students`) VALUES
-('bad65421', 'Badminton', 'Fun game to play with friends', 350, 1000, 10);
+('bad65421', 'Badminton', 'Fun game to play with friends', 350, 1000, 10),
+('basket17212', 'Basketball', 'basketball is fun', 500, 1000, 10);
 
 -- --------------------------------------------------------
 
@@ -319,7 +331,8 @@ CREATE TABLE `sports_court` (
 
 INSERT INTO `sports_court` (`court_id`, `sport_id`, `court_name`, `branch_id`, `request_status`, `added_manager`) VALUES
 ('badcourt1212', 'bad65421', 'A', 'kiri987521', 'a', NULL),
-('badcourt1213', 'bad65421', 'B', 'kiri987521', 'a', NULL);
+('badcourt1213', 'bad65421', 'B', 'kiri987521', 'a', NULL),
+('basketcourt345', 'basket17212', 'A', 'kiri987521', 'a', NULL);
 
 -- --------------------------------------------------------
 
@@ -328,7 +341,7 @@ INSERT INTO `sports_court` (`court_id`, `sport_id`, `court_name`, `branch_id`, `
 --
 
 CREATE TABLE `sports_court_photo` (
-  `court_photo` varchar(100) NOT NULL,
+  `court_photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `court_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -369,6 +382,13 @@ CREATE TABLE `student` (
   `stu_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `student`
+--
+
+INSERT INTO `student` (`stu_id`) VALUES
+('ramRod63816dc9007b4');
+
 -- --------------------------------------------------------
 
 --
@@ -382,6 +402,15 @@ CREATE TABLE `student_coach_feedback` (
   `coach_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `stu_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `student_coach_feedback`
+--
+
+INSERT INTO `student_coach_feedback` (`feedback_id`, `description`, `rating`, `coach_id`, `stu_id`) VALUES
+('feedback1', 'asdasdad ', 5, 'coach_tha63b71e629627b', 'ramRod63816dc9007b4'),
+('feedback2', 'asdasdad ', 3, 'coach_tha63b71e629627b', 'ramRod63816dc9007b4'),
+('feedback4', 'asdasdad ', 2, 'coach_63b70ff6dc7152.69619366', 'ramRod63816dc9007b4');
 
 -- --------------------------------------------------------
 
@@ -443,7 +472,7 @@ CREATE TABLE `user` (
   `first_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `last_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `gender` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `profile_photo` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `profile_photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `home_address` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `contact_num` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `birthday` date NOT NULL,
@@ -457,10 +486,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `gender`, `profile_photo`, `home_address`, `contact_num`, `birthday`, `register_date`, `height`, `weight`) VALUES
-('dihHan6384813878b75', 'Dihan', 'Hansaja', 'm', 'dihan_hansaja6384813878ccc.jpg', 'Dihan&amp;#039;s Address, Ambalangoda', '0786541239', '2000-07-04', '2022-11-28', 170, 55),
+('dihHan6384813878b75', 'Dihan', 'Hansaja', 'm', '../../public/user/profile_images/dihan_hansaja6384813878ccc.jpg', 'Dihan&amp;#039;s Address, Ambalangoda', '0786541239', '2000-07-04', '2022-11-28', 170, 55),
 ('kamPer638656b5362c7', 'Kamal', 'Perera', 'm', NULL, 'Madamulana, Sri Lanka', '0715423658', '2003-05-09', '2022-11-29', 166, 66),
 ('nihWij638657d83c715', 'Nihal', 'Wijesinghe', 'm', NULL, 'Some road, Galle', '0789654125', '1996-07-26', '2022-11-29', 177, 69),
-('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', 'ramith_rodrigo63816dc90092f.jpg', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', 178, 56);
+('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', '../../public/user/profile_images/ramith_rodrigo63816dc90092f.jpg', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', 178, 56);
 
 -- --------------------------------------------------------
 
@@ -476,6 +505,13 @@ CREATE TABLE `user_branch_feedback` (
   `description` varchar(500) NOT NULL,
   `branch_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `user_branch_feedback`
+--
+
+INSERT INTO `user_branch_feedback` (`userfeedback_id`, `user_id`, `date`, `rating`, `description`, `branch_id`) VALUES
+('feedback1', 'ramRod63816dc9007b4', '2023-01-13', 4, 'The factilities were quite good and clean. We had lots of fun and hoping to come back soon!', 'kiri987521');
 
 -- --------------------------------------------------------
 
@@ -599,7 +635,8 @@ ALTER TABLE `court_maintenance`
 -- Indexes for table `discount`
 --
 ALTER TABLE `discount`
-  ADD PRIMARY KEY (`manager_id`,`starting_date`);
+  ADD PRIMARY KEY (`manager_id`,`starting_date`),
+  ADD KEY `branch_id` (`branch_id`);
 
 --
 -- Indexes for table `login_details`
@@ -803,7 +840,8 @@ ALTER TABLE `court_maintenance`
 -- Constraints for table `discount`
 --
 ALTER TABLE `discount`
-  ADD CONSTRAINT `discount_ibfk_1` FOREIGN KEY (`manager_id`) REFERENCES `manager` (`manager_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `discount_ibfk_1` FOREIGN KEY (`manager_id`) REFERENCES `manager` (`manager_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `discount_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `manager`
