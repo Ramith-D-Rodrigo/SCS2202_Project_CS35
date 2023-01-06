@@ -311,7 +311,7 @@ class Coach extends Actor implements JsonSerializable{
         return $rating;
     }
 
-    public function jsonSerialize(){
+    public function jsonSerialize() : mixed{
       return [
         "coachID" => $this -> userID,
         "username" => $this -> username,
