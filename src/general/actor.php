@@ -15,6 +15,10 @@
             }
         }
 
+        public function setUserID($id){
+            $this -> userID = $id;
+        }
+
         public function getUserID(){
             return $this -> userID;
         }
@@ -99,6 +103,19 @@
             else{
                 return false;
             }
+        }
+
+        public function resetPassword($newPasswordHash){
+            $sql = sprintf("UPDATE `login_details` SET `password` = '%s' WHERE `user_id` = '%s'",
+            $this -> connection -> real_escape_string($newPasswordHash),
+            $this -> connection -> real_escape_string($this -> userID));
+
+            $result = $this -> connection -> query($sql);
+
+            if($result === FALSE){
+                return FALSE;
+            }
+            return TRUE;
         }
     }
 ?>

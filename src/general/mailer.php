@@ -55,5 +55,15 @@
                     <p>Regards,<br>Sportude Support</p>";
             return self::sendMail($recipientEmail, $recipient_name, $subject, $body);
         }
+
+        public static function passwordReset($recipientEmail, $recipient_username, $verificationCode){   //this function is used to send the verification code for account activation
+            $subject = "Password Reset";
+            $body = "<p>Hi $recipient_username,</p>
+                    <p>You have requested to reset your password. Please use the following code to verify the action.</p>
+                    <p?>Code : {$verificationCode} </p>
+                    <p>If you did not request to reset your password, please ignore this email.</p>
+                    <p>Regards,<br>Sportude Support</p>";
+            return self::sendMail($recipientEmail, $recipient_username, $subject, $body);
+        }
     }
 ?>
