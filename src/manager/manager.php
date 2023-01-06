@@ -1,26 +1,32 @@
 <?php
     require_once("../../src/general/uuid.php");
     require_once("../../src/system_admin/staffMember.php");
+    require_once("../../src/general/actor.php");
 
-class Manager implements JsonSerializable , StaffMember{
+class Manager extends Actor implements JsonSerializable , StaffMember{
 
-    private $managerID;
     private $firstName;
     private $lastName;
-    private $emailAddress;
     private $contactNum;
     private $joinDate;
     private $leaveDate;
     private $dateOfBirth;
-    private $username;
-    private $password;
     private $gender;
     private $branchID;
     private $staffRole;
 
+    public function __construct($actor = null){
+        if($actor !== null){
+            $this -> userID = $actor -> getUserID();
+            $this -> username = $actor -> getUsername();
+        }
+        require("manager_dbconnection.php");   //get the user connection to the db
+        $this -> connection = $connection;
+    }
+
 
     public function setDetails($fName='', $lName='', $email='', $contactNo='', $dob='', $gender='', $uid='', $username='', $password='', $brID = ''){
-        $this -> managerID = $uid;
+        $this -> userID = $uid;
         $this -> firstName = $fName;
         $this -> lastName = $lName;
         $this -> emailAddress = $email;
@@ -34,8 +40,8 @@ class Manager implements JsonSerializable , StaffMember{
     }
  
     public function getID(){    //managerID getter
-        if(isset($this -> managerID) || $this -> managerID !== ''){
-            return $this -> managerID;
+        if(isset($this -> userID) || $this -> userID !== ''){
+            return $this -> userID;
         }
     }
 
@@ -49,7 +55,7 @@ class Manager implements JsonSerializable , StaffMember{
         `is_active`) 
         VALUES 
         ('%s','%s','%s','%s','manager',1)",
-        $database -> real_escape_string($this -> managerID),
+        $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> emailAddress),
         $database -> real_escape_string($this -> password))); 
@@ -78,7 +84,7 @@ class Manager implements JsonSerializable , StaffMember{
         `staff_role`) 
         VALUES 
         ('%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), '%s', '%s')",
-        $database -> real_escape_string($this -> managerID),
+        $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> contactNum),
         $database -> real_escape_string($this -> gender),
         $database -> real_escape_string($this -> dateOfBirth),
@@ -94,7 +100,7 @@ class Manager implements JsonSerializable , StaffMember{
 
     private function create_manager_entry($database) {
         $result = $database->query(sprintf("INSERT INTO `manager` (`manager_id`) VALUES ('%s')",
-        $database -> real_escape_string($this -> managerID)));
+        $database -> real_escape_string($this -> userID)));
 
         return $result;
     }
@@ -111,37 +117,13 @@ class Manager implements JsonSerializable , StaffMember{
         }
     }
 
-    public function login($username, $password, $database){
-        $sql = sprintf("SELECT `user_id`, 
-        `username`, 
-        `password`, 
-        `user_role` 
-        FROM `login_details`  
-        WHERE `username` = '%s'", 
-        $database -> real_escape_string($username));
-
-        $result = $database -> query($sql);
-
-        $rows = $result -> fetch_object();  //get the resulting row
-
-        if($rows === NULL){ //no result. hence no user
-            return ["No Such Manager Exists"];
-        }
-
-        $hash = $rows -> password;
-        if(password_verify($password, $hash) === FALSE){    //Incorrect Password
-            return ["Incorrect Password"];
-        }
-
-        //setting user data for session
-        $this -> managerID = $rows -> user_id;
-
+    public function login($username, $password){
         $getBranch = sprintf("SELECT `branch_id` AS brid  
         FROM `staff`  
         WHERE `staff_id` = '%s'", 
-        $database -> real_escape_string($this -> managerID));
+        $this -> connection -> real_escape_string($this -> userID));
 
-        $brResult = $database -> query($getBranch);
+        $brResult = $this -> connection -> query($getBranch);
 
         $branchIDResult = $brResult -> fetch_object();   //get the branch_id
         $this -> branchID = $branchIDResult -> brid;
@@ -149,13 +131,13 @@ class Manager implements JsonSerializable , StaffMember{
         $getBrName = sprintf("SELECT `city`  
         FROM `branch`  
         WHERE `branch_id` = '%s'", 
-        $database -> real_escape_string($this -> branchID));
+        $this -> connection -> real_escape_string($this -> branchID));
 
-        $brNameResult = $database -> query($getBrName);
+        $brNameResult = $this -> connection -> query($getBrName);
 
         $branchName = $brNameResult -> fetch_object();   //get the branch_city
     
-        return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details
+        return [$branchName -> city, $this -> branchID];  //return the message and other important details
     }
     public function getSportID($sportName, $database){
         $sportSql = sprintf("SELECT `sport_id`
@@ -195,7 +177,7 @@ class Manager implements JsonSerializable , StaffMember{
         `staff_id` = '%s'
         AND
         `staff_role` = 'manager'",
-        $database -> real_escape_string($this -> managerID));
+        $database -> real_escape_string($this -> userID));
 
         $result = $database -> query($sql);
         $row = $result -> fetch_object();
@@ -222,7 +204,7 @@ class Manager implements JsonSerializable , StaffMember{
 
     public function jsonSerialize() : mixed{
         return [
-            'managerID' => $this -> managerID,
+            'managerID' => $this -> userID,
             'firstName' => $this -> firstName,
             'lastName' => $this -> lastName,
             'emailAddress' => $this -> emailAddress,
