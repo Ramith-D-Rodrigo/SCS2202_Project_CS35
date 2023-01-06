@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once("../../src/user/dbconnection.php");
+    require_once("../../src/general/dbconnection.php");
     require_once("../../src/general/sport_court.php");
     require_once("../../src/general/branch.php");
     require_once("../../src/general/sport.php");

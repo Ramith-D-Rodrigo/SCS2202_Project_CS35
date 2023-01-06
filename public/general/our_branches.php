@@ -10,6 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
         <link rel="stylesheet" href="/styles/general/our_branches.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <title>Our Branches</title>
     </head>
@@ -17,7 +18,7 @@
             <?php
                 require_once("header.php");
             ?>
-            <main style="display:flex; justify-content:center; align-items:center;">
+            <main class="body-container">
                 <div class="content-box" id="branches">
                 </div>
             </main>

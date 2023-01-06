@@ -83,20 +83,8 @@
                                 Number of People : <input type="text" required name="numOfPeople" id="numOfPeople" min="1" pattern="[0-9]+">
                             </div>
                         </div>
-                        <div class="err-msg" id="errMsg">
-                            <?php if(isset($_SESSION['reservationFail'])){
-                                echo $_SESSION['reservationFail'];
-                                unset($_SESSION['reservationFail']);
-                            }
-                            ?>
-                        </div>
-                        <div class="success-msg">
-                        <?php if(isset($_SESSION['reservationSuccess'])){
-                            echo $_SESSION['reservationSuccess'];
-                            unset($_SESSION['reservationSuccess']);
-                        }
-                        ?>
-                        </div>
+                        <div class="err-msg" id="errMsg"></div>
+                        <div class="success-msg" id="successMsg"></div>
                         <div style="text-align:center">
                             Reservation Price : <input readonly id="reservationPrice" name="reservationPrice">
                         </div>
@@ -115,7 +103,8 @@
             require_once("footer.php");
         ?>
     </body>
-    <script src="/js/general/reservation_schedule.js"></script>
-    <script src="/js/general/reservation_validation.js"></script>
+    <script type="module" src="/js/general/reservation_schedule.js"></script>
+    <script type="module" src="/js/general/reservation_validation.js"></script>
+    <script type="module" src="/js/user/make_reservation.js"></script>
     <script src="/js/user/account_links.js"></script>
 </html>

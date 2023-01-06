@@ -43,7 +43,7 @@ fetch("../../controller/general/our_sports_controller.php")
             sportInfoForm.method = "get";
             sportInfoForm.action = "/public/general/reservation_schedule.php";
             sportInfoForm.innerHTML = "Sport : " + data[i].sport_name + "<br>" +
-                                      "Reservation Price : Rs ."+ data[i].reserve_price + " per hour <br>" +
+                                      "Reservation Price : Rs. "+ data[i].reserve_price + " per hour <br>" +
                                       "Available Branches : " ;
 
             const providingBranchSelection = document.createElement("select");  //providing branches selection

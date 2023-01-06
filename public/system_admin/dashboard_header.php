@@ -20,15 +20,21 @@
               
                 if($_SERVER['REQUEST_URI'] === '/public/system_admin/admin_dashboard.php'){    //Check whether the admin is in the dashboard
             ?>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href=''">Settings<img src="/styles/icons/settings_icon.svg" class="acc-img"></button>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
+                <div style="float:right">
+                    <button class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
+                    <button class ="btn" id="logout" onclick="window.location.href=''">Settings<img src="/styles/icons/settings_icon.svg" class="acc-img"></button>
+                    <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
+                </div>
+                    
             <?php 
                 } else { 
             ?>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/public/system_admin/admin_dashboard.php'">Dashboard<img src="/styles/icons/dashboard_icon.svg" class="dash-img"></button>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
+                <div style="float:right">
+                    <button class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
+                    <button class ="btn" id="logout" onclick="window.location.href='/public/system_admin/admin_dashboard.php'"><img src="/styles/icons/dashboard_icon.svg" class="dash-img"></button>
+                    <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
+                </div>
+                    
             <?php
                 }
             }

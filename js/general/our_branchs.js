@@ -12,14 +12,22 @@ function changeBtnValue(e){
     //console.log(reseveBtn.value);
 }
 
+function viewFeedback(e){
+    e.preventDefault();
+    const branchID = e.target.parentElement.id;
+    console.log(branchID);
+    localStorage.setItem("feedbackBranch", branchID);
+    window.location.href = "/public/general/our_feedback.php";
+}
+
+let branches = [];
+let branch_pictures = [];
+
 fetch("../../controller/general/our_branches_controller.php")
     .then((res) => res.json())
     .then((data) => {
-        let branches = [];
-        console.log(data);
-        for(i = 0; i < data.length; i++){
+        for(let i = 0; i < data.length; i++){
             branches[i] = data[i];  //store the json objects in the array
-            console.log(branches[i]);
             const branchRow = document.createElement("div");
             branchRow.setAttribute("class", "branch-row");
 
@@ -27,7 +35,16 @@ fetch("../../controller/general/our_branches_controller.php")
             branchImageContainer.setAttribute("class","branch-image-container");
 
             const branchImage = document.createElement("img");
-            branchImage.src = "/public/general/branch/" + branches[i].photos;
+
+
+            branch_pictures[i] = branches[i].photos;    //add the pictures to the array
+            if(branch_pictures[i] != null){ //has photos
+                branchImage.src = "/public/general/branch_images/" + branches[i].photos[0];    //add the first photo
+            }
+            else{
+                branchImage.src = "/public/general/branch_images/";
+            }
+
             branchImage.setAttribute("class", "branch-image");
             branchImage.setAttribute("onerror", "this.src='/styles/icons/no-results.png'");
 
@@ -61,6 +78,24 @@ fetch("../../controller/general/our_branches_controller.php")
             const rating = document.createElement("div");   //branch rating div
             rating.className = "info";
             rating.innerHTML = "Rating : ";
+            const branchRating = parseFloat(branches[i].rating);
+            
+            for(let j = 0; j < 5; j++){
+                const star = document.createElement("span");
+                star.className = "fa fa-star";
+                star.style.margin = "0 0.2em";
+                if(j < branchRating){
+                    star.className = "fa fa-star checked";
+                }
+                //color star for decimal rating
+                if(j === Math.floor(branchRating) && branchRating % 1 !== 0){
+                    star.className = "fa fa-star-half-o checked";
+                    star.style.color = "gold";
+                }
+                star.style.fontSize = "1.5em";
+                rating.appendChild(star);
+            }
+
             form.appendChild(rating);
 
             const address = document.createElement("div");  //branch address div
@@ -99,7 +134,8 @@ fetch("../../controller/general/our_branches_controller.php")
 
             const feedbackBtn = document.createElement("button");//branch feedback button
             feedbackBtn.innerHTML = "View Feedback";
-            feedbackBtn.disabled = true;    //for now it is disabled
+            //feedbackBtn.disabled = true;    //for now it is disabled
+            feedbackBtn.addEventListener("click", viewFeedback);
             form.appendChild(feedbackBtn);
 
             const receptionist = document.createElement("div"); //branch receptionist div
@@ -115,6 +151,11 @@ fetch("../../controller/general/our_branches_controller.php")
 
             receptionist.innerHTML = "Receptionist : " + receptionistName;
             form.appendChild(receptionist);
+
+            const branchEmail = document.createElement("div");  //branch email
+            branchEmail.className = "info";
+            branchEmail.innerHTML = "Branch Email : " + branches[i].email;
+            form.appendChild(branchEmail);
 
             const receptionist_contact = document.createElement("div"); //branch receptionist contact div
             receptionist_contact.className = "info";    
@@ -163,6 +204,23 @@ fetch("../../controller/general/our_branches_controller.php")
         const selectOption = document.querySelectorAll(".providing_sports");
         //console.log(selectOption);
         selectOption.forEach(element => element.addEventListener("change", changeBtnValue));
+
+        //change branch image using setInterval
+        const branchImg = document.querySelectorAll(".branch-image");
+        for(let i = 0; i < branchImg.length; i++){
+            setInterval(() =>{
+                if(branch_pictures[i].length === 1){    //if there is only one image
+                    return;
+                }
+                const prev = branchImg[i].src.split("/").pop(); //previous img name
+                do{
+                    var nextImgIndex = Math.floor(Math.random() * branch_pictures[i].length); //next img index
+                }while(branch_pictures[i][nextImgIndex] === prev);
+                branchImg[i].src = "/public/general/branch_images/" + branch_pictures[i][nextImgIndex];
+            }, 3000);
+        }
+
+
     });
 
 

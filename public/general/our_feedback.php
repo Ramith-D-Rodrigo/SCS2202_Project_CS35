@@ -10,6 +10,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
+        <link rel="stylesheet" href="/styles/general/our_feedback.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <title>Our Feedback</title>
     </head>
     <body>
@@ -19,15 +21,15 @@
         <main>
             <div class="content-box" style="align-items:center">
                 <div>
-                    Filter By :
+                    Filter By Branch:
                     <select id="branchFilter">
-                        <option value="">Branch</option>
+                        <option value="">All</option>
                     </select>
                 </div>
                 <div id="feedbackTableContainer" style="width:100%">
                     <table style="width:100%">
                         <thead>
-                            <tr>
+                            <tr class="headRow">
                                 <th>Date</th>
                                 <th>Branch</th>
                                 <th>Feedback</th>
@@ -45,4 +47,5 @@
         ?>
     </body>
     <script src="/js/user/account_links.js"></script>
+    <script src="/js/general/our_feedback.js"></script>
 </html>

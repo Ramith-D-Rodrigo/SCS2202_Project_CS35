@@ -35,7 +35,7 @@
                 $userDetails = $_SESSION['userProfile'][0];
         ?>
                 <?php if(isset($userDetails->profile_photo)){?>
-                    <div style="display:flex; justify-content:center;margin-bottom:30px"><img src="/styles/icons/sports/basketball.jpg" class="branch-img" style="border: solid thin black"></div>
+                    <div style="display:flex; justify-content:center;margin-bottom:30px"><img src="/styles/icons/<?php echo $userDetails->profile_photo?>" class="branch-img" style="border: solid thin black"></div>
                 <?php
                 }
                 else{
@@ -70,7 +70,7 @@
                 <br>
                 <div class="row-container">
                     <div class="left-side"> Home Address: </div>
-                    <div class="right-side"> <textarea> <?php echo $userDetails->home_address ?> </textarea></div>
+                    <div class="right-side"> <textarea readonly> <?php echo $userDetails->home_address ?> </textarea></div>
                 </div>
                 <br>
                 <div class="row-container">

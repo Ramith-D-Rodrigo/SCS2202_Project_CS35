@@ -1,0 +1,26 @@
+.content_box {
+    
+    width: 800px;
+    height: 500px;
+    left: 350px;
+    background-color:#ffffff;
+    padding: 10px;  
+    margin:auto;
+    margin-top: 50px;
+}  
+
+#but_AddCourt{
+    position:absolute;
+    margin-left: 560px;
+    margin-top: -50px;
+}
+
+#but_Filt{
+    margin-left: 210px;
+    margin-top: 30px;
+}
+
+#but_Choose{
+    margin-left: 310px;
+    margin-top: -40px;
+}

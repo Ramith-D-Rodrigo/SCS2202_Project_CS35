@@ -17,7 +17,7 @@
     align-items: center;
     font-size: 30px;
     height: 200px;
-    width : 1200px;
+    width : 100%;
 }
 .tabs ,.longTab {
     display:flex;
@@ -33,5 +33,5 @@
     align-items: center;
     font-size: 30px;
     height: 200px;
-    width : 1200px;
+    width : 100%;
 }

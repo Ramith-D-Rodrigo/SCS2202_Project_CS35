@@ -62,11 +62,11 @@
                     <div class="left-side"> Sport Name :  </div>
                     <div class="right-side"> <select name="sportName" id="sportName">
                     <?php 
-                    $nameArray =  $_SESSION['sportResult'];
-                    foreach($nameArray as $name) {
+                    $sportArray =  $_SESSION['sportResult'];
+                    foreach($sportArray as $sport) {
                         ?> 
-                         <option id="sportOption" value="<?php echo $name; ?>">                            
-                        <?php echo $name; ?>                           
+                         <option id="sportOption" value="<?php echo $sport -> sport_name; ?>">                            
+                        <?php echo $sport -> sport_name; ?>                           
                         </option>  
                     <?php
                     }
@@ -151,11 +151,12 @@
                     <?php
                         if(isset($_SESSION['RequestsuccessMsg'])){
                             echo $_SESSION['RequestsuccessMsg'];
-                            echo '<br> You will be Redirected to the Dashboard. Please Wait';
+                            //echo '<br> You will be Redirected to the Dashboard. Please Wait';
                             unset($_SESSION['RequestsuccessMsg']);
                             unset($_SESSION['courtResult']);
                             unset($_SESSION['sportResult']);
-                            header("Refresh: 3; URL =/public/receptionist/receptionist_dashboard.php");  //redirect to dashboard
+                            //header_remove();
+                            //header("Refresh: 3; URL =/public/receptionist/receptionist_dashboard.php");  //redirect to dashboard
                         }
                     ?>
                 </div>

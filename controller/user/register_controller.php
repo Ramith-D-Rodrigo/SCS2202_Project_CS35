@@ -1,10 +1,8 @@
 <?php
-    session_start();
     require_once("../../src/user/user.php");
     require_once("../../src/user/user_dependent.php");
-    require_once("../../src/user/dbconnection.php");
+    require_once("../../src/general/dbconnection.php");
     require_once("../../src/user/credentials_availability.php");
-    require_once("../../src/general/uuid.php"); //to generate uuids
 
 
     //all possible inputs for prefilling
@@ -26,17 +24,18 @@
 
     $validationErrFlag = false;
 
+    $returnMsg = [];    //to echo the json response
 
-    foreach($inputFields as $i){    //store session details and validation
+    foreach($inputFields as $i){    //validation
         if(isset($_POST[$i])){  //the user has entered it
             if(($i === 'firstName' || $i === 'lastName')){    //first name and last name validation
                 if(!preg_match("/^[a-zA-Z]+$/", $_POST[$i])){ //doesn't match the pattern
-                    $_SESSION['RegUnsuccessMsg'] = 'Name Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Name Error';
                     $validationErrFlag = true;
                     break;
                 }
                 else if(strlen($i) > 50){  //maximum is 100 (varchar100) but keeping it lower than 50 to make sure
-                    $_SESSION['RegUnsuccessMsg'] = 'Name Length Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Name Length Error';
                     $validationErrFlag = true;
                     break;
                 }
@@ -44,14 +43,14 @@
             }
             else if($i === 'gender'){ //gender validation
                 if($_POST[$i] !== 'm' && $_POST[$i] !== 'f'){
-                    $_SESSION['RegUnsuccessMsg'] = 'Gender Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Gender Error';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'birthday'){ //birthday validation
                 if(!strtotime($_POST[$i])){ //not a valid date
-                    $_SESSION['RegUnsuccessMsg'] = 'Birthday Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Birthday Error';
                     $validationErrFlag = true;
                     break;
                 }
@@ -61,21 +60,21 @@
                 $diff = date_diff($currDate, $bDay);
                 
                 if($diff -> y < 14){    //age should be atleast 14 years
-                    $_SESSION['RegUnsuccessMsg'] = 'Age Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Age Error';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'contactNum' || $i === 'emgcontactNum1' || $i === 'emgcontactNum2' || $i === 'emgcontactNum3'){
                 if(!preg_match("/^[0-9]{10,11}$/", $_POST[$i])){  //doesn't match the pattern
-                    $_SESSION['RegUnsuccessMsg'] = 'Contact Number Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Contact Number Error';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'homeAddress'){
                 if(strlen($_POST[$i]) > 225){ //max is varchar250 in db
-                    $_SESSION['RegUnsuccessMsg'] = 'Address length Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Address length Error';
                     $validationErrFlag = true;
                     break;
                 }
@@ -83,7 +82,7 @@
             else if($i === 'height' || $i === 'weight'){
                 if($_POST[$i] !== ''){  //has entered some value
                     if(!preg_match("/^[1-9][0-9]*(?:\.[1-9][0-9]*)*$/", $_POST[$i])){   //doesn't match the pattern
-                        $_SESSION['RegUnsuccessMsg'] = 'Height/Weight Error';
+                        $returnMsg['RegUnsuccessMsg'] = 'Height/Weight Error';
                         $validationErrFlag = true;
                         break;
                     }
@@ -91,50 +90,50 @@
             }
             else if($i === 'username'){ //username validation
                 if(!preg_match("/^[a-z]([a-z0-9_]){5,15}$/", $_POST[$i])){
-                    $_SESSION['RegUnsuccessMsg'] = 'Username Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Username Error';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'password'){ //password validation
                 if(!preg_match("/(?=.*\d)(?=.*[A-Z]).{8,}/", $_POST[$i])){
-                    $_SESSION['RegUnsuccessMsg'] = 'Password Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Password Error';
                     $validationErrFlag = true;
                     break;
                 }
 
                 if($_POST[$i] !== $_POST['passwordConfirm']){   //password is not equal
-                    $_SESSION['RegUnsuccessMsg'] = 'Password Not Matching Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Password Not Matching Error';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'medical_concern1' || $i === 'medical_concern2' || $i === 'medical_concern3' || $i === 'medical_concern4' || $i === 'medical_concern5' || $i === 'name1' || $i === 'name2' || $i === 'name3'){
                 if(!preg_match("/^[a-zA-Z ]+$/", $_POST[$i])){
-                    $_SESSION['RegUnsuccessMsg'] = 'Medical Concerns/Emergency Contact Names Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Medical Concerns/Emergency Contact Names Error';
                     $validationErrFlag = true;
                     break;
                 }
 
                 if(strlen($_POST[$i]) > 40){    //max is 50varchar
-                    $_SESSION['RegUnsuccessMsg'] = 'Medical Concerns/Emergency Contact Names Length Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Medical Concerns/Emergency Contact Names Length Error';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'relationship1' || $i === 'relationship2' || $i === 'relationship3'){
                 if(!(in_array($_POST[$i], $relationshipFields))){   //invalid relationship
-                    $_SESSION['RegUnsuccessMsg'] = 'Relationship Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Relationship Error';
                     $validationErrFlag = true;
                     break;
                 }
             }
 
             $_POST[$i] = htmlspecialchars($_POST[$i], ENT_QUOTES);
-            $_SESSION[$i] = $_POST[$i];
         }
         else{  //user has not entered it
             if(in_array($i, $compulsaryFields)){    //a compulsary field
+                $returnMsg['RegUnsuccessMsg'] = 'Compulsary Field Error';
                 $validationErrFlag = true;
                 break;
             }
@@ -142,9 +141,8 @@
     }
 
     if($validationErrFlag === true){
-        //$_SESSION['RegUnsuccessMsg'] = 'Please Enter Valid Information';
-        $connection -> close();
-        header("Location: /public/user/user_register.php");
+        $returnMsg['RegUnsuccessMsg'] = $returnMsg['RegUnsuccessMsg'] . '<br>Please Enter Valid Information';
+        echo json_encode($returnMsg);
         exit();
     }
     
@@ -153,33 +151,21 @@
     //email availability   
     $hasEmailResult = checkEmail($_POST['emailAddress'], $connection);
 
-    if(isset($_SESSION['successMsg'])){ //same user is trying to register (in the same session) We have to unset the message
-        unset($_SESSION['successMsg']);
-    }
 
-    if($hasEmailResult -> num_rows > 0){    //account already exists
-        $_SESSION['emailError'] = "Account with same Email Address exists.";
-        header("Location: /public/user/user_register.php");
-        $connection -> close(); //close the database connection
+    if($hasEmailResult === true){    //account already exists
+        $returnMsg['RegUnsuccessMsg'] = 'Account with same Email Address exists.';
+        echo json_encode($returnMsg);
         exit(); //exit the registration
-    }
-    else{
-        unset($_SESSION['emailError']); //email is available, hence unset the error message
     }
     
     //username availability    
     $hasUsernameResult = checkUsername($_POST['username'], $connection);
 
-    if($hasUsernameResult -> num_rows > 0){    //account already exists
-        $_SESSION['usernameError'] = "Account with same Username exists.";
-        header("Location: /public/user/user_register.php");
-        $connection -> close(); //close the database connection
+    if($hasUsernameResult === true){    //account already exists
+        $returnMsg['RegUnsuccessMsg'] = 'Account with same Username exists.';
+        echo json_encode($returnMsg);
         exit(); //exit the registration
     }
-    else{
-        unset($_SESSION['usernameError']); //username is available, hence unset the error message
-    }
-
 
     //can create a account
 
@@ -286,25 +272,35 @@
         $new_user -> setProfilePic("NULL");
     }
 
-    $result = $new_user -> registerUser($connection);
+    $result = $new_user -> registerUser();
 
     if($result === TRUE){   //successfully registered
-        //echo "Successfully registered";
-/*         foreach($inputFields as $i){    //store session details
-            if(isset($_SESSION[$i])){   //unsetting input values
-                session_unset($i);
+        //time for email verification and account activation
+        session_start();
+        $_SESSION['fName'] = $fName;    //for resending the mail
+        $_SESSION['lName'] = $lName;
+        $_SESSION['email'] = $email;
+        require_once("email_verification_controller.php");
+        $emailResult = Mailer::registerAccount($email, $fName . ' ' . $lName, $mailVerificationCode);    //send the email
+        if($emailResult === FALSE){ //check email sent successfully or not
+            $returnMsg['RegUnsuccessMsg'] = 'Error Registering the Account, Please check your email address';
+    
+            do{
+                $deleteResult = $new_user -> deleteUser(); //delete the user
             }
-        } */
-        session_unset(); //free all current session variables 
-
-        $_SESSION['RegsuccessMsg'] = 'Registered Successfully';
-        header("Location: /public/user/user_register.php");
+            while($deleteResult != TRUE);   
+            echo json_encode($returnMsg);
+        }
+        else{
+            $returnMsg['RegSuccessMsg'] = 'An email has been sent to your email address. <br>Please verify your account using the code sent to your email address.';
+            echo json_encode($returnMsg);
+        }
     }
     else{
         //echo "Error Registering the Account";
-        $_SESSION['RegUnsuccessMsg'] = 'Error Registering the Account';
-        header("Location: /public/user/user_register.php");
+        $returnMsg['RegUnsuccessMsg'] = 'Error Registering the Account';
+        echo json_encode($returnMsg);
     }
 
-    $connection -> close(); //close the database connection
+    unset($new_user);
 ?>

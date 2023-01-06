@@ -1,18 +1,18 @@
-import { verbose, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, MAX_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS } from "../CONSTANTS";
+import { verbose, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, MAX_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS } from "../CONSTANTS.js";
 
 const reserveStartingTime = document.getElementById("reserveStartingTime");
 const reserveEndingTime = document.getElementById("reserveEndingTime");
 const reservationPrice = document.getElementById("reservationPrice");
 const numOfPeople = document.getElementById("numOfPeople");
 
-function userInputTimeCheck(e){ //this function check for valid time input (30, 00 minutes check and the max and min time check (opening and closing time))
+function userInputTimeCheck(e){ //this function check for valid time input (00 minutes check and the max and min time check (opening and closing time))
     const min = e.target.value.split(":")[1];
     if(verbose){
         //console.log(e.target.value);
         //console.log(min)   //get the minutes
     }
 
-    if(!(min == '00' || min == '30') || !(e.target.min <= e.target.value && e.target.max >= e.target.value)){
+    if(!(min == '00') || !(e.target.min <= e.target.value && e.target.max >= e.target.value)){
         e.target.style.border = "medium solid red";
     }
     else{
@@ -20,15 +20,11 @@ function userInputTimeCheck(e){ //this function check for valid time input (30, 
     }
 }
 
-function reservationTimePeriodCheck(e){
-
-}
-
 reserveStartingTime.addEventListener('change', userInputTimeCheck);
 
 reserveEndingTime.addEventListener('change', userInputTimeCheck);
 
-//date constraints    -->  atleast 3 days before, at most a month
+//date constraints
 
 function addDays(date, days){   //function to add days
     let result = new Date(date);
@@ -36,14 +32,29 @@ function addDays(date, days){   //function to add days
     return result;
 }
 
-const today = new Date().toISOString().split("T")[0];
+//function to add leading zeros to the date
+function addLeadingZeros(date){
+    let result = date;
+    if(date < 10){
+        result = "0" + date;
+    }
+    return result;
+}
+
+const today = new Date();
+today.setHours(0,0,0,0); //set the time to 00:00:00:000 to avoid the date change
 const reservationDate = document.getElementById("reservationDate");
 
-const minDate = addDays(today, MIN_RESERVATION_DAYS).toISOString().split("T")[0];
-const maxDate = addDays(today, MAX_RESERVATION_DAYS).toISOString().split("T")[0];
+const minDateObj = addDays(today, MIN_RESERVATION_DAYS);
+const minDateStr = minDateObj.getFullYear() + "-" + addLeadingZeros(minDateObj.getMonth() + 1) + "-" + addLeadingZeros(minDateObj.getDate());
+console.log(minDateStr);
 
-reservationDate.min = minDate;
-reservationDate.max = maxDate;
+const maxDateObj = addDays(today, MAX_RESERVATION_DAYS);
+const maxDateStr = maxDateObj.getFullYear() + "-" + addLeadingZeros(maxDateObj.getMonth() + 1) + "-" + addLeadingZeros(maxDateObj.getDate());
+console.log(maxDateStr);
+
+reservationDate.min = minDateStr;
+reservationDate.max = maxDateStr;
 
 //price calculation
 
@@ -91,7 +102,7 @@ reserveStartingTime.addEventListener('change', (e)=>{
     }
     
     const minRevPrice = reservationPrice.min;
-    calulatedPrice = minRevPrice * timeDiffHours;
+    const calulatedPrice = minRevPrice * timeDiffHours;
     reservationPrice.value = calulatedPrice;
 });
 
@@ -140,7 +151,7 @@ reserveEndingTime.addEventListener('change', (e)=>{
     console.log(timeDiffHours);
     
     const minRevPrice = reservationPrice.min;
-    calulatedPrice = minRevPrice * timeDiffHours;
+    const calulatedPrice = minRevPrice * timeDiffHours;
     reservationPrice.value = calulatedPrice;
 });
 
@@ -169,5 +180,7 @@ function validateForm(e){
     }
 
     errorMsg.innerHTML = "";
-    return tr
+    return true;
 }
+
+window.validateForm = validateForm; //export the function to be used in the html file
