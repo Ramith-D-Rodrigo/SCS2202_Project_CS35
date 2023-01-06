@@ -80,5 +80,21 @@
 
             return $result -> fetch_object() -> request_status;
         }
+
+        public function getPhotos($database){
+            $sql = sprintf("SELECT `court_photo` FROM `sports_court_photo`
+            WHERE `court_id`
+            LIKE '%s'",
+            $database -> real_escape_string($this -> courtID));
+
+            $result = $database -> query($sql);
+            $photos = [];
+            while($row = $result -> fetch_object()){
+                array_push($photos, $row -> court_photo);
+                unset($row);
+            }
+            $result -> free_result();
+            return $photos;
+        }
     }
 ?>

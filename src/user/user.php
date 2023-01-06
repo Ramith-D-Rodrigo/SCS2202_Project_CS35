@@ -275,7 +275,9 @@ class User extends Actor implements JsonSerializable{
             return ['errMsg' => "Sorry, Cannot find what you are looking For"];
         }
 
-        $result = [];
+        $branchResultArr = [];
+        $coachResultArr = [];
+
         while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of receptionist (pending request)
             $courtBranchSql = sprintf("SELECT DISTINCT `branch_id`   
             FROM `sports_court`
@@ -288,13 +290,27 @@ class User extends Actor implements JsonSerializable{
             while($branchRow = $branchResult -> fetch_object()){   //getting all the branches
                 $branch = $branchRow -> branch_id;
 
-                array_push($result, ['branch' => $branch, 'sport_name' => $row['sport_name'], 'sport_id' => $row['sport_id'], 'reserve_price' => $row['reservation_price']]); //create a branch sport pair
+                array_push($branchResultArr, ['branch' => $branch, 'sport_name' => $row['sport_name'], 'sport_id' => $row['sport_id'], 'reserve_price' => $row['reservation_price']]); //create a branch sport pair
+                unset($branchRow);
             }
+
+            $coachSql = sprintf("SELECT `coach_id`
+            FROM `coach`
+            WHERE `sport` = '%s'",
+            $this -> connection -> real_escape_string($row['sport_id']));
+
+            $coachResult = $this -> connection -> query($coachSql);
+            while($coachRow = $coachResult -> fetch_object()){
+                array_push($coachResultArr, ['coach_id' => $coachRow -> coach_id, 'sport_name' => $row['sport_name'], 'sport_id' => $row['sport_id']]); //create a coach sport pair
+                unset($coachRow);
+            }
+
+            unset($row);
         }
-        if(count($result) === 0){   //couldn't find any branch that provide the searched sport
+        if(count($branchResultArr) === 0 && count($coachResultArr) === 0){   //couldn't find any branch that provide the searched sport (also coaches)
             return ['errMsg' => "Sorry, Cannot find what you are looking For"];
         }
-
+        $result = array('branches' => $branchResultArr, 'coaches' => $coachResultArr);
         return $result;
     }
 

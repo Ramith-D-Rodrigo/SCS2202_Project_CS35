@@ -163,6 +163,10 @@ textarea{
     margin: 10px;
 }
 
+.result-info{
+    margin: 10px;
+}
+
 .err-msg{
     color: red;
     text-align: center;
