@@ -7,6 +7,26 @@ function validateForm(event){
     return true;
 }
 
+function validatePasswordForm(event){
+    const form = document.querySelector('form');    //email, username check form
+
+    if(form.reportValidity() === false){
+        return false;
+    }
+    //now check if the passwords match
+    const password = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    const errMsgBox = document.getElementById('errmsgbox');  //error message box
+    errMsgBox.innerHTML = "Passwords do not match";
+
+    if(password !== confirmPassword){
+        return false;
+    }
+    errMsgBox.innerHTML = "";
+    return true;
+}
+
 function togglePasswordVisibility(event){
     event.preventDefault();
     const parentDiv = event.target.parentNode;
@@ -56,12 +76,13 @@ form.addEventListener('submit', checkuserInput = (e)=>{
             const checkBtn = document.getElementById('checkBtn'); //check button
             checkBtn.innerHTML = "Verify Code";
             checkBtn.setAttribute('id', 'verifyBtn');
-            checkBtn.setAttribute('onclick', '');   //remove onclick event
+            //remove onclick event
+            checkBtn.removeAttribute('click');
 
             //change the form's submit event listener
             form.removeEventListener('submit', checkuserInput);
 
-            form.addEventListener('submit', (e)=>{  //now for the code check
+            form.addEventListener('submit', checkCode = (e)=>{  //now for the code check
                 e.preventDefault(); //prevent page reload
 
                 const codeCheckFormData = new FormData(form);
@@ -88,8 +109,9 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                         newPasswordInput.setAttribute('type', 'password');
                         newPasswordInput.setAttribute('name', 'newPassword');
                         newPasswordInput.setAttribute('id', 'newPassword');
+                        newPasswordInput.setAttribute('pattern', '(?=.*\\d)(?=.*[A-Z]).{8,}');  //escape the backslash
+                        newPasswordInput.setAttribute('minlength', '8');
                         newPasswordInput.setAttribute('required', '');
-                        newPasswordInput.setAttribute('pattern', '(?=.*\d)(?=.*[A-Z]).{8,}');
                         newPasswordInput.setAttribute('title', 'Password length must be atleast 8 characters. Must include an uppercase letter and a number');
                         newPasswordDiv.appendChild(newPasswordInput);
                         form.insertBefore(newPasswordDiv, form.firstChild);
@@ -117,11 +139,48 @@ form.addEventListener('submit', checkuserInput = (e)=>{
 
                         newPasswordDiv.after(confirmPasswordDiv);
 
+                        const btn = document.getElementById('verifyBtn');
+                        btn.innerHTML = "Reset Password";
+                        btn.setAttribute('id', 'resetBtn');
+                        btn.setAttribute('onclick', validatePasswordForm);  //validate the form
 
                         errMsgBox.innerHTML = "";
                         successMsgBox.innerHTML = data.successMsg;
+
+                        //change the form's submit event listener
+                        form.removeEventListener('submit', checkCode);
+                        form.addEventListener('submit', resetPassword = (e)=>{  //now for the password reset
+                            e.preventDefault(); //prevent page reload
+                            const formData = new FormData(form);
+                            const data = Object.fromEntries(formData);
+
+                            fetch('../../controller/general/password_reset_controller.php', { //reset the password
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(data)
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if(data.errMsg === undefined){  //if no error (password is reset)
+                                    errMsgBox.innerHTML = "";
+                                    successMsgBox.innerHTML = data.successMsg + "<br>Redirecting to the login page...";
+                                    setTimeout(() => {
+                                        window.location.href = "../../public/general/login.php";
+                                    }, 2000);
+                                }
+                                else{   //password reset failed
+                                    errMsgBox.innerHTML = data.errMsg;
+                                    successMsgBox.innerHTML = "";
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
+                        });
                     }
-                    else{
+                    else{   //code is incorrect
                         errMsgBox.innerHTML = data.errMsg;
                         successMsgBox.innerHTML = "";
                     }
@@ -131,11 +190,6 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                 });
                     
             });
-
-
-
-
-
         }else{
             //if email or username is incorrect, show error
             errMsgBox.innerHTML = data.errMsg;

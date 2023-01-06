@@ -44,7 +44,7 @@
         session_unset();
         session_destroy();
         header("application/json");
-        echo json_encode(array("successMsg" => "Password reset successful."));
+        echo json_encode(array("successMsg" => "Password reset is successful."));
     }
     else{
         header("application/json");
