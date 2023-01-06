@@ -51,7 +51,7 @@
             
                 <?php if(isset($_SESSION['userProfilePic'])){?>
                     
-                    <button class ="btn" id='profileBtn'><img src="/public/user/profile_images/<?php echo $_SESSION['userProfilePic']?>" class="acc-img" style="border: solid thin black"></button>
+                    <button class ="btn" id='profileBtn'><img src="<?php echo $_SESSION['userProfilePic']?>" class="acc-img" style="border: solid thin black"></button>
                 <?php
                 }
                 else{

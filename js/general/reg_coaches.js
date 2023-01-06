@@ -22,7 +22,7 @@ fetch("../../controller/general/reg_coaches_controller.php")
             const coachImg = document.createElement("img");
             coachImg.setAttribute("class", "coach-image");
 
-            coachImg.setAttribute("src", "/public/coach/profile_images/" + data[i].photo);
+            coachImg.setAttribute("src", data[i].photo);
             coachImg.setAttribute("onerror", "this.src='/styles/icons/no-results.png'");
 
             coachImgContainer.appendChild(coachImg);

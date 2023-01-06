@@ -118,7 +118,7 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
 
                 const coachPic = document.createElement("img");
                 coachPic.className = "coach-image";
-                coachPic.src = "../../public/coach/profile_images/" + coaches[i].profilePic;
+                coachPic.src = coaches[i].profilePic;
 
                 coachPic.setAttribute("onerror", "this.src='/styles/icons/no-results.png'");
                 coachPicDiv.appendChild(coachPic);

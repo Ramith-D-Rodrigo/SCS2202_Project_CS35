@@ -39,7 +39,7 @@ fetch("../../controller/general/our_branches_controller.php")
 
             branch_pictures[i] = branches[i].photos;    //add the pictures to the array
             if(branch_pictures[i] != null){ //has photos
-                branchImage.src = "/public/general/branch_images/" + branches[i].photos[0];    //add the first photo
+                branchImage.src = branches[i].photos[0];    //add the first photo
             }
             else{
                 branchImage.src = "/public/general/branch_images/";

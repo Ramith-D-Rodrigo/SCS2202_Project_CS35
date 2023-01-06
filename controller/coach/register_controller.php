@@ -107,7 +107,7 @@
     $new_coach = new Coach();
     $new_coach -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $coach_qualifications, $username, $password, $gender,$sport);
 
-    $new_coach -> setProfilePic($picNewName);
+    $new_coach -> setProfilePic('../../public/coach/profile_images/'.$picNewName);  //add the directory to the profile picture
     $result = $new_coach -> registercoach($connection);
 
     if($result === TRUE){   //successfully registered

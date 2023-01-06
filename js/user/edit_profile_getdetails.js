@@ -158,7 +158,7 @@ fetch("/controller/user/edit_profile_entry_controller.php")
         profilePicImg.style.maxWidth = "25%";
 
         if(data['profilePic'] !== null){    //has a profile picture  
-            profilePicImg.src = "profile_images/" + data['profilePic'];
+            profilePicImg.src = data['profilePic'];
         }
         else{
             profilePicImg.src = "/styles/icons/profile_icon.svg";

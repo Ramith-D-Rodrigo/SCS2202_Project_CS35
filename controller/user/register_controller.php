@@ -266,7 +266,7 @@
     $new_user -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $user_dependents, $height, $weight, $medical_concerns, $username, $password, $gender);
 
     if($profilePicFlag === true){    //has uploaded a profile pic
-        $new_user -> setProfilePic($picNewName);
+        $new_user -> setProfilePic('../../public/user/profile_images/'.$picNewName);    //add the directory to the profile pic
     }
     else{
         $new_user -> setProfilePic("NULL");
