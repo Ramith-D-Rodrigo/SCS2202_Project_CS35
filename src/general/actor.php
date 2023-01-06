@@ -10,7 +10,7 @@
 
         public function __construct($userRole = ''){    //establish the database connection according to the given user role
             if($userRole === ''){
-                require_once("dbconnection.php");
+                require("dbconnection.php");
                 $this -> connection = $connection;
             }
         }
