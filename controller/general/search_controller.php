@@ -40,7 +40,7 @@
                 $courtPics = $court -> getPhotos($user -> getConnection());
                 
                 foreach($courtPics as $currPic){    //add the court photos to the branch photos
-                    array_push($neededInfo['photos'], $currPic['photo']);
+                    array_push($neededInfo['photos'], $currPic);
                 }
             }
            

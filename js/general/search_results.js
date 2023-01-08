@@ -52,7 +52,17 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                     if(arrLength === 1){
                         return; //if there is only one photo, don't change it (to avoid infinite loop)
                     }
-                    const randomIndex = Math.floor(Math.random() * branchPhotos[i].length);
+                    const prev = photo.src; //current img source
+                    var randomIndex = Math.floor(Math.random() * branchPhotos[i].length); //next img index
+
+                    if(branchPhotos[i][randomIndex].split("/").pop() === prev.split("/").pop()){
+                        randomIndex++;
+                    }
+
+                    if(randomIndex === arrLength){ //go back to start
+                        randomIndex = 0;
+                    }
+                    
                     photo.src = branchPhotos[i][randomIndex];
                 }, 3000);
 
