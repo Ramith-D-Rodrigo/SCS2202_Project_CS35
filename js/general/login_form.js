@@ -33,6 +33,10 @@ loginForm.addEventListener("submit", (e) => {
             regBtn.disabled = true;
             regBtn.style.cursor = "not-allowed";
 
+            const forgotBtn = document.getElementById("forBtn"); //disabling forgot password button
+            forgotBtn.disabled = true;
+            forgotBtn.style.cursor = "not-allowed";
+
             if(data.userrole === 'user'){
                 successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to the home page in 2 seconds";
                 setTimeout(() =>{
