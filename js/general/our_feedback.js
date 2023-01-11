@@ -24,70 +24,99 @@ function sortByDate(row1, row2){    //sort feedback rows by dates (rows are tabl
     }
 }
 
-function filterBranch(e){
-    if(e.target.value === ""){
-        const allRows = Array.from(document.querySelectorAll("tr")); //select all the table rows
-        allRows.filter(i => i.className !== "headRow").forEach(i => i.style.display = ""); //show all the rows
-    }
-    else{
-        const allRows = Array.from(document.querySelectorAll("tr")).filter(i => i.className !== "headRow"); //select all the table rows other than the header
+const filterFeedback = (e) =>{
+    const searchVal = searchBar.value.toLowerCase();
+    const branchVal = branchFilter.value;
+    const ratingVal = ratingFilter.value;
 
-        const hidingRows = allRows.filter(i => !i.classList.contains(e.target.value));
-        hidingRows.forEach(i => i.style.display = "none"); //hide the rows that don't match the branch id
-        const showingRows = allRows.filter(i => i.classList.contains(e.target.value));
-        showingRows.forEach(i => i.style.display = ""); //show the rows that match the branch id
-    }
-}
+    const allRows = Array.from(document.querySelectorAll("tr")).filter(i => i.className !== "headRow"); //select all the table rows other than the header
+    allRows.forEach(i => i.style.display = ""); //show all the rows
 
+    let filteredRows = Array(); //to store the filtered rows
 
-const feedbackSearchFilter = (e) => {    //function to filter the feedback by user input (date, feedback, branch) 
-    const allRows = Array.from(document.querySelectorAll("tr")).filter(i => i.className !== 'headRow'); //select all the table rows and filter out the header
-    const searchInput = e.target.value.toLowerCase();    //get the user input
-
-    if(searchInput.length < 3){
-        allRows.forEach(i => i.style.display = ""); //show all the rows
-    }
-    else{
+    //filtering the search result
+    if(searchVal.length >= 3){  //if the search value is more than 3 characters (can filter)
         allRows.forEach(row => {    //go each row
             let flag = false;
             const cells = Array.from(row.childNodes);
             cells.forEach(cell => {   //go each cell of that row
-                if(cell.innerHTML.toLowerCase().includes(searchInput)){ //if found
+                if(cell.innerHTML.toLowerCase().includes(searchVal)){ //if found
                     flag = true;
                 }
             });
     
-            if(flag === false){
-                row.style.display = "none";
+            if(flag === false){ //result not available in the current checking row
+                row.style.display = "none"; //hide it
             }
             else{
                 row.style.display = "";
+                filteredRows.push(row);
             }
         });       
     }
-}
+    else{   //show all the rows
+        filteredRows = [...allRows];
+    }
 
-const filterRating = (e) => {   //function to filter the feedback by rating
-    const allRows = Array.from(document.querySelectorAll("tr")).filter(i => i.className !== 'headRow'); //select all the table rows and filter out the header
-    const rating = e.target.value;
+    //console.log(filteredRows);
 
-    if(rating === ""){
-        allRows.forEach(i => i.style.display = ""); //show all the rows
+    let temp = null;
+
+    if(filteredRows.length === 0){  //no such result
+        return;
+    }
+    else{   //if there are filtered rows
+        temp = [...filteredRows];
+        filteredRows.length = 0;    //clear the filtered rows array
+    }
+
+    //filtering the branch
+    if(branchVal !== ""){   //if the user wants to filter the branch
+        temp.forEach(i => { //go through search filtered rows
+            if(i.classList.contains(branchVal)){    //found a row that matches the branch
+                i.style.display = "";
+                filteredRows.push(i);   //add the rows to the filtered rows array
+            }
+            else{
+                i.style.display = "none";
+            }
+        });
     }
     else{
-        const hidingRows = allRows.filter(i => !i.classList.contains("Rating" + rating));
-        hidingRows.forEach(i => i.style.display = "none"); //hide the rows that don't match the rating
-    
-        const showingRows = allRows.filter(i => i.classList.contains("Rating" + rating));
-        showingRows.forEach(i => i.style.display = ""); //show the rows that match the rating
+        filteredRows = [...temp];
     }
+
+    //console.log(filteredRows);
+ 
+    //filtering the rating
+    if(filteredRows.length === 0){  // no results
+        return;
+    }
+    else{
+        temp = [...filteredRows];
+        filteredRows.length = 0;
+    }
+
+    if(ratingVal !== ""){   //if the user wants to filter the rating 
+        temp.forEach(i => {
+            if(i.classList.contains("Rating" + ratingVal)){
+                i.style.display = "";
+                filteredRows.push(i);   //add the rows to the filtered rows array
+            }
+            else{
+                i.style.display = "none";
+            }
+        }); 
+    }
+
+    //console.log(filteredRows);
 }
 
 //event listeners
 
-searchBar.addEventListener("keyup", feedbackSearchFilter);    //add event listener to the searchbar
-branchFilter.addEventListener("change", filterBranch);  //add event listener to the branchfilter
-ratingFilter.addEventListener("change", filterRating);  //add event listener to the ratingfilter
+searchBar.addEventListener("keyup", filterFeedback);    //add event listener to the searchbar
+branchFilter.addEventListener("change", filterFeedback);  //add event listener to the branchfilter
+ratingFilter.addEventListener("change", filterFeedback);  //add event listener to the ratingfilter
 
 //data fetch from server
 
@@ -165,7 +194,7 @@ fetch("../../controller/general/our_feedback_controller.php")
         const selectedBranch = localStorage.getItem("feedbackBranch");
         if(selectedBranch !== null){
             const eventObj = {"target" : {"value" : selectedBranch}};
-            filterBranch(eventObj);
+            filterFeedback(eventObj);
             localStorage.removeItem("feedbackBranch");  //remove the item from the local storage
 
             branchFilter.value = selectedBranch;    //set the value to display the correct filter option
