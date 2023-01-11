@@ -19,13 +19,19 @@
             require_once("header.php");
         ?>
         <main>
-            <div class="content-box" style="align-items:center">
-                <div>
-                    Filter By Branch:
-                    <select id="branchFilter">
-                        <option value="">All</option>
-                    </select>
+            <div class="content-box">
+                <div style="display:flex; flex-direction:row; justify-content:space-around">
+                    <div>
+                        <input placeholder="Search a Feedback" id="feedbackSearch">
+                    </div>
+                    <div>
+                        Filter By Branch:
+                        <select id="branchFilter">
+                            <option value="">All</option>
+                        </select>
+                    </div>
                 </div>
+
                 <div id="feedbackTableContainer" style="width:100%">
                     <table style="width:100%">
                         <thead>

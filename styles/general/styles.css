@@ -130,7 +130,7 @@ input,output{
 }
 
 input::placeholder{
-    color:rgb(107, 106, 106);
+    color: aliceblue;
     text-align: center;
 }
 

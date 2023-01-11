@@ -17,6 +17,40 @@ function sortByDate(row1, row2){    //sort feedback rows by dates (rows are tabl
     }
 }
 
+
+const feedbackSearchFilter = (e) => {    //function to filter the feedback by user input (date, feedback, branch) 
+    const allRows = Array.from(document.querySelectorAll("tr")).filter(i => i.className !== 'headRow'); //select all the table rows and filter out the header
+    const searchInput = e.target.value.toLowerCase();    //get the user input
+    if(searchInput.length < 3){
+        allRows.forEach(i => i.style.display = ""); //show all the rows
+        return;
+    }
+    
+
+    allRows.forEach(row => {    //go each row
+        let flag = false;
+        const cells = Array.from(row.childNodes);
+        console.log(row);
+        cells.forEach(cell => {   //go each cell of that row
+            console.log(cell);
+            if(cell.innerHTML.toLowerCase().includes(searchInput)){ //if found
+                flag = true;
+            }
+        });
+
+        if(flag === false){
+            row.style.display = "none";
+        }
+        else{
+            row.style.display = "";
+        }
+    });
+}
+
+const searchBar = document.querySelector("#feedbackSearch");    //searchbar
+
+searchBar.addEventListener("keyup", feedbackSearchFilter);    //add event listener to the searchbar
+
 function filterBranch(e){
     if(e.target.value === ""){
         const allRows = Array.from(document.querySelectorAll("tr")); //select all the table rows
