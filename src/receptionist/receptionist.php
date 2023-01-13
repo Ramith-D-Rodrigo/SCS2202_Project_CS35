@@ -305,10 +305,6 @@ class Receptionist implements JsonSerializable , StaffMember{
 
         array_push($result,$branchLoc,$branchEmail,$numArray,$photoArray);
 
-        if(count($result) === 0){   //couldn't find any branch that provide the searched sport
-            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
-        }
-
         return $result;
     }
 
@@ -322,6 +318,13 @@ class Receptionist implements JsonSerializable , StaffMember{
     public function getAllCourts($branchID,$database) {
         $branch = new Branch($branchID);
         $courtNames = $branch -> getAllCourts($database);
+
+        return $courtNames;
+    }
+
+    public function getAvailableCourts($branchID,$sportID,$database) {
+        $branch = new Branch($branchID);
+        $courtNames = $branch -> getSportCourtNames($sportID, $database);
 
         return $courtNames;
     }
@@ -391,7 +394,7 @@ class Receptionist implements JsonSerializable , StaffMember{
         }
 
     }
-    public function jsonSerialize(){
+    public function jsonSerialize():mixed{
         return [
             'receptionistID' => $this -> receptionistID,
             'firstName' => $this -> firstName,

@@ -228,6 +228,31 @@
             return $courts;
         }
 
+        public function getSportCourtNames($sportID, $database){
+            $sql = sprintf("SELECT `court_name`
+            FROM
+            `sports_court`
+            WHERE
+            `branch_id`
+            LIKE
+            '%s'
+            AND
+            `sport_id`
+            LIKE
+            '%s'",
+            $database -> real_escape_string($this -> branchID),
+            $database -> real_escape_string($sportID));
+
+            $result = $database -> query($sql);
+            $courtNames = [];
+            while($row = $result -> fetch_object()){
+                array_push($courtNames, $row -> court_name);
+                unset($row);
+            }
+            $result -> free_result();
+            return $courtNames;
+        }
+
         public function updateBranchEmail($newEmail,$database) {
             $updateSQL = sprintf("UPDATE `branch` SET `branch_email` = '%s' WHERE `branch`.`branch_id` = '%s'",
             $database -> real_escape_string($newEmail),
@@ -304,14 +329,14 @@
 
         }
 
-        public function jsonSerialize(){
+        public function jsonSerialize():mixed{
             return [
                 'branchID' => $this -> branchID,
                 'city' => $this -> city,
                 'address' => $this -> address,
                 'email' => $this -> email,
-                'manager' => $this -> manager,
-                'receptionist' => $this -> receptionist,
+                // 'manager' => $this -> manager,
+                // 'receptionist' => $this -> receptionist,
                 'opening_time' => $this -> opening_time,
                 'closing_time' => $this -> closing_time,
                 'photos' => $this -> photos
