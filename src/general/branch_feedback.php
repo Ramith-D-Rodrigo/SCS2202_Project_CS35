@@ -52,7 +52,7 @@
 
         }
 
-        public function jsonSerialize(){
+        public function jsonSerialize():mixed{
             return [
                 "feedbackID" => $this -> userfeedback_id,
                 "date" => $this -> date,
