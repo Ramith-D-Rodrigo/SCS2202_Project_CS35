@@ -1,6 +1,7 @@
 <?php
     require_once("../../src/general/actor.php");
     require_once("../../src/general/sport.php");
+    require_once("coaching_session.php");
 class Coach extends Actor implements JsonSerializable{
     private $firstName;
     private $lastName;
@@ -204,10 +205,33 @@ class Coach extends Actor implements JsonSerializable{
 
        $result = $database -> query($sql);
        return $result;
-}
+    }
     public function getSport(){
 
         return $this->sportID;
+    }
+
+    public function getAllSessions(){
+        $sql = sprintf("SELECT session_id, coach_id, court_id FROM coaching_session WHERE coach_id = '%s'",
+        $this -> connection -> real_escape_string($this -> userID));
+
+        $result = $this -> connection -> query($sql);
+
+        if($result == NULL){    //no sessions
+            return NULL;
+        }
+
+        //has sessions
+        $sessionArr = [];   //to store the coaching sessions
+        while($row = $result -> fetch_object()){
+            $tempSession = new Coaching_Session($row -> session_id, $row -> coach_id, $row -> court_id);
+            array_push($sessionArr, $tempSession);
+            unset($tempSession);
+            unset($row);
+        }
+        $result -> free_result();
+        
+        return $sessionArr;
     }
 
     public function addsession($sessionID,$coach_monthly_payment, $startingTime, $endingTime, $no_of_students,$coach_id,$court_id,$day,$payment_amount,$database){
@@ -251,7 +275,7 @@ class Coach extends Actor implements JsonSerializable{
 
     public function getDetails($wantedProperty = ''){
         if($wantedProperty == ''){
-            $sql = sprintf("SELECT * FROM coach WHERE coach_id = '%s'",
+            $sql = sprintf("SELECT `c`.*, `ld`.username, `ld`.email_address FROM coach c INNER JOIN login_details ld ON `ld`.`user_id` = `c`.`coach_id` WHERE coach_id = '%s'",
             $this -> connection -> real_escape_string($this -> userID));
     
             $result = $this -> connection -> query($sql);
@@ -259,12 +283,12 @@ class Coach extends Actor implements JsonSerializable{
             $this -> firstName = $obj -> first_name;
             $this -> lastName = $obj -> last_name;
             $this -> homeAddress = $obj -> home_address;
-            $this -> dateOfBirth = $obj -> birth_day;
+            $this -> dateOfBirth = $obj -> birthday;
             $this -> gender = $obj -> gender;
             $this -> contactNum = $obj -> contact_num;
             $this -> emailAddress = $obj -> email_address;
-            $this -> sportID = $obj -> sport;
             $this -> username = $obj -> username;
+            $this -> sportID = $obj -> sport;
             $this -> profilePic = $obj -> photo;
 
             unset($obj);
@@ -309,6 +333,25 @@ class Coach extends Actor implements JsonSerializable{
         }
         unset($obj);
         return $rating;
+    }
+
+    
+    public function getFeedback(){
+        $sql = sprintf("SELECT `description`, `rating` FROM student_coach_feedback WHERE `coach_id` = '%s'", 
+        $this -> connection -> real_escape_string($this -> userID));
+
+        $result = $this -> connection -> query($sql);
+
+        $feedbackArr = [];
+        if($result !== NULL){   //coach has feedback
+            while($row = $result -> fetch_object()){
+                array_push($feedbackArr, $row);
+                unset($row);
+            }
+        }
+
+        $result -> free_result();
+        return $feedbackArr;
     }
 
     public function jsonSerialize() : mixed{
