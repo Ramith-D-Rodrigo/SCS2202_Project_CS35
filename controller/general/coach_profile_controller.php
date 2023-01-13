@@ -49,10 +49,19 @@
 
     //filtering coach's needed information
     $coachJSON = json_encode($viewingCoach);
-    $coachNeededInfo = json_decode($coachJSON);
-    unset($coachNeededInfo -> homeAddress);
-    unset($coachNeededInfo -> sport);
-    
+    $coachNeededInfo = json_decode($coachJSON, true);
+    unset($coachNeededInfo['homeAddress']);
+    unset($coachNeededInfo['sport']);
+
+    //calculate age
+    $today = new DateTime();
+    $coachBirthday = new DateTime($coachNeededInfo['birthday']);
+
+    $age = ($today -> diff($coachBirthday)) -> y;
+    unset($coachNeededInfo['birthday']);
+    $coachNeededInfo['age'] = $age;
+    unset($today);
+    unset($coachBirthday);
 
     //filtering sport's needed information
     $sportJSON = json_encode($coachSport);
@@ -60,13 +69,13 @@
     unset($sportNeededInfo['description']);
     unset($sportNeededInfo['reservationPrice']);
 
-    $returningJSON = json_encode(array(
+    $returningJSON = array(
         "coachInfo" => $coachNeededInfo,
         "coachRating" => $coachRating,
         "sportInfo" => $sportNeededInfo,
         "coachingSessions" => $coachingSessionsArr,
         "coachFeedback" => $coachFeedback
-    ));
+    );
 
 
     header('Content-Type: application/json');

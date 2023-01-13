@@ -20,8 +20,7 @@
 
         $sport = new Sport();
         $sport -> setID($currCoach -> sport);
-        $sportName = $sport -> getDetails($connection, 'sportName');
-
+        $sportName = $sport -> getDetails($connection, 'sport_name');
         $result[] = array(
             "coachID" => $currCoach -> coach_id,
             "sport" => $sportName,
