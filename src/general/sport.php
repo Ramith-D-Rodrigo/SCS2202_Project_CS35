@@ -18,16 +18,17 @@
             $this -> sportName = $row -> sport_name;
             $this -> description = $row -> description;
             $this -> reservationPrice = $row -> reservation_price;
+            $this -> maxNumberOfStudents = $row -> max_no_of_students;
 
             $result -> free_result();
             
-            if($wantedProperty === 'sportID'){
+            if($wantedProperty === 'sport_id'){
                 return $this -> sportID;
             }
-            else if($wantedProperty === 'sportName'){
+            else if($wantedProperty === 'sport_name'){
                 return $this -> sportName;
             }
-            else if($wantedProperty === 'reservationPrice'){
+            else if($wantedProperty === 'reservation_price'){
                 return $this -> reservationPrice;
             }
             else{
@@ -52,7 +53,8 @@
                 "sportID" => $this -> sportID,
                 "sportName" => $this -> sportName,
                 "description" => $this -> description,
-                "reservationPrice" => $this -> reservationPrice
+                "reservationPrice" => $this -> reservationPrice,
+                "maxNoOfStudents" => $this -> maxNumberOfStudents
             ];
             
         }
