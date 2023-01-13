@@ -323,7 +323,7 @@ class User implements JsonSerializable{
         $loginResult -> free_result();
     }
 
-    public function jsonSerialize(){    //to json encode
+    public function jsonSerialize():mixed{    //to json encode
         return [
             'username' => $this -> username,
             'password' => $this -> password,

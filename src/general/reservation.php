@@ -122,7 +122,7 @@
             unset($resultObj);
             return $this;
         }
-        public function JsonSerialize(){
+        public function JsonSerialize():mixed{
             return [
                 "reservationID" => $this -> reservationID,
                 "date" => $this -> date,

@@ -220,7 +220,7 @@ class Manager implements JsonSerializable , StaffMember{
         return $this;
     }
 
-    public function jsonSerialize(){
+    public function jsonSerialize():mixed{
         return [
             'managerID' => $this -> managerID,
             'firstName' => $this -> firstName,
