@@ -38,6 +38,9 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/user/reservation_history.php'){  //reservation history
                     echo "Reservation History";
                 }
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/coach_profile.php')){  //reservation history
+                    echo "Coach Profile";
+                }
             ?>
         </div>
         <div> <!--- sports complex name -->
