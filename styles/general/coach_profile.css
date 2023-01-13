@@ -6,12 +6,12 @@
 }
 
 .left-field{
-    width: 50%;
-    margin: 10px auto;
+    width: 30%;
+    margin: 10px auto 10px 0;
 }
 
 .right-field{
-    width: 50%;
+    width: 70%;
     margin-right: 10px;
 }
 
@@ -36,4 +36,14 @@
 
 .checked{
     color: gold;
+}
+
+.err-msg{
+    color: red;
+    text-align: center;
+}
+
+.success-msg{
+    color: green;
+    text-align: center;
 }

@@ -96,37 +96,40 @@
                 <div style="text-align:center; margin-bottom: 20px">Request to Join a Session</div>
                 <form>
                     <div class="row-container">
-                        <div class="left-field">
+                        <div class="left-field" style="width:50%">
                             Branch :
                         </div>
-                        <div class="right-field">
+                        <div class="right-field" style="width:50%">
                             <select id="requestingSessionBranch">
                                 <option value="">Select One</option>
                             </select>
                         </div>
                     </div>
                     <div class="row-container">
-                        <div class="left-field">
+                        <div class="left-field" style="width:50%">
                         Coaching Session : 
                         </div>
-                        <div class="right-field" style="display:flex; flex-direction: row; align-items:baseline">
-                            <select>
+                        <div class="right-field" style="display:flex; flex-direction: row; align-items:baseline; width:50%"">
+                            <select id="requestingSession">
                                 <option value="">Please Select a Branch</option>
                             </select>
-                            <div style="margin-left: 10px">Session Fee : </div>
+                            <div style="margin-left: 10px" id="sessionFee">Session Fee : </div>
                         </div> 
                     </div>
                     <div class="row-container">
-                        <div class="left-field">
+                        <div class="left-field" style="width:50%">
                             Any Note / Message :
                         </div>
-                        <div class="right-field">
+                        <div class="right-field" style="width:50%">
                             <textarea ></textarea> 
                         </div>
                     </div>
+                    <div class="err-msg" id="errMsg"></div>
+                    <div class="success-msg" id="successMsg"></div>
+                    <div id="waitMsg"></div>
                     <div class="btn-container">
                         <button type="submit">
-                            <i class="fa fa-paper-plane"></i>
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
                             Send Request
                         </button>
                     </div>

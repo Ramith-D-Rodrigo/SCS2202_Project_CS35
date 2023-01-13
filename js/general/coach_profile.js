@@ -10,6 +10,124 @@ let sessions = [];
 //maximum number of students for the sport
 let maxStudents = 0;
 
+let branchSet = new Set();  //to store the branch names
+let branchSessionMap = new Map();   //to map the branch to the sessions
+
+const sessionBranches = document.querySelector("#sessionBranches"); //branches that the coach conducts the sessions
+const coachingSessions = document.querySelector("#coachingSessions");   //sessions that the coach conducts by branch
+const requestingSessionBranch = document.querySelector("#requestingSessionBranch"); //join request form branch selection
+const requestingSession = document.querySelector("#requestingSession");   //join request form session selection
+
+const sessionInfo = (e) => {    //function to get the session info when a session is selected
+    let sessionID = null;
+    if(e.target.id === "coachingSessions"){    //if the event is triggered from the coach profile container
+        sessionID = coachingSessions.value;   //get the session id
+    }
+    else if(e.target.id === "requestingSession"){  //if the event is triggered from the join request form
+        sessionID = requestingSession.value;   //get the session id
+    }
+
+    sessions.forEach(session => {
+        //selecting the inserting fields
+        const timePeriod = document.querySelector("#timePeriod");
+        const day = document.querySelector("#day");
+        const startingTime = document.querySelector("#startingTime");
+        const endingTime = document.querySelector("#endingTime");
+        const courtName = document.querySelector("#courtName");
+        const noOfStudents = document.querySelector("#noOfStudents");
+        const paymentAmount = document.querySelector("#paymentAmount");
+        
+
+        if(session.sessionID === sessionID){ //if the session is found
+            if(e.target.id === "coachingSessions"){    //if the event is triggered from the coach profile container
+                //insert the session info
+                timePeriod.value = session.timePeriod;
+                day.value = session.day;
+                startingTime.value = session.startingTime;
+                endingTime.value = session.endingTime;
+                courtName.value = session.courtName;
+                noOfStudents.value = session.noOfStudents;
+                paymentAmount.value = session.paymentAmount;
+
+                if(parseInt(session.noOfStudents) >= parseInt(maxStudents)){   //if the session is full
+                    noOfStudents.style.color = "red";
+                    noOfStudents.setAttribute("title", "This Session has Reached the Maximum Number of Students");                
+                }
+            }
+            else if(e.target.id === "requestingSession"){  //if the event is triggered from the join request form
+                const sessionFee = document.querySelector("#sessionFee");
+                const errMsg = document.querySelector("#errMsg");
+                errMsg.innerHTML = "";
+                sessionFee.innerHTML = sessionFee.innerHTML  + session.paymentAmount;
+
+                if(parseInt(session.noOfStudents) >= parseInt(maxStudents)){   //if the session is full
+                    errMsg.innerHTML = "This Session has Reached the Maximum Number of Students";
+                }
+            }
+        }
+        else{
+            //clear the fields
+            if(e.target.id === "coachingSessions"){    //if the event is triggered from the coach profile container  
+                timePeriod.value = "";
+                day.value = "";
+                startingTime.value = "";
+                endingTime.value = "";
+                courtName.value = "";
+                noOfStudents.value = "";
+                paymentAmount.value = "";
+            }
+            else if(e.target.id === "requestingSession"){  //if the event is triggered from the join request form
+                const sessionFee = document.querySelector("#sessionFee");
+                sessionFee.innerHTML = "Session Fee: ";
+                const errMsg = document.querySelector("#errMsg");
+                errMsg.innerHTML = "";
+            }
+        }
+    });
+}
+
+const branchSelected = (e) => { //function to get the sessions when a branch is selected
+    let branch = null;
+    let coachingSessionElement = null;
+    let nextObj;
+    if(e.target.id === "sessionBranches"){  //if the event is triggered from the coach profile container
+        branch = sessionBranches.value;   //get the branch name
+        coachingSessionElement = coachingSessions;
+        nextObj = {
+            target : {
+                id : "coachingSessions"
+            }
+        }
+    }
+    else if(e.target.id === "requestingSessionBranch"){ //if the event is triggered from the join request form
+        branch = requestingSessionBranch.value;   //get the branch name
+        coachingSessionElement = requestingSession;
+        nextObj = {
+            target : {
+                id : "requestingSession"
+            }
+        }
+    }
+    coachingSessionElement.innerHTML = "";    //remove the current sessions
+    if(branch === ""){  //if no branch is selected
+        const defaultOption = document.createElement("option");
+        defaultOption.text = "Please Select a Branch";
+        defaultOption.value = "";
+        coachingSessionElement.appendChild(defaultOption);
+    }
+    else{
+        const sessions = branchSessionMap.get(branch);  //get all the sessions for that branch (an array)
+        for(let i = 0; i < sessions.length; i++){   //add the sessions
+            const option = document.createElement("option");
+            option.text = sessions[i];
+            option.value = sessions[i];
+            coachingSessionElement.appendChild(option);
+        }
+    }
+    //invoke the session info function
+    sessionInfo(nextObj);
+}
+
 
 fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(coachID))
     .then(res => res.json())
@@ -66,6 +184,7 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         rating.style.marginLeft = "10px";
         for(let i = 1; i <= 5; i++){
             const star = document.createElement("i");
+            star.ariaHidden = "true";   //for screen readers
             star.className = "fa fa-star";
             star.style.margin = "0 0.2em";
             star.style.fontSize = "1.5em";
@@ -91,10 +210,6 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         }
 
         //session branches
-        const sessionBranches = document.querySelector("#sessionBranches");
-
-        let branchSet = new Set();
-        let branchSessionMap = new Map();   //to map the branch to the sessions
 
         for(let i = 0; i < data.coachingSessions.length; i++){
             const option1 = document.createElement("option");   //session branches
@@ -128,6 +243,7 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
             for(let j = 1; j <= 5; j++){
                 const star = document.createElement("i");
                 star.className = "fa fa-star";
+                star.ariaHidden = "true";   //for screen readers
                 if(j <= data.coachFeedback[i].rating){
                     star.classList.add("checked");
                 }
@@ -140,18 +256,35 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
 
 
         //join session form
-        const requestingSessionBranch = document.querySelector("#requestingSessionBranch");
 
         //add the branches to the select
         for(let i = 0; i < branchSessionMap.size; i++){
             const option = document.createElement("option");
             option.text = Array.from(branchSessionMap.keys())[i];
-            option.value = branchSessionMap.keys()[i];
+            option.value = Array.from(branchSessionMap.keys())[i];
 
             requestingSessionBranch.appendChild(option);
         }
 
         //create objects for the sessions (need them for event listeners)
+
+        //change time to local
+        const changeToLocalTime = (time) => {
+            //split the time
+            const timeArr = time.split(":");
+            const hours = parseInt(timeArr[0]);
+            const minutes = parseInt(timeArr[1]);
+            const seconds = parseInt(timeArr[2]);
+
+            const date = new Date();
+            date.setHours(hours);
+            date.setMinutes(minutes);
+            date.setSeconds(seconds);
+
+            const localTime = date.toLocaleTimeString();
+            return localTime;
+        }
+
     
         for(let i = 0; i < data.coachingSessions.length; i++){
             const session = {
@@ -159,11 +292,11 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
                 timePeriod: data.coachingSessions[i].timePeriod,
                 noOfStudents: data.coachingSessions[i].noOfStudents,
                 day: data.coachingSessions[i].day,
-                startingTime: data.coachingSessions[i].startingTime,
-                endingTime: data.coachingSessions[i].endingTime,
+                startingTime: changeToLocalTime(data.coachingSessions[i].startingTime),
+                endingTime: changeToLocalTime(data.coachingSessions[i].endingTime),
                 branchName: data.coachingSessions[i].branchName,
                 courtName: data.coachingSessions[i].courtName,
-                paymentAmount: data.coachingSessions[i].paymentAmount,
+                paymentAmount: "Rs. " + data.coachingSessions[i].paymentAmount,
             }
 
             sessions.push(session);
@@ -172,5 +305,8 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         maxStudents = data.sportInfo.maxNoOfStudents;   //maxmimum number of students for the sport
 
         //add the event listeners
+        sessionBranches.addEventListener("change", branchSelected);
+        coachingSessions.addEventListener("change", sessionInfo);
+        requestingSessionBranch.addEventListener("change", branchSelected);
         
     })
