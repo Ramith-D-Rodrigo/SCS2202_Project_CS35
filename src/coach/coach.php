@@ -364,7 +364,10 @@ class Coach extends Actor implements JsonSerializable{
         "gender" => $this -> gender,
         "contactNum" => $this -> contactNum,
         "homeAddress" => $this -> homeAddress,
-        "sport" => $this -> sport
+        "birthday" => $this -> dateOfBirth,
+        "sport" => $this -> sport,
+        "qualifications" => $this -> qualifications,
+        "profilePic" => $this -> profilePic
       ];
     }
 }

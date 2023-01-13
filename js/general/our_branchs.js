@@ -38,7 +38,7 @@ fetch("../../controller/general/our_branches_controller.php")
 
 
             branch_pictures[i] = branches[i].photos;    //add the pictures to the array
-            if(branch_pictures[i] != null){ //has photos
+            if(branch_pictures[i].length !== 0){ //has photos
                 branchImage.src = branches[i].photos[0];    //add the first photo
             }
             else{
@@ -46,7 +46,7 @@ fetch("../../controller/general/our_branches_controller.php")
             }
 
             setInterval(() =>{
-                if(branch_pictures[i] === undefined){  //if there are no photos
+                if(branch_pictures[i] === undefined || branch_pictures[i].length === 0){  //if there are no photos
                     return;
                 }
                 if(branch_pictures[i].length === 1){    //if there is only one image
