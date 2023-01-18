@@ -280,7 +280,12 @@
         $_SESSION['fName'] = $fName;    //for resending the mail
         $_SESSION['lName'] = $lName;
         $_SESSION['email'] = $email;
-        require_once("email_verification_controller.php");
+
+        //generating random code for email verification
+        $mailVerificationCode = rand(100000, 999999);
+        $_SESSION['mailVerificationCode'] = $mailVerificationCode;    //store the verification code in the session
+        $_SESSION['verifyUserID'] = $userid;  //store the userid in the session
+
         $emailResult = Mailer::registerAccount($email, $fName . ' ' . $lName, $mailVerificationCode);    //send the email
         if($emailResult === FALSE){ //check email sent successfully or not
             $returnMsg['RegUnsuccessMsg'] = 'Error Registering the Account, Please check your email address';

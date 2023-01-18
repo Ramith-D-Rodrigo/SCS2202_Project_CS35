@@ -42,9 +42,7 @@
             $lName = $loginUser -> getProfileDetails('last_name');
             $email = $loginActor -> getEmailAddress();  //get the user's email from the actor object
 
-            $mailPrefix1 = uniqid();    //generate unique id
-            $mailPrefix2 = uniqid();    //generate unique id
-            $mailVerificationCode = substr($mailPrefix1, 3, 4) . substr($mailPrefix2, 8, 4);    //concat the two unique ids' substrings to get the verification code
+            $mailVerificationCode = rand(100000, 999999);   //generate a random verification code
 
             $_SESSION['mailVerificationCode'] = $mailVerificationCode;    //store the verification code in the session
             $_SESSION['verifyUserID'] = $loginUser -> getUserID();  //store the userid in the session (userid value is set from includes)

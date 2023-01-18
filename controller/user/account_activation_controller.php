@@ -24,8 +24,10 @@
     $verificationCode = $userInput['verificationCode'];
     $activationType = $userInput['activationType'];
 
-    if($verificationCode !== $mailVerificationCode){    //if the verification code is incorrect
-        require_once('email_verification_controller.php');    //send a new verification code to the user's email
+    if($verificationCode != $mailVerificationCode){    //if the verification code is incorrect
+        //generating random code for email verification
+        $mailVerificationCode = rand(100000, 999999);
+        $_SESSION['mailVerificationCode'] = $mailVerificationCode;    //store the verification code in the session
         $emailResult = '';
         if($activationType === 'registration'){ //registration activation
             $emailResult = Mailer::registerAccount($email, $fName . ' ' . $lName, $mailVerificationCode);    //send the email
