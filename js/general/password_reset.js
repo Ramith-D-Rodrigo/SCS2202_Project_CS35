@@ -76,8 +76,35 @@ form.addEventListener('submit', checkuserInput = (e)=>{
             const checkBtn = document.getElementById('checkBtn'); //check button
             checkBtn.innerHTML = "Verify Code";
             checkBtn.setAttribute('id', 'verifyBtn');
-            //remove onclick event
-            checkBtn.removeAttribute('click');
+
+            //code resend button
+            const resendBtn = document.createElement('button');
+            resendBtn.setAttribute('id', 'resendBtn');
+            resendBtn.innerHTML = "Resend Code";
+
+            //button container
+            const btnContainer = document.getElementById('btnContainer');
+            btnContainer.appendChild(resendBtn);
+
+            //add event listener to resend button
+            resendBtn.addEventListener('click', resendCode = (e)=>{
+                e.preventDefault();
+                fetch('../../controller/general/resend_code_controller.php', { //check the user input
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(res => res.json())
+                .then(data => {
+                    if(data.errMsg === undefined){  //if no error
+                        successMsgBox.innerHTML = data.successMsg;
+                    }
+                    else{
+                        errMsgBox.innerHTML = data.errMsg;
+                    }
+                })
+            });
 
             //change the form's submit event listener
             form.removeEventListener('submit', checkuserInput);
@@ -102,6 +129,10 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                         const codeInputDiv = document.getElementById('inputDiv');
                         codeInputDiv.remove();
 
+                        //remove resend button
+                        const resendBtn = document.getElementById('resendBtn');
+                        resendBtn.remove();
+                        
                         //new password input field
                         const newPasswordDiv = document.createElement('div');
                         newPasswordDiv.innerHTML = "Enter your new password :";

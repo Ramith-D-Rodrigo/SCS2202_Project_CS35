@@ -31,7 +31,7 @@
                     </div>
                     <div class='success-msg' id='successmsgbox'>
                     </div>
-                    <div class="btn-container">
+                    <div class="btn-container" id="btnContainer">
                         <button type="submit" 
                             id="checkBtn"  
                             name= "checkSubmitBtn"
