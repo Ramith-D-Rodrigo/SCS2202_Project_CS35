@@ -97,7 +97,7 @@ function removeMedicalConcern(e){   //remove medical concern when button is pres
     }
     parent.remove();
     if(medicalCount < 5){   //can add more
-        medicalConcernBtn.style.display = '';
+        concernAddBtn.style.display = '';
     }
     //console.log(medicalinputID);
 }
@@ -183,9 +183,9 @@ function addEmergencyContact(e){
 
     /*     const breakpoint1 = document.createElement("br");
     const breakpoint2 = document.createElement("br"); */
-    const nameField = document.createTextNode("Name : ");
-    const relationshipField = document.createTextNode("Relationship :");
-    const contactNoField = document.createTextNode("Contact Number :");
+    const nameField = document.createTextNode("Name");
+    const relationshipField = document.createTextNode("Relationship");
+    const contactNoField = document.createTextNode("Contact Number");
     
     for(let info = 1; info <= 3; info++){   //info = 1 -> name, info = 2 -> relationship, info = 3 -> contact number
         const row = document.createElement("div");
@@ -358,9 +358,28 @@ function validateChanges(e){
         errMsg.innerHTML.replace("Duplicate Medical Concern Details<br>", '');  //Remove Contact Details Error Message
     }
 
+    if(flag === false){ //Has invalid inputs
+        console.log("Form is invalid");
+        return false;
+    }
+    else{   //valid to submit the data
+        console.log("Form is valid");
+        return true;
+    }
+}
+
+const  credentialForm = document.getElementById("credentialForm");
+
+function validateEmailPasswordForm(event){
     //passwords matching or not
     const password = document.getElementById("password");
     const passwordConfirm = document.getElementById("confirmPassword");
+
+    if(!credentialForm.reportValidity()){
+        return false;
+    }
+
+    let flag = true;
 
     if(password.value !== "" || passwordConfirm.value !== ""){  //the user is changing the password
         if(password.value !== passwordConfirm.value){
@@ -389,7 +408,6 @@ function validateChanges(e){
         }
     }
 
-
     if(flag === false){ //Has invalid inputs
         console.log("Form is invalid");
         return false;
@@ -399,6 +417,30 @@ function validateChanges(e){
         return true;
     }
 }
+
+credentialForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let newValues = []; //new values to be updated
+    const formData = new FormData(credentialForm);
+
+
+
+    if(formData.get("newPassword") === ""){    //if the user is not changing the password
+        formData.delete("newPassword");
+        formData.delete("newPasswordConfirm");
+    }
+    if(formData.get("email") === ""){   //if the user is not changing the email
+        formData.delete("email");
+    }
+    const arr = Array.from(formData.entries());
+    console.log(arr);
+    if(arr.length === 0){  //if the user is not changing anything
+        errMsg.innerHTML = "You have not changed anything";
+        return;
+    }
+
+
+});
 
 editForm.addEventListener('submit', (e) => {
     let newValues = []; //new values to be updated
@@ -447,21 +489,6 @@ editForm.addEventListener('submit', (e) => {
             }
             continue;
         }
-        else if(key === "newPassword"){ //if the user is changing the password
-            if(value === ""){   //if the user is not changing the password
-                continue;
-            }
-        }
-        else if(key === "newPasswordConfirm"){   //if the user is changing the password
-            if(value === ""){   //if the user is not changing the password
-                continue;
-            }
-        }
-        else if(key === 'email'){   //if the user is changing the email
-            if(value === ""){   //if the user is not changing the email
-                continue;
-            }
-        }
 
         if(currValues[key] !== value){  //if the value has changed
             newValues[key] = value; //add the new value to the newValues object
@@ -483,6 +510,10 @@ editForm.addEventListener('submit', (e) => {
         }
     }
     else{
+        if(newMedicalConcerns.length === 0){    //if the user has removed all the medical concerns
+            console.log("removed all");
+            newValues['medicalAllRemoved'] = true;
+        }
         medFlag = true;
     }
     
@@ -513,6 +544,12 @@ editForm.addEventListener('submit', (e) => {
             newValues['relationship' + (i+1)] = newEmergencyDetails[i].relationship;
             newValues['contact' + (i+1)] = newEmergencyDetails[i].contact_num;
         }
+    }
+
+    console.log(newValues);
+    if(Object.keys(newValues).length === 0){ //nothing changed
+        errMsg.innerHTML = "You haven't changed Anything";
+        return;
     }
     
     const sendingData  = new FormData();
