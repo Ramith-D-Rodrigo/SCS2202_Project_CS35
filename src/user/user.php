@@ -413,6 +413,35 @@ class User extends Actor implements JsonSerializable{
         $loginResult -> free_result();
     }
 
+    public function isStudent(){    //check if the user is a student
+        $sql = sprintf("SELECT `stu_id` FROM `student` WHERE  `stu_id` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+        $result = $this -> connection -> query($sql);
+        if($result -> num_rows === 0){
+            return false;
+        }
+        return true;
+    }
+
+    public function setDetailsByProperty($propertyName, $propertyValue){   //set the details of the user
+        $this -> {$propertyName} = $propertyValue;
+    }
+
+    public function editProfile($editingValArr){
+        $sql = "UPDATE `user` SET";
+        foreach($editingValArr as $key => $value){  //set the details of the user
+            $this -> {$key} = $value;
+            if($key === 'medicalConcerns' || $key === 'dependents'){
+                continue;
+            }
+            $sql .= sprintf(" `%s` = '%s',", $key, $this -> connection -> real_escape_string($value));
+        }
+
+        $sql = substr($sql, 0, -1); //remove the last comma
+        $sql .= sprintf(" WHERE `user_id` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+        echo $sql;
+
+    }
+
     public function jsonSerialize() : mixed{    //to json encode
         return [
             'username' => $this -> username,
