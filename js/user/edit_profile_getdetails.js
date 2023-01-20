@@ -1,9 +1,6 @@
-const profileInfoTable = document.getElementById("profileInfoTable");
-
 //editable fields
 
 let currValues = [];    //array of current values of the fields (associative array)
-let newValues = [];
 
 //editable fields
 const editableFields = ['contactNo', 'dependents', 'height', 'weight', 'homeAddress', 'medicalConcerns', 'profilePic', 'email'];
@@ -92,7 +89,6 @@ function removeMedicalConcern(e){   //remove medical concern when button is pres
     }
     medicalCount--;
     const parent = e.currentTarget.parentElement;  //list element
-    console.log(e.currentTarget);
     const freedID = parent.id.slice(-1);    //get the removing number
     console.log(freedID);
 
@@ -104,7 +100,6 @@ function removeMedicalConcern(e){   //remove medical concern when button is pres
         medicalConcernBtn.style.display = '';
     }
     //console.log(medicalinputID);
-    console.log(currValues.medicalConcerns);
 }
 
 
@@ -246,30 +241,302 @@ function pictureSize(size){ //max size 2mb
 const editForm = document.querySelector("#editForm");   //edit form
 
 const submitBtn = document.querySelector("#submitBtn");
-submitBtn.addEventListener('click', validateChanges);
+
+const errMsg = document.querySelector("#errMsg");
+const successMsg = document.querySelector("#successMsg");
 
 function validateChanges(e){
-    if(editForm.checkValidity() === false){ //if the form is not valid   
-        console.log("Form is not valid");
+    if(editForm.reportValidity() === false){ //if the form is not valid   
+        errMsg.innerHTML = "Please Enter Correct Information<br>";
         return false;
     }
-    console.log("Form is valid");
-    return true;
+    errMsg.innerHTML = "";  //reset the error message
+    //the form is valid from html perspective
+    //check if the user has changed anything
+
+    let flag = true;   //if the user has changed anything
+    const uploadedPic = document.getElementById("profilePicUploadInput");
+    if(uploadedPic.value !== ""){   //has uploaded a file
+        if(!pictureSize(uploadedPic.files[0].size)){   //image too big
+            errMsg.innerHTML = errMsg.innerHTML + "Uploaded Image is Too Big<br>";
+            flag = false;  
+        }
+        else{
+            errMsg.innerHTML.replace("Uploaded Image is Too Big<br>", "");
+        }
+
+        if(uploadedPic.files[0].type !== 'image/png' && uploadedPic.files[0].type !== 'image/jpeg' && uploadedPic.files[0].type !== 'image/jpg'){
+            errMsg.innerHTML = errMsg.innerHTML + "Uploaded File is Not Supported. Check the File Type<br>";
+            flag = false;  
+        }
+        else{
+            errMsg.innerHTML.replace("Uploaded File is Not Supported. Check the File Type<br>", "");
+        }
+    }
+
+
+//have to check input values validity (similary)
+    const emergencyDetails = document.getElementById("emergencyDetails");
+    const emergencyDetailsChildren = emergencyDetails.children;
+    
+    let contactNum = [];    //contact number
+    let relationship = [];  //relationship
+    let names = [];         //name
+
+    //emergency contact details
+
+    //emergencyDetailsChildren -> the children of the div container that has all the emergency contact details
+    //each children is a div that contains 3 rows (row container)
+    //each row has 2 children (fields -> left and right (both are divs))
+    //each field has 1 element ( we need the right fields children element for input value)
+
+    //div container -> emgcontact children -> rows -> fields -> field's children
+    for(i = 0; i < emergencyDetailsChildren.length; i++){
+        names[i] = emergencyDetailsChildren[i].children[0].children[1].children[0].value.toLowerCase();
+        relationship[i] = emergencyDetailsChildren[i].children[1].children[1].children[0].value.toLowerCase();
+        contactNum[i] = emergencyDetailsChildren[i].children[2].children[1].children[0].value; 
+    }
+
+    const usercontact = document.getElementById('usercontact').value;   //registering user contact details
+    const user = document.getElementById('nameField').innerHTML.toLowerCase(); //registering user's name
+
+    contactNum.push(usercontact);
+    names.push(user);
+    //removing empty fields
+    contactNum = contactNum.filter(i => i !== '');   
+    relationship = relationship.filter(i => i !== '');   
+    names = names.filter(i => i !== ''); 
+
+    if(new Set(contactNum).size !== contactNum.length){ //check for duplicate contact numbers
+        errMsg.innerHTML = errMsg.innerHTML + "Duplicate Contact Number Details<br>";
+        flag = false;  
+    }
+    else{
+        errMsg.innerHTML.replace("Duplicate Contact Number Details<br>", '');  //Remove Contact Details Error Message
+    }
+
+    if(new Set(relationship).size !== relationship.length){ //check for duplicate relationships
+        errMsg.innerHTML = errMsg.innerHTML + "Duplicate Relationship Details<br>";
+        flag = false;  
+    }
+    else{
+        errMsg.innerHTML.replace("Duplicate Relationship Details<br>", '');  //Remove relationship Error Message
+    }
+
+    if(new Set(names).size !== names.length){ //check for duplicate names
+        errMsg.innerHTML = errMsg.innerHTML + "Duplicate Emergency Contact Detail Names<br>";
+        flag = false;  
+    }
+    else{
+        errMsg.innerHTML.replace("Duplicate Emergency Contact Detail Names<br>", '');  //Remove duplicate name Error Message
+    }
+
+    
+    const medicalConcernDiv =  document.getElementById("medicalConcernsField");
+    const medicalArr = Array.from(medicalConcernDiv.children[0].children);  //create an array for the elements inside (list elements) the medical concern div
+    let concerns = []
+
+    medicalArr.forEach((val, i, arr)=> {    //traverse the array
+        if(val.tagName.toLowerCase() === 'li'){    //find the child list elements
+            if(val.childNodes[0].nodeType === 3){  //check if the child is a text node
+                concerns.push(val.childNodes[0].nodeValue.toLowerCase());    //push the text node value
+            }
+            else{
+                concerns.push(val.children.item(0).value.toLowerCase());  //push the input value 
+            }
+        }
+    })
+
+    concerns = concerns.filter(i => i !== '');
+    
+
+    if(new Set(concerns).size !== concerns.length){ //check for duplicate contact numbers
+        errMsg.innerHTML = errMsg.innerHTML + "Duplicate Medical Concern Details<br>";
+        flag = false;
+    }
+    else{
+        errMsg.innerHTML.replace("Duplicate Medical Concern Details<br>", '');  //Remove Contact Details Error Message
+    }
+
+    //passwords matching or not
+    const password = document.getElementById("password");
+    const passwordConfirm = document.getElementById("confirmPassword");
+
+    if(password.value !== "" || passwordConfirm.value !== ""){  //the user is changing the password
+        if(password.value !== passwordConfirm.value){
+            errMsg.innerHTML = errMsg.innerHTML + "Passwords do not match<br>";
+            flag = false;
+        }
+        else{
+            errMsg.innerHTML.replace("Passwords do not match<br>", "");
+        }
+    }
+
+    const email = document.getElementById("emailAddress");  //email address check
+    if(email.value !== ""){
+        if(!email.value.includes("@") || !email.value.includes(".")){
+            errMsg.innerHTML = errMsg.innerHTML + "Invalid Email Address<br>";
+            flag = false;
+        }
+        else if(email.value === currValues.email){
+            errMsg.innerHTML.replace("Invalid Email Address<br>", "");
+            errMsg.innerHTML = errMsg.innerHTML + "You have entered the previous Email as the new Email<br>";
+        }
+
+        else{
+            errMsg.innerHTML.replace("Invalid Email Address<br>", "");
+            errMsg.innerHTML.replace("You have entered the previous Email as the new Email<br>", "");
+        }
+    }
+
+
+    if(flag === false){ //Has invalid inputs
+        console.log("Form is invalid");
+        return false;
+    }
+    else{   //valid to submit the data
+        console.log("Form is valid");
+        return true;
+    }
 }
 
 editForm.addEventListener('submit', (e) => {
+    let newValues = []; //new values to be updated
     e.preventDefault();
-    console.log("Form is v2alid");
+    console.log("Form is valid");
+    const formData = new FormData(editForm);
+
+    let newMedicalConcerns = [];
+    let newEmergencyDetails = [];
+
+    let tempDependent = {
+        name: "",
+        relationship: "",
+        contact_num: ""
+    }
+
+    for([key,value] of formData){
+        if(key === "profilePic"){
+            const photoSize = formData.get("profilePic").size;
+
+            if(photoSize !== 0){    //if the user is changing the profile picture
+                newValues["profilePic"] = value;
+            }
+            continue;
+
+        }
+        else if(key.includes("medical_concern")){
+            newMedicalConcerns.push(value);
+            continue;
+        }
+        else if(key.includes("name")){
+            tempDependent.name = value;
+            continue;
+        }
+        else if(key.includes("relationship")){
+            tempDependent.relationship = value;
+            continue;
+        }
+        else if(key.includes("contact") && key !== "contactNo"){  //not the user's contact number
+            tempDependent.contact_num = value;
+            newEmergencyDetails.push(tempDependent);
+            tempDependent = {
+                name: "",
+                relationship: "",
+                contact_num: ""
+            }
+            continue;
+        }
+        else if(key === "newPassword"){ //if the user is changing the password
+            if(value === ""){   //if the user is not changing the password
+                continue;
+            }
+        }
+        else if(key === "newPasswordConfirm"){   //if the user is changing the password
+            if(value === ""){   //if the user is not changing the password
+                continue;
+            }
+        }
+        else if(key === 'email'){   //if the user is changing the email
+            if(value === ""){   //if the user is not changing the email
+                continue;
+            }
+        }
+
+        if(currValues[key] !== value){  //if the value has changed
+            newValues[key] = value; //add the new value to the newValues object
+        }
+    }
+
+    //check for new medical concerns
+    const prevMedicalConcerns = currValues.medicalConcerns.map(i => i.medical_concern);
+
+    let medFlag = false;
+    
+    if(newMedicalConcerns.length === prevMedicalConcerns.length){   //if the number of medical concerns is the same
+        //check whether the medical concerns are the same
+        for(let i = 0; i < newMedicalConcerns.length; i++){
+            if(newMedicalConcerns[i] !== prevMedicalConcerns[i]){    //if the medical concerns are not the same
+                medFlag = true;
+                break;
+            }
+        }
+    }
+    else{
+        medFlag = true;
+    }
+    
+    if(medFlag === true){   //if the medical concerns are not the same
+        for(let i = 0; i < newMedicalConcerns.length; i++){
+            newValues['medical_concern' + (i+1)] = newMedicalConcerns[i];
+        }
+    }
+
+    //check for new emergency details
+    let depFlag = false;
+    if(newEmergencyDetails.length === currValues.dependents.length){   //if the number of emergency details is the same
+        //check whether the emergency details are the same
+        for(let i = 0; i < newEmergencyDetails.length; i++){
+            if(newEmergencyDetails[i].name !== currValues.dependents[i].name || newEmergencyDetails[i].relationship !== currValues.dependents[i].relationship || newEmergencyDetails[i].contact_num !== currValues.dependents[i].contact_num){
+                depFlag = true;
+                break;
+            }
+        }
+    }
+    else{
+        depFlag = true;
+    }
+
+    if(depFlag === true){   //if the emergency details are not the same
+        for(let i = 0; i < newEmergencyDetails.length; i++){
+            newValues['name' + (i+1)] = newEmergencyDetails[i].name;
+            newValues['relationship' + (i+1)] = newEmergencyDetails[i].relationship;
+            newValues['contact' + (i+1)] = newEmergencyDetails[i].contact_num;
+        }
+    }
+    
+    const sendingData  = new FormData();
+    for(let key in newValues){  //add the new values to the sendingData object
+        sendingData.append(key, newValues[key]);
+    }
+
+    //send the data to the server
+    fetch("/controller/user/edit_profile_change_controller.php", {
+        method: "POST",
+        body: sendingData
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data);
+    });
 });
-
-
 
 
 
 fetch("/controller/user/edit_profile_entry_controller.php") //get the details of the user from the server
     .then((res) => res.json())
     .then((data) => {
-        console.log(data);
+        //console.log(data);
 
         //store the current values of the fields
         //get keys and values of data
@@ -328,8 +595,13 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
 
             data['medicalConcerns'].forEach((concern, index) => {
                 const concernItem = document.createElement("li");
+                concernInput = document.createElement("input");
+                concernInput.type = "text";
+                concernInput.value = concern.medical_concern;
+                concernInput.name = "medical_concern" + (index+1);
                 concernItem.id = "medicalConcern" + (index+1);
-                concernItem.innerHTML = concern.medical_concern;
+
+                concernItem.appendChild(concernInput);
 
                 const removeBtn = document.createElement("button");
                 removeBtn.addEventListener("click", removeMedicalConcern);
@@ -347,7 +619,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         for(let i = medicalCount + 1; i <= 5 ; i++){   //remaining medical concerns
             medicalinputID.push(i);
         }
-        console.log(medicalinputID);
+
         //set the profile picture
         const currProfilePicField = document.getElementById("profilePicField");
         const profilePicImg = document.createElement("img");

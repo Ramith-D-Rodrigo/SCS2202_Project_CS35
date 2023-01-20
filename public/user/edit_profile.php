@@ -27,7 +27,7 @@
                                 <i class="fas fa-image" style="font-size:1.5rem; margin-right:0.25rem"></i>
                                 <i class="fas fa-upload" style="font-size:1.5rem; margin-left:0.25rem"></i>
                                 <input type="file" 
-                                name="profilePicUpload" 
+                                name="profilePic" 
                                 id="profilePicUploadInput" 
                                 accept=".jpg, .jpeg, .png" 
                                 title="Maximum File Size 2MB. Only Accepts JPG, PNG"
@@ -56,7 +56,7 @@
                         <div class="left-field">
                             Contact Number
                         </div>
-                        <input class="right-field" type="text" name="contactNum"
+                        <input class="right-field" type="text" name="contactNo"
                                 pattern="[0-9]{10,11}" 
                                 id="usercontact"
                                 required>
@@ -115,7 +115,7 @@
                             New Email Address
                         </div>
                         <input type="email" 
-                                name="emailAddress"
+                                name="email"
                                 id="emailAddress"
                                 class="right-field">
                     </div>
@@ -133,7 +133,7 @@
                             New Password
                         </div>
                         <div class="right-field">
-                            <input type="password" name="newPassword"><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
+                            <input type="password" name="newPassword" id="password" pattern="(?=.*\d)(?=.*[A-Z]).{8,}" minlength="8"><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
                         </div>
                     </div>
 
@@ -142,7 +142,7 @@
                             Confirm New Password
                         </div>
                         <div class="right-field">
-                            <input type="password" name="newPasswordConfirm"><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
+                            <input type="password" name="newPasswordConfirm" id="confirmPassword"><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
                         </div>
                     </div>
 
@@ -156,8 +156,9 @@
                         <div class="left-field" id="medicalConcernsField" style="width:100%"></div>
                     </div>
 
+                    <div style="text-align:center">Emergency Contact Details</div>
+
                     <div id="emergencyDetails">
-                        <div style="text-align:center">Emergency Contact Details</div>
                         <div id="emergencydetail1">
                             <div class="row-container">
                                 <div class="left-field">
@@ -198,9 +199,10 @@
                         </div>
                     </div>
                     <div style="text-align:center">Want to Add More ? <button id="emergencyDetailsBtn"><i class="fa-solid fa-circle-plus"></i></button></div>
-
+                    <div class="err-msg" id="errMsg"></div>
+                    <div class="sucess-msg" id="successMsg"></div>
                     <div class="btn-container">
-                        <button type="submit" id="submitBtn">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
+                        <button type="submit" id="submitBtn" onclick="return validateChanges(event)">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
                     </div>
                 </form>                
             </div>
