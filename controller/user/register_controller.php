@@ -24,6 +24,8 @@
 
     $validationErrFlag = false;
 
+    $allowedExtensions = ['jpg', 'jpeg', 'png'];
+
     $returnMsg = [];    //to echo the json response
 
     foreach($inputFields as $i){    //validation
@@ -81,7 +83,7 @@
             }
             else if($i === 'height' || $i === 'weight'){
                 if($_POST[$i] !== ''){  //has entered some value
-                    if(!preg_match("/^[1-9][0-9]*(?:\.[1-9][0-9]*)*$/", $_POST[$i])){   //doesn't match the pattern
+                    if(!preg_match("/^\d*\.?\d*$/", $_POST[$i])){   //doesn't match the pattern
                         $returnMsg['RegUnsuccessMsg'] = 'Height/Weight Error';
                         $validationErrFlag = true;
                         break;
@@ -250,10 +252,24 @@
     echo $_FILES['user_pic']['tmp_name']; */
 
     if(!empty($_FILES['user_pic']['name'])){    //user has uploaded a picture
+        //check image size
+        if($_FILES['user_pic']['size'] > 2097152){ //image size is greater than 1MB
+            $returnMsg['RegUnsuccessMsg'] = 'Image size is too large';
+            echo json_encode($returnMsg);
+            exit();
+        }
         $profilePicFlag = true;
         $pic = $_FILES['user_pic']['tmp_name'];   //the image
         $picName = $_FILES['user_pic']['name'];
         $picExtension = explode('.', $picName);
+
+        //check image extension
+        if(!in_array(strtolower(end($picExtension)), $allowedExtensions)){
+            $returnMsg['RegUnsuccessMsg'] = 'Invalid image type';
+            echo json_encode($returnMsg);
+            exit();
+        }
+
         $picExtension = strtolower(end($picExtension)); //get image extension
 
         $picNewName = uniqid($username);    //create a new name for the image
