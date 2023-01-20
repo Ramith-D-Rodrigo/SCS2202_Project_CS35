@@ -20,7 +20,7 @@
 
     $onlyNumbersFields = ['contactNum', 'emgcontactNum1', 'emgcontactNum2', 'emgcontactNum3', 'height', 'weight']; */
 
-    $relationshipFields = ["Father", "Mother", "Sibling 1", "Sibling 2", "Friend 1", "Friend 2", "Partner"];
+    $relationshipFields = ["Father", "Mother", "Sibling 1", "Sibling 2", "Friend 1", "Friend 2", "Partner", "Other"];
 
     $validationErrFlag = false;
 

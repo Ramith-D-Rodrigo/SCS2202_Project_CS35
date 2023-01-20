@@ -197,6 +197,7 @@
                                             <option value="Friend 1">Friend 1</option>
                                             <option value="Friend 2">Friend 2</option>
                                             <option value="Partner">Partner</option>
+                                            <option value="Other">Other</option>
                                         </select>
                                     </div>
                                 </div>

@@ -121,7 +121,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     inputRelationship.setAttribute('name', 'relationship' + currID);
     inputRelationship.setAttribute('required', '');
 
-    const relationshipOptions = ["Mother", "Father", "Sibling 1", "Sibling 2", "Friend 1", "Friend 2", "Partner"];
+    const relationshipOptions = ["Mother", "Father", "Sibling 1", "Sibling 2", "Friend 1", "Friend 2", "Partner", "Other"];
 
     const initialOption = document.createElement("option");
     initialOption.setAttribute('value','');
@@ -129,7 +129,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     inputRelationship.appendChild(initialOption);
 
 
-    for(i = 0; i < 7; i++){
+    for(i = 0; i < relationshipOptions.length; i++){
         const optionField = document.createElement("option");
         optionField.setAttribute('value',relationshipOptions[i]);
         optionField.innerHTML = relationshipOptions[i];
