@@ -46,19 +46,19 @@ class Coach{
 
     private function create_login_details_entry($database){   //first we createe the log in details entry
         $result = $database -> query(sprintf("INSERT INTO `login_details`
-        (`user_id`, 
+        (`userID`, 
         `username`, 
         `password`,
-        `email_address`, 
-        `is_active`,
-        `user_role`) 
+        `emailAddress`, 
+        `isActive`,
+        `userRole`) 
         VALUES 
         ('%s','%s','%s','%s','%s','coach')",
         $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> password),
         $database -> real_escape_string($this -> emailAddress),
-        $database -> real_escape_string($this -> isactive),
+        $database -> real_escape_string($this -> isActive),
     )); 
 
 /*         if ($result === TRUE) {
@@ -72,16 +72,16 @@ class Coach{
 
     private function create_coach_entry($database){  //Create entry in coach table
        $result = $database -> query(sprintf("INSERT INTO `coach`
-        (`coach_id`, 
-        `first_name`, 
-        `last_name`,
-        `home_address`, 
+        (`coachID`, 
+        `firstName`, 
+        `lastName`,
+        `homeAddress`, 
         `birthday`, 
         `gender`, 
-        `contact_num`, 
+        `contactNum`, 
         `photo`,
          `sport`,
-          `register_date`)
+          `registerDate`)
            VALUES 
            ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
             $database -> real_escape_string($this -> userID),
@@ -111,7 +111,7 @@ class Coach{
         if(count($this -> qualifications) != 0){   //has qualifications
             foreach($this -> qualifications as $i){
                 $result = $database -> query(sprintf("INSERT INTO `coach_qualification`
-                (`coach_id`, 
+                (`coachID`, 
                 `qualification`) 
                 VALUES 
                 ('%s','%s')", 
@@ -155,7 +155,7 @@ class Coach{
         $sql = sprintf("SELECT `user_id`, 
         `username`, 
         `password`, 
-        `user_role` 
+        `userRole` 
         FROM `login_details`  
         WHERE `username` = '%s'", 
         $database -> real_escape_string($username));
@@ -179,7 +179,7 @@ class Coach{
         //get the profile pic from the datbase and store in the object's attribute
         $sqlPic = sprintf("SELECT `photo` , `sport` 
         FROM `coach` 
-        WHERE `coach_id` = '%s'",
+        WHERE `coachID` = '%s'",
         $database -> real_escape_string ($this -> userID));
 
         $result = $database -> query($sqlPic);
@@ -187,31 +187,31 @@ class Coach{
         $this -> profilePic =  $resultRow -> photo;
         $this -> sport = ( $resultRow -> sport);
        
-        return ["Successfully Logged In", $rows -> user_role, $rows -> username];  //return the message and role
+        return ["Successfully Logged In", $rows -> userRole, $rows -> username];  //return the message and role
 
     }    
 
     public function getBranchesWithCourts($database){
          $sql = sprintf("SELECT  
-        `sc`.`court_id`, 
-        `sc`.`court_name`, 
-        `b`.`branch_id`, 
+        `sc`.`courtID`, 
+        `sc`.`courtName`, 
+        `b`.`branchID`, 
         `b`.`city`, 
-        `b`.`opening_time`, 
-        `b`.`closing_time`, 
-        `s`.`sport_name`,
-        `s`.`min_coaching_session_price`,
-        `s`.`reservation_price` ,
-        `s`.`max_no_of_students`  
+        `b`.`openingTime`, 
+        `b`.`closingTime`, 
+        `s`.`sportName`,
+        `s`.`minCoachingSessionPrice`,
+        `s`.`reservationPrice` ,
+        `s`.`maxNoOfStudents`  
         FROM `sports_court` `sc`
         INNER JOIN  `branch` `b`
-        ON `b`.`branch_id` = `sc`.`branch_id`
+        ON `b`.`branchID` = `sc`.`branchID`
         INNER JOIN `sport` `s` 
-        ON `s`.`sport_id` = `sc`.`sport_id`
+        ON `s`.`sportID` = `sc`.`sportID`
 
-        WHERE `s`.`sport_id` = '%s'
-        AND `b`.`request_status`= 'a' 
-        AND `sc`.`request_status`='a'",
+        WHERE `s`.`sportID` = '%s'
+        AND `b`.`requestStatus`= 'a' 
+        AND `sc`.`requestStatus`='a'",
         $database -> real_escape_string($this -> sport));
 
         $result = $database -> query($sql);
@@ -221,22 +221,22 @@ class Coach{
     }
 
     public function getSessionDetail($database){
-        $sql = sprintf("SELECT `cs`.`session_id`, 
-       `cs`.`starting_time`, 
-       `cs`.`ending_time`,
+        $sql = sprintf("SELECT `cs`.`sessionID`, 
+       `cs`.`startingTime`, 
+       `cs`.`endingTime`,
        `cs`.`day`, 
-       `cs`.`coach_monthly_payment`, 
-       `cs`.`no_of_students`,
-       `sc`.`court_name`, 
+       `cs`.`coachMonthlyPayment`, 
+       `cs`.`noOfStudents`,
+       `sc`.`courtName`, 
        `b`.`city` 
        FROM `coaching_session` `cs`
        INNER JOIN  `sports_court` `sc`
-       ON `cs`.`court_id` = `sc`.`court_id`
+       ON `cs`.`courtID` = `sc`.`courtID`
        INNER JOIN `branch` `b` 
-       ON `sc`.`branch_id` = `b`.`branch_id`
+       ON `sc`.`branchID` = `b`.`branchID`
        INNER JOIN `coach` `c` 
-       ON `c`.`coach_id` = `cs`.`coach_id`
-       WHERE `c`.`coach_id` = '%s'",
+       ON `c`.`coachID` = `cs`.`coachID`
+       WHERE `c`.`coachID` = '%s'",
        $database -> real_escape_string($this ->userID));
 
        $result = $database -> query($sql);
@@ -260,27 +260,27 @@ class Coach{
         $timePeriod ->setTime($hours, $minutes);
 
         $sql = sprintf("INSERT INTO `coaching_session` 
-        (`session_id`, 
-        `coach_monthly_payment`, 
-        `time_period`, 
-        `no_of_students`, 
-        `coach_id`, 
-        `court_id`, 
+        (`sessionID`, 
+        `coachMonthlyPayment`, 
+        `timePeriod`, 
+        `noOfStudents`, 
+        `coachID`, 
+        `courtID`, 
         `day`, 
-        `starting_time`, 
-        `ending_time`, 
-        `payment_amount`) 
+        `startingTime`, 
+        `endingTime`, 
+        `paymentAmount`) 
         VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
         $database -> real_escape_string($sessionID),
-        $database -> real_escape_string($coach_monthly_payment),
+        $database -> real_escape_string($coachMonthlyPayment),
         $database -> real_escape_string($timePeriod -> format("H:i:s")),
-        $database -> real_escape_string($no_of_students),
-        $database -> real_escape_string($coach_id),
-        $database -> real_escape_string($court_id),
+        $database -> real_escape_string($noOfStudents),
+        $database -> real_escape_string($coachID),
+        $database -> real_escape_string($courtID),
         $database -> real_escape_string($day),
         $database -> real_escape_string($startingTime),
         $database -> real_escape_string($endingTime),
-        $database -> real_escape_string($payment_amount));
+        $database -> real_escape_string($paymentAmount));
 
         $result = $database -> query($sql);
         return $result;
@@ -303,7 +303,7 @@ class Coach{
 
     //     $result = $database -> query($sql);
     //     return $result;
-    }
+    
 }
 
 

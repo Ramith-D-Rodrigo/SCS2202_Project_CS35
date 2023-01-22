@@ -25,9 +25,9 @@ while($row = $result->fetch_object()){
      $branch_info = [];
     
      $branch_info["city"] = $row->city;
-     $branch_info["opening_time"] = $row->opening_time;
-     $branch_info["closing_time"] = $row->closing_time;
-     $branch_info["id"] = $row->branch_id;
+     $branch_info["opening_time"] = $row->openingTime;
+     $branch_info["closing_time"] = $row->closingTime;
+     $branch_info["id"] = $row->branchID;
 
     //  array_push($branches,$branch_info);
 

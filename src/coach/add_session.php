@@ -4,25 +4,25 @@
     class Session{
    
     public function addsessiondetails($database){   //Joining sport, sport court, branch,
-        $sql = sprintf("SELECT `b`.`request_status` AS branch_status,
-        `sc`.`request_status` AS `court_status`, 
-        `sc`.`court_id`, 
-        `sc`.`court_name`, 
-        `b`.`branch_id`, 
+        $sql = sprintf("SELECT `b`.`requestStatus` AS branch_status,
+        `sc`.`requestStatus` AS `court_status`, 
+        `sc`.`courtID`, 
+        `sc`.`courtName`, 
+        `b`.`branchId`, 
         `b`.`city`, 
-        `b`.`opening_time`, 
-        `b`.`closing_time`, 
-        `s`.`sport_name`,
-        `s`.`min_coaching_session_price` 
-        FROM `sports_court` `sc`
+        `b`.`openingTime`, 
+        `b`.`closingTime`, 
+        `s`.`sportName`,
+        `s`.`minCoachingSessionPrice` 
+        FROM `sportsCourt` `sc`
         INNER JOIN  `branch` `b`
-        ON `b`.`branch_id` = `sc`.`branch_id`
+        ON `b`.`branchID` = `sc`.`branchID`
         INNER JOIN `sport` `s` 
-        ON `s`.`sport_id` = `sc`.`sport_id`
+        ON `s`.`sportID` = `sc`.`sportID`
 
-        WHERE `s`.`sport_id` = '%s'
-        AND `b`.`requrst_status`= `a` ,
-        AND `sc`.`request_status=`a`",
+        WHERE `s`.`sportID` = '%s'
+        AND `b`.`requestStatus`= `a` ,
+        AND `sc`.`requestStatus=`a`",
         $database -> real_escape_string($this -> userID));
 
         $result = $database -> query($sql);
