@@ -110,7 +110,16 @@
 
         }
         else if($result[1] === 'receptionist'){ //receptionist login
-
+            $loginRcep = new Receptionist($loginActor);
+            $result = $loginRcep -> login($username, $password);
+            $_SESSION['userid'] = $loginRcep -> getUserID();
+            $_SESSION['city'] = $result[0];
+            $_SESSION['branchID'] = $result[1];
+            $_SESSION['username'] = $username;  //store the username in the session
+            $loginRcep -> closeConnection();
+            unset($loginRcep);
+            $_SESSION['userrole'] = 'receptionist';
+            $returnJSON['userrole'] = 'receptionist';
         }
         else{
             $returnJSON['errMsg'] = "Error Logging in. Please try again later";
