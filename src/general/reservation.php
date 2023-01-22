@@ -23,7 +23,7 @@
             $prefix2 = substr($this -> userID, 0, 3);
 
             $this -> reservationID = uniqid($prefix1.$prefix2);
-            
+
             $this -> date = $date;
             $this -> startingTime = $st;
             $this -> endingTime = $et;
@@ -41,17 +41,17 @@
         private function create_online_reservation_entry($database){
             //echo"<br>";
             $sql = sprintf("INSERT INTO `reservation`
-            (`reservationID`, 
-            `date`, 
-            `startingTime`, 
-            `endingTime`, 
-            `noOfPeople`, 
+            (`reservationID`,
+            `date`,
+            `startingTime`,
+            `endingTime`,
+            `noOfPeople`,
             `paymentAmount`,
-            `sportCourt`, 
+            `sportCourt`,
             `userID`,
-            `status`) 
-            VALUES 
-            ('%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
+            `status`)
+            VALUES
+            ('%s','%s','%s','%s','%s','%s','%s','%s','%s')",
             $database -> real_escape_string($this -> reservationID),
             $database -> real_escape_string($this -> date),
             $database -> real_escape_string($this -> startingTime),
@@ -73,9 +73,9 @@
 
         public function cancelReservation($user_id, $database){
 
-            $sql = sprintf("UPDATE `reservation` 
+            $sql = sprintf("UPDATE `reservation`
             SET `status`='Cancelled'
-            WHERE `reservationID` = '%s' 
+            WHERE `reservationID` = '%s'
             AND `userID` = '%s'",
             $database -> real_escape_string($this -> reservationID),
             $database -> real_escape_string($user_id));
@@ -87,9 +87,9 @@
 
         public function getDetails($database){
             $sql = sprintf("SELECT `r`.*,
-            `b`.`city` AS `branch`, 
+            `b`.`city` AS `branch`,
             `s`.`sportName`,
-            `sc`.`courtName`  
+            `sc`.`courtName`
             FROM `reservation` `r`
             INNER JOIN `sports_court` `sc`
             ON `sc`.`courtID` = `r`.`sportCourt`
@@ -108,7 +108,7 @@
             foreach($resultObj as $key => $value){
                 $this -> $key = $value;
             }
-            
+
 /*             $this -> date = $resultObj -> date;
             $this -> startingTime = $resultObj -> startingTime;
             $this -> endingTime = $resultObj -> endingTime;
