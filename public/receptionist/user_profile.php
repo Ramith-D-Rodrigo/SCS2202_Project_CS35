@@ -70,7 +70,7 @@
                 <br>
                 <div class="row-container">
                     <div class="left-side"> Home Address: </div>
-                    <div class="right-side"> <textarea readonly> <?php echo $userDetails->home_address ?> </textarea></div>
+                    <div class="right-side"> <textarea rows='1' readonly> <?php echo $userDetails->home_address ?> </textarea> </div>
                 </div>
                 <br>
                 <div class="row-container">

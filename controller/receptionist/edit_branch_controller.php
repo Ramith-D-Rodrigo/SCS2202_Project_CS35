@@ -10,14 +10,13 @@
     
     $result = $recep -> editBranch($_SESSION['userid'], $_SESSION['branchid'],$connection);  //search the branch to edit
 
-    if(isset($result['errMsg'])){   //no branch was found
-        $_SESSION['searchErrorMsg'] = $result['errMsg'];
+    if(count($result) === 0){   //couldn't find any branch that provide the searched sport
+        array_push($result,['errMsg' => "Sorry, Cannot find what you are looking For"]);
     }
-    else{
-        unset($_SESSION['searchErrorMsg']);
-        $_SESSION['searchResult'] = $result;
-    }
+    
+    header('Content-Type: application/json;');    //because we are sending json
+    echo json_encode($result);
     //print_r($_SESSION['searchResult']);
-    header("Location: /public/receptionist/edit_branch.php");
+    // header("Location: /public/receptionist/edit_branch.php");
     $connection -> close();
 ?>

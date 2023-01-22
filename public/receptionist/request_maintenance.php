@@ -1,18 +1,9 @@
 <?php
     session_start();
-    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
+    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {   //check whether receptionist is logged in correctly
         header("Location: /public/receptionist/receptionist_login.php");
         exit();
     }
-    // if(!(isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is not logged in
-    //     header("Location: /index.php");
-    //     exit();
-    // }
-
-    // if($_SESSION['userrole'] !== 'receptionist'){   //not an user (might be another actor)
-    //     header("Location: /index.php");
-    //     exit();
-    // }
 ?>
 
 <!DOCTYPE html>
@@ -35,81 +26,31 @@
             <form action="/controller/receptionist/req_maintenance_controller.php" method="post" id="reqForm">
                 <div class="row-container">
                     <div class="left-side"> Maintenance Reason : </div>
-                    <!-- <textarea 
-                    rows='1' 
-                    name='reason' 
-                    id='reason' 
-                    required > </textarea>     -->
-                    <div class="right-side"> <input 
-                    name="reason" 
-                    id="reason" 
-                    required
-                    value=<?php if(isset($_SESSION['reason'])) echo htmlspecialchars($_SESSION['reason'], ENT_QUOTES)?>> </input> </div>
-                </div>  
-            <?php
-                if(isset($_SESSION['searchErrorMsg'])){
-            ?>      <div class="err-msg">
-                    <?php 
-                        echo $_SESSION['searchErrorMsg'];
-                        unset($_SESSION['searchErrorMsg']);
-                    ?>
+                    <div class="right-side">
+                        <!-- <textarea 
+                        required></textarea> -->
+                         
+                        <input
+                        required 
+                        name='reason' 
+                        id='reason'
+                        value=<?php if(isset($_SESSION['reason'])) echo htmlspecialchars($_SESSION['reason'], ENT_QUOTES)?>>    
                     </div>
-            <?php
-                }
-                else if(isset($_SESSION['sportResult'])){
-            ?>
+                </div>  
                 <div class="row-container">
                     <div class="left-side"> Sport Name :  </div>
-                    <div class="right-side"> <select name="sportName" id="sportName">
-                    <?php 
-                    $sportArray =  $_SESSION['sportResult'];
-                    foreach($sportArray as $sport) {
-                        ?> 
-                         <option id="sportOption" value="<?php echo $sport -> sport_name; ?>">                            
-                        <?php echo $sport -> sport_name; ?>                           
-                        </option>  
-                    <?php
-                    }
-                    ?>
-                        <option id="sportAllOption"  value="ALL">ALL</option> 
-                    </select> 
+                    <div class="right-side">
+                        <select required name="sportName" id="sportName">  
+                        </select>
                     </div>
                 </div> 
-                    <?php
-                }
-                if(isset($_SESSION['searchErrorMsg'])){
-                    ?>      
-                    <div class="err-msg">
-                    <?php 
-                        echo $_SESSION['searchErrorMsg'];
-                        unset($_SESSION['searchErrorMsg']);
-                    ?>
-                    </div>
-            <?php
-                }
-                else if(isset($_SESSION['courtResult'])){
-            ?>
-                    <div class="row-container">
-                        <div class="left-side"> Sport Court Name :  </div>
-                        <div class="right-side"> <select name="courtName" id="courtName">
-                        <?php 
-                        $courtArray =  $_SESSION['courtResult'];
-                        foreach($courtArray as $court) {
-                            ?> 
-                            <option id="courtOption" value="<?php echo $court; ?>">                            
-                            <?php echo $court; ?>                           
-                            </option>
-                            
-                        <?php
-                        }
-                        ?>
-                            <option id="courtAllOption" value="ALL">ALL</option>
-                        </select> </div> 
-                    </div>
-                    <?php
-                }
-                    ?> 
-                          
+                <div class="row-container">
+                    <div class="left-side"> Sport Court Name :  </div>
+                    <div class="right-side"> 
+                        <select required name="courtName" id="courtName">
+                        </select> 
+                    </div> 
+                </div>     
                 <div class="row-container">
                     <div class="left-side"> Starting Date : </div>
                     <div class="right-side"> <input type="date"
@@ -153,8 +94,6 @@
                             echo $_SESSION['RequestsuccessMsg'];
                             //echo '<br> You will be Redirected to the Dashboard. Please Wait';
                             unset($_SESSION['RequestsuccessMsg']);
-                            unset($_SESSION['courtResult']);
-                            unset($_SESSION['sportResult']);
                             //header_remove();
                             //header("Refresh: 3; URL =/public/receptionist/receptionist_dashboard.php");  //redirect to dashboard
                         }
@@ -172,6 +111,7 @@
         <?php
             require_once("../general/footer.php");
         ?>
+        <script src="/js/receptionist/maintenance_entry_results.js"></script>
         <script src="/js/receptionist/maintenance_validation.js"></script>
     </body>
 
