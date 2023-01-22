@@ -38,9 +38,9 @@ class Receptionist implements JsonSerializable , StaffMember{
     public function getDetails($database){
         $sql = sprintf("SELECT * FROM `staff` 
         WHERE 
-        `staff_id` = '%s'
+        `staffID` = '%s'
         AND
-        `staff_role` = 'receptionist'",
+        `staffRole` = 'receptionist'",
         $database -> real_escape_string($this -> receptionistID));
 
         $result = $database -> query($sql);
@@ -50,16 +50,16 @@ class Receptionist implements JsonSerializable , StaffMember{
             return FALSE;
         }
 
-        $this -> setDetails(fName: $row -> first_name, 
-            lName: $row -> last_name, 
-            contactNo: $row -> contact_number, 
-            dob: $row -> date_of_birth,
-            brID: $row -> branch_id,
+        $this -> setDetails(fName: $row -> firstName, 
+            lName: $row -> lastName, 
+            contactNo: $row -> contactNum, 
+            dob: $row -> dateOfBirth,
+            brID: $row -> branchID,
             gender: $row -> gender);
 
-        $this -> joinDate = $row -> join_date;
-        $this -> leaveDate = $row -> leave_date;
-        $this -> staffRole = $row -> staff_role;
+        $this -> joinDate = $row -> joinDate;
+        $this -> leaveDate = $row -> leaveDate;
+        $this -> staffRole = $row -> staffRole;
         
         $result -> free_result();
         unset($row);
@@ -72,12 +72,12 @@ class Receptionist implements JsonSerializable , StaffMember{
 
     private function create_login_details_entry($database){   //enter details to the login_details table
         $result = $database -> query(sprintf("INSERT INTO `login_details`
-        (`user_id`,
+        (`userID`,
         `username`,
-        `email_address`,
+        `emailAddress`,
         `password`,
-        `user_role`,
-        `is_active`)
+        `userRole`,
+        `isActive`)
         VALUES
         ('%s','%s','%s','%s','receptionist',1)",
         $database -> real_escape_string($this -> receptionistID),
@@ -97,16 +97,16 @@ class Receptionist implements JsonSerializable , StaffMember{
     private function create_staff_entry($database){  //enter details to the staff table
 
         $result = $database -> query(sprintf("INSERT INTO `staff`
-        (`staff_id`,
-        `contact_number`,
+        (`staffID`,
+        `contactNum`,
         `gender`,
-        `date_of_birth`,
-        `first_name`,
-        `last_name`,
-        `join_date`,
-        `leave_date`,
-        `branch_id`,
-        `staff_role`)
+        `dateOfBirth`,
+        `firstName`,
+        `lastName`,
+        `joinDate`,
+        `leaveDate`,
+        `branchID`,
+        `staffRole`)
         VALUES
         ('%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), '%s','%s')",
         $database -> real_escape_string($this -> receptionistID),
@@ -124,7 +124,7 @@ class Receptionist implements JsonSerializable , StaffMember{
     }
 
     private function create_receptionist_entry($database) {
-        $sql = sprintf("INSERT INTO `receptionist` (`receptionist_id`)
+        $sql = sprintf("INSERT INTO `receptionist` (`receptionistID`)
         VALUES ('%s')",
         $database -> real_escape_string($this -> receptionistID));
 
@@ -146,10 +146,10 @@ class Receptionist implements JsonSerializable , StaffMember{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT `user_id`,
+        $sql = sprintf("SELECT `userID`,
         `username`,
         `password`,
-        `user_role`
+        `userRole`
         FROM `login_details`
         WHERE `username` = '%s'",
         $database -> real_escape_string($username));
@@ -168,11 +168,11 @@ class Receptionist implements JsonSerializable , StaffMember{
         }
 
         //setting user data for session
-        $this -> receptionistID = $rows -> user_id;
+        $this -> receptionistID = $rows -> userID;
 
-        $getBranch = sprintf("SELECT `branch_id` AS brid
+        $getBranch = sprintf("SELECT `branchID` AS brid
         FROM `staff`
-        WHERE `staff_id` = '%s'",
+        WHERE `staffID` = '%s'",
         $database -> real_escape_string($this -> receptionistID));
 
         $brResult = $database -> query($getBranch);
@@ -182,25 +182,25 @@ class Receptionist implements JsonSerializable , StaffMember{
 
         $getBrName = sprintf("SELECT `city`
         FROM `branch`
-        WHERE `branch_id` = '%s'",
+        WHERE `branchID` = '%s'",
         $database -> real_escape_string($this -> branchID));
 
         $brNameResult = $database -> query($getBrName);
 
         $branchName = $brNameResult -> fetch_object();   //get the branch_city
 
-        return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details
+        return ["Successfully Logged In", $rows -> userRole, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details
     }
 
     public function branchMaintenance($reason,$startDate,$endDate,$brID,$stfID,$database) {
         $branchQuery = sprintf("INSERT INTO `branch_maintenance`
-        (`branch_id`,
-        `starting_date`,
-        `ending_date`,
+        (`branchID`,
+        `startingDate`,
+        `endingDate`,
         `status`,
         `message`,
         `decision`,
-        `requested_receptionist`) VALUES
+        `requestedReceptionist`) VALUES
         ('%s','%s','%s','pending','%s','p','%s')",
         $database -> real_escape_string($brID),
         $database -> real_escape_string($startDate),
@@ -214,32 +214,32 @@ class Receptionist implements JsonSerializable , StaffMember{
     }
     public function reqMaintenance($reason,$sportName,$courtName,$startDate,$endDate,$stfID,$database) {
 
-        $crtID = sprintf("SELECT `sports_court`.`court_id` AS court_id
+        $crtID = sprintf("SELECT `sports_court`.`courtID` AS court_id
         from `sports_court` INNER JOIN
         `sport` ON
-        `sports_court`.`sport_id` = `sport`.`sport_id` INNER JOIN
+        `sports_court`.`sportID` = `sport`.`sportID` INNER JOIN
         `staff` ON
-        `sports_court`.`branch_id` = `staff`.`branch_id`
-        WHERE `staff`.`staff_id` = '%s'
-        AND `sports_court`.`court_name` = '%s'
-        AND `sport`.`sport_name`= '%s'
-        AND `sports_court`.`request_status`='a'",
+        `sports_court`.`branchID` = `staff`.`branchID`
+        WHERE `staff`.`staffID` = '%s'
+        AND `sports_court`.`courtName` = '%s'
+        AND `sport`.`sportName`= '%s'
+        AND `sports_court`.`requestStatus`='a'",
         $database -> real_escape_string($stfID),
         $database -> real_escape_string($courtName),
         $database -> real_escape_string($sportName));
 
         $crtIDRes = $database -> query($crtID);
         $crtIDResult = $crtIDRes -> fetch_object();
-        $courtID = $crtIDResult -> court_id;             //get the court id
+        $courtID = $crtIDResult -> courtID;             //get the court id
 
         $courtQuery = sprintf("INSERT INTO `court_maintenance`
-        (`court_id`,
-        `starting_date`,
-        `ending_date`,
+        (`courtID`,
+        `startingDate`,
+        `endingDate`,
         `status`,
         `message`,
         `decision`,
-        `requested_receptionist`) VALUES
+        `requestedReceptionist`) VALUES
         ('%s','%s','%s','pending','%s','p','%s')",
         $database -> real_escape_string($courtID),
         $database -> real_escape_string($startDate),
@@ -260,10 +260,10 @@ class Receptionist implements JsonSerializable , StaffMember{
     public function editBranch($staffID,$branchID,$database) {
 
         $branchSql = sprintf("SELECT DISTINCT `branch`.`city` AS location,
-        `branch`.`branch_email` AS email
+        `branch`.`branchEmail` AS email
         from `branch` INNER JOIN `staff` ON
-        `branch`.`branch_id` = `staff`.`branch_id`
-        WHERE `staff`.`branch_id` = '%s'",
+        `branch`.`branchID` = `staff`.`branchID`
+        WHERE `staff`.`branchID` = '%s'",
         $database -> real_escape_string($branchID));
 
         $branchResult = $database -> query($branchSql);   //get the branch results
@@ -273,9 +273,9 @@ class Receptionist implements JsonSerializable , StaffMember{
         $branchLoc = $row -> location;
         $branchEmail = $row -> email;
 
-        $branchNum = sprintf("SELECT DISTINCT `contact_number` AS contact_number
+        $branchNum = sprintf("SELECT DISTINCT `contactNum` AS contact_number
         from `staff`
-        WHERE `staff`.`branch_id` = '%s' AND `staff`.`leave_date` is NULL",
+        WHERE `staff`.`branchID` = '%s' AND `staff`.`leaveDate` is NULL",
         $database -> real_escape_string($branchID));
 
         $numResult = $database -> query($branchNum);   //get the branch contact numbers
@@ -283,13 +283,13 @@ class Receptionist implements JsonSerializable , StaffMember{
 
         $numArray = [];
         while($row = $numResult -> fetch_object()){   //get the branch numbers one by one
-            $number = $row -> contact_number;
+            $number = $row -> contactNum;
             array_push($numArray,$number);
         }
 
         $branchPhotos = sprintf("SELECT  `photo`
         from `branch_photo`
-        WHERE `branch_id` = '%s'",
+        WHERE `branchID` = '%s'",
         $database -> real_escape_string($branchID));
 
         $photoResult = $database -> query($branchPhotos);   //get the branch photos
@@ -330,18 +330,18 @@ class Receptionist implements JsonSerializable , StaffMember{
     }
 
     public function getUserProfiles($database) {
-        $userProResult = $database -> query("SELECT `first_name`,`last_name`,`contact_num`,`profile_photo` FROM `user`");
+        $userProResult = $database -> query("SELECT `firstName`,`lastName`,`contactNum`,`profilePhoto` FROM `user`");
         $profileResult = [];
         while($row = $userProResult->fetch_object()){   //get profiles one by one
-            array_push($profileResult,['fName' => $row->first_name,'lName' => $row ->last_name, 'contactN' => $row -> contact_num, 'profile' => $row->profile_photo]);
+            array_push($profileResult,['fName' => $row->firstName,'lName' => $row ->lastName, 'contactN' => $row -> contactNum, 'profile' => $row->profilePhoto]);
         }
 
         return $profileResult;
     }
 
     public function getWantedUserProfile($fName,$lName,$contactN,$database) {
-        $findUser = sprintf("SELECT * FROM `user` WHERE `first_name` = '%s'
-        AND `last_name` = '%s' AND `contact_num` = '%s'",
+        $findUser = sprintf("SELECT * FROM `user` WHERE `firstName` = '%s'
+        AND `lastName` = '%s' AND `contactNum` = '%s'",
         $database -> real_escape_string($fName),
         $database -> real_escape_string($lName),
         $database -> real_escape_string($contactN));
@@ -349,14 +349,14 @@ class Receptionist implements JsonSerializable , StaffMember{
         $user = $database -> query($findUser) -> fetch_Object() ;  //get the user id of the particular user
         // $user = new User('uid:$userID');
         // $user = $user -> getProfileDetails($database);
-        $medicalConcernsSql = sprintf("SELECT `medical_concern` FROM `user_medical_concern` WHERE `user_id` = '%s'",
-        $database -> real_escape_string($user -> user_id)); //medical concerns
+        $medicalConcernsSql = sprintf("SELECT `medicalConcern` FROM `user_medical_concern` WHERE `userID` = '%s'",
+        $database -> real_escape_string($user -> userID)); //medical concerns
 
         $medicalConcernResult = $database -> query($medicalConcernsSql);
         $medicalConcernsArr = $medicalConcernResult -> fetch_all(MYSQLI_ASSOC);
 
-        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contact_num` FROM `user_dependent` WHERE `owner_id` = '%s'",
-        $database -> real_escape_string($user -> user_id)); //user dependents
+        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contactNum` FROM `user_dependent` WHERE `ownerID` = '%s'",
+        $database -> real_escape_string($user -> userID)); //user dependents
 
         $dependentResult = $database -> query($dependentsSql);
         $dependentArr = $dependentResult -> fetch_all(MYSQLI_ASSOC);
@@ -375,7 +375,7 @@ class Receptionist implements JsonSerializable , StaffMember{
     }
 
     public function updateContactNumber($recepID,$number,$database){
-        $updateSQL = sprintf("UPDATE `staff` SET `contact_number` = '%s' WHERE `staff`.`staff_id` = '%s'",
+        $updateSQL = sprintf("UPDATE `staff` SET `contactNum` = '%s' WHERE `staff`.`staffID` = '%s'",
         $database -> real_escape_string($number),
         $database -> real_escape_string($recepID));
 
