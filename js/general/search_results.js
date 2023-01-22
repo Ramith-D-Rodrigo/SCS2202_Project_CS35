@@ -102,7 +102,7 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                     }
                     //decimal values for the rating
                     if(branches[i].rating % 1 !== 0 && j === Math.ceil(branches[i].rating)){
-                        star.className = "fas fa-star-half-o checked";
+                        star.className = "fa fa-star-half-o checked";
                     }
                     rating.appendChild(star);
                 }

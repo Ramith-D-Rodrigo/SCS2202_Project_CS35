@@ -17,7 +17,7 @@
 
         public function getSchedule($database){ //get the reservation schedule of a certain court
             $sql = sprintf("SELECT * FROM `reservation` 
-            WHERE `sport_court` 
+            WHERE `sportCourt` 
             LIKE '%s'
             ORDER BY `date`",
             $database -> real_escape_string($this -> courtID));
