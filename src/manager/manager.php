@@ -14,6 +14,7 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     private $gender;
     private $branchID;
     private $staffRole;
+    private $staffID;
 
     public function __construct($actor = null){
         if($actor !== null){
@@ -27,6 +28,7 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
 
     public function setDetails($fName='', $lName='', $email='', $contactNo='', $dob='', $gender='', $uid='', $username='', $password='', $brID = ''){
         $this -> userID = $uid;
+        $this -> staffID = $uid;
         $this -> firstName = $fName;
         $this -> lastName = $lName;
         $this -> emailAddress = $email;
@@ -47,12 +49,12 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
 
     private function create_login_details_entry($database){   //enter details to the login_details table
         $result = $database -> query(sprintf("INSERT INTO `login_details`
-        (`user_id`, 
+        (`userID`, 
         `username`,
-        `email_address`, 
+        `emailAddress`, 
         `password`, 
-        `user_role`,
-        `is_active`) 
+        `userRole`,
+        `isActive`) 
         VALUES 
         ('%s','%s','%s','%s','manager',1)",
         $database -> real_escape_string($this -> userID),
@@ -72,16 +74,16 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     private function create_staff_entry($database){  //enter details to the staff table
 
         $result = $database -> query(sprintf("INSERT INTO `staff`
-        (`staff_id`,   
-        `contact_number`, 
+        (`staffID`,   
+        `contactNum`, 
         `gender`, 
-        `date_of_birth`,
-        `first_name`, 
-        `last_name`, 
-        `join_date`, 
-        `leave_date`, 
-        `branch_id`,
-        `staff_role`) 
+        `dateOfBirth`,
+        `firstName`, 
+        `lastName`, 
+        `joinDate`, 
+        `leaveDate`, 
+        `branchID`,
+        `staffRole`) 
         VALUES 
         ('%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), '%s', '%s')",
         $database -> real_escape_string($this -> userID),
@@ -99,7 +101,7 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     }
 
     private function create_manager_entry($database) {
-        $result = $database->query(sprintf("INSERT INTO `manager` (`manager_id`) VALUES ('%s')",
+        $result = $database->query(sprintf("INSERT INTO `manager` (`managerID`) VALUES ('%s')",
         $database -> real_escape_string($this -> userID)));
 
         return $result;
@@ -118,9 +120,9 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     }
 
     public function login($username, $password){
-        $getBranch = sprintf("SELECT `branch_id` AS brid  
+        $getBranch = sprintf("SELECT `branchID` AS brid  
         FROM `staff`  
-        WHERE `staff_id` = '%s'", 
+        WHERE `staffID` = '%s'", 
         $this -> connection -> real_escape_string($this -> userID));
 
         $brResult = $this -> connection -> query($getBranch);
@@ -130,7 +132,7 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
 
         $getBrName = sprintf("SELECT `city`  
         FROM `branch`  
-        WHERE `branch_id` = '%s'", 
+        WHERE `branchID` = '%s'", 
         $this -> connection -> real_escape_string($this -> branchID));
 
         $brNameResult = $this -> connection -> query($getBrName);
@@ -140,14 +142,14 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
         return [$branchName -> city, $this -> branchID];  //return the message and other important details
     }
     public function getSportID($sportName, $database){
-        $sportSql = sprintf("SELECT `sport_id`
+        $sportSql = sprintf("SELECT `sportID`
         FROM `sport` 
-        WHERE `sport_name` = '%s'", //to escape % in sprintf, we need to add % again
+        WHERE `sportName` = '%s'", //to escape % in sprintf, we need to add % again
         $database -> real_escape_string($sportName));
 
         $sportResult = $database -> query($sportSql);
         $sportR = mysqli_fetch_assoc($sportResult);
-        return  $sportR['sport_id'];  //get the sports results
+        return  $sportR['sportID'];  //get the sports results
 
         if($sportResult -> num_rows === 0){ //no such sport found
             return ['errMsg' => "Sorry, Cannot find what you are looking For"];
@@ -155,7 +157,7 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     }
 
     public function getBranchID( $database, $branch){
-        $sportSql = sprintf("SELECT `branch_id`
+        $sportSql = sprintf("SELECT `branchID`
         FROM `branch` 
         WHERE `city` = '%s'",
         $database -> real_escape_string($branch)); //to escape % in sprintf, we need to add % again
@@ -163,7 +165,7 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
 
         $sportResult = $database -> query($sportSql);
         $sportR = mysqli_fetch_assoc($sportResult);
-        return  $sportR['branch_id'];  //get the sports results
+        return  $sportR['branchID'];  //get the sports results
 
         if($sportResult -> num_rows === 0){ //no such sport found
             return ['errMsg' => "Sorry, Cannot find what you are looking For"];
@@ -174,9 +176,9 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     public function getDetails($database){
         $sql = sprintf("SELECT * FROM `staff` 
         WHERE 
-        `staff_id` = '%s'
+        `staffID` = '%s'
         AND
-        `staff_role` = 'manager'",
+        `staffRole` = 'manager'",
         $database -> real_escape_string($this -> userID));
 
         $result = $database -> query($sql);
@@ -185,16 +187,16 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
         if($row === NULL){
             return FALSE;
         }
-        $this -> setDetails(fName: $row -> first_name, 
-            lName: $row -> last_name, 
-            contactNo: $row -> contact_number, 
-            dob: $row -> date_of_birth,
-            brID: $row -> branch_id,
+        $this -> setDetails(fName: $row -> firstName, 
+            lName: $row -> lastName, 
+            contactNo: $row -> contactNum, 
+            dob: $row -> dateOfBirth,
+            brID: $row -> branchID,
             gender: $row -> gender);
 
-        $this -> joinDate = $row -> join_date;
-        $this -> leaveDate = $row -> leave_date;
-        $this -> staffRole = $row -> staff_role;
+        $this -> joinDate = $row -> joinDate;
+        $this -> leaveDate = $row -> leaveDate;
+        $this -> staffRole = $row -> staffRole;
 
         
         $result -> free_result();

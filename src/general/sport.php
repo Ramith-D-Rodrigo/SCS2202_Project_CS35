@@ -5,30 +5,35 @@
         private $description;
         private $reservationPrice;
         private $minCoachingSessionPrice;
-        private $maxNumberOfStudents;
+        private $maxNoOfStudents;
 
         public function getDetails($database, $wantedProperty = ''){
             $sql = sprintf("SELECT * FROM `sport` 
-            WHERE `sport_id`
+            WHERE `sportID`
             LIKE '%s'", $database -> real_escape_string($this -> sportID));
             $result = $database -> query($sql);
 
             $row = $result -> fetch_object();
 
-            $this -> sportName = $row -> sport_name;
+            //using foreach to set the object properties
+            foreach($row as $key => $value){
+                $this -> $key = $value;
+            }
+
+/*             $this -> sportName = $row -> sportName;
             $this -> description = $row -> description;
-            $this -> reservationPrice = $row -> reservation_price;
-            $this -> maxNumberOfStudents = $row -> max_no_of_students;
+            $this -> reservationPrice = $row -> reservationPrice;
+            $this -> manNoOfStudents = $row -> manNoOfStudents; */
 
             $result -> free_result();
             
-            if($wantedProperty === 'sport_id'){
+            if($wantedProperty === 'sportID'){
                 return $this -> sportID;
             }
-            else if($wantedProperty === 'sport_name'){
+            else if($wantedProperty === 'sportName'){
                 return $this -> sportName;
             }
-            else if($wantedProperty === 'reservation_price'){
+            else if($wantedProperty === 'reservationPrice'){
                 return $this -> reservationPrice;
             }
             else{
@@ -40,9 +45,9 @@
             $this -> sportID = $id;
         }
 
-        public function getSportID($spName,$database) {
-            $sql = sprintf("SELECT `sport_id` FROM `sport` 
-            WHERE `sport_name`
+        public function getSportID($spName, $database) {
+            $sql = sprintf("SELECT `sportID` FROM `sport` 
+            WHERE `sportName`
             LIKE '%s'", $database -> real_escape_string($spName));
             $result = $database -> query($sql);
             return $result;
@@ -54,7 +59,7 @@
                 "sportName" => $this -> sportName,
                 "description" => $this -> description,
                 "reservationPrice" => $this -> reservationPrice,
-                "maxNoOfStudents" => $this -> maxNumberOfStudents
+                "maxNoOfStudents" => $this -> maxNoOfStudents
             ];
             
         }
