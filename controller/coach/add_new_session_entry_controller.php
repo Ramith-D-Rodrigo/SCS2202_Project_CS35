@@ -10,6 +10,8 @@
  $coach -> setDetails(sport:$coachsport);
 
  $result = $coach -> getBranchesWithCourts($connection);
+ print_r($result);
+ die();
 
  $branches = [];
  
@@ -18,8 +20,8 @@ while($row = $result->fetch_object()){
     // print_r($row);
     $court_info = [];
     
-         $court_info["id"] = $row->court_id;
-         $court_info["name"] = $row->court_name;
+         $court_info["id"] = $row->courtID;
+         $court_info["name"] = $row->courtName;
 
          
      $branch_info = [];
@@ -43,17 +45,17 @@ while($row = $result->fetch_object()){
 
     if(!isset($_SESSION["min_coaching_session_price"])){
 
-        $_SESSION["min_coaching_session_price"] = $row->min_coaching_session_price;
+        $_SESSION["min_coaching_session_price"] = $row->minCoachingSessionPrice;
     }
 
     if(!isset($_SESSION["reservation_price"])){
 
-        $_SESSION["reservation_price"] = $row->reservation_price;
+        $_SESSION["reservation_price"] = $row->reservationPrice;
     }
 
     if(!isset($_SESSION["max_no_of_students"])){
 
-        $_SESSION["max_no_of_students"] = $row->max_no_of_students;
+        $_SESSION["max_no_of_students"] = $row->maxNoOfStudents;
     }
 
 

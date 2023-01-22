@@ -32,23 +32,23 @@
         public static function checkEmailAvailability($email){   //checks if the email address is available
             $santizedEmail = filter_var($email, FILTER_SANITIZE_EMAIL); //sanitize the email address
 
-            if(!filter_var($santizedEmail, FILTER_VALIDATE_EMAIL)){ //check if the email is valid
+            if(!filter_var($santizedEmail, FILTER_VALIDATE_EMAIL) ){ //check if the email is valid
                 return false;
             }
 
             require("dbconnection.php");
             self::$connection = $connection;
-            $sql = sprintf("SELECT `emailAddress` FROM `login_details` WHERE emailAddress = '%s'", self::$connection -> real_escape_string($santizedEmail));
+            $sql = sprintf("SELECT `emailAddress` FROM `login_details` WHERE `emailAddress` = '%s'", self::$connection -> real_escape_string($santizedEmail));
 
             $result = self::$connection -> query($sql);
-            $row = $result -> fetch_object();
+            //$row = $result -> fetch_object();
             self::$connection -> close();
 
-            if($row === null){  //if the email address is not in the database, it is available
+            if($result -> num_rows == 0){  //if the email address is not in the database, it is available
                 return true;
             }
             else{
-                $row -> free_result();
+                
                 return false;
             }
         }

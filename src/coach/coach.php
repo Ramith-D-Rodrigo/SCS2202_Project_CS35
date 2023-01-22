@@ -11,7 +11,6 @@ class Coach extends Actor implements JsonSerializable{
     private $dateOfBirth;
     private $qualifications;
     private $gender;
-    private $isactive;
     private $profilePic;
     private $sportID;
     private $sport;
@@ -132,7 +131,7 @@ class Coach extends Actor implements JsonSerializable{
 
     public function registercoach($database){    //public function to register the coach
         $this -> registeredDate = date("Y-m-d");
-        $this -> isactive = 1;
+        $this -> isActive = 1;
         $loginEntry = $this -> create_login_details_entry($database);
         if( $loginEntry===false){
             return false;
@@ -155,45 +154,7 @@ class Coach extends Actor implements JsonSerializable{
         }
     }
 
-    public function login($username, $password, $database){
-        $sql = sprintf("SELECT `user_id`, 
-        `username`, 
-        `password`, 
-        `userRole` 
-        FROM `login_details`  
-        WHERE `username` = '%s'", 
-        $database -> real_escape_string($username));
-
-        $result = $database -> query($sql);
-
-        $rows = $result -> fetch_object();
-
-        if($rows === NULL){ //no result. hence no user
-            return ["No Such User Exists"];
-        }
-
-        $hash = $rows -> password;
-        if(password_verify($password, $hash) === FALSE){    //Incorrect Password
-            return ["Incorrect Password"];
-        }
-
-        //setting user data for session
-        $this -> userID = $rows -> user_id;  
-        
-        //get the profile pic from the datbase and store in the object's attribute
-        $sqlPic = sprintf("SELECT `photo` , `sport` 
-        FROM `coach` 
-        WHERE `coachID` = '%s'",
-        $database -> real_escape_string ($this -> userID));
-
-        $result = $database -> query($sqlPic);
-        $resultRow = $result -> fetch_object();
-        $this -> profilePic =  $resultRow -> photo;
-        $this -> sport = ( $resultRow -> sport);
-       
-        return ["Successfully Logged In", $rows -> userRole, $rows -> username];  //return the message and role
-
-    }    
+     
 
 
     public function getBranchesWithCourts($database){
@@ -275,7 +236,7 @@ class Coach extends Actor implements JsonSerializable{
         return $sessionArr;
     }
 
-    public function addsession($sessionID,$coach_monthly_payment, $startingTime, $endingTime, $no_of_students,$coach_id,$court_id,$day,$payment_amount,$database){
+    public function addsession($sessionID,$coachMonthlyPayment, $startingTime, $endingTime, $noOfStudents,$coachID,$courtID,$day,$paymentAmount,$database){
         $startingTimeObj = new DateTime($startingTime);
         $endingTimeObj = new DateTime($endingTime);
 
