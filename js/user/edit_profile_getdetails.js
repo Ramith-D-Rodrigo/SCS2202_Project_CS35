@@ -634,8 +634,8 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
                 const concernItem = document.createElement("li");
                 concernInput = document.createElement("input");
                 concernInput.type = "text";
-                concernInput.value = concern.medical_concern;
-                concernInput.name = "medical_concern" + (index+1);
+                concernInput.value = concern.medicalConcern;
+                concernInput.name = "medicalConcern" + (index+1);
                 concernItem.id = "medicalConcern" + (index+1);
 
                 concernItem.appendChild(concernInput);
@@ -716,7 +716,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         const dept1Relationship = document.getElementById("relationship1");
 
         dept1Name.value = data.dependents[0].name;
-        dept1Contact.value = data.dependents[0].contact_num;
+        dept1Contact.value = data.dependents[0].contactNum;
         dept1Relationship.value = data.dependents[0].relationship;
 
         //for other dependents
@@ -731,7 +731,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
                 const deptRelationship = document.getElementById("relationship" + id);
 
                 deptName.value = dept.name;
-                deptContact.value = dept.contact_num;
+                deptContact.value = dept.contactNum;
                 deptRelationship.value = dept.relationship;
             }
         });

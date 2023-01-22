@@ -9,11 +9,11 @@
     'weight', 
     'homeAddress', 
     'profilePic',  
-    'medical_concern1', 
-    'medical_concern2', 
-    'medical_concern3', 
-    'medical_concern4', 
-    'medical_concern5',
+    'medicalConcern1', 
+    'medicalConcern2', 
+    'medicalConcern3', 
+    'medicalConcern4', 
+    'medicalConcern5',
     'name1',
     'name2',
     'name3',
@@ -89,7 +89,7 @@
                 }
                 $arr['weight'] = $_POST[$field];
             }
-            else if($field === 'medical_concern1' || $field === 'medical_concern2' || $field === 'medical_concern3' || $field === 'medical_concern4' || $field === 'medical_concern5' || $field === 'name1' || $field === 'name2' || $field === 'name3'){   // medical concerns validation and emergency name validation
+            else if($field === 'medicalConcern1' || $field === 'medicalConcern2' || $field === 'medicalConcern3' || $field === 'medicalConcern4' || $field === 'medicalConcern5' || $field === 'name1' || $field === 'name2' || $field === 'name3'){   // medical concerns validation and emergency name validation
                 if(!preg_match("/^[a-zA-Z ]*$/", $_POST[$field])){
                     $returnMsg["errMsg"] = "Invalid Medical Concerns / Emergency Contact Name";
                     $validationErrFlag = true;
@@ -151,8 +151,8 @@
                 $picNewName = uniqid($editingUser -> getUsername());    //create a new name for the image
                 $picNewName = $picNewName . '.' . $picExtension; //concat the extension
                 
-                move_uploaded_file($pic, '../../public/user/profile_images/'.$picNewName);  //move the file to this directory
-                $arr['profilePic'] = '../../public/user/profile_images/'.$picNewName;
+                move_uploaded_file($pic, '../../uploads/user_profile_images/'.$picNewName);  //move the file to this directory
+                $arr['profilePic'] = '../../uploads/user_profile_images/'.$picNewName;
 
                 //delete the old profile picture
                 $oldPic = $editingUser -> getProfilePic();
