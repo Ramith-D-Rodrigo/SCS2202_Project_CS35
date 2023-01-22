@@ -290,7 +290,7 @@ class User extends Actor implements JsonSerializable{
             while($branchRow = $branchResult -> fetch_object()){   //getting all the branches
                 $branch = $branchRow -> branchID;
 
-                array_push($branchResultArr, ['branch' => $branch, 'sport_name' => $row['sportName'], 'sport_id' => $row['sportID'], 'reserve_price' => $row['reservationPrice']]); //create a branch sport pair
+                array_push($branchResultArr, ['branch' => $branch, 'sportName' => $row['sportName'], 'sportID' => $row['sportID'], 'reservationPrice' => $row['reservationPrice']]); //create a branch sport pair
                 unset($branchRow);
             }
 
@@ -301,7 +301,7 @@ class User extends Actor implements JsonSerializable{
 
             $coachResult = $this -> connection -> query($coachSql);
             while($coachRow = $coachResult -> fetch_object()){
-                array_push($coachResultArr, ['coach_id' => $coachRow -> coachID, 'sport_name' => $row['sportName'], 'sport_id' => $row['sportID']]); //create a coach sport pair
+                array_push($coachResultArr, ['coachID' => $coachRow -> coachID, 'sportName' => $row['sportName'], 'sportID' => $row['sportID']]); //create a coach sport pair
                 unset($coachRow);
             }
 

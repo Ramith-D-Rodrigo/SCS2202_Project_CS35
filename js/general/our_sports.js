@@ -31,7 +31,7 @@ fetch("../../controller/general/our_sports_controller.php")
     
             const sportImage = document.createElement("img");   //img
             sportImage.className = "sport-icon";
-            sportImage.src = "/styles/icons/sports/" + data[i].sport_name.toLowerCase() + ".jpg";
+            sportImage.src = "/uploads/sport_images/" + data[i].sport_name.toLowerCase() + ".jpg";
             sportImage.onerror = "this.src='/styles/icons/no-results.png''";    //set img to load when the current sport img is not found
 
             sportsIconContainerDiv.appendChild(sportImage); //append img to the container

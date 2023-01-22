@@ -127,28 +127,28 @@
     foreach($schedule as $reservation){
         //print_r($reservation);
         if($reservation -> date === $date && $reservation -> status === 'Pending'){ //only need the reservations that are pending
-            if(strtotime($startingTime) < strtotime($reservation -> starting_time) && strtotime($endingTime) > strtotime($reservation -> ending_time)){ //current reserving time slot is over an already reserved time slot
+            if(strtotime($startingTime) < strtotime($reservation -> startingTime) && strtotime($endingTime) > strtotime($reservation -> endingTime)){ //current reserving time slot is over an already reserved time slot
                 $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
                 header('Content-Type: application/json;');    //because we are sending json
                 echo json_encode($returningMsg);
                 exit();
                 //echo "Over the top"."<br>";
             }
-            else if(strtotime($startingTime) >= strtotime($reservation -> starting_time) && strtotime($endingTime) <= strtotime($reservation -> ending_time)){    //current reserving time slot is within an already reserved time slot
+            else if(strtotime($startingTime) >= strtotime($reservation -> startingTime) && strtotime($endingTime) <= strtotime($reservation -> endingTime)){    //current reserving time slot is within an already reserved time slot
                 $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
                 header('Content-Type: application/json;');    //because we are sending json
                 echo json_encode($returningMsg);
                 exit();
                 //echo "within or same"."<br>";
             }
-            else if(strtotime($startingTime) < strtotime($reservation -> starting_time) && (strtotime($endingTime) <= strtotime($reservation -> ending_time) && strtotime($endingTime) > strtotime($reservation -> starting_time))){    //ending time is within an already resevred slot
+            else if(strtotime($startingTime) < strtotime($reservation -> startingTime) && (strtotime($endingTime) <= strtotime($reservation -> endingTime) && strtotime($endingTime) > strtotime($reservation -> startingTime))){    //ending time is within an already resevred slot
                 $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
                 header('Content-Type: application/json;');    //because we are sending json
                 echo json_encode($returningMsg);
                 exit();
                 //echo "ending is within or same. starting is outside"."<br>";
             }
-            else if((strtotime($startingTime) >= strtotime($reservation -> starting_time) && strtotime($startingTime) < strtotime($reservation -> ending_time)) && strtotime($endingTime) > strtotime($reservation -> ending_time)){   //starting time is within an already reserved slot
+            else if((strtotime($startingTime) >= strtotime($reservation -> startingTime) && strtotime($startingTime) < strtotime($reservation -> endingTime)) && strtotime($endingTime) > strtotime($reservation -> endingTime)){   //starting time is within an already reserved slot
                 $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
                 header('Content-Type: application/json;');    //because we are sending json
                 echo json_encode($returningMsg);

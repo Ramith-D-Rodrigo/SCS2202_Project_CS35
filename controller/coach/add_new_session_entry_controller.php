@@ -10,14 +10,11 @@
  $coach -> setDetails(sport:$coachsport);
 
  $result = $coach -> getBranchesWithCourts($connection);
- print_r($result);
- die();
 
  $branches = [];
  
 
 while($row = $result->fetch_object()){
-    // print_r($row);
     $court_info = [];
     
          $court_info["id"] = $row->courtID;

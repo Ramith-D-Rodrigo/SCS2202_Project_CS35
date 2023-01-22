@@ -23,7 +23,7 @@
             $branch = new Branch($i['branch']);
             $branch -> getDetails($user -> getConnection());    //get branch details
 
-            $courts = $branch -> getSportCourts($i['sport_id'], $user -> getConnection(), 'a');    //get the number of courts of the current considering branch (request status should be accepted)
+            $courts = $branch -> getSportCourts($i['sportID'], $user -> getConnection(), 'a');    //get the number of courts of the current considering branch (request status should be accepted)
             $brRating = $branch -> getBranchRating($user -> getConnection());  //get the branch rating
             $brDiscount = $branch -> getCurrentDiscount($user -> getConnection());    //get the branch discount
             $branchJSON = json_encode($branch);
@@ -32,8 +32,8 @@
             unset($neededInfo['manager']);  //do not need manager and receptionist info
             unset($neededInfo['receptionist']);
             unset($neededInfo['email']);
-            unset($neededInfo['opening_time']);
-            unset($neededInfo['closing_time']);
+            unset($neededInfo['openingTime']);
+            unset($neededInfo['closingTime']);
 
             foreach($courts as $currCourt){ //to get the court pictures
                 $court = new Sports_Court($currCourt);
@@ -46,9 +46,9 @@
            
             //other needed info
             $neededInfo['num_of_courts'] = sizeof($courts);
-            $neededInfo['reserve_price'] = $i['reserve_price'];
-            $neededInfo['sport_name'] = $i['sport_name'];
-            $neededInfo['sport_id'] = $i['sport_id'];
+            $neededInfo['reserve_price'] = $i['reservationPrice'];
+            $neededInfo['sport_name'] = $i['sportName'];
+            $neededInfo['sport_id'] = $i['sportID'];
             $neededInfo['rating'] = $brRating;
             $neededInfo['discount'] = $brDiscount;
             
@@ -62,10 +62,10 @@
         //now for coaches
         foreach($result['coaches'] as $i){
             $coach = new Coach();
-            $coach -> setDetails(uid: $i['coach_id'], sport: $i['sport_id']);
+            $coach -> setDetails(uid: $i['coachID'], sport: $i['sportID']);
 
             $rating = $coach -> getRating();
-            $coachName = $coach -> getDetails('first_name') . " " . $coach -> getDetails('last_name');
+            $coachName = $coach -> getDetails('firstName') . " " . $coach -> getDetails('lastName');
             $gender = $coach -> getDetails('gender');
             if($gender == 'm'){
                 $coachName = "Mr. " . $coachName;
@@ -77,10 +77,10 @@
             $pic = $coach -> getDetails('photo');
 
             $coachInfo = array(
-                'coachID' => $i['coach_id'],
+                'coachID' => $i['coachID'],
                 'coachName' => $coachName,
                 'rating' => $rating,
-                'sport' => $i['sport_name'],
+                'sport' => $i['sportName'],
                 'profilePic' => $pic
             );
 

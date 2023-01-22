@@ -85,6 +85,7 @@
             }
 
             $_SESSION['userid'] = $loginCoach -> getUserID();
+            $_SESSION['coachsportid'] = $loginCoach -> getSport();  //store the coach's sport in the session
             $loginCoach -> closeConnection();
             unset($loginCoach);
             $_SESSION['username'] = $username;  //store the username in the session
