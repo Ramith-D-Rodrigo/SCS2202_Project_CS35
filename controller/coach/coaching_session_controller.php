@@ -11,7 +11,7 @@
     }
     require_once("../../src/coach/coach.php");
     require_once("../../src/user/dbconnection.php");
-    require_once("../../src/general/uuid.php");
+
 
     $user = new Coach();
     $user -> setDetails(uid: $_SESSION['userid']);

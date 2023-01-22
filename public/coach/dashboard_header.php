@@ -8,8 +8,14 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/coach/coach_addsession.php'){  //coach add session
                     echo "Add New Session";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/coach/coach_session.php'){  //coach view session
+                else if($_SERVER['REQUEST_URI'] === '/public/coach/coach_session.php'){  //coaching sessions
                     echo "Coaching Sessions";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/coach/coach_feedback.php'){  //coach feedback
+                    echo "Coach Feedback";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/coach/viewing_session.php'){  //view session
+                    echo "Viewing Session";
                 }
             ?>
         </div>

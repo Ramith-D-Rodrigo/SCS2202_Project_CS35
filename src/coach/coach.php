@@ -285,6 +285,25 @@ class Coach{
         $result = $database -> query($sql);
         return $result;
     }
+
+
+    // public function coachFeedback($database){
+ 
+    // $sql = sprintf("SELECT `fi`.`feedback_id` 
+    //     (`d`.`description`, 
+    //     `r`.`rating`, 
+    //     `ci`.`coach_id`, 
+    //     `si`.`stu_id`) 
+    //     VALUES ('%s', '%s', '%s', '%s', '%s')",
+    //     $database -> real_escape_string($feedback_id),
+    //     $database -> real_escape_string($description),
+    //     $database -> real_escape_string($rating),
+    //     $database -> real_escape_string($coach_id),
+    //     $database -> real_escape_string($stu_id));
+
+    //     $result = $database -> query($sql);
+    //     return $result;
+    }
 }
 
 
