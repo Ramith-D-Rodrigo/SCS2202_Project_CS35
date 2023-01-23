@@ -29,6 +29,8 @@
 
     $allowedExtensions = ['jpg', 'jpeg', 'png'];
 
+
+
     $returnMsg = [];
     $validationErrFlag = false;
 
@@ -38,7 +40,6 @@
     //user input validation and insertion
 
     $arr = array(); //array to store the editing primitive values like contact num, home address
-
     foreach($editableFields as $field){
         if(isset($_POST[$field])){  //check if field is set ( the user has inputted something)
             $_POST[$field] = trim($_POST[$field]);  //remove leading and trailing whitespace
@@ -152,13 +153,21 @@
                 $picNewName = $picNewName . '.' . $picExtension; //concat the extension
                 
                 move_uploaded_file($pic, '../../uploads/user_profile_images/'.$picNewName);  //move the file to this directory
-                $arr['profilePic'] = '../../uploads/user_profile_images/'.$picNewName;
+                $arr['profilePhoto'] = '../../uploads/user_profile_images/'.$picNewName;    //profilePhoto is the column name
 
                 //delete the old profile picture
                 $oldPic = $editingUser -> getProfilePic();
                 if($oldPic != ''){  //if the user has a profile picture
-                    unlink($oldPic);
+                    if(file_exists($oldPic)){   //if the file exists
+                        $result = unlink($oldPic);    //delete the file
+                        if(!$result){   //if the file cannot be deleted
+                            $returnMsg['errMsg'] = 'Error Changing the Old Profile Picture';
+                            $validationErrFlag = true;
+                        }
+                    }
                 }
+                //set the new profile picture in session
+                $_SESSION['userProfilePic'] = $arr['profilePhoto'];
             }
         }
         
@@ -173,6 +182,7 @@
 
 
     $userDependents = array();
+
     for($i = 1; $i <= 3; $i++){
         if(isset($_POST['name'.$i]) && isset($_POST['contact'.$i]) && isset($_POST['relationship'.$i])){    //the user dependent info exists
             $userDependent = new UserDependent(name: $_POST['name'.$i], contactNo: $_POST['contact'.$i], relationship: $_POST['relationship'.$i]);
@@ -184,22 +194,39 @@
     $medicalConcerns = array();
 
     if(isset($_POST['medicalAllRemoved'])){ //if all medical concerns are removed
-        $medicalConcerns = null;
+        $arr['medicalConcerns'] = "removeAll";  //remove all medical concerns
     }
     else{
         for($i = 1; $i <= 5; $i++){
-            if(isset($_POST['medical_concern'.$i])){    //the medical concern exists
-                array_push($medicalConcerns, $_POST['medical_concern'.$i]);
+            if(isset($_POST['medicalConcern'.$i])){    //the medical concern exists
+                $concernFlag = true;
+                array_push($medicalConcerns, $_POST['medicalConcern'.$i]);
             }
         }
     }
 
-    $arr['medicalConcerns'] = $medicalConcerns;
-    $arr['dependents'] = $userDependents;
+    if(sizeof($medicalConcerns) !== 0){ //has new medical concerns to add
+        $arr['medicalConcerns'] = $medicalConcerns;
+    }
 
-    $editingUser -> editProfile($arr);  //edit the user profile
-
-    
-
+    if(sizeof($userDependents) !== 0){  //has emergency contacts to change
+        $arr['dependents'] = $userDependents;
+    }
+  
+    $result = $editingUser -> editProfile($arr);  //edit the user profile
+    if($result == true){
+        $returnMsg['successMsg'] = 'Profile Edited Successfully';
+        $editingUser -> closeConnection();
+        unset($editingUser);
+        echo json_encode($returnMsg);
+        exit();
+    }
+    else{
+        $returnMsg['errMsg'] = 'Profile Edit Unsuccessful';
+        $editingUser -> closeConnection();
+        unset($editingUser);
+        echo json_encode($returnMsg);
+        exit();
+    }
 
 ?>

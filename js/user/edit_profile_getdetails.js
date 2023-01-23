@@ -69,8 +69,8 @@ function addMedicalConcern(e){
     inputField.setAttribute('placeholder', 'ex: Have back pains');
     inputField.setAttribute('required', '');
     inputField.setAttribute('pattern',"[a-zA-Z ]+");
-    inputField.setAttribute('name', 'medical_concern' + currID);
-    item.id = 'medical_concern' + currID;
+    inputField.setAttribute('name', 'medicalConcern' + currID);
+    item.id = 'medicalConcern' + currID;
     item.appendChild(inputField);
 
     const removeBtn = document.createElement("button");
@@ -454,7 +454,7 @@ editForm.addEventListener('submit', (e) => {
     let tempDependent = {
         name: "",
         relationship: "",
-        contact_num: ""
+        contactNum: ""
     }
 
     for([key,value] of formData){
@@ -467,7 +467,7 @@ editForm.addEventListener('submit', (e) => {
             continue;
 
         }
-        else if(key.includes("medical_concern")){
+        else if(key.includes("medicalConcern")){
             newMedicalConcerns.push(value);
             continue;
         }
@@ -480,12 +480,12 @@ editForm.addEventListener('submit', (e) => {
             continue;
         }
         else if(key.includes("contact") && key !== "contactNo"){  //not the user's contact number
-            tempDependent.contact_num = value;
+            tempDependent.contactNum = value;
             newEmergencyDetails.push(tempDependent);
             tempDependent = {
                 name: "",
                 relationship: "",
-                contact_num: ""
+                contactNum: ""
             }
             continue;
         }
@@ -496,7 +496,7 @@ editForm.addEventListener('submit', (e) => {
     }
 
     //check for new medical concerns
-    const prevMedicalConcerns = currValues.medicalConcerns.map(i => i.medical_concern);
+    const prevMedicalConcerns = currValues.medicalConcerns.map(i => i.medicalConcern);
 
     let medFlag = false;
     
@@ -519,7 +519,7 @@ editForm.addEventListener('submit', (e) => {
     
     if(medFlag === true){   //if the medical concerns are not the same
         for(let i = 0; i < newMedicalConcerns.length; i++){
-            newValues['medical_concern' + (i+1)] = newMedicalConcerns[i];
+            newValues['medicalConcern' + (i+1)] = newMedicalConcerns[i];
         }
     }
 
@@ -528,7 +528,7 @@ editForm.addEventListener('submit', (e) => {
     if(newEmergencyDetails.length === currValues.dependents.length){   //if the number of emergency details is the same
         //check whether the emergency details are the same
         for(let i = 0; i < newEmergencyDetails.length; i++){
-            if(newEmergencyDetails[i].name !== currValues.dependents[i].name || newEmergencyDetails[i].relationship !== currValues.dependents[i].relationship || newEmergencyDetails[i].contact_num !== currValues.dependents[i].contact_num){
+            if(newEmergencyDetails[i].name !== currValues.dependents[i].name || newEmergencyDetails[i].relationship !== currValues.dependents[i].relationship || newEmergencyDetails[i].contactNum !== currValues.dependents[i].contactNum){
                 depFlag = true;
                 break;
             }
@@ -542,7 +542,7 @@ editForm.addEventListener('submit', (e) => {
         for(let i = 0; i < newEmergencyDetails.length; i++){
             newValues['name' + (i+1)] = newEmergencyDetails[i].name;
             newValues['relationship' + (i+1)] = newEmergencyDetails[i].relationship;
-            newValues['contact' + (i+1)] = newEmergencyDetails[i].contact_num;
+            newValues['contact' + (i+1)] = newEmergencyDetails[i].contactNum;
         }
     }
 
@@ -564,7 +564,12 @@ editForm.addEventListener('submit', (e) => {
     })
     .then((res) => res.json())
     .then((data) => {
-        console.log(data);
+        if(data.errMsg !== undefined){
+            errMsg.innerHTML = data.errMsg;
+        }
+        else{
+            successMsg.innerHTML = data.successMsg;
+        }
     });
 });
 
@@ -659,7 +664,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
 
         //set the profile picture
         const currProfilePicField = document.getElementById("profilePicField");
-        const profilePicImg = document.createElement("img");
+        const profilePicImg = document.getElementById("profilePicImg");
         //change the img container size to 100px
         currProfilePicField.style.width = "auto";
         currProfilePicField.style.height = "15rem";
@@ -673,10 +678,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
             profilePicImg.src = "/styles/icons/profile_icon.svg";
         }
         profilePicImg.style.borderRadius = "50%";
-        currProfilePicField.appendChild(profilePicImg);  
-
-        //add profile picture add/edit button
-        const profilePicBtn = document.getElementById("profilePicUploadBtn");
+        profilePicImg.setAttribute("onerror", "this.src='/styles/icons/profile_icon.svg';");
 
         //add event listener to the file upload input
         const fileUploadInput = document.getElementById("profilePicUploadInput");
@@ -698,10 +700,12 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
             }
         });
 
-        //add event listener to the profile pic button
-        profilePicBtn.addEventListener("click", ()=>{
+        //add event listener to the profile pic image
+
+        profilePicImg.addEventListener("click", ()=>{
             fileUploadInput.click();    //click the file upload input
         });
+        
 
         //set the emergency contact details (dependents)
 

@@ -428,18 +428,74 @@ class User extends Actor implements JsonSerializable{
 
     public function editProfile($editingValArr){
         $sql = "UPDATE `user` SET";
+
+        if(array_key_exists('medicalConcerns', $editingValArr)){    //update medical concerns
+            //delete the current medical concerns
+            $medicalConcernDeleteSql = sprintf("DELETE FROM `user_medical_concern` WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+            $medicalConcernDeleteResult = $this -> connection -> query($medicalConcernDeleteSql);
+            if($medicalConcernDeleteResult === false){
+                return false;
+            }
+
+            if($editingValArr['medicalConcerns'] !== "removeAll"){ //the user is changing the medical concerns
+                //insert the new medical concerns
+                if(!empty($editingValArr['medicalConcerns'])){  //the user has new medical concerns to enter
+                    foreach($editingValArr['medicalConcerns'] as $medicalConcern){
+                        $medicalConcernInsertSql = sprintf("INSERT INTO `user_medical_concern` (`userID`, `medicalConcern`) VALUES ('%s', '%s')",
+                        $this -> connection -> real_escape_string($this -> userID),
+                        $this -> connection -> real_escape_string($medicalConcern));
+            
+                        $medicalConcernInsertResult = $this -> connection -> query($medicalConcernInsertSql);
+                        if($medicalConcernInsertResult === false){
+                            return false;
+                        }
+                    }
+                }
+            }   //otherwise no need to do anything as the user is removing all medical concerns
+        }
+
+        if(array_key_exists('dependents', $editingValArr)){     //update dependents
+            //update the dependents
+            //delete the current dependents
+            $dependentDeleteSql = sprintf("DELETE FROM `user_dependent` WHERE `ownerID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+            $dependentDeleteResult = $this -> connection -> query($dependentDeleteSql);
+            if($dependentDeleteResult === false){
+                return false;
+            }
+
+            //insert the new dependents
+            foreach($editingValArr['dependents'] as $dependent){    //dependent cannot be null array as there is always at least one dependent
+                $dependentInsertResult = $dependent -> create_entry($this -> connection);   //call user dependent object create function
+                if($dependentInsertResult === false){
+                    return false;
+                }
+            }
+        }           
+        //if the user is editing other details
+        //create the update query for user profile details
         foreach($editingValArr as $key => $value){  //set the details of the user
             $this -> {$key} = $value;
             if($key === 'medicalConcerns' || $key === 'dependents'){
+                //delete key value pair from the array
+                unset($editingValArr[$key]);
                 continue;
             }
             $sql .= sprintf(" `%s` = '%s',", $key, $this -> connection -> real_escape_string($value));
         }
 
+        if(sizeof($editingValArr) === 0){   //no need to update the user profile (only have medical concerns and dependents)
+            return true;
+        }
+
         $sql = substr($sql, 0, -1); //remove the last comma
         $sql .= sprintf(" WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
-        echo $sql;
-
+        
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+        
+        return true;    //successfully update the profile
     }
 
     public function jsonSerialize() : mixed{    //to json encode

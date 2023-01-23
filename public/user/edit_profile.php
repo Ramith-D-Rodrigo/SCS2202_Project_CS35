@@ -20,20 +20,14 @@
             <div class="body-container" style="flex-direction:column">
                 <div class="content-box" style="min-width:40%">
                     <form id="editForm">
-                        <div>
-                            <div id="profilePicField" class="row-container"></div>
-                            <div id="profilePicUpload" class="row-container">
-                                <button id="profilePicUploadBtn">
-                                    <i class="fas fa-image" style="font-size:1.5rem; margin-right:0.25rem"></i>
-                                    <i class="fas fa-upload" style="font-size:1.5rem; margin-left:0.25rem"></i>
-                                    <input type="file" 
-                                    name="profilePic" 
-                                    id="profilePicUploadInput" 
-                                    accept=".jpg, .jpeg, .png" 
-                                    title="Maximum File Size 2MB. Only Accepts JPG, PNG"
-                                    style="display:none;">
-                                </button>
-                            </div>
+                        <div id="profilePicField" class="row-container">
+                            <img id="profilePicImg">
+                            <input type="file" 
+                            name="profilePic" 
+                            id="profilePicUploadInput" 
+                            accept=".jpg, .jpeg, .png" 
+                            title="Maximum File Size 2MB. Only Accepts JPG, PNG"
+                            style="display:none;">
                         </div>
 
                         <div class="row-container">
@@ -153,7 +147,7 @@
                         </div>
                         <div style="text-align:center">Want to Add More ? <button id="emergencyDetailsBtn"><i class="fa-solid fa-circle-plus"></i></button></div>
                         <div class="err-msg" id="errMsg"></div>
-                        <div class="sucess-msg" id="successMsg"></div>
+                        <div class="success-msg" id="successMsg"></div>
                         <div class="btn-container">
                             <button type="submit" id="submitBtn" onclick="return validateChanges(event)">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
                         </div>
