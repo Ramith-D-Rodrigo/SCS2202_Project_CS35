@@ -9,8 +9,7 @@
 
     $userid = $_SESSION['verifyUserID'];
     $mailVerificationCode = $_SESSION['mailVerificationCode'];    //get the verification code from the session
-    $fName = $_SESSION['fName'];    //get the user's first name from the session
-    $lName = $_SESSION['lName'];    //get the user's last name from the session
+    $username = $_SESSION['username'];    //get the username from the session
     $email = $_SESSION['email'];    //get the user's email from the session
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
@@ -30,10 +29,10 @@
         $_SESSION['mailVerificationCode'] = $mailVerificationCode;    //store the verification code in the session
         $emailResult = '';
         if($activationType === 'registration'){ //registration activation
-            $emailResult = Mailer::registerAccount($email, $fName . ' ' . $lName, $mailVerificationCode);    //send the email
+            $emailResult = Mailer::registerAccount($email, $username, $mailVerificationCode);    //send the email
         }
         else if($activationType === 'activate'){    //account activation (other than registration)
-            $emailResult = Mailer::activateAccount($email, $fName . ' ' . $lName, $mailVerificationCode);    //send the email
+            $emailResult = Mailer::activateAccount($email, $username, $mailVerificationCode);    //send the email
         }
         if($emailResult === false){ //if the email sending is unsuccessful
             $returnJSON['errMsg'] = 'Verification code is incorrect.<br>Failed to send a new verification code to your email.<br>Please try again later.';
