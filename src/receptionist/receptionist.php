@@ -18,7 +18,14 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
     private $branchID;
     private $staffRole;
 
-
+    public function __construct($actor = null){
+        if($actor !== null){
+            $this -> userID = $actor -> getUserID();
+            $this -> username = $actor -> getUsername();
+        }
+        require("dbconnection.php");   //get the user connection to the db
+        $this -> connection = $connection;
+    }
 
     public function setDetails($fName='', $lName='', $email='', $contactNo='', $dob='', $gender='', $uid='', $username='', $password='', $brID = ''){
         $this -> receptionistID = $uid;
@@ -144,14 +151,14 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         }
     }
 
-    public function login($username, $password){
+    public function getSessionData(){
 
-/*         $getBranch = sprintf("SELECT `branch_id` AS brid
+        $getBranch = sprintf("SELECT `branchID` AS brid
         FROM `staff`
         WHERE `staffID` = '%s'",
-        $database -> real_escape_string($this -> receptionistID));
+        $this-> connection -> real_escape_string($this -> userID));
 
-        $brResult = $database -> query($getBranch);
+        $brResult = $this-> connection -> query($getBranch);
 
         $branchIDResult = $brResult -> fetch_object();   //get the branch_id
         $this -> branchID = $branchIDResult -> brid;
@@ -159,13 +166,13 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         $getBrName = sprintf("SELECT `city`
         FROM `branch`
         WHERE `branchID` = '%s'",
-        $database -> real_escape_string($this -> branchID));
+        $this->connection -> real_escape_string($this -> branchID));
 
-        $brNameResult = $database -> query($getBrName);
+        $brNameResult = $this->connection -> query($getBrName);
 
         $branchName = $brNameResult -> fetch_object();   //get the branch_city
 
-        return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details */
+        return [$branchName -> city, $this -> branchID];  //return the branch name and id
     }
 
     public function branchMaintenance($reason,$startDate,$endDate,$brID,$stfID,$database) {

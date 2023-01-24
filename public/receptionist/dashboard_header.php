@@ -33,8 +33,8 @@
                 if($_SERVER['REQUEST_URI'] === '/public/receptionist/receptionist_dashboard.php'){  //Check whether the receptionist is in the dashboard
             ?>
                 <div style="float:right" >
-                    <button class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
-                    <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
+                    <button class ="btn" id="" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
+                    <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
                 </div>
                     
             <?php 

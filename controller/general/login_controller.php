@@ -8,6 +8,8 @@
     require_once("../../src/user/user.php");
     require_once("../../src/coach/coach.php");
     require_once("../../src/manager/manager.php");
+    require_once("../../src/receptionist/receptionist.php");
+    require_once("../../src/system_admin/admin.php");
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
 
@@ -60,7 +62,6 @@
     }
     else{   //login success
         $returnJSON['successMsg'] = $result[0];
-
         if($result[1] === 'user'){  //user login
             $loginUser = new User($loginActor);
             $profilePic = $loginUser -> getProfilePic();
@@ -111,14 +112,14 @@
 
         }
         else if($result[1] === 'receptionist'){ //receptionist login
-            $loginRcep = new Receptionist($loginActor);
-            $result = $loginRcep -> login($username, $password);
-            $_SESSION['userid'] = $loginRcep -> getUserID();
-            $_SESSION['city'] = $result[0];
-            $_SESSION['branchID'] = $result[1];
+            $loginRecep = new Receptionist($loginActor);
+            $sessionData = $loginRecep -> getSessionData();
+            $_SESSION['userid'] = $loginRecep -> getUserID();
+            $_SESSION['branchName'] = $sessionData[0];
+            $_SESSION['branchID'] = $sessionData[1];
             $_SESSION['username'] = $username;  //store the username in the session
-            $loginRcep -> closeConnection();
-            unset($loginRcep);
+            $loginRecep -> closeConnection();
+            unset($loginRecep);
             $_SESSION['userrole'] = 'receptionist';
             $returnJSON['userrole'] = 'receptionist';
         }
