@@ -71,6 +71,15 @@
                 return false;
             }
         }
+
+        public static function ActionAuthentication($username, $password, $userRole){  //function that validates the login credentials for actions that require authentication
+            require("dbconnection.php");
+            self::$connection = $connection;
+            $sql = sprintf("SELECT `userID`, `username`, `password`, `emailAddress`, `userRole` FROM `login_details` WHERE `username` = '%s'",
+            self::$connection -> real_escape_string($username));
+
+            
+        }
     }
 
 ?>

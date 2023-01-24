@@ -13,7 +13,6 @@
     require_once("../../src/user/user.php");
     require_once("../../src/user/dbconnection.php");
     require_once("../../src/general/reservation.php");
-    require_once("../../src/general/reservation.php");
 
     $cancellingUser = new User();
     $cancellingUser -> setDetails(uid: $_SESSION['userid']);
