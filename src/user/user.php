@@ -324,7 +324,7 @@ class User extends Actor implements JsonSerializable{
         $sql = sprintf("SELECT `reservationID`
         FROM `reservation`
         WHERE `userID` = '%s'
-        ORDER BY `date`",
+        ORDER BY `date` DESC",
         $database -> real_escape_string($this -> userID));
 
         $result = $database -> query($sql);
