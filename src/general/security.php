@@ -72,13 +72,31 @@
             }
         }
 
-        public static function ActionAuthentication($username, $password, $userRole){  //function that validates the login credentials for actions that require authentication
+        public static function ActionAuthentication($inputUsername, $inputPassword, $userRole, $userID){  //function that validates the login credentials for actions that require authentication
             require("dbconnection.php");
             self::$connection = $connection;
-            $sql = sprintf("SELECT `userID`, `username`, `password`, `emailAddress`, `userRole` FROM `login_details` WHERE `username` = '%s'",
-            self::$connection -> real_escape_string($username));
+            $sql = sprintf("SELECT `userID`, `username`, `password`, `userRole` 
+            FROM `login_details` 
+            WHERE `username` = '%s' AND `userID` = '%s' AND `userRole` = '%s'",
+            self::$connection -> real_escape_string($inputUsername),
+            self::$connection -> real_escape_string($userID),
+            self::$connection -> real_escape_string($userRole));
 
+            $result = self::$connection -> query($sql);
+            $row = $result -> fetch_object();
+            $result -> free_result();
+
+            self::$connection -> close();
             
+            if($row === null){  //incorrect username, email or user role
+                return false;
+            }
+
+            if(!password_verify($inputPassword, $row -> password)){  //incorrect password
+                return false;
+            }
+
+            return true;    //if all the conditions are met, the user is authenticated
         }
     }
 

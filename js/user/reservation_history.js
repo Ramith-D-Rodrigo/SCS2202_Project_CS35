@@ -1,3 +1,6 @@
+//import cancel reservation function init from cancel_reservation.js
+import {init} from "./cancel_reservation.js";
+
 const reservationHistory = document.getElementById("reservationHistoryBox");
 
 
@@ -18,7 +21,7 @@ fetch("../../controller/user/reservation_history_controller.php")
             const tableHeader = document.createElement("thead");
             const headerRow = document.createElement("tr");
 
-            for(h = 0; h < headers.length; h++){    //creating table headers
+            for(let h = 0; h < headers.length; h++){    //creating table headers
                 const currHead = document.createElement("td");
                 currHead.innerHTML = headers[h];
                 headerRow.appendChild(currHead);
@@ -29,7 +32,7 @@ fetch("../../controller/user/reservation_history_controller.php")
 
             const tBody = document.createElement("tbody");
 
-            for(i = 0; i < data.length; i++){
+            for(let i = 0; i < data.length; i++){
                 const currRow = document.createElement("tr");
                 
                 const currResID = document.createElement("td"); //reservation id
@@ -81,17 +84,34 @@ fetch("../../controller/user/reservation_history_controller.php")
 
                 if(data[i].status === 'Pending'){   //can cancel
                     const cancelForm = document.createElement("form");
-                    cancelForm.action = "/controller/user/cancel_reservation_controller.php";
-                    cancelForm.method = "post";
+                    cancelForm.className = "cancel-form";
 
                     const cancelBtn = document.createElement("button");
+                    cancelBtn.style.background = "revert";
+                    cancelBtn.className = "cancel-button";
+                    cancelBtn.style.backgroundColor = "transparent";
+                    cancelBtn.style.border = "none";
                     cancelBtn.type = "submit";
                     cancelBtn.name = "cancelBtn";
-                    cancelBtn.value = data[i].reservationID;
-                    cancelBtn.innerHTML = "Cancel";
+                    cancelBtn.value = "cancel";
 
+                    //icon for cancel button
+                    const cancelIcon = document.createElement("i");
+                    cancelIcon.className = "fa-solid fa-circle-xmark";
+                    cancelIcon.style.color = "red";
+                    cancelIcon.style.fontSize = "1.5rem";
+                    cancelBtn.appendChild(cancelIcon);
+
+                    //hidden input for reservation id
+                    const resID = document.createElement("input");
+                    resID.type = "hidden";
+                    resID.name = "reservationID";
+                    resID.value = data[i].reservationID;
+
+                    cancelForm.appendChild(resID);
                     cancelForm.appendChild(cancelBtn);
                     currAction.appendChild(cancelForm);
+
                 }
                 else if(data[i].status === 'Cancelled'){    
 
@@ -109,4 +129,6 @@ fetch("../../controller/user/reservation_history_controller.php")
             reservationHistory.appendChild(reservationTable);
         }
 
-    })
+    }).then(() => {
+        init(); //initialize cancel reservation function
+    }).catch(err => console.log(err));

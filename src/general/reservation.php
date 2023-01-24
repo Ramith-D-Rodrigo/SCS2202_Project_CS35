@@ -88,7 +88,7 @@
         public function getDetails($database){
             $sql = sprintf("SELECT `r`.*,
             `b`.`city` AS `branch`,
-            `s`.`sportName`,
+            `s`.`sportName` as `sport`,
             `sc`.`courtName`
             FROM `reservation` `r`
             INNER JOIN `sports_court` `sc`
@@ -142,7 +142,7 @@
                 "status" => $this -> status,     //pending //checked_in //cancelled //declined  //completed
                 "branch" => $this -> branch,
                 "sport" => $this -> sport,
-                "court_name" => $this -> courtName
+                "court_name" => $this -> courtName,
             ];
         }
     }
