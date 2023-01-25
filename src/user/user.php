@@ -319,15 +319,15 @@ class User extends Actor implements JsonSerializable{
         return $result;
     }
 
-    public function getReservationHistory($database){   //Joining sport, sport court, branch, reservation tables
+    public function getReservationHistory(){   //Joining sport, sport court, branch, reservation tables
         //get all the reservations
         $sql = sprintf("SELECT `reservationID`
         FROM `reservation`
         WHERE `userID` = '%s'
         ORDER BY `date` DESC",
-        $database -> real_escape_string($this -> userID));
+        $this -> connection -> real_escape_string($this -> userID));
 
-        $result = $database -> query($sql);
+        $result = $this -> connection -> query($sql);
 
         $reservations = [];
         while($row = $result -> fetch_object()){
@@ -339,7 +339,7 @@ class User extends Actor implements JsonSerializable{
             $endingTime = $row -> ending_time; */
 
             //$row -> {"time_period"} = $startingTime . " to " . $endingTime;
-            $currReservation -> getDetails($database);  //get the reservation details
+            $currReservation -> getDetails($this -> connection);  //get the reservation details
 
             array_push($reservations, $currReservation);
             unset($currReservation);
@@ -349,8 +349,8 @@ class User extends Actor implements JsonSerializable{
         return $reservations;
     }
 
-    public function cancelReservation($reservation, $database){
-        $result = $reservation -> cancelReservation($this -> userID, $database);
+    public function cancelReservation($reservation){
+        $result = $reservation -> cancelReservation($this -> userID, $this -> connection);
         return $result;
     }
 

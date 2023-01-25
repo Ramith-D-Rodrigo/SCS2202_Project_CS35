@@ -10,29 +10,41 @@
         exit();
     }
 
+    if(!isset($_SESSION['userAuth']) || $_SESSION['userAuth'] !== true){   //if the user is not authenticated
+        header("Location: /index.php");
+        exit();
+    }
+
     require_once("../../src/user/user.php");
-    require_once("../../src/user/dbconnection.php");
     require_once("../../src/general/reservation.php");
 
     $cancellingUser = new User();
     $cancellingUser -> setDetails(uid: $_SESSION['userid']);
-    $selectedReservation = $_POST['cancelBtn'];  //get the cancel button'value which is the reservation id
+    $selectedReservation = json_decode(file_get_contents("php://input"), true)['reservationID'];
 
     $cancellingReservation = new Reservation();
     $cancellingReservation -> setID($selectedReservation);
 
     $result = $cancellingUser -> cancelReservation($cancellingReservation, $connection);
 
+
+    $returnMsg = array();
+    $statusCode = null;
+
     if($result === TRUE){
-        $_SESSION['reserveCancelSuccess'] = "Reservation Cancelled Successfully";
+        $statusCode = 200;
+        $returnMsg['msg'] = "Reservation Cancelled Successfully";
     }
     else{
-        $_SESSION['reserveCancelError'] = "Could Not Cancel the Reservation";
+        $statusCode = 400;
+        $returnMsg['msg'] = "Reservation Cancel Failed";
     }
 
     unset($cancellingReservation);
     unset($cancellingUser);
-    $connection -> close();
-    header("Location: /public/user/reservation_history.php");
+
+    http_response_code($statusCode);
+    header('Content-Type: application/json;');    //because we are sending json
+    echo json_encode($returnMsg);
 
 ?>

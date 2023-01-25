@@ -3,6 +3,8 @@ import {init} from "./cancel_reservation.js";
 
 const reservationHistory = document.getElementById("reservationHistoryBox");
 
+let reservationAndTimeStamp = [];   //array to store reservation id and reserved timestamp
+
 
 fetch("../../controller/user/reservation_history_controller.php")
     .then(res => res.json())
@@ -17,7 +19,7 @@ fetch("../../controller/user/reservation_history_controller.php")
         else{   //has reservations
             const reservationTable = document.createElement("table");
 
-            const headers = ["Reservation ID", "Date", "Time Period", "Sport", "Branch", "Court", "Payment Amount", "Status", "Action"];
+            const headers = ["Reservation ID", "Date", "Time Period", "Sport", "Branch", "Court", "Payment Amount", "Status", "Reserved Timestamp", "Action"];
             const tableHeader = document.createElement("thead");
             const headerRow = document.createElement("tr");
 
@@ -79,6 +81,16 @@ fetch("../../controller/user/reservation_history_controller.php")
                 currStatus.innerHTML = data[i].status;
                 currRow.appendChild(currStatus);
 
+                const reservedTimestamp = document.createElement("td");  //reserved timestamp
+                const timeStamp = new Date(data[i].reserved_date);
+                reservedTimestamp.innerHTML = timeStamp.toLocaleString();
+                const resObj = {
+                    reservationID: data[i].reservationID,
+                    reservedTimestamp: timeStamp
+                };
+                reservationAndTimeStamp.push(resObj);
+                currRow.appendChild(reservedTimestamp);
+
                 const currAction = document.createElement("td");  //action cell
 
 
@@ -130,5 +142,5 @@ fetch("../../controller/user/reservation_history_controller.php")
         }
 
     }).then(() => {
-        init(); //initialize cancel reservation function
+        init(reservationAndTimeStamp); //initialize cancel reservation function (passing reservation id and reserved timestamp)
     }).catch(err => console.log(err));

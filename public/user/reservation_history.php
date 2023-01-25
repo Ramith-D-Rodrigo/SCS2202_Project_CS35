@@ -34,6 +34,7 @@
                 <form>
                     <p style="text-align:center">Please Authenticate Yourself<br>to Cancel the Reservation</p>
                     <p style="text-align:center"><i class="fas fa-user-lock" style="font-size:1.5rem"></i></p>
+                    <p id="authMsg" style="text-align:center"></p>
                     <div style="display:flex; flex-direction:column">
                         <input type="text" name="username" id="username" placeholder="Username" required minlength="6" maxlength="15">
                         <input type="password" name="password" id="password" placeholder="Password" required>
@@ -48,8 +49,20 @@
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
+                        <div id="altMsg"></div>
                     </div>
                 </form>
+        </div>
+
+        <div class="content-box" id="msgBox">
+            <div style="text-align:center">
+                <div id="msg" style="display:flex; flex-direction:column"> ajhsdgajsdg jha jhsdg ajhs jhdasg jhd a</div>
+            </div>
+            <div style="text-align:center; margin-top: 3rem">
+                <span id="dismiss">
+                    Dismiss <i class="fas fa-times"></i>
+                </span>
+            </div>
         </div>
         <?php
             require_once("../../public/general/footer.php");
