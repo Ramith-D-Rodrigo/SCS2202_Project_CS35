@@ -31,7 +31,7 @@
             </div>
             <div class=tabs>
                 <div>Branch Details</div> 
-                <div> <button onclick="window.location.href='/public/receptionist/edit_branch.php'"> Edit Button</button> </div>
+                <div> <button onclick="window.location.href='/public/receptionist/edit_branch.php'"> Edit</button> </div>
             </div>   
         </div>
         <div class="flex-container">

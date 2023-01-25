@@ -1,7 +1,7 @@
 fetch("../../controller/receptionist/edit_branch_controller.php")
     .then((res) => res.json())   //removing the headers
     .then((data) => {
-        // console.log(data[0]);
+        console.log(data);
         // console.log(data[1]);
         const outputLocation = document.createElement("output");
         const locationDiv = document.getElementById("location");

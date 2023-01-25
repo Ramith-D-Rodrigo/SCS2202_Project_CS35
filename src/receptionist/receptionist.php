@@ -213,7 +213,7 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
         $crtIDRes = $database -> query($crtID);
         $crtIDResult = $crtIDRes -> fetch_object();
-        $courtID = $crtIDResult -> courtID;             //get the court id
+        $courtID = $crtIDResult -> court_id;             //get the court id
 
         $courtQuery = sprintf("INSERT INTO `court_maintenance`
         (`courtID`,
@@ -240,13 +240,11 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $results;
     }
 
-    public function editBranch($staffID,$branchID,$database) {
+    public function editBranch($stafID,$branchID,$database) {
 
-        $branchSql = sprintf("SELECT DISTINCT `branch`.`city` AS location,
-        `branch`.`branchEmail` AS email
-        from `branch` INNER JOIN `staff` ON
-        `branch`.`branchID` = `staff`.`branchID`
-        WHERE `staff`.`branchID` = '%s'",
+        $branchSql = sprintf("SELECT DISTINCT `city` AS location,
+        `branchEmail` AS email
+        from `branch` WHERE `branchID` = '%s'",
         $database -> real_escape_string($branchID));
 
         $branchResult = $database -> query($branchSql);   //get the branch results
@@ -266,7 +264,7 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
         $numArray = [];
         while($row = $numResult -> fetch_object()){   //get the branch numbers one by one
-            $number = $row -> contactNum;
+            $number = $row -> contact_number;
             array_push($numArray,$number);
         }
 
@@ -293,9 +291,9 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
     public function getAllSports($branchID,$database) {
         $branch = new Branch($branchID);
-        $sportNames = $branch -> getAllSports($database);
+        $sportDetails = $branch -> getAllSports($database);
 
-        return $sportNames;
+        return $sportDetails;
     }
 
     public function getAllCourts($branchID,$database) {
