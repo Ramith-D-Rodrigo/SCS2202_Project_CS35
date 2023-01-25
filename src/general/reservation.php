@@ -14,6 +14,7 @@
         private $branch;
         private $sport;
         private $courtName;
+        private $reservedDate;  //the date and time when the reservation is made
 
         public function onlineReservation($date, $st, $et, $people, $payment, $court, $user, $database){
             $this -> userID = $user;
@@ -39,7 +40,7 @@
         }
 
         private function create_online_reservation_entry($database){
-            //echo"<br>";
+            //reserved date and time is added automatically
             $sql = sprintf("INSERT INTO `reservation`
             (`reservationID`,
             `date`,
@@ -143,6 +144,7 @@
                 "branch" => $this -> branch,
                 "sport" => $this -> sport,
                 "court_name" => $this -> courtName,
+                "reserved_date" => $this -> reservedDate
             ];
         }
     }
