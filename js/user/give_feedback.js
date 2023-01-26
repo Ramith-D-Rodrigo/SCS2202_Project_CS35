@@ -100,6 +100,8 @@ feedbackBox.querySelector("form").addEventListener("submit", (e) => {
 
     //get the reservation id
     const reservationID = sessionStorage.getItem("reservationID");
+    //remove the reservation id from the session storage
+    sessionStorage.removeItem("reservationID");
     //get the feedback form
     const feedbackForm = feedbackBox.querySelector("form");
     //get the rating
@@ -126,16 +128,59 @@ feedbackBox.querySelector("form").addEventListener("submit", (e) => {
             "Content-Type": "application/json"
         }     
     }).then((response) => {
-        if(response.ok){
-            return response.json();
+        //close the feedback form
+        cancelFeedbackBtn.click();
+
+        const msgBox = document.querySelector("#msgBox");
+        //blur the main content and darken it
+        const main = document.querySelector("main");
+        main.style.filter = "blur(5px)";
+        //animate the blur effect
+        main.style.transition = "filter 0.5s ease-in-out";
+        //disable main 
+        main.style.pointerEvents = "none";
+
+        const msg = document.getElementById("msg");
+        msg.innerHTML = "";   //clear the message
+        msg.style.fontSize = "1.5rem";
+        msg.style.fontWeight = "bold";
+        msg.style.textAlign = "center";
+
+        const icon = document.createElement("i");    //icon
+        icon.style.fontSize = "2.5rem";
+        icon.style.marginBottom = "1rem";
+
+        if(response.ok){ //ok means the status code is 200
+            //success icon
+            icon.classList.add("fas", "fa-check-circle", "success-icon");
+            msg.appendChild(icon);
+            icon.style.color = "green";
+
+            msg.innerHTML += "Thank You for Your Feedback";
+
+            //update the reservation history table by refreshing the page
+
+            //session storage to let know dismiss button to refresh the page
+            sessionStorage.setItem("refreshPage", "true");
+
         }
-        throw new Error("Network response was not ok");
+        else{   //if the status code is not 200
+            //error icon
+            icon.classList.add("fas", "fa-times-circle", "error-icon");
+            msg.appendChild(icon);
+            icon.style.color = "red";
+
+            msg.innerHTML += "Unable to Submit Feedback";
+        }
+
+        //display the message box
+        msgBox.style.display = "block";
+
     }).then((data) => {
         console.log(data);
     }).catch((error) => {
         console.log(error);
     });
-
 });
 
 

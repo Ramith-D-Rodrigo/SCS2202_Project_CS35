@@ -498,6 +498,37 @@ class User extends Actor implements JsonSerializable{
         return true;    //successfully update the profile
     }
 
+    public function giveFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //generalized function to give feedback to coach or branch
+        if(get_class($feedbackObj) === 'Coaching_Session'){ //the user is giving feedback to a coach
+            return $this -> giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating);
+        }
+        else if(get_class($feedbackObj) === 'Reservation'){  //the user is giving feedback to a branch
+            return $this -> giveBranchFeedback($feedbackObj, $feedbackOwner, $feedback, $rating);
+        }
+        else{
+            return false;
+        }
+    }
+
+    private function giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //give feedback to a coach
+
+    }
+
+    private function giveBranchFeedback($reservationObj, $branchObj, $feedback, $rating){ //give feedback to a branch
+        //update the status of the reservation to let that the user has given feedback
+        $updateResult = $reservationObj -> updateStatus($this -> connection, 'feedbackGiven');
+        if($updateResult === false){
+            return false;
+        }
+
+        //insert the feedback into the database
+        $feedbackAddResult = $branchObj -> addBranchFeedback($this, $feedback, $rating, $this -> connection);
+        if($feedbackAddResult === false){
+            return false;
+        }
+        return true;
+    }
+
     public function jsonSerialize() : mixed{    //to json encode
         return [
             'username' => $this -> username,

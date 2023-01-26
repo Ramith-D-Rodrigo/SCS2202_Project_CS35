@@ -289,6 +289,16 @@
             return $this -> photos;
         }
 
+        public function addBranchFeedback($addedUser, $feedback, $rating, $database){
+            $newFeedback = new Branch_Feedback();
+            
+            $addedDate = date("Y-m-d");
+            $newFeedbackID = uniqid("FB");
+            $newFeedback -> setDetails(user_id: $addedUser -> getUserID(), branch_id: $this -> branchID, description: $feedback, rating: $rating, date: $addedDate, userfeedback_id: $newFeedbackID);
+            $result = $newFeedback -> addFeedback($database);
+            return $result;
+        }
+
 
         public function getBranchFeedback($database){
             $sql = sprintf("SELECT `userFeedbackID` FROM `user_branch_feedback` WHERE `branchID` = '%s'",

@@ -1,4 +1,5 @@
 <?php
+    require_once("../../src/general/branch.php");
     class Reservation implements JsonSerializable{
         private $reservationID;
         private $date;
@@ -86,8 +87,17 @@
             return $result;
         }
 
-        public function getDetails($database){
-            $sql = sprintf("SELECT `r`.*,
+
+
+        public function getDetails($database, $wantedColumns = []){
+            if($wantedColumns != []){  //specific columns are wanted
+                //concat the array elements with comma
+                $wantedColumns = implode(',', $wantedColumns);
+            }
+            else{   //all columns are wanted
+                $wantedColumns = '*';
+            }
+            $sql = sprintf("SELECT `r`.{$wantedColumns},
             `b`.`city` AS `branch`,
             `s`.`sportName` as `sport`,
             `sc`.`courtName`
@@ -129,7 +139,7 @@
             return $this;
         }
 
-        public function getReservedBranch($database){  //get the branch id of the reserved court that belongs to the reservation
+        public function getReservedBranch($database){  //get the branch id of the reserved court that belongs to the reservation and return the branch object
             $sql = sprintf("SELECT `b`.`branchID` AS `branchID`
             FROM `reservation` `r`
             INNER JOIN `sports_court` `sc`
@@ -145,9 +155,22 @@
 
             $branchID = $resultObj -> branchID;
 
+            $branchObj = new Branch($branchID);
+
             $result -> free_result();
-            unset($resultObj);
-            return $branchID;
+            return $branchObj;
+        }
+
+        public function updateStatus($database, $status){   //update the status of the reservation
+            $sql = sprintf("UPDATE `reservation`
+            SET `status` = '%s'
+            WHERE `reservationID` = '%s'",
+            $this -> status ." ". $database -> real_escape_string($status),
+            $database -> real_escape_string($this -> reservationID));
+
+            $result = $database -> query($sql);
+
+            return $result;
         }
 
 

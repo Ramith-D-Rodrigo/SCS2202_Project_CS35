@@ -81,6 +81,10 @@ fetch("../../controller/user/reservation_history_controller.php")
                 currRow.appendChild(currPaymentAmount);
 
                 const currStatus = document.createElement("td");  //status
+                if(data[i].status.includes("feedbackGiven")){
+                    //if feedback is given, remove the feedbackGiven part
+                    data[i].status = data[i].status.replace("feedbackGiven", "");
+                }
                 currStatus.innerHTML = data[i].status;
                 currRow.appendChild(currStatus);
 

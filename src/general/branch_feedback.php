@@ -52,6 +52,22 @@
 
         }
 
+        public function addFeedback($database){
+            $sql = sprintf("INSERT INTO `user_branch_feedback` 
+            (`userFeedbackID`, `userID`, `date`, `rating`, `description`, `branchID`) 
+            VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
+            $database -> real_escape_string($this -> userFeedbackID),
+            $database -> real_escape_string($this -> userID),
+            $database -> real_escape_string($this -> date),
+            $database -> real_escape_string($this -> rating),
+            $database -> real_escape_string($this -> description),
+            $database -> real_escape_string($this -> branchID));
+
+            $result = $database -> query($sql);
+
+            return $result;
+        }
+
         public function jsonSerialize() : mixed{
             return [
                 "feedbackID" => $this -> userFeedbackID,
