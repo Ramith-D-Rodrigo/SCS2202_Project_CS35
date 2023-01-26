@@ -15,10 +15,7 @@ const authFormDisplay = (e) => {
     authenticationFormDiv.style.display = "block";
 
     //scroll to the authentication form and animate it
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+    authenticationFormDiv.scrollIntoView({behavior: "smooth", block: "center"});
     
     //blur the main content and darken it
     const main = document.querySelector("main");

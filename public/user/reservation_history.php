@@ -20,6 +20,7 @@
         <link rel="stylesheet" href="/styles/general/styles.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
         <link rel="stylesheet" href="/styles/user/cancel_reservation.css">
+        <link rel="stylesheet" href="/styles/user/give_feedback.css">
         <title>Reservation History</title>
     </head>
     <body>
@@ -56,13 +57,44 @@
 
         <div class="content-box" id="msgBox">
             <div style="text-align:center">
-                <div id="msg" style="display:flex; flex-direction:column"> ajhsdgajsdg jha jhsdg ajhs jhdasg jhd a</div>
+                <div id="msg" style="display:flex; flex-direction:column"></div>
             </div>
             <div style="text-align:center; margin-top: 3rem">
                 <span id="dismiss">
                     Dismiss <i class="fas fa-times"></i>
                 </span>
             </div>
+        </div>
+
+        <div class="content-box" id="feedbackBox">
+            <div style="text-align:center; font-size:1.5rem">
+                How Was Your Experience? <i class="fas fa-smile-beam" style="font-size:1.5rem"></i>
+                <form>
+                    <p id="feedbackMsg" style="padding:1rem" style="width:60%"></p>
+                    <div style="display:flex; flex-direction:column;">
+                        <div id="userRating">
+                            <i class="fas fa-star rating" style="font-size:1.2rem" id="rating1"></i>
+                            <i class="fas fa-star rating" style="font-size:1.2rem" id="rating2"></i>
+                            <i class="fas fa-star rating" style="font-size:1.2rem" id="rating3"></i>
+                            <i class="fas fa-star rating" style="font-size:1.2rem" id="rating4"></i>
+                            <i class="fas fa-star rating" style="font-size:1.2rem" id="rating5"></i>
+                        </div>
+
+                        <div>
+                            <textarea name="feedback" id="feedback" cols="30" rows="10" placeholder="Your Feedback" required></textarea>
+                        </div>
+
+                        <div style="display: flex; flex-direction:row; justify-content:space-between">
+                            <button id="sendFeedback" style="width:25%;" type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button id="cancelFeedback" style="width:25%;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>    
         </div>
         <?php
             require_once("../../public/general/footer.php");

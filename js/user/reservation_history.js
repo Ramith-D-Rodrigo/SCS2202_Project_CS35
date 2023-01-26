@@ -1,5 +1,8 @@
 //import cancel reservation function init from cancel_reservation.js
-import {init} from "./cancel_reservation.js";
+import {init as cancelReservation} from "./cancel_reservation.js";
+
+//import give feedback function init from give_feedback.js
+import {init as giveFeedback} from "./give_feedback.js";
 
 const reservationHistory = document.getElementById("reservationHistoryBox");
 
@@ -109,7 +112,7 @@ fetch("../../controller/user/reservation_history_controller.php")
 
                     //icon for cancel button
                     const cancelIcon = document.createElement("i");
-                    cancelIcon.className = "fa-solid fa-circle-xmark";
+                    cancelIcon.className = "fa-regular fa-circle-xmark";
                     cancelIcon.style.color = "red";
                     cancelIcon.style.fontSize = "1.5rem";
                     cancelBtn.appendChild(cancelIcon);
@@ -125,13 +128,33 @@ fetch("../../controller/user/reservation_history_controller.php")
                     currAction.appendChild(cancelForm);
 
                 }
-                else if(data[i].status === 'Cancelled'){    
-
-                }
                 else if(data[i].status === 'Checked In' || data[i].status === 'Declined'){  //can give feedback
+                    const feedbackForm = document.createElement("form");
+                    feedbackForm.className = "feedback-form";
+
                     const feedbackBtn = document.createElement("button");
-                    feedbackBtn.innerHTML = "Give Feedback";
-                    currAction.appendChild(feedbackBtn);
+                    feedbackBtn.style.background = "revert";
+                    feedbackBtn.className = "feedback-button";
+                    feedbackBtn.style.backgroundColor = "transparent";
+                    feedbackBtn.style.border = "none";
+                    feedbackBtn.value = "cancel";
+
+                    //icon for feedback button
+                    const feedbackIcon = document.createElement("i");
+                    feedbackIcon.className = "fa-regular fa-comment";
+                    feedbackIcon.style.color = "blue";
+                    feedbackIcon.style.fontSize = "1.5rem";
+                    feedbackBtn.appendChild(feedbackIcon);
+
+                    //hidden input for reservation id
+                    const resID = document.createElement("input");
+                    resID.type = "hidden";
+                    resID.name = "reservationID";
+                    resID.value = data[i].reservationID;
+
+                    feedbackForm.appendChild(resID);
+                    feedbackForm.appendChild(feedbackBtn);
+                    currAction.appendChild(feedbackForm);
                 }
                 currRow.appendChild(currAction);
 
@@ -142,5 +165,6 @@ fetch("../../controller/user/reservation_history_controller.php")
         }
 
     }).then(() => {
-        init(reservationAndTimeStamp); //initialize cancel reservation function (passing reservation id and reserved timestamp)
+        cancelReservation(reservationAndTimeStamp); //initialize cancel reservation function (passing reservation id and reserved timestamp)
+        giveFeedback(); //initialize give feedback function
     }).catch(err => console.log(err));
