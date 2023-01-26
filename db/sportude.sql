@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 22, 2023 at 10:20 AM
+-- Generation Time: Jan 26, 2023 at 10:39 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -293,41 +293,45 @@ CREATE TABLE `reservation` (
   `status` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `userID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `formalManagerID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `onsiteReceptionistID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
+  `onsiteReceptionistID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `reservedDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reservation`
 --
 
-INSERT INTO `reservation` (`reservationID`, `date`, `startingTime`, `endingTime`, `noOfPeople`, `paymentAmount`, `sportCourt`, `status`, `userID`, `formalManagerID`, `onsiteReceptionistID`) VALUES
-('Res-dar63acd29160719', '2023-01-06', '09:00:00', '10:00:00', 2, 350, 'badcourt1212', 'Pending', 'darRod63acc32138634', NULL, NULL),
-('Res-dar63acecea83066', '2023-01-04', '14:00:00', '16:00:00', 2, 700, 'badcourt1212', 'Pending', 'darRod63acc32138634', NULL, NULL),
-('Res-dar63aced00c15a1', '2023-01-04', '10:00:00', '12:00:00', 4, 700, 'badcourt1212', 'Pending', 'darRod63acc32138634', NULL, NULL),
-('Res-dar63aced265efb1', '2023-01-03', '11:00:00', '17:00:00', 5, 2100, 'badcourt1212', 'Pending', 'darRod63acc32138634', NULL, NULL),
-('Res-dar63aced788977f', '2023-01-08', '12:00:00', '14:00:00', 2, 700, 'badcourt1213', 'Pending', 'darRod63acc32138634', NULL, NULL),
-('Res-dih639431189c53b', '2022-12-24', '12:00:00', '15:00:00', 2, 1050, 'badcourt1213', 'Pending', 'dihHan6384813878b75', NULL, NULL),
-('Res-ram6381ff1962f37', '2022-12-03', '09:00:00', '12:00:00', 4, 1050, 'badcourt1213', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram6389552c34f9a', '2022-12-17', '09:00:00', '12:00:00', 3, 1050, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram638955f9d5247', '2022-12-17', '16:00:00', '18:00:00', 3, 700, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram6389622caecf9', '2022-12-14', '17:00:00', '18:30:00', 1, 525, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram6392242acaf4e', '2022-12-17', '15:30:00', '16:30:00', 2, 350, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram639303f19962e', '2022-12-17', '13:00:00', '15:00:00', 2, 700, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63930648c43c3', '2022-12-22', '09:30:00', '11:00:00', 2, 525, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram639308b17770b', '2022-12-21', '12:00:00', '14:00:00', 2, 700, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63930a5c45935', '2022-12-22', '16:00:00', '17:00:00', 4, 350, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63987a48694d7', '2023-01-05', '09:00:00', '10:30:00', 4, 525, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63b29a9f5a6b2', '2023-01-14', '10:00:00', '11:00:00', 2, 350, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63b29acad030d', '2023-01-13', '10:00:00', '11:00:00', 2, 350, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63b2a388476c3', '2023-01-08', '16:00:00', '17:00:00', 2, 350, 'badcourt1213', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63b2a9ca1c21c', '2023-01-06', '14:00:00', '16:00:00', 2, 700, 'badcourt1213', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63b2d951c5af2', '2023-01-06', '12:00:00', '16:00:00', 4, 2000, 'basket345', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63b2d964ae7ef', '2023-01-06', '10:00:00', '12:00:00', 4, 1000, 'basket345', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63b2da914e447', '2023-01-05', '13:00:00', '16:00:00', 2, 1500, 'basket345', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63ccf24183dbb', '2023-01-25', '15:00:00', '17:00:00', 2, 700, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63ccf2539478d', '2023-01-25', '15:00:00', '17:00:00', 2, 700, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63ccf3134ba7a', '2023-01-25', '17:00:00', '18:00:00', 1, 350, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL),
-('Res-ram63ccf328cfc1f', '2023-02-20', '17:00:00', '18:00:00', 1, 350, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL);
+INSERT INTO `reservation` (`reservationID`, `date`, `startingTime`, `endingTime`, `noOfPeople`, `paymentAmount`, `sportCourt`, `status`, `userID`, `formalManagerID`, `onsiteReceptionistID`, `reservedDate`) VALUES
+('Res-dar63acd29160719', '2023-01-06', '09:00:00', '10:00:00', 2, 350, 'badcourt1212', 'Pending', 'darRod63acc32138634', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-dar63acecea83066', '2023-01-04', '14:00:00', '16:00:00', 2, 700, 'badcourt1212', 'Pending', 'darRod63acc32138634', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-dar63aced00c15a1', '2023-01-04', '10:00:00', '12:00:00', 4, 700, 'badcourt1212', 'Pending', 'darRod63acc32138634', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-dar63aced265efb1', '2023-01-03', '11:00:00', '17:00:00', 5, 2100, 'badcourt1212', 'Pending', 'darRod63acc32138634', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-dar63aced788977f', '2023-01-08', '12:00:00', '14:00:00', 2, 700, 'badcourt1213', 'Pending', 'darRod63acc32138634', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-dih639431189c53b', '2022-12-24', '12:00:00', '15:00:00', 2, 1050, 'badcourt1213', 'Pending', 'dihHan6384813878b75', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram6381ff1962f37', '2022-12-03', '09:00:00', '12:00:00', 4, 1050, 'badcourt1213', 'Checked In feedbackGiven', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram6389552c34f9a', '2022-12-17', '09:00:00', '12:00:00', 3, 1050, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram638955f9d5247', '2022-12-17', '16:00:00', '18:00:00', 3, 700, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram6389622caecf9', '2022-12-14', '17:00:00', '18:30:00', 1, 525, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram6392242acaf4e', '2022-12-17', '15:30:00', '16:30:00', 2, 350, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram639303f19962e', '2022-12-17', '13:00:00', '15:00:00', 2, 700, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63930648c43c3', '2022-12-22', '09:30:00', '11:00:00', 2, 525, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram639308b17770b', '2022-12-21', '12:00:00', '14:00:00', 2, 700, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63930a5c45935', '2022-12-22', '16:00:00', '17:00:00', 4, 350, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63987a48694d7', '2023-01-05', '09:00:00', '10:30:00', 4, 525, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63b29a9f5a6b2', '2023-01-14', '10:00:00', '11:00:00', 2, 350, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63b29acad030d', '2023-01-13', '10:00:00', '11:00:00', 2, 350, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63b2a388476c3', '2023-01-08', '16:00:00', '17:00:00', 2, 350, 'badcourt1213', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63b2a9ca1c21c', '2023-01-06', '14:00:00', '16:00:00', 2, 700, 'badcourt1213', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63b2d951c5af2', '2023-01-06', '12:00:00', '16:00:00', 4, 2000, 'basket345', 'Checked In feedbackGiven', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63b2d964ae7ef', '2023-01-06', '10:00:00', '12:00:00', 4, 1000, 'basket345', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63b2da914e447', '2023-01-05', '13:00:00', '16:00:00', 2, 1500, 'basket345', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63ccf24183dbb', '2023-01-25', '15:00:00', '17:00:00', 2, 700, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63ccf2539478d', '2023-01-25', '15:00:00', '17:00:00', 2, 700, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63ccf3134ba7a', '2023-01-25', '17:00:00', '18:00:00', 1, 350, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:08:36'),
+('Res-ram63ccf328cfc1f', '2023-02-20', '17:00:00', '18:00:00', 1, 350, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-16 16:08:36'),
+('Res-ram63d154888731f', '2023-01-29', '15:00:00', '16:00:00', 3, 500, 'basket345', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:10:48'),
+('Res-ram63d154f293174', '2023-01-29', '17:00:00', '18:00:00', 3, 500, 'basket345', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-25 16:12:34'),
+('Res-ram63d24a4aa1d15', '2023-01-29', '18:00:00', '19:00:00', 2, 500, 'basket345', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-01-26 09:39:22');
 
 -- --------------------------------------------------------
 
@@ -546,7 +550,7 @@ INSERT INTO `user` (`userID`, `firstName`, `lastName`, `gender`, `profilePhoto`,
 ('lahKum63a5b560507af', 'Lahiru', 'Kumara', 'm', '../../uploads/user_profile_images/lahiru_kumara263a5b56050808.jpg', 'Lahiru&amp;#039;s Address', '0774145632', '2002-02-06', '2022-12-23', 175, 66),
 ('lahRod63a6ff48ce0c4', 'Lahiru', 'Rodrigo', 'm', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-12-02', '2022-12-24', NULL, NULL),
 ('nihWij638657d83c715', 'Nihal', 'Wijesinghe', 'm', NULL, 'Some road, Galle', '0789654125', '1996-07-26', '2022-11-29', 177, 69),
-('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', '../../uploads/user_profile_images/ramith_rodrigo63816dc90092f.jpg', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', 178, 56),
+('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', '../../uploads/user_profile_images/ramith_rodrigo63cebd39aaeb3.png', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', 180, 58),
 ('thaSam639a02d983325', 'Tharindu', 'Sampath', 'm', NULL, 'Some road, Kaluthara', '0774125478', '1999-06-25', '2022-12-14', 170, 70);
 
 -- --------------------------------------------------------
@@ -569,6 +573,8 @@ CREATE TABLE `user_branch_feedback` (
 --
 
 INSERT INTO `user_branch_feedback` (`userFeedbackID`, `userID`, `date`, `rating`, `description`, `branchID`) VALUES
+('FB63d246278a096', 'ramRod63816dc9007b4', '2023-01-26', 5, 'Wonderful time, Thank you for the amazing facilities!', 'kiri987521'),
+('FB63d246eaca834', 'ramRod63816dc9007b4', '2023-01-26', 1, 'Absolutely horrible!', 'col128423'),
 ('feedback1', 'ramRod63816dc9007b4', '2022-12-29', 4, 'Amazing Experience!', 'kiri987521'),
 ('feedback2', 'dihHan6384813878b75', '2022-12-27', 1, 'Worst Experience Ever!', 'kiri987521');
 
@@ -603,8 +609,7 @@ INSERT INTO `user_dependent` (`ownerID`, `name`, `relationship`, `contactNum`) V
 ('lahKum63a5b560507af', 'Ramith Rodrigo', 'Sibling 1', '0774589963'),
 ('lahRod63a6ff48ce0c4', 'Ramith', 'Sibling 2', '0777854521'),
 ('nihWij638657d83c715', 'Amitha', 'Partner', '0774532174'),
-('ramRod63816dc9007b4', 'Ajith', 'Father', '0714831556'),
-('ramRod63816dc9007b4', 'Champa', 'Mother', '0776512846'),
+('ramRod63816dc9007b4', 'Ajith', 'Father', '0714831744'),
 ('thaSam639a02d983325', 'Sarindu', 'Sibling 1', '0774125963');
 
 -- --------------------------------------------------------
@@ -640,8 +645,7 @@ INSERT INTO `user_medical_concern` (`userID`, `medicalConcern`) VALUES
 ('lahKum63a5b560507af', 'eye'),
 ('lahKum63a5b560507af', 'helo pain'),
 ('lahKum63a5b560507af', 'nice'),
-('ramRod63816dc9007b4', 'concern one'),
-('ramRod63816dc9007b4', 'concern two'),
+('ramRod63816dc9007b4', 'new concern'),
 ('thaSam639a02d983325', 'chest pain');
 
 -- --------------------------------------------------------
