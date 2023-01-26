@@ -10,7 +10,7 @@
         private $userID;
         private $formalManagerID;
         private $onsiteReceptionistID;
-        private $status;     //pending //checked_in //cancelled //declined  //completed
+        private $status;     //pending //checked_in //cancelled //declined  //not checked in
         private $branch;
         private $sport;
         private $courtName;
@@ -128,6 +128,29 @@
             unset($resultObj);
             return $this;
         }
+
+        public function getReservedBranch($database){  //get the branch id of the reserved court that belongs to the reservation
+            $sql = sprintf("SELECT `b`.`branchID` AS `branchID`
+            FROM `reservation` `r`
+            INNER JOIN `sports_court` `sc`
+            ON `sc`.`courtID` = `r`.`sportCourt`
+            INNER JOIN `branch` `b`
+            ON `b`.`branchID` = `sc`.`branchID`
+            WHERE `reservationID` = '%s'",
+            $database -> real_escape_string($this -> reservationID));  
+
+            $result = $database -> query($sql);
+
+            $resultObj = $result -> fetch_object();
+
+            $branchID = $resultObj -> branchID;
+
+            $result -> free_result();
+            unset($resultObj);
+            return $branchID;
+        }
+
+
         public function JsonSerialize() : mixed{
             return [
                 "reservationID" => $this -> reservationID,
