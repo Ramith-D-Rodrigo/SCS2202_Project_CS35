@@ -4,7 +4,7 @@ fetch("../../controller/receptionist/req_maintenance_entry_controller.php")    /
     .then((res) => res.json())
     .then((data) => {
             searchError.innerHTML = "";   //empty the error message div
-            console.log(data);
+            // console.log(data);
         if(data[0]['errMsg'] !== undefined){   //no sport was found
             const searchErrorDiv = document.createElement("div");
             searchErrorDiv.className = "search_err-msg";
