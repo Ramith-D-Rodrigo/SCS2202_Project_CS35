@@ -30,6 +30,5 @@
         require_once("../general/footer.php");
     ?>    
 </body>
-<script src="/js/receptionist/view_profiles_entry.js"></script>
-<script src="/js/receptionist/profile_handler.js"></script>
+<script src="/js/receptionist/view_user_profiles.js"></script>
 </html>
