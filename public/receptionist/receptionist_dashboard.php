@@ -39,7 +39,7 @@
                 <div> View Profiles</div> 
                 <div> 
                     <button> View Coach Profiles </button> 
-                    <button onclick="window.location.href='/controller/receptionist/view_sProfiles_controller.php'"> View User Profiles   </button> 
+                    <button onclick="window.location.href='/public/receptionist/view_user_profiles.php'"> View User Profiles   </button> 
                 </div>
             </div>
             <div class=tabs>
