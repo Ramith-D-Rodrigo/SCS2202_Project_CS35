@@ -5,13 +5,65 @@
     position: relative;
 }
 
-#landing-img1{
-    background-image: url('/styles/landing_res.png');
+.slider{
+    width:100vw;
+    overflow: hidden;
 }
 
-#landing-img2{
-    background-image: url('/styles/landing_coach.png');
+.slides{
+    width:500%;
+    display: flex;
+}
 
+.slides input{
+    display: none;
+}
+
+.slide{
+    position: relative;
+    width: 20%;
+    transition: 1.2s;
+}
+
+.slide img{
+    width: 100vw;
+}
+
+.navigation-manual{
+    position: absolute;
+    width: 100vw;
+    margin-top: -40px;
+    display: flex;
+    justify-content: center;
+
+}
+
+.manual-btn{
+    border: 2px solid white;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.7s;
+}
+
+.manual-btn:not(:last-child){
+    margin-right: 20px;
+}
+
+.manual-btn:hover{
+    background-color: white;
+}
+
+#radio1:checked ~ .first{
+    margin-left: 0;
+}
+
+#radio2:checked ~ .first{
+    margin-left: -20%;
+}
+
+.active{
+    background-color: white;
 }
 
 main{
