@@ -20,6 +20,12 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/receptionist/user_profile.php'){  //edit branch
                     echo "User Profile";
                 }
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_coach_profiles.php'){  //edit branch
+                    echo "View Coach Profiles";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/coach_profile.php'){  //edit branch
+                    echo "Coach Profile";
+                }
             ?>
         </div>
         <div style="align-items:center;">

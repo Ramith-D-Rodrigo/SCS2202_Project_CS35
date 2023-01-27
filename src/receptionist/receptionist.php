@@ -311,21 +311,18 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
     }
 
     public function getUserProfiles($database) {
-        $userProResult = $database -> query("SELECT `firstName`,`lastName`,`contactNum`,`profilePhoto` FROM `user`");
+        $userProResult = $database -> query("SELECT `userID`,`firstName`,`lastName`,`contactNum`,`profilePhoto` FROM `user`");
         $profileResult = [];
         while($row = $userProResult->fetch_object()){   //get profiles one by one
-            array_push($profileResult,['fName' => $row->firstName,'lName' => $row ->lastName, 'contactN' => $row -> contactNum, 'profile' => $row->profilePhoto]);
+            array_push($profileResult,['id' => $row->userID,'fName' => $row->firstName,'lName' => $row ->lastName, 'contactN' => $row -> contactNum, 'profile' => $row->profilePhoto]);
         }
 
         return $profileResult;
     }
 
-    public function getWantedUserProfile($fName,$lName,$contactN,$database) {
-        $findUser = sprintf("SELECT * FROM `user` WHERE `firstName` = '%s'
-        AND `lastName` = '%s' AND `contactNum` = '%s'",
-        $database -> real_escape_string($fName),
-        $database -> real_escape_string($lName),
-        $database -> real_escape_string($contactN));
+    public function getWantedUserProfile($userID,$database) {
+        $findUser = sprintf("SELECT * FROM `user` WHERE `userID` = '%s'",
+        $database -> real_escape_string($userID));
 
         $user = $database -> query($findUser) -> fetch_Object() ;  //get the user id of the particular user
         // $user = new User('uid:$userID');
@@ -348,6 +345,17 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $allInfo;
     }
 
+    public function getCoachProfiles($database){
+        $coachProResult = $database -> query("SELECT `c`.`firstName`,`c`.`lastName`,`c`.`contactNum`,`c`.`photo`,`s`.`sportName` FROM `coach` `c` 
+        INNER JOIN `sport` `s` ON `c`.`sport` = `s`.`sportID`");    //get the coach profile details and sport name
+
+        $profileResult = [];
+        while($row = $coachProResult->fetch_object()){   //get profiles one by one
+            array_push($profileResult,['fName' => $row->firstName,'lName' => $row ->lastName, 'sport' => $row ->sportName, 'contactN' => $row -> contactNum, 'profilePhoto' => $row->photo]);
+        }
+
+        return $profileResult;
+    }
     public function updateBranchEmail($branchID,$email,$database) {
         $branch = new Branch($branchID);
         $result = $branch -> updateBranchEmail($email,$database);

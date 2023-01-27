@@ -38,7 +38,7 @@
             <div class=tabs>
                 <div> View Profiles</div> 
                 <div> 
-                    <button> View Coach Profiles </button> 
+                    <button onclick="window.location.href='/public/receptionist/view_coach_profiles.php'"> View Coach Profiles </button> 
                     <button onclick="window.location.href='/public/receptionist/view_user_profiles.php'"> View User Profiles   </button> 
                 </div>
             </div>
