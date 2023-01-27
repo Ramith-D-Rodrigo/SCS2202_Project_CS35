@@ -1,0 +1,38 @@
+.landing-img{
+    background-repeat: no-repeat;
+    background-size: 100vw;
+    height:calc(0.562429696287964 * 100vw);
+    position: relative;
+}
+
+#landing-img1{
+    background-image: url('/styles/landing_res.png');
+}
+
+#landing-img2{
+    background-image: url('/styles/landing_coach.png');
+
+}
+
+main{
+    background-image: none;
+    background-color: black;
+}
+
+#reservationBtn{
+    position: absolute;
+    padding: initial calc(0.1vw + 0.1rem);
+    top: 79%;
+    left: 55%;
+    margin:0;
+    font-size: calc(1vw + 0.02rem);
+}
+
+#coachBtn{
+    top: 72.83950617283951%;
+    left:6.25%;
+    position: absolute;
+    padding: initial calc(0.1vw + 0.1rem);
+    margin:0;
+    font-size: calc(1vw + 0.02rem);
+}

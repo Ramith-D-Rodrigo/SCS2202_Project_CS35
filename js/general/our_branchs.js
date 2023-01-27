@@ -110,7 +110,7 @@ fetch("../../controller/general/our_branches_controller.php")
                 }
                 //color star for decimal rating
                 if(j === Math.floor(branchRating) && branchRating % 1 !== 0){
-                    star.className = "fa fa-star-half-o checked";
+                    star.className = "fa-solid fa-star-half-stroke";
                     star.style.color = "gold";
                 }
                 star.style.fontSize = "1.5em";

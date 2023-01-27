@@ -63,15 +63,15 @@
                 <?php
                 }
                 ?>
-                <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
+                <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-from-bracket" style="margin: 0 10px"></i></button>
             </div>
         <?php
             }
             else{
         ?>
             <div style="float:right" id="userOptions">
-                <button class="btn" id ="register" onclick="window.location.href='/public/general/register.php'">Register<img src="/styles/icons/register_icon.svg" class="acc-img"></button>
-                <button class="btn" id="login" onclick="window.location.href='/public/general/login.php'">Log in<img src="/styles/icons/login_icon.svg" class="acc-img"></button>
+                <button class="btn" id ="register" onclick="window.location.href='/public/general/register.php'">Register<i class="fa-solid fa-user-plus" style="margin: 0 10px"></i></button>
+                <button class="btn" id="login" onclick="window.location.href='/public/general/login.php'">Log in<i class="fa-solid fa-right-to-bracket" style="margin: 0 10px"></i></button>
             </div>
         <?php
             }
