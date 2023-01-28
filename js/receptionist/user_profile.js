@@ -50,55 +50,40 @@ fetch("../../controller/receptionist/view_sProfile_controller.php?userID=".conca
             addressDiv.innerHTML = data[0].homeAddress;
             const weightDiv = document.getElementById("weight");
             const weightOut = document.createElement("output");
-            weightOut.innerHTML = data[0].weight+" kg";
+            if(data[0].weight===null){
+                weightOut.innerHTML = "Not mentioned";
+            }else{
+                weightOut.innerHTML = data[0].weight+" kg";
+            
+            }
             weightDiv.appendChild(weightOut);
             const heightDiv = document.getElementById("height");
             const heightOut = document.createElement("output");
-            heightOut.innerHTML = data[0].height+" cm";
+            if(data[0].height===null){
+                heightOut.innerHTML = "Not mentioned";
+            }else{
+                heightOut.innerHTML = data[0].height+" cm";
+            }
             heightDiv.appendChild(heightOut);
             
-            const eDetails = document.getElementById("eDetails");
-            for(j = 0; j < data[2].length; j++){
-                const nameContainer = document.createElement("div");
-                nameContainer.className = "row-container";
-                const relaContainer = document.createElement("div");
-                relaContainer.className = "row-container";
-                const contactContainer = document.createElement("div");
-                contactContainer.className = "row-container";
-                const nameDiv = document.createElement("div");
-                nameDiv.className = "left-side";
-                nameDiv.innerHTML = "Name: ";
-                const nameOutput = document.createElement("div");
-                nameOutput.className = "right-side";
-                nameOutput.innerHTML = data[2][j].name;
-                nameContainer.appendChild(nameDiv);
-                nameContainer.appendChild(nameOutput);
-                const relationDiv = document.createElement("div");
-                relationDiv.className = "left-side";
-                relationDiv.innerHTML = "Relationship: ";
-                const relaOutput = document.createElement("div");
-                relaOutput.className = "right-side";
-                relaOutput.innerHTML = data[2][j].relationship;
-                relaContainer.appendChild(relationDiv);
-                relaContainer.appendChild(relaOutput);
-                const contactDiv = document.createElement("div");
-                contactDiv.className = "left-side";
-                contactDiv.innerHTML = "Contact Number: ";
-                const contactOutput = document.createElement("div");
-                contactOutput.className = "right-side";
-                contactOutput.innerHTML = data[2][j].contactNum;
-                contactContainer.appendChild(contactDiv);
-                contactContainer.appendChild(contactOutput);
-                eDetails.appendChild(nameContainer);
-                eDetails.appendChild(relaContainer);
-                eDetails.appendChild(contactContainer);
-                eDetails.appendChild(document.createElement("br"));
-
+            const selectEName = document.getElementById("eName");
+            const defaultOption = document.createElement("option");
+            defaultOption.innerHTML = "Choose One...";
+            defaultOption.value = "";
+            selectEName.appendChild(defaultOption);
+            
+            for(j = 0; j < data[2].length; j++){   
+                const nameOption = document.createElement("option");
+                nameOption.innerHTML = data[2][j].name;
+                nameOption.value = data[2][j].name;
+                selectEName.appendChild(nameOption);
             }
             
             const medConcernDiv = document.getElementById("medicalConcerns");
             if(data[1].length===0){
-                medConcernDiv.innerHTML = "No medical concerns recorded";
+                const medConcernOut = document.createElement("output");
+                medConcernOut.innerHTML = "No medical concerns mentioned";
+                medConcernDiv.appendChild(medConcernOut);
             }else{
                 for(i = 0; i < data[1].length; i++){
                     const medConcerns = document.createElement("div");
@@ -109,5 +94,34 @@ fetch("../../controller/receptionist/view_sProfile_controller.php?userID=".conca
                     medConcernDiv.appendChild(document.createElement("br"));
                 }
             } 
+        }
+    });
+
+    const depenedentN = document.getElementById("eName");
+    depenedentN.addEventListener("change", (e) => {
+        if(e.target.value !== ""){
+            fetch("../../controller/receptionist/dependentInfo_controller.php?userID=".concat(userProfile, "&name=", e.target.value))
+            .then((res)=>res.json())
+            .then((data)=>{
+                // console.log(data);
+                if(data[0]['errMsg'] !== undefined){   //not any dependent
+                    const searchError = document.getElementById("searchError");
+                    const searchErrorDiv = document.createElement("div");
+                    searchErrorDiv.className = "search_err-msg";
+                    searchErrorDiv.id = "search_err-msg";
+                    searchErrorDiv.innerHTML = data[0]['errMsg'];
+                    searchError.appendChild(searchErrorDiv);
+                }else{
+                    const eRelationship = document.getElementById("eRelationship");
+                    eRelationship.innerHTML = data[0].Relationship;
+                    const eContactN= document.getElementById("eContactN");
+                    eContactN.innerHTML = data[0].contactN;
+                }
+            });
+        }else{
+            const eRelationship = document.getElementById("eRelationship");
+            eRelationship.innerHTML = "";
+            const eContactN= document.getElementById("eContactN");
+            eContactN.innerHTML = "";
         }
     });

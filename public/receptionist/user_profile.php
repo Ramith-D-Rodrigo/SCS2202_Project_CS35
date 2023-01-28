@@ -24,7 +24,7 @@
         <div class="row-container"> 
         <div class="searchError"> </div>
         </div>
-        <div id="profilePic">
+        <div id="profilePic" style="display:flex; justify-content:center;margin-bottom:5%">
         </div>
         <div class="row-container">
             <div class="left-side"> Name: </div>
@@ -62,12 +62,24 @@
             <div class="right-side" id="weight"> </div>
         </div>
                 
-        <u> Emergency Details </u>
-            <div id="eDetails">
+        <h3> Emergency Details </h3>
+            <div id="" class="row-container">
+                <div class="left-side">Name: </div>
+                <div class="right-side"> <select id="eName"> </select> </div>
+            </div>
+                <br>
+            <div id="" class="row-container">
+                <div class="left-side">Relationship: </div>
+                <div class="right-side"> <output id="eRelationship"></output></div>
+            </div>
+                <br>
+            <div id="" class="row-container">
+                <div class="left-side">Contact Number: </div>
+                <div class="right-side"><output id="eContactN"></output> </div>
             </div>
             <br>
-            <u> Medical Concerns </u> 
-            <div id="medicalConcerns">
+            <h3> Medical Concerns </h3> 
+            <div id="medicalConcerns" >
             </div>
         </div>
     </main>

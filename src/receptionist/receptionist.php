@@ -345,6 +345,21 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $allInfo;
     }
 
+    public function getUserDependentInfo($userID,$name,$database){
+        // $user  = new User();
+        // $user -> setDetails(uid:$userID);
+        // $user -> getProfileDetails();
+        // $dependents = $user -> dependents;
+        $userDependentsSql = sprintf("SELECT `name`,`relationship`,`contactNum` from `user_dependent` WHERE `ownerID` = '%s' AND `name` = '%s'",
+        $database -> real_escape_string($userID),
+        $database -> real_escape_string($name));
+        $dependentInfo = $database -> query($userDependentsSql) -> fetch_object();
+        $depInfo = [];
+        array_push($depInfo,['Name'=>$dependentInfo->name,'Relationship'=>$dependentInfo->relationship,'contactN'=>$dependentInfo->contactNum]);
+        
+        return $depInfo;
+    }
+
     public function getCoachProfiles($database){
         $coachProResult = $database -> query("SELECT `c`.`firstName`,`c`.`lastName`,`c`.`contactNum`,`c`.`photo`,`s`.`sportName` FROM `coach` `c` 
         INNER JOIN `sport` `s` ON `c`.`sport` = `s`.`sportID`");    //get the coach profile details and sport name
