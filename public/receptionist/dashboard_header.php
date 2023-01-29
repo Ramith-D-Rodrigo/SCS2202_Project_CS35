@@ -14,16 +14,16 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/receptionist/edit_branch.php'){  //edit branch
                     echo "Edit Branch";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_user_profiles.php'){  //edit branch
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_user_profiles.php'){  //view user profiles
                     echo "View User Profiles";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/user_profile.php'){  //edit branch
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/user_profile.php'){  //view selected profile
                     echo "User Profile";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_coach_profiles.php'){  //edit branch
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_coach_profiles.php'){  //view coach profiles
                     echo "View Coach Profiles";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/coach_profile.php'){  //edit branch
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/coach_profile.php'){  //view selected profile
                     echo "Coach Profile";
                 }
             ?>

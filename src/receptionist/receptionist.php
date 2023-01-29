@@ -3,6 +3,8 @@
     require_once("../../src/general/branch.php");
     require_once("../../src/system_admin/staffMember.php");
     require_once("../../src/user/user.php");
+    require_once("../../src/coach/coach.php");
+    require_once("../../src/coach/coaching_session.php");
     require_once("../../src/general/actor.php");
 
 class Receptionist extends Actor implements JsonSerializable , StaffMember{
@@ -361,15 +363,66 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
     }
 
     public function getCoachProfiles($database){
-        $coachProResult = $database -> query("SELECT `c`.`firstName`,`c`.`lastName`,`c`.`contactNum`,`c`.`photo`,`s`.`sportName` FROM `coach` `c` 
+        $coachProResult = $database -> query("SELECT `c`.`coachID`,`c`.`firstName`,`c`.`lastName`,`c`.`contactNum`,`c`.`photo`,`s`.`sportName` FROM `coach` `c` 
         INNER JOIN `sport` `s` ON `c`.`sport` = `s`.`sportID`");    //get the coach profile details and sport name
 
         $profileResult = [];
         while($row = $coachProResult->fetch_object()){   //get profiles one by one
-            array_push($profileResult,['fName' => $row->firstName,'lName' => $row ->lastName, 'sport' => $row ->sportName, 'contactN' => $row -> contactNum, 'profilePhoto' => $row->photo]);
+            array_push($profileResult,['coachID' => $row->coachID,'fName' => $row->firstName,'lName' => $row ->lastName, 'sport' => $row ->sportName, 'contactN' => $row -> contactNum, 'profilePhoto' => $row->photo]);
         }
 
         return $profileResult;
+    }
+
+    public function getWantedCoachProfile($coachID,$database){
+
+        $coach = new Coach();
+        $coach -> setDetails(uid:$coachID);
+        $coachProfileQuery = sprintf("SELECT `c`.*,`l`.`emailAddress`,`s`.`sportName` FROM `coach` `c` 
+        INNER JOIN `login_details` `l` ON `c`.`coachID` = `l`.`userID`
+        INNER JOIN `sport` `s` ON `c`.`sport` = `s`.`sportID` 
+        WHERE `c`.`coachID` = '%s'",
+        $database -> real_escape_string($coachID));
+        $coachProfile = $database -> query($coachProfileQuery) -> fetch_object();   //get the coach profile details
+        
+        $qualificationsql = sprintf("SELECT `qualification` FROM `coach_qualification` WHERE `coachID` = '%s'",
+        $database -> real_escape_string($coachID)); //get the coach qualifications
+        $qualificationArr = $database -> query($qualificationsql) -> fetch_all(MYSQLI_ASSOC);
+
+        $coachingSessionsql = sprintf("SELECT `sessionID` FROM `coaching_session` WHERE `coachID` = '%s'",
+        $database -> real_escape_string($coachID));
+        $coachingSessions = $database -> query($coachingSessionsql);
+        $branchNames = [];
+        while($row = $coachingSessions -> fetch_object()){
+            $session = new Coaching_Session($row -> sessionID);
+            $branchName = $session -> getDetails($database,"branchName");
+            array_push($branchNames,$branchName);
+        }
+
+        $uniBranchNames = array_unique($branchNames);
+        $rating = $coach -> getRating($database);
+        $feedbackArray = $coach -> getFeedback($database);
+
+        $coachInfo = [];
+        array_push($coachInfo,$coachProfile,$rating,$feedbackArray,$uniBranchNames,$qualificationArr);
+        return $coachInfo;
+    }
+
+    public function getSeesionOnBranch($coachID,$branchName,$database){
+        $coachingSessionsql = sprintf("SELECT `sessionID` FROM `coaching_session` WHERE `coachID` = '%s'",
+        $database -> real_escape_string($coachID));
+        $coachingSessions = $database -> query($coachingSessionsql);
+        $sessionInfo = [];
+        while($row = $coachingSessions -> fetch_object()){
+            $session = new Coaching_Session($row -> sessionID);
+            if($session -> getDetails($database,"branchName") === $branchName){
+                $sTime = $session -> getDetails($database,"startingTime");
+                $eTime = $session -> getDetails($database,"endingTime");
+                $day = $session -> getDetails($database,"day");
+                array_push($sessionInfo,[$day,$sTime,$eTime]);
+            }  
+        }
+        return $sessionInfo;
     }
     public function updateBranchEmail($branchID,$email,$database) {
         $branch = new Branch($branchID);

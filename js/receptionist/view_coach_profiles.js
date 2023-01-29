@@ -1,7 +1,7 @@
 fetch("../../controller/receptionist/view_cProfiles_controller.php")
     .then((res) => res.json())   //removing the headers
     .then((data) => {
-        console.log(data);
+        // console.log(data);
         if(data[0]['errMsg'] !== undefined){
             const errorDiv = document.getElementById("err-msg");
             const searchError = document.createElement("div");
@@ -35,6 +35,8 @@ fetch("../../controller/receptionist/view_cProfiles_controller.php")
                 const viewButton = document.createElement("button");
                 viewButton.className = "viewBtn";
                 viewButton.id = "viewBtn";
+                viewButton.name = "coachProfile";
+                viewButton.value = data[i].coachID;
                 viewButton.innerHTML = "View Profile";
                 viewButton.type = "submit";
                 buttonDiv.appendChild(viewButton);
