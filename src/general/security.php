@@ -98,6 +98,65 @@
 
             return true;    //if all the conditions are met, the user is authenticated
         }
+
+        public static function userAuthentication(bool $logInCheck, array $acceptingUserRoles = []){  //function to check whether the user has authentication to access the page
+            if($logInCheck == FALSE){   //no need to be logged in to access the page
+                if(!isset($_SESSION['userid'])){    //the user is not logged in
+                    return true; //can access
+                }
+                else{   //the user is logged in
+                    if(!($_SESSION['userrole'] === 'coach' || $_SESSION['userrole'] === 'user')){   //if the logged in person is not a coach or an user
+                        return false;   //they cannot access (we are referring to staff here)
+                    }
+                    else{
+                        return true;
+                    }
+                }
+            }
+            else{   //access is based on the userRole
+                if(!isset($_SESSION['userid'])){    //the user is not logged in
+                    if(empty($acceptingUserRoles)){ //no one can access when logged in (register, login pages, etc)
+                        return true;
+                    }   
+                    return false;   //no access
+                }
+                else{   //is logged in
+                    if(!in_array($_SESSION['userrole'], $acceptingUserRoles)){  //the user is trying to access a page that cannot be accessed by their role (works for empty array)
+                        return false;
+                    }
+                    else{   //can access
+                        return true;
+                    }
+                }
+            }
+        }
+
+        public static function redirectUserBase(){  //redirects the user to the appropriate page (starting page) based on the user role
+            if(!isset($_SESSION['userrole'])){  //homepage
+                header("Location: /index.php");
+                return;
+            }
+            switch($_SESSION['userrole']){
+                case 'admin':
+                    header("Location: /public/system_admin/admin_dashboard.php");
+                    break;
+                case 'owner':
+                    header("Location: /public/owner/owner_dashboard.php");
+                    break;
+                case 'manager':
+                    header("Location: /public/manager/manager_dashboard.php");
+                    break;
+                case 'receptionist':
+                    header("Location: /public/receptionist/receptionist_dashboard.php");
+                    break;
+                case 'coach':
+                    header("Location: /public/coach/coach_dashboard.php");
+                    break;
+                case 'any' || 'user':
+                    header("Location: /index.php");
+                    break;
+            }
+        }
     }
 
 ?>
