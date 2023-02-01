@@ -1,7 +1,4 @@
 <?php
-
-use Random\Engine\Secure;
-
     session_start();
     require_once("src/general/security.php");
     //check the authentication
