@@ -10,6 +10,10 @@
     font-style: normal;
 }
 
+html{
+    scroll-behavior: smooth;
+}
+
 textarea { height: auto; }
 
 body{
@@ -17,10 +21,11 @@ body{
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    background-color: black;
 }
 
 a{
-    color:black;
+    color:white;
     text-decoration: none;
     padding: 0 15px;
 }
@@ -36,13 +41,13 @@ header{
     position: sticky;
     height:auto;
     width:100vw;
-    background-color: #FFD700;
+    background-color: black;
     color: white;
 }
 
 .header-top{
     display:flex;
-    color: black;
+    color: white;
     justify-content: space-between;
     padding: 0 15px;
     align-items: center;
@@ -63,7 +68,20 @@ header{
 
 main {
     flex: auto;
-    background: linear-gradient(180deg, #FFD700, #033C66);
+    position: relative;
+}
+
+main::before{
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.8;
+    background-image: url('../bg_image.jpg');
+    background-repeat: repeat;
+    background-size: 750px;
 }
 
 
@@ -74,7 +92,7 @@ footer{
     margin-top: auto;
     height:auto;
     width:100vw;
-    background-color: #033C66;
+    background-color: black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -182,6 +200,7 @@ textarea{
     height: 29px;
     width: 29px;
     border-radius: 50%;
+    color:white;
 }
 .dash-img{
     margin: 0 5px -5px 5px;
