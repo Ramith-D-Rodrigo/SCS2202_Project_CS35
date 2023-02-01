@@ -71,6 +71,11 @@ main{
     background-color: black;
 }
 
+main::before{
+    content: none;
+    
+}
+
 #reservationBtn{
     position: absolute;
     padding: initial calc(0.1vw + 0.1rem);

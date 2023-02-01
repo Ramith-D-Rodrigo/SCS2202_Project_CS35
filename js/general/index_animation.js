@@ -40,6 +40,16 @@ let animationInterval = setInterval(animation, 5000);
 //add event listener to the radio btns on click
 radioBtns.forEach((radioBtn) => {
     radioBtn.addEventListener("click", () => {
+        //remove the active status of all the labels
+        const labels = document.querySelectorAll("label");
+        labels.forEach((label) => {
+            label.classList.remove("active");
+        });
+
+        //add the active status to the clicked label
+        const clickedLabel = document.querySelector(`label[for='${radioBtn.id}']`);
+        clickedLabel.classList.add("active");
+        
         //if clicked, reset the interval
         clearInterval(animationInterval);
         //set the interval again

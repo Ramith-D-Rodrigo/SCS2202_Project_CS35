@@ -21,6 +21,7 @@ body{
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    background-color: black;
 }
 
 a{
@@ -67,9 +68,20 @@ header{
 
 main {
     flex: auto;
-    background-image: url('../bg.png');
-    background-repeat: no-repeat;
-    background-size: cover;
+    position: relative;
+}
+
+main::before{
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.8;
+    background-image: url('../bg_image.jpg');
+    background-repeat: repeat;
+    background-size: 750px;
 }
 
 
