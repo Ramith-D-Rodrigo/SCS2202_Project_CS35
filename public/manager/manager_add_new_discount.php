@@ -56,10 +56,10 @@ session_start();
 
             <div class="button">
                 <div>
-                    <button>Add</button>
+                    <button >Add</button>
                 </div>
                 <div>
-                    <button>Cancel</button>
+                    <button onclick="window.location.href='manager_dashboard.php'">Cancel</button>
                 </div>
             </div>
         </div>

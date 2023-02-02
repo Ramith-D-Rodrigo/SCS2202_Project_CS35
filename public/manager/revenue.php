@@ -101,8 +101,8 @@
 
         <div class=tabs>
             <div>Discount History</div>       
-            <button id ="ADD">Add New Discount</button>
-            <button id = "VIEW">View More</button>
+            <button  onclick="window.location.href='manager_add_new_discount.php'" id ="ADD">Add New Discount</button>
+            <button  onclick="window.location.href='discount_history.php'" id = "VIEW">View More</button>
         </div>
          
     </div>    

@@ -10,6 +10,7 @@ session_start();
   <title>Discount History</title>
   <link rel="stylesheet" href="/styles/manager/discount_history.css" />
   <link rel="stylesheet" href="/styles/general/styles.css" />
+
 </head>
 
 <body>
@@ -18,7 +19,7 @@ session_start();
   ?>
   <main class="body_container">
     <div class="content_box">
-      <button id="discount">Add New Discount</button>
+      <button  onclick="window.location.href='manager_add_new_discount.php'" id="discount">Add New Discount</button>
       <button id="report">Generate Report</button>
       <div id="table">
         <table style="width:95% ">

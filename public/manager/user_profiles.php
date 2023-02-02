@@ -39,7 +39,7 @@ session_start();
                 Age:
                     <input type="text" pattern="[0-9]+" name="Sport" id="Age" value="20">
                 <br>    
-                    <button type="submit" id="but_Add">View Profile</button>
+                    <button  onclick="window.location.href='user_profile.php'" type="submit" id="but_Add">View Profile</button>
                 </div>
                 </div>
 

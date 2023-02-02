@@ -46,7 +46,7 @@ session_start();
                 <button>Change</button>
             </div>
             <div>
-                <button>Cancel</button>
+                <button  onclick="window.location.href='manager_dashboard.php'">Cancel</button>
             </div>
             </div>
           

@@ -54,7 +54,8 @@ session_start();
                 Sport:
                     <input type="text" pattern="[a-zA-Z]+" name="Sport" id="name" value="football">
                 <br>    
-                    <button type="submit" id="but_Add">View Profile</button>
+                    <button   onclick="window.location.href='coach_profile.php'" type="submit" id="but_Add">View Profile</button>
+                    
                 </div>
                 </div>
 
@@ -64,7 +65,7 @@ session_start();
                         echo $_SESSION['resultMsg'];
                         unset($_SESSION['resultMsg']);
                     }
-                    ?>
+                    ?> 
                 </div>
             </form>
         </div>
