@@ -101,13 +101,13 @@
         $picNewName = uniqid($username);    //create a new name for the image
         $picNewName = $picNewName . '.' . $picExtension; //concat the extension
         
-        move_uploaded_file($pic, '../../public/coach/profile_images/'.$picNewName);  //move the file to this directory
+        move_uploaded_file($pic, '../../uploads/coach_profile_images/'.$picNewName);  //move the file to this directory
     }
 
     $new_coach = new Coach();
     $new_coach -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $coach_qualifications, $username, $password, $gender,$sport);
 
-    $new_coach -> setProfilePic('../../public/coach/profile_images/'.$picNewName);  //add the directory to the profile picture
+    $new_coach -> setProfilePic('../../uploads/coach_profile_images/'.$picNewName);  //add the directory to the profile picture
     $result = $new_coach -> registercoach($connection);
 
     if($result === TRUE){   //successfully registered

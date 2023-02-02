@@ -1,4 +1,12 @@
+//import cancel reservation function init from cancel_reservation.js
+import {init as cancelReservation} from "./cancel_reservation.js";
+
+//import give feedback function init from give_feedback.js
+import {init as giveFeedback} from "./give_feedback.js";
+
 const reservationHistory = document.getElementById("reservationHistoryBox");
+
+let reservationAndTimeStamp = [];   //array to store reservation id and reserved timestamp
 
 
 fetch("../../controller/user/reservation_history_controller.php")
@@ -14,11 +22,11 @@ fetch("../../controller/user/reservation_history_controller.php")
         else{   //has reservations
             const reservationTable = document.createElement("table");
 
-            const headers = ["Reservation ID", "Date", "Time Period", "Sport", "Branch", "Court", "Payment Amount", "Status", "Action"];
+            const headers = ["Reservation ID", "Date", "Time Period", "Sport", "Branch", "Court", "Payment Amount", "Status", "Reserved Timestamp", "Action"];
             const tableHeader = document.createElement("thead");
             const headerRow = document.createElement("tr");
 
-            for(h = 0; h < headers.length; h++){    //creating table headers
+            for(let h = 0; h < headers.length; h++){    //creating table headers
                 const currHead = document.createElement("td");
                 currHead.innerHTML = headers[h];
                 headerRow.appendChild(currHead);
@@ -29,7 +37,7 @@ fetch("../../controller/user/reservation_history_controller.php")
 
             const tBody = document.createElement("tbody");
 
-            for(i = 0; i < data.length; i++){
+            for(let i = 0; i < data.length; i++){
                 const currRow = document.createElement("tr");
                 
                 const currResID = document.createElement("td"); //reservation id
@@ -73,33 +81,84 @@ fetch("../../controller/user/reservation_history_controller.php")
                 currRow.appendChild(currPaymentAmount);
 
                 const currStatus = document.createElement("td");  //status
+                if(data[i].status.includes("feedbackGiven")){
+                    //if feedback is given, remove the feedbackGiven part
+                    data[i].status = data[i].status.replace("feedbackGiven", "");
+                }
                 currStatus.innerHTML = data[i].status;
                 currRow.appendChild(currStatus);
+
+                const reservedTimestamp = document.createElement("td");  //reserved timestamp
+                const timeStamp = new Date(data[i].reserved_date);
+                reservedTimestamp.innerHTML = timeStamp.toLocaleString();
+                const resObj = {
+                    reservationID: data[i].reservationID,
+                    reservedTimestamp: timeStamp
+                };
+                reservationAndTimeStamp.push(resObj);
+                currRow.appendChild(reservedTimestamp);
 
                 const currAction = document.createElement("td");  //action cell
 
 
                 if(data[i].status === 'Pending'){   //can cancel
                     const cancelForm = document.createElement("form");
-                    cancelForm.action = "/controller/user/cancel_reservation_controller.php";
-                    cancelForm.method = "post";
+                    cancelForm.className = "cancel-form";
 
                     const cancelBtn = document.createElement("button");
+                    cancelBtn.style.background = "revert";
+                    cancelBtn.className = "cancel-button";
+                    cancelBtn.style.backgroundColor = "transparent";
+                    cancelBtn.style.border = "none";
                     cancelBtn.type = "submit";
                     cancelBtn.name = "cancelBtn";
-                    cancelBtn.value = data[i].reservationID;
-                    cancelBtn.innerHTML = "Cancel";
+                    cancelBtn.value = "cancel";
 
+                    //icon for cancel button
+                    const cancelIcon = document.createElement("i");
+                    cancelIcon.className = "fa-regular fa-circle-xmark";
+                    cancelIcon.style.color = "red";
+                    cancelIcon.style.fontSize = "1.5rem";
+                    cancelBtn.appendChild(cancelIcon);
+
+                    //hidden input for reservation id
+                    const resID = document.createElement("input");
+                    resID.type = "hidden";
+                    resID.name = "reservationID";
+                    resID.value = data[i].reservationID;
+
+                    cancelForm.appendChild(resID);
                     cancelForm.appendChild(cancelBtn);
                     currAction.appendChild(cancelForm);
-                }
-                else if(data[i].status === 'Cancelled'){    
 
                 }
                 else if(data[i].status === 'Checked In' || data[i].status === 'Declined'){  //can give feedback
+                    const feedbackForm = document.createElement("form");
+                    feedbackForm.className = "feedback-form";
+
                     const feedbackBtn = document.createElement("button");
-                    feedbackBtn.innerHTML = "Give Feedback";
-                    currAction.appendChild(feedbackBtn);
+                    feedbackBtn.style.background = "revert";
+                    feedbackBtn.className = "feedback-button";
+                    feedbackBtn.style.backgroundColor = "transparent";
+                    feedbackBtn.style.border = "none";
+                    feedbackBtn.value = "cancel";
+
+                    //icon for feedback button
+                    const feedbackIcon = document.createElement("i");
+                    feedbackIcon.className = "fa-regular fa-comment";
+                    feedbackIcon.style.color = "blue";
+                    feedbackIcon.style.fontSize = "1.5rem";
+                    feedbackBtn.appendChild(feedbackIcon);
+
+                    //hidden input for reservation id
+                    const resID = document.createElement("input");
+                    resID.type = "hidden";
+                    resID.name = "reservationID";
+                    resID.value = data[i].reservationID;
+
+                    feedbackForm.appendChild(resID);
+                    feedbackForm.appendChild(feedbackBtn);
+                    currAction.appendChild(feedbackForm);
                 }
                 currRow.appendChild(currAction);
 
@@ -109,4 +168,7 @@ fetch("../../controller/user/reservation_history_controller.php")
             reservationHistory.appendChild(reservationTable);
         }
 
-    })
+    }).then(() => {
+        cancelReservation(reservationAndTimeStamp); //initialize cancel reservation function (passing reservation id and reserved timestamp)
+        giveFeedback(); //initialize give feedback function
+    }).catch(err => console.log(err));

@@ -275,14 +275,14 @@
         $picNewName = uniqid($username);    //create a new name for the image
         $picNewName = $picNewName . '.' . $picExtension; //concat the extension
         
-        move_uploaded_file($pic, '../../public/user/profile_images/'.$picNewName);  //move the file to this directory
+        move_uploaded_file($pic, '../../uploads/user_profile_images/'.$picNewName);  //move the file to this directory
     }
 
     $new_user = new User();
     $new_user -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $user_dependents, $height, $weight, $medical_concerns, $username, $password, $gender);
 
     if($profilePicFlag === true){    //has uploaded a profile pic
-        $new_user -> setProfilePic('../../public/user/profile_images/'.$picNewName);    //add the directory to the profile pic
+        $new_user -> setProfilePic('../../uploads/user_profile_images/'.$picNewName);    //add the directory to the profile pic
     }
     else{
         $new_user -> setProfilePic("NULL");

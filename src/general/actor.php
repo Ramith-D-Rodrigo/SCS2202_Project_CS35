@@ -24,7 +24,18 @@
         }
 
         public function getUsername(){
-            return $this -> username;
+            if(isset($this -> username)){
+                return $this -> username;
+            }
+            else{ //get from the database
+                $sql = sprintf("SELECT username FROM `login_details` WHERE userID = '%s'", $this -> connection -> real_escape_string($this -> userID));
+                $result = $this -> connection -> query($sql);
+                $resultRow = $result -> fetch_object();
+                $this -> username = $resultRow -> username;
+                $result -> free_result();
+                unset($resultRow);
+                return $this -> username;
+            }
         }
 
         public function getUserRole(){

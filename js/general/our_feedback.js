@@ -26,7 +26,13 @@ function sortByDate(row1, row2){    //sort feedback rows by dates (rows are tabl
 
 const filterFeedback = (e) =>{
     const searchVal = searchBar.value.toLowerCase();
-    const branchVal = branchFilter.value;
+    let branchVal = null;
+    if(e.target.flag !== undefined && e.target.flag === true){    //if we coming from the branches page
+        branchVal = e.target.value;
+    }
+    else{
+        branchVal = branchFilter.value;
+    }
     const ratingVal = ratingFilter.value;
 
     const allRows = Array.from(document.querySelectorAll("tr")).filter(i => i.className !== "headRow"); //select all the table rows other than the header
@@ -193,7 +199,7 @@ fetch("../../controller/general/our_feedback_controller.php")
         //check if we are coming from the our branches page
         const selectedBranch = localStorage.getItem("feedbackBranch");
         if(selectedBranch !== null){
-            const eventObj = {"target" : {"value" : selectedBranch}};
+            const eventObj = {"target" : {"value" : selectedBranch, "flag": true}};
             filterFeedback(eventObj);
             localStorage.removeItem("feedbackBranch");  //remove the item from the local storage
 

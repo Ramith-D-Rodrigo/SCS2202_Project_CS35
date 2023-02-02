@@ -102,7 +102,8 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                     }
                     //decimal values for the rating
                     if(branches[i].rating % 1 !== 0 && j === Math.ceil(branches[i].rating)){
-                        star.className = "fa fa-star-half-o checked";
+                        star.className = "fa-solid fa-star-half-stroke";
+                        star.style.color = "gold";
                     }
                     rating.appendChild(star);
                 }
@@ -201,7 +202,8 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                     }
                     //if the rating is a decimal, add a half star
                     if(j == Math.ceil(coaches[i].rating) && coaches[i].rating % 1 != 0){
-                        star.className = "fa fa-star-half-o checked";
+                        star.className = "fa-solid fa-star-half-stroke";
+                        star.style.color = "gold";
                     }
                     coachRating.appendChild(star);
                 }

@@ -319,15 +319,15 @@ class User extends Actor implements JsonSerializable{
         return $result;
     }
 
-    public function getReservationHistory($database){   //Joining sport, sport court, branch, reservation tables
+    public function getReservationHistory(){   //Joining sport, sport court, branch, reservation tables
         //get all the reservations
         $sql = sprintf("SELECT `reservationID`
         FROM `reservation`
         WHERE `userID` = '%s'
-        ORDER BY `date`",
-        $database -> real_escape_string($this -> userID));
+        ORDER BY `date` DESC",
+        $this -> connection -> real_escape_string($this -> userID));
 
-        $result = $database -> query($sql);
+        $result = $this -> connection -> query($sql);
 
         $reservations = [];
         while($row = $result -> fetch_object()){
@@ -339,7 +339,7 @@ class User extends Actor implements JsonSerializable{
             $endingTime = $row -> ending_time; */
 
             //$row -> {"time_period"} = $startingTime . " to " . $endingTime;
-            $currReservation -> getDetails($database);  //get the reservation details
+            $currReservation -> getDetails($this -> connection);  //get the reservation details
 
             array_push($reservations, $currReservation);
             unset($currReservation);
@@ -349,8 +349,8 @@ class User extends Actor implements JsonSerializable{
         return $reservations;
     }
 
-    public function cancelReservation($reservation, $database){
-        $result = $reservation -> cancelReservation($this -> userID, $database);
+    public function cancelReservation($reservation){
+        $result = $reservation -> cancelReservation($this -> userID, $this -> connection);
         return $result;
     }
 
@@ -428,18 +428,105 @@ class User extends Actor implements JsonSerializable{
 
     public function editProfile($editingValArr){
         $sql = "UPDATE `user` SET";
+
+        if(array_key_exists('medicalConcerns', $editingValArr)){    //update medical concerns
+            //delete the current medical concerns
+            $medicalConcernDeleteSql = sprintf("DELETE FROM `user_medical_concern` WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+            $medicalConcernDeleteResult = $this -> connection -> query($medicalConcernDeleteSql);
+            if($medicalConcernDeleteResult === false){
+                return false;
+            }
+
+            if($editingValArr['medicalConcerns'] !== "removeAll"){ //the user is changing the medical concerns
+                //insert the new medical concerns
+                if(!empty($editingValArr['medicalConcerns'])){  //the user has new medical concerns to enter
+                    foreach($editingValArr['medicalConcerns'] as $medicalConcern){
+                        $medicalConcernInsertSql = sprintf("INSERT INTO `user_medical_concern` (`userID`, `medicalConcern`) VALUES ('%s', '%s')",
+                        $this -> connection -> real_escape_string($this -> userID),
+                        $this -> connection -> real_escape_string($medicalConcern));
+            
+                        $medicalConcernInsertResult = $this -> connection -> query($medicalConcernInsertSql);
+                        if($medicalConcernInsertResult === false){
+                            return false;
+                        }
+                    }
+                }
+            }   //otherwise no need to do anything as the user is removing all medical concerns
+        }
+
+        if(array_key_exists('dependents', $editingValArr)){     //update dependents
+            //update the dependents
+            //delete the current dependents
+            $dependentDeleteSql = sprintf("DELETE FROM `user_dependent` WHERE `ownerID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+            $dependentDeleteResult = $this -> connection -> query($dependentDeleteSql);
+            if($dependentDeleteResult === false){
+                return false;
+            }
+
+            //insert the new dependents
+            foreach($editingValArr['dependents'] as $dependent){    //dependent cannot be null array as there is always at least one dependent
+                $dependentInsertResult = $dependent -> create_entry($this -> connection);   //call user dependent object create function
+                if($dependentInsertResult === false){
+                    return false;
+                }
+            }
+        }           
+        //if the user is editing other details
+        //create the update query for user profile details
         foreach($editingValArr as $key => $value){  //set the details of the user
             $this -> {$key} = $value;
             if($key === 'medicalConcerns' || $key === 'dependents'){
+                //delete key value pair from the array
+                unset($editingValArr[$key]);
                 continue;
             }
             $sql .= sprintf(" `%s` = '%s',", $key, $this -> connection -> real_escape_string($value));
         }
 
+        if(sizeof($editingValArr) === 0){   //no need to update the user profile (only have medical concerns and dependents)
+            return true;
+        }
+
         $sql = substr($sql, 0, -1); //remove the last comma
         $sql .= sprintf(" WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
-        echo $sql;
+        
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+        
+        return true;    //successfully update the profile
+    }
 
+    public function giveFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //generalized function to give feedback to coach or branch
+        if(get_class($feedbackObj) === 'Coaching_Session'){ //the user is giving feedback to a coach
+            return $this -> giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating);
+        }
+        else if(get_class($feedbackObj) === 'Reservation'){  //the user is giving feedback to a branch
+            return $this -> giveBranchFeedback($feedbackObj, $feedbackOwner, $feedback, $rating);
+        }
+        else{
+            return false;
+        }
+    }
+
+    private function giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //give feedback to a coach
+
+    }
+
+    private function giveBranchFeedback($reservationObj, $branchObj, $feedback, $rating){ //give feedback to a branch
+        //update the status of the reservation to let that the user has given feedback
+        $updateResult = $reservationObj -> updateStatus($this -> connection, 'feedbackGiven');
+        if($updateResult === false){
+            return false;
+        }
+
+        //insert the feedback into the database
+        $feedbackAddResult = $branchObj -> addBranchFeedback($this, $feedback, $rating, $this -> connection);
+        if($feedbackAddResult === false){
+            return false;
+        }
+        return true;
     }
 
     public function jsonSerialize() : mixed{    //to json encode
