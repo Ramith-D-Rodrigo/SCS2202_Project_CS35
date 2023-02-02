@@ -1,0 +1,45 @@
+body {
+    flex: auto;
+    background: linear-gradient(180deg, #FFD700, #033C66);
+}
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    box-sizing: border-box;
+  }
+
+table {
+    
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 80%;
+    border: 2px solid black;
+    /* border-radius: 15px solid black; */
+   margin-top: 100px;
+    
+  }
+  
+  td, th {
+    /* border: 2px solid #605f5f; */
+    text-align: left;
+    padding: 8px;
+    
+  }
+  
+  tbody tr{
+    background-color: #dddddd;
+  }
+
+  .buttonSection{    
+    display: flex;
+    justify-content: center;
+    margin-top:5%;
+  }
+  .tableSection{
+    margin-top:2%
+  }
+.tabs1{
+    display: flex ;
+    flex-wrap: wrap;}
+

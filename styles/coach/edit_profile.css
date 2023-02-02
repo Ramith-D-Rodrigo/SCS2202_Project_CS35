@@ -1,0 +1,51 @@
+body {
+    flex: auto;
+    background: linear-gradient(180deg, #FFD700, #033C66);
+}
+.form-type{
+    text-align: left;
+    background-color: transparent;
+}
+td,th{
+    padding: 10px;
+    border: none;
+ 
+}
+
+.row-container{
+    display:flex; 
+    justify-content:space-around; 
+    flex-direction:row;
+    align-items: center;
+}
+
+.left-field{
+    width: 50%;
+    margin: 10px auto;
+}
+
+.right-field{
+    width: 50%;
+    margin: 10px;
+}
+
+.right-field > input, textarea{
+    max-width:100%;
+    min-width: 80%;
+}
+
+.right-field > *{
+    margin-left: 0;
+}
+
+.err-msg{
+    color: red;
+    text-align: center;
+}
+
+.success-msg{
+    color: green;
+    text-align: center;
+}
+
+

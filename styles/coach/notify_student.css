@@ -1,0 +1,32 @@
+body {
+    flex: auto;
+    background: linear-gradient(180deg, #FFD700, #033C66);
+}
+.container{
+   
+    border: 1px solid rgb(0, 0, 0);
+    width: 500px;
+    height: 500px;
+    margin: auto auto;
+    box-sizing: border-box;}
+.h3{
+    display: flex;
+    justify-content:center ;}    
+
+.label{
+    display: flex;
+    justify-content:space-around ;
+    margin-top:  30px; ;}
+
+.input{
+    display: flex;
+    justify-content:space-around ;
+    }
+.button{
+    display: flex;
+    justify-content:space-around ;
+    } 
+    
+.msg{
+    width: 70%;
+    height: 300px;}    
