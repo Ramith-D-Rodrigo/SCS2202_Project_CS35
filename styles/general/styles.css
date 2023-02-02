@@ -31,8 +31,11 @@ a{
 }
 
 a:hover{
-    color: grey;
+    color: rgb(86, 85, 85);
+    background-color: white;
+    transition: 500ms;
     text-decoration: none;
+    border-radius: 5px;
 }
 
 header{
