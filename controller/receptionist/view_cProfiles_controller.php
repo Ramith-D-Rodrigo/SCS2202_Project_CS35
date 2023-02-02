@@ -5,18 +5,17 @@
     require_once("../../src/receptionist/dbconnection.php");
     require_once("../../src/system_admin/staff.php");
 
-    $userID = $_GET['userID'];
-
     $staffM = new Staff();
     $receptionist = $staffM -> getStaffMemeber($_SESSION['userrole']);
 
-    $userProfile = $receptionist -> getWantedUserProfile($userID,$connection);
+    $profileResults = $receptionist -> getCoachProfiles($connection);
 
-    if(count($userProfile)===0){
-        array_push($userProfile,['errMsg'=>"Sorry, No record of such user"]);
+    if(count($profileResults)===0) {    //if the array is empty, then there are no results
+        array_push($profileResults,['errMsg' => "Sorry, Can't find any coach profiles"]);
+        // $_SESSION['searchErrorMsg'] = $profileResults['errMsg'];
     }
 
     header('Content-Type: application/json;');    //because we are sending json
-    echo json_encode($userProfile);
+    echo json_encode($profileResults);
     $connection -> close();
 ?>

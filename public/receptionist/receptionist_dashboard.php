@@ -12,18 +12,18 @@
 <head>
   <meta charset="UTF-8" />
   <title>Receptionist's Dashboard</title>
-  <link rel="stylesheet" href="/styles/receptionist/receptionist.css" />
-  <link rel="stylesheet" href="/styles/general/styles.css" />
+  <link rel="stylesheet" href="/styles/general/styles.css"/>
+  <link rel="stylesheet" href="/styles/general/staff.css"/>
 </head>
 <body>
 <?php
         require_once("dashboard_header.php");
 ?>
-<main>
+<main >
     <div class="flex-container">
             <div class=tabs>
                 <div> Reservations</div> 
-                <div> <button> View More </button> </div>
+                <div> <button onclick="window.location.href='/public/receptionist/view_reservations.php'"> View More </button> </div>
             </div>
             <div class=tabs>
                 <div> Onsite Reservation</div> 
@@ -31,15 +31,15 @@
             </div>
             <div class=tabs>
                 <div>Branch Details</div> 
-                <div> <button onclick="window.location.href='/public/receptionist/edit_branch.php'"> Edit Button</button> </div>
+                <div> <button onclick="window.location.href='/public/receptionist/edit_branch.php'"> Edit</button> </div>
             </div>   
         </div>
         <div class="flex-container">
             <div class=tabs>
                 <div> View Profiles</div> 
                 <div> 
-                    <button> View Coach Profiles </button> 
-                    <button onclick="window.location.href='/controller/receptionist/view_sProfiles_controller.php'"> View User Profiles   </button> 
+                    <button onclick="window.location.href='/public/receptionist/view_coach_profiles.php'"> View Coach Profiles </button> 
+                    <button onclick="window.location.href='/public/receptionist/view_user_profiles.php'"> View User Profiles   </button> 
                 </div>
             </div>
             <div class=tabs>

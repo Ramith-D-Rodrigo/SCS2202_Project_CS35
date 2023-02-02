@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/general/styles.css">
     <link rel="stylesheet" href="/styles/receptionist/receptionist.css" />
-    <title>View User Profiles</title>
+    <title>View Coach Profiles</title>
 </head>
 <body>
     <?php
@@ -30,5 +30,5 @@
         require_once("../general/footer.php");
     ?>    
 </body>
-<script src="/js/receptionist/view_user_profiles.js"></script>
+<script src="/js/receptionist/view_coach_profiles.js"></script>
 </html>

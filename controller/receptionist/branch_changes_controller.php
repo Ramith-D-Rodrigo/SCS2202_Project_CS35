@@ -44,7 +44,7 @@
         }
         else{
             unset($_SESSION['emailError']); //contact number is available, hence unset the error message
-            $result = $receptionist -> updateBranchEmail($_SESSION['branchid'],$newEmail,$connection);
+            $result = $receptionist -> updateBranchEmail($_SESSION['branchID'],$newEmail,$connection);
         }
     }else{
         $hasContactNumber = checkContactNumber($newContactN,$connection);
@@ -68,15 +68,15 @@
 
         unset($_SESSION['numberError']); 
         unset($_SESSION['emailError']);
-        $result = $receptionist -> updateBranch($_SESSION['userid'],$_SESSION['branchid'],$newEmail,$newContactN,$connection);
+        $result = $receptionist -> updateBranch($_SESSION['userid'],$_SESSION['branchID'],$newEmail,$newContactN,$connection);
     }
 
     if($result === TRUE){
         $_SESSION['UpdatesuccessMsg'] = "Branch Details Updated Successfully";
-        header("Location: /controller/receptionist/edit_branch_controller.php");
+        header("Location: /public/receptionist/edit_branch.php");
     }else{
         $_SESSION['updateError'] = "There was an error when updating";
-        header("Location: /controller/receptionist/edit_branch_controller.php");
+        header("Location: /public/receptionist/edit_branch.php");
     }
     
     $connection -> close();
