@@ -8,7 +8,7 @@
     $staffMember = new Staff();
     $recep = $staffMember -> getStaffMemeber('receptionist');          //$_SESSION['userrole']
     
-    $result = $recep -> editBranch($_SESSION['userid'], $_SESSION['branchid'],$connection);  //search the branch to edit
+    $result = $recep -> editBranch($_SESSION['userid'], $_SESSION['branchID'],$connection);  //search the branch to edit
 
     if(count($result) === 0){   //couldn't find any branch that provide the searched sport
         array_push($result,['errMsg' => "Sorry, Cannot find what you are looking For"]);

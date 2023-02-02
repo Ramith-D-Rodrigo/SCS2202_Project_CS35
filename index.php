@@ -30,28 +30,28 @@
                         </form>
                     </div>
                     <div class="slider">
-                <div class="slides">
-                    <input type="radio" name="radio-btn" id="radio1">
-                    <input type="radio" name="radio-btn" id="radio2">
-                    <div class="slide first">
-                        <img class="landing-img" id="landing-img1" src="/styles/landing_res.png">
-                        <button id="reservationBtn" onclick="window.location.href='/public/general/our_sports.php'">Make a Reservation Now!</button>
+                        <div class="slides">
+                            <input type="radio" name="radio-btn" id="radio1">
+                            <input type="radio" name="radio-btn" id="radio2">
+                            <div class="slide first">
+                                <img class="landing-img" id="landing-img1" src="/styles/landing_res.png">
+                                <button id="reservationBtn" onclick="window.location.href='/public/general/our_sports.php'">Make a Reservation Now!</button>
+                            </div>
+                            <div class="slide">
+                                <img class="landing-img" id="landing-img2" src="/styles/landing_coach.png">
+                                <button id="coachBtn" onclick="window.location.href='/public/general/reg_coaches.php'">Choose Your Trainer!</button>
+                            </div>
+                            <div class="navigation-auto">
+                                <div class="auto-btn1"></div>
+                                <div class="auto-btn2"></div>
+                            </div>
+                        </div>
+                        <div class="navigation-manual">
+                            <label for="radio1" class="manual-btn active"></label>
+                            <label for="radio2" class="manual-btn"></label>
+                        </div>
                     </div>
-                    <div class="slide">
-                        <img class="landing-img" id="landing-img2" src="/styles/landing_coach.png">
-                        <button id="coachBtn" onclick="window.location.href='/public/general/reg_coaches.php'">Choose Your Trainer!</button>
-                    </div>
-                    <div class="navigation-auto">
-                        <div class="auto-btn1"></div>
-                        <div class="auto-btn2"></div>
-                    </div>
-                </div>
-                <div class="navigation-manual">
-                    <label for="radio1" class="manual-btn active"></label>
-                    <label for="radio2" class="manual-btn"></label>
-                </div>
-            </div>
-        </main>
+                </main>
                 <?php
                     require_once("./public/general/footer.php");
                 ?>

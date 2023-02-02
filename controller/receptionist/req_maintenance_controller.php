@@ -28,7 +28,7 @@
     $valid = checkAvailableSport($_SESSION['userid'],$courtName,$sportName,$connection);
     if(($valid -> num_rows > 0) || ($sportName === "ALL" && $courtName === "ALL")){
         if($sportName === "ALL" && $courtName === "ALL") {
-            $brAvailable = checkBranchMaintenance($_SESSION['branchid'],$sDate,$eDate,$connection);
+            $brAvailable = checkBranchMaintenance($_SESSION['branchID'],$sDate,$eDate,$connection);
             if($brAvailable -> num_rows > 0) {
                 $_SESSION['slotUnavailability'] = "There's an already pending branch maintenance request that overlap to this request";
                 header("Location: /public/receptionist/request_maintenance.php");
@@ -38,11 +38,11 @@
                 unset($_SESSION['slotUnavailability']);
                 $staffMember = new Staff();
                 $receptionist = $staffMember -> getStaffMemeber($_SESSION['userrole']);
-                $results = $receptionist -> branchMaintenance($reason,$sDate,$eDate,$_SESSION['branchid'],$_SESSION['userid'],$connection);    
+                $results = $receptionist -> branchMaintenance($reason,$sDate,$eDate,$_SESSION['branchID'],$_SESSION['userid'],$connection);    
             }
            
         }else if($sportName != "ALL" && $courtName != "ALL") {
-            $brAvailable = checkBranchMaintenance($_SESSION['branchid'],$sDate,$eDate,$connection);
+            $brAvailable = checkBranchMaintenance($_SESSION['branchID'],$sDate,$eDate,$connection);
             $crtAvailable = checkCourtMaintenance($_SESSION['userid'],$courtName,$sportName,$sDate,$eDate,$connection);
             if( $brAvailable -> num_rows > 0 || $crtAvailable -> num_rows > 0){
                 $_SESSION['slotUnavailability'] = "There's an already pending request that overlap to this request";
