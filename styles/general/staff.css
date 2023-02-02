@@ -22,10 +22,9 @@
 }
 
 main{
-    all: unset;
+    background-image: none;
     background:linear-gradient(316.41deg, #6F0808 5.32%, #000000 45.92%, #000956 78.45%);
     /* background-color: linear-gradient(316.41deg, #6F0808 5.32%, #000000 45.92%, #000956 78.45%); */
-    background-image: none;
 }
 
 main::before{
