@@ -1,0 +1,53 @@
+.content_box {
+    
+    width: 800px;
+    height: 500px;
+    left: 350px;
+    background-color:#ffffff;
+    padding: 10px;  
+    margin:auto;
+    margin-top: 50px;
+} 
+
+
+
+#Enter{
+   
+    background-color:#e8d4d4;
+    width:300px;
+}
+
+#Sub_Ent{ 
+    margin-top: 20px;
+    margin-left: 200px;
+}
+
+#Image{
+    margin-top: -350px;
+    margin-left: 400px;
+}
+
+#SportName{
+    margin-left: 270px;
+    margin-top: -250px;
+
+}
+
+#Name{
+    width:200px;
+    margin-left: 50px;
+
+}
+
+#name{
+    width:200px;
+    margin-left:10px ;
+}
+
+#Age{
+    width:70px;
+}
+
+#but_Add{
+    margin-left: 0px;
+}
