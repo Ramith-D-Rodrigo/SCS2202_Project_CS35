@@ -28,7 +28,7 @@
                 if($_SERVER['REQUEST_URI'] === '/public/manager/manager_dashboard.php'){  //Check whether the manager is in the dashboard
             ?>
                     <button style="float:right" class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
+                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
             <?php 
                 } else { 
             ?>

@@ -12,7 +12,16 @@ table {
   
   tr:nth-child(even) {
     background-color: #dddddd;
+
   }
+  tr td:nth-child(2) {
+   text-align: center;
+    
+  }
+  tr td:nth-child(3) {
+    text-align: right;
+     
+   }
 
   .buttonSection{    
     display: flex;

@@ -6,10 +6,10 @@
         exit();
     }
 
-    if($_SESSION['userrole'] !== 'coach'){   //not an coach (might be another actor)
-        header("Location: /index.php");
-        exit();
-    }
+    // if($_SESSION['userrole'] !== 'coach'){   //not an coach (might be another actor)
+    //     header("Location: /index.php");
+    //     exit();
+    // }
 ?>
 
 
@@ -21,6 +21,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
         <link rel="stylesheet" href="/styles/coach/coach_feedback.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+        <link rel="stylesheet" href="../../styles/coach/coach.css">
+
         <title>Coach Feedback</title>
     </head>
     <body>
@@ -45,6 +48,12 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td>2023.05.13</td>
+                                <td>Good</td>
+                                <td>***</td>
+
+                            </tr>
                         </tbody>
                     </table>
                 </div>

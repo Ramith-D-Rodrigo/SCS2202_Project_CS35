@@ -4,6 +4,7 @@ fetch("../../controller/receptionist/req_maintenance_entry_controller.php")    /
     .then((res) => res.json())
     .then((data) => {
             searchError.innerHTML = "";   //empty the error message div
+            // console.log(data);
         if(data[0]['errMsg'] !== undefined){   //no sport was found
             const searchErrorDiv = document.createElement("div");
             searchErrorDiv.className = "search_err-msg";
@@ -19,9 +20,9 @@ fetch("../../controller/receptionist/req_maintenance_entry_controller.php")    /
             sportOptions.appendChild(emptyOption);
             for(i = 0; i < data.length; i++){   //for each branch result
                 const option = document.createElement("option");
-                sportDetails.set(data[i].sport_name,data[i].sport_id);
-                option.value = data[i].sport_name;
-                option.innerHTML = data[i].sport_name;
+                sportDetails.set(data[i].sportName,data[i].sportID);
+                option.value = data[i].sportName;
+                option.innerHTML = data[i].sportName;
                 sportOptions.appendChild(option);
             }
             const option = document.createElement("option");  //adding the ALL option

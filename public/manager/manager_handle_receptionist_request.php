@@ -16,8 +16,8 @@
         require_once("manager_handle_receptionist_request_header.php");
       ?>
         <main class="body_container">
-            <div class="content_box">
-                <table style="width:90%">
+            <!-- <div class="content_box"> -->
+                <table id="Table" style="width:90%">
                     <tr>
                         <th>Reason</th>
                         <th>Starting<br>Date</th>
@@ -27,7 +27,7 @@
                         <th>Status</th>
                         <th>Requested<br>by</th>
                         <th>Dession</th>
-                        </tr>
+                    </tr>
                     <tr>
                         <td></td>
                         <td></td>
