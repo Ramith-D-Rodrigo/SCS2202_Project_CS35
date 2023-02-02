@@ -20,45 +20,32 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
-        <link rel="stylesheet" href="/styles/coach/coach_feedback.css">
+        <link rel="stylesheet" href="/styles/coach/notify_student.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
         <link rel="stylesheet" href="../../styles/coach/coach.css">
 
-        <title>Coach Feedback</title>
+        <title>Notify Student</title>
     </head>
     <body>
         <?php
             require_once("dashboard_header.php");
         ?>
-        <main>
-            <div class="content-box" style="align-items:center">
-                <div>
-                    Filter By Branch:
-                    <select id="branchFilter">
-                        <option value="">All</option>
-                    </select>
-                </div>
-                <div id="feedbackTableContainer" style="width:100%">
-                    <table style="width:100%">
-                        <thead>
-                            <tr class="headRow">
-                                <th>Date</th>
-                                <th>Feedback</th>
-                                <th>Rating</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>2023.05.13</td>
-                                <td>Good</td>
-                                <td>***</td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+     <main>
+        <div class="container">
+            <div class="h3" ><h3>Message</h3></div>
+            <div class="label">
+                <label>Session ID :</label>
+                <label>Branch ID :</label>
             </div>
-        </main>
+            <div class="input"> <textarea class="msg" placeholder="Type your message here"></textarea> </div>
+            <div class="button">
+                <button>send</button>
+                <button>cancel</button>
+
+            </div>
+
+        </div>
+     </main>   
         <?php
             require_once("../../public/general/footer.php");
         ?>

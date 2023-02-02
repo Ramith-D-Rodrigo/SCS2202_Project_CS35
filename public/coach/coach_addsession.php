@@ -15,6 +15,10 @@
      <link rel="stylesheet" href="../../styles/coach/styles.css">
      <link rel="stylesheet" href="../../styles/general/styles.css">
      <!-- <link rel="stylesheet" href="../../styles/coach/coach_dashboard.css">  -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+     <link rel="stylesheet" href="../../styles/coach/coach.css">
+
+
 
     <title>ADD session</title>
 </head>
@@ -26,7 +30,7 @@
 
 <main>
     <div class='body-container'>
-    <div class="content-box">
+     <div class="content-box">
         <form action="/controller/coach/add_new_session_controller.php" method="POST">
             <label>Select Branch : 
                 <select name ="branch" id="branch">
@@ -84,7 +88,7 @@
 
             </label>
 
-            <br>
+             <br>
 
             <label for="session_fee">Enter session fee : 
             <input type="text"
@@ -136,7 +140,7 @@
                 <button class =" " onclick="window.location.href='/public/coach/coach_session.php'">Cancel</button>
             
         </form>  
-        </div>
+     </div>
 
     
     
