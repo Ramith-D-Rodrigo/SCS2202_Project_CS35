@@ -1,11 +1,11 @@
 <?php
     session_start();
     if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
-        header("Location: /public/receptionist/receptionist_login.php");
+        header("Location: /public/general/login.php");
         exit();
     }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,21 +14,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/general/styles.css">
     <link rel="stylesheet" href="/styles/receptionist/receptionist.css" />
-    <title>View User Profiles</title>
+    <title>View Reservations</title>
 </head>
 <body>
     <?php
-        require_once("dashboard_header.php");
+        require_once("dashboard_header.php")
     ?>
     <main class="body-container">
-    <div class="content-box" id="search_results">
-        <div id="err-msg">
+        <div id="reserve_results">
+            <div id="err-msg">
+            </div>
+            <div id="reservations">
+            </div>
         </div>
-    </div>
     </main>
     <?php
         require_once("../general/footer.php");
-    ?>    
+    ?>
 </body>
-<script src="/js/receptionist/view_user_profiles.js"></script>
+<script src="/js/receptionist/view_reservations.js"></script>
 </html>

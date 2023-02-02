@@ -8,7 +8,7 @@
     $staffMember = new Staff();
     $receptionist = $staffMember -> getStaffMemeber($_SESSION['userrole']);  
     $sportID = htmlspecialchars($_GET['sportID']);  
-    $courtNames = $receptionist -> getAvailableCourts($_SESSION['branchid'],$sportID,$connection);  // get the courts of the particular branch
+    $courtNames = $receptionist -> getAvailableCourts($_SESSION['branchID'],$sportID,$connection);  // get the courts of the particular branch
 
     if(count($courtNames)=== 0) {
         array_push($courtNames,['errMsg' => "Sorry, Cannot find what you are looking For"]);

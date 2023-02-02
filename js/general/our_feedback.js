@@ -4,14 +4,16 @@ const branchFilter = document.getElementById("branchFilter");   //branch filter
 const searchBar = document.querySelector("#feedbackSearch");    //searchbar
 const ratingFilter = document.getElementById("ratingFilter");   //rating filter
 
+const feedbackContainer = document.querySelector("#feedbackContainer"); //feedback container
+
 //functions
 
-function sortByDate(row1, row2){    //sort feedback rows by dates (rows are table rows)
-    const dateCell1 = row1.firstChild;
-    const dateCell2 = row2.firstChild;
+function sortByDate(div1, div2){    //sort feedbacks by date
+    const dateSpan1 = div1.querySelector(".feedbackDate");   //get the date span of the first div
+    const dateSpan2 = div2.querySelector(".feedbackDate");   //get the date span of the second div
 
-    const date1 = new Date(dateCell1.innerHTML);
-    const date2 = new Date(dateCell2.innerHTML);
+    const date1 = new Date(dateSpan1.innerHTML);
+    const date2 = new Date(dateSpan2.innerHTML);
     
     if(date1 < date2){
         return 1;
@@ -35,45 +37,48 @@ const filterFeedback = (e) =>{
     }
     const ratingVal = ratingFilter.value;
 
-    const allRows = Array.from(document.querySelectorAll("tr")).filter(i => i.className !== "headRow"); //select all the table rows other than the header
-    allRows.forEach(i => i.style.display = ""); //show all the rows
+    const allDivs = feedbackContainer.children; //get all the feedback divs
+    
+    for(let i = 0; i < allDivs.length; i++){    //show all the the divs
+        allDivs[i].style.display = "";
+    }
 
-    let filteredRows = Array(); //to store the filtered rows
+    let filteredDivs = Array(); //to store the filtered rows
 
     //filtering the search result
     if(searchVal.length >= 3){  //if the search value is more than 3 characters (can filter)
-        allRows.forEach(row => {    //go each row
+        for(let i = 0; i < allDivs.length; i++){
             let flag = false;
-            const cells = Array.from(row.childNodes);
-            cells.forEach(cell => {   //go each cell of that row
+            const childDivs = Array.from(allDivs[i].childNodes);
+            childDivs.forEach(cell => {   //go each cell of that row
                 if(cell.innerHTML.toLowerCase().includes(searchVal)){ //if found
                     flag = true;
                 }
             });
     
             if(flag === false){ //result not available in the current checking row
-                row.style.display = "none"; //hide it
+                allDivs[i].style.display = "none"; //hide it
             }
             else{
-                row.style.display = "";
-                filteredRows.push(row);
+                allDivs[i].style.display = "";
+                filteredDivs.push(allDivs[i]);
             }
-        });       
+        }       
     }
     else{   //show all the rows
-        filteredRows = [...allRows];
+        filteredDivs = [...allDivs];
     }
 
     //console.log(filteredRows);
 
     let temp = null;
 
-    if(filteredRows.length === 0){  //no such result
+    if(filteredDivs.length === 0){  //no such result
         return;
     }
     else{   //if there are filtered rows
-        temp = [...filteredRows];
-        filteredRows.length = 0;    //clear the filtered rows array
+        temp = [...filteredDivs];
+        filteredDivs.length = 0;    //clear the filtered rows array
     }
 
     //filtering the branch
@@ -81,7 +86,7 @@ const filterFeedback = (e) =>{
         temp.forEach(i => { //go through search filtered rows
             if(i.classList.contains(branchVal)){    //found a row that matches the branch
                 i.style.display = "";
-                filteredRows.push(i);   //add the rows to the filtered rows array
+                filteredDivs.push(i);   //add the rows to the filtered rows array
             }
             else{
                 i.style.display = "none";
@@ -89,25 +94,27 @@ const filterFeedback = (e) =>{
         });
     }
     else{
-        filteredRows = [...temp];
+        filteredDivs = [...temp];
     }
 
     //console.log(filteredRows);
  
     //filtering the rating
-    if(filteredRows.length === 0){  // no results
+    if(filteredDivs.length === 0){  // no results
         return;
     }
     else{
-        temp = [...filteredRows];
-        filteredRows.length = 0;
+        temp = [...filteredDivs];
+        filteredDivs.length = 0;
     }
+
+    console.log(temp);
 
     if(ratingVal !== ""){   //if the user wants to filter the rating 
         temp.forEach(i => {
             if(i.classList.contains("Rating" + ratingVal)){
                 i.style.display = "";
-                filteredRows.push(i);   //add the rows to the filtered rows array
+                filteredDivs.push(i);   //add the rows to the filtered rows array
             }
             else{
                 i.style.display = "none";
@@ -130,8 +137,6 @@ fetch("../../controller/general/our_feedback_controller.php")
     .then(res => res.json())
     .then(data =>{
         //console.log(data);
-        const tableBody = document.querySelector("tbody");
-
         const dataKeys = Object.keys(data);
 
         const branchInfo = [];  //array to store all branches (branch id and the city)
@@ -157,24 +162,42 @@ fetch("../../controller/general/our_feedback_controller.php")
 
             for(let j = 0; j < data[dataKeys[i]].length; j++){    //traversing each feedback for a particular branch
                 //console.log(data[dataKeys[i]].length);
-                const feedbackRow = document.createElement("tr");   //feedback row
-                feedbackRow.className = currBranch.branchID;    //same class to identify feedback rows for each branch
+                //const feedbackRow = document.createElement("tr");   //feedback row
+                //feedbackRow.className = currBranch.branchID;    //same class to identify feedback rows for each branch
+                const feedbackDiv = document.createElement("div");    //feedback div
+                feedbackDiv.className = currBranch.branchID;    //same class to identify feedback divs for each branch
+                feedbackDiv.classList.add("feedbackDiv");
 
-                const dateCell = document.createElement("td");  //date cell
-                dateCell.innerHTML = data[dataKeys[i]][j].date;
-                feedbackRow.appendChild(dateCell);
+                //create the feedback content
+                const feedbackContent = document.createElement("div");
+                feedbackContent.innerHTML = data[dataKeys[i]][j].description;
 
-                const branchCell = document.createElement("td");    //branch cell
-                branchCell.innerHTML = currBranch.branchCity;
-                feedbackRow.appendChild(branchCell);
+                //create the feedback footer
+                const feedbackFooter = document.createElement("div");
 
-                const feedbackCell = document.createElement("td");    //description cell
-                feedbackCell.innerHTML = data[dataKeys[i]][j].description;
-                feedbackRow.appendChild(feedbackCell);
+                const feedbackDate = document.createElement("span");
+                feedbackDate.className = "feedbackDate";
+                feedbackDate.innerHTML = data[dataKeys[i]][j].date;
+                feedbackDate.style.fontStyle = "italic";
+                feedbackDate.style.color = "grey";
 
-                const ratingCell = document.createElement("td");    //rating cell
+                const feedbackBranch = document.createElement("span");
+                feedbackBranch.innerHTML = currBranch.branchCity;
+                feedbackBranch.style.fontStyle = "italic";
+                feedbackBranch.style.color = "grey";
+                
+
+                feedbackFooter.appendChild(feedbackDate);
+                //append a space between the date and the branch
+                const space = document.createTextNode(" ");
+                feedbackFooter.appendChild(space);
+                feedbackFooter.appendChild(feedbackBranch);
+
+
+                //create the feedback rating
+                const feedbackRating = document.createElement("div");
                 const userRating = parseInt(data[dataKeys[i]][j].rating);
-                feedbackRow.classList.add("Rating" + userRating); //add the rating as a class to the row
+                feedbackDiv.classList.add("Rating" + userRating); //add the rating as a class to the row
                
                 for(let k = 1; k <= 5; k++){ //create the stars
                     const star = document.createElement("span");
@@ -182,11 +205,15 @@ fetch("../../controller/general/our_feedback_controller.php")
                     if(k > userRating){    //if the k has exceeded the user rating, change the star to empty
                         star.className = "fa fa-star";
                     }
-                    ratingCell.appendChild(star);
+                    feedbackRating.appendChild(star);
                 }
-                feedbackRow.appendChild(ratingCell);
 
-                branchFeedbacks.push(feedbackRow);
+                //append the feedback content, footer and rating to the feedback div
+                feedbackDiv.appendChild(feedbackRating);
+                feedbackDiv.appendChild(feedbackContent);
+                feedbackDiv.appendChild(feedbackFooter);
+
+                branchFeedbacks.push(feedbackDiv);
             }
         }
         
@@ -194,7 +221,7 @@ fetch("../../controller/general/our_feedback_controller.php")
         branchFeedbacks.sort(sortByDate);
         //console.log(branchFeedbacks);
 
-        branchFeedbacks.forEach(i => tableBody.appendChild(i)); //append the table rows
+        branchFeedbacks.forEach(i => feedbackContainer.appendChild(i)); //append the table rows
 
         //check if we are coming from the our branches page
         const selectedBranch = localStorage.getItem("feedbackBranch");

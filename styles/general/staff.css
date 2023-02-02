@@ -1,5 +1,3 @@
-
-
 .flex-container {
     display: flex;
     flex-direction: row;
@@ -19,6 +17,16 @@
     padding: 20px;
     align-items: center;
     font-size: 30px;
-    height: 500px;
+    height: 200px;
     width : 400px;
+}
+
+main{
+    background-image: none;
+    background:linear-gradient(316.41deg, #6F0808 5.32%, #000000 45.92%, #000956 78.45%);
+    /* background-color: linear-gradient(316.41deg, #6F0808 5.32%, #000000 45.92%, #000956 78.45%); */
+}
+
+main::before{
+    content: none;
 }

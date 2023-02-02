@@ -3,6 +3,8 @@
     require_once("../../src/general/branch.php");
     require_once("../../src/system_admin/staffMember.php");
     require_once("../../src/user/user.php");
+    require_once("../../src/coach/coach.php");
+    require_once("../../src/coach/coaching_session.php");
     require_once("../../src/general/actor.php");
 
 class Receptionist extends Actor implements JsonSerializable , StaffMember{
@@ -18,7 +20,14 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
     private $branchID;
     private $staffRole;
 
-
+    public function __construct($actor = null){
+        if($actor !== null){
+            $this -> userID = $actor -> getUserID();
+            $this -> username = $actor -> getUsername();
+        }
+        require("dbconnection.php");   //get the user connection to the db
+        $this -> connection = $connection;
+    }
 
     public function setDetails($fName='', $lName='', $email='', $contactNo='', $dob='', $gender='', $uid='', $username='', $password='', $brID = ''){
         $this -> receptionistID = $uid;
@@ -144,14 +153,14 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         }
     }
 
-    public function login($username, $password){
+    public function getSessionData(){
 
-/*         $getBranch = sprintf("SELECT `branch_id` AS brid
+        $getBranch = sprintf("SELECT `branchID` AS brid
         FROM `staff`
         WHERE `staffID` = '%s'",
-        $database -> real_escape_string($this -> receptionistID));
+        $this-> connection -> real_escape_string($this -> userID));
 
-        $brResult = $database -> query($getBranch);
+        $brResult = $this-> connection -> query($getBranch);
 
         $branchIDResult = $brResult -> fetch_object();   //get the branch_id
         $this -> branchID = $branchIDResult -> brid;
@@ -159,13 +168,13 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         $getBrName = sprintf("SELECT `city`
         FROM `branch`
         WHERE `branchID` = '%s'",
-        $database -> real_escape_string($this -> branchID));
+        $this->connection -> real_escape_string($this -> branchID));
 
-        $brNameResult = $database -> query($getBrName);
+        $brNameResult = $this->connection -> query($getBrName);
 
         $branchName = $brNameResult -> fetch_object();   //get the branch_city
 
-        return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details */
+        return [$branchName -> city, $this -> branchID];  //return the branch name and id
     }
 
     public function branchMaintenance($reason,$startDate,$endDate,$brID,$stfID,$database) {
@@ -206,7 +215,7 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
         $crtIDRes = $database -> query($crtID);
         $crtIDResult = $crtIDRes -> fetch_object();
-        $courtID = $crtIDResult -> courtID;             //get the court id
+        $courtID = $crtIDResult -> court_id;             //get the court id
 
         $courtQuery = sprintf("INSERT INTO `court_maintenance`
         (`courtID`,
@@ -233,13 +242,11 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $results;
     }
 
-    public function editBranch($staffID,$branchID,$database) {
+    public function editBranch($stafID,$branchID,$database) {
 
-        $branchSql = sprintf("SELECT DISTINCT `branch`.`city` AS location,
-        `branch`.`branchEmail` AS email
-        from `branch` INNER JOIN `staff` ON
-        `branch`.`branchID` = `staff`.`branchID`
-        WHERE `staff`.`branchID` = '%s'",
+        $branchSql = sprintf("SELECT DISTINCT `city` AS location,
+        `branchEmail` AS email
+        from `branch` WHERE `branchID` = '%s'",
         $database -> real_escape_string($branchID));
 
         $branchResult = $database -> query($branchSql);   //get the branch results
@@ -259,7 +266,7 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
         $numArray = [];
         while($row = $numResult -> fetch_object()){   //get the branch numbers one by one
-            $number = $row -> contactNum;
+            $number = $row -> contact_number;
             array_push($numArray,$number);
         }
 
@@ -286,9 +293,9 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
     public function getAllSports($branchID,$database) {
         $branch = new Branch($branchID);
-        $sportNames = $branch -> getAllSports($database);
+        $sportDetails = $branch -> getAllSports($database);
 
-        return $sportNames;
+        return $sportDetails;
     }
 
     public function getAllCourts($branchID,$database) {
@@ -306,21 +313,18 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
     }
 
     public function getUserProfiles($database) {
-        $userProResult = $database -> query("SELECT `firstName`,`lastName`,`contactNum`,`profilePhoto` FROM `user`");
+        $userProResult = $database -> query("SELECT `userID`,`firstName`,`lastName`,`contactNum`,`profilePhoto` FROM `user`");
         $profileResult = [];
         while($row = $userProResult->fetch_object()){   //get profiles one by one
-            array_push($profileResult,['fName' => $row->firstName,'lName' => $row ->lastName, 'contactN' => $row -> contactNum, 'profile' => $row->profilePhoto]);
+            array_push($profileResult,['id' => $row->userID,'fName' => $row->firstName,'lName' => $row ->lastName, 'contactN' => $row -> contactNum, 'profile' => $row->profilePhoto]);
         }
 
         return $profileResult;
     }
 
-    public function getWantedUserProfile($fName,$lName,$contactN,$database) {
-        $findUser = sprintf("SELECT * FROM `user` WHERE `firstName` = '%s'
-        AND `lastName` = '%s' AND `contactNum` = '%s'",
-        $database -> real_escape_string($fName),
-        $database -> real_escape_string($lName),
-        $database -> real_escape_string($contactN));
+    public function getWantedUserProfile($userID,$database) {
+        $findUser = sprintf("SELECT * FROM `user` WHERE `userID` = '%s'",
+        $database -> real_escape_string($userID));
 
         $user = $database -> query($findUser) -> fetch_Object() ;  //get the user id of the particular user
         // $user = new User('uid:$userID');
@@ -343,6 +347,121 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $allInfo;
     }
 
+    public function getUserDependentInfo($userID,$name,$database){
+        // $user  = new User();
+        // $user -> setDetails(uid:$userID);
+        // $user -> getProfileDetails();
+        // $dependents = $user -> dependents;
+        $userDependentsSql = sprintf("SELECT `name`,`relationship`,`contactNum` from `user_dependent` WHERE `ownerID` = '%s' AND `name` = '%s'",
+        $database -> real_escape_string($userID),
+        $database -> real_escape_string($name));
+        $dependentInfo = $database -> query($userDependentsSql) -> fetch_object();
+        $depInfo = [];
+        array_push($depInfo,['Name'=>$dependentInfo->name,'Relationship'=>$dependentInfo->relationship,'contactN'=>$dependentInfo->contactNum]);
+        
+        return $depInfo;
+    }
+
+    public function getCoachProfiles($database){
+        $coachProResult = $database -> query("SELECT `c`.`coachID`,`c`.`firstName`,`c`.`lastName`,`c`.`contactNum`,`c`.`photo`,`s`.`sportName` FROM `coach` `c` 
+        INNER JOIN `sport` `s` ON `c`.`sport` = `s`.`sportID`");    //get the coach profile details and sport name
+
+        $profileResult = [];
+        while($row = $coachProResult->fetch_object()){   //get profiles one by one
+            array_push($profileResult,['coachID' => $row->coachID,'fName' => $row->firstName,'lName' => $row ->lastName, 'sport' => $row ->sportName, 'contactN' => $row -> contactNum, 'profilePhoto' => $row->photo]);
+        }
+
+        return $profileResult;
+    }
+
+    public function getWantedCoachProfile($coachID,$database){
+
+        $coach = new Coach();
+        $coach -> setDetails(uid:$coachID);
+        $coachProfileQuery = sprintf("SELECT `c`.*,`l`.`emailAddress`,`s`.`sportName` FROM `coach` `c` 
+        INNER JOIN `login_details` `l` ON `c`.`coachID` = `l`.`userID`
+        INNER JOIN `sport` `s` ON `c`.`sport` = `s`.`sportID` 
+        WHERE `c`.`coachID` = '%s'",
+        $database -> real_escape_string($coachID));
+        $coachProfile = $database -> query($coachProfileQuery) -> fetch_object();   //get the coach profile details
+        
+        $qualificationsql = sprintf("SELECT `qualification` FROM `coach_qualification` WHERE `coachID` = '%s'",
+        $database -> real_escape_string($coachID)); //get the coach qualifications
+        $qualificationArr = $database -> query($qualificationsql) -> fetch_all(MYSQLI_ASSOC);
+
+        $coachingSessionsql = sprintf("SELECT `sessionID` FROM `coaching_session` WHERE `coachID` = '%s'",
+        $database -> real_escape_string($coachID));
+        $coachingSessions = $database -> query($coachingSessionsql);
+        $branchNames = [];
+        while($row = $coachingSessions -> fetch_object()){
+            $session = new Coaching_Session($row -> sessionID);
+            $branchName = $session -> getDetails($database,"branchName");
+            array_push($branchNames,$branchName);
+        }
+
+        $uniBranchNames = array_unique($branchNames);
+        $rating = $coach -> getRating($database);
+        $feedbackArray = $coach -> getFeedback($database);
+
+        $coachInfo = [];
+        array_push($coachInfo,$coachProfile,$rating,$feedbackArray,$uniBranchNames,$qualificationArr);
+        return $coachInfo;
+    }
+
+    public function getSeesionOnBranch($coachID,$branchName,$database){
+        $coachingSessionsql = sprintf("SELECT `sessionID` FROM `coaching_session` WHERE `coachID` = '%s'",
+        $database -> real_escape_string($coachID));
+        $coachingSessions = $database -> query($coachingSessionsql);
+        $sessionInfo = [];
+        while($row = $coachingSessions -> fetch_object()){
+            $session = new Coaching_Session($row -> sessionID);
+            if($session -> getDetails($database,"branchName") === $branchName){
+                $sTime = $session -> getDetails($database,"startingTime");
+                $eTime = $session -> getDetails($database,"endingTime");
+                $day = $session -> getDetails($database,"day");
+                array_push($sessionInfo,[$day,$sTime,$eTime]);
+            }  
+        }
+        return $sessionInfo;
+    }
+
+    public function viewReservations($branchID,$database){
+        //get the user reservation details
+        $uReservationSql = sprintf("SELECT `r`.`reservationID`,`r`.`startingTime`,`r`.`endingTime`,`r`.`noOfPeople`,`r`.`status`,`u`.`firstName`,`u`.`lastName`,`u`.`contactNum` ,`s`.`sportName`,
+        `sc`.`courtName`
+        FROM `reservation` `r`              
+        INNER JOIN `user` `u` ON
+        `r`.`userID` = `u`.`userID`
+        INNER JOIN `sports_court` `sc`
+        ON `sc`.`courtID` = `r`.`sportCourt`
+        INNER JOIN `sport` `s`
+        ON `sc`.`sportID` = `s`.`sportID`
+        INNER JOIN `branch` `b`
+        ON `b`.`branchID` = `sc`.`branchID`
+        WHERE `b`.`branchID` = '%s' AND `r`.`status` = 'pending'",
+        $database -> real_escape_string($branchID));
+        $userReservations = $database -> query($uReservationSql) -> fetch_all(MYSQLI_ASSOC);
+
+        $currentDay = date("j"); //get the current day
+        echo $currentDay;
+        //get the coaching_session Details
+        $permanentReservationsSql = sprintf("SELECT `p`.`sessionID`,`p`.`startingTime`,`p`.`endingTime`,`p`.`noOfStudents`,`s`.`sportName`,`sc`.`courtName`,`c`.`firstName`,`c`.`lastName`,`c`.`contactNum` FROM 
+        `coaching_session` `p` INNER JOIN `sports_court` `sc` 
+        ON `p`.`courtID` = `sc`.`courtID` INNER JOIN `branch` `b` 
+        ON `sc`.`branchID` = `b`.`branchID` INNER JOIN`sport` `s` 
+        ON `sc`.`sportID` = `s`.`sportID` INNER JOIN `coach` `c` 
+        ON `p`.`coachID` = `c`.`coachID` 
+        WHERE `b`.`branchID` = '%s' AND `p`.`noOfStudents` > 0 AND `p`.`day` = 'Thursday'",
+        $database -> real_escape_string($branchID));
+        $permanentReservations = $database -> query($permanentReservationsSql) -> fetch_all(MYSQLI_ASSOC);
+        
+        $reservationArr = [];
+        // while($row = $reservationResult -> fetch_object()){
+        //     array_push($reservationArr,['reservationID' => $row -> reservationID,'startingTime' => $row -> startingTime,'endingTime' => $row -> endingTime,'day' => $row -> day,'date' => $row -> date,'status' => $row -> status,'fName' => $row -> firstName,'lName' => $row -> lastName,'contactN' => $row -> contactNum]);
+        // }
+        array_push($reservationArr,$userReservations,$permanentReservations);
+        return $reservationArr;
+    }
     public function updateBranchEmail($branchID,$email,$database) {
         $branch = new Branch($branchID);
         $result = $branch -> updateBranchEmail($email,$database);

@@ -5,18 +5,18 @@
     require_once("../../src/receptionist/dbconnection.php");
     require_once("../../src/system_admin/staff.php");
 
-    $userID = $_GET['userID'];
+    $coachID = $_GET['coachID'];
 
     $staffM = new Staff();
     $receptionist = $staffM -> getStaffMemeber($_SESSION['userrole']);
 
-    $userProfile = $receptionist -> getWantedUserProfile($userID,$connection);
+    $coachProfile = $receptionist -> getWantedCoachProfile($coachID,$connection);
 
-    if(count($userProfile)===0){
+    if(count($coachProfile)===0){
         array_push($userProfile,['errMsg'=>"Sorry, No record of such user"]);
     }
 
     header('Content-Type: application/json;');    //because we are sending json
-    echo json_encode($userProfile);
+    echo json_encode($coachProfile);
     $connection -> close();
 ?>
