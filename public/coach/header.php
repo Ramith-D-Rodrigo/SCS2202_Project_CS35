@@ -32,9 +32,7 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/coach/coach_dashboard.php'){
                     echo "Welcome, ".$_SESSION['username'];
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/coach/coach_addsession.php'){
-                    echo "Add Session ";
-                }
+                
             ?>
         </div>
         <div>
