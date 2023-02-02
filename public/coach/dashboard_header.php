@@ -53,7 +53,7 @@
                 <div style="float:right">
                     <button class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
                     <button class ="btn" id="logout" onclick="window.location.href='/public/coach/coach_dashboard.php'"><img src="/styles/icons/dashboard_icon.svg" class="dash-img"></button>
-                    <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<i class="fa-solid fa-right-to-bracket" style="margin: 0 10px"></i></button>        
+                    <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-to-bracket" style="margin: 0 10px"></i></button>        
                 </div>
                     
             <?php
