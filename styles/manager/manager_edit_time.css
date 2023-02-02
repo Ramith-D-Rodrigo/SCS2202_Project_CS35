@@ -1,0 +1,56 @@
+.content_box {
+
+    width: 800px;
+    height: 500px;
+    left: 350px;
+    background-color: #ffffff;
+    padding: 10px;
+    margin: auto;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.open_close {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 50px;
+}
+
+#CloseTime {
+    margin-left: 20px;
+}
+
+#Duration {
+    margin-left: 53px;
+    margin-bottom: 30px;
+}
+
+/* .NewOpenClose{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: -25px; 
+} */
+
+#NewOpen {
+    width: 250px;
+    margin-left: 40px;
+}
+
+#Newclose {
+    width: 250px;
+    margin-left: 55px;
+}
+
+.button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+    margin-top: 30px;
+    
+}
