@@ -17,6 +17,20 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/coach/viewing_session.php'){  //view session
                     echo "Viewing Session";
                 }
+                else if($_SERVER['REQUEST_URI'] === '/public/coach/notify_student.php'){  //notify student
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/coach/income_payment.php'){  //income & payment
+                    echo "Income & Payment";
+                } 
+                else if($_SERVER['REQUEST_URI'] === '/public/coach/student_request.php'){  //student requset
+                    echo "Student Requset";
+                } 
+                else if($_SERVER['REQUEST_URI'] === '/public/coach/edit_profile.php'){  //edit profile
+                    echo "Edit Profile";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/coach/student_profile.php'){  //student profile
+                    echo "Student Profile";
+                }
             ?>
         </div>
         <div style="align-items:flex-end">

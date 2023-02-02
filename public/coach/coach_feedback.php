@@ -6,10 +6,10 @@
         exit();
     }
 
-    if($_SESSION['userrole'] !== 'coach'){   //not an coach (might be another actor)
-        header("Location: /index.php");
-        exit();
-    }
+    // if($_SESSION['userrole'] !== 'coach'){   //not an coach (might be another actor)
+    //     header("Location: /index.php");
+    //     exit();
+    // }
 ?>
 
 
@@ -45,6 +45,12 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td>2023.05.13</td>
+                                <td>Good</td>
+                                <td>***</td>
+
+                            </tr>
                         </tbody>
                     </table>
                 </div>
