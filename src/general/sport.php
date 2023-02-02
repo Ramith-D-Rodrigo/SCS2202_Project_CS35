@@ -8,7 +8,7 @@
         private $maxNoOfStudents;
 
         public function getDetails($database, $wantedProperty = ''){
-            $sql = sprintf("SELECT * FROM `sport` 
+            $sql = sprintf("SELECT * FROM `sport`
             WHERE `sportID`
             LIKE '%s'", $database -> real_escape_string($this -> sportID));
             $result = $database -> query($sql);
@@ -26,7 +26,7 @@
             $this -> manNoOfStudents = $row -> manNoOfStudents; */
 
             $result -> free_result();
-            
+
             if($wantedProperty === 'sportID'){
                 return $this -> sportID;
             }
@@ -46,7 +46,7 @@
         }
 
         public function getSportID($spName, $database) {
-            $sql = sprintf("SELECT `sportID` FROM `sport` 
+            $sql = sprintf("SELECT `sportID` FROM `sport`
             WHERE `sportName`
             LIKE '%s'", $database -> real_escape_string($spName));
             $result = $database -> query($sql);
@@ -61,7 +61,7 @@
                 "reservationPrice" => $this -> reservationPrice,
                 "maxNoOfStudents" => $this -> maxNoOfStudents
             ];
-            
+
         }
     }
 

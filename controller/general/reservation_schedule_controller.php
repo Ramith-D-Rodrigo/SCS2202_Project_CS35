@@ -41,10 +41,10 @@
                 continue;
             }
             $reservationDetails['date'] = $currReservation -> date;
-            $reservationDetails['starting_time'] = $currReservation -> starting_time;
-            $reservationDetails['ending_time'] = $currReservation -> ending_time;
+            $reservationDetails['startingTime'] = $currReservation -> startingTime;
+            $reservationDetails['endingTime'] = $currReservation -> endingTime;
 
-            $courtSchedule[$currReservation -> reservation_id] =  $reservationDetails;   //reservation details stored in courtschedule
+            $courtSchedule[$currReservation -> reservationID] =  $reservationDetails;   //reservation details stored in courtschedule
             unset($reservationDetails);
         }
         $allCourts[$currCourt] = ['schedule' => $courtSchedule, 'courtName' => $courtName];  //reservation schedule of the court is stored in the courts array
@@ -60,7 +60,7 @@
     unset($neededInfo['photos']);
     unset($neededInfo['receptionist']);
     $neededInfo['reservingSport'] = $sport;
-    $neededInfo['branch_reservation_schedule'] = $allCourts;
+    $neededInfo['branchReservationSchedule'] = $allCourts;
 
     unset($allCourts);
     unset($sport);

@@ -22,27 +22,26 @@
         }
 
         public function getDetails($database, $wantedProperty = ''){
-            $sql = sprintf("SELECT `cs`.*, `b`.`city`, `c`.`court_name` FROM coaching_session cs 
-            INNER JOIN sports_court c ON  `c`.`court_id` = `cs`.`court_id`
-            INNER JOIN branch b ON `c`.`branch_id` = `b`.`branch_id`
+            $sql = sprintf("SELECT `cs`.*, `b`.`city` as `branchName`, `c`.`courtName` FROM coaching_session cs 
+            INNER JOIN sports_court c ON  `c`.`courtID` = `cs`.`courtID`
+            INNER JOIN branch b ON `c`.`branchID` = `b`.`branchID`
 
-            WHERE session_id = '%s'",
+            WHERE sessionID = '%s'",
             $database -> real_escape_string($this -> sessionID));
 
             $result = $database -> query($sql);
 
             $obj = $result -> fetch_object();
-            $this -> coachID = $obj -> coach_id;
-            $this -> courtID = $obj -> court_id;
-            $this -> coachMonthlyPayment = $obj -> coach_monthly_payment;
-            $this -> timePeriod = $obj -> time_period;
-            $this -> noOfStudents = $obj -> no_of_students;
-            $this -> day = $obj -> day;
-            $this -> startingTime = $obj -> starting_time;
-            $this -> endingTime = $obj -> ending_time;
-            $this -> paymentAmount = $obj -> payment_amount;
-            $this -> courtName = $obj -> court_name;
-            $this -> branchName = $obj -> city;
+
+            //foreach loop to set the object properties
+            foreach($obj as $key => $value){
+                if($key == $wantedProperty){
+                    $this -> $key = $value;
+                    return $value;
+                }
+                $this -> $key = $value;
+
+            }
 
             unset($obj);
             $result -> free_result();

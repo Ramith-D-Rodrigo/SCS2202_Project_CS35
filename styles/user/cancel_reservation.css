@@ -1,0 +1,32 @@
+#authFormDiv{
+    padding: 25px;
+    position:absolute; 
+    display:none; 
+    top:50%; 
+    left:50%; 
+    transform: translate(-50%, -50%);
+    animation: slideIn 0.5s ease-in-out; 
+}
+
+#msgBox{
+    padding: 25px;
+    position:absolute; 
+    display:none; 
+    top:50%; 
+    left:50%; 
+    transform: translate(-50%, -50%);
+    animation: slideIn 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translate(-50%, -50%);
+        top: -50%;
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%);
+        top: 50%;
+        opacity: 1;
+    }
+}

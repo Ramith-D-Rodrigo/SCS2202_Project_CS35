@@ -11,18 +11,18 @@
 
     foreach($coaches as $currCoach){
         $tempCoach = new Coach();
-        $tempCoach -> setDetails(uid: $currCoach -> coach_id, sport: $currCoach -> sport);
-        $fName = $tempCoach -> getDetails('first_name');
-        $lName = $tempCoach -> getDetails('last_name');
+        $tempCoach -> setDetails(uid: $currCoach -> coachID, sport: $currCoach -> sport);
+        $fName = $tempCoach -> getDetails('firstName');
+        $lName = $tempCoach -> getDetails('lastName');
         $gender = $tempCoach -> getDetails('gender');
         $photo = $tempCoach -> getDetails('photo');
         $rating = $tempCoach -> getRating();
 
         $sport = new Sport();
         $sport -> setID($currCoach -> sport);
-        $sportName = $sport -> getDetails($connection, 'sport_name');
+        $sportName = $sport -> getDetails($connection, 'sportName');
         $result[] = array(
-            "coachID" => $currCoach -> coach_id,
+            "coachID" => $currCoach -> coachID,
             "sport" => $sportName,
             "firstName" => $fName,
             "lastName" => $lName,

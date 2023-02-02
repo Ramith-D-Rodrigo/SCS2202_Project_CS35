@@ -237,7 +237,32 @@
             return $courts;
         }
 
-        public function updateBranchEmail($newEmail, $database){
+        public function getSportCourtNames($sportID, $database){
+            $sql = sprintf("SELECT `courtName`
+            FROM
+            `sports_court`
+            WHERE
+            `branchID`
+            LIKE
+            '%s'
+            AND
+            `sportID`
+            LIKE
+            '%s'",
+            $database -> real_escape_string($this -> branchID),
+            $database -> real_escape_string($sportID));
+
+            $result = $database -> query($sql);
+            $courtNames = [];
+            while($row = $result -> fetch_object()){
+                array_push($courtNames, $row -> courtName);
+                unset($row);
+            }
+            $result -> free_result();
+            return $courtNames;
+        }
+
+        public function updateBranchEmail($newEmail,$database) {
             $updateSQL = sprintf("UPDATE `branch` SET `branchEmail` = '%s' WHERE `branch`.`branchID` = '%s'",
             $database -> real_escape_string($newEmail),
             $database -> real_escape_string($this -> branchID));
@@ -262,6 +287,16 @@
             }
             $result -> free_result();
             return $this -> photos;
+        }
+
+        public function addBranchFeedback($addedUser, $feedback, $rating, $database){
+            $newFeedback = new Branch_Feedback();
+            
+            $addedDate = date("Y-m-d");
+            $newFeedbackID = uniqid("FB");
+            $newFeedback -> setDetails(user_id: $addedUser -> getUserID(), branch_id: $this -> branchID, description: $feedback, rating: $rating, date: $addedDate, userfeedback_id: $newFeedbackID);
+            $result = $newFeedback -> addFeedback($database);
+            return $result;
         }
 
 
@@ -309,6 +344,7 @@
 
         }
 
+
         public function getBranchRating($database){
             $sql = sprintf("SELECT AVG(`rating`) as `rating` FROM `user_branch_feedback` WHERE `branchID` = '%s'",
             $database -> real_escape_string($this -> branchID));
@@ -329,11 +365,11 @@
         public function getCurrentDiscount($database){ //function to get the current discount of the branch (available during the current date)
             $today = date('Y-m-d');
 
-            $sql = sprintf("SELECT `discountValue` 
-            FROM `discount` 
-            WHERE `branchID` = '%s' 
-            AND `decision` = 'a' 
-            AND `startingDate` <= '%s' 
+            $sql = sprintf("SELECT `discountValue`
+            FROM `discount`
+            WHERE `branchID` = '%s'
+            AND `decision` = 'a'
+            AND `startingDate` <= '%s'
             AND `endingDate` >= '%s'",
             $database -> real_escape_string($this -> branchID),
             $database -> real_escape_string($today),
@@ -351,7 +387,7 @@
             return $discount;
         }
 
-        public function jsonSerialize() : mixed{
+        public function jsonSerialize():mixed{
             return [
                 'branchID' => $this -> branchID,
                 'city' => $this -> city,

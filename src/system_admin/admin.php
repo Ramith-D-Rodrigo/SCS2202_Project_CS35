@@ -20,10 +20,10 @@ class Admin{
     }
 
     public function login($username, $password, $database){
-        $sql = sprintf("SELECT `user_id`,
+        $sql = sprintf("SELECT `userID`,
         `username`,
         `password`,
-        `user_role`
+        `userRole`
         FROM `login_details`
         WHERE `username` = '%s'",
         $database -> real_escape_string($username));
@@ -42,9 +42,9 @@ class Admin{
         }
 
         //setting admin data for session
-        $this -> adminID = $rows -> user_id;
+        $this -> adminID = $rows -> userID;
 
-        return ["Successfully Logged In", $rows -> user_role, $rows -> username];  //return the message, user role and username
+        return ["Successfully Logged In", $rows -> userRole, $rows -> username];  //return the message, user role and username
     }
 
     public function registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$database) {
@@ -76,10 +76,10 @@ class Admin{
     }
 
     public function getBranchID($branchName,$database){
-        $sql = sprintf("SELECT `branch_id` FROM `branch` WHERE `city`= '%s'",$database -> real_escape_string($branchName));
+        $sql = sprintf("SELECT `branchID` FROM `branch` WHERE `city`= '%s'",$database -> real_escape_string($branchName));
         $result = $database -> query($sql);
 
-        $branchID = $result -> fetch_object() -> branch_id;
+        $branchID = $result -> fetch_object() -> branchID;
         return $branchID;
     }
 

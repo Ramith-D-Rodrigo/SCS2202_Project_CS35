@@ -1,6 +1,6 @@
-/public/user/profile_images/
-/public/coach/profile_images/
-/public/general/branch_images/
-/public/general/court_images/
+/uploads/user_profile_images/
+/uploads/coach_profile_images/
+/uploads/branch_images/
+/uploads/sports_court_images/
 
 config.php
