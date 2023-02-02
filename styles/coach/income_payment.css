@@ -1,11 +1,9 @@
-body {
-    flex: auto;
-    background: linear-gradient(180deg, #FFD700, #033C66);
-}
-.container{
+
+ .flex-container{
     display:flex;
+    flex-direction: column;
     box-sizing: border-box;
-    justify-content: space-around;
+    justify-content: space-between;
     
    }
 
@@ -13,10 +11,12 @@ body {
         display:flex;
         border-radius: 10px;
         flex-direction: column;
-        /* justify-content: first baseline; */
+        justify-content: space-between;
         align-items: center;
-    }
-    .container > div {
+        float: left;
+        
+    }   
+    .flex-container > div {
         background-color: #ecfcff;
         margin: 10px;
         padding: 20px;

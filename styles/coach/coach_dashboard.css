@@ -1,7 +1,5 @@
-body {
-    flex: auto;
-    background: linear-gradient(180deg, #FFD700, #033C66);
-}
+
+
 .flex-container {
     display: flex;
     flex-direction: row;

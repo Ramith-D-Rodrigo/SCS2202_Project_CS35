@@ -21,35 +21,38 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/styles/general/styles.css">
         <link rel="stylesheet" href="/styles/coach/income_payment.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+        <link rel="stylesheet" href="../../styles/coach/coach.css">
+
         <title>Income & Payment</title>
     </head>
     <body>
         <?php
             require_once("dashboard_header.php");
         ?>
-       <div class="container">
-       
-       <div class="tabs">
+     <main>
+       <div class="flex-container" >            
+              <div class="tabs">
                 <div>Income</div>
-                <div>
+                  <div>
                     <select class="select">
                         <option>Date period</option>
                     </select>
-                        <div class="ul"> 
-                            <ul>
-                                <li><output></output></li><br>
-                                <li><output></output></li><br>
-                                <li><output></output></li><br>
-                                <li><output></output></li>
+                      <div class="ul"> 
+                        <ul>
+                            <li><output></output></li><br>
+                            <li><output></output></li><br>
+                            <li><output></output></li><br>
+                            <li><output></output></li>
 
-                            </ul>
-                        </div>
-                </div>
-            </div>
+                        </ul>
+                      </div>
+                  </div>
+              </div>
 
             <div class="tabs">
                 <div>Payment</div>
-                <div>
+                 <div>
                      <select class="select">
                         <option>Session</option>
                      </select>
@@ -62,11 +65,11 @@
 
                             </ul>
                         </div>
-                </div>
+                 </div>
             </div>
-            
-            
-       </div>
+              
+        </div>
+     </main>
         <?php
             require_once("../../public/general/footer.php");
         ?>
