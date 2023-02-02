@@ -5,22 +5,28 @@
         private $description;
         private $reservationPrice;
         private $minCoachingSessionPrice;
-        private $maxNumberOfStudents;
+        private $maxNoOfStudents;
 
         public function getDetails($database, $wantedProperty = ''){
-            $sql = sprintf("SELECT * FROM `sport` 
-            WHERE `sport_id`
+            $sql = sprintf("SELECT * FROM `sport`
+            WHERE `sportID`
             LIKE '%s'", $database -> real_escape_string($this -> sportID));
             $result = $database -> query($sql);
 
             $row = $result -> fetch_object();
 
-            $this -> sportName = $row -> sport_name;
+            //using foreach to set the object properties
+            foreach($row as $key => $value){
+                $this -> $key = $value;
+            }
+
+/*             $this -> sportName = $row -> sportName;
             $this -> description = $row -> description;
-            $this -> reservationPrice = $row -> reservation_price;
+            $this -> reservationPrice = $row -> reservationPrice;
+            $this -> manNoOfStudents = $row -> manNoOfStudents; */
 
             $result -> free_result();
-            
+
             if($wantedProperty === 'sportID'){
                 return $this -> sportID;
             }
@@ -39,9 +45,9 @@
             $this -> sportID = $id;
         }
 
-        public function getSportID($spName,$database) {
-            $sql = sprintf("SELECT `sport_id` FROM `sport` 
-            WHERE `sport_name`
+        public function getSportID($spName, $database) {
+            $sql = sprintf("SELECT `sportID` FROM `sport`
+            WHERE `sportName`
             LIKE '%s'", $database -> real_escape_string($spName));
             $result = $database -> query($sql);
             return $result;
@@ -52,9 +58,10 @@
                 "sportID" => $this -> sportID,
                 "sportName" => $this -> sportName,
                 "description" => $this -> description,
-                "reservationPrice" => $this -> reservationPrice
+                "reservationPrice" => $this -> reservationPrice,
+                "maxNoOfStudents" => $this -> maxNoOfStudents
             ];
-            
+
         }
     }
 

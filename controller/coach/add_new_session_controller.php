@@ -25,8 +25,8 @@
      $day = htmlspecialchars($_POST['day'], ENT_QUOTES);
      $startingTime = htmlspecialchars($_POST['StartingTime'], ENT_QUOTES);
      $endingTime = htmlspecialchars($_POST['EndingTime'], ENT_QUOTES);
-     $sessionfee = htmlspecialchars($_POST['session_fee'], ENT_QUOTES);
-     $coach_monthly_payment = htmlspecialchars($_POST['monthly_payment'], ENT_QUOTES);
+     $sessionFee = htmlspecialchars($_POST['sessionFee'], ENT_QUOTES);
+     $coachMonthlyPayment = htmlspecialchars($_POST['monthlyPayment'], ENT_QUOTES);
      $coachID = htmlspecialchars($_SESSION['userid'], ENT_QUOTES);
 
 
@@ -92,7 +92,7 @@
     $sessionID = uniqid($prefix1."-Session-".$prefix2);
 
 
-    $result = $coach ->addsession($sessionID,$coach_monthly_payment,$startingTime,$endingTime,"0",$_SESSION['userid'],$courtID,$day,$sessionfee,$connection);
+    $result = $coach ->addsession($sessionID,$coachMonthlyPayment,$startingTime,$endingTime,"0",$_SESSION['userid'],$courtID,$day,$sessionFee,$connection);
     //echo $startingTime;
     // $result = $addseession -> addsession($day, $startingTime, $endingTime, $payment_amount, $court_id, $coach_monthly_payment, $coach, $connection,);   //pass the reserving court object to the function
     if($result === TRUE){

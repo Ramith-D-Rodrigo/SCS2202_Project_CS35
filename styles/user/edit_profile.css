@@ -22,4 +22,26 @@ td,th{
 
 .right-field{
     width: 50%;
+    margin: 10px;
 }
+
+.right-field > input, textarea{
+    max-width:100%;
+    min-width: 80%;
+}
+
+.right-field > *{
+    margin-left: 0;
+}
+
+.err-msg{
+    color: red;
+    text-align: center;
+}
+
+.success-msg{
+    color: green;
+    text-align: center;
+}
+
+

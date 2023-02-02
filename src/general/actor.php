@@ -10,7 +10,7 @@
 
         public function __construct($userRole = ''){    //establish the database connection according to the given user role
             if($userRole === ''){
-                require_once("dbconnection.php");
+                require("dbconnection.php");
                 $this -> connection = $connection;
             }
         }
@@ -24,7 +24,18 @@
         }
 
         public function getUsername(){
-            return $this -> username;
+            if(isset($this -> username)){
+                return $this -> username;
+            }
+            else{ //get from the database
+                $sql = sprintf("SELECT username FROM `login_details` WHERE userID = '%s'", $this -> connection -> real_escape_string($this -> userID));
+                $result = $this -> connection -> query($sql);
+                $resultRow = $result -> fetch_object();
+                $this -> username = $resultRow -> username;
+                $result -> free_result();
+                unset($resultRow);
+                return $this -> username;
+            }
         }
 
         public function getUserRole(){
@@ -54,17 +65,26 @@
                 return ["Incorrect Password"];
             }
 
-            //set the object variables
-            $this -> userID = $resultRow -> user_id;
+/*             //set the object variables
+            $this -> userID = $resultRow -> userID;
             $this -> username = $resultRow -> username;
-            $this -> userRole = $resultRow -> user_role;
-            $this -> emailAddress = $resultRow -> email_address;
+            $this -> userRole = $resultRow -> userRole;
+            $this -> emailAddress = $resultRow -> emailAddress; */
 
-            if($resultRow -> is_active == 0 && ($resultRow -> user_role === 'user' || $resultRow -> user_role === 'coach')){   //user is not active
+            //foreach loop to set object variables
+            foreach($resultRow as $key => $value){
+                //exclude password
+                if($key === 'password'){
+                    continue;
+                }
+                $this -> $key = $value;
+            }
+
+            if($resultRow -> isActive == 0 && ($resultRow -> userRole === 'user' || $resultRow -> userRole === 'coach')){   //user is not active
                 //has to send the email code              
                 return ["Account is not active<br>Please Activate your account using the code that has been sent to your email"];
             }
-            else if($resultRow -> is_active == 0 && ($resultRow -> user_role === 'manager' || $resultRow -> user_role === 'owner' || $resultRow -> user_role === 'receptionist')){   //staff is not active
+            else if($resultRow -> isActive == 0 && ($resultRow -> userRole === 'manager' || $resultRow -> userRole === 'owner' || $resultRow -> userRole === 'receptionist')){   //staff is not active
                 return ["Account is not active<br>Please contact the admin to activate your account"];
             }
 
@@ -106,7 +126,7 @@
         }
 
         public function resetPassword($newPasswordHash){
-            $sql = sprintf("UPDATE `login_details` SET `password` = '%s' WHERE `user_id` = '%s'",
+            $sql = sprintf("UPDATE `login_details` SET `password` = '%s' WHERE `userID` = '%s'",
             $this -> connection -> real_escape_string($newPasswordHash),
             $this -> connection -> real_escape_string($this -> userID));
 

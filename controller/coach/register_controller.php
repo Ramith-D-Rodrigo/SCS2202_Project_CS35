@@ -3,7 +3,7 @@
     require_once("../../src/coach/coach.php");
     require_once("../../src/coach/dbconnection.php");
     require_once("../../src/coach/credentials_availability.php");
-    require_once("../../src/general/uuid.php"); //to generate uuids
+    require_once("../../src/general/security.php"); 
 
 
     //all possible inputs for prefilling
@@ -22,13 +22,13 @@
     //Checking if the account already exists
 
     //email availability   
-    $hasEmailResult = checkEmail($_POST['emailAddress'], $connection);
+    $hasEmailResult = Security::checkEmailAvailability($_POST['emailAddress']);
 
     if(isset($_SESSION['successMsg'])){ //same user is trying to register (in the same session) We have to unset the message
         unset($_SESSION['successMsg']);
     }
 
-    if($hasEmailResult -> num_rows > 0){    //account already exists
+    if($hasEmailResult == false ){    //account already exists
         $_SESSION['emailError'] = "Account with same Email Address exists.";
         header("Location: /public/coach/coach_register.php");
         $connection -> close(); //close the database connection
@@ -101,13 +101,13 @@
         $picNewName = uniqid($username);    //create a new name for the image
         $picNewName = $picNewName . '.' . $picExtension; //concat the extension
         
-        move_uploaded_file($pic, '../../public/coach/profile_images/'.$picNewName);  //move the file to this directory
+        move_uploaded_file($pic, '../../uploads/coach_profile_images/'.$picNewName);  //move the file to this directory
     }
 
     $new_coach = new Coach();
     $new_coach -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $coach_qualifications, $username, $password, $gender,$sport);
 
-    $new_coach -> setProfilePic($picNewName);
+    $new_coach -> setProfilePic('../../uploads/coach_profile_images/'.$picNewName);  //add the directory to the profile picture
     $result = $new_coach -> registercoach($connection);
 
     if($result === TRUE){   //successfully registered

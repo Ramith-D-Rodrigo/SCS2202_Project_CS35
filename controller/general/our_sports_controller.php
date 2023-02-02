@@ -10,12 +10,12 @@
 
     $returningResult = [];
     foreach($allSports as $currSport){
-        $sport_id = $currSport -> sport_id;
+        $sport_id = $currSport -> sportID;
         $allBranches = branchesWithThatSport($sport_id, $connection);
         if(count($allBranches) === 0){ //there are no branch that provide the current considering sport
             continue;
         }
-        array_push($returningResult, ['sport_id' => $sport_id, 'sport_name' => $currSport -> sport_name, 'reserve_price' => $currSport -> reservation_price, 'providing_branches' => $allBranches]);
+        array_push($returningResult, ['sport_id' => $sport_id, 'sport_name' => $currSport -> sportName, 'reserve_price' => $currSport -> reservationPrice, 'providing_branches' => $allBranches]);
         unset($allBranches);
     }
     

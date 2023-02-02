@@ -1,48 +1,48 @@
 <?php
     class Branch_Feedback implements JsonSerializable{
-        private $userfeedback_id;
-        private $user_id;
+        private $userFeedbackID;
+        private $userID;
         private $date;
         private $rating;
         private $description;
-        private $branch_id;
+        private $branchID;
 
         public function setDetails($userfeedback_id = '', $user_id = '', $date = '', $rating = '', $description = '', $branch_id = ''){
-            $this -> userfeedback_id = $userfeedback_id;
-            $this -> user_id = $user_id;
+            $this -> userFeedbackID = $userfeedback_id;
+            $this -> userID = $user_id;
             $this -> date = $date;
             $this -> rating = $rating;
             $this -> description = $description;
-            $this -> branch_id = $branch_id;
+            $this -> branchID = $branch_id;
         }
 
         public function getDetails($database, $wantedProperty = ''){
-            if($wantedProperty === 'userfeedback_id'){
-                return $this -> userfeedback_id;
+            if($wantedProperty === 'userFeedbackID'){
+                return $this -> userFeedbackID;
             }
             else if($wantedProperty === ''){
-                $sql = sprintf("SELECT * FROM `user_branch_feedback` WHERE `userfeedback_id`  = '%s'",
-                $database -> real_escape_string($this -> userfeedback_id));
-    
+                $sql = sprintf("SELECT * FROM `user_branch_feedback` WHERE `userFeedbackID`  = '%s'",
+                $database -> real_escape_string($this -> userFeedbackID));
+
                 $sql = $database -> query($sql);
-    
+
                 $row = $sql -> fetch_object();
-    
-                $this -> setDetails(userfeedback_id : $row -> userfeedback_id, 
-                user_id: $row -> user_id, 
-                date: $row -> date, 
-                rating: $row -> rating, 
-                description: $row -> description, 
-                branch_id: $row -> branch_id);
+
+                $this -> setDetails(userfeedback_id : $row -> userFeedbackID,
+                user_id: $row -> userID,
+                date: $row -> date,
+                rating: $row -> rating,
+                description: $row -> description,
+                branch_id: $row -> branchID);
                 return $this;
             }
             else{   //any other property (single)
-                $sql = sprintf("SELECT `%s` as `wanted_property` FROM `user_branch_feedback` WHERE `userfeedback_id`  = '%s'",
+                $sql = sprintf("SELECT `%s` as `wanted_property` FROM `user_branch_feedback` WHERE `userFeedbackID`  = '%s'",
                 $database -> real_escape_string($wantedProperty),
-                $database -> real_escape_string($this -> userfeedback_id));
-    
+                $database -> real_escape_string($this -> userFeedbackID));
+
                 $result = $database -> query($sql);
-    
+
                 $row = $result -> fetch_object();
                 $wantedInfo = $row -> wanted_property;
                 unset($row);
@@ -52,13 +52,29 @@
 
         }
 
+        public function addFeedback($database){
+            $sql = sprintf("INSERT INTO `user_branch_feedback` 
+            (`userFeedbackID`, `userID`, `date`, `rating`, `description`, `branchID`) 
+            VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
+            $database -> real_escape_string($this -> userFeedbackID),
+            $database -> real_escape_string($this -> userID),
+            $database -> real_escape_string($this -> date),
+            $database -> real_escape_string($this -> rating),
+            $database -> real_escape_string($this -> description),
+            $database -> real_escape_string($this -> branchID));
+
+            $result = $database -> query($sql);
+
+            return $result;
+        }
+
         public function jsonSerialize() : mixed{
             return [
-                "feedbackID" => $this -> userfeedback_id,
+                "feedbackID" => $this -> userFeedbackID,
                 "date" => $this -> date,
                 "rating" => $this -> rating,
                 "description" => $this -> description,
-                "branch" => $this -> branch_id
+                "branch" => $this -> branchID
             ];
         }
     }

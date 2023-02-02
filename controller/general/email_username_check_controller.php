@@ -17,19 +17,19 @@
     //check if the user input is an email address or a username
     $returnVal = Security::passwordResetCheck($userInput);
     if($returnVal === false){   //if the user input is not an email address or a username or the user input is not in the database
-        header("application/json");
+        header('Content-Type: application/json;');
         echo json_encode(array("errMsg" => "Invalid Email Address or Username"));
         exit();
     }
 
     //check the user role
     if($returnVal[2] === "owner" || $returnVal[2] === "manager" || $returnVal[2] === "receptionist"){  //staff roles
-        header("application/json");
+        header('Content-Type: application/json;');
         echo json_encode(array("errMsg" => "Please contact the system administrator to reset your password"));
         exit();
     }
     else if($returnVal[2] === 'admin'){
-        header("application/json");
+        header('Content-Type: application/json;');
         echo json_encode(array("errMsg" => "Unable to send the email. <br>Please try again later"));
     }
 
@@ -48,12 +48,12 @@
 
     $status = Mailer::passwordReset($email, $username, $code);
     if($status === false){
-        header("application/json");
+        header('Content-Type: application/json;');
         echo json_encode(array("errMsg" => "Unable to send the email. <br>Please try again later"));
         exit();
     }
 
-    header("application/json");
+    header('Content-Type: application/json;');
     echo json_encode(array("successMsg" => "An Email has been sent to your Email Address.<br>Please check your email and enter the code to reset your password"));
     exit();
 

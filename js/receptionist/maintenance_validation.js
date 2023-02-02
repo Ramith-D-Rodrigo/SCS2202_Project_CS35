@@ -19,31 +19,31 @@ function validateForm(event){
     }
 }
 
-const spName = document.getElementById("sportName");
-const crtName = document.getElementById("courtName");
+// const spName = document.getElementById("sportName");
+// const crtName = document.getElementById("courtName");
 
-spName.addEventListener('change',(e) => {
-    const errorMsg = document.getElementById('errmsg2');
-    spVal = e.target.value;
+// spName.addEventListener('change',(e) => {
+//     const errorMsg = document.getElementById('errmsg2');
+//     spVal = e.target.value;
 
-    if((spVal === 'ALL' && crtName.value != 'ALL') || (spVal != 'ALL' && crtName.value === 'ALL')) {
-        errorMsg.innerHTML = "Both the Sport Name and Sport Court Have to be ALL or Neither";
-        return;
-    }
-    errorMsg.innerHTML = "";
-})
+//     if((spVal === 'ALL' && crtName.value != 'ALL') || (spVal != 'ALL' && crtName.value === 'ALL')) {
+//         errorMsg.innerHTML = "Both the Sport Name and Sport Court Have to be ALL or Neither";
+//         return;
+//     }
+//     errorMsg.innerHTML = "";
+// })
 
-crtName.addEventListener('change',(e) => {
-    const errorMsg = document.getElementById('errmsg2');
-    crtVal = e.target.value;
+// crtName.addEventListener('change',(e) => {
+//     const errorMsg = document.getElementById('errmsg2');
+//     crtVal = e.target.value;
 
-    if((crtVal === 'ALL' && spName.value != 'ALL') || (crtVal != 'ALL' && spName.value === 'ALL')) {
-        errorMsg.innerHTML = "Both the Sport Name and Sport Court Have to be ALL or Neither";
-        return;
-    }
-    errorMsg.innerHTML = "";
+//     if((crtVal === 'ALL' && spName.value != 'ALL') || (crtVal != 'ALL' && spName.value === 'ALL')) {
+//         errorMsg.innerHTML = "Both the Sport Name and Sport Court Have to be ALL or Neither";
+//         return;
+//     }
+//     errorMsg.innerHTML = "";
 
-})
+// })
 
 const sDate = document.getElementById("sDate");
 const eDate = document.getElementById("eDate");

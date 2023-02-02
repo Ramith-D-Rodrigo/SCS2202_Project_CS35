@@ -38,6 +38,9 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/user/reservation_history.php'){  //reservation history
                     echo "Reservation History";
                 }
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/coach_profile.php')){  //reservation history
+                    echo "Coach Profile";
+                }
             ?>
         </div>
         <div> <!--- sports complex name -->
@@ -51,7 +54,7 @@
             
                 <?php if(isset($_SESSION['userProfilePic'])){?>
                     
-                    <button class ="btn" id='profileBtn'><img src="/public/user/profile_images/<?php echo $_SESSION['userProfilePic']?>" class="acc-img" style="border: solid thin black"></button>
+                    <button class ="btn" id='profileBtn'><img src="<?php echo $_SESSION['userProfilePic']?>" class="acc-img" style="border: solid thin black"></button>
                 <?php
                 }
                 else{
@@ -60,15 +63,15 @@
                 <?php
                 }
                 ?>
-                <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
+                <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-from-bracket" style="margin: 0 10px"></i></button>
             </div>
         <?php
             }
             else{
         ?>
             <div style="float:right" id="userOptions">
-                <button class="btn" id ="register" onclick="window.location.href='/public/general/register.php'">Register<img src="/styles/icons/register_icon.svg" class="acc-img"></button>
-                <button class="btn" id="login" onclick="window.location.href='/public/general/login.php'">Log in<img src="/styles/icons/login_icon.svg" class="acc-img"></button>
+                <button class="btn" id ="register" onclick="window.location.href='/public/general/register.php'">Register<i class="fa-solid fa-user-plus" style="margin: 0 10px"></i></button>
+                <button class="btn" id="login" onclick="window.location.href='/public/general/login.php'">Log in<i class="fa-solid fa-right-to-bracket" style="margin: 0 10px"></i></button>
             </div>
         <?php
             }

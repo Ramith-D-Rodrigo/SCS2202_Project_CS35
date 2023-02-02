@@ -13,15 +13,15 @@
     }
 
     function branchesWithThatSport($sportID, $database){
-        $sql = sprintf("SELECT DISTINCT `sc`.`branch_id` AS `branch_id`,
+        $sql = sprintf("SELECT DISTINCT `sc`.`branchID` AS `branch_id`,
         `b`.`city` AS `branch_name`
         FROM `sports_court` `sc`
         INNER JOIN `branch` `b`
-        ON `sc`.`branch_id` = `b`.`branch_id`
-        WHERE `sc`.`sport_id` 
+        ON `sc`.`branchID` = `b`.`branchID`
+        WHERE `sc`.`sportID` 
         LIKE '%s' 
         AND 
-        `sc`.`request_status` ='a'", $database -> real_escape_string($sportID));   //requested status a means accepted
+        `sc`.`requestStatus` ='a'", $database -> real_escape_string($sportID));   //requested status a means accepted
 
         $result = $database -> query($sql);
 

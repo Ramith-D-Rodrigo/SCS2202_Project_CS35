@@ -8,7 +8,7 @@
     </div>
     <div>
         <div>
-            <a href="/public/general/credits.php" style="font-size:x-small">Credits</a>
+            <a href="/public/general/credits.php" style="font-size:x-small; color:white">Credits</a>
         </div>
     </div>
 </footer>

@@ -20,9 +20,11 @@
 
     $onlyNumbersFields = ['contactNum', 'emgcontactNum1', 'emgcontactNum2', 'emgcontactNum3', 'height', 'weight']; */
 
-    $relationshipFields = ["Father", "Mother", "Sibling 1", "Sibling 2", "Friend 1", "Friend 2", "Partner"];
+    $relationshipFields = ["Father", "Mother", "Sibling 1", "Sibling 2", "Friend 1", "Friend 2", "Partner", "Other"];
 
     $validationErrFlag = false;
+
+    $allowedExtensions = ['jpg', 'jpeg', 'png'];
 
     $returnMsg = [];    //to echo the json response
 
@@ -81,7 +83,7 @@
             }
             else if($i === 'height' || $i === 'weight'){
                 if($_POST[$i] !== ''){  //has entered some value
-                    if(!preg_match("/^[1-9][0-9]*(?:\.[1-9][0-9]*)*$/", $_POST[$i])){   //doesn't match the pattern
+                    if(!preg_match("/^\d*\.?\d*$/", $_POST[$i])){   //doesn't match the pattern
                         $returnMsg['RegUnsuccessMsg'] = 'Height/Weight Error';
                         $validationErrFlag = true;
                         break;
@@ -250,23 +252,37 @@
     echo $_FILES['user_pic']['tmp_name']; */
 
     if(!empty($_FILES['user_pic']['name'])){    //user has uploaded a picture
+        //check image size
+        if($_FILES['user_pic']['size'] > 2097152){ //image size is greater than 1MB
+            $returnMsg['RegUnsuccessMsg'] = 'Image size is too large';
+            echo json_encode($returnMsg);
+            exit();
+        }
         $profilePicFlag = true;
         $pic = $_FILES['user_pic']['tmp_name'];   //the image
         $picName = $_FILES['user_pic']['name'];
         $picExtension = explode('.', $picName);
+
+        //check image extension
+        if(!in_array(strtolower(end($picExtension)), $allowedExtensions)){
+            $returnMsg['RegUnsuccessMsg'] = 'Invalid image type';
+            echo json_encode($returnMsg);
+            exit();
+        }
+
         $picExtension = strtolower(end($picExtension)); //get image extension
 
         $picNewName = uniqid($username);    //create a new name for the image
         $picNewName = $picNewName . '.' . $picExtension; //concat the extension
         
-        move_uploaded_file($pic, '../../public/user/profile_images/'.$picNewName);  //move the file to this directory
+        move_uploaded_file($pic, '../../uploads/user_profile_images/'.$picNewName);  //move the file to this directory
     }
 
     $new_user = new User();
     $new_user -> setDetails($fName, $lName, $email, $address, $contactNo, $bday, $userid, $user_dependents, $height, $weight, $medical_concerns, $username, $password, $gender);
 
     if($profilePicFlag === true){    //has uploaded a profile pic
-        $new_user -> setProfilePic($picNewName);
+        $new_user -> setProfilePic('../../uploads/user_profile_images/'.$picNewName);    //add the directory to the profile pic
     }
     else{
         $new_user -> setProfilePic("NULL");
@@ -280,7 +296,12 @@
         $_SESSION['fName'] = $fName;    //for resending the mail
         $_SESSION['lName'] = $lName;
         $_SESSION['email'] = $email;
-        require_once("email_verification_controller.php");
+
+        //generating random code for email verification
+        $mailVerificationCode = rand(100000, 999999);
+        $_SESSION['mailVerificationCode'] = $mailVerificationCode;    //store the verification code in the session
+        $_SESSION['verifyUserID'] = $userid;  //store the userid in the session
+
         $emailResult = Mailer::registerAccount($email, $fName . ' ' . $lName, $mailVerificationCode);    //send the email
         if($emailResult === FALSE){ //check email sent successfully or not
             $returnMsg['RegUnsuccessMsg'] = 'Error Registering the Account, Please check your email address';
