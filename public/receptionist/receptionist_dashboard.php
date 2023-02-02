@@ -12,14 +12,14 @@
 <head>
   <meta charset="UTF-8" />
   <title>Receptionist's Dashboard</title>
-  <link rel="stylesheet" href="/styles/receptionist/receptionist.css" />
-  <link rel="stylesheet" href="/styles/general/styles.css" />
+  <link rel="stylesheet" href="/styles/general/styles.css"/>
+  <link rel="stylesheet" href="/styles/general/staff.css"/>
 </head>
 <body>
 <?php
         require_once("dashboard_header.php");
 ?>
-<main>
+<main >
     <div class="flex-container">
             <div class=tabs>
                 <div> Reservations</div> 
