@@ -23,7 +23,7 @@
     <div class="flex-container">
             <div class=tabs>
                 <div> Reservations</div> 
-                <div> <button> View More </button> </div>
+                <div> <button onclick="window.location.href='/public/receptionist/view_reservations.php'"> View More </button> </div>
             </div>
             <div class=tabs>
                 <div> Onsite Reservation</div> 

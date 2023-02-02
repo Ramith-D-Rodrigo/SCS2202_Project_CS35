@@ -424,6 +424,44 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         }
         return $sessionInfo;
     }
+
+    public function viewReservations($branchID,$database){
+        //get the user reservation details
+        $uReservationSql = sprintf("SELECT `r`.`reservationID`,`r`.`startingTime`,`r`.`endingTime`,`r`.`noOfPeople`,`r`.`status`,`u`.`firstName`,`u`.`lastName`,`u`.`contactNum` ,`s`.`sportName`,
+        `sc`.`courtName`
+        FROM `reservation` `r`              
+        INNER JOIN `user` `u` ON
+        `r`.`userID` = `u`.`userID`
+        INNER JOIN `sports_court` `sc`
+        ON `sc`.`courtID` = `r`.`sportCourt`
+        INNER JOIN `sport` `s`
+        ON `sc`.`sportID` = `s`.`sportID`
+        INNER JOIN `branch` `b`
+        ON `b`.`branchID` = `sc`.`branchID`
+        WHERE `b`.`branchID` = '%s' AND `r`.`status` = 'pending'",
+        $database -> real_escape_string($branchID));
+        $userReservations = $database -> query($uReservationSql) -> fetch_all(MYSQLI_ASSOC);
+
+        $currentDay = date("j"); //get the current day
+        echo $currentDay;
+        //get the coaching_session Details
+        $permanentReservationsSql = sprintf("SELECT `p`.`sessionID`,`p`.`startingTime`,`p`.`endingTime`,`p`.`noOfStudents`,`s`.`sportName`,`sc`.`courtName`,`c`.`firstName`,`c`.`lastName`,`c`.`contactNum` FROM 
+        `coaching_session` `p` INNER JOIN `sports_court` `sc` 
+        ON `p`.`courtID` = `sc`.`courtID` INNER JOIN `branch` `b` 
+        ON `sc`.`branchID` = `b`.`branchID` INNER JOIN`sport` `s` 
+        ON `sc`.`sportID` = `s`.`sportID` INNER JOIN `coach` `c` 
+        ON `p`.`coachID` = `c`.`coachID` 
+        WHERE `b`.`branchID` = '%s' AND `p`.`noOfStudents` > 0 AND `p`.`day` = 'Thursday'",
+        $database -> real_escape_string($branchID));
+        $permanentReservations = $database -> query($permanentReservationsSql) -> fetch_all(MYSQLI_ASSOC);
+        
+        $reservationArr = [];
+        // while($row = $reservationResult -> fetch_object()){
+        //     array_push($reservationArr,['reservationID' => $row -> reservationID,'startingTime' => $row -> startingTime,'endingTime' => $row -> endingTime,'day' => $row -> day,'date' => $row -> date,'status' => $row -> status,'fName' => $row -> firstName,'lName' => $row -> lastName,'contactN' => $row -> contactNum]);
+        // }
+        array_push($reservationArr,$userReservations,$permanentReservations);
+        return $reservationArr;
+    }
     public function updateBranchEmail($branchID,$email,$database) {
         $branch = new Branch($branchID);
         $result = $branch -> updateBranchEmail($email,$database);

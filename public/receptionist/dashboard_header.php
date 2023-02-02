@@ -25,6 +25,8 @@
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/receptionist/coach_profile.php'){  //view selected profile
                     echo "Coach Profile";
+                }else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_reservations.php'){   //view today's reservations
+                    echo "Reservations";
                 }
             ?>
         </div>
