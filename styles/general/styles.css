@@ -230,6 +230,8 @@ textarea{
 .search-icon-btn{
     background-color: #ECFCFF;
     color: black;
+    position: relative;
+    z-index: 1;
 }
 
 table{
