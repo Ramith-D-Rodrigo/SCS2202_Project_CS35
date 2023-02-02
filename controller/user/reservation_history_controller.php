@@ -10,12 +10,10 @@
         exit();
     }
     require_once("../../src/user/user.php");
-    require_once("../../src/user/dbconnection.php");
-    require_once("../../src/general/uuid.php");
     
     $user = new User();
     $user -> setDetails(uid: $_SESSION['userid']);
-    $reservationHistory = $user -> getReservationHistory($connection);
+    $reservationHistory = $user -> getReservationHistory();
     
 /*     if(isset($_SESSION['reservationHistory'])){ //previous reservation history clear
         unset($_SESSION['reservationHistory']);
@@ -42,8 +40,6 @@
 
 
     unset($user);
-    //header("Location: /public/user/reservation_history.php");    
-    $connection -> close();
     header('Content-Type: application/json;');    //because we are sending json
     echo json_encode($neededInfo);
 ?>

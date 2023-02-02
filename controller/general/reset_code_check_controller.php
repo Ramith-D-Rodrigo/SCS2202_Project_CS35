@@ -6,7 +6,7 @@
     }
 
     if(!isset($_SESSION['resetUserID'])){  //if the user is not logged in and has not checked the reset code
-        header("application/json");
+        header('Content-Type: application/json;');
         echo json_encode(array("errMsg" => "Unable to reset your password. <br>Please try again later"));
         exit();
     }
@@ -25,7 +25,7 @@
         $_SESSION['code'] = $code;
         //resend the email
         $status = Mailer::passwordReset($_SESSION['email'], $_SESSION['username'], $code);
-        header("application/json");
+        header('Content-Type: application/json;');
         echo json_encode(array("errMsg" => "Invalid Code.<br>Please try again using the new code that has been sent to your email address"));
         exit();
     }
@@ -37,7 +37,7 @@
 
     $_SESSION['resetCheck'] = true;
 
-    header("application/json");
+    header('Content-Type: application/json;');
     echo json_encode(array("successMsg" => "Please enter your new password"));
     exit();
 ?>

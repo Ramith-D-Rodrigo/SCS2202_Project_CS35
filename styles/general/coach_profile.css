@@ -1,0 +1,49 @@
+.row-container{
+    display:flex; 
+    justify-content:space-around; 
+    flex-direction:row;
+    align-items: center;
+}
+
+.left-field{
+    width: 30%;
+    margin: 10px auto 10px 0;
+}
+
+.right-field{
+    width: 70%;
+    margin-right: 10px;
+}
+
+.right-field > input, textarea{
+    max-width:100%;
+}
+
+.coach-image{
+    border-radius: 50%;
+    background: linear-gradient(180deg, #dac340, #e6800d);
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+}
+
+.coach-image-container{
+    height: 250px;
+    width: 250px;
+    margin: 0 20px;
+    border-radius: 50%;
+}
+
+.checked{
+    color: gold;
+}
+
+.err-msg{
+    color: red;
+    text-align: center;
+}
+
+.success-msg{
+    color: green;
+    text-align: center;
+}

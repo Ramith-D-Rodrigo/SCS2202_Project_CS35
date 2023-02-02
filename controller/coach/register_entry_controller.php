@@ -13,8 +13,8 @@
         // {
         //     continue;
         // }
-        $sport_id =   $sport -> sport_id;
-        $sport_name = $sport -> sport_name;
+        $sport_id =   $sport -> sportID;
+        $sport_name = $sport -> sportName;
 
 
        array_push($sport_info,[$sport_id, $sport_name]) ;

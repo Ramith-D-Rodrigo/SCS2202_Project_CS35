@@ -121,7 +121,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     inputRelationship.setAttribute('name', 'relationship' + currID);
     inputRelationship.setAttribute('required', '');
 
-    const relationshipOptions = ["Mother", "Father", "Sibling 1", "Sibling 2", "Friend 1", "Friend 2", "Partner"];
+    const relationshipOptions = ["Mother", "Father", "Sibling 1", "Sibling 2", "Friend 1", "Friend 2", "Partner", "Other"];
 
     const initialOption = document.createElement("option");
     initialOption.setAttribute('value','');
@@ -129,7 +129,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     inputRelationship.appendChild(initialOption);
 
 
-    for(i = 0; i < 7; i++){
+    for(i = 0; i < relationshipOptions.length; i++){
         const optionField = document.createElement("option");
         optionField.setAttribute('value',relationshipOptions[i]);
         optionField.innerHTML = relationshipOptions[i];
@@ -169,7 +169,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     const relationshipField = document.createTextNode("Relationship :");
     const contactNoField = document.createTextNode("Contact Number :");
     
-    for(info = 1; info <= 3; info++){
+    for(info = 1; info <= 3; info++){   //info = 1 -> name, info = 2 -> relationship, info = 3 -> contact number
         const row = document.createElement("div");
         row.className = "row-container";
     
@@ -179,21 +179,21 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
         const rightField = document.createElement("div");
         rightField.className = "right-field";
 
-        if(info === 1){
+        if(info === 1){ //name
             leftField.appendChild(nameField);
             rightField.appendChild(inputName);
 
             row.appendChild(leftField);
             row.appendChild(rightField);
         }
-        else if(info === 2){
+        else if(info === 2){    //relationship
             leftField.appendChild(relationshipField);
             rightField.appendChild(inputRelationship);
 
             row.appendChild(leftField);
             row.appendChild(rightField);
         }
-        else if(info === 3){
+        else if(info === 3){    //contact number
             leftField.appendChild(contactNoField);
             rightField.appendChild(inputContactNum);
             rightField.appendChild(removeBtn);

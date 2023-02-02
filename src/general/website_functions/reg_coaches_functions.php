@@ -1,7 +1,7 @@
 <?php
 
     function getAllCoaches($database){  //a function to ids of the all coaches
-        $sql = sprintf("SELECT `coach_id`, `sport` FROM `coach`");
+        $sql = sprintf("SELECT `coachID`, `sport` FROM `coach`");
 
         $result = $database -> query($sql);
 

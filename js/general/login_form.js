@@ -33,6 +33,10 @@ loginForm.addEventListener("submit", (e) => {
             regBtn.disabled = true;
             regBtn.style.cursor = "not-allowed";
 
+            const forgotBtn = document.getElementById("forBtn"); //disabling forgot password button
+            forgotBtn.disabled = true;
+            forgotBtn.style.cursor = "not-allowed";
+
             if(data.userrole === 'user'){
                 successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to the home page in 2 seconds";
                 setTimeout(() =>{
@@ -49,6 +53,18 @@ loginForm.addEventListener("submit", (e) => {
                 successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to your Dashboard in 2 seconds";
                 setTimeout(() =>{
                     window.location.href = "/public/manager/Manager_Dashboard.php";
+                }, 2000);
+            }
+            else if(data.userrole === 'receptionist'){
+                successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to your Dashboard in 2 seconds";
+                setTimeout(() =>{
+                    window.location.href = "/public/receptionist/receptionist_dashboard.php";
+                }, 2000);
+            }
+            else if(data.userrole === 'admin'){
+                successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to your Dashboard in 2 seconds";
+                setTimeout(() =>{
+                    window.location.href = "/public/system_admin/admin_dashboard.php";
                 }, 2000);
             }
         }else{  //login failed

@@ -38,12 +38,33 @@ fetch("../../controller/general/our_branches_controller.php")
 
 
             branch_pictures[i] = branches[i].photos;    //add the pictures to the array
-            if(branch_pictures[i] != null){ //has photos
-                branchImage.src = "/public/general/branch_images/" + branches[i].photos[0];    //add the first photo
+            if(branch_pictures[i].length !== 0){ //has photos
+                branchImage.src = branches[i].photos[0];    //add the first photo
             }
             else{
                 branchImage.src = "/public/general/branch_images/";
             }
+
+            setInterval(() =>{
+                if(branch_pictures[i] === undefined || branch_pictures[i].length === 0){  //if there are no photos
+                    return;
+                }
+                if(branch_pictures[i].length === 1){    //if there is only one image
+                    return;
+                }
+                const prev = branchImage.src;
+                var nextImgIndex = Math.floor(Math.random() * branch_pictures[i].length); //next img index
+
+                if(branch_pictures[i][nextImgIndex].split("/").pop() === prev.split("/").pop()){
+                    nextImgIndex++;
+                }
+
+                if(nextImgIndex === branch_pictures[i].length){
+                    nextImgIndex = 0;
+                }
+
+                branchImage.src = branch_pictures[i][nextImgIndex];
+            }, 3000);
 
             branchImage.setAttribute("class", "branch-image");
             branchImage.setAttribute("onerror", "this.src='/styles/icons/no-results.png'");
@@ -58,13 +79,13 @@ fetch("../../controller/general/our_branches_controller.php")
             form.action = "/public/general/reservation_schedule.php";
             form.method = "get";
 
-            const openingTimeArr = branches[i].opening_time.split(":"); //setting opening time
+            const openingTimeArr = branches[i].openingTime.split(":"); //setting opening time
             const openingTime = new Date();
             openingTime.setHours(openingTimeArr[0]);
             openingTime.setMinutes(openingTimeArr[1]);
             openingTime.setSeconds(openingTimeArr[2]);
 
-            const closingTimeArr = branches[i].closing_time.split(":"); //setting closing time
+            const closingTimeArr = branches[i].closingTime.split(":"); //setting closing time
             const closingTime = new Date();
             closingTime.setHours(closingTimeArr[0]);
             closingTime.setMinutes(closingTimeArr[1]);
@@ -89,7 +110,7 @@ fetch("../../controller/general/our_branches_controller.php")
                 }
                 //color star for decimal rating
                 if(j === Math.floor(branchRating) && branchRating % 1 !== 0){
-                    star.className = "fa fa-star-half-o checked";
+                    star.className = "fa-solid fa-star-half-stroke";
                     star.style.color = "gold";
                 }
                 star.style.fontSize = "1.5em";
@@ -178,8 +199,8 @@ fetch("../../controller/general/our_branches_controller.php")
 
             for(j = 0; j < branches[i].sports.length; j++){ //adding the sports to the drop dowm
                 const sportOption = document.createElement("option");
-                sportOption.text = branches[i].sports[j].sport_name;
-                sportOption.value = branches[i].sports[j].sport_id;
+                sportOption.text = branches[i].sports[j].sportName;
+                sportOption.value = branches[i].sports[j].sportID;
                 sportSelector.appendChild(sportOption);
             }
 
@@ -204,23 +225,6 @@ fetch("../../controller/general/our_branches_controller.php")
         const selectOption = document.querySelectorAll(".providing_sports");
         //console.log(selectOption);
         selectOption.forEach(element => element.addEventListener("change", changeBtnValue));
-
-        //change branch image using setInterval
-        const branchImg = document.querySelectorAll(".branch-image");
-        for(let i = 0; i < branchImg.length; i++){
-            setInterval(() =>{
-                if(branch_pictures[i].length === 1){    //if there is only one image
-                    return;
-                }
-                const prev = branchImg[i].src.split("/").pop(); //previous img name
-                do{
-                    var nextImgIndex = Math.floor(Math.random() * branch_pictures[i].length); //next img index
-                }while(branch_pictures[i][nextImgIndex] === prev);
-                branchImg[i].src = "/public/general/branch_images/" + branch_pictures[i][nextImgIndex];
-            }, 3000);
-        }
-
-
     });
 
 

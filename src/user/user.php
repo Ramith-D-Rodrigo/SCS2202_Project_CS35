@@ -9,13 +9,13 @@ class User extends Actor implements JsonSerializable{
     private $contactNum;
     private $height;
     private $weight;
-    private $registeredDate;
-    private $dateOfBirth;
+    private $registerDate;
+    private $birthday;
     private $dependents;
     private $medicalConcerns;
     private $gender;
     private $isactive;
-    private $profilePic;
+    private $profilePhoto;
 
     public function __construct($actor = null){
         if($actor !== null){
@@ -33,7 +33,7 @@ class User extends Actor implements JsonSerializable{
         $this -> emailAddress = $email;
         $this -> homeAddress = $address;
         $this -> contactNum = $contactNo;
-        $this -> dateOfBirth = $dob;
+        $this -> birthday = $dob;
         $this -> height = $height;
         $this -> weight = $weight;
         $this -> medicalConcerns = $medicalConcerns;
@@ -44,7 +44,7 @@ class User extends Actor implements JsonSerializable{
     }
 
     public function setProfilePic($profilePic){
-        $this -> profilePic = $profilePic;
+        $this -> profilePhoto = $profilePic;
     }
 
     public function getUserID(){    //userID getter
@@ -52,37 +52,37 @@ class User extends Actor implements JsonSerializable{
     }
 
     public function getProfilePic(){
-        $sqlPic = sprintf("SELECT `profile_photo` 
-        FROM `user` 
-        WHERE `user_id` = '%s'",
+        $sqlPic = sprintf("SELECT `profilePhoto`
+        FROM `user`
+        WHERE `userID` = '%s'",
         $this -> connection -> real_escape_string($this -> userID));
 
         $result = $this -> connection -> query($sqlPic);
         $picRow = $result -> fetch_object();
         if($picRow === NULL){
-            $this -> profilePic = '';
+            $this -> profilePhoto = '';
         }
         else{
-            $this -> profilePic =  $picRow -> profile_photo;
+            $this -> profilePhoto =  $picRow -> profilePhoto;
         }
-        return $this -> profilePic;
+        return $this -> profilePhoto;
     }
 
     private function create_login_details_entry(){   //first we createe the log in details entry
         $result = $this -> connection -> query(sprintf("INSERT INTO `login_details`
-        (`user_id`, 
-        `username`, 
-        `email_address`,
-        `password`, 
-        `user_role`,
-        `is_active`) 
-        VALUES 
+        (`userID`,
+        `username`,
+        `emailAddress`,
+        `password`,
+        `userRole`,
+        `isActive`)
+        VALUES
         ('%s','%s','%s','%s','user', '%s')",
         $this -> connection -> real_escape_string($this -> userID),
         $this -> connection -> real_escape_string($this -> username),
         $this -> connection -> real_escape_string($this -> emailAddress),
         $this -> connection -> real_escape_string($this -> password),
-        $this -> connection -> real_escape_string($this -> isactive))); 
+        $this -> connection -> real_escape_string($this -> isactive)));
 
 /*         if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
@@ -95,18 +95,18 @@ class User extends Actor implements JsonSerializable{
 
     private function create_user_entry(){  //Create entry in user table
         $result = $this -> connection -> query(sprintf("INSERT INTO `user`
-        (`user_id`, 
-        `first_name`, 
-        `last_name`,  
-        `gender`, 
-        `home_address`, 
-        `contact_num`, 
-        `birthday`, 
-        `register_date`, 
-        `height`, 
+        (`userID`,
+        `firstName`,
+        `lastName`,
+        `gender`,
+        `homeAddress`,
+        `contactNum`,
+        `birthday`,
+        `registerDate`,
+        `height`,
         `weight`,
-        `profile_photo`) 
-        VALUES 
+        `profile_photo`)
+        VALUES
         ('%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), NULLIF('%s', 'NULL'))",
         $this -> connection -> real_escape_string($this -> userID),
         $this -> connection -> real_escape_string($this -> firstName),
@@ -114,11 +114,11 @@ class User extends Actor implements JsonSerializable{
         $this -> connection -> real_escape_string($this -> gender),
         $this -> connection -> real_escape_string($this -> homeAddress),
         $this -> connection -> real_escape_string($this -> contactNum),
-        $this -> connection -> real_escape_string($this -> dateOfBirth),
-        $this -> connection -> real_escape_string($this -> registeredDate),
+        $this -> connection -> real_escape_string($this -> birthday),
+        $this -> connection -> real_escape_string($this -> registerDate),
         $this -> connection -> real_escape_string($this -> height),
         $this -> connection -> real_escape_string($this -> weight),
-        $this -> connection -> real_escape_string($this -> profilePic))); 
+        $this -> connection -> real_escape_string($this -> profilePhoto)));
 
         return $result;
 /*         if ($result === TRUE) {
@@ -145,10 +145,10 @@ class User extends Actor implements JsonSerializable{
         if(count($this -> medicalConcerns) != 0){   //has medical concerns
             foreach($this -> medicalConcerns as $i){
                 $result = $this -> connection -> query(sprintf("INSERT INTO `user_medical_concern`
-                (`user_id`, 
-                `medical_concern`) 
-                VALUES 
-                ('%s','%s')", 
+                (`userID`,
+                `medicalConcern`)
+                VALUES
+                ('%s','%s')",
                 $this -> connection -> real_escape_string($this -> userID),
                 $this -> connection -> real_escape_string($i)));
 
@@ -161,11 +161,11 @@ class User extends Actor implements JsonSerializable{
     }
 
     public function registerUser(){    //public function to register the user
-        $this -> registeredDate = date("Y-m-d");
+        $this -> registerDate = date("Y-m-d");
         $this -> isactive = 0;  //still pending, has to verify using the email
         $loginEntry = $this -> create_login_details_entry();
         $userEntry = $this -> create_user_entry();
-        $medicalConcernEntry = $this -> create_user_medicalConcerns(); 
+        $medicalConcernEntry = $this -> create_user_medicalConcerns();
         $dependentEntry = $this -> create_user_dependents(); //finally, create the entries for the dependents
 
         if($loginEntry  === TRUE && $userEntry  === TRUE && $medicalConcernEntry  === TRUE && $dependentEntry === TRUE){    //all has to be true (successfully registered)
@@ -180,16 +180,16 @@ class User extends Actor implements JsonSerializable{
 
     private function delete_login_details_entry(){  //delete login details entry
         $result = $this -> connection -> query(sprintf("DELETE FROM `login_details`
-        WHERE `user_id` = '%s'",
-        $this -> connection -> real_escape_string($this -> userID))); 
+        WHERE `userID` = '%s'",
+        $this -> connection -> real_escape_string($this -> userID)));
 
         return $result;
     }
 
     private function delete_user_entry(){  //Delete entry in user table
         $result = $this -> connection -> query(sprintf("DELETE FROM `user`
-        WHERE `user_id` = '%s'",
-        $this -> connection -> real_escape_string($this -> userID))); 
+        WHERE `userID` = '%s'",
+        $this -> connection -> real_escape_string($this -> userID)));
 
         return $result;
     }
@@ -199,7 +199,7 @@ class User extends Actor implements JsonSerializable{
         if(count($this -> medicalConcerns) != 0){   //has medical concerns
             foreach($this -> medicalConcerns as $i){
                 $result = $this -> connection -> query(sprintf("DELETE FROM `user_medical_concern`
-                WHERE `user_id` = '%s' AND `medical_concern` = '%s'",
+                WHERE `userID` = '%s' AND `medicalConcern` = '%s'",
                 $this -> connection -> real_escape_string($this -> userID),
                 $this -> connection -> real_escape_string($i)));
 
@@ -248,12 +248,12 @@ class User extends Actor implements JsonSerializable{
 
     public function activateAccount(){
         $this -> isactive = 1;
-        $sql = sprintf("UPDATE `login_details` SET `is_active` = '%s' WHERE `user_id` = '%s'",
+        $sql = sprintf("UPDATE `login_details` SET `isActive` = '%s' WHERE `userID` = '%s'",
         $this -> connection -> real_escape_string($this -> isactive),
         $this -> connection -> real_escape_string($this -> userID));
 
         $result = $this -> connection -> query($sql);
-        
+
         if($result === FALSE){
             return FALSE;
         }
@@ -261,11 +261,11 @@ class User extends Actor implements JsonSerializable{
     }
 
     public function searchSport($sportName){
-        $sportSql = sprintf("SELECT `sport_id`,
-        `sport_name`,
-        `reservation_price`
-        FROM `sport` 
-        WHERE `sport_name` 
+        $sportSql = sprintf("SELECT `sportID`,
+        `sportName`,
+        `reservationPrice`
+        FROM `sport`
+        WHERE `sportName`
         LIKE '%%%s%%'", //to escape % in sprintf, we need to add % again
         $this -> connection -> real_escape_string($sportName));
 
@@ -275,26 +275,42 @@ class User extends Actor implements JsonSerializable{
             return ['errMsg' => "Sorry, Cannot find what you are looking For"];
         }
 
-        $result = [];
+        $branchResultArr = [];
+        $coachResultArr = [];
+
         while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of receptionist (pending request)
-            $courtBranchSql = sprintf("SELECT DISTINCT `branch_id`   
+            $courtBranchSql = sprintf("SELECT DISTINCT `branchID`
             FROM `sports_court`
-            WHERE `sport_id` 
+            WHERE `sportID`
             LIKE '%s'
             AND
-            `request_status` = 'a'", $this -> connection -> real_escape_string($row['sport_id'])); //find the branches with the searched sports (per sport)
+            `requestStatus` = 'a'", $this -> connection -> real_escape_string($row['sportID'])); //find the branches with the searched sports (per sport)
             $branchResult = $this -> connection -> query($courtBranchSql);
 
             while($branchRow = $branchResult -> fetch_object()){   //getting all the branches
-                $branch = $branchRow -> branch_id;
+                $branch = $branchRow -> branchID;
 
-                array_push($result, ['branch' => $branch, 'sport_name' => $row['sport_name'], 'sport_id' => $row['sport_id'], 'reserve_price' => $row['reservation_price']]); //create a branch sport pair
+                array_push($branchResultArr, ['branch' => $branch, 'sportName' => $row['sportName'], 'sportID' => $row['sportID'], 'reservationPrice' => $row['reservationPrice']]); //create a branch sport pair
+                unset($branchRow);
             }
+
+            $coachSql = sprintf("SELECT `coachID`
+            FROM `coach`
+            WHERE `sport` = '%s'",
+            $this -> connection -> real_escape_string($row['sportID']));
+
+            $coachResult = $this -> connection -> query($coachSql);
+            while($coachRow = $coachResult -> fetch_object()){
+                array_push($coachResultArr, ['coachID' => $coachRow -> coachID, 'sportName' => $row['sportName'], 'sportID' => $row['sportID']]); //create a coach sport pair
+                unset($coachRow);
+            }
+
+            unset($row);
         }
-        if(count($result) === 0){   //couldn't find any branch that provide the searched sport
+        if(count($branchResultArr) === 0 && count($coachResultArr) === 0){   //couldn't find any branch that provide the searched sport (also coaches)
             return ['errMsg' => "Sorry, Cannot find what you are looking For"];
         }
-
+        $result = array('branches' => $branchResultArr, 'coaches' => $coachResultArr);
         return $result;
     }
 
@@ -303,19 +319,19 @@ class User extends Actor implements JsonSerializable{
         return $result;
     }
 
-    public function getReservationHistory($database){   //Joining sport, sport court, branch, reservation tables
+    public function getReservationHistory(){   //Joining sport, sport court, branch, reservation tables
         //get all the reservations
-        $sql = sprintf("SELECT `reservation_id`
+        $sql = sprintf("SELECT `reservationID`
         FROM `reservation`
-        WHERE `user_id` = '%s'
-        ORDER BY `date`",
-        $database -> real_escape_string($this -> userID));
+        WHERE `userID` = '%s'
+        ORDER BY `date` DESC",
+        $this -> connection -> real_escape_string($this -> userID));
 
-        $result = $database -> query($sql);
+        $result = $this -> connection -> query($sql);
 
         $reservations = [];
         while($row = $result -> fetch_object()){
-            $reservationID = $row -> reservation_id;
+            $reservationID = $row -> reservationID;
             $currReservation = new Reservation();
             $currReservation -> setID($reservationID);
 
@@ -323,7 +339,7 @@ class User extends Actor implements JsonSerializable{
             $endingTime = $row -> ending_time; */
 
             //$row -> {"time_period"} = $startingTime . " to " . $endingTime;
-            $currReservation -> getDetails($database);  //get the reservation details
+            $currReservation -> getDetails($this -> connection);  //get the reservation details
 
             array_push($reservations, $currReservation);
             unset($currReservation);
@@ -333,15 +349,15 @@ class User extends Actor implements JsonSerializable{
         return $reservations;
     }
 
-    public function cancelReservation($reservation, $database){
-        $result = $reservation -> cancelReservation($this ->userID, $database);
+    public function cancelReservation($reservation){
+        $result = $reservation -> cancelReservation($this -> userID, $this -> connection);
         return $result;
     }
 
     public function getProfileDetails($wantedProperty = ''){   //get the profile details and store in the object
         if($wantedProperty !== ''){ //when needed only single property
-            $detailsSql = sprintf("SELECT `%s` FROM `user` WHERE `user_id` = '%s'", 
-            $this -> connection -> real_escape_string($wantedProperty), 
+            $detailsSql = sprintf("SELECT `%s` FROM `user` WHERE `userID` = '%s'",
+            $this -> connection -> real_escape_string($wantedProperty),
             $this -> connection -> real_escape_string($this -> userID)); //user details
 
             $result = $this -> connection -> query($detailsSql);
@@ -352,13 +368,13 @@ class User extends Actor implements JsonSerializable{
             return $returnVal;
         }
 
-        $detailsSql = sprintf("SELECT * FROM `user` WHERE `user_id` = '%s'", $this -> connection -> real_escape_string($this -> userID)); //user details
+        $detailsSql = sprintf("SELECT * FROM `user` WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID)); //user details
 
-        $loginSql = sprintf("SELECT * FROM `login_details` WHERE `user_id` = '%s'", $this -> connection -> real_escape_string($this -> userID));  //login details
+        $loginSql = sprintf("SELECT * FROM `login_details` WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID));  //login details
 
-        $medicalConcernsSql = sprintf("SELECT `medical_concern` FROM `user_medical_concern` WHERE `user_id` = '%s'", $this -> connection -> real_escape_string($this -> userID)); //medical concerns
+        $medicalConcernsSql = sprintf("SELECT `medicalConcern` FROM `user_medical_concern` WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID)); //medical concerns
 
-        $dependentsSql = sprintf("SELECT `name`,`relationship`,`contact_num` FROM `user_dependent` WHERE `owner_id` = '%s'", $this -> connection -> real_escape_string($this -> userID)); //user dependents
+        $dependentsSql = sprintf("SELECT `name`, `relationship`, `contactNum` FROM `user_dependent` WHERE `ownerID` = '%s'", $this -> connection -> real_escape_string($this -> userID)); //user dependents
 
         $detailsResult = $this -> connection -> query($detailsSql);
         $detailsrow = $detailsResult -> fetch_object();
@@ -375,26 +391,142 @@ class User extends Actor implements JsonSerializable{
 
         //set details
         $this -> setDetails(
-            fName: $detailsrow -> first_name,
-            lName: $detailsrow -> last_name,
+            fName: $detailsrow -> firstName,
+            lName: $detailsrow -> lastName,
             gender: $detailsrow -> gender,
-            address: $detailsrow -> home_address,
-            contactNo: $detailsrow -> contact_num,
+            address: $detailsrow -> homeAddress,
+            contactNo: $detailsrow -> contactNum,
             dob: $detailsrow -> birthday,
             height: $detailsrow -> height,
             weight: $detailsrow -> weight,
-            email: $loginrow -> email_address,
+            email: $loginrow -> emailAddress,
             password: $loginrow -> password,
             username: $loginrow -> username,
             medicalConcerns: $medicalConcernsArr,
             dependents: $dependentArr);
 
-        $this -> setProfilePic($detailsrow -> profile_photo);   //set profile pic
+        $this -> setProfilePic($detailsrow -> profilePhoto);   //set profile pic
 
         $detailsResult -> free_result();    //free the query results
         $medicalConcernResult -> free_result();
         $dependentResult -> free_result();
         $loginResult -> free_result();
+    }
+
+    public function isStudent(){    //check if the user is a student
+        $sql = sprintf("SELECT `stuID` FROM `student` WHERE  `stuID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+        $result = $this -> connection -> query($sql);
+        if($result -> num_rows === 0){
+            return false;
+        }
+        return true;
+    }
+
+    public function setDetailsByProperty($propertyName, $propertyValue){   //set the details of the user
+        $this -> {$propertyName} = $propertyValue;
+    }
+
+    public function editProfile($editingValArr){
+        $sql = "UPDATE `user` SET";
+
+        if(array_key_exists('medicalConcerns', $editingValArr)){    //update medical concerns
+            //delete the current medical concerns
+            $medicalConcernDeleteSql = sprintf("DELETE FROM `user_medical_concern` WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+            $medicalConcernDeleteResult = $this -> connection -> query($medicalConcernDeleteSql);
+            if($medicalConcernDeleteResult === false){
+                return false;
+            }
+
+            if($editingValArr['medicalConcerns'] !== "removeAll"){ //the user is changing the medical concerns
+                //insert the new medical concerns
+                if(!empty($editingValArr['medicalConcerns'])){  //the user has new medical concerns to enter
+                    foreach($editingValArr['medicalConcerns'] as $medicalConcern){
+                        $medicalConcernInsertSql = sprintf("INSERT INTO `user_medical_concern` (`userID`, `medicalConcern`) VALUES ('%s', '%s')",
+                        $this -> connection -> real_escape_string($this -> userID),
+                        $this -> connection -> real_escape_string($medicalConcern));
+            
+                        $medicalConcernInsertResult = $this -> connection -> query($medicalConcernInsertSql);
+                        if($medicalConcernInsertResult === false){
+                            return false;
+                        }
+                    }
+                }
+            }   //otherwise no need to do anything as the user is removing all medical concerns
+        }
+
+        if(array_key_exists('dependents', $editingValArr)){     //update dependents
+            //update the dependents
+            //delete the current dependents
+            $dependentDeleteSql = sprintf("DELETE FROM `user_dependent` WHERE `ownerID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+            $dependentDeleteResult = $this -> connection -> query($dependentDeleteSql);
+            if($dependentDeleteResult === false){
+                return false;
+            }
+
+            //insert the new dependents
+            foreach($editingValArr['dependents'] as $dependent){    //dependent cannot be null array as there is always at least one dependent
+                $dependentInsertResult = $dependent -> create_entry($this -> connection);   //call user dependent object create function
+                if($dependentInsertResult === false){
+                    return false;
+                }
+            }
+        }           
+        //if the user is editing other details
+        //create the update query for user profile details
+        foreach($editingValArr as $key => $value){  //set the details of the user
+            $this -> {$key} = $value;
+            if($key === 'medicalConcerns' || $key === 'dependents'){
+                //delete key value pair from the array
+                unset($editingValArr[$key]);
+                continue;
+            }
+            $sql .= sprintf(" `%s` = '%s',", $key, $this -> connection -> real_escape_string($value));
+        }
+
+        if(sizeof($editingValArr) === 0){   //no need to update the user profile (only have medical concerns and dependents)
+            return true;
+        }
+
+        $sql = substr($sql, 0, -1); //remove the last comma
+        $sql .= sprintf(" WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+        
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+        
+        return true;    //successfully update the profile
+    }
+
+    public function giveFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //generalized function to give feedback to coach or branch
+        if(get_class($feedbackObj) === 'Coaching_Session'){ //the user is giving feedback to a coach
+            return $this -> giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating);
+        }
+        else if(get_class($feedbackObj) === 'Reservation'){  //the user is giving feedback to a branch
+            return $this -> giveBranchFeedback($feedbackObj, $feedbackOwner, $feedback, $rating);
+        }
+        else{
+            return false;
+        }
+    }
+
+    private function giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //give feedback to a coach
+
+    }
+
+    private function giveBranchFeedback($reservationObj, $branchObj, $feedback, $rating){ //give feedback to a branch
+        //update the status of the reservation to let that the user has given feedback
+        $updateResult = $reservationObj -> updateStatus($this -> connection, 'feedbackGiven');
+        if($updateResult === false){
+            return false;
+        }
+
+        //insert the feedback into the database
+        $feedbackAddResult = $branchObj -> addBranchFeedback($this, $feedback, $rating, $this -> connection);
+        if($feedbackAddResult === false){
+            return false;
+        }
+        return true;
     }
 
     public function jsonSerialize() : mixed{    //to json encode
@@ -405,10 +537,10 @@ class User extends Actor implements JsonSerializable{
             'lName' => $this -> lastName,
             'homeAddress' => $this -> homeAddress,
             'gender' => $this -> gender,
-            'dob' => $this -> dateOfBirth,
+            'dob' => $this -> birthday,
             'height' => $this -> height,
             'weight' => $this -> weight,
-            'profilePic' => $this -> profilePic,
+            'profilePic' => $this -> profilePhoto,
             'email' => $this -> emailAddress,
             'contactNo' => $this -> contactNum,
             'medicalConcerns' => $this -> medicalConcerns,

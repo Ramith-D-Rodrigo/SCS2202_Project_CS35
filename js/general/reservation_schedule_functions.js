@@ -44,20 +44,20 @@ function addReservationInformation(jsonData){   //function to add the reservatio
     reservationPriceDiv.innerHTML = reservationPriceDiv.innerHTML + " Rs. " + jsonData.reservingSport.reservationPrice + " per Hour";
 
     const branchOpeningTimeDiv = document.getElementById("branchOpeningTime");  //branch opening time
-    branchOpeningTimeDiv.innerHTML = branchOpeningTimeDiv.innerHTML + " " + jsonData.opening_time;
+    branchOpeningTimeDiv.innerHTML = branchOpeningTimeDiv.innerHTML + " " + jsonData.openingTime;
 
     const branchClosingTimeDiv = document.getElementById("branchClosingTime");  //branch closing time
-    branchClosingTimeDiv.innerHTML = branchClosingTimeDiv.innerHTML + " " + jsonData.closing_time;
+    branchClosingTimeDiv.innerHTML = branchClosingTimeDiv.innerHTML + " " + jsonData.closingTime;
 }
 
 function createScheduleNavigation(jsonData){
     const allScheduleDetailsDiv = document.getElementById("allScheduleDetails");
 
-    for(var key in jsonData.branch_reservation_schedule){   //to create the buttons and store reservation details
+    for(var key in jsonData.branchReservationSchedule){   //to create the buttons and store reservation details
         const courtBtn = document.createElement("button");
         courtBtn.className = "courtBtn";
         courtBtn.id = key;
-        courtBtn.innerHTML = "Court " + jsonData.branch_reservation_schedule[key].courtName;
+        courtBtn.innerHTML = "Court " + jsonData.branchReservationSchedule[key].courtName;
 
         const navBtnsDiv = document.getElementById("scheduleNavBtns");
         allScheduleDetailsDiv.insertBefore(courtBtn, navBtnsDiv); //append the buttons before the nav buttons
@@ -74,12 +74,12 @@ function createScheduleNavigation(jsonData){
 function createScheduleObjects(jsonData){   //function to create objects to all the reservations
     let schedulesArr = [];  //array to store the reservation info of each court
 
-    for(var key in jsonData.branch_reservation_schedule){  //go through all the courts
+    for(var key in jsonData.branchReservationSchedule){  //go through all the courts
         let currCourtReservations = Array();
-        for(var resInfo in jsonData.branch_reservation_schedule[key].schedule){  //go through all the reservation of each court
-            const resDate = jsonData.branch_reservation_schedule[key].schedule[resInfo]['date'].split("-");
-            const startingTime = jsonData.branch_reservation_schedule[key].schedule[resInfo]['starting_time'].split(":"); 
-            const endingTime = jsonData.branch_reservation_schedule[key].schedule[resInfo]['ending_time'].split(":");
+        for(var resInfo in jsonData.branchReservationSchedule[key].schedule){  //go through all the reservation of each court
+            const resDate = jsonData.branchReservationSchedule[key].schedule[resInfo]['date'].split("-");
+            const startingTime = jsonData.branchReservationSchedule[key].schedule[resInfo]['startingTime'].split(":"); 
+            const endingTime = jsonData.branchReservationSchedule[key].schedule[resInfo]['endingTime'].split(":");
 
             //create date objects for the reservation starting and ending times
 
@@ -109,8 +109,8 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
     //creating schedule tables    
     const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     
-    const branchOpeningTime = jsonData.opening_time.split(":");   //branch opening time
-    const branchClosingTime = jsonData.closing_time.split(":");   //branch closing time
+    const branchOpeningTime = jsonData.openingTime.split(":");   //branch opening time
+    const branchClosingTime = jsonData.closingTime.split(":");   //branch closing time
     //console.log(branchOpeningTime, branchClosingTime);
     let createdTables = [];
 
@@ -229,12 +229,12 @@ function makeReservationBox(jsonData){
     reservingBranchInput.value = jsonData.city;
 
     const reserveStartingTime = document.getElementById("reserveStartingTime"); //reserve starting time input
-    reserveStartingTime.min = jsonData.opening_time.substring(0,5);
-    reserveStartingTime.max = jsonData.closing_time.substring(0,5);
+    reserveStartingTime.min = jsonData.openingTime.substring(0,5);
+    reserveStartingTime.max = jsonData.closingTime.substring(0,5);
 
     const reserveEndingTime = document.getElementById("reserveEndingTime"); //reserve ending time input
-    reserveEndingTime.min = jsonData.opening_time.substring(0,5);
-    reserveEndingTime.max = jsonData.closing_time.substring(0,5);
+    reserveEndingTime.min = jsonData.openingTime.substring(0,5);
+    reserveEndingTime.max = jsonData.closingTime.substring(0,5);
 
     const reservationPrice = document.getElementById("reservationPrice");  //reservation price input
     reservationPrice.min = jsonData.reservingSport['reservationPrice'];
