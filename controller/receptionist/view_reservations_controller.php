@@ -10,7 +10,7 @@
     $reservationInfo = $receptionist -> viewReservations($_SESSION['branchID'],$connection);
 
     if(count($reservationInfo)=== 0){
-        array_push($reservationInfo, ['err-Msg' => "No reservations found"]);
+        array_push($reservationInfo, ['errMsg' => "No reservations found for today"]);
     }
 
     header('Content-type: application/json');

@@ -13,7 +13,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/general/styles.css">
-    <link rel="stylesheet" href="/styles/receptionist/receptionist.css" />
+    <link rel="stylesheet" href="/styles/general/staff.css">
+    <link rel="stylesheet" href="/styles/receptionist/viewReservations.css">
     <title>View Reservations</title>
 </head>
 <body>
@@ -21,7 +22,7 @@
         require_once("dashboard_header.php")
     ?>
     <main class="body-container">
-        <div id="reserve_results">
+        <div>
             <div id="err-msg">
             </div>
             <div id="reservations">
