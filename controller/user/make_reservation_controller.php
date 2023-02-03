@@ -1,7 +1,6 @@
 <?php
     session_start();
 
-    $previousPage = $_SESSION['prevPage'];
     $returningMsg = [];
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string

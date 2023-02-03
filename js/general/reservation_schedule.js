@@ -52,7 +52,7 @@ fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn="
                 i++;
             });
             //console.log(tableParents);
-            updateTheReservationTables(schedules);  //update the reservations
+            updateTheReservationTables(schedules, data);  //update the reservations
 
             if(navDateIncrement >= MAX_RESERVATION_DAYS - 10){  //now reached the limit (disable the button)
                 nextBtn.disabled = true;
