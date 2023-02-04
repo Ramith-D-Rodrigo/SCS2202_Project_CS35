@@ -11,7 +11,15 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
             errorDiv.appendChild(searchError);
         }else{
             // data[0].push(data[1]);
-            data.sort(function(a,b){    //sort the array to display the reservations in order of time
+            //sort the array to display the reservations in order of starting time and ending time and finally court name
+            data.sort(function(a,b){    
+                if(parseInt(a.startingTime)- parseInt(b.startingTime) === 0){
+                    if(parseInt(a.endingTime)-parseInt(b.endingTime) === 0){
+                        return b.courtName-a.courtName;
+                    }else{
+                        return parseInt(a.endingTime)-parseInt(b.endingTime);
+                    }
+                }
                 return parseInt(a.startingTime)-parseInt(b.startingTime);
             });
             
