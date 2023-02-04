@@ -25,6 +25,7 @@
     require_once("../../src/user/user.php");
     require_once("../../src/general/sport_court.php");
     require_once("../../src/general/sport.php");
+    require_once("../../src/general/branch.php");
     require_once("../CONSTANTS.php");
 
     if($_SESSION['userrole'] !== 'user'){   //not a user
@@ -123,7 +124,71 @@
     //reservation availability check
     $schedule = $reservingCourt -> getSchedule($reservingUser -> getConnection());
 
-    foreach($schedule as $reservation){
+
+    //branch maintenance
+    $branchID = $reservingCourt -> getBranch($reservingUser -> getConnection());
+    $branch = new Branch($branchID);
+    $branchMaintenance = $branch -> getBranchMaintenance($reservingUser -> getConnection(),['startingDate', 'endingDate'], $date, 'a');
+
+    if(count($branchMaintenance) !== 0){   //branch has maintenance
+        foreach($branchMaintenance as $maintenance){
+            if(strtotime($maintenance -> startingDate) <= strtotime($date) && strtotime($maintenance -> endingDate) >= strtotime($date)){   //the reservation date is in middle of the maintenance period
+                $returningMsg['errMsg'] = "Branch is under Maintenance";
+                header('Content-Type: application/json;');    //because we are sending json
+                echo json_encode($returningMsg);
+                unset($branch);
+                exit();
+            }
+        }
+    }
+
+    //court maintenance
+    foreach($schedule['maintenance'] as $maintenance){
+        if(strtotime($maintenance -> startingDate) <= strtotime($date) && strtotime($maintenance -> endingDate) >= strtotime($date)){   //the reservation date is in middle of the maintenance period
+            $returningMsg['errMsg'] = "Court is under Maintenance";
+            header('Content-Type: application/json;');    //because we are sending json
+            echo json_encode($returningMsg);
+            exit();
+        }
+    }
+
+    //coaching sessions
+    foreach($schedule['coachingSessions'] as $coachingSession){
+        //get the day of the week of reservation date
+        if($coachingSession -> noOfStudents > 0){   //ongoing session
+            $dayOfWeek = date('l', strtotime($date));
+            if($coachingSession -> day === $dayOfWeek){ //reservation is on the same day
+                if(strtotime($coachingSession -> startingTime) > strtotime($startingTime) && strtotime($coachingSession -> endingTime) < strtotime($endingTime)){
+                    $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
+                    header('Content-Type: application/json;');    //because we are sending json
+                    echo json_encode($returningMsg);
+                    exit();
+                }
+                else if(strtotime($coachingSession -> startingTime) <= strtotime($startingTime) && strtotime($coachingSession -> endingTime) >= strtotime($endingTime)){ //before coaching session starting time, but reservation ending time is inside the coaching session
+                    $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
+                    header('Content-Type: application/json;');    //because we are sending json
+                    echo json_encode($returningMsg);
+                    exit();
+                }
+                else if(strtotime($coachingSession -> startingTime) > strtotime($startingTime) && (strtotime($endingTime) <= strtotime($coachingSession -> endingTime) && strtotime($endingTime) > strtotime($coachingSession -> startingTime))){ //current reserving time slot is over an already reserved time slot
+                    $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
+                    header('Content-Type: application/json;');    //because we are sending json
+                    echo json_encode($returningMsg);
+                    exit();
+                }
+                else if((strtotime($startingTime) >= strtotime($coachingSession -> startingTime) && strtotime($startingTime) < strtotime($coachingSession -> endingTime)) && strtotime($coachingSession -> endingTime) < strtotime($endingTime)){ //current reserving time slot is over an already reserved time slot
+                    $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
+                    header('Content-Type: application/json;');    //because we are sending json
+                    echo json_encode($returningMsg);
+                    exit();
+                }
+            }
+        }
+    }
+
+
+    //user reservations
+    foreach($schedule['reservations'] as $reservation){
         //print_r($reservation);
         if($reservation -> date === $date && $reservation -> status === 'Pending'){ //only need the reservations that are pending
             if(strtotime($startingTime) < strtotime($reservation -> startingTime) && strtotime($endingTime) > strtotime($reservation -> endingTime)){ //current reserving time slot is over an already reserved time slot
@@ -175,6 +240,7 @@
     $sport = $reservingCourt -> getBranch */
     unset($reservingCourt);
     unset($reservingUser);
+    unset($branch);
     unset($reservingSport);
 
 ?>
