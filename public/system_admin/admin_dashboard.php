@@ -10,8 +10,11 @@
 <head>
   <meta charset="UTF-8" />
   <title>Admin's Dashboard</title>
-  <link rel="stylesheet" href="/styles/system_admin/admin_dashboard.css" />
-  <link rel="stylesheet" href="/styles/general/styles.css" />
+  <link rel="stylesheet" href="/styles/system_admin/admin_dashboard.css">
+  <link rel="stylesheet" href="/styles/general/styles.css">
+  <link rel="stylesheet" href="/styles/general/staff.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
 </head>
 <body>
 <?php
