@@ -256,7 +256,7 @@ function updateTheReservationTables(scheduleObjs, jsonData){
                 }
                 const resDate = res.startingTime.toLocaleDateString();
         
-                const cell = createReservationCell("Reserved", res, i);
+                const cell = createReservationCell("Reserved", res.timeDiff);
                 const namingID = createCellID(i, resDate, res.startingTime.toLocaleTimeString());
                 cell.id = namingID;
         
@@ -289,7 +289,7 @@ function updateTheReservationTables(scheduleObjs, jsonData){
                     const day = tempDate.toLocaleDateString('en-US', { weekday: 'long' });
                     if(day === sessionDay){    //if the day of the week matches the day of the coaching session
                         const resDate = tempDate.toLocaleDateString();
-                        const cell = createReservationCell("Coaching Session", res);
+                        const cell = createReservationCell("Coaching Session", res.timeDiff);
                         const namingID = createCellID(i, resDate, res.startingTime.toLocaleTimeString());
                         cell.id = namingID;
 
@@ -325,11 +325,27 @@ function updateTheReservationTables(scheduleObjs, jsonData){
                 const endingTime = jsonData.closingTime.substring(0,5); //get the closing time
 
                 const startingTimeObj = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate(), startingTime.substring(0,2), startingTime.substring(3,5));
+                startingTimeObj.setSeconds(0);
                 const endingTimeObj = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate(), endingTime.substring(0,2), endingTime.substring(3,5));
+                endingTimeObj.setSeconds(0);
+
+                const timeDiff = (endingTimeObj.getTime() - startingTimeObj.getTime()) / 1000 / 60/ 60; //get the time difference in hours (should be the no of hours the branch is open)
+                for(let k = 0; k <= res.noOfDays; k++){ //for the maintenance period
+                    const tempDate = new Date(res.startingDate);
+                    tempDate.setDate(res.startingDate.getDate() + k);    //increment the date by 1
+                    const newCell = createReservationCell("Unable Due to Maintenance", timeDiff);   //create the cell
+                    const namingID = createCellID(i, tempDate.toLocaleDateString(), startingTimeObj.toLocaleTimeString());
+                    newCell.style.background = "";
+                    newCell.style.backgroundColor = "grey";
+    
+                    newCell.id = namingID;
+    
+                    const replacingCell = document.getElementById(namingID);
+                    if(replacingCell != null && replacingCell != undefined && replacingCell.innerHTML != "Reserved" && replacingCell.innerHTML != "Coaching Session" && replacingCell.innerHTML != "Unable Due to Maintenance"){
+                        replaceCell(replacingCell, newCell, startingTimeObj, tempDate.toLocaleDateString(), timeDiff, i);
+                    }
+                }
                 
-
-
-
             }
         }
 
@@ -400,9 +416,9 @@ function makeReservationBox(jsonData){
     }
 }
 
-function createReservationCell(innerText, cellInfoObj){   //create a reservation cell (need a function because it follows the same pattern for reservation, coaching, and maintenance)
+function createReservationCell(innerText, timeDiff){   //create a reservation cell (need a function because it follows the same pattern for reservation, coaching, and maintenance)
     const cell = document.createElement("td");
-    cell.rowSpan = cellInfoObj.timeDiff;
+    cell.rowSpan = timeDiff;
     cell.innerText = innerText;
     cell.style.background = "linear-gradient(180deg, rgba(5,5,108,1) 0%, rgba(0,0,0,1) 48%, rgba(167,0,0,1) 100%)";
     cell.style.color = "white";
@@ -430,6 +446,15 @@ function replaceCell(replacingCell, newCell, startingTime, localeDateString, tim
         //const removingCell = parent.childNodes[replacingCell.cellIndex + k];
         currParent.removeChild(removingCell);
         currParent = currParent.nextSibling;
+
+        if(removingCell.rowSpan > 1){  //if the cell has a rowspan, we need to to increase the value of k by the rowspan for the next cell
+            k += removingCell.rowSpan - 1;
+
+            //change the parent to match the rowspan
+            for(let l = 0; l < removingCell.rowSpan - 1; l++){
+                currParent = currParent.nextSibling;
+            }
+        }
     }
     prevSibling.after(newCell);    //add the reservation cell after the sibling
 }
