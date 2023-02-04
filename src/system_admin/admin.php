@@ -1,17 +1,24 @@
 <?php
 require_once("../../src/system_admin/staff.php");
+require_once("../../src/general/actor.php");
 
-class Admin{
+class Admin extends Actor{
 
     private static $admin;
     private $adminID;
 
     private function __construct() {}  //make the construct private so that no new object can be created
 
-    public static function getInstance() {
+    public static function getInstance($actor = NULL) {
         if(!isset(self::$admin)){
             $admin = new Admin();
         }
+        if($actor !== NULL){
+            $admin -> userID = $actor -> getUserID();
+            $admin -> username = $actor -> getUsername();
+        }
+        require("dbconnection.php");   //get the user connection to the db
+        $admin -> connection = $connection;
         return $admin;
     }
 
@@ -19,33 +26,33 @@ class Admin{
         return $this -> adminID;
     }
 
-    public function login($username, $password, $database){
-        $sql = sprintf("SELECT `userID`,
-        `username`,
-        `password`,
-        `userRole`
-        FROM `login_details`
-        WHERE `username` = '%s'",
-        $database -> real_escape_string($username));
+    // public function login($username, $password, $database){
+    //     $sql = sprintf("SELECT `userID`,
+    //     `username`,
+    //     `password`,
+    //     `userRole`
+    //     FROM `login_details`
+    //     WHERE `username` = '%s'",
+    //     $database -> real_escape_string($username));
 
-        $result = $database -> query($sql);
+    //     $result = $database -> query($sql);
 
-        $rows = $result -> fetch_object();
+    //     $rows = $result -> fetch_object();
 
-        if($rows === NULL){ //no result. hence no user
-            return ["No Such User Exists"];
-        }
+    //     if($rows === NULL){ //no result. hence no user
+    //         return ["No Such User Exists"];
+    //     }
 
-        $hash = $rows -> password;
-        if(password_verify($password, $hash) === FALSE){    //Incorrect Password
-            return ["Incorrect Password"];
-        }
+    //     $hash = $rows -> password;
+    //     if(password_verify($password, $hash) === FALSE){    //Incorrect Password
+    //         return ["Incorrect Password"];
+    //     }
 
-        //setting admin data for session
-        $this -> adminID = $rows -> userID;
+    //     //setting admin data for session
+    //     $this -> adminID = $rows -> userID;
 
-        return ["Successfully Logged In", $rows -> userRole, $rows -> username];  //return the message, user role and username
-    }
+    //     return ["Successfully Logged In", $rows -> userRole, $rows -> username];  //return the message, user role and username
+    // }
 
     public function registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$database) {
         $staffMember = new Staff();
