@@ -149,7 +149,7 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
             const courtMaintenance = {
                 startingDate : startingTimeDateObj,
                 endingDate : endingTimeDateObj,
-                noOfDays : (endingTimeDateObj - startingTimeDateObj)/1000/60/60/24
+                noOfDays : ((endingTimeDateObj - startingTimeDateObj)/1000/60/60/24) + 1 //+1 because the ending date is included
             };
 
             currCourtMaintenance.push(courtMaintenance);
@@ -159,6 +159,27 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
         schedulesArr[i] = courtSchedule;
         i++;
     }
+
+    //branch maintenance
+    let branchMaintenance = Array();
+    for(var resInfo in jsonData.branchMaintenance){  //go through all the reservation of each court
+        const startingDate = jsonData.branchMaintenance[resInfo]['startingDate'].split("-");
+        const endingDate = jsonData.branchMaintenance[resInfo]['endingDate'].split("-");
+
+        //create date objects for the reservation starting and ending times
+        const startingTimeDateObj = new Date(startingDate[0], startingDate[1] - 1, startingDate[2]);
+        const endingTimeDateObj = new Date(endingDate[0], endingDate[1] - 1, endingDate[2]);
+
+        const branchMaintenanceObj = {
+            startingDate : startingTimeDateObj,
+            endingDate : endingTimeDateObj,
+            noOfDays : ((endingTimeDateObj - startingTimeDateObj)/1000/60/60/24) + 1 //+1 because the ending date is included
+        };
+
+        branchMaintenance.push(branchMaintenanceObj);
+    }
+    schedulesArr[i] = branchMaintenance;
+
     return schedulesArr;
 }
 
@@ -176,7 +197,7 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
     //convert scheduleObjs to an array
     scheduleObjs = Object.values(scheduleObjs);
 
-    for(let i = 0; i < scheduleObjs.length; i++){//going through each reservation schedule of the courts
+    for(let i = 0; i < scheduleObjs.length - 1; i++){//going through each reservation schedule of the courts ( - 1 because the last element is the branch maintenance)
         const table = document.createElement("table");  //initial table
         const tableRow = table.insertRow();
         const tableCell = tableRow.insertCell();    //first empty cell
@@ -244,8 +265,7 @@ function updateTheReservationTables(scheduleObjs, jsonData){
     //convert object to array
     scheduleObjs = Object.values(scheduleObjs);
    
-    
-    for(let i = 0; i < scheduleObjs.length; i++){   //go through each schedule
+    for(let i = 0; i < scheduleObjs.length - 1; i++){   //go through each schedule
         //user reservations
         if(scheduleObjs[i].reservations !== undefined){    //if there are reservations
             for(let j = 0; j < scheduleObjs[i]['reservations'].length; j++){    //replace the empty cells with reserved cells
@@ -314,44 +334,16 @@ function updateTheReservationTables(scheduleObjs, jsonData){
         if(scheduleObjs[i].courtMaintenance !== undefined){    //if there are court maintenance
             for(let j = 0; j < scheduleObjs[i]['courtMaintenance'].length; j++){    //replace the empty cells with reserved cells
                 let res = scheduleObjs[i]['courtMaintenance'][j];
-                if(typeof res.startingDate === "string"){   //if the reservation is a string, it means that it is a stringified date object
-                    res.startingDate = new Date(res.startingDate);
-                    res.endingDate = new Date(res.endingDate);
-                }
-
-                //court maintenance takes a full day, so we will check the starting date and ending date
-                let tempDate = new Date();  //we will use this to increment the date
-                const startingTime = jsonData.openingTime.substring(0,5);   //get the opening time
-                const endingTime = jsonData.closingTime.substring(0,5); //get the closing time
-
-                const startingTimeObj = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate(), startingTime.substring(0,2), startingTime.substring(3,5));
-                startingTimeObj.setSeconds(0);
-                const endingTimeObj = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate(), endingTime.substring(0,2), endingTime.substring(3,5));
-                endingTimeObj.setSeconds(0);
-
-                const timeDiff = (endingTimeObj.getTime() - startingTimeObj.getTime()) / 1000 / 60/ 60; //get the time difference in hours (should be the no of hours the branch is open)
-                for(let k = 0; k <= res.noOfDays; k++){ //for the maintenance period
-                    const tempDate = new Date(res.startingDate);
-                    tempDate.setDate(res.startingDate.getDate() + k);    //increment the date by 1
-                    const newCell = createReservationCell("Unable Due to Maintenance", timeDiff);   //create the cell
-                    const namingID = createCellID(i, tempDate.toLocaleDateString(), startingTimeObj.toLocaleTimeString());
-                    newCell.style.background = "";
-                    newCell.style.backgroundColor = "grey";
-    
-                    newCell.id = namingID;
-    
-                    const replacingCell = document.getElementById(namingID);
-                    if(replacingCell != null && replacingCell != undefined && replacingCell.innerHTML != "Reserved" && replacingCell.innerHTML != "Coaching Session" && replacingCell.innerHTML != "Unable Due to Maintenance"){
-                        replaceCell(replacingCell, newCell, startingTimeObj, tempDate.toLocaleDateString(), timeDiff, i);
-                    }
-                }
-                
+                createMaintenanceCell(res, jsonData.openingTime, jsonData.closingTime, i);
             }
         }
 
-
-
-
+        //for each court, we need to add branch maintenance
+        if(scheduleObjs[scheduleObjs.length - 1] !== undefined){
+            for(let j = 0; j < scheduleObjs[scheduleObjs.length - 1].length; j++){    //replace the empty cells with reserved cells
+                createMaintenanceCell(scheduleObjs[scheduleObjs.length - 1][j], jsonData.openingTime, jsonData.closingTime, i);
+            }
+        }
     }
 }
 
@@ -459,6 +451,40 @@ function replaceCell(replacingCell, newCell, startingTime, localeDateString, tim
     prevSibling.after(newCell);    //add the reservation cell after the sibling
 }
 
+function createMaintenanceCell(maintenanceObj, openingTime, closingTime, courtNum){
+    let maintenance = maintenanceObj;
+    if(typeof maintenance.startingDate === "string"){   //if the reservation is a string, it means that it is a stringified date object
+        maintenance.startingDate = new Date(maintenance.startingDate);
+        maintenance.endingDate = new Date(maintenance.endingDate);
+    }
+
+    let tempDate = new Date();  //we will use this to increment the date
+    const startingTime = openingTime.substring(0,5);   //get the opening time
+    const endingTime = closingTime.substring(0,5); //get the closing time
+
+    const startingTimeObj = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate(), startingTime.substring(0,2), startingTime.substring(3,5));
+    startingTimeObj.setSeconds(0);
+    const endingTimeObj = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate(), endingTime.substring(0,2), endingTime.substring(3,5));
+    endingTimeObj.setSeconds(0);
+
+    const timeDiff = (endingTimeObj.getTime() - startingTimeObj.getTime()) / 1000 / 60/ 60; //get the time difference in hours (should be the no of hours the branch is open)
+
+    for(let k = 0; k < maintenance.noOfDays; k++){ //for the maintenance period
+        const tempDate = new Date(maintenance.startingDate);
+        tempDate.setDate(maintenance.startingDate.getDate() + k);    //increment the date by 1
+        const newCell = createReservationCell("Unable Due to Maintenance", timeDiff);   //create the cell
+        const namingID = createCellID(courtNum, tempDate.toLocaleDateString(), startingTimeObj.toLocaleTimeString());
+        newCell.style.background = "";
+        newCell.style.backgroundColor = "grey";
+
+        newCell.id = namingID;
+
+        const replacingCell = document.getElementById(namingID);
+        if(replacingCell != null && replacingCell != undefined && replacingCell.innerHTML != "Unable Due to Maintenance"){
+            replaceCell(replacingCell, newCell, startingTimeObj, tempDate.toLocaleDateString(), timeDiff, courtNum);
+        }
+    }
+}
 
 //we can export updateTheReservationTables, createScheduleObjects, and createReservationTable functions aswell to use them to update the table after a reservation is made
 

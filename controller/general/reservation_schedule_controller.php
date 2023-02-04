@@ -87,7 +87,10 @@
         $allCourts[$currCourt] = ['schedule' => $courtSchedule, 'courtName' => $courtName];  //reservation schedule of the court is stored in the courts array
         unset($tempCourt);
     }
-    //print_r($allCourts);
+
+    //branch maintenance
+    $branchMaintenance = $branch -> getBranchMaintenance($connection, ['startingDate', 'endingDate'], date("Y-m-d"), 'a');
+
 
     $branchJSON = json_encode($branch);
     $neededInfo = json_decode($branchJSON, true);
@@ -98,6 +101,7 @@
     unset($neededInfo['receptionist']);
     $neededInfo['reservingSport'] = $sport;
     $neededInfo['branchReservationSchedule'] = $allCourts;
+    $neededInfo['branchMaintenance'] = $branchMaintenance;
 
     unset($allCourts);
     unset($sport);

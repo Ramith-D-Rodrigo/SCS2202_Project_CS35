@@ -19,6 +19,7 @@ window.createReservationTable = createReservationTable;
 fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn=".concat(getReq))
     .then(res => res.json())
     .then(data => {
+        console.log(data);
         createReservationSchedulePage(data);
        //creating the event listeners for the navigation buttons
         let navDateIncrement = 0;
