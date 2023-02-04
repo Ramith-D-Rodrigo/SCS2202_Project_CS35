@@ -20,13 +20,14 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
             for(i=0; i<data.length; i++){
                 const reservDiv = document.createElement("div");
                 reservDiv.style.display = "flex";
-                reservDiv.style.direction = "column";
+                reservDiv.style.flexDirection = "row";
                 reservDiv.className = "container";
                 const leftContent = document.createElement("div");
                 const rightContent = document.createElement("div");
                 leftContent.style.display = "flex";
                 leftContent.style.marginRight = "70px";
                 rightContent.style.display = "flex";
+                rightContent.style.marginRight = "20px";
                 if(Object.keys(data[i]).length===10){
                     leftContent.innerHTML = "Reservation ID: ".concat(data[i].reservationID,
                         "<br>","Reserved By: ",data[i].firstName," ",data[i].lastName,
@@ -49,13 +50,15 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
                 }
                 const formInput = document.createElement("form");
        
-                formInput.style.justifyContent = "space-between";
+                formInput.style.display = "flex";
+                formInput.style.flexDirection = "column";
                 formInput.action = "../../controller/receptionist/handle_reservation_controller.php";
                 formInput.method = "POST";
-                const cancelBtn = document.createElement("button");
-                cancelBtn.innerHTML = "Cancel";
                 const confirmBtn = document.createElement("button");
                 confirmBtn.innerHTML = "Confirm";
+                confirmBtn.style.marginBottom = "5px";
+                const  cancelBtn = document.createElement("button");
+                cancelBtn.innerHTML = "Cancel";
                 if(Object.keys(data[i]).length===10){
                     confirmBtn.value = data[i].reservationID;
                     cancelBtn.value = data[i].reservationID;
@@ -63,8 +66,8 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
                     cancelBtn.value = data[i].sessionID;
                     confirmBtn.value = data[i].sessionID;
                 }
-                formInput.appendChild(cancelBtn);
                 formInput.appendChild(confirmBtn);
+                formInput.appendChild(cancelBtn);
                 reservDiv.appendChild(leftContent);
                 reservDiv.appendChild(rightContent);
                 reservDiv.appendChild(formInput);

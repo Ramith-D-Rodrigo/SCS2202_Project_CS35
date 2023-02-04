@@ -25,7 +25,7 @@
         <div>
             <div id="err-msg">
             </div>
-            <div id="reservations">
+            <div id="reservations" style="display:flex;flex-direction:column">
             </div>
         </div>
     </main>
