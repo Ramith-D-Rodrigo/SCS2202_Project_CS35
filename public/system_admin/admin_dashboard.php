@@ -45,7 +45,7 @@
         </div>
         <div class=tabs>
             <div>Deactivate Staff Accounts</div> 
-            <div> <button onclick="window.location.href" > Proceed </button> </div>
+            <div> <button onclick="window.location.href='/public/system_admin/deactivate_account.php'" > Proceed </button> </div>
         </div>   
     </div>
 </div>

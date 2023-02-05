@@ -106,20 +106,28 @@ class Admin extends Actor{
     }
 
     public function getLoginDetails($role,$branch,$database) {
-        if($role === "receptionist"){
-            $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` INNER JOIN
-            `branch` `b` ON `l`.`userID` = `b`.`currReceptionist` WHERE `b`.`branchID` = '%s'",
-            $database -> real_escape_string($branch));
-        }else{
-            $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` INNER JOIN
-            `branch` `b` ON `l`.`userID` = `b`.`currManager` WHERE `b`.`branchID` = '%s'",
-            $database -> real_escape_string($branch));
-        }
+        
+        $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` INNER JOIN
+        `staff` `s` ON `l`.`userID` = `s`.`staffID` WHERE `s`.`branchID` = '%s' AND `s`.`staffRole` = '%s'",
+        $database -> real_escape_string($branch),
+        $database -> real_escape_string($role));
         
         $row = $database -> query($sql) -> fetch_object();
         $loginResults = [];
         array_push($loginResults,[$row -> userID,$row -> username,$row -> emailAddress]);
         return $loginResults;
+    }
+
+    public function getAccountDetails($role,$branch,$database){
+        $profileSQL = sprintf("SELECT `l`.`userID`,`l`.`emailAddress`,`l`.`username`,`s`.`firstName`,`s`.`lastName`,`s`.`joinDate`,`s`.`contactNum` FROM `login_details` `l` INNER JOIN
+        `staff` `s` ON `l`.`userID` = `s`.`staffID` WHERE `s`.`branchID` = '%s' AND `s`.`staffRole` = '%s'",
+        $database -> real_escape_string($branch),
+        $database -> real_escape_string($role));
+
+        $row = $database -> query($profileSQL) -> fetch_object();
+        $accountDetails = [];
+        array_push($accountDetails,[$row -> userID,$row -> username,$row -> emailAddress,$row->firstName,$row->lastName,$row->joinDate,$row->contactNum]);
+        return $accountDetails;
     }
 }
 
