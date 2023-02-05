@@ -31,7 +31,7 @@
     <div class="long-container">
         <div class=longTab>
             <div> Owner Requests</div> 
-            <div> <button> View More </button> </div>
+            <div> <button onclick="window.location.href='/public/system_admin/view_owner_requests.php'"> View More </button> </div>
         </div>
     </div>
     <div class="flex-container">

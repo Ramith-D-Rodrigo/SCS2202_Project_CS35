@@ -129,6 +129,16 @@ class Admin extends Actor{
         array_push($accountDetails,[$row -> userID,$row -> username,$row -> emailAddress,$row->firstName,$row->lastName,$row->joinDate,$row->contactNum]);
         return $accountDetails;
     }
+
+    public function getPendingBranches($database){
+        $pendingBranches = $database -> query("SELECT * FROM `branch` WHERE `requestStatus` = 'p'");
+        $branchInfo = [];
+        while($row = $pendingBranches -> fetch_object()){
+            array_push($branchInfo,$row);
+        }
+
+        return $branchInfo;
+    }
 }
 
 ?>

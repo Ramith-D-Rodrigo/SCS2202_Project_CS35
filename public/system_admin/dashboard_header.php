@@ -14,6 +14,12 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/system_admin/change_staff_logins.php'){  //change staff login details
                     echo "Change Login Details";
                 }
+                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/deactivate_account.php'){  //change staff login details
+                    echo "Deactivate Staff Accounts";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/view_owner_requests.php'){  //change staff login details
+                    echo "Owner Requests";
+                }
             ?>
         </div>
         <div style="align-items:flex-end">
