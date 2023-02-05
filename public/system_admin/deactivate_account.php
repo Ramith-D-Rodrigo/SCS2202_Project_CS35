@@ -45,32 +45,32 @@
                 </div>
             </div>
             <div class="row-container">
-                <div class="left-side" style="margin-top:15px;margin-right: -100px;"> Email Address: </div>
+                <div class="left-side" > Email Address: </div>
                 <div class="right-side"><input readonly id="email"></input>
                 </div>    
             </div>
             <div class="row-container">
-                <div class="left-side" style="margin-top:15px;margin-right: -100px;"> First Name: </div>
+                <div class="left-side"> First Name: </div>
                 <div class="right-side"><input readonly id="fName"></input>
                 </div>    
             </div>
             <div class="row-container">
-                <div class="left-side" style="margin-top:15px;margin-right: -100px;"> Last Name: </div>
+                <div class="left-side"> Last Name: </div>
                 <div class="right-side"><input readonly id="lName"></input>
                 </div>    
             </div>
             <div class="row-container">
-                <div class="left-side" style="margin-top:15px;margin-right: -100px;"> Username: </div>
+                <div class="left-side"> Username: </div>
                 <div class="right-side"><input readonly id="username"></input>
                 </div>    
             </div>
             <div class="row-container">
-                <div class="left-side" style="margin-top:15px;margin-right: -100px;"> Contact No: </div>
+                <div class="left-side"> Contact No: </div>
                 <div class="right-side"><input readonly id="contactN"></input>
                 </div>    
             </div>
             <div class="row-container">
-                <div class="left-side" style="margin-top:15px;margin-right: -100px;"> Joined Date: </div>
+                <div class="left-side"> Joined Date: </div>
                 <div class="right-side"><input readonly id="jDate"></input>
                 </div>    
             </div>

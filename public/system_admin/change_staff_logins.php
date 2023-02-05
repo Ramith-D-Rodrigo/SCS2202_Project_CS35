@@ -92,12 +92,8 @@
                     ?>
                 </div>
                 <div class="row-container">
-                    <div class="left-side"> 
-                        <button type="submit" id="viewBtn" >Cancel</button>
-                    </div>
-                    <div class="right-side">
-                        <button type="submit" id="viewBtn" onclick="return validateForm(event)" style="margin-left:-100px">Confirm</button>
-                    </div>    
+                    <button type="submit" id="viewBtn" style="margin-left:80%" >Cancel</button>
+                    <button type="submit" id="viewBtn" style="margin-left:5%" onclick="return validateForm(event)">Confirm</button>
                 </div>
             </form>
         </div>

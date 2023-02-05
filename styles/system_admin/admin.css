@@ -1,3 +1,13 @@
+err-msg{
+    color: red;
+    text-align: center;
+}
+
+.success-msg{
+    color: green;
+    text-align: center;
+}
+
 .row-container {
     display: flex;
     justify-content: center;
@@ -8,6 +18,8 @@
 
 .left-side{
     width: 600px;
+    margin-top:15px;
+    margin-right: -100px;
 }
 
 .right-side{
