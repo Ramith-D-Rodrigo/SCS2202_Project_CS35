@@ -41,7 +41,7 @@
         </div> 
         <div class=tabs>
             <div>Change Staff Login Details</div> 
-            <div> <button onclick="window.location.href" > Proceed </button> </div>
+            <div> <button onclick="window.location.href='/public/system_admin/change_staff_logins.php'" > Proceed </button> </div>
         </div>
         <div class=tabs>
             <div>Deactivate Staff Accounts</div> 

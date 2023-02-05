@@ -72,7 +72,7 @@ class Admin extends Actor{
     }
 
     public function getAllBranches($database){
-        $result = $database -> query("SELECT `city` from `branch` ");
+        $result = $database -> query("SELECT `city` from `branch`");
 
         $branches = [];
         while($rows = $result -> fetch_object()){
@@ -83,13 +83,44 @@ class Admin extends Actor{
     }
 
     public function getBranchID($branchName,$database){
-        $sql = sprintf("SELECT `branchID` FROM `branch` WHERE `city`= '%s'",$database -> real_escape_string($branchName));
+        $sql = sprintf("SELECT `branchID` FROM `branch` WHERE `city`= '%s'",
+        $database -> real_escape_string($branchName));
         $result = $database -> query($sql);
 
         $branchID = $result -> fetch_object() -> branchID;
         return $branchID;
     }
 
+    public function getBranchDetails($role,$database){
+        $availBranchResult = '';
+        if($role === "receptionist"){
+            $availBranchResult = $database -> query("SELECT `branchID`,`city` FROM `branch` WHERE `currReceptionist` IS NOT NULL");  //get only the branches that have a receptionist
+        }else{
+            $availBranchResult = $database -> query("SELECT `branchID`,`city` FROM `branch` WHERE `currManager` IS NOT NULL");  //get only the branches that have a manager
+        }
+        $branchInfo = [];
+        while($row = $availBranchResult -> fetch_object()){
+            array_push($branchInfo,[$row->city,$row->branchID]);
+        }
+        return $branchInfo;
+    }
+
+    public function getLoginDetails($role,$branch,$database) {
+        if($role === "receptionist"){
+            $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` INNER JOIN
+            `branch` `b` ON `l`.`userID` = `b`.`currReceptionist` WHERE `b`.`branchID` = '%s'",
+            $database -> real_escape_string($branch));
+        }else{
+            $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` INNER JOIN
+            `branch` `b` ON `l`.`userID` = `b`.`currManager` WHERE `b`.`branchID` = '%s'",
+            $database -> real_escape_string($branch));
+        }
+        
+        $row = $database -> query($sql) -> fetch_object();
+        $loginResults = [];
+        array_push($loginResults,[$row -> userID,$row -> username,$row -> emailAddress]);
+        return $loginResults;
+    }
 }
 
 ?>

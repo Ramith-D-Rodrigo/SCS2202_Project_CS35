@@ -11,6 +11,9 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/system_admin/staff_register.php'){  //staff register
                     echo "Staff Register";
                 }
+                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/change_staff_logins.php'){  //change staff login details
+                    echo "Change Login Details";
+                }
             ?>
         </div>
         <div style="align-items:flex-end">

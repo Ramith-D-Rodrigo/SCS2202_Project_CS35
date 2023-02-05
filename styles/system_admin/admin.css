@@ -1,0 +1,20 @@
+.row-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 600px;
+    margin: 10px auto;
+}
+
+.left-side{
+    width: 600px;
+}
+
+.right-side{
+    width: 1200px;
+    margin-left: 60px;
+}
+
+.right-side > textarea{
+    max-width:80%;
+}
