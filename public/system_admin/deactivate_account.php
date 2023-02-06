@@ -76,10 +76,8 @@
             </div>
             <div class="errMsg" id="err-msg">
             </div>
-            <div class="row-container">
-                <div class="right-side">  
-                    <button style="margin-left: 50%;" type="submit" id="viewBtn">Deactivate Account</button>
-                </div>
+            <div class="row-container" style="justify-content: flex-end;">
+                <button type="submit" class="viewBtn">Deactivate Account</button>
             </div>
         </div>
     </main>

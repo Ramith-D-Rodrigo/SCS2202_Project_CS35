@@ -91,9 +91,9 @@
                         }
                     ?>
                 </div>
-                <div class="row-container">
-                    <button type="submit" id="viewBtn" style="margin-left:80%" >Cancel</button>
-                    <button type="submit" id="viewBtn" style="margin-left:5%" onclick="return validateForm(event)">Confirm</button>
+                <div class="row-container" style="justify-content:flex-end">
+                    <button type="submit" id="viewBtn" >Cancel</button>
+                    <button type="submit" id="viewBtn" onclick="return validateForm(event)">Confirm</button>
                 </div>
             </form>
         </div>
