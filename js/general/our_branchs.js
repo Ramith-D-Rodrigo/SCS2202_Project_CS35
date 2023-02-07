@@ -28,6 +28,8 @@ fetch("../../controller/general/our_branches_controller.php")
     .then((data) => {
         for(let i = 0; i < data.length; i++){
             branches[i] = data[i];  //store the json objects in the array
+            const branchContainer = document.createElement("div");
+            branchContainer.setAttribute("class", "content-box");
             const branchRow = document.createElement("div");
             branchRow.setAttribute("class", "branch-row");
 
@@ -218,7 +220,8 @@ fetch("../../controller/general/our_branches_controller.php")
             formDiv.appendChild(form);
             branchRow.appendChild(formDiv);
 
-            result.appendChild(branchRow);
+            branchContainer.appendChild(branchRow);
+            result.appendChild(branchContainer);
         }
 
         //event listener for the select options
