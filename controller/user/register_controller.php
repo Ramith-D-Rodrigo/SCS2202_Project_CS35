@@ -149,24 +149,21 @@
     }
     
     //Checking if the account already exists
-
+    require_once("../../src/general/security.php");
     //email availability   
-    $hasEmailResult = checkEmail($_POST['emailAddress'], $connection);
-
-
-    if($hasEmailResult === true){    //account already exists
-        $returnMsg['RegUnsuccessMsg'] = 'Account with same Email Address exists.';
+    $emailCheck = Security::checkEmailAvailability($_POST['emailAddress']);
+    if($emailCheck === false){  //email is not valid
+        $returnMsg['RegUnsuccessMsg'] = 'Email Address Error';
         echo json_encode($returnMsg);
-        exit(); //exit the registration
+        exit();
     }
-    
-    //username availability    
-    $hasUsernameResult = checkUsername($_POST['username'], $connection);
 
-    if($hasUsernameResult === true){    //account already exists
-        $returnMsg['RegUnsuccessMsg'] = 'Account with same Username exists.';
+    //username availability    
+    $usernameCheck = Security::checkUsernameAvailability($_POST['username']);
+    if($usernameCheck === false){   //username is not valid
+        $returnMsg['RegUnsuccessMsg'] = 'Username Error';
         echo json_encode($returnMsg);
-        exit(); //exit the registration
+        exit();
     }
 
     //can create a account
@@ -293,14 +290,15 @@
     if($result === TRUE){   //successfully registered
         //time for email verification and account activation
         session_start();
-        $_SESSION['fName'] = $fName;    //for resending the mail
-        $_SESSION['lName'] = $lName;
+        $_SESSION['username'] = $username;
         $_SESSION['email'] = $email;
 
         //generating random code for email verification
         $mailVerificationCode = rand(100000, 999999);
         $_SESSION['mailVerificationCode'] = $mailVerificationCode;    //store the verification code in the session
         $_SESSION['verifyUserID'] = $userid;  //store the userid in the session
+
+        require_once("../../src/general/mailer.php");
 
         $emailResult = Mailer::registerAccount($email, $fName . ' ' . $lName, $mailVerificationCode);    //send the email
         if($emailResult === FALSE){ //check email sent successfully or not
