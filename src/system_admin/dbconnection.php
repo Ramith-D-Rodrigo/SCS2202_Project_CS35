@@ -1,9 +1,18 @@
 <?php
     //admin connection to the database
-    $serverName = "localhost";
-    $username = "root";
-    $password = "";
-    $db = "sportude";
+    $localFlag = FALSE; //to switch between local and remote database
+    if($localFlag){
+        $serverName = "localhost";
+        $username = "root";
+        $password = "";
+        $db = "sportude";
+    }
+    else{
+        $serverName = "sql12.freesqldatabase.com";
+        $username = "sql12596346";
+        $password = "gd6Bi5h8BX";
+        $db = "sql12596346";
+    }
 
 
     $connection = new mysqli($serverName, $username, $password, $db);    ////establish the connection with the database
