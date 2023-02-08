@@ -25,7 +25,7 @@
         <div class=longTab>
             <div> System Maintenance</div> 
             <div> <button> Finish </button> </div>
-            <div> <button> Add </button> </div>
+            <div> <button onclick="window.location.href='/public/system_admin/add_system_maintenance.php'"> Add </button> </div>
         </div>
     </div>
     <div class="long-container">
@@ -37,7 +37,7 @@
     <div class="flex-container">
         <div class=tabs>
             <div>Register Staff</div> 
-            <div> <button onclick="window.location.href= '/controller/system_admin/drop_down_list_controller.php'" > Proceed </button> </div>
+            <div> <button onclick="window.location.href= '/public/system_admin/staff_register.php'" > Proceed </button> </div>
         </div> 
         <div class=tabs>
             <div>Change Staff Login Details</div> 
