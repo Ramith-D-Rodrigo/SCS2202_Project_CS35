@@ -14,7 +14,7 @@ fetch("../../controller/system_admin/view_owner_requests_controller.php")
             for(i=0;i<data.length;i++){
                 const formData = document.createElement("form");
                 formData.className = "row-container";
-                formData.type = "post";
+                formData.type = "GET";
                 formData.action = "owner_requests.php";
                 const leftContainer = document.createElement("div");
                 leftContainer.className = "left-side";
