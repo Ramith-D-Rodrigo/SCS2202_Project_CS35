@@ -105,7 +105,7 @@ class User extends Actor implements JsonSerializable{
         `registerDate`,
         `height`,
         `weight`,
-        `profile_photo`)
+        `profilePhoto`)
         VALUES
         ('%s','%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), NULLIF('%s', ''), NULLIF('%s', 'NULL'))",
         $this -> connection -> real_escape_string($this -> userID),

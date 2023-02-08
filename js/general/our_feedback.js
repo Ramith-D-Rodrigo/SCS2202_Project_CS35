@@ -46,7 +46,7 @@ const filterFeedback = (e) =>{
     let filteredDivs = Array(); //to store the filtered rows
 
     //filtering the search result
-    if(searchVal.length >= 3){  //if the search value is more than 3 characters (can filter)
+    if(searchVal.length > 3){  //if the search value is more than 3 characters (can filter)
         for(let i = 0; i < allDivs.length; i++){
             let flag = false;
             const childDivs = Array.from(allDivs[i].childNodes);
@@ -181,16 +181,24 @@ fetch("../../controller/general/our_feedback_controller.php")
                 feedbackDate.style.fontStyle = "italic";
                 feedbackDate.style.color = "grey";
 
+                const feedbackUser = document.createElement("span");
+                feedbackUser.innerHTML = data[dataKeys[i]][j].userFullName;
+                feedbackUser.style.fontStyle = "italic";
+                feedbackUser.style.color = "grey";
+                
                 const feedbackBranch = document.createElement("span");
-                feedbackBranch.innerHTML = currBranch.branchCity;
+                feedbackBranch.innerHTML = "@" + currBranch.branchCity;
                 feedbackBranch.style.fontStyle = "italic";
                 feedbackBranch.style.color = "grey";
                 
 
                 feedbackFooter.appendChild(feedbackDate);
-                //append a space between the date and the branch
-                const space = document.createTextNode(" ");
-                feedbackFooter.appendChild(space);
+                const space1 = document.createTextNode(" ");
+                feedbackFooter.appendChild(space1);
+                feedbackFooter.appendChild(feedbackUser);
+
+                const space2 = document.createTextNode(" ");
+                feedbackFooter.appendChild(space2);
                 feedbackFooter.appendChild(feedbackBranch);
 
 

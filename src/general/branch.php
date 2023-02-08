@@ -387,6 +387,41 @@
             return $discount;
         }
 
+        public function getBranchMaintenance($database,array $wantedInfo, $date = null, $decision = '%'){ //function to get the current maintenance of the branch
+            if($date === null){
+                //set date to 1800-01-01 so that it will return all maintenance
+                $date = '1800-01-01';
+            }
+            //create sql query using wantedinfo column names and format it
+            $sql = "SELECT ";
+            foreach($wantedInfo as $column){
+                $sql .= "`$column`,";
+            }
+            $sql = substr($sql, 0, -1); //remove the last comma
+
+            $sql .= sprintf(" FROM `branch_maintenance` 
+            WHERE `branchID` = '%s'
+            AND `decision` LIKE '%s'
+            AND (`startingDate` >= '%s'
+            OR `endingDate` >= '%s')",
+            $database -> real_escape_string($this -> branchID),
+            $database -> real_escape_string($decision),
+            $database -> real_escape_string($date),
+            $database -> real_escape_string($date));
+
+            $result = $database -> query($sql);
+
+            $allMaintenances = [];
+
+            while($row = $result -> fetch_object()){    //traverse each result
+                array_push($allMaintenances, $row);
+                unset($tempMaintenance);
+                unset($row);
+            }
+
+            return $allMaintenances;
+        }
+
         public function jsonSerialize():mixed{
             return [
                 'branchID' => $this -> branchID,

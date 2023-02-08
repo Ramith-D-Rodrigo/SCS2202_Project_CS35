@@ -2,7 +2,7 @@
     <div class='header-top'>
         <div> <!-- For the current visiting page of the site -->
             <?php
-                if($_SERVER['REQUEST_URI'] === '/index.php'){    //home page
+                if($_SERVER['REQUEST_URI'] === '/index.php' || $_SERVER['REQUEST_URI'] === '/'){    //home page
                     echo "Welcome";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/general/login.php' || $_SERVER['REQUEST_URI'] === '/public/user/user_login.php'){    //login
@@ -40,6 +40,12 @@
                 }
                 else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/coach_profile.php')){  //reservation history
                     echo "Coach Profile";
+                }
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/our_feedback.php')){  //reservation history
+                    echo "Our Feedback";
+                }
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/user/edit_profile.php')){  //reservation history
+                    echo "Edit Profile";
                 }
             ?>
         </div>
@@ -87,8 +93,7 @@
         <a href="/public/general/our_feedback.php">Our Feedback</a>
         <a href="/public/general/about_us.php">About Us</a>
         <div id="profile-links" style="float:right; margin-right:20px; display:none">
-            <a href="/index.php">Ongoing Sessions</a>
-            <a href="/index.php">Left Sessions</a>
+            <a href="/public/user/coaching_sessions.php">Coaching Sessions</a>
             <a href="/public/user/reservation_history.php">Reservation History</a>
             <a href="/public/user/edit_profile.php">Edit Profile</a>
         </div>
