@@ -1,7 +1,7 @@
 <?php
     //general connection to the database (Any Actor, basically the connection for the users who are not logged in)
-    $localFlag = FALSE; //to switch between local and remote database
-    if($localFlag){
+    include_once("../../hostChange.php");
+    if(localFlag){
         $serverName = "localhost";
         $username = "root";
         $password = "";

@@ -1,7 +1,7 @@
 <?php
     //User connection to the database
-    $localFlag = FALSE; //to switch between local and remote database
-    if($localFlag){
+    include_once("../../hostChange.php");
+    if(localFlag){
         $serverName = "localhost";
         $username = "root";
         $password = "";
