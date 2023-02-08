@@ -1,4 +1,8 @@
-.add_session{
+.tabs.add_session{
   display: flex;
   justify-content: center;
+
+ /* background-image: none; */
+  background:linear-gradient(316.41deg, #000000 45.92%, #000000 45.92%, #000956 78.45%);
 }
+/* #6F0808 5.32%, */
