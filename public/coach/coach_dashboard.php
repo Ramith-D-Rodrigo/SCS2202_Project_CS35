@@ -45,22 +45,16 @@
 
             <div class="tabs">
                 <div>Payment</div>
-                <div><button>View more</button></div>
+                <div><button  onclick="window.location.href='income_payment.php'">View more</button></div>
             </div>
 
             <div class="tabs">
                 <div>Feedback</div>
-                <div><button>View more</button></div>
+                <div><button onclick="window.location.href='coach_feedback.php'">View more</button></div>
             </div>
 
         </div>
 
-
-
-
-        
-
-           
 
     </div>
     </main>

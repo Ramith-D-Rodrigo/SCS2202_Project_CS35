@@ -19,7 +19,7 @@
 main {
     display: flex;
     flex: auto;
-    background: linear-gradient(180deg, #FFD700, #033C66);
+  
     justify-content: center;
     align-items: center;
 }
