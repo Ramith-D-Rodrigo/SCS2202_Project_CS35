@@ -20,6 +20,9 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/system_admin/view_owner_requests.php'){  //change staff login details
                     echo "Owner Requests";
                 }
+                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/add_system_maintenance.php'){  //add system maintenance
+                    echo "System Maintenance";
+                }
             ?>
         </div>
         <div style="align-items:flex-end">
