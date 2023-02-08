@@ -55,7 +55,9 @@
                                     <th>Timeslot</th>
                                     <th>Day</th>
                                     <th>Fee</th>
-                                    <th></th>
+                                    <th>
+                                       
+                                    </th>
                                     
                                 </tr>
                             <?php foreach($_SESSION['sessionDetails'] as $row){
@@ -68,7 +70,7 @@
                                     <td><?php echo $row -> starting_time."-".$row -> ending_time ?></td>
                                     <td><?php echo $row -> day ?></td>
                                     <td><?php echo "Rs.".$row -> coach_monthly_payment ?></td>
-                                    <td><button>View session</button></td>
+                                    <td><button onclick="window.location.href='viewing_session.php'">View session</button></td>
                                     
                                     
                                 </tr>
