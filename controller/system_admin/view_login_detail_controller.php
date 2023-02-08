@@ -5,9 +5,10 @@
     require_once("../../src/system_admin/dbconnection.php");
 
     $role = $_GET['role'];
-    $branchID = $_GET['branchID'];
+    $branchName = $_GET['branchName'];
 
     $admin = Admin::getInstance();
+    $branchID = $admin -> getBranchID($branchName,$connection);
     $loginInfo = $admin -> getLoginDetails($role, $branchID, $connection);
 
     if(count($loginInfo)===0){

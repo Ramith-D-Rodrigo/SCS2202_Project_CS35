@@ -38,7 +38,7 @@
                 <div class="row-container" style="margin-left:-100px;display:flex;align-items:center;flex-direction:row">
                     <div> Registered Branch: </div>
                     <div>
-                        <select name="branch" id="branch">
+                        <select name="branchName" id="branchName">
                             <option value="">Choose Branch</option>
                         </select>
                     </div>
@@ -85,5 +85,6 @@
         require_once("../general/footer.php");
     ?>
 </body>
+    <script src="/js/system_admin/get_all_branches.js"></script>
     <script src="/js/system_admin/account_info.js"></script>
 </html>

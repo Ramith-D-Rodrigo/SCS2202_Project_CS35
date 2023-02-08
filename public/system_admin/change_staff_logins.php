@@ -38,7 +38,7 @@
                 <div class="row-container" style="margin-left:-100px;display:flex;align-items:center;flex-direction:row">
                     <div> Registered Branch: </div>
                     <div>
-                        <select name="branch" id="branch">
+                        <select name="branchName" id="branchName">
                             <option value="">Choose Branch</option>
                         </select>
                     </div>
@@ -82,7 +82,7 @@
                     </div>    
                     <!-- <div><button type="submit" id="viewBtn" >Show Password</button></div> -->
                 </div>
-                <div  id="errmsg" class="err-msg">
+                <div  id="err-msg">
                     <?php 
                         if(isset($_SESSION['emailError'])){
                             echo $_SESSION['emailError'];
@@ -102,6 +102,7 @@
         require_once("../../public/general/footer.php");
     ?>
 </body>
+    <script src="/js/system_admin/get_all_branches.js"></script>
     <script src="/js/system_admin/staff_login_details.js"></script>
     <script src="/js/system_admin/login_details_form_handle.js"></script>
 </html>

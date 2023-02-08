@@ -6,9 +6,10 @@
 
 
     $role = $_GET['role'];
-    $branchID = $_GET['branchID'];
+    $branchName = $_GET['branchName'];
 
     $admin = Admin::getInstance();
+    $branchID = $admin -> getBranchID($branchName,$connection);
     $accountDetails = $admin -> getAccountDetails($role,$branchID,$connection);
 
     if(count($accountDetails)===0){
