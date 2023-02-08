@@ -224,6 +224,7 @@ textarea{
 
 .search-input::placeholder{
     text-align: left;
+    color: black;
 }
 
 .search-icon-btn{

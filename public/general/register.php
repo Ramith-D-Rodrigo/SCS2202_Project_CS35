@@ -30,7 +30,7 @@
                             <div class="register-options-container">
                                 <div class="register-option">
                                     <img src="/styles/icons/user.svg" class="register-imgs">
-                                    Register as an User
+                                    Register as a User
                                     <button onclick="window.location.href='/public/user/user_register.php'">REGISTER</button>
                                 </div>
                                 <div class="register-option">
