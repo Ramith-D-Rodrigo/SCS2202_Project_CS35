@@ -185,6 +185,7 @@
                 unset($row);
             }
             $result -> free_result();
+            
             return $sports;
         }
 
@@ -400,8 +401,25 @@
                 'photos' => $this -> photos
             ];
         }
+
+        public  function get_time($database){
+            $sql=sprintf( "SELECT `openingTime`,`closingTime` FROM `branch` WHERE `branchID`LIKE '%s' ",
+            $database -> real_escape_string($this -> branchID));
+            $Result = $database -> query($sql);
+            $timeResult=[];
+             
+            foreach($Result as $time){
+                $temporaryOpen =$time['openingTime'];
+                $temporaryClose= $time['closingTime'];
+                array_push($timeResult,['openingTime'=>$temporaryOpen,'closingTime'=>$temporaryClose]);
+            }
+            // while($row =  $Result  -> fetch_object()) {
+            //     array_push($timeResult,[ $row['openingTime'] -> openingTime,$row['closingTime'] -> closingTime]);
+            // }
+            return  $timeResult;
     }
-
-
+    
+    }
+   
 
 ?>
