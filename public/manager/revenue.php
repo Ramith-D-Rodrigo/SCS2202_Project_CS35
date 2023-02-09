@@ -9,6 +9,7 @@
   <title>Revenue</title>
   <link rel="stylesheet" href="/styles/manager/revenue.css" />
   <link rel="stylesheet" href="/styles/general/styles.css" />
+  <link rel="stylesheet" href="/styles/general/staff.css" />
 </head>
 <body>
 <?php
