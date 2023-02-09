@@ -53,21 +53,20 @@
             }
         }
 
-        public static function checkUsernameAvailability($username){
+        public static function checkUsernameAvailability($inputUsername){
             require("dbconnection.php");
             self::$connection = $connection;
-            $sql = sprintf("SELECT `username` FROM `login_details` WHERE username = '%s'", self::$connection -> real_escape_string($username));
-
+            $sql = sprintf("SELECT `username` FROM `login_details` WHERE username = '%s'", self::$connection -> real_escape_string($inputUsername));
             $result = self::$connection -> query($sql);
 
-            $row = $result -> fetch_object();
+            //$row = $result -> fetch_object();
             self::$connection -> close();
 
-            if($row === null){  //if the username is not in the database, it is available
+            if($result -> num_rows == 0){  //if the username is not in the database, it is available
                 return true;
             }
             else{
-                $row -> free_result();
+                //$row -> free_result();
                 return false;
             }
         }
