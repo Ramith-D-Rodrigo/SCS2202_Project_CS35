@@ -14,12 +14,12 @@
 .flex-container > div {
     
     background-color: #ecfcff;
-    margin: 10px;
+    margin: 100px;
     padding: 20px;
     align-items: center;
     font-size: 30px;
     /* height: 200px; */
-    width : 40%;
+    width : 35%;
    
     
 }

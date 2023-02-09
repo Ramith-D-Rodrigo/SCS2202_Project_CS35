@@ -19,7 +19,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../styles/general/styles.css">
-    <!-- <link rel="stylesheet" href="../../styles/coach/viewing_session.css"> -->
+    <link rel="stylesheet" href="../../styles/coach/viewing_session.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link rel="stylesheet" href="../../styles/coach/coach.css">
 
@@ -48,13 +48,16 @@
                 Session Fee     : <output type="text" name="session_fee" ></output> 
                 Monthly Payment : <output type="text" name="monthly_payment" ></output> 
 
-                <div >
+                <div class="tabs-btn">
                         <div ><button>Send Message</button></div>
                         <div ><button>View Request</button></div>
                         <div ><button>Make Payment</button></div>
-                        <div ><button>Income & Payment</button></div>
-                        <div ><button>Cancel Session</button></div> 
-                </div>
+                        <div class="tabs-btn1" >
+                            <div ><button>Income & Payment</button></div>
+                            <div ><button>Cancel Session</button></div> 
+                        </div>
+                    </div>
+
             </div>
             
 
