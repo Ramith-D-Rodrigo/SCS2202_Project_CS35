@@ -13,12 +13,12 @@
 
     $allCourts = [];
     foreach($branchSports as $currSport){
-        $courts = $branch -> getSportCourts($currSport -> sport_id, $connection);
+        $courts = $branch -> getSportCourts($currSport -> sportID, $connection);
         foreach($courts as $currCourt){
             $tempCourt = new Sports_Court($currCourt);
             $status = $tempCourt -> getStatus($connection);
             $tempCourtName = $tempCourt -> getName($connection);
-            array_push($allCourts, ['courtID' => $currCourt, 'courtName' => $tempCourtName, 'sport' => $currSport -> sport_name, "status" => $status]);
+            array_push($allCourts, ['courtID' => $currCourt, 'courtName' => $tempCourtName, 'sport' => $currSport -> sportName, "status" => $status]);
         }
     }
     $_SESSION['branchCourts'] = $allCourts;

@@ -10,7 +10,8 @@ session_start();
     <title>Add New Discount</title>
     <link rel="stylesheet" href="/styles/manager/manager_add_new_discount.css" />
     <link rel="stylesheet" href="/styles/general/styles.css" />
-
+    <link rel="stylesheet" href="/styles/general/staff.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 </head>
 
 <body>

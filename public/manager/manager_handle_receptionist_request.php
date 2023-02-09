@@ -9,11 +9,13 @@
     <title>Receptionist Request</title>
     <link rel="stylesheet" href="/styles/manager/manager_handle_receptionist_request.css" />
     <link rel="stylesheet" href="/styles/general/styles.css" />
+    <link rel="stylesheet" href="/styles/general/staff.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   </head>
 
    <body>
       <?php
-        require_once("manager_handle_receptionist_request_header.php");
+        require_once("manager_header.php");
       ?>
         <main class="body_container">
             <!-- <div class="content_box"> -->

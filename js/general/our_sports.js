@@ -2,7 +2,11 @@ const sportsContainer = document.getElementById("sportsContainer"); //displaying
 
 
 function changeBtnValue(e){
-    const reseveBtn = e.target.parentNode.lastChild;    //get the button
+    const reseveBtn = e.target.parentNode.lastChild.lastChild;    //get the button
+    //e.target iss the select option
+    //parentNode is the form
+    //lastChild is the div button container
+    //lastChild's lastChild is the button
     if(e.target.value === ""){  //selected "Choose One" option
         reseveBtn.value = "";
         return;
@@ -22,8 +26,9 @@ fetch("../../controller/general/our_sports_controller.php")
         //console.log(data);
         
         for(i = 0; i < data.length; i++){   //traverse each sport
+            const currSportContainer = document.createElement("div"); //displaying container
+            currSportContainer.className = "content-box";
             const sportsRowDiv = document.createElement("div"); //row for each sport
-            sportsRowDiv.className = "sports-row";
             sportsRowDiv.id = data[i].sport_id; //set sport id
             
             const sportsIconContainerDiv = document.createElement("div");   //img container
@@ -64,20 +69,25 @@ fetch("../../controller/general/our_sports_controller.php")
 
             sportInfoForm.appendChild(providingBranchSelection);    //append the select to the form
 
+            const btnContainer = document.createElement("div"); //container for the reserve button
+            btnContainer.className = "btn-container";
+
+
             const reserveBtn = document.createElement("button");
             reserveBtn.innerHTML = "Make a Reservation";
             reserveBtn.type = "submit";
             reserveBtn.name = "reserveBtn"; //we need to send this to the reservation schedule controller (get method)
             //value should be changed with user's selection (need event listener for selection)
 
-            sportInfoForm.innerHTML = sportInfoForm.innerHTML + "<br>";
+            btnContainer.appendChild(reserveBtn);  //append the reserve button
 
-            sportInfoForm.appendChild(reserveBtn);  //append the reserve button
+            sportInfoForm.appendChild(btnContainer);  //append the reserve button
             sportInfoDiv.appendChild(sportInfoForm);    //append the form to the form container
             sportsRowDiv.appendChild(sportInfoDiv); //append the form container to the row
 
             //finally append the row
-            sportsContainer.appendChild(sportsRowDiv);
+            currSportContainer.appendChild(sportsRowDiv);
+            sportsContainer.appendChild(currSportContainer);
         }
 
         //event listener for the select options

@@ -1,4 +1,4 @@
-.flex-container {
+.flex-contain{
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -12,7 +12,7 @@
   align-items: center;
 } */
 
-.flex-container>div {
+.flex-contain>div {
   background-color: #ecfcff;
   margin: 10px;
   padding: 20px;
@@ -28,31 +28,31 @@
 }
 
 #Name {
-  margin-left: 270px;
-  margin-top: -250px;
+  margin-left: 150px;
+  margin-top: -300px;
 }
 
-#Qual{
+#Qual {
   margin-right: 350px;
-  margin-top: 130px;
+  margin-top: 250px;
 }
 
 .checked {
   color: orange;
 }
 
-#Feedback{
+#Feedback {
   font-size: 50px;
   margin-left: 80px;
 }
 
-#Friend{
+#Friend {
   margin-top: 20px;
   margin-left: 50px;
   font-size: 30px;
 }
 
-#Cool{
+#Cool {
   margin-left: 50px;
   font-size: 30px;
 }

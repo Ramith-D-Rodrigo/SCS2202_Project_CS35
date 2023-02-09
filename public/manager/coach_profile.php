@@ -10,6 +10,8 @@ session_start();
     <title>Coach Profile</title>
     <link rel="stylesheet" href="/styles/manager/coach_profile.css" />
     <link rel="stylesheet" href="/styles/general/styles.css" />
+    <link rel="stylesheet" href="/styles/general/staff.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 </head>
 
 <body>
@@ -17,13 +19,13 @@ session_start();
     require_once("manager_header.php");
     ?>
     <main>
-        <div class="flex-container">
+        <div class="flex-contain">
             <div class=tabs>
                 <div id="Image">
                     <img src=" C:\Users" width="250" height="250" id="img">
                 </div>
 
-                <div id="Name">
+                <div style="margin-bottom:10px"id="Name">
                     <div>
                         Name:
                     </div>

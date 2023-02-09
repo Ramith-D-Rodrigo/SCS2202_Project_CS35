@@ -16,9 +16,11 @@
         }
 
         public function getSchedule($database){ //get the reservation schedule of a certain court
+            //get user reservations
             $sql = sprintf("SELECT * FROM `reservation` 
             WHERE `sportCourt` 
             LIKE '%s'
+            AND `date` >= NOW()
             ORDER BY `date`",
             $database -> real_escape_string($this -> courtID));
 
@@ -29,7 +31,47 @@
                 unset($row);
             }
             $result -> free_result();
-            return $reservations;
+
+            //get coaching sessions that has students
+            $sql = sprintf("SELECT * FROM `coaching_session` 
+            WHERE `courtID`
+            LIKE '%s'
+            AND `noOfStudents`  > 0",
+            $database -> real_escape_string($this -> courtID));
+
+            $coachingSessions = [];
+            $result = $database -> query($sql);
+            while($row = $result -> fetch_object()){
+                array_push($coachingSessions, $row);
+                unset($row);
+            }
+            $result -> free_result();
+
+            //get maintenance information
+            $sql = sprintf("SELECT * FROM `court_maintenance` 
+            WHERE `courtID`
+            LIKE '%s'
+            AND `decision` = 'a'
+            AND (`startingDate` >= NOW()
+            OR `endingDate` >= NOW())",
+            $database -> real_escape_string($this -> courtID));
+
+            $maintenance = [];
+            $result = $database -> query($sql);
+            while($row = $result -> fetch_object()){
+                array_push($maintenance, $row);
+                unset($row);
+            }
+            $schedule = [];
+            $schedule['reservations'] = $reservations;
+            $schedule['coachingSessions'] = $coachingSessions;
+            $schedule['maintenance'] = $maintenance;
+
+            unset($reservations);
+            unset($coachingSessions);
+            unset($maintenance);
+
+            return $schedule;
         }
 
         public function getName($database){ // Get sports court name

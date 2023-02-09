@@ -1,7 +1,7 @@
 <?php
     session_start();
     require_once("../../src/general/branch.php");
-    require_once("../../src/user/dbconnection.php");
+    require_once("../../src/general/dbconnection.php");
     require_once("../../src/general/sport_court.php");
     require_once("../../src/general/sport.php");
 
@@ -35,22 +35,62 @@
         $courtSchedule = [];    //to store each court's reservations
         $courtName = $tempCourt -> getName($connection);
 
-        foreach($tempSchedule as $currReservation){   //create the array for current schedule reservations
+        //user reservations
+        $i = 0;
+        foreach($tempSchedule['reservations'] as $currReservation){   //create the array for current schedule reservations
             $reservationDetails = [];   //to store current court's each reservation's details
-            if($currReservation -> date < date("Y-m-d") || $currReservation -> status === 'Cancelled'){    //no need to check for previous reservations and cancelled ones
+            if($currReservation -> date < date("Y-m-d") || $currReservation -> status !== 'Pending'){    //no need to check for previous reservations , and get only pending reservations
                 continue;
             }
+            //get only the needed information
             $reservationDetails['date'] = $currReservation -> date;
             $reservationDetails['startingTime'] = $currReservation -> startingTime;
             $reservationDetails['endingTime'] = $currReservation -> endingTime;
 
-            $courtSchedule[$currReservation -> reservationID] =  $reservationDetails;   //reservation details stored in courtschedule
+            $courtSchedule['reservations'][$i] =  $reservationDetails;   //reservation details stored in courtschedule
+            $i++;
             unset($reservationDetails);
+            unset($currReservation);
         }
+
+        //coaching sessions
+        $i = 0;
+        foreach($tempSchedule['coachingSessions'] as $currCoachingSession){ //create the array for current schedule coaching sessions
+            $coachingSessionDetails = [];   //to store current court's each coaching session's details
+            //get only the needed information
+            $coachingSessionDetails['day'] = $currCoachingSession -> day;
+            $coachingSessionDetails['startingTime'] = $currCoachingSession -> startingTime;
+            $coachingSessionDetails['endingTime'] = $currCoachingSession -> endingTime;
+            $coachingSessionDetails['timePeriod'] = $currCoachingSession -> timePeriod;
+
+            $courtSchedule['coachingSessions'][$i] =  $coachingSessionDetails;   //coaching session details stored in courtschedule
+            $i++;
+            unset($coachingSessionDetails);
+            unset($currCoachingSession);
+
+        }
+
+        //court maintenace
+        $i = 0;
+        foreach($tempSchedule['maintenance'] as $currCourtMaintenance){ //create the array for current schedule court maintenance
+            $courtMaintenanceDetails = [];   //to store current court's each court maintenance's details
+            //get only the needed information
+            $courtMaintenanceDetails['startingDate'] = $currCourtMaintenance -> startingDate;
+            $courtMaintenanceDetails['endingDate'] = $currCourtMaintenance -> endingDate;
+
+            $courtSchedule['courtMaintenance'][$i] =  $courtMaintenanceDetails;   //court maintenance details stored in courtschedule
+            $i++;
+            unset($courtMaintenanceDetails);
+            unset($currCourtMaintenance);
+        }
+
         $allCourts[$currCourt] = ['schedule' => $courtSchedule, 'courtName' => $courtName];  //reservation schedule of the court is stored in the courts array
         unset($tempCourt);
     }
-    //print_r($allCourts);
+
+    //branch maintenance
+    $branchMaintenance = $branch -> getBranchMaintenance($connection, ['startingDate', 'endingDate'], date("Y-m-d"), 'a');
+
 
     $branchJSON = json_encode($branch);
     $neededInfo = json_decode($branchJSON, true);
@@ -61,6 +101,7 @@
     unset($neededInfo['receptionist']);
     $neededInfo['reservingSport'] = $sport;
     $neededInfo['branchReservationSchedule'] = $allCourts;
+    $neededInfo['branchMaintenance'] = $branchMaintenance;
 
     unset($allCourts);
     unset($sport);

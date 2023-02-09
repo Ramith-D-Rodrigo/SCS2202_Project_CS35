@@ -22,8 +22,8 @@
                 <?php
                     require_once("header.php");
                 ?>
-                <main style="display:flex; justify-content:center; align-items:center;">
-                    <div class="content-box" id="sportsContainer">
+                <main>
+                    <div style="display:flex; justify-content:center; align-items:center; flex-direction:row" id="sportsContainer">
                     </div>
                 </main> 
 
