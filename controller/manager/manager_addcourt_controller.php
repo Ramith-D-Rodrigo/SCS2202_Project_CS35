@@ -16,13 +16,13 @@
     $branch_obj = new Branch($_SESSION['branchID']);
     $manager_obj -> setDetails(uid: $_SESSION['userid']);
 
-    $sport_id = $sport_obj -> getSportID($sport, $connection) -> fetch_object() -> sport_id;
-    $sport_obj -> setID($sport_id);
+    $sportID = $sport_obj -> getSportID($sport, $connection) -> fetch_object() -> sportID;
+    $sport_obj -> setID($sportID);
 
     $courtID = uniqid(substr($sport, 0, 3)."court");
 
     
-    $result = $manager_obj -> add_court($connection, $courtName, $sport_id, $_SESSION['branchID'], $courtID, $_SESSION['userid']);
+    $result = $manager_obj -> add_court($connection, $courtName, $sportID, $_SESSION['branchID'], $courtID, $_SESSION['userid']);
     
     if($result === TRUE){
         $resultmsg = "Request sent to the owner Successfully";

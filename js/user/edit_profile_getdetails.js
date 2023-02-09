@@ -333,19 +333,21 @@ function validateChanges(e){
 
     
     const medicalConcernDiv =  document.getElementById("medicalConcernsField");
-    const medicalArr = Array.from(medicalConcernDiv.children[0].children);  //create an array for the elements inside (list elements) the medical concern div
+    let medicalArr = null;
     let concerns = []
-
-    medicalArr.forEach((val, i, arr)=> {    //traverse the array
-        if(val.tagName.toLowerCase() === 'li'){    //find the child list elements
-            if(val.childNodes[0].nodeType === 3){  //check if the child is a text node
-                concerns.push(val.childNodes[0].nodeValue.toLowerCase());    //push the text node value
+    if(medicalConcernDiv.children[0] !== undefined){
+        medicalArr = Array.from(medicalConcernDiv.children[0].children);  //create an array for the elements inside (list elements) the medical concern div
+        medicalArr.forEach((val, i, arr)=> {    //traverse the array
+            if(val.tagName.toLowerCase() === 'li'){    //find the child list elements
+                if(val.childNodes[0].nodeType === 3){  //check if the child is a text node
+                    concerns.push(val.childNodes[0].nodeValue.toLowerCase());    //push the text node value
+                }
+                else{
+                    concerns.push(val.children.item(0).value.toLowerCase());  //push the input value 
+                }
             }
-            else{
-                concerns.push(val.children.item(0).value.toLowerCase());  //push the input value 
-            }
-        }
-    })
+        })
+    }
 
     concerns = concerns.filter(i => i !== '');
     
@@ -488,6 +490,11 @@ editForm.addEventListener('submit', (e) => {
                 contactNum: ""
             }
             continue;
+        }
+        if(key === 'height' || key === 'weight'){
+            if(value === ''){
+                value = null;
+            }
         }
 
         if(currValues[key] !== value){  //if the value has changed

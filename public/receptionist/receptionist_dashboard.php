@@ -12,8 +12,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>Receptionist's Dashboard</title>
-  <link rel="stylesheet" href="/styles/general/styles.css"/>
-  <link rel="stylesheet" href="/styles/general/staff.css"/>
+  <link rel="stylesheet" href="/styles/general/styles.css">
+  <link rel="stylesheet" href="/styles/general/staff.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
 </head>
 <body>
 <?php
@@ -21,28 +23,28 @@
 ?>
 <main >
     <div class="flex-container">
-            <div class=tabs>
+            <div class=tabs style="min-width:30%; min-height:20rem">
                 <div> Reservations</div> 
                 <div> <button onclick="window.location.href='/public/receptionist/view_reservations.php'"> View More </button> </div>
             </div>
-            <div class=tabs>
+            <div class="tabs" style="min-width:30%; min-height:20rem">
                 <div> Onsite Reservation</div> 
                 <div> <button> Add </button> </div>
             </div>
-            <div class=tabs>
+            <div class=tabs style="min-width:30%; min-height:20rem">
                 <div>Branch Details</div> 
                 <div> <button onclick="window.location.href='/public/receptionist/edit_branch.php'"> Edit</button> </div>
             </div>   
         </div>
         <div class="flex-container">
-            <div class=tabs>
+            <div class=tabs style="min-width:30%; min-height:20rem">
                 <div> View Profiles</div> 
                 <div> 
                     <button onclick="window.location.href='/public/receptionist/view_coach_profiles.php'"> View Coach Profiles </button> 
                     <button onclick="window.location.href='/public/receptionist/view_user_profiles.php'"> View User Profiles   </button> 
                 </div>
             </div>
-            <div class=tabs>
+            <div class=tabs style="min-width:30%; min-height:20rem">
                 <div>Request Maintenance</div> 
                 <div> <button onclick="window.location.href='/public/receptionist/request_maintenance.php'" > Add </button> </div>
             </div>  

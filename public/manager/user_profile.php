@@ -10,6 +10,7 @@ session_start();
     <title>User Profile</title>
     <link rel="stylesheet" href="/styles/manager/user_profile.css" />
     <link rel="stylesheet" href="/styles/general/styles.css" />
+    <link rel="stylesheet" href="/styles/general/staff.css" />
 </head>
 
 <body>

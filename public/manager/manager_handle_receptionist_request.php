@@ -9,11 +9,12 @@
     <title>Receptionist Request</title>
     <link rel="stylesheet" href="/styles/manager/manager_handle_receptionist_request.css" />
     <link rel="stylesheet" href="/styles/general/styles.css" />
+    <link rel="stylesheet" href="/styles/general/staff.css" />
   </head>
 
    <body>
       <?php
-        require_once("manager_handle_receptionist_request_header.php");
+        require_once("manager_header.php");
       ?>
         <main class="body_container">
             <!-- <div class="content_box"> -->

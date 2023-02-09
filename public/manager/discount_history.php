@@ -10,6 +10,7 @@ session_start();
   <title>Discount History</title>
   <link rel="stylesheet" href="/styles/manager/discount_history.css" />
   <link rel="stylesheet" href="/styles/general/styles.css" />
+  <link rel="stylesheet" href="/styles/general/staff.css" />
 
 </head>
 

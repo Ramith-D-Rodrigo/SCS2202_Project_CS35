@@ -17,8 +17,6 @@
     padding: 20px;
     align-items: center;
     font-size: 30px;
-    height: 200px;
-    width : 400px;
 }
 
 main{
@@ -30,3 +28,5 @@ main{
 main::before{
     content: none;
 }
+
+
