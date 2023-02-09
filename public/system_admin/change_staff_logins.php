@@ -82,7 +82,7 @@
                     </div>    
                     <!-- <div><button type="submit" id="viewBtn" >Show Password</button></div> -->
                 </div>
-                <div  id="err-msg">
+                <div id="err-msg">
                     <?php 
                         if(isset($_SESSION['emailError'])){
                             echo $_SESSION['emailError'];
@@ -92,7 +92,7 @@
                     ?>
                 </div>
                 <div class="row-container" style="justify-content:flex-end">
-                    <button type="submit" id="viewBtn" >Cancel</button>
+                    <button id="viewBtn" onclick="window.location.href='../../public/system_admin/change_staff_logins.php'">Cancel</button>
                     <button type="submit" id="viewBtn" onclick="return validateForm(event)">Confirm</button>
                 </div>
             </form>

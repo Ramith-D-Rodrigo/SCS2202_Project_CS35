@@ -23,7 +23,7 @@
     ?>
     <main class="body-container">
     <div style="display:flex;flex-direction:row" id="search_results">
-        <div class="content-box" style="width:45%" id="profileData">
+        <div class="content-box" style="width:65%" id="profileData">
             <div id="profilePic" style="display:flex; justify-content:center;margin-bottom:5%">
             </div>
             <div id="errProfile-msg">
