@@ -16,6 +16,7 @@ require_once("../../src/general/uuid.php");
     <link rel="stylesheet" href="/styles/manager/manager_edit_time.css" />
     <link rel="stylesheet" href="/styles/general/styles.css" />
     <link rel="stylesheet" href="/styles/general/staff.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
 </head>
 
