@@ -14,7 +14,19 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/manager/sport_court.php'){  //sportcourt
                     echo "Sport Court";
                 }
-              
+                else if($_SERVER['REQUEST_URI'] === '/public/manager/coach_profile.php'){  //coachprofile
+                    echo "Coach Profile";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/manager/discount_history.php'){  //discountHistory
+                    echo "Discount History";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/manager/manager_edit_time.php'){  //edittime
+                    echo "Edit Time";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/manager/manager_add_new_discount.php'){  //addnewdiscount
+                    echo "Add New Discount";
+                }
+                
             ?>
         </div>
         <div style="align-items:center;">

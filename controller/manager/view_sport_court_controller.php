@@ -13,7 +13,7 @@
 
     $allCourts = [];
     foreach($branchSports as $currSport){
-        $courts = $branch -> getSportCourts($currSport -> sport_id, $connection);
+        $courts = $branch -> getSportCourts($currSport -> sportID, $connection);
         foreach($courts as $currCourt){
             $tempCourt = new Sports_Court($currCourt);
             $status = $tempCourt -> getStatus($connection);

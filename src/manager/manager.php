@@ -223,19 +223,19 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
 
     }
 
-    public function add_court($database, $court_name ,$sport_id, $branch_id, $courtID, $managerID){
+    public function add_court($database, $court_name ,$sport_id, $branch_id, $court_id, $managerID){
         $result = $database -> query(sprintf("INSERT INTO `sports_court`
-        (`court_id`,
-        `sport_id`,
-        `court_name`,
-        `branch_id`,
-        `request_status`,
-        `added_manager`)
+        (`courtID`,
+        `sportID`,
+        `courtName`,
+        `branchID`,
+        `requestStatus`,
+        `addedManager`)
         VALUES
         ('%s','%s','%s','%s','p','%s')",
         // $database -> real_escape_string($this -> managerID),
         // $database -> real_escape_string($this -> contactNum),
-        $database -> real_escape_string($courtID),
+        $database -> real_escape_string($court_id),
         $database -> real_escape_string($sport_id),
         $database -> real_escape_string($court_name),
         $database -> real_escape_string($branch_id),
@@ -245,7 +245,7 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
 
     }
 
-
+    
     // public function getSportID($sportName, $database){
     //     $sportSql = sprintf("SELECT `sport_id`
     //     FROM `sport`
@@ -276,6 +276,5 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     //         return ['errMsg' => "Sorry, Cannot find what you are looking For"];
     //     }
     // }
-
-}
+    }
 ?>
