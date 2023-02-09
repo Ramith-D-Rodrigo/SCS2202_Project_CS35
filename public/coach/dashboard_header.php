@@ -42,6 +42,8 @@
                 if($_SERVER['REQUEST_URI'] === '/public/coach/coach_dashboard.php'){    //Check whether the coach is in the dashboard
             ?>
                 <div style="float:right">
+
+                    <button class ="btn" id="" onclick="window.location.href='edit_profile.php'">edit</i></button>
                     <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button>
                     <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-to-bracket" style="margin: 0 10px"></i></button>        
                 </div>
@@ -50,6 +52,7 @@
                 } else { 
             ?>
                 <div style="float:right">
+                    
                     <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button>
                     <button class ="btn" id="" onclick="window.location.href='/public/coach/coach_dashboard.php'"><i class="fa-solid fa-house"></i></button>
                     <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-to-bracket" style="margin: 0 10px"></i></button>        

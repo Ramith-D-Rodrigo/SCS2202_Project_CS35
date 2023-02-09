@@ -1,15 +1,20 @@
 
 .container{
-   
+    
     border: 1px solid rgb(247, 243, 243);
     background-color: white;
     width: 500px;
     height: 500px;
-    margin: auto auto;
+    margin-top: 70px ;
+    margin-left: 30%;
+    border-radius: 10px;
+
     box-sizing: border-box;}
 .h3{
     display: flex;
-    justify-content:center ;}    
+    margin-top:  10px; ;
+    flex-direction: row;
+    justify-content: space-around;}    
 
 .label{
     display: flex;

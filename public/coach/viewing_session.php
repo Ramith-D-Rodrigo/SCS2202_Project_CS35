@@ -49,12 +49,12 @@
              <div > <label>  Monthly Payment : </label>  <input readonly type="text" name="monthly_payment" ></input> </div> 
 
                 <div class="tabs-btn">
-                        <div ><button>Send Message</button></div>
-                        <div ><button>View Request</button></div>
-                        <div ><button>Make Payment</button></div>
+                        <div ><button onclick="window.location.href='notify_student.php'">Send Message</button></div>
+                        <div ><button onclick="window.location.href='student_request.php'">View Request</button></div>
+                        <div ><button onclick="window.location.href=''">Make Payment</button></div>
                         <div class="tabs-btn1" >
-                            <div ><button>Income & Payment</button></div>
-                            <div ><button>Cancel Session</button></div> 
+                            <div ><button onclick="window.location.href='income_payment.php'">Income & Payment</button></div>
+                            <div ><button onclick="window.location.href='coach_dashboard.php'">Cancel Session</button></div> 
                         </div>
                     </div>
 
@@ -67,10 +67,10 @@
                 <div><input readonly type="text" name="stname2" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
                 <div><input readonly type="text" name="stname3" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
                 <div><input readonly type="text" name="stname4" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
-                <!-- <div><input readonly type="text" name="stname1"  ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
+                <div><input readonly type="text" name="stname1"  ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
                 <div><input readonly type="text" name="stname2" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
                 <div><input readonly type="text" name="stname3" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
-                <div><input readonly type="text" name="stname4" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div> -->
+                <div><input readonly type="text" name="stname4" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
 
 
 
