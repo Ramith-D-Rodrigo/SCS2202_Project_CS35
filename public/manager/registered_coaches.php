@@ -10,6 +10,7 @@ session_start();
     <title>Registered Coaches</title>
     <link rel="stylesheet" href="/styles/manager/registered_coaches.css" />
     <link rel="stylesheet" href="/styles/general/styles.css" />
+    <link rel="stylesheet" href="/styles/general/staff.css" />
 </head>
 
 <body>
