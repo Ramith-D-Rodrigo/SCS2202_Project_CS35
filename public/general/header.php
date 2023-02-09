@@ -49,7 +49,7 @@
                 }
             ?>
         </div>
-        <div> <!--- sports complex name -->
+        <div style="text-align:center"> <!--- sports complex name -->
            Example Sports Complex
         </div>
         <div>
