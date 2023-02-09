@@ -27,42 +27,48 @@ fetch("../../controller/receptionist/view_sProfile_controller.php?userID=".conca
             }
             imgDiv.appendChild(img);
             const nameDiv = document.getElementById("name");
-            const nameOut = document.createElement("output");
-            nameOut.innerHTML = data[0].firstName + " " + data[0].lastName;
+            const nameOut = document.createElement("input");
+            nameOut.setAttribute("readonly", "readonly");
+            nameOut.value = data[0].firstName + " " + data[0].lastName;
             nameDiv.appendChild(nameOut);
             const genderDiv = document.getElementById("gender");
-            const genderOut = document.createElement("output");
+            const genderOut = document.createElement("input");
+            genderOut.setAttribute("readonly", "readonly");
             if(data[0].gender==="m"){
-                genderOut.innerHTML = "Male";
+                genderOut.value = "Male";
             }else{
-                genderOut.innerHTML = "Female";
+                genderOut.value = "Female";
             }
             genderDiv.appendChild(genderOut);
             const bdayDiv = document.getElementById("bday");
-            const bdayOut = document.createElement("output");
-            bdayOut.innerHTML = data[0].birthday;
+            const bdayOut = document.createElement("input");
+            bdayOut.setAttribute("readonly", "readonly");
+            bdayOut.value = data[0].birthday;
             bdayDiv.appendChild(bdayOut);
             const contactNDiv = document.getElementById("contactN");
-            const contactNOut = document.createElement("output");
-            contactNOut.innerHTML = data[0].contactNum;
+            const contactNOut = document.createElement("input");
+            contactNOut.setAttribute("readonly", "readonly");
+            contactNOut.value = data[0].contactNum;
             contactNDiv.appendChild(contactNOut);
             const addressDiv = document.getElementById("address");
-            addressDiv.innerHTML = data[0].homeAddress;
+            addressDiv.value = data[0].homeAddress;
             const weightDiv = document.getElementById("weight");
-            const weightOut = document.createElement("output");
+            const weightOut = document.createElement("input");
+            weightOut.setAttribute("readonly", "readonly");
             if(data[0].weight===null){
-                weightOut.innerHTML = "Not mentioned";
+                weightOut.value = "Not mentioned";
             }else{
-                weightOut.innerHTML = data[0].weight+" kg";
+                weightOut.value = data[0].weight+" kg";
             
             }
             weightDiv.appendChild(weightOut);
             const heightDiv = document.getElementById("height");
-            const heightOut = document.createElement("output");
+            const heightOut = document.createElement("input");
+            heightOut.setAttribute("readonly", "readonly");
             if(data[0].height===null){
-                heightOut.innerHTML = "Not mentioned";
+                heightOut.value = "Not mentioned";
             }else{
-                heightOut.innerHTML = data[0].height+" cm";
+                heightOut.value = data[0].height+" cm";
             }
             heightDiv.appendChild(heightOut);
             
@@ -81,17 +87,18 @@ fetch("../../controller/receptionist/view_sProfile_controller.php?userID=".conca
             
             const medConcernDiv = document.getElementById("medicalConcerns");
             if(data[1].length===0){
-                const medConcernOut = document.createElement("output");
-                medConcernOut.innerHTML = "No medical concerns mentioned";
+                const medConcernOut = document.createElement("input");
+                medConcernOut.setAttribute("readonly", "readonly");
+                medConcernOut.value = "No medical concerns mentioned";
                 medConcernDiv.appendChild(medConcernOut);
             }else{
                 for(i = 0; i < data[1].length; i++){
                     const medConcerns = document.createElement("div");
-                    const medConcernOut = document.createElement("output");
-                    medConcernOut.innerHTML = data[1][i].medicalConcern;
+                    const medConcernOut = document.createElement("input");
+                    medConcernOut.setAttribute("readonly", "readonly");
+                    medConcernOut.value = data[1][i].medicalConcern;
                     medConcerns.appendChild(medConcernOut);
                     medConcernDiv.appendChild(medConcerns);
-                    medConcernDiv.appendChild(document.createElement("br"));
                 }
             } 
         }

@@ -27,40 +27,40 @@ fetch("../../controller/receptionist/view_cProfile_controller.php?coachID=".conc
             }
             imgDiv.appendChild(img);
             const idDiv = document.getElementById("cid");
-            const idOut = document.createElement("output");
-            idOut.innerHTML = data[0].coachID;
+            const idOut = document.createElement("input");
+            idOut.value = data[0].coachID;
             idDiv.appendChild(idOut);
             const sportDiv = document.getElementById("sport");
-            const sportOut = document.createElement("output");
-            sportOut.innerHTML = data[0].sportName;
+            const sportOut = document.createElement("input");
+            sportOut.value = data[0].sportName;
             sportDiv.appendChild(sportOut);
             const nameDiv = document.getElementById("name");
-            const nameOut = document.createElement("output");
-            nameOut.innerHTML = data[0].firstName + " " + data[0].lastName;
+            const nameOut = document.createElement("input");
+            nameOut.value = data[0].firstName + " " + data[0].lastName;
             nameDiv.appendChild(nameOut);
             const genderDiv = document.getElementById("gender");
-            const genderOut = document.createElement("output");
+            const genderOut = document.createElement("input");
             if(data[0].gender==="m"){
-                genderOut.innerHTML = "Male";
+                genderOut.value = "Male";
             }else{
-                genderOut.innerHTML = "Female";
+                genderOut.value = "Female";
             }
             genderDiv.appendChild(genderOut);
             const bdayDiv = document.getElementById("bday");
-            const bdayOut = document.createElement("output");
-            bdayOut.innerHTML = data[0].birthday;
+            const bdayOut = document.createElement("input");
+            bdayOut.value = data[0].birthday;
             bdayDiv.appendChild(bdayOut);
             const contactNDiv = document.getElementById("contactN");
-            const contactNOut = document.createElement("output");
-            contactNOut.innerHTML = data[0].contactNum;
+            const contactNOut = document.createElement("input");
+            contactNOut.value = data[0].contactNum;
             contactNDiv.appendChild(contactNOut);
             const addressDiv = document.getElementById("eAddress");
-            const addressOut = document.createElement("output");
-            addressOut.innerHTML = data[0].emailAddress;
+            const addressOut = document.createElement("input");
+            addressOut.value = data[0].emailAddress;
             addressDiv.appendChild(addressOut);
             const ratingDiv = document.getElementById("rating");
-            const ratingOut = document.createElement("output");
-            ratingOut.innerHTML = data[1];
+            const ratingOut = document.createElement("input");
+            ratingOut.value = data[1];
             ratingDiv.appendChild(ratingOut);
             
             const qualificationsDiv = document.getElementById("qualifications");   //output the coach qualifications
@@ -68,8 +68,8 @@ fetch("../../controller/receptionist/view_cProfile_controller.php?coachID=".conc
                 qualificationsDiv.innerHTML = "No Qualifications mentioned";
             }else{
                 for(i = 0; i < data[4].length; i++){
-                    const qualificationsOut = document.createElement("output");
-                    qualificationsOut.innerHTML = data[4][i].qualification;
+                    const qualificationsOut = document.createElement("input");
+                    qualificationsOut.value = data[4][i].qualification;
                     qualificationsDiv.appendChild(qualificationsOut);
                     qualificationsDiv.appendChild(document.createElement("br"));
                     qualificationsDiv.appendChild(document.createElement("br"));
@@ -96,8 +96,8 @@ fetch("../../controller/receptionist/view_cProfile_controller.php?coachID=".conc
             }else{
                 const feedbackDiv = document.getElementById("feedback");
                 for(i = 0; i < data[2].length; i++){
-                    const feedbackOut = document.createElement("output");
-                    feedbackOut.innerHTML = data[2][i].description;
+                    const feedbackOut = document.createElement("input");
+                    feedbackOut.value = data[2][i].description;
                     feedbackDiv.appendChild(feedbackOut);
                     feedbackDiv.appendChild(document.createElement("br"));
                     feedbackDiv.appendChild(document.createElement("br"));
@@ -119,8 +119,8 @@ fetch("../../controller/receptionist/view_cProfile_controller.php?coachID=".conc
                 }else{
                     const sessionInfo = document.getElementById("sessionInfo");
                     for(i=0;i<data.length;i++){
-                        const session = document.createElement("output");
-                        session.innerHTML = data[i][0].concat("<br>From: ",data[i][1]," To: ",data[i][2],"<br>");
+                        const session = document.createElement("input");
+                        session.value = data[i][0].concat("From: ",data[i][1]," To: ",data[i][2]);
                         sessionInfo.appendChild(session);
                     }   
                 }
