@@ -1,4 +1,19 @@
-.t_container{
+
+.tabs-btn{
 display: flex;
 flex-direction: row;
-flex-wrap: wrap;}
+flex-wrap: wrap;
+}
+
+.tabs-btn1{
+    display: flex;
+    /* flex-direction: row; */
+    /* flex-wrap: wrap; */
+    justify-content: space-around;
+    margin-left:13% ;
+    }
+ .lbl{
+    margin: left 3px;
+    }   
+
+
