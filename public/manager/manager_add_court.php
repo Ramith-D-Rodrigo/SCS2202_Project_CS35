@@ -9,6 +9,7 @@
     <title>Add New Court</title>
     <link rel="stylesheet" href="/styles/manager/manager_add_court.css" />
     <link rel="stylesheet" href="/styles/general/styles.css" />
+    <link rel="stylesheet" href="/styles/general/staff.css" />
   </head>
 
    <body>

@@ -11,6 +11,7 @@
     <title>Sport Court</title>
     <link rel="stylesheet" href="/styles/manager/sport_court.css" />
     <link rel="stylesheet" href="/styles/general/styles.css" />
+    <link rel="stylesheet" href="/styles/general/staff.css" />
   </head>
 
    <body>
@@ -30,6 +31,7 @@
             </div>
          
             <?php
+           
               if(isset($_SESSION['branchCourts'])){
                 foreach($_SESSION['branchCourts'] as $currCourt){
                   echo "Sport : ".$currCourt['sport']."<br>";
