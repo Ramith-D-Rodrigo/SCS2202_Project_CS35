@@ -46,7 +46,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td><button>profile</button></td>
+                        <td><button onclick="window.location.href='student_profile.php'">profile</button></td>
                         <td>
                             <div class="tabs1">
                                 <button >Accept</button>

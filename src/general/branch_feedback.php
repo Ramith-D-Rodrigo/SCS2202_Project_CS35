@@ -6,6 +6,7 @@
         private $rating;
         private $description;
         private $branchID;
+        private $userFullName;
 
         public function setDetails($userfeedback_id = '', $user_id = '', $date = '', $rating = '', $description = '', $branch_id = ''){
             $this -> userFeedbackID = $userfeedback_id;
@@ -21,7 +22,7 @@
                 return $this -> userFeedbackID;
             }
             else if($wantedProperty === ''){
-                $sql = sprintf("SELECT * FROM `user_branch_feedback` WHERE `userFeedbackID`  = '%s'",
+                $sql = sprintf("SELECT `uf`.*, CONCAT(`u`.`firstName`,' ', `u`.`lastName`) AS fullName FROM `user_branch_feedback` `uf` INNER JOIN user u ON `u`.`userID` = `uf`.`userID` WHERE `userFeedbackID`  = '%s'",
                 $database -> real_escape_string($this -> userFeedbackID));
 
                 $sql = $database -> query($sql);
@@ -34,6 +35,8 @@
                 rating: $row -> rating,
                 description: $row -> description,
                 branch_id: $row -> branchID);
+
+                $this -> userFullName = $row -> fullName;
                 return $this;
             }
             else{   //any other property (single)
@@ -74,7 +77,8 @@
                 "date" => $this -> date,
                 "rating" => $this -> rating,
                 "description" => $this -> description,
-                "branch" => $this -> branchID
+                "branch" => $this -> branchID,
+                "userFullName" => $this -> userFullName
             ];
         }
     }

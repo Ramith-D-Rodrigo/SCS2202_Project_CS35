@@ -23,8 +23,9 @@
                     <?php
                         require_once("header.php");
                     ?>
-                    <main class="body-container">
-                        <div class="content-box" id="branches">
+                    <main>
+                        <div class="body-container" id="branches" style="flex-direction:column">
+
                         </div>
                     </main>
                     <?php

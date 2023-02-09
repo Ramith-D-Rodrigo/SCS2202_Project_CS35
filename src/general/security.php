@@ -105,7 +105,7 @@
                     return true; //can access
                 }
                 else{   //the user is logged in
-                    if(!($_SESSION['userrole'] === 'coach' || $_SESSION['userrole'] === 'user')){   //if the logged in person is not a coach or an user
+                    if(!($_SESSION['userrole'] === 'user')){   //if the logged in person is not a coach or an user
                         return false;   //they cannot access (we are referring to staff here)
                     }
                     else{
