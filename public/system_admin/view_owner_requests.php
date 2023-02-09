@@ -14,19 +14,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/general/styles.css">
     <link rel="stylesheet" href="/styles/general/staff.css">
-    <link rel="stylesheet" href="/styles/receptionist/viewReservations.css">
+    <link rel="stylesheet" href="/styles/system_admin/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <title>View Reservations</title>
+    <title>View Owner Requests</title>
 </head>
 <body>
     <?php
         require_once("dashboard_header.php")
     ?>
     <main class="body-container">
-        <div>
+        <div class="content-box">
             <div id="err-msg">
             </div>
-            <div id="reservations" style="display:flex;flex-direction:column">
+            <div id="requests" style="display:flex;flex-direction:column">
             </div>
         </div>
     </main>
@@ -34,5 +34,5 @@
         require_once("../general/footer.php");
     ?>
 </body>
-<script src="/js/receptionist/view_reservations.js"></script>
+<script src="/js/system_admin/view_owner_requests.js"></script>
 </html>

@@ -63,7 +63,7 @@
 
         $returnJSON['successMsg'] = $result[0];
         $userrole = $result[1];
-        $loginUser = new $userrole($loginActor);
+        // $loginUser = new $userrole($loginActor);
         if($result[1] === 'user'){  //user login
             $loginUser = new User($loginActor);
             $profilePic = $loginUser -> getProfilePic();
@@ -96,7 +96,13 @@
             $returnJSON['userrole'] = 'coach';
         }
         else if($result[1] === 'admin'){  //admin login
-
+            $loginAdmin = Admin::getInstance($loginActor);
+            $_SESSION['userid'] = $loginAdmin -> getUserID();
+            $_SESSION['username'] = $username;  //store the username in the session
+            $_SESSION['userrole'] = 'admin';
+            $loginAdmin -> closeConnection();
+            unset($loginAdmin);
+            $returnJSON['userrole'] = 'admin';
         }
         else if($result[1] === 'manager'){  //manager login
             $loginManager = new Manager($loginActor);
