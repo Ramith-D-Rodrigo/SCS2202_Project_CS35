@@ -38,15 +38,15 @@
 
         <div class="flex-container">
             <div class="tabs">
-                <div> <h2>Session Information</h2> </div>
+                <div> <h3>Session Information</h3> </div>
 
-              <label> Session ID: </label>  <input readonly type="text" name="session_id" ></input> 
-              <label>  Time Slot :</label>  <input readonly type="text" name="time_slot" ></input> 
-              <label>  Day : </label>  <input readonly type="text" name="day" ></input> 
-              <label>  Court : </label>  <input readonly type="text" name="court" ></input> 
-              <label>  Branch : </label>  <input readonly type="text" name="branch" ></input> 
-              <label>  Session Fee : </label>  <input readonly type="text" name="session_fee" ></input> 
-              <label>  Monthly Payment : </label>  <input readonly type="text" name="monthly_payment" ></input> 
+             <div > <label> Session ID: </label>  <input readonly type="text" name="session_id" ></input> </div>
+             <div > <label>  Time Slot :</label>  <input readonly type="text" name="time_slot" ></input> </div>
+             <div > <label>  Day : </label>  <input readonly type="text" name="day" ></input> </div>
+             <div > <label>  Court : </label>  <input readonly type="text" name="court" ></input> </div>
+             <div > <label>  Branch : </label>  <input readonly type="text" name="branch" ></input> </div>
+             <div > <label>  Session Fee : </label>  <input readonly type="text" name="session_fee" ></input> </div>
+             <div > <label>  Monthly Payment : </label>  <input readonly type="text" name="monthly_payment" ></input> </div> 
 
                 <div class="tabs-btn">
                         <div ><button>Send Message</button></div>
@@ -62,7 +62,7 @@
             
 
             <div class="tabs">
-                <div><h2>Registered Students</h2></div>
+                <div><h3>Registered Students</h3></div>
                 <div><input readonly type="text" name="stname1"  ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
                 <div><input readonly type="text" name="stname2" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
                 <div><input readonly type="text" name="stname3" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
