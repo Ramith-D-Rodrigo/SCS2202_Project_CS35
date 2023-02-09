@@ -32,12 +32,7 @@
         ?>
         <main>
             <div class="content-box" style="align-items:center">
-                <div>
-                    Filter By Branch:
-                    <select id="branchFilter">
-                        <option value="">All</option>
-                    </select>
-                </div>
+              
                 <div id="feedbackTableContainer" style="width:100%">
                     <table style="width:100%">
                         <thead>
