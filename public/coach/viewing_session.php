@@ -38,15 +38,15 @@
 
         <div class="flex-container">
             <div class="tabs">
-                <div>Session Information</div>
+                <div> <h2>Session Information</h2> </div>
 
-                Session ID      : <output type="text" name="session_id" ></output> 
-                Time Slot       : <output type="text" name="time_slot" ></output> 
-                Day             : <output type="text" name="day" ></output> 
-                Court           : <output type="text" name="court" ></output> 
-                Branch          : <output type="text" name="branch" ></output> 
-                Session Fee     : <output type="text" name="session_fee" ></output> 
-                Monthly Payment : <output type="text" name="monthly_payment" ></output> 
+              <label> Session ID: </label>  <input readonly type="text" name="session_id" ></input> 
+              <label>  Time Slot :</label>  <input readonly type="text" name="time_slot" ></input> 
+              <label>  Day : </label>  <input readonly type="text" name="day" ></input> 
+              <label>  Court : </label>  <input readonly type="text" name="court" ></input> 
+              <label>  Branch : </label>  <input readonly type="text" name="branch" ></input> 
+              <label>  Session Fee : </label>  <input readonly type="text" name="session_fee" ></input> 
+              <label>  Monthly Payment : </label>  <input readonly type="text" name="monthly_payment" ></input> 
 
                 <div class="tabs-btn">
                         <div ><button>Send Message</button></div>
@@ -62,11 +62,15 @@
             
 
             <div class="tabs">
-                <div>Registered Students</div>
-                <div><outout type="text" name="stname1" value="st" ></outout>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
-                <div><outout type="text" name="stname2" value="st"></outout>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
-                <div><outout type="text" name="stname3" value="st"></outout>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
-                <div><outout type="text" name="stname4" value="st"></outout>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
+                <div><h2>Registered Students</h2></div>
+                <div><input readonly type="text" name="stname1"  ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
+                <div><input readonly type="text" name="stname2" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
+                <div><input readonly type="text" name="stname3" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
+                <div><input readonly type="text" name="stname4" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
+                <!-- <div><input readonly type="text" name="stname1"  ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
+                <div><input readonly type="text" name="stname2" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
+                <div><input readonly type="text" name="stname3" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div>
+                <div><input readonly type="text" name="stname4" ></input>  <button onclick="window.location.href='student_profile.php'">View more</button></div> -->
 
 
 
