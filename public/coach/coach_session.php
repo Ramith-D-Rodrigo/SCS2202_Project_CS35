@@ -60,7 +60,20 @@
                                     </th>
                                     
                                 </tr>
-                            <?php foreach($_SESSION['sessionDetails'] as $row){
+                            <!--LINE 63 to 74 for hard coding for presentation after presentation delete this-->
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <button onclick="window.location.href='viewing_session.php'">View session</button>
+                                    </td>
+                                </tr>
+
+                           <!-- <?php foreach($_SESSION['sessionDetails'] as $row){
                                     
                                     ?>
                                 <tr>
@@ -70,12 +83,12 @@
                                     <td><?php echo $row -> starting_time."-".$row -> ending_time ?></td>
                                     <td><?php echo $row -> day ?></td>
                                     <td><?php echo "Rs.".$row -> coach_monthly_payment ?></td>
-                                    <td><button onclick="window.location.href='viewing_session.php'">View session</button></td>
+                                    <tr><button onclick="window.location.href='viewing_session.php'">View session</button></tr>
                                     
                                     
                                 </tr>
                                 <?php
-                            } ?>
+                            } ?>-->
                             </tbody>
                         </table>
                            <?php
