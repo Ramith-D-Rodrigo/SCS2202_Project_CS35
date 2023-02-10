@@ -2,7 +2,13 @@ verbose = true; //for debugging
 
 function validateForm(event){
     const errMsg = document.getElementById("errmsg");    //For Displaying the Error messages
-    errMsg.innerHTML = '' //empty before the validation
+    if (errMsg.innerHTML.trim() !== "") {   //trim method to remove any leading or trailing whitespaces
+        event.preventDefault(); //do not submit
+        return false;
+    } else {
+        errMsg.innerHTML = '' //empty before the validation
+    }
+    
 
     const loginForm = document.getElementById("reqForm"); //get login form
 
