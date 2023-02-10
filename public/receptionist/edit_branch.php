@@ -77,7 +77,7 @@
                 <div style="display:flex;flex-direction:row">
                     
                     <div style="display:flex;justify-content:left">
-                        <button onclick="window.location.href='/public/receptionist/edit_branch.php'">Cancel</button>
+                        <button type="button" onclick="window.location.href='/public/receptionist/edit_branch.php'">Cancel</button>
                     </div>
                     <div style="display:flex;justify-content:right">
                         <button  
