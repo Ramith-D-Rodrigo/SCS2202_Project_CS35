@@ -5,7 +5,7 @@
         exit();
     }
 
-    if($_SESSION['userrole'] !== 'user'){   //not an user (might be another actor)
+    if($_SESSION['userrole'] !== 'user'){   //not a user (might be another actor)
         header("Location: /index.php");
         exit();
     }
@@ -25,7 +25,7 @@
     $cancellingReservation = new Reservation();
     $cancellingReservation -> setID($selectedReservation);
 
-    $result = $cancellingUser -> cancelReservation($cancellingReservation, $connection);
+    $result = $cancellingUser -> cancelReservation($cancellingReservation);
 
 
     $returnMsg = array();
