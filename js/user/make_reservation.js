@@ -2,6 +2,8 @@ const reservationForm = document.querySelector('form');
 
 import {updateTheReservationTables, createScheduleObjects} from '../general/reservation_schedule_functions.js';
 
+import { currency } from '../CONSTANTS.js';
+
 reservationForm.addEventListener('submit', (event) => {
     event.preventDefault(); // Prevent the form from submitting
     const formData = new FormData(reservationForm);
@@ -14,6 +16,30 @@ reservationForm.addEventListener('submit', (event) => {
         "reservingDate" : formData.get("reservingDate"),
         "makeReserveBtn" : reserveBtn.value
     };
+
+    let stripe = null;
+
+    //get the publishable key from the server
+    fetch("../../controller/general/get_stripe_publishable_key_controller.php")
+    .then((res) => res.json())
+    .then((data) => {
+        //console.log(data);
+        stripe = Stripe(data.publishableKey);
+
+        const elements = stripe.elements();
+
+        const cardElement = elements.create("card");    //create the card element
+        cardElement.mount("#card-element");
+
+        //add the amount
+        const amount = document.getElementById("amount");
+        amount.innerHTML += currency + " ";
+        amount.innerHTML += formData.get("reservationPrice");
+
+    })
+
+    return;
+
 
     //send the reservation details to the server
     fetch("../../controller/user/make_reservation_controller.php", {
