@@ -24,7 +24,7 @@
     ?>
     <main class="body-container">
         <div>
-            <div class="content-box" id="err-msg">
+            <div id="err-msg">
             </div>
             <div id="reservations" style="display:flex;flex-direction:column">
             </div>

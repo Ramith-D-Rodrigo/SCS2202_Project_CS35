@@ -4,6 +4,7 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
         // console.log(data);
         if(data[0]['errMsg'] !== undefined){
             const errorDiv = document.getElementById("err-msg");
+            errorDiv.className = "container";
             const searchError = document.createElement("div");
             searchError.className = "no-result";
             searchError.id = "no-result";
