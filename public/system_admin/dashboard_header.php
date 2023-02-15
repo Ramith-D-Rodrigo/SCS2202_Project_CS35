@@ -14,14 +14,17 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/system_admin/change_staff_logins.php'){  //change staff login details
                     echo "Change Login Details";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/deactivate_account.php'){  //change staff login details
+                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/deactivate_account.php'){  //deactivate staff accounts
                     echo "Deactivate Staff Accounts";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/view_owner_requests.php'){  //change staff login details
+                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/view_owner_requests.php'){  //to view owner requests
                     echo "Owner Requests";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/system_admin/add_system_maintenance.php'){  //add system maintenance
                     echo "System Maintenance";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/branch_request.php?'){  //to view particular branch request
+                    echo "Branch Request";
                 }
             ?>
         </div>
