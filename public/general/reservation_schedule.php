@@ -102,30 +102,29 @@
                                 </div>
                             </form>
                     </div>
-                    <div class="content-box" id="paymentBox">
-                        <form id="payment-form">
-                            <div style="font-size:1.5rem">
-                                Payment Details
-                            </div>
-                            <div id="amount" style="font-size:1.2rem; margin: 20px auto">
-                                You are Paying 
-                            </div>
-                            <div id="card-element">
-                            </div>
-                            <button id="submit">
-                                <span id="button-text">Pay Now</span>
-                            </button>
-                            <div id="payment-message" class="hidden"></div>
-                        </form>
-                        <div class="payment-gateway-footer">
-                            <div style="font-size:0.7rem; font-style:italic">
-                                The payment gateway is powered by 
-                            </div>
-                            <i class="fa-brands fa-stripe" style="font-size:1.3rem; margin: 0 5px"></i>
-                        </div>
-                    </div>
                 </main>
-
+                <div class="content-box" id="paymentBox">
+                    <form id="payment-form">
+                        <div style="font-size:1.5rem">
+                            Payment Details
+                        </div>
+                        <div id="amount" style="font-size:1.2rem; margin: 20px auto">
+                        </div>
+                        <div id="card-element">
+                        </div>
+                        <div id="card-errors" role="alert"></div>
+                        <button id="paymentGatewaySubmitBtn" value="paymentSubmit" name="paymentBtn" type="submit">
+                            <span id="button-text">Pay Now</span>
+                        </button>
+                        <div id="payment-message" class="hidden"></div>
+                    </form>
+                    <div class="payment-gateway-footer">
+                        <div style="font-size:0.7rem; font-style:italic">
+                            The payment gateway is powered by 
+                        </div>
+                        <i class="fa-brands fa-stripe" style="font-size:1.3rem; margin: 0 5px"></i>
+                    </div>
+                </div>
                 <?php
                     require_once("footer.php");
                 ?>
