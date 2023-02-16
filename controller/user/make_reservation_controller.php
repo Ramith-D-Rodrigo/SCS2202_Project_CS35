@@ -1,18 +1,23 @@
 <?php
     session_start();
+    require_once("../../src/general/security.php");
+    //check the authentication
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
+
+    //post request check
+    if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        Security::redirectUserBase();
+        die();
+    }
 
     $returningMsg = [];
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
     $reservationDetails = json_decode($requestJSON, true);
 
-    if(!isset($_SESSION['userrole']) || !isset($_SESSION['userid'])){  //not logged in
-        //$_SESSION['reservationFail'] = "Please Log in to make a Reservation";
-        $returningMsg['errMsg'] = "Please Log in to make a Reservation";
-        header('Content-Type: application/json;');    //because we are sending json
-        echo json_encode($returningMsg);
-        exit();
-    }
 
     if(empty($requestJSON) || $requestJSON == null){ //have not made the reservation
         $returningMsg['errMsg'] = "Not made any reservations yet";
@@ -28,10 +33,6 @@
     require_once("../../src/general/branch.php");
     require_once("../CONSTANTS.php");
 
-    if($_SESSION['userrole'] !== 'user'){   //not a user
-        header("Location: /index.php");
-        exit();
-    }
     
     //store the reservation details
 
@@ -41,6 +42,7 @@
     $endingTime = $reservationDetails['reservingEndTime'];
     $date = $reservationDetails['reservingDate'];
     $user = $_SESSION['userid'];
+    $token = $reservationDetails['tokenID'];
     
     //user inputs validation
     $validationFlag = false;
@@ -224,8 +226,31 @@
             }
         }
     }
+    //can be reserved
 
-    //now making the reservation
+    //payment 
+    require_once("../../src/general/paymentGateway.php");
+
+    $fName = $reservingUser -> getProfileDetails('firstName');
+    $lName = $reservingUser -> getProfileDetails('lastName');
+
+    $branchName = $branch -> getDetails($reservingUser -> getConnection(), 'city');
+    //current timestamp
+    $timestamp = date('Y-m-d H:i:s');
+
+    //reservation description
+    $reservationDescription = "Reservation for ".$date." from ".$startingTime." to ".$endingTime." for ".$numOfpeople." people on ".$branchName. " by ".$fName." ".$lName." at ".$timestamp;
+
+    $paymentResult = paymentGateway::userReservationPayment($payment, $reservationDescription, CURRENCY, $token);
+    if(!$paymentResult[0]){ //0th index is the status of the payment
+        //payment failed
+        $returningMsg['errMsg'] = $paymentResult[1]; //1st index is the error message
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($returningMsg);
+        exit();
+    }
+
+    //now making the reservation since the payment succeeded
     $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $reservingCourt);   //pass the reserving court object to the function
     if($result === TRUE){
         $returningMsg['successMsg'] = "Reservation has been made Successfully";
