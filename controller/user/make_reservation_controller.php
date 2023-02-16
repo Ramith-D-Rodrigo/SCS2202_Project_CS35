@@ -235,8 +235,9 @@
     $lName = $reservingUser -> getProfileDetails('lastName');
 
     $branchName = $branch -> getDetails($reservingUser -> getConnection(), 'city');
-    //current timestamp
-    $timestamp = date('Y-m-d H:i:s');
+    //current timestamp for the timezone of the server
+    date_default_timezone_set(SERVER_TIMEZONE);
+    $timestamp = date('Y-m-d H:i:s');   
 
     //reservation description
     $reservationDescription = "Reservation for ".$date." from ".$startingTime." to ".$endingTime." for ".$numOfpeople." people on ".$branchName. " by ".$fName." ".$lName." at ".$timestamp;
