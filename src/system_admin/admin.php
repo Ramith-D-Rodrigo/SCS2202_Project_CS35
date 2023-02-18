@@ -105,6 +105,23 @@ class Admin extends Actor{
         return $branchInfo;
     }
 
+    public function getPendingBranchDetails($branchID,$database){
+        $pendingBr = new Branch($branchID);    //get details of the pending branch
+        $sql = sprintf("SELECT `branchID`,`branchEmail`,`city`,`address`,`openingTime`,`closingTime`,`ownerRequestDate` FROM Branch WHERE branchID = '%s'",
+        $database -> real_escape_string($branchID));
+        $generalDetails  = $database -> query($sql) -> fetch_object();
+        $pendingBranch = [];
+        array_push($pendingBranch,$generalDetails);
+        $sports = $pendingBr -> getAllSports($database);
+        foreach($sports as $sport){
+            $courts = $pendingBr -> getSportCourtNames($sport->sportID,$database);
+            $courtCount = count($courts);
+            array_push($pendingBranch,[$sport->sportName,$courtCount]);
+        }
+
+        return $pendingBranch;
+    }
+
     public function getLoginDetails($role,$branch,$database) {
         
         $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` INNER JOIN

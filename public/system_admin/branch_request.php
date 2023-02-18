@@ -53,6 +53,14 @@
                 </div>
                 <div class="row-container">
                     <div class="left-side">
+                        Branch Email:  
+                    </div>
+                    <div class="right-side">
+                        <input readonly id="emailAddress"></input>
+                    </div>
+                </div>
+                <div class="row-container">
+                    <div class="left-side">
                         Opening Time: 
                     </div>
                     <div class="right-side">
@@ -76,18 +84,19 @@
                     </div>
                 </div>
                 <div style="display:flex;flex-direction:row">
-                        <!-- <div > -->
-                        <div style="width:50%"> Sport(s): 
-                            <select id="sports">
-                                <option value="">Select Sport..</option>
-                            </select>   
-                        </div> 
-                        <!-- </div> 
-                        <div > -->
-                            <!-- <div> </div>  -->
-                            <div style="width:50%"> No. of Courts: <output readonly id="courts"></output> </div>
-                        <!-- </div> -->
-                        
+                    <div style="width:50%"> Sport(s): 
+                        <select id="sports">
+                            <option value="">Select Sport..</option>
+                        </select>   
+                    </div> 
+                    <div style="width:50%;margin-top:15px"> No. of Courts: <output readonly id="courts"></output> 
+                    </div>       
+                </div>
+                <div style="display:flex;flex-direction:row;justify-content:flex-end;margin-top:5%">
+                    <form action="../../controller/system_admin/request_handle_controller.php" method="POST">
+                        <button type="submit" id ="cancelBtn" class="viewBtn">Decline</button>
+                        <button type="submit" id="acceptBtn" class="viewBtn">Accept</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -96,4 +105,5 @@
         require_once("../general/footer.php");
     ?>
 </body>
+<script src="/js/system_admin/branch_request.js"></script>
 </html>
