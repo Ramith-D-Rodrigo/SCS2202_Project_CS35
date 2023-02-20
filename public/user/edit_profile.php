@@ -222,8 +222,8 @@
                         </div>
 
                         <div class="content-box" style="min-width:40%">
+                            <div style="text-align:center">Deactivate Account</div>
                             <form id ="deactivateForm">
-                                <div style="text-align:center">Deactivate Account</div>
                                 <div class="row-container">
                                     <div class="left-field">
                                         Enter Password

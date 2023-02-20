@@ -15,16 +15,13 @@
         die();
     }
 
-    $retunMsg = [];
-    $responseCode = 200;
-
     //get the user request data
     $requestJSON = json_decode(file_get_contents('php://input'), true);
 
     if(!isset($requestJSON['password']) || !isset($requestJSON['confirmPassword'])){  //if the request data is not set
         http_response_code(400);
         header('Content-Type: application/json;');
-        echo json_encode(array("errMsg" => "Invalid Request"));
+        echo json_encode(array("msg" => "Invalid Request"));
         die();
     }
 
@@ -34,13 +31,23 @@
     if($password !== $confirmPassword){  //if the password and the confirm password are not the same
         http_response_code(401);    //unauthorized
         header('Content-Type: application/json;');
-        echo json_encode(array("errMsg" => "The passwords do not match"));
+        echo json_encode(array("msg" => "The passwords do not match"));
         die();
     }
 
     require_once("../../src/user/user.php");
     $deactivatingUser = new User();
     $deactivatingUser -> setUserID($_SESSION['userid']);
+
+    //check the user input password and the user's actual password in the database (actual authentication)
+    $authFlag = Security::ActionAuthentication('%', $password, 'user', $_SESSION['userid']);
+    if(!$authFlag){ //not authenticated
+        http_response_code(401);    //unauthorized
+        header('Content-Type: application/json;');
+        echo json_encode(array("msg" => "Invalid Password"));
+        die();
+    }
+    //the user is authenticated
 
     //check for ongoing reservations of the user
     $userReservations = $deactivatingUser -> getReservationHistory();
@@ -52,7 +59,7 @@
             if($status === 'Pending'){   //the reservation is pending (an ongoing reservation)
                 http_response_code(401);
                 header('Content-Type: application/json;');
-                echo json_encode(array("errMsg" => "You have an ongoing reservation.<br> Please Complete or Cancel the reservation before deactivating your account"));
+                echo json_encode(array("msg" => "You have an ongoing reservation.<br> Please Complete or Cancel the reservation before deactivating your account"));
                 die();
             }
         }
@@ -65,7 +72,7 @@
             unset($coachingSessions);
             http_response_code(401);
             header('Content-Type: application/json;');
-            echo json_encode(array("errMsg" => "You have ongoing coaching sessions.<br> Please Leave the coaching sessions before deactivating your account"));
+            echo json_encode(array("msg" => "You have ongoing coaching sessions.<br> Please Leave the coaching sessions before deactivating your account"));
             die();
         }
     }
@@ -84,12 +91,12 @@
     if($status){
         http_response_code(200);
         header('Content-Type: application/json;');
-        echo json_encode(array("successMsg" => "A verification code has been sent to your email address"));
+        echo json_encode(array("msg" => "A verification code has been sent to your email address"));
         die();
     }
 
     http_response_code(500); //500 - internal server error
     header('Content-Type: application/json;');
-    echo json_encode(array("errMsg" => "An error occurred while sending the verification code"));
+    echo json_encode(array("msg" => "An error occurred while sending the verification code"));
 
 ?>
