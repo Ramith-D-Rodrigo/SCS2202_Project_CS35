@@ -220,6 +220,37 @@
                                 </div>
                             </form>
                         </div>
+
+                        <div class="content-box" style="min-width:40%">
+                            <form id ="deactivateForm">
+                                <div style="text-align:center">Deactivate Account</div>
+                                <div class="row-container">
+                                    <div class="left-field">
+                                        Enter Password
+                                    </div>
+                                    <div class="right-field">
+                                        <input type="password" 
+                                            name="password" 
+                                            required><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
+                                    </div>
+                                </div>
+                                <div class="row-container">
+                                    <div class="left-field">
+                                        Confirm Password
+                                    </div>
+                                    <div class="right-field">
+                                        <input type="password" 
+                                            name="confirmPassword" 
+                                            required><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
+                                    </div>
+                                </div>
+                                <div class="err-msg" id="errMsg3"></div>
+                                <div class="success-msg" id="successMsg3"></div>
+                                <div class="btn-container">
+                                    <button type="submit" id="submitBtn3" onclick="return validateDeactivateForm(event)">Deactivate Account <i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </main>
 
@@ -229,6 +260,7 @@
             <script src="/js/user/edit_profile_getdetails.js"></script>
             <script src="/js/user/change_password.js"></script>
             <script src="/js/user/account_links.js"></script>
+            <script src="/js/user/deactivate_account.js"></script>
         </html>
     <?php
     }
