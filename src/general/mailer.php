@@ -65,5 +65,15 @@
                     <p>Regards,<br>Sportude Support</p>";
             return self::sendMail($recipientEmail, $recipient_username, $subject, $body);
         }
+
+        public static function deactivateAccount($recipientEmail, $recipientUsername, $verifcationCode){
+            $subject = "Account Deactivation";
+            $body = "<p>Hi $recipientUsername,</p>
+                    <p>You have requested to deactivate your account. Please use the following code to verify the action.</p>
+                    <p?>Code : {$verifcationCode} </p>
+                    <p>If you did not request to deactivate your account, please ignore this email.</p>
+                    <p>Regards,<br>Sportude Support</p>";
+            return self::sendMail($recipientEmail, $recipientUsername, $subject, $body);
+        }
     }
 ?>

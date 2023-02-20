@@ -1,6 +1,7 @@
 <?php
     require_once("../../src/general/reservation.php");
     require_once("../../src/general/actor.php");
+    require_once("../../src/coach/coaching_session.php");
 
 class User extends Actor implements JsonSerializable{
     private $firstName;
@@ -420,6 +421,23 @@ class User extends Actor implements JsonSerializable{
             return false;
         }
         return true;
+    }
+
+    public function getOngoingCoachingSessions(){   //return coaching sessions the user is attending
+        $sql = sprintf("SELECT `sessionID` 
+        FROM `student_registered_session` 
+        WHERE `stuID` = '%s' 
+        AND `leaveDate` = NULL", $this -> connection -> real_escape_string($this -> userID));
+        $result = $this -> connection -> query($sql);
+        $sessionArr = [];
+        while($row = $result -> fetch_object()){
+            $sessionID = $row -> sessionID;
+            $currSession = new Coaching_Session($sessionID);
+            array_push($sessionArr, $currSession);
+            unset($currSession);
+            unset($row);
+        }
+        return $sessionArr;
     }
 
     public function setDetailsByProperty($propertyName, $propertyValue){   //set the details of the user
