@@ -76,7 +76,7 @@
             self::$connection = $connection;
             $sql = sprintf("SELECT `userID`, `username`, `password`, `userRole` 
             FROM `login_details` 
-            WHERE `username` = '%s' AND `userID` = '%s' AND `userRole` = '%s'",
+            WHERE `username` LIKE '%s' AND `userID` = '%s' AND `userRole` = '%s'",
             self::$connection -> real_escape_string($inputUsername),
             self::$connection -> real_escape_string($userID),
             self::$connection -> real_escape_string($userRole));
