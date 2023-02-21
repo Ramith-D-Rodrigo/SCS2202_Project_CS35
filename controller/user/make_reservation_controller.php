@@ -118,7 +118,8 @@
     
     $reservingSport = new Sport();
     $reservingSport -> setID($sport);
-    $reservationPrice = $reservingSport -> getDetails($reservingUser -> getConnection(), 'reservationPrice');
+    $temp = $reservingSport -> getDetails($reservingUser -> getConnection(), ['reservationPrice']);
+    $reservationPrice = json_decode(json_encode($temp)) -> reservationPrice; //get the reservation price
     $calculation = ($timeDifference -> h + ($timeDifference -> i/60));  //get hours and minutes and convert minutes to hours to get the period in hours
     $payment = $reservationPrice * $calculation;//calculate the payment
 

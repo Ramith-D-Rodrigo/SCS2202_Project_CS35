@@ -90,18 +90,18 @@
 
 
         public function getDetails($database, $wantedColumns = []){
-            if($wantedColumns != []){  //specific columns are wanted
-                //concat the array elements with comma
-                $wantedColumns = implode(',', $wantedColumns);
+            $sql = "SELECT ";
+            if(empty($wantedColumns)){
+                $sql .= "`r`.*, `b`.`city` AS `branch`, `s`.`sportName` as `sport`, `sc`.`courtName`";
+            }else{
+                foreach($wantedColumns as $column){
+                    $sql .= "`r`.`$column`,";
+                }
+                //remove the last comma
+                $sql = substr($sql, 0, -1);
             }
-            else{   //all columns are wanted
-                $wantedColumns = '*';
-            }
-            $sql = sprintf("SELECT `r`.{$wantedColumns},
-            `b`.`city` AS `branch`,
-            `s`.`sportName` as `sport`,
-            `sc`.`courtName`
-            FROM `reservation` `r`
+            
+            $sql .= sprintf(" FROM `reservation` `r`
             INNER JOIN `sports_court` `sc`
             ON `sc`.`courtID` = `r`.`sportCourt`
             INNER JOIN `sport` `s`
