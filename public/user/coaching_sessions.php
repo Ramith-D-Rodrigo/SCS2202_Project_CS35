@@ -32,7 +32,7 @@
                 ?>
             </body>
             <script src="/js/user/account_links.js"></script>
-            <script src="/js/user/coaching_sessions.js"></script>
+            <script type="module" src="/js/user/coaching_sessions.js"></script>
         </html>
     <?php
     }

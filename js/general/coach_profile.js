@@ -1,4 +1,5 @@
 import {currency} from "../../js/CONSTANTS.js";
+import {changeToLocalTime} from "../../js/FUNCTIONS.js";
 
 const url = new URL(window.location);   //get the url
 const params = new URLSearchParams(url.search); //search parameters
@@ -130,21 +131,7 @@ const branchSelected = (e) => { //function to get the sessions when a branch is 
 }
 
 //change time to local
-const changeToLocalTime = (time) => {
-    //split the time
-    const timeArr = time.split(":");
-    const hours = parseInt(timeArr[0]);
-    const minutes = parseInt(timeArr[1]);
-    const seconds = parseInt(timeArr[2]);
 
-    const date = new Date();
-    date.setHours(hours);
-    date.setMinutes(minutes);
-    date.setSeconds(seconds);
-
-    const localTime = date.toLocaleTimeString();
-    return localTime;
-}
 
 
 fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(coachID))
