@@ -1,3 +1,5 @@
+import {currency} from "../../js/CONSTANTS.js";
+
 const url = new URL(window.location);   //get the url
 const params = new URLSearchParams(url.search); //search parameters
 //console.log(params);
@@ -27,17 +29,16 @@ const sessionInfo = (e) => {    //function to get the session info when a sessio
         sessionID = requestingSession.value;   //get the session id
     }
 
-    sessions.forEach(session => {
-        //selecting the inserting fields
-        const timePeriod = document.querySelector("#timePeriod");
-        const day = document.querySelector("#day");
-        const startingTime = document.querySelector("#startingTime");
-        const endingTime = document.querySelector("#endingTime");
-        const courtName = document.querySelector("#courtName");
-        const noOfStudents = document.querySelector("#noOfStudents");
-        const paymentAmount = document.querySelector("#paymentAmount");
-        
+    //selecting the inserting fields
+    const timePeriod = document.querySelector("#timePeriod");
+    const day = document.querySelector("#day");
+    const startingTime = document.querySelector("#startingTime");
+    const endingTime = document.querySelector("#endingTime");
+    const courtName = document.querySelector("#courtName");
+    const noOfStudents = document.querySelector("#noOfStudents");
+    const paymentAmount = document.querySelector("#paymentAmount");
 
+    sessions.forEach(session => {
         if(session.sessionID === sessionID){ //if the session is found
             if(e.target.id === "coachingSessions"){    //if the event is triggered from the coach profile container
                 //insert the session info
@@ -128,11 +129,27 @@ const branchSelected = (e) => { //function to get the sessions when a branch is 
     sessionInfo(nextObj);
 }
 
+//change time to local
+const changeToLocalTime = (time) => {
+    //split the time
+    const timeArr = time.split(":");
+    const hours = parseInt(timeArr[0]);
+    const minutes = parseInt(timeArr[1]);
+    const seconds = parseInt(timeArr[2]);
+
+    const date = new Date();
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    date.setSeconds(seconds);
+
+    const localTime = date.toLocaleTimeString();
+    return localTime;
+}
+
 
 fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(coachID))
     .then(res => res.json())
     .then(data => { //data is added to the page
-
         //add the coach info data
 
         //coach profile pic
@@ -217,7 +234,7 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
             if(!branchSet.has(data.coachingSessions[i].branchName)){  //add the branch if not found in the set
                 option1.text = data.coachingSessions[i].branchName;
                 option1.value = data.coachingSessions[i].branchName;
-                branchSet.add(data.coachingSessions[i].branchID);
+                branchSet.add(data.coachingSessions[i].branchName);
                 sessionBranches.appendChild(option1);
             }
 
@@ -267,24 +284,6 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         }
 
         //create objects for the sessions (need them for event listeners)
-
-        //change time to local
-        const changeToLocalTime = (time) => {
-            //split the time
-            const timeArr = time.split(":");
-            const hours = parseInt(timeArr[0]);
-            const minutes = parseInt(timeArr[1]);
-            const seconds = parseInt(timeArr[2]);
-
-            const date = new Date();
-            date.setHours(hours);
-            date.setMinutes(minutes);
-            date.setSeconds(seconds);
-
-            const localTime = date.toLocaleTimeString();
-            return localTime;
-        }
-
     
         for(let i = 0; i < data.coachingSessions.length; i++){
             const session = {
@@ -296,7 +295,7 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
                 endingTime: changeToLocalTime(data.coachingSessions[i].endingTime),
                 branchName: data.coachingSessions[i].branchName,
                 courtName: data.coachingSessions[i].courtName,
-                paymentAmount: "Rs. " + data.coachingSessions[i].paymentAmount,
+                paymentAmount: currency + " " + data.coachingSessions[i].paymentAmount,
             }
 
             sessions.push(session);

@@ -7,10 +7,21 @@
         private $minCoachingSessionPrice;
         private $maxNoOfStudents;
 
-        public function getDetails($database, $wantedProperty = ''){
-            $sql = sprintf("SELECT * FROM `sport`
-            WHERE `sportID`
-            LIKE '%s'", $database -> real_escape_string($this -> sportID));
+        public function getDetails($database, $wantedColumns = []){
+            $sql = "SELECT ";
+            if(empty($wantedColumns)){
+                $sql = $sql . "*";
+            }
+            else{
+                foreach($wantedColumns as $column){
+                    $sql .= "`$column`,";
+                }
+                $sql = substr($sql, 0, -1); //remove the last comma
+            }
+            $sql .= " FROM `sport` ";
+
+            $sql .= sprintf("WHERE `sportID` LIKE '%s'", $database -> real_escape_string($this -> sportID));
+
             $result = $database -> query($sql);
 
             $row = $result -> fetch_object();
@@ -26,19 +37,8 @@
             $this -> manNoOfStudents = $row -> manNoOfStudents; */
 
             $result -> free_result();
-
-            if($wantedProperty === 'sportID'){
-                return $this -> sportID;
-            }
-            else if($wantedProperty === 'sportName'){
-                return $this -> sportName;
-            }
-            else if($wantedProperty === 'reservationPrice'){
-                return $this -> reservationPrice;
-            }
-            else{
-                return $this;
-            }
+            unset($row);
+            return $this;
         }
 
         public function setID($id){
