@@ -55,9 +55,19 @@
             
             $coaches += [$temp['coachID'] => ['sport' => $sportName, 'photo' => $coachPic]];
         }
+
+        //check the session user status 
+        if(in_array($currSession, $ongoingCoachingSessions)){   //ongoing
+            $currSession -> status = 'ongoing';
+        }else if(in_array($currSession, $pendingCoachingSessions)){ //pending
+            $currSession -> status = 'pending';
+        }else if(in_array($currSession, $leftCoachingSessions)){    //left
+            $currSession -> status = 'left';
+        }
+
     }
 
-    $returnMsg['data'] = ['coachingSessions' => $allSessions, 'coaches' => $coaches];
+    $returnMsg = ['coachingSessions' => $allSessions, 'coaches' => $coaches];
     http_response_code(200);
     header('Content-Type: application/json');
     echo json_encode($returnMsg);
