@@ -23,11 +23,7 @@
                     require_once("../../public/general/header.php");
                 ?>
                 <main>
-                    <div class="body-container">
-                        <div class="content-box" id="ongoingSessions">
-                        </div>
-                        <div class="content-box" id="leftSessions">
-                        </div>
+                    <div class="body-container" id="coachingSessionsContainer">
                     </div>
                 </main> 
 
@@ -36,6 +32,7 @@
                 ?>
             </body>
             <script src="/js/user/account_links.js"></script>
+            <script src="/js/user/coaching_sessions.js"></script>
         </html>
     <?php
     }
