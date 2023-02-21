@@ -80,7 +80,7 @@
     //random code generation for email pin verification
     $code = rand(100000, 999999);
 
-    $_SESSION['code'] = $code;
+    $_SESSION['verificationCode'] = $code;
     
     require_once("../../src/general/mailer.php");
 
