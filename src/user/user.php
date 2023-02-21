@@ -516,6 +516,39 @@ class User extends Actor implements JsonSerializable{
         return true;    //successfully update the profile
     }
 
+    public function getPendingCoachingSessionRequests(){   //function to get coaching sessions that are requested by the user (returns an array of sessionIDs)
+        $sql = sprintf("SELECT `sessionID` FROM `user_request_coaching_session` 
+        WHERE `userID` = '%s'", 
+        $this -> connection -> real_escape_string($this -> userID));
+
+        $result = $this -> connection -> query($sql);
+        
+        $requestArr = [];
+        while($row = $result -> fetch_object()){
+            $sessionID = $row -> sessionID;
+            array_push($requestArr, $sessionID);
+            unset($row);
+        }
+        return $requestArr;
+    }
+
+    public function requestCoachingSession($sessionID, $message){
+        
+        $sql = sprintf("INSERT INTO `user_request_coaching_session` 
+        (`userID`, `sessionID`, `message`, `requestDate`) 
+        VALUES ('%s', '%s', NULLIF('%s', ''), '%s')",
+        $this -> connection -> real_escape_string($this -> userID),
+        $this -> connection -> real_escape_string($sessionID),
+        $this -> connection -> real_escape_string($message),
+        $this -> connection -> real_escape_string(date('Y-m-d')));
+
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+        return true;
+    }
+
     public function giveFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //generalized function to give feedback to coach or branch
         if(get_class($feedbackObj) === 'Coaching_Session'){ //the user is giving feedback to a coach
             return $this -> giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating);
