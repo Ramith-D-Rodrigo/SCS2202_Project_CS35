@@ -2,6 +2,7 @@ const staffRole = document.getElementById("staffRole");
 const selectedBranch = document.getElementById("branchName");
 const username = document.getElementById("username");
 const cEmail = document.getElementById("currEmail");
+const confirmBtn = document.getElementById("confirmBtn");
 
 staffRole.addEventListener("change", (e) => {
     if(selectedBranch.value !== "" && staffRole.value !== ""){
@@ -19,6 +20,7 @@ staffRole.addEventListener("change", (e) => {
                 }else{   
                     username.value = data[0][1];
                     cEmail.value = data[0][2];
+                    confirmBtn.value = data[0][0];
                 }
             });
     }else{
@@ -29,8 +31,7 @@ staffRole.addEventListener("change", (e) => {
 
 selectedBranch.addEventListener("change", (e) => {
     if(selectedBranch.value !== "" && staffRole.value !== ""){
-        fetch("../../controller/system_admin/view_login_detail_controller.php?branchName=".concat(e.target.value, "&role=", staffRole.value))
-            
+        fetch("../../controller/system_admin/view_login_detail_controller.php?branchName=".concat(e.target.value, "&role=", staffRole.value)) 
             .then((res) => res.json())
             .then((data) => {
                 // console.log(data[0][0]);
@@ -44,6 +45,7 @@ selectedBranch.addEventListener("change", (e) => {
                 }else{   
                     username.value = data[0][1];
                     cEmail.value = data[0][2];
+                    confirmBtn.value = data[0][0];
                 }
             });
     }else{

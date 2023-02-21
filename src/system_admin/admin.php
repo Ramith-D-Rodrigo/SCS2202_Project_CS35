@@ -156,6 +156,16 @@ class Admin extends Actor{
 
         return $branchInfo;
     }
+
+    public function updateStaffLogin($userID,$newEmail,$newPwd,$database){
+        $sql = sprintf("UPDATE `login_details` SET `emailAddress` = '%s', `password` = '%s' WHERE `userID` = '%s'",
+        $database -> real_escape_string($newEmail),
+        $database -> real_escape_string($newPwd),
+        $database -> real_escape_string($userID));
+
+        $result = $database -> query($sql);
+        return $result;
+    }
 }
 
 ?>
