@@ -547,6 +547,15 @@ class User extends Actor implements JsonSerializable{
         return true;
     }
 
+    public function deactivateAccount(){
+        $sql = sprintf("UPDATE `login_details` SET `isActive` = '0' WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+        return true;
+    }
+
     public function jsonSerialize() : mixed{    //to json encode
         return [
             'username' => $this -> username,
