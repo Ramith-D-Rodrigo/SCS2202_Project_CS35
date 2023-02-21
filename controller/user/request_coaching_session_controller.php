@@ -67,7 +67,7 @@
     $pendingRequests = $requestingUser -> getPendingCoachingSessionRequests();
     if($pendingRequests != []){ //has pending coaching session requests
         foreach($pendingRequests as $currRequest){
-            if($currRequest == $userRequest['requestingSession']){    //found the session and the user has already requested to join
+            if($currRequest -> getSessionID() == $userRequest['requestingSession']){    //found the session and the user has already requested to join
                 http_response_code(400);
                 header('Content-Type: application/json');
                 $returnMsg['msg'] = 'You have already requested to join this session';

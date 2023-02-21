@@ -527,10 +527,30 @@ class User extends Actor implements JsonSerializable{
         $requestArr = [];
         while($row = $result -> fetch_object()){
             $sessionID = $row -> sessionID;
-            array_push($requestArr, $sessionID);
+            $tempSession = new Coaching_Session($sessionID);
+            array_push($requestArr, $tempSession);
             unset($row);
         }
         return $requestArr;
+    }
+
+    public function getLeftCoachingSessions(){
+        $sql = sprintf("SELECT `sessionID` FROM `student_registered_session` 
+        WHERE `stuID` = '%s'
+        AND `leaveDate` IS NOT NULL",
+        $this -> connection -> real_escape_string($this -> userID));
+
+        $result = $this -> connection -> query($sql);
+
+        $sessionArr = [];
+        while($row = $result -> fetch_object()){
+            $sessionID = $row -> sessionID;
+            $tempSession = new Coaching_Session($sessionID);
+            array_push($sessionArr, $tempSession);
+            unset($row);
+        }
+
+        return $sessionArr;
     }
 
     public function requestCoachingSession($sessionID, $message){
