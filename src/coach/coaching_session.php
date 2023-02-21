@@ -92,20 +92,18 @@
         }
         
         public function jsonSerialize() : mixed{
-            return [
-                "sessionID" => $this -> sessionID,
-                "coachID" => $this -> coachID,
-                "courtID" => $this -> courtID,
-                "coachMonthlyPayment" => $this -> coachMonthlyPayment,
-                "timePeriod" => $this -> timePeriod,
-                "noOfStudents" => $this -> noOfStudents,
-                "day" => $this -> day,
-                "startingTime" => $this -> startingTime,
-                "endingTime" => $this -> endingTime,
-                "paymentAmount" => $this -> paymentAmount,
-                "courtName" => $this -> courtName,
-                "branchName" => $this -> branchName,
-            ];
+            //get all class properties
+            $properties = get_object_vars($this);
+            $returnArr = [];
+
+            //only return the properties that are not null
+            foreach($properties as $key => $value){
+                if($value != NULL){
+                    $returnArr[$key] = $value;
+                }
+            }
+
+            return $returnArr;
         }
     }
 
