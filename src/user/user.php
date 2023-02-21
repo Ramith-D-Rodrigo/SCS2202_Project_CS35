@@ -2,6 +2,7 @@
     require_once("../../src/general/reservation.php");
     require_once("../../src/general/actor.php");
     require_once("../../src/coach/coaching_session.php");
+    require_once("../../controller/CONSTANTS.php");
 
 class User extends Actor implements JsonSerializable{
     private $firstName;
@@ -533,14 +534,15 @@ class User extends Actor implements JsonSerializable{
     }
 
     public function requestCoachingSession($sessionID, $message){
-        
+        date_default_timezone_set(SERVER_TIMEZONE);
+        $date = date('Y-m-d');   
         $sql = sprintf("INSERT INTO `user_request_coaching_session` 
         (`userID`, `sessionID`, `message`, `requestDate`) 
         VALUES ('%s', '%s', NULLIF('%s', ''), '%s')",
         $this -> connection -> real_escape_string($this -> userID),
         $this -> connection -> real_escape_string($sessionID),
         $this -> connection -> real_escape_string($message),
-        $this -> connection -> real_escape_string(date('Y-m-d')));
+        $this -> connection -> real_escape_string($date));
 
         $result = $this -> connection -> query($sql);
         if($result === false){
