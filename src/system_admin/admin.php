@@ -125,25 +125,30 @@ class Admin extends Actor{
     public function getLoginDetails($role,$branch,$database) {
         
         $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` INNER JOIN
-        `staff` `s` ON `l`.`userID` = `s`.`staffID` WHERE `s`.`branchID` = '%s' AND `s`.`staffRole` = '%s'",
+        `staff` `s` ON `l`.`userID` = `s`.`staffID` WHERE `s`.`leaveDate` IS NULL AND `s`.`branchID` = '%s' AND `s`.`staffRole` = '%s'",
         $database -> real_escape_string($branch),
         $database -> real_escape_string($role));
         
         $row = $database -> query($sql) -> fetch_object();
         $loginResults = [];
-        array_push($loginResults,[$row -> userID,$row -> username,$row -> emailAddress]);
+        if($row !== NULL){
+            array_push($loginResults,[$row -> userID,$row -> username,$row -> emailAddress]);
+        }
+        
         return $loginResults;
     }
 
     public function getAccountDetails($role,$branch,$database){
         $profileSQL = sprintf("SELECT `l`.`userID`,`l`.`emailAddress`,`l`.`username`,`s`.`firstName`,`s`.`lastName`,`s`.`joinDate`,`s`.`contactNum` FROM `login_details` `l` INNER JOIN
-        `staff` `s` ON `l`.`userID` = `s`.`staffID` WHERE `s`.`branchID` = '%s' AND `s`.`staffRole` = '%s'",
+        `staff` `s` ON `l`.`userID` = `s`.`staffID` WHERE `s`.`leaveDate` IS NULL AND `s`.`branchID` = '%s' AND `s`.`staffRole` = '%s'",
         $database -> real_escape_string($branch),
         $database -> real_escape_string($role));
 
         $row = $database -> query($profileSQL) -> fetch_object();
         $accountDetails = [];
-        array_push($accountDetails,[$row -> userID,$row -> username,$row -> emailAddress,$row->firstName,$row->lastName,$row->joinDate,$row->contactNum]);
+        if($row !== NULL){
+            array_push($accountDetails,[$row -> userID,$row -> username,$row -> emailAddress,$row->firstName,$row->lastName,$row->joinDate,$row->contactNum]);
+        }
         return $accountDetails;
     }
 
@@ -158,13 +163,49 @@ class Admin extends Actor{
     }
 
     public function updateStaffLogin($userID,$newEmail,$newPwd,$database){
-        $sql = sprintf("UPDATE `login_details` SET `emailAddress` = '%s', `password` = '%s' WHERE `userID` = '%s'",
+        $sql = sprintf("UPDATE `login_details` SET `emailAddress` = '%s', `password` = '%s', `isActive` = 1 WHERE `userID` = '%s'",
         $database -> real_escape_string($newEmail),
         $database -> real_escape_string($newPwd),
         $database -> real_escape_string($userID));
 
         $result = $database -> query($sql);
         return $result;
+    }
+
+    public function deactivateAccount($branchID,$staffRole,$profileID,$database){
+        $updateBranchRow = false;   //for updating the current manager/receptionist in the branch table
+        // $deleteRole = false;     //for deleting the row in the specific role table
+        $updateStaffRow = false;   //for updating the leave date in the staff table
+        $updateLoginRow = false;    //for updating the isActive column in the login_details table
+        
+        if($staffRole === "receptionist"){ 
+            $sql = sprintf("UPDATE `branch` SET `currReceptionist` = NULL WHERE `branchID` = '%s'",
+            $database -> real_escape_string($branchID));
+            $updateBranchRow = $database -> query($sql);
+            
+        }else{
+            $sql = sprintf("UPDATE `branch` SET `currManager` = NULL WHERE `branchID` = '%s'",
+            $database -> real_escape_string($branchID));
+            $updateBranchRow = $database -> query($sql);
+            
+        }
+
+        $sql2 = sprintf("UPDATE `staff` SET `leaveDate` = '%s' WHERE `staffID` = '%s'",
+        $database -> real_escape_string(date("Y-m-d")),
+        $database -> real_escape_string($profileID));
+
+        $updateStaffRow = $database -> query($sql2);
+
+        $sql3 = sprintf("UPDATE `login_details` SET `isActive` = 0 WHERE `userID` = '%s'",
+        $database -> real_escape_string($profileID));
+
+        $updateLoginRow = $database -> query($sql3);
+
+        if($updateBranchRow && $updateStaffRow && $updateLoginRow){
+            return true;
+        }else{
+            return false;
+        }   
     }
 }
 

@@ -6,6 +6,8 @@ const firstName = document.getElementById("fName");
 const lastName = document.getElementById("lName");
 const contactN = document.getElementById("contactN");
 const jDate = document.getElementById("jDate");
+const dButton = document.getElementById("deactivateBtn");
+
 staffRole.addEventListener("change", (e) => {      //for getting the branch names according to the role
     if(selectedBranch.value !== "" && staffRole.value !== ""){    //load profile details according to the correct branch and role
         fetch("../../controller/system_admin/view_account_controller.php?branchName=".concat(selectedBranch.value, "&role=", e.target.value))   
@@ -26,6 +28,7 @@ staffRole.addEventListener("change", (e) => {      //for getting the branch name
                     lastName.value = data[0][4];
                     contactN.value = data[0][6];
                     jDate.value = data[0][5];
+                    dButton.value = data[0][0];
                 }
             });
     }else{
@@ -60,6 +63,7 @@ selectedBranch.addEventListener("change", (e) => {
                     lastName.value = data[0][4];
                     contactN.value = data[0][6];
                     jDate.value = data[0][5];
+                    dButton.value = data[0][0];
                 }
             });
     }else{
