@@ -23,6 +23,26 @@
                     require_once("../../public/general/header.php");
                 ?>
                 <main>
+                    <div class="body-container">
+                        <div class="content-box" style="flex-direction:row">
+                            <div>
+                                Status
+                                <select id="statusFilter">
+                                    <option value="all">All</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="ongoing">Ongoing</option>
+                                    <option value="left">Left</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                Sport
+                                <select id="sportFilter">
+                                    <option value="all">All</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="body-container" id="coachingSessionsContainer">
                     </div>
                 </main> 
