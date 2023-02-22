@@ -30,7 +30,7 @@
             $sql = "SELECT ";
             if($wantedColumns != []){  //specific columns are wanted
                 foreach($wantedColumns as $column){
-                    $sql .= "`$column`,";
+                    $sql .= "`cs`.`$column`,";
                 }
                 //remove the last comma
                 $sql = substr($sql, 0, -1);

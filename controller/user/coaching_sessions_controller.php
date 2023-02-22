@@ -9,6 +9,7 @@
     require_once("../../src/coach/coach.php");
     require_once("../../src/coach/coaching_session.php");
     require_once("../../src/general/sport.php");
+    require_once("../../src/general/sport_court.php");
 
     $user = new User();
     $user -> setUserID($_SESSION['userid']);
@@ -34,11 +35,12 @@
 
     $allSessions = array_merge($ongoingCoachingSessions, $pendingCoachingSessions, $leftCoachingSessions); //merge all the arrays
     $coaches = [];
+    $courts = [];
 
     //get general details of the coaching sessions (day, time, sport, coach)
 
     foreach($allSessions as $currSession){
-        $currSession -> getDetails($user -> getConnection(), ['day', 'startingTime', 'endingTime', 'coachID']);
+        $currSession -> getDetails($user -> getConnection(), ['day', 'startingTime', 'endingTime', 'coachID', 'courtID']);
         $temp = json_decode(json_encode($currSession), true);
 
         if(!array_key_exists($temp['coachID'], $coaches)){  //if the coach is not in the array
@@ -54,6 +56,22 @@
             $sportName = json_decode(json_encode($tempSport), true)['sportName'];
             
             $coaches += [$temp['coachID'] => ['sport' => $sportName, 'photo' => $coachPic]];
+
+            unset($tempCoach);
+        }
+
+        if(!array_key_exists($temp['courtID'], $courts)){
+            $tempCourt = new Sports_Court($temp['courtID']);
+            $courtName = $tempCourt -> getName($user -> getConnection());
+            $courtBranch = $tempCourt -> getBranch($user -> getConnection());
+
+            $tempBranch = new Branch($courtBranch);
+            $branchLocation = $tempBranch -> getDetails($user -> getConnection(), 'city');
+
+            $courts += [$temp['courtID'] => ['name' => $courtName, 'branch' => $branchLocation]];
+
+            unset($tempCourt);
+            unset($tempBranch);
         }
 
         //check the session user status 
@@ -67,7 +85,7 @@
 
     }
 
-    $returnMsg = ['coachingSessions' => $allSessions, 'coaches' => $coaches];
+    $returnMsg = ['coachingSessions' => $allSessions, 'coaches' => $coaches, 'courts' => $courts];
     http_response_code(200);
     header('Content-Type: application/json');
     echo json_encode($returnMsg);
