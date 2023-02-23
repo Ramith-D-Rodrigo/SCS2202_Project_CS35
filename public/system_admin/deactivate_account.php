@@ -75,7 +75,7 @@
                     <div class="right-side"><input readonly id="jDate"></input>
                     </div>    
                 </div>
-                <div class="errMsg" id="err-msg">
+                <div class="err-msg" id="err-msg">
                 </div>
                 <div class="success-msg">
                         <?php 
