@@ -179,7 +179,7 @@
             $sql = sprintf("UPDATE `reservation`
             SET `status` = '%s'
             WHERE `reservationID` = '%s'",
-            $this -> status ." ". $database -> real_escape_string($status),
+            $database -> real_escape_string($status),
             $database -> real_escape_string($this -> reservationID));
 
             $result = $database -> query($sql);
@@ -204,7 +204,8 @@
                 "branch" => $this -> branch,
                 "sport" => $this -> sport,
                 "court_name" => $this -> courtName,
-                "reserved_date" => $this -> reservedDate
+                "reservedDate" => $this -> reservedDate,
+                "chargeID" => $this -> chargeID
             ];
         }
     }
