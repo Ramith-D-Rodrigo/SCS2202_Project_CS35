@@ -252,13 +252,31 @@
         exit();
     }
 
+    $chargeID = $paymentResult[2]; //2nd index is the charge id
+
     //now making the reservation since the payment succeeded
-    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $reservingCourt);   //pass the reserving court object to the function
-    if($result === TRUE){
+    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $chargeID, $reservingCourt);   //pass the reserving court object to the function
+    if($result[0] === TRUE){
         $returningMsg['successMsg'] = "Reservation has been made Successfully";
         echo json_encode($returningMsg);
     }
-    else{
+    else{//error while inserting the reservation
+        $resID = $result[1];    //1st index is the reservation id
+        $deletingReservation = new Reservation();
+        $deletingReservation -> setID($resID);
+
+        $deletingReservation -> deleteReservation($reservingUser -> getConnection()); //delete the reservation that was made
+
+        //refund the payment
+        $refundResult = paymentGateway::chargeRefund($chargeID, $payment);
+        if(!$refundResult[0]){  //0th index is the status of the refund
+            //refund failed
+            $returningMsg['errMsg'] = "Couldn't make the reservation and for Refund : " . $refundResult[1]; //1st index is the error message
+            header('Content-Type: application/json;');    //because we are sending json
+            echo json_encode($returningMsg);
+            exit();
+        }
+
         $returningMsg['errMsg'] = "Reservation has not been made";
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($returningMsg);

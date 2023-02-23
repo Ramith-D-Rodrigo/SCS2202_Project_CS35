@@ -84,11 +84,11 @@
             return $result -> fetch_object() -> courtName;
         }
 
-        public function createReservation($user, $date, $starting_time, $ending_time, $payment, $num_of_people, $database){
+        public function createReservation($user, $date, $starting_time, $ending_time, $payment, $num_of_people, $chargeID, $database){
             $reservation = new Reservation();
-            $result = $reservation -> onlineReservation($date, $starting_time, $ending_time, $num_of_people, $payment, $this -> courtID, $user, $database);
+            $result = $reservation -> onlineReservation($date, $starting_time, $ending_time, $num_of_people, $payment, $this -> courtID, $user, $chargeID, $database);
             unset($reservation);
-            return $result;
+            return $result; //an array
         }
 
         public function getBranch($database){

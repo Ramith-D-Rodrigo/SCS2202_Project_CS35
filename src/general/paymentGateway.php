@@ -17,7 +17,7 @@
                 ));
 
                 if($charge -> paid == true){    //if the payment is successful
-                    return [true, "Payment Successful"];
+                    return [true, "Payment Successful", $charge -> id]; //return the charge id to store in the database
                 }
                 else{
                     return [false, "Payment Failed"];
@@ -70,6 +70,47 @@
                         break;
                     default:
                         return [false, "Payment Failed"];
+                        break;
+                }
+            }
+        }
+
+        public static function chargeRefund($chargeID, $refundAmount): array{    //returns the array with the status and the message
+            \Stripe\Stripe::setApiKey(STRIPE_API_KEY);
+            try {
+                // Create a refund
+                $refund = \Stripe\Refund::create(array(
+                    'charge' => $chargeID,
+                    'amount' => $refundAmount * 100,    //to convert the amount to cents
+                ));
+
+                if($refund -> status == 'succeeded'){    //if the refund is successful
+                    return [true, "Refund Successful"];
+                }
+                else{
+                    return [false, "Refund Failed"];
+                }
+            } catch (\Stripe\Exception\CardException $e) {     // Handle other errors
+                //echo "Exception: " . $e -> getMessage();
+                $errCode = $e -> getError() -> code;
+                switch($errCode){
+                    case 'card_error':
+                        return [false, "Card Error"];
+                        break;
+                    case 'incorrect_cvc':
+                        return [false, "Incorrect CVC"];
+                        break;
+                    case 'expired_card':
+                        return [false, "Expired Card"];
+                        break;
+                    case 'incorrect_number':
+                        return [false, "Incorrect Card Number"];
+                        break;
+                    case 'processing_error':
+                        return [false, "Processing Error"];
+                        break;
+                    default:
+                        return [false, "Refund Failed"];
                         break;
                 }
             }
