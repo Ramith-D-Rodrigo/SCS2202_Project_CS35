@@ -38,15 +38,10 @@ const filterSessions = (e) => {
 fetch("../../controller/user/coaching_sessions_controller.php")
     .then(res => {
         successflag = res.ok;
-        if(!res.ok){
-            coachingSessionsContainer.innerHTML = `<p class="text-center">No coaching sessions found</p>`;
-        }
         return res.json();
     })
     .then(data => {
         if(successflag){
-            console.log(data);
-
             let sportSet = new Set();   //to store the sports
 
             for(let i = 0; i < data.coachingSessions.length; i++){
@@ -101,7 +96,7 @@ fetch("../../controller/user/coaching_sessions_controller.php")
 
                 //status
                 const sessionStatus = document.createElement('p');
-                sessionStatus.innerHTML = "Your Request is still pending";
+                sessionStatus.innerHTML = coachingSessions[i].status.toUpperCase();
                 sessionDiv.appendChild(sessionStatus);
 
                 //buttons and filtering based on status
@@ -120,16 +115,29 @@ fetch("../../controller/user/coaching_sessions_controller.php")
 
                     sessionDiv.classList.add('pending');
                 }
+                else if(data.coachingSessions[i].status === "ongoing"){
 
 
+                }
                 coachingSessionsContainer.appendChild(sessionDiv);
 
             }
 
             return sportSet;
         }
+        console.log(data);
+
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'content-box';
+        msgDiv.innerHTML = data.msg;
+        coachingSessionsContainer.appendChild(msgDiv);
+        
+        return new Set();   //empty set
+
+
     }).then((sportSet) => {
         //filtering
+        
 
         sportSet.forEach(sport => { //add sports to the filter
             const option = document.createElement('option');
