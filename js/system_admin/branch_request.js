@@ -16,6 +16,8 @@ fetch("../../controller/system_admin/view_branch_request_controller.php?branchID
             searchError.innerHTML = data[0]['errMsg'];
             errorDiv.appendChild(searchError);
         }else{
+            const branchID = document.getElementById("branchID");
+            branchID.value = branch;
             const requestDate = document.getElementById("date");
             requestDate.value = data[0].ownerRequestDate;
             const location = document.getElementById("city");
@@ -37,6 +39,7 @@ fetch("../../controller/system_admin/view_branch_request_controller.php?branchID
                 opt.innerHTML = data[i][0];
                 sportOptions.appendChild(opt);
             }
+
         }
     });
 

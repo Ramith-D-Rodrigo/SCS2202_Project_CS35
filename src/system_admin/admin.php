@@ -72,7 +72,7 @@ class Admin extends Actor{
     }
 
     public function getAllBranches($database){
-        $result = $database -> query("SELECT `city` from `branch`");
+        $result = $database -> query("SELECT `city` from `branch` WHERE `requestStatus` = 'a'");
 
         $branches = [];
         while($rows = $result -> fetch_object()){
@@ -153,7 +153,7 @@ class Admin extends Actor{
     }
 
     public function getPendingBranches($database){
-        $pendingBranches = $database -> query("SELECT * FROM `branch` WHERE `requestStatus` = 'p'");
+        $pendingBranches = $database -> query("SELECT * FROM `branch`");
         $branchInfo = [];
         while($row = $pendingBranches -> fetch_object()){
             array_push($branchInfo,$row);
@@ -206,6 +206,23 @@ class Admin extends Actor{
         }else{
             return false;
         }   
+    }
+
+    public function makeBranchActive($decision,$branchID,$database){
+        if($decision==="Accept"){
+            $sql = sprintf("UPDATE `branch` SET `requestStatus` = 'a' WHERE `branchID` = '%s'",
+            $database -> real_escape_string($branchID));   //make the branch availalbe
+            $sql = sprintf("UPDATE `sports_court` SET `requestStatus` = 'a' WHERE `branchID` = '%s'",
+            $database -> real_escape_string($branchID));   //make the sport_courts available too
+        }else{
+            $sql = sprintf("UPDATE `branch` SET `requestStatus` = 'd' WHERE `branchID` = '%s'",
+            $database -> real_escape_string($branchID));
+            $sql = sprintf("UPDATE `sports_court` SET `requestStatus` = 'a' WHERE `branchID` = '%s'",
+            $database -> real_escape_string($branchID));
+        }
+
+        $result = $database -> query($sql);
+        return $result;
     }
 }
 

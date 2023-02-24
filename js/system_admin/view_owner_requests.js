@@ -23,25 +23,29 @@ fetch("../../controller/system_admin/view_owner_requests_controller.php")
                 leftContainer.style.marginRight = "180px";
                 const rightContainer = document.createElement("div");
                 rightContainer.style.display = "flex";
-                leftContainer.innerHTML = "Branch: ".concat(data[i].city,"<br>","Requested On: ",data[i].ownerRequestDate);
+                leftContainer.innerHTML = "Branch: ".concat(data[i].city,"<br>","Requested On: ",data[i].ownerRequestDate);  
                 const btn = document.createElement("button");
-                btn.className = "viewBtn";
-                btn.type = "submit";
-                btn.name = "branchID";
                 btn.innerHTML = "View Request";
-                btn.value = data[i].branchID;
                 if(data[i].requestStatus == 'p'){
+                    btn.type = "submit";
+                    btn.name = "branchID";
+                    btn.value = data[i].branchID;
                     leftContainer.innerHTML = leftContainer.innerHTML+"<br>"+"Status: Pending";
-                }else{
+                    
+                }else if(data[i].requestStatus == 'd'){
+                    leftContainer.innerHTML = leftContainer.innerHTML+"<br>"+"Status: Declined";
+                    btn.disabled = true;
+                    btn.style.opacity = "0.5";
+                }else if(data[i].requestStatus == 'a'){
                     leftContainer.innerHTML = leftContainer.innerHTML+"<br>"+"Status: Accepted";
                     btn.disabled = true;
+                    btn.style.opacity = "0.5";
                 }
+                contentBox.appendChild(leftContainer); 
                 formData.appendChild(btn);
                 rightContainer.appendChild(formData);
-                contentBox.appendChild(leftContainer);
                 contentBox.appendChild(rightContainer);
                 requests.appendChild(contentBox);
-
             }
             
 

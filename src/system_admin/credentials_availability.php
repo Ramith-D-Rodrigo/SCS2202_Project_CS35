@@ -79,4 +79,15 @@
         return $unavailable;
     }
 
+    function checkDuplicateBranch($location,$database){
+        $sql = sprintf("SELECT * FROM `branch` WHERE `city` = '%s' AND `requestStatus` = 'a'",
+        $database -> real_escape_string($location));
+        $result = $database -> query($sql);
+
+        $unavailable = false;
+        if($result -> num_rows > 0){
+            $unavailable = true;
+        }
+        return $unavailable;
+    }
 ?>

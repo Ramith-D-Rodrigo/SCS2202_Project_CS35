@@ -24,80 +24,89 @@
     ?>
     <main class="body-container">
         <div>
-            <div id="err-msg">
-            </div>
-            <div class="content-box" id="branch_request">
-                <div class="row-container">
-                    <div class="left-side">
-                        Reqeust Sent Date: 
+            <form action="../../controller/system_admin/request_handle_controller.php" method="POST">
+                <div class="content-box" id="branch_request">
+                    <div class="row-container">
+                        <div class="left-side">
+                            Reqeust Sent Date: 
+                        </div>
+                        <div class="right-side">
+                            <input readonly id="date"></input>
+                        </div>
                     </div>
-                    <div class="right-side">
-                        <input readonly id="date"></input>
+                    <div class="row-container">
+                        <div class="left-side">
+                            Branch Location: 
+                        </div>
+                        <div class="right-side">
+                            <input readonly name="address" id="city"></input>
+                        </div>
+                    </div>
+                    <div class="row-container">
+                        <div class="left-side">
+                            Branch Address: 
+                        </div>
+                        <div class="right-side">
+                            <input readonly id="address"></input>
+                        </div>
+                    </div>
+                    <div class="row-container">
+                        <div class="left-side">
+                            Branch Email:  
+                        </div>
+                        <div class="right-side">
+                            <input readonly id="emailAddress"></input>
+                        </div>
+                    </div>
+                    <div class="row-container">
+                        <div class="left-side">
+                            Opening Time: 
+                        </div>
+                        <div class="right-side">
+                            <input readonly id="openTime"></input>
+                        </div>
+                    </div>
+                    <div class="row-container">
+                        <div class="left-side">
+                            Closing Time: 
+                        </div>
+                        <div class="right-side">
+                            <input readonly id="closeTime"></input>
+                        </div>
+                    </div>
+                    <div class="row-container">
+                        <div class="left-side">
+                            Contact Number(s):
+                        </div>
+                        <div class="right-side">
+                            <input readonly id="contactNum"></input>
+                        </div>
+                    </div>
+                    <div style="display:flex;flex-direction:row">
+                        <div style="width:50%"> Sport(s): 
+                            <select id="sports">
+                                <option value="">Select Sport..</option>
+                            </select>   
+                        </div> 
+                        <div style="width:50%;margin-top:15px"> No. of Courts: <output readonly id="courts"></output> 
+                        </div>       
+                    </div>
+                    <input hidden name="branchID" id="branchID"></input>
+                    <div style="display:flex;flex-direction:row;justify-content:flex-end;margin-top:5%">
+                            <button type="submit" id ="cancelBtn" name="decision" value="Decline">Decline</button>
+                            <button type="submit" id="acceptBtn" name="decision" value="Accept">Accept</button>
                     </div>
                 </div>
-                <div class="row-container">
-                    <div class="left-side">
-                        Branch Location: 
-                    </div>
-                    <div class="right-side">
-                        <input readonly id="city"></input>
-                    </div>
-                </div>
-                <div class="row-container">
-                    <div class="left-side">
-                        Branch Address: 
-                    </div>
-                    <div class="right-side">
-                        <input readonly id="address"></input>
-                    </div>
-                </div>
-                <div class="row-container">
-                    <div class="left-side">
-                        Branch Email:  
-                    </div>
-                    <div class="right-side">
-                        <input readonly id="emailAddress"></input>
-                    </div>
-                </div>
-                <div class="row-container">
-                    <div class="left-side">
-                        Opening Time: 
-                    </div>
-                    <div class="right-side">
-                        <input readonly id="openTime"></input>
-                    </div>
-                </div>
-                <div class="row-container">
-                    <div class="left-side">
-                        Closing Time: 
-                    </div>
-                    <div class="right-side">
-                        <input readonly id="closeTime"></input>
-                    </div>
-                </div>
-                <div class="row-container">
-                    <div class="left-side">
-                        Contact Number(s):
-                    </div>
-                    <div class="right-side">
-                        <input readonly id="contactNum"></input>
-                    </div>
-                </div>
-                <div style="display:flex;flex-direction:row">
-                    <div style="width:50%"> Sport(s): 
-                        <select id="sports">
-                            <option value="">Select Sport..</option>
-                        </select>   
-                    </div> 
-                    <div style="width:50%;margin-top:15px"> No. of Courts: <output readonly id="courts"></output> 
-                    </div>       
-                </div>
-                <div style="display:flex;flex-direction:row;justify-content:flex-end;margin-top:5%">
-                    <form action="../../controller/system_admin/request_handle_controller.php" method="POST">
-                        <button type="submit" id ="cancelBtn" class="viewBtn">Decline</button>
-                        <button type="submit" id="acceptBtn" class="viewBtn">Accept</button>
-                    </form>
-                </div>
+            </form>
+            <div id="success-msg"> </div>
+            <div class="err-msg" id="err-msg">
+                <?php
+                    if(isset($_SESSION['branchExistError'])){
+                        echo $_SESSION['branchExistError'];
+                        echo '<br>';
+                        unset($_SESSION['branchExistError']);
+                    }
+                ?>
             </div>
         </div>
     </main>
