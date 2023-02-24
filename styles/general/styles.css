@@ -5,9 +5,13 @@
     padding :0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-    font-weight: 650;
-    font-size: 20px;
+    font-weight: 625;
+    font-size: 0.95rem;
     font-style: normal;
+}
+
+html{
+    scroll-behavior: smooth;
 }
 
 textarea { height: auto; }
@@ -17,17 +21,22 @@ body{
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    background-color: black;
 }
 
 a{
-    color:black;
+    color:white;
     text-decoration: none;
     padding: 0 15px;
+    transition: 500ms;
 }
 
 a:hover{
-    color: grey;
+    color: rgb(86, 85, 85);
+    background-color: white;
+    transition: 500ms;
     text-decoration: none;
+    border-radius: 5px;
 }
 
 header{
@@ -36,13 +45,13 @@ header{
     position: sticky;
     height:auto;
     width:100vw;
-    background-color: #FFD700;
+    background-color: black;
     color: white;
 }
 
 .header-top{
     display:flex;
-    color: black;
+    color: white;
     justify-content: space-between;
     padding: 0 15px;
     align-items: center;
@@ -50,7 +59,7 @@ header{
 }
 
 .header-top > div {
-    width: 260px;
+    width: 33.333%;
     height: auto;
 }
 
@@ -63,7 +72,19 @@ header{
 
 main {
     flex: auto;
-    background: linear-gradient(180deg, #FFD700, #033C66);
+    position: relative;
+}
+
+main::before{
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.5;
+    background-image: url('../bg_image.jpg');
+    background-repeat: repeat;
 }
 
 
@@ -74,7 +95,7 @@ footer{
     margin-top: auto;
     height:auto;
     width:100vw;
-    background-color: #033C66;
+    background-color: black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,18 +118,22 @@ footer{
     margin: 10px;
 }
 button{
-    background-color: #033C66;
+    background-color: black;
     color: white;
     padding: 5px 20px;
     border-radius: 40px;
     border: 0;
     margin: 10px;
+    transition: 250ms;
 }
 
 button:hover{
     cursor: pointer;
+    background-color: white;
+    color: black;
     filter:drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.25));
     transform: scale(1.05);
+    transition: 250ms;
 }
 
 select{
@@ -130,7 +155,7 @@ input,output{
 }
 
 input::placeholder{
-    color:rgb(107, 106, 106);
+    color: aliceblue;
     text-align: center;
 }
 
@@ -163,21 +188,27 @@ textarea{
     margin: 10px;
 }
 
+.result-info{
+    margin: 10px;
+}
+
 .err-msg{
     color: red;
     text-align: center;
 }
 
 .btn{
-    all: unset;
-    margin: 0 8px;
+    padding: 0.25rem;
+    margin: 0 5px;
 }
+
 
 .acc-img{
     margin: 0 5px -5px 5px;
     height: 29px;
     width: 29px;
     border-radius: 50%;
+    color:white;
 }
 .dash-img{
     margin: 0 5px -5px 5px;
@@ -185,11 +216,6 @@ textarea{
     width: 29px;
 }
 
-.branch-img{
-    height: 200px;
-    width: 200px;
-    border-radius: 10%;
-}
 .success-msg{
     color: green;
     text-align: center;
@@ -204,11 +230,14 @@ textarea{
 
 .search-input::placeholder{
     text-align: left;
+    color: black;
 }
 
 .search-icon-btn{
     background-color: #ECFCFF;
     color: black;
+    position: relative;
+    z-index: 1;
 }
 
 table{
@@ -240,4 +269,9 @@ tr:last-of-type td:first-of-type {
 
 tr:last-of-type td:last-of-type {
     border-bottom-right-radius: 10px;
+}
+
+#accountIcons{
+    display: flex;
+    align-items: center;
 }

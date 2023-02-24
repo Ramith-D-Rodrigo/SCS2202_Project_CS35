@@ -3,14 +3,13 @@
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/manager/manager.php");
     require_once("../../src/system_admin/admin.php");
-    require_once("../../src/general/uuid.php");
     require_once("../../src/system_admin/dbconnection.php");
     require_once("../../src/system_admin/credentials_availability.php");
 
 
     //all possible inputs for prefilling
-    $inputFields = [`email_address`, `contact_number`, `gender`, `date_of_birth`, `first_name`, 
-                                `last_name`,`branchName`];
+    $inputFields = ['emailAddress', 'contactNum', 'gender', 'birthday', 'firstName', 
+                                'lastName','branchName'];
 
     //Compulsary Details
 
@@ -42,6 +41,18 @@
         unset($_SESSION['emailError']); //email is available, hence unset the error message
     }
     
+    //contact number availability
+    $hasContactNumber = checkContactNumber($_POST['contactNum'],$connection);
+
+    if($hasContactNumber -> num_rows > 0){    //contact number already exists
+        $_SESSION['numberError'] = "Contact Number already exists.";
+        header("Location: /public/system_admin/staff_register.php");
+        $connection -> close(); //close the database connection
+        exit(); //exit the registration
+    }
+    else{
+        unset($_SESSION['numberError']); //contact number is available, hence unset the error message
+    }
     //username availability    
     $hasUsernameResult = checkUsername($_POST['username'], $connection);
 
@@ -117,10 +128,10 @@
     $result = $admin -> registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$connection);
     
     if($result === TRUE){   //successfully registered
-            echo "Successfully Registered";
+            // echo "Successfully Registered";
         foreach($inputFields as $i){    //store session details
             if(isset($_SESSION[$i])){   //unsetting input values
-                session_unset($i);
+                unset($_SESSION[$i]);
             }
         } 
         // session_unset(); free all current session variables 

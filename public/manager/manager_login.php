@@ -1,3 +1,4 @@
+
 <?php
     session_start();
 ?>
@@ -9,6 +10,7 @@
        <meta http-equiv="X-UA-Compatible" content="IE=edge">
        <meta name="viewport" content="width=device-width, initial-scale=1.0">
        <link rel="stylesheet" href="/styles/general/styles.css">
+       <link rel="stylesheet" href="/styles/general/staff.css" />
        <title>Manager Log In</title>
     </head>
 
@@ -39,7 +41,7 @@
                        required>
                        <button id="togglePassword">Show Password</button><br>
                     </div>
-                    <div class='err_msg' id="errmsgbox">
+                    <div class='err-msg' id="errmsgbox">
                         <?php
                            if(isset($_SESSION['errMsg'])){
                                echo $_SESSION['errMsg'];
@@ -47,13 +49,14 @@
                                unset($_SESSION['errMsg']);
                            }
                         ?>
-                    <div class='successful_msg' id="successfulmsgbox">
+                    </div>    
+                    <div class='success-msg' id="successmsgbox">
                         <?php
                            if(isset($_SESSION['LogInsuccessMsg'])){
                               echo $_SESSION['LogInsuccessMsg'];
                               echo '<br> You will be Redirected to the Manager dashboard. Please Wait';
                               unset($_SESSION['LogInsuccessMsg']);
-                             // header("Refresh: 3; URL =/index.php");
+                              header("Refresh: 3; URL =/public/manager/manager_dashboard.php");
                            }
                         ?>
                     </div>
@@ -66,7 +69,7 @@
                                 <?php
                                 if(isset($_SESSION['userrole'])){
                                 ?>
-                                    disabled
+                                disabled
                                 <?php
                                 }
                                 else{
@@ -74,7 +77,7 @@
 
                                 <?php
                                 }
-                                ?>> Log in </button>
+                                ?>> Log in </button> 
                     </div>
                 </form>
             </div>
@@ -86,3 +89,4 @@
     <script src="/js/manager/manager_login_handle.js"></script>
     <script src="/js/manager/manager_login_validation.js"></script>
 </html>
+

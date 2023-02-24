@@ -14,11 +14,19 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/receptionist/edit_branch.php'){  //edit branch
                     echo "Edit Branch";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_user_profiles.php'){  //edit branch
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_user_profiles.php'){  //view user profiles
                     echo "View User Profiles";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/user_profile.php'){  //edit branch
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/user_profile.php'){  //view selected profile
                     echo "User Profile";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_coach_profiles.php'){  //view coach profiles
+                    echo "View Coach Profiles";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/coach_profile.php'){  //view selected profile
+                    echo "Coach Profile";
+                }else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_reservations.php'){   //view today's reservations
+                    echo "Reservations";
                 }
             ?>
         </div>
@@ -32,14 +40,20 @@
             <?php
                 if($_SERVER['REQUEST_URI'] === '/public/receptionist/receptionist_dashboard.php'){  //Check whether the receptionist is in the dashboard
             ?>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
+                <div style="float:right" >
+                    <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button>
+                    <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-from-bracket" style="margin: 0 10px"></i></button>        
+                </div>
+                    
             <?php 
                 } else { 
             ?>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href=''"><img src="/styles/icons/bell_icon.svg" class="acc-img"></button>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/public/receptionist/receptionist_dashboard.php'">Dashboard<img src="/styles/icons/dashboard_icon.svg" class="dash-img"></button>
-                    <button style="float:right" class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>        
+                <div style="float:right" >
+                    <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button>
+                    <button class ="btn" id="" onclick="window.location.href='/public/receptionist/receptionist_dashboard.php'"><i class="fa-solid fa-house"></i></button>
+                    <button class ="btn" id="" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-from-bracket" style="margin: 0 10px"></i></button>        
+                </div>
+                    
             <?php
                 }
             }

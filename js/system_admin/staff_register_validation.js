@@ -3,7 +3,12 @@ function validateForm(event){
     const password = document.getElementById("password");
     const cPassword = document.getElementById("cPassword");
 
-    errMsg.innerHTML = '';
+    if (errMsg.innerHTML.trim() !== "") {   //trim method to remove any leading or trailing whitespaces
+        event.preventDefault(); //do not submit
+        return false;
+    } else {
+        errMsg.innerHTML = '' //empty before the validation
+    }
     const form = document.querySelector("form");
 
     if(verbose){

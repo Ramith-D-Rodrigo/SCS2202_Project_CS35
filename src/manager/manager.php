@@ -1,24 +1,34 @@
 <?php
     require_once("../../src/general/uuid.php");
     require_once("../../src/system_admin/staffMember.php");
-class Manager implements StaffMember{
-    private $managerID;
+    require_once("../../src/general/actor.php");
+
+class Manager extends Actor implements JsonSerializable , StaffMember{
+
     private $firstName;
     private $lastName;
-    private $emailAddress;
     private $contactNum;
     private $joinDate;
     private $leaveDate;
     private $dateOfBirth;
-    private $username;
-    private $password;
     private $gender;
     private $branchID;
     private $staffRole;
+    private $staffID;
+
+    public function __construct($actor = null){
+        if($actor !== null){
+            $this -> userID = $actor -> getUserID();
+            $this -> username = $actor -> getUsername();
+        }
+        require("manager_dbconnection.php");   //get the user connection to the db
+        $this -> connection = $connection;
+    }
 
 
     public function setDetails($fName='', $lName='', $email='', $contactNo='', $dob='', $gender='', $uid='', $username='', $password='', $brID = ''){
-        $this -> managerID = $uid;
+        $this -> userID = $uid;
+        $this -> staffID = $uid;
         $this -> firstName = $fName;
         $this -> lastName = $lName;
         $this -> emailAddress = $email;
@@ -31,26 +41,28 @@ class Manager implements StaffMember{
         $this -> staffRole = 'manager';
     }
 
-    public function getManagerID(){    //managerID getter
-        return $this -> managerID;
+    public function getID(){    //managerID getter
+        if(isset($this -> userID) || $this -> userID !== ''){
+            return $this -> userID;
+        }
     }
 
     private function create_login_details_entry($database){   //enter details to the login_details table
         $result = $database -> query(sprintf("INSERT INTO `login_details`
-        (`user_id`, 
+        (`userID`,
         `username`,
-        `email_address`, 
-        `password`, 
-        `user_role`,
-        `is_active`) 
-        VALUES 
+        `emailAddress`,
+        `password`,
+        `userRole`,
+        `isActive`)
+        VALUES
         ('%s','%s','%s','%s','manager',1)",
-        $database -> real_escape_string($this -> managerID),
+        $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> username),
         $database -> real_escape_string($this -> emailAddress),
-        $database -> real_escape_string($this -> password))); 
+        $database -> real_escape_string($this -> password)));
 
-/*         if ($result === TRUE) {
+/*      if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
         }
         else{
@@ -62,19 +74,19 @@ class Manager implements StaffMember{
     private function create_staff_entry($database){  //enter details to the staff table
 
         $result = $database -> query(sprintf("INSERT INTO `staff`
-        (`staff_id`,   
-        `contact_number`, 
-        `gender`, 
-        `date_of_birth`,
-        `first_name`, 
-        `last_name`, 
-        `join_date`, 
-        `leave_date`, 
-        `branch_id`,
-        `staff_role`) 
-        VALUES 
+        (`staffID`,
+        `contactNum`,
+        `gender`,
+        `dateOfBirth`,
+        `firstName`,
+        `lastName`,
+        `joinDate`,
+        `leaveDate`,
+        `branchID`,
+        `staffRole`)
+        VALUES
         ('%s','%s','%s','%s','%s','%s','%s', NULLIF('%s', ''), '%s', '%s')",
-        $database -> real_escape_string($this -> managerID),
+        $database -> real_escape_string($this -> userID),
         $database -> real_escape_string($this -> contactNum),
         $database -> real_escape_string($this -> gender),
         $database -> real_escape_string($this -> dateOfBirth),
@@ -83,14 +95,14 @@ class Manager implements StaffMember{
         $database -> real_escape_string($this -> joinDate),
         $database -> real_escape_string($this -> leaveDate),
         $database -> real_escape_string($this -> branchID),
-        $database -> real_escape_string($this -> staffRole))); 
+        $database -> real_escape_string($this -> staffRole)));
 
         return $result;
     }
 
     private function create_manager_entry($database) {
-        $result = $database->query(sprintf("INSERT INTO `manager` (`manager_id`) VALUES ('%s')",
-        $database -> real_escape_string($this -> managerID)));
+        $result = $database->query(sprintf("INSERT INTO `manager` (`managerID`) VALUES ('%s')",
+        $database -> real_escape_string($this -> userID)));
 
         return $result;
     }
@@ -100,58 +112,169 @@ class Manager implements StaffMember{
         $this -> leaveDate = '';
         $loginEntry = $this -> create_login_details_entry($database);
         $staffEntry = $this -> create_staff_entry($database);
-        $receptionistEntry = $this -> create_manager_entry($database);
+        $managerEntry = $this -> create_manager_entry($database);
 
-        if($loginEntry  === TRUE && $staffEntry  === TRUE && $receptionistEntry === TRUE){    //all has to be true (successfully registered)
+        if($loginEntry  === TRUE && $staffEntry  === TRUE && $managerEntry === TRUE){    //all has to be true (successfully registered)
             return TRUE;
         }
     }
 
-    public function login($username, $password, $database){
-        $sql = sprintf("SELECT `user_id`, 
-        `username`, 
-        `password`, 
-        `user_role` 
-        FROM `login_details`  
-        WHERE `username` = '%s'", 
-        $database -> real_escape_string($username));
+    public function login($username, $password){
+        $getBranch = sprintf("SELECT `branchID` AS brid
+        FROM `staff`
+        WHERE `staffID` = '%s'",
+        $this -> connection -> real_escape_string($this -> userID));
 
-        $result = $database -> query($sql);
-
-        $rows = $result -> fetch_object();  //get the resulting row
-
-        if($rows === NULL){ //no result. hence no user
-            return ["No Such User Exists"];
-        }
-
-        $hash = $rows -> password;
-        if(password_verify($password, $hash) === FALSE){    //Incorrect Password
-            return ["Incorrect Password"];
-        }
-
-        //setting user data for session
-        $this -> managerID = $rows -> uuid;
-
-        $getBranch = sprintf("SELECT `branch_id` AS brid  
-        FROM `staff`  
-        WHERE `staff_id` = '%s'", 
-        $database -> real_escape_string($this -> managerID));
-
-        $brResult = $database -> query($getBranch);
+        $brResult = $this -> connection -> query($getBranch);
 
         $branchIDResult = $brResult -> fetch_object();   //get the branch_id
         $this -> branchID = $branchIDResult -> brid;
 
-        $getBrName = sprintf("SELECT `city`  
-        FROM `branch`  
-        WHERE `branch_id` = '%s'", 
-        $database -> real_escape_string($this -> branchID));
+        $getBrName = sprintf("SELECT `city`
+        FROM `branch`
+        WHERE `branchID` = '%s'",
+        $this -> connection -> real_escape_string($this -> branchID));
 
-        $brNameResult = $database -> query($getBrName);
+        $brNameResult = $this -> connection -> query($getBrName);
 
         $branchName = $brNameResult -> fetch_object();   //get the branch_city
-    
-        return ["Successfully Logged In", $rows -> user_role, $branchName -> city, $this -> branchID, $rows -> username];  //return the message and other important details
+
+        return [$branchName -> city, $this -> branchID];  //return the message and other important details
     }
-}
+    public function getSportID($sportName, $database){
+        $sportSql = sprintf("SELECT `sportID`
+        FROM `sport`
+        WHERE `sportName` = '%s'", //to escape % in sprintf, we need to add % again
+        $database -> real_escape_string($sportName));
+
+        $sportResult = $database -> query($sportSql);
+        $sportR = mysqli_fetch_assoc($sportResult);
+        return  $sportR['sportID'];  //get the sports results
+
+        if($sportResult -> num_rows === 0){ //no such sport found
+            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+        }
+    }
+
+    public function getBranchID( $database, $branch){
+        $sportSql = sprintf("SELECT `branchID`
+        FROM `branch`
+        WHERE `city` = '%s'",
+        $database -> real_escape_string($branch)); //to escape % in sprintf, we need to add % again
+        // $database -> real_escape_string($sportName));
+
+        $sportResult = $database -> query($sportSql);
+        $sportR = mysqli_fetch_assoc($sportResult);
+        return  $sportR['branchID'];  //get the sports results
+
+        if($sportResult -> num_rows === 0){ //no such sport found
+            return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+        }
+    }
+
+
+    public function getDetails($database){
+        $sql = sprintf("SELECT * FROM `staff`
+        WHERE
+        `staffID` = '%s'
+        AND
+        `staffRole` = 'manager'",
+        $database -> real_escape_string($this -> userID));
+
+        $result = $database -> query($sql);
+        $row = $result -> fetch_object();
+
+        if($row === NULL){
+            return FALSE;
+        }
+        $this -> setDetails(fName: $row -> firstName,
+            lName: $row -> lastName,
+            contactNo: $row -> contactNum,
+            dob: $row -> dateOfBirth,
+            brID: $row -> branchID,
+            gender: $row -> gender);
+
+        $this -> joinDate = $row -> joinDate;
+        $this -> leaveDate = $row -> leaveDate;
+        $this -> staffRole = $row -> staffRole;
+
+
+        $result -> free_result();
+        unset($row);
+        return $this;
+    }
+
+    public function jsonSerialize() : mixed{
+        return [
+            'managerID' => $this -> userID,
+            'firstName' => $this -> firstName,
+            'lastName' => $this -> lastName,
+            'emailAddress' => $this -> emailAddress,
+            'contactNum' => $this -> contactNum,
+            'joinDate' => $this -> joinDate,
+            'leaveDate' => $this -> leaveDate,
+            'dateOfBirth' => $this -> dateOfBirth,
+            'username' => $this -> username,
+            'password' => $this -> password,
+            'gender' => $this -> gender,
+            'branchID' => $this -> branchID,
+            'staffRole' => $this -> staffRole
+        ];
+
+    }
+
+    public function add_court($database, $court_name ,$sport_id, $branch_id, $court_id, $managerID){
+        $result = $database -> query(sprintf("INSERT INTO `sports_court`
+        (`courtID`,
+        `sportID`,
+        `courtName`,
+        `branchID`,
+        `requestStatus`,
+        `addedManager`)
+        VALUES
+        ('%s','%s','%s','%s','p','%s')",
+        // $database -> real_escape_string($this -> managerID),
+        // $database -> real_escape_string($this -> contactNum),
+        $database -> real_escape_string($court_id),
+        $database -> real_escape_string($sport_id),
+        $database -> real_escape_string($court_name),
+        $database -> real_escape_string($branch_id),
+        $database -> real_escape_string($managerID)));
+
+        return $result;
+
+    }
+
+    
+    // public function getSportID($sportName, $database){
+    //     $sportSql = sprintf("SELECT `sport_id`
+    //     FROM `sport`
+    //     WHERE `sport_name` = '%s'", //to escape % in sprintf, we need to add % again
+    //     $database -> real_escape_string($sportName));
+
+    //     $sportResult = $database -> query($sportSql);
+    //     $sportR = mysqli_fetch_assoc($sportResult);
+    //     return  $sportR['sport_id'];  //get the sports results
+
+    //     if($sportResult -> num_rows === 0){ //no such sport found
+    //         return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+    //     }
+    // }
+
+    // public function getBranchID( $database, $branch){
+    //     $sportSql = sprintf("SELECT `branch_id`
+    //     FROM `branch`
+    //     WHERE `city` = '%s'",
+    //     $database -> real_escape_string($branch)); //to escape % in sprintf, we need to add % again
+    //     // $database -> real_escape_string($sportName));
+
+    //     $sportResult = $database -> query($sportSql);
+    //     $sportR = mysqli_fetch_assoc($sportResult);
+    //     return  $sportR['branch_id'];  //get the sports results
+
+    //     if($sportResult -> num_rows === 0){ //no such sport found
+    //         return ['errMsg' => "Sorry, Cannot find what you are looking For"];
+    //     }
+    // }
+    }
 ?>

@@ -1,0 +1,40 @@
+.checked{
+    color: gold;
+}
+
+.coach-image{
+    border-radius: 50%;
+    background: linear-gradient(180deg, #dac340, #e6800d);
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+}
+
+.coach-image-container{
+    height: 250px;
+    width: 250px;
+    margin: 0 20px;
+    border-radius: 50%;
+}
+
+.info{
+    min-width:50%;
+    padding: 1%;
+    display: inline-block;
+    white-space: nowrap;
+
+}
+
+.coach-row{
+    margin: 25px;
+    display:flex; 
+    flex-direction:row; 
+    align-items: center;
+    justify-content: center;
+}
+
+
+.coachInfo{
+    display:flex; 
+    flex-direction:column; 
+}

@@ -3,20 +3,24 @@
     background: linear-gradient(180deg, #dac340, #e6800d);
     height: 250px;
     width: 250px;
+    margin: 0 auto;
     object-fit: cover;
 }
 
 .sport-icon-container{
-    height: 250px;
-    width: 250px;
-    margin: 0 20px;
+    width: 100%;
     border-radius: 50%;
+    margin-bottom: 1rem;
+    display:flex;
+    justify-content:center;
+    align-items: center;
 }
 
 .sports-row{
     margin: 25px;
     display:flex; 
     flex-direction:row; 
+    align-items: center;
     width:100%;
 }
 

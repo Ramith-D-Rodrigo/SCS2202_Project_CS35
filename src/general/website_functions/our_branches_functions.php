@@ -1,17 +1,19 @@
 <?php
 
-    function getAllBranches($database){ //branch id in binary
+    function getAllBranches($database){ //branch id
         $sql = sprintf("SELECT 
-        `branch_id`
+        `branchID`
         FROM `branch` 
-        WHERE `request_status` = 'a'");
+        WHERE `requestStatus` = 'a'");
 
         $result = $database -> query($sql);
-        return $result;
+        $branchIDs = [];
+        while($row = $result -> fetch_object()){
+            array_push($branchIDs, $row -> branchID);
+            unset($row);
+        }
+        $result -> free_result();
+        return $branchIDs;
     }
-
-
-
-
 
 ?>

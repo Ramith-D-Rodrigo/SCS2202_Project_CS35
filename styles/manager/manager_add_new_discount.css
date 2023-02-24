@@ -1,0 +1,42 @@
+.content_box {
+
+    width: 1000px;
+    height: 500px;
+    left: 350px;
+    background-color: #ffffff;
+    padding: 10px;
+    margin: auto;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.start_close {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-top: 50px;
+    justify-content: space-between;
+    width:90%;
+}
+
+#but_Discount {
+    margin-right: 20px;
+    margin-top:60px; ;
+}
+
+.ReservationPrice {
+    margin-left: 53px;
+    margin-top: 30px;
+}
+
+.button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 60%;
+    margin-top: 50px;
+    
+}

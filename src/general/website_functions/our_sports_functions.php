@@ -1,25 +1,39 @@
 <?php
 
     function getAllSports($database){
-        $sql = sprintf("SELECT * FROM `sport`");   //sport id in binary
+        $sql = sprintf("SELECT * FROM `sport`");
         $result = $database -> query($sql);
-        return $result;
+        $sports = [];
+        while($row = $result -> fetch_object()){
+            array_push($sports, $row);
+            unset($row);
+        }
+        $result -> free_result();
+        return $sports;
     }
 
     function branchesWithThatSport($sportID, $database){
-        $sql = sprintf("SELECT DISTINCT `sc`.`branch_id` AS `branch_id`,
+        $sql = sprintf("SELECT DISTINCT `sc`.`branchID` AS `branch_id`,
         `b`.`city` AS `branch_name`
         FROM `sports_court` `sc`
         INNER JOIN `branch` `b`
-        ON `sc`.`branch_id` = `b`.`branch_id`
-        WHERE `sc`.`sport_id` 
+        ON `sc`.`branchID` = `b`.`branchID`
+        WHERE `sc`.`sportID` 
         LIKE '%s' 
         AND 
-        `sc`.`request_status` ='a'", $database -> real_escape_string($sportID));   //requested status a means accepted
+        `sc`.`requestStatus` ='a'", $database -> real_escape_string($sportID));   //requested status a means accepted
 
         $result = $database -> query($sql);
 
-        return $result;
+        $branches = [];
+
+        while($row = $result -> fetch_object()){
+            array_push($branches, $row);
+            unset($row);
+        }
+        
+        $result -> free_result();
+        return $branches;
     }
 
 ?>

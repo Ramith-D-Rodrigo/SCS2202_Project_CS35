@@ -1,62 +1,117 @@
 <?php
     session_start();
     require_once("../../src/general/branch.php");
-    require_once("../../src/user/dbconnection.php");
+    require_once("../../src/general/dbconnection.php");
     require_once("../../src/general/sport_court.php");
-    require_once("../../src/general/uuid.php");
+    require_once("../../src/general/sport.php");
 
-    if($_SERVER['REQUEST_METHOD'] === 'POST'){  //we are coming from a post request
+/*     if($_SERVER['REQUEST_METHOD'] === 'POST'){  //we are coming from a post request
         $reservationPlace = $_SESSION[$_POST['reserveBtn']];    //get the array
         $_SESSION['reservationPlace'] = $reservationPlace;  //assign the array to session
     }
     else{
         $reservationPlace = $_SESSION['reservationPlace'];
-    }
+    } */
 
-    //branch id -> 0th index, sport id -> 1st index, branch location -> 2nd index, sport name -> 3rd index, opening time -> 4th index, closing time -> 5th index, reservation price -> 6th index
+    $reservationPlace = explode(",",$_GET['reserveBtn']);
+
+    //branch id -> 0th index, sport id -> 1st index
 
     $branch = new Branch($reservationPlace[0]);
+    $branch -> getDetails($connection);
+    $sports_courts = $branch -> getSportCourts($reservationPlace[1], $connection, 'a');  //get all the sports court of that branch's sport (request status should be accepted)
 
-    $sports_courts = $branch -> getSportCourts($reservationPlace[1], $connection);  //get all the sports court of that branch's sport
+    $sport = new Sport();   //to get sport details
+    $sport -> setID($reservationPlace[1]);
+    $sport -> getDetails($connection);
 
     $allCourts = [];
 
 
-    while($courtResult = $sports_courts -> fetch_object()){ //traverse all the sports courts
-        $tempCourt = new Sports_Court($courtResult -> court_id); 
+    foreach($sports_courts as $currCourt){ //traverse all the sports courts
+        $tempCourt = new Sports_Court($currCourt); 
         $tempSchedule = $tempCourt -> getSchedule($connection); //get the schedule of that particular sport (all the reservations)
 
         $courtSchedule = [];    //to store each court's reservations
         $courtName = $tempCourt -> getName($connection);
 
-        while($scheduleResult = $tempSchedule -> fetch_object()){   //create the array for current schedule reservations
+        //user reservations
+        $i = 0;
+        foreach($tempSchedule['reservations'] as $currReservation){   //create the array for current schedule reservations
             $reservationDetails = [];   //to store current court's each reservation's details
-            if($scheduleResult -> date < date("Y-m-d") || $scheduleResult -> status === 'Cancelled'){    //no need to check for previous reservations and cancelled ones
+            if($currReservation -> date < date("Y-m-d") || $currReservation -> status !== 'Pending'){    //no need to check for previous reservations , and get only pending reservations
                 continue;
             }
-            $reservationDetails['date'] = $scheduleResult -> date;
-            $reservationDetails['starting_time'] = $scheduleResult -> starting_time;
-            $reservationDetails['ending_time'] = $scheduleResult -> ending_time;
+            //get only the needed information
+            $reservationDetails['date'] = $currReservation -> date;
+            $reservationDetails['startingTime'] = $currReservation -> startingTime;
+            $reservationDetails['endingTime'] = $currReservation -> endingTime;
 
-            $courtSchedule[$scheduleResult -> reservation_id] =  $reservationDetails;   //reservation details stored in courtschedule
+            $courtSchedule['reservations'][$i] =  $reservationDetails;   //reservation details stored in courtschedule
+            $i++;
+            unset($reservationDetails);
+            unset($currReservation);
         }
-        $allCourts[$courtResult -> court_id] = ['schedule' => $courtSchedule, 'courtName' => $courtName];  //reservation schedule of the court is sotred in the courts array
+
+        //coaching sessions
+        $i = 0;
+        foreach($tempSchedule['coachingSessions'] as $currCoachingSession){ //create the array for current schedule coaching sessions
+            $coachingSessionDetails = [];   //to store current court's each coaching session's details
+            //get only the needed information
+            $coachingSessionDetails['day'] = $currCoachingSession -> day;
+            $coachingSessionDetails['startingTime'] = $currCoachingSession -> startingTime;
+            $coachingSessionDetails['endingTime'] = $currCoachingSession -> endingTime;
+            $coachingSessionDetails['timePeriod'] = $currCoachingSession -> timePeriod;
+
+            $courtSchedule['coachingSessions'][$i] =  $coachingSessionDetails;   //coaching session details stored in courtschedule
+            $i++;
+            unset($coachingSessionDetails);
+            unset($currCoachingSession);
+
+        }
+
+        //court maintenace
+        $i = 0;
+        foreach($tempSchedule['maintenance'] as $currCourtMaintenance){ //create the array for current schedule court maintenance
+            $courtMaintenanceDetails = [];   //to store current court's each court maintenance's details
+            //get only the needed information
+            $courtMaintenanceDetails['startingDate'] = $currCourtMaintenance -> startingDate;
+            $courtMaintenanceDetails['endingDate'] = $currCourtMaintenance -> endingDate;
+
+            $courtSchedule['courtMaintenance'][$i] =  $courtMaintenanceDetails;   //court maintenance details stored in courtschedule
+            $i++;
+            unset($courtMaintenanceDetails);
+            unset($currCourtMaintenance);
+        }
+
+        $allCourts[$currCourt] = ['schedule' => $courtSchedule, 'courtName' => $courtName];  //reservation schedule of the court is stored in the courts array
         unset($tempCourt);
     }
-    //print_r($allCourts);
 
-    $_SESSION['reservingBranch'] = $reservationPlace[2];    //reserving branch
-    $_SESSION['reservingSport'] = $reservationPlace[3]; //reserving sport
-    $_SESSION['opening_time'] = $reservationPlace[4];
-    $_SESSION['closing_time'] = $reservationPlace[5];
-    $_SESSION['reserve_price'] = $reservationPlace[6]; 
-    $_SESSION['branch_reservation_schedule'] = $allCourts;
+    //branch maintenance
+    $branchMaintenance = $branch -> getBranchMaintenance($connection, ['startingDate', 'endingDate'], date("Y-m-d"), 'a');
 
+
+    $branchJSON = json_encode($branch);
+    $neededInfo = json_decode($branchJSON, true);
+    unset($neededInfo['manager']);
+    unset($neededInfo['email']);
+    unset($neededInfo['address']);
+    unset($neededInfo['photos']);
+    unset($neededInfo['receptionist']);
+    $neededInfo['reservingSport'] = $sport;
+    $neededInfo['branchReservationSchedule'] = $allCourts;
+    $neededInfo['branchMaintenance'] = $branchMaintenance;
+
+    unset($allCourts);
+    unset($sport);
+    unset($branch);
+
+    $connection -> close();
+    header('Content-Type: application/json');    //because we are sending json
+    echo json_encode($neededInfo);
     //sending opening and closing times as a json response to be received by Javascript
 /*     $arr = ["openingTime" => $reservationPlace[4], "closingTime" => $reservationPlace[5]];
     echo json_encode($arr); */
-
-    header("Location: /public/general/reservation_schedule.php");
-    $connection -> close();
-
+    //header("Location: /public/general/reservation_schedule.php");
 ?>

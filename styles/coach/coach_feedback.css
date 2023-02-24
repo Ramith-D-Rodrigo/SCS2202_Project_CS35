@@ -1,0 +1,33 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+
+  }
+  tr td:nth-child(2) {
+   text-align: center;
+    
+  }
+  tr td:nth-child(3) {
+    text-align: right;
+     
+   }
+
+  .buttonSection{    
+    display: flex;
+    justify-content: center;
+    margin-top:5%;
+  }
+  .tableSection{
+    margin-top:2%
+  }

@@ -1,0 +1,57 @@
+.content_box {
+    
+    width: 800px;
+    height: 600px;
+    left: 350px;
+    background-color:#ffffff;
+    padding: 10px;  
+    margin:auto;
+    margin-top: 50px;
+} 
+
+#Image{
+    margin-left: 100px;
+    margin-top: 50px;
+}
+
+#Name{
+    margin-left: 270px;
+    margin-top: -250px;
+}
+
+#name{
+    margin-left: 30px;
+}
+
+#Gender{
+    margin-left: 10px;
+}
+
+#Age{
+    margin-left: 55px;
+}
+
+#Email{
+    margin-left: 40px;
+}
+/* #homeAddress{
+    margin-top: 0px;
+} */
+
+#home{
+    margin-top: 50px;
+}
+#area{
+    margin-top: -30px;
+    margin-left: 150px;
+    max-width: 100%;
+    
+}
+
+#weight{
+    width:200px;
+}
+
+#height{
+    width: 200px;
+}

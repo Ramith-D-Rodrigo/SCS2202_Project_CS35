@@ -1,0 +1,25 @@
+.checked{
+    color: gold;
+}
+
+.feedbackDiv{
+    margin: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: auto;
+    animation: slideIn 1s ease-in-out;
+}
+
+
+@keyframes slideIn{
+    0%{
+        transform: translateX(40%);
+        opacity: 0;
+    }
+    100%{
+        transform: translateX(0%);
+        opacity: 1;
+    }
+}

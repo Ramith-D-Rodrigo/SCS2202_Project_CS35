@@ -1,0 +1,75 @@
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.tabs {
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  
+.flex-container>div {
+    background-color: #ecfcff;
+    margin: 10px;
+    padding: 20px;
+    align-items: center;
+    font-size: 30px;
+  }
+
+#but_From{
+    
+    margin-left: -10px;
+}
+
+#but_To{
+    margin-left: 330px;
+    margin-top: -63px;
+}
+
+#FromDate{
+    margin-left :10px; 
+    width: 180px;
+}  
+
+#ToDate{
+    width: 180px;
+}
+
+#but_Start{
+    margin-left: -10px;
+}
+
+#but_End{
+    margin-left: 325px;
+    margin-top: -63px;
+}
+
+#Sport{
+    margin-top: -10px;
+}
+
+#but_Starting{
+    margin-left: -10px;
+}
+
+#but_Ending{
+    margin-left: 325px;
+    margin-top: -63px;
+}
+
+#sport{
+    margin-top: -10px;
+}
+
+#ADD{
+    margin-top: 100px;
+}
+
+#VIEW{
+    margin-top: 0px;
+}

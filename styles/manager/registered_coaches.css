@@ -1,0 +1,51 @@
+.content_box {
+    
+    width: 800px;
+    height: 500px;
+    left: 350px;
+    background-color:#ffffff;
+    padding: 10px;  
+    margin:auto;
+    margin-top: 50px;
+} 
+
+#Filter{
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+#Enter{
+   
+    background-color:#e8d4d4;
+}
+
+#Sub{ 
+    margin-top: -60px;
+    margin-left: 330px;
+}
+
+#Image{
+    margin-top: 50px;
+    margin-left: 130px;
+}
+
+#SportName{
+    margin-left: 270px;
+    margin-top: -250px;
+
+}
+
+#Name{
+    width:250px;
+}
+
+#name{
+    width:250px;
+    margin-left:18px ;
+}
+
+#but_Add{
+    margin-left: 0px;
+}
+
+

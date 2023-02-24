@@ -16,10 +16,24 @@
     text-align: center;
 }
 
-main {
-    display: flex;
-    flex: auto;
-    background: linear-gradient(180deg, #FFD700, #033C66);
-    justify-content: center;
+
+.row-container{
+    display:flex; 
+    justify-content:space-around; 
+    flex-direction:row;
     align-items: center;
+}
+
+.left-field{
+    width: 50%;
+    margin: 10px auto;
+}
+
+.right-field{
+    width: 50%;
+    margin-right: 10px;
+}
+
+.right-field > input, textarea{
+    max-width:100%;
 }

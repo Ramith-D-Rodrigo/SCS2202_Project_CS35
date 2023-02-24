@@ -2,7 +2,7 @@
     <div class='header-top'>
         <div> <!-- For the current visiting page of the site -->
             <?php
-                if($_SERVER['REQUEST_URI'] === '/index.php'){    //home page
+                if($_SERVER['REQUEST_URI'] === '/index.php' || $_SERVER['REQUEST_URI'] === '/'){    //home page
                     echo "Welcome";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/general/login.php' || $_SERVER['REQUEST_URI'] === '/public/user/user_login.php'){    //login
@@ -29,18 +29,27 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/general/about_us.php'){ //user register
                     echo "About Us";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/general/search_results.php'){  //search sport
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/search_results.php')){  //search sport
                     echo "Search a Sport";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/general/reservation_schedule.php'){  //Reservation Schedule
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/reservation_schedule.php')){  //Reservation Schedule
                     echo "Reservation Schedule";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/user/reservation_history.php'){  //reservation history
                     echo "Reservation History";
                 }
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/coach_profile.php')){  //reservation history
+                    echo "Coach Profile";
+                }
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/our_feedback.php')){  //reservation history
+                    echo "Our Feedback";
+                }
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/user/edit_profile.php')){  //reservation history
+                    echo "Edit Profile";
+                }
             ?>
         </div>
-        <div> <!--- sports complex name -->
+        <div style="text-align:center"> <!--- sports complex name -->
            Example Sports Complex
         </div>
         <div>
@@ -48,9 +57,10 @@
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
         ?>  
             <div style="float:right" id="accountIcons">
+            
                 <?php if(isset($_SESSION['userProfilePic'])){?>
                     
-                    <button class ="btn" id='profileBtn'><img src="/public/user/profile_images/<?php echo $_SESSION['userProfilePic']?>" class="acc-img" style="border: solid thin black"></button>
+                    <button class ="btn" id='profileBtn'><img src="<?php echo $_SESSION['userProfilePic']?>" class="acc-img" style="border: solid thin black"></button>
                 <?php
                 }
                 else{
@@ -59,15 +69,15 @@
                 <?php
                 }
                 ?>
-                <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout.php'">Log Out<img src="/styles/icons/logout_icon.svg" class="acc-img"></button>
+                <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-from-bracket" style="margin: 0 10px"></i></button>
             </div>
         <?php
             }
             else{
         ?>
             <div style="float:right" id="userOptions">
-                <button class="btn" id ="register" onclick="window.location.href='/public/general/register.php'">Register<img src="/styles/icons/register_icon.svg" class="acc-img"></button>
-                <button class="btn" id="login" onclick="window.location.href='/public/general/login.php'">Log in<img src="/styles/icons/login_icon.svg" class="acc-img"></button>
+                <button class="btn" id ="register" onclick="window.location.href='/public/general/register.php'">Register<i class="fa-solid fa-user-plus" style="margin: 0 10px"></i></button>
+                <button class="btn" id="login" onclick="window.location.href='/public/general/login.php'">Log in<i class="fa-solid fa-right-to-bracket" style="margin: 0 10px"></i></button>
             </div>
         <?php
             }
@@ -77,15 +87,14 @@
 
     <nav class="header-links">
         <a href="/index.php">Home</a>
-        <a onclick="window.location.href='/controller/general/our_sports_controller.php'">Our Sports</a>
+        <a href="/public/general/our_sports.php">Our Sports</a>
         <a href="/public/general/our_branches.php">Our Branches</a>
         <a href="/public/general/reg_coaches.php">Registered Coaches</a>
         <a href="/public/general/our_feedback.php">Our Feedback</a>
         <a href="/public/general/about_us.php">About Us</a>
         <div id="profile-links" style="float:right; margin-right:20px; display:none">
-            <a href="/index.php">Ongoing Sessions</a>
-            <a href="/index.php">Left Sessions</a>
-            <a href="/controller/user/reservation_history_controller.php">Reservation History</a>
+            <a href="/public/user/coaching_sessions.php">Coaching Sessions</a>
+            <a href="/public/user/reservation_history.php">Reservation History</a>
             <a href="/public/user/edit_profile.php">Edit Profile</a>
         </div>
     </nav>
