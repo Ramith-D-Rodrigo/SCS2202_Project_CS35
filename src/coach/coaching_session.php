@@ -90,6 +90,51 @@
             }
 
         }
+
+        public function studentPaymentAvailability($database, $studID){ //to check whether a given student has to pay or not
+
+            //first get the join date of the student
+            $joinDateSql = sprintf("SELECT `joinDate` FROM `student_coaching_session` WHERE `sessionID` = '%s' AND `studID` = '%s'",
+            $database -> real_escape_string($this -> sessionID),
+            $database -> real_escape_string($studID));
+
+            $joinDateResult = $database -> query($joinDateSql);
+            $joinDateObj = $joinDateResult -> fetch_object();
+            $joinDate = $joinDateObj -> joinDate;
+
+
+            //get student's last payment information for this session
+            $paymentSql = sprintf("SELECT `paymentDate` FROM `payment` WHERE `sessionID` = '%s' AND `studID` = '%s' ORDER BY `paymentDate` DESC LIMIT 1",
+            $database -> real_escape_string($this -> sessionID),
+            $database -> real_escape_string($studID));       
+
+            $paymentResult = $database -> query($paymentSql);
+            
+            if($paymentResult -> num_rows == 0){ //student has not paid yet (not even once)
+                return true;
+            }
+            else{
+                $paymentObj = $paymentResult -> fetch_object();
+                $lastPaymentDate = $paymentObj -> paymentDate;
+
+                //get the number of days between the last payment date and the join date
+                //get the current date
+                date_default_timezone_set(SERVER_TIMEZONE);
+                $currDate = new DateTime("now");
+                
+                $date1 = new DateTime($lastPaymentDate);
+                $date2 = new DateTime($joinDate);
+                $diff = $date1 -> diff($date2);
+                $days = $diff -> days;
+
+                if($days >= 30){    //student has to pay
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
         
         public function jsonSerialize() : mixed{
             //get all class properties

@@ -116,7 +116,16 @@ fetch("../../controller/user/coaching_sessions_controller.php")
                     sessionDiv.classList.add('pending');
                 }
                 else if(data.coachingSessions[i].status === "ongoing"){
+                    const viewMoreBtn = document.createElement('button');
+                    viewMoreBtn.innerHTML = 'View More';
+                    viewMoreBtn.className = 'sessionViewMore';  //to add event listeners
 
+                    const viewMoreIcon = document.createElement('i');
+                    viewMoreIcon.style.margin = '0 0.5rem';
+                    viewMoreIcon.className = 'fas fa-chevron-right';
+                    viewMoreBtn.appendChild(viewMoreIcon);
+
+                    
 
                 }
                 coachingSessionsContainer.appendChild(sessionDiv);
