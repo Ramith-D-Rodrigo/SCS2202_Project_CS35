@@ -14,6 +14,8 @@
         private $paymentAmount;
         private $branchName;
         private $courtName;
+        private $startDate;
+        private $cancelDate;
 
         public function __construct($sessionID, $coachID = NULL, $courtID = NULL){
             $this -> sessionID = $sessionID;
