@@ -22,7 +22,6 @@
 
     $result = $admin -> makeBranchActive($decision,$branchID,$connection);
     if($result){
-        $_SESSION['successMsg'] = "Branch Request is Processed Successfully.";
         header("Location: /public/system_admin/view_owner_requests.php");
         $connection -> close();
         exit();

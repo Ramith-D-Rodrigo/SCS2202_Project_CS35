@@ -98,7 +98,6 @@
                     </div>
                 </div>
             </form>
-            <div id="success-msg"> </div>
             <div class="err-msg" id="err-msg">
                 <?php
                     if(isset($_SESSION['branchExistError'])){
