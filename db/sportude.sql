@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 24, 2023 at 04:21 PM
+-- Generation Time: Feb 25, 2023 at 02:53 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -151,6 +151,23 @@ CREATE TABLE `coach_qualification` (
 
 INSERT INTO `coach_qualification` (`qualification`, `coachID`) VALUES
 ('pro basketball', 'coach_sen63f62a9821f62');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coach_session_payment`
+--
+
+CREATE TABLE `coach_session_payment` (
+  `paymentID` varchar(35) NOT NULL,
+  `coachID` varchar(35) NOT NULL,
+  `sessionID` varchar(35) NOT NULL,
+  `paymentAmount` double NOT NULL,
+  `paymentDate` date NOT NULL,
+  `chargeID` varchar(30) NOT NULL,
+  `status` varchar(10) NOT NULL,
+  `processDate` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -367,7 +384,8 @@ INSERT INTO `reservation` (`reservationID`, `date`, `startingTime`, `endingTime`
 ('Res-ram63ee5468dd221', '2023-02-23', '10:00:00', '12:00:00', 2, 1000, 'basket345', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-02-16 16:06:00', ''),
 ('Res-ram63ee56b99b8cf', '2023-02-25', '13:00:00', '16:00:00', 2, 1050, 'badcourt1213', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-02-16 16:15:53', ''),
 ('Res-ram63ee57da3e981', '2023-02-20', '10:00:00', '14:00:00', 2, 2000, 'basket345', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-02-16 16:20:42', ''),
-('Res-ram63f48625b04c0', '2023-02-25', '10:00:00', '12:00:00', 2, 700, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-02-21 08:51:49', '');
+('Res-ram63f48625b04c0', '2023-02-25', '10:00:00', '12:00:00', 2, 700, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-02-21 08:51:49', ''),
+('Res-ram63f8dc83d1add', '2023-03-02', '11:00:00', '12:00:00', 2, 350, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-02-24 15:49:23', 'ch_3Mf3WkKUOfa0wCPZ10vmygDn');
 
 -- --------------------------------------------------------
 
@@ -508,6 +526,13 @@ CREATE TABLE `student_registered_session` (
   `leaveDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `student_registered_session`
+--
+
+INSERT INTO `student_registered_session` (`stuID`, `sessionID`, `joinDate`, `leaveDate`) VALUES
+('ramRod63816dc9007b4', 'session1', '2023-02-01', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -587,7 +612,7 @@ INSERT INTO `user` (`userID`, `firstName`, `lastName`, `gender`, `profilePhoto`,
 ('lahKum63a5b560507af', 'Lahiru', 'Kumara', 'm', '../../uploads/user_profile_images/lahiru_kumara263a5b56050808.jpg', 'Lahiru&amp;#039;s Address', '0774145632', '2002-02-06', '2022-12-23', 175, 66),
 ('lahRod63a6ff48ce0c4', 'Lahiru', 'Rodrigo', 'm', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-12-02', '2022-12-24', NULL, NULL),
 ('nihWij638657d83c715', 'Nihal', 'Wijesinghe', 'm', NULL, 'Some road, Galle', '0789654125', '1996-07-26', '2022-11-29', 177, 69),
-('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', '../../uploads/user_profile_images/ramith_rodrigo63e3cb8597d4c.jpg', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', 180, 58),
+('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', '../../uploads/user_profile_images/ramith_rodrigo63f8d69aa0fc9.jpg', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', 180, 58),
 ('samKum63e523eab8d76', 'Saman', 'Kumara', 'm', '../../uploads/user_profile_images/saman_kumara63e52426da49d.jpg', 'Saman address', '0774587452', '2009-02-04', '2023-02-09', NULL, NULL),
 ('thaSam639a02d983325', 'Tharindu', 'Sampath', 'm', NULL, 'Some road, Kaluthara', '0774125478', '1999-06-25', '2022-12-14', 170, 70);
 
@@ -712,7 +737,6 @@ CREATE TABLE `user_request_coaching_session` (
 --
 
 INSERT INTO `user_request_coaching_session` (`userID`, `sessionID`, `requestDate`, `message`) VALUES
-('ramRod63816dc9007b4', 'session1', '2023-02-21', 'waeasd'),
 ('ramRod63816dc9007b4', 'session2', '2023-02-22', 'i wanna play basketball');
 
 --
@@ -764,6 +788,14 @@ ALTER TABLE `coaching_session`
 ALTER TABLE `coach_qualification`
   ADD PRIMARY KEY (`qualification`,`coachID`),
   ADD KEY `coach_id` (`coachID`);
+
+--
+-- Indexes for table `coach_session_payment`
+--
+ALTER TABLE `coach_session_payment`
+  ADD PRIMARY KEY (`paymentID`),
+  ADD KEY `coachID` (`coachID`),
+  ADD KEY `sessionID` (`sessionID`);
 
 --
 -- Indexes for table `court_maintenance`
@@ -970,6 +1002,13 @@ ALTER TABLE `coaching_session`
 --
 ALTER TABLE `coach_qualification`
   ADD CONSTRAINT `coach_qualification_ibfk_1` FOREIGN KEY (`coachID`) REFERENCES `coach` (`coachID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `coach_session_payment`
+--
+ALTER TABLE `coach_session_payment`
+  ADD CONSTRAINT `coach_session_payment_ibfk_1` FOREIGN KEY (`coachID`) REFERENCES `coach` (`coachID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `coach_session_payment_ibfk_2` FOREIGN KEY (`sessionID`) REFERENCES `coaching_session` (`sessionID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `court_maintenance`
