@@ -4,6 +4,7 @@ const username = document.getElementById("username");
 const cEmail = document.getElementById("currEmail");
 const confirmBtn = document.getElementById("confirmBtn");
 const errorDiv = document.getElementById("err-msg");
+const staff = document.getElementById("staff");
 
 staffRole.addEventListener("change", (e) => {
     if(selectedBranch.value !== "" && staffRole.value !== ""){
@@ -15,6 +16,7 @@ staffRole.addEventListener("change", (e) => {
                     errorDiv.innerHTML = data[0]['errMsg'];
                     username.value = "";
                     cEmail.value = "";
+                    staff.value = "";
                     // const searchError = document.createElement("div");
                     // searchError.className = "no-result";
                     // searchError.id = "no-result";
@@ -25,12 +27,14 @@ staffRole.addEventListener("change", (e) => {
                     username.value = data[0][1];
                     cEmail.value = data[0][2];
                     confirmBtn.value = data[0][0];
+                    staff.value = "Staff";
                 }
             });
     }else{
         errorDiv.innerHTML = ""; 
         username.value = "";
         cEmail.value = "";
+        staff.value = "";
     }
 });
 
@@ -44,6 +48,7 @@ selectedBranch.addEventListener("change", (e) => {
                     errorDiv.innerHTML = data[0]['errMsg'];
                     username.value = "";
                     cEmail.value = "";
+                    staff.value = "";
                     // const searchError = document.createElement("div");
                     // searchError.className = "no-result";
                     // searchError.id = "no-result";
@@ -54,12 +59,14 @@ selectedBranch.addEventListener("change", (e) => {
                     username.value = data[0][1];
                     cEmail.value = data[0][2];
                     confirmBtn.value = data[0][0];
+                    staff.value = "Staff";
                 }
             });
     }else{
         errorDiv.innerHTML = ""; 
         username.value = "";
         cEmail.value = "";
+        staff.value = "";
     }
 });
 

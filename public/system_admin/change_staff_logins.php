@@ -83,6 +83,7 @@
                     </div>    
                     <!-- <div><button type="submit" id="viewBtn" >Show Password</button></div> -->
                 </div>
+                <input hidden name="role" id="staff"></input>
                 <div class="err-msg" id="err-msg">
                     <?php 
                         if(isset($_SESSION['emailError'])){
