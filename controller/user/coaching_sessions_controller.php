@@ -40,13 +40,18 @@
     //get general details of the coaching sessions (day, time, sport, coach)
 
     foreach($allSessions as $currSession){
-        $currSession -> getDetails($user -> getConnection(), ['day', 'startingTime', 'endingTime', 'coachID', 'courtID']);
+        $currSession -> getDetails($user -> getConnection(), ['day', 'startingTime', 'endingTime', 'coachID', 'courtID', 'paymentAmount']);
         $temp = json_decode(json_encode($currSession), true);
 
         if(!array_key_exists($temp['coachID'], $coaches)){  //if the coach is not in the array
             $tempCoach = new Coach();
             $tempCoach -> setUserID($temp['coachID']);
             $coachPic = $tempCoach -> getDetails('photo');
+
+            $firstName = $tempCoach -> getDetails('firstName');
+            $lastName = $tempCoach -> getDetails('lastName');
+
+            $coachName = $firstName . ' ' . $lastName;
 
             $tempSport = new Sport();
             $tempSport -> setID($tempCoach -> getSport());
@@ -55,7 +60,7 @@
 
             $sportName = json_decode(json_encode($tempSport), true)['sportName'];
             
-            $coaches += [$temp['coachID'] => ['sport' => $sportName, 'photo' => $coachPic]];
+            $coaches += [$temp['coachID'] => ['sport' => $sportName, 'photo' => $coachPic, 'name' => $coachName]];
 
             unset($tempCoach);
         }
