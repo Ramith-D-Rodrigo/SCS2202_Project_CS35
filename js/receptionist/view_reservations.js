@@ -5,11 +5,7 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
         if(data[0]['errMsg'] !== undefined){
             const errorDiv = document.getElementById("err-msg");
             errorDiv.className = "container";
-            const searchError = document.createElement("div");
-            searchError.className = "no-result";
-            searchError.id = "no-result";
-            searchError.innerHTML = data[0]['errMsg'];
-            errorDiv.appendChild(searchError);
+            errorDiv.innerHTML = data[0]['errMsg'];
         }else{
             // data[0].push(data[1]);
             //sort the array to display the reservations in order of starting time and ending time and finally court name
@@ -55,28 +51,37 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
                     rightContent.innerHTML = "Sport: ".concat(data[i].sportName,
                     "<br>","Court Name: ",data[i].courtName,
                     "<br>","Number of Students: ",data[i].noOfStudents,
-                    "<br>","Status: ","Permanently Reserved");
+                    "<br>","Status: ","Reserved");
                 }
+                const resID = document.createElement("input");
+                resID.hidden = true;
+                resID.name = "reservationID";
                 const formInput = document.createElement("form");
-       
                 formInput.style.display = "flex";
                 formInput.style.flexDirection = "column";
                 formInput.action = "../../controller/receptionist/handle_reservation_controller.php";
                 formInput.method = "POST";
                 const confirmBtn = document.createElement("button");
                 confirmBtn.innerHTML = "Confirm";
+                confirmBtn.name = "btnVal";
                 confirmBtn.style.marginBottom = "5px";
                 const  cancelBtn = document.createElement("button");
+                cancelBtn.name = "btnVal";
                 cancelBtn.innerHTML = "Cancel";
-                if(Object.keys(data[i]).length===10){
-                    confirmBtn.value = data[i].reservationID;
-                    cancelBtn.value = data[i].reservationID;
+                if(Object.keys(data[i]).length===10 && data[i].status === "Pending"){
+                    resID.value = data[i].reservationID;
+                    confirmBtn.value = "Checked In";
+                    cancelBtn.value = "Declined";
                 }else{
-                    cancelBtn.value = data[i].sessionID;
-                    confirmBtn.value = data[i].sessionID;
+                    cancelBtn.disabled = true;
+                    cancelBtn.style.opacity = "50%";
+                    confirmBtn.disabled = true;
+                    confirmBtn.style.opacity = "50%";
                 }
+                
                 formInput.appendChild(confirmBtn);
                 formInput.appendChild(cancelBtn);
+                formInput.appendChild(resID);
                 reservDiv.appendChild(leftContent);
                 reservDiv.appendChild(rightContent);
                 reservDiv.appendChild(formInput);

@@ -440,7 +440,7 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         ON `sc`.`sportID` = `s`.`sportID`
         INNER JOIN `branch` `b`
         ON `b`.`branchID` = `sc`.`branchID`
-        WHERE `b`.`branchID` = '%s' AND `r`.`date` = '%s' AND `r`.`status` = 'pending'",
+        WHERE `b`.`branchID` = '%s' AND `r`.`date` = '%s'",
         $database -> real_escape_string($branchID),
         $database -> real_escape_string($currentDate));
         $userReservations = $database -> query($uReservationSql) -> fetch_all(MYSQLI_ASSOC);
@@ -493,6 +493,14 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
             return FALSE;
         }
 
+    }
+
+    public function handleReservation($reservationID,$decision,$database){
+        $reservation = new Reservation();
+        $reservation -> setID($reservationID);
+        $result  = $reservation -> updateStatus($database,$decision);
+
+        return $result;
     }
     public function jsonSerialize() : mixed {
         return [
