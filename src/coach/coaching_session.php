@@ -79,7 +79,7 @@
             $sessionCoach -> setUserID($coachID);
 
             $coachSport = new Sport();  //find the sport of the coach
-            $coachSport -> setID($sessionCoach -> getSport($database));
+            $coachSport -> setID($sessionCoach -> getSport());
             
             $coachSport -> getDetails($database, ['maxNoOfStudents']);
             $maxNoOfStudents = json_decode(json_encode($coachSport)) -> maxNoOfStudents;
