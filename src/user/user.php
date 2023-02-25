@@ -428,7 +428,7 @@ class User extends Actor implements JsonSerializable{
         $sql = sprintf("SELECT `sessionID` 
         FROM `student_registered_session` 
         WHERE `stuID` = '%s' 
-        AND `leaveDate` = NULL", $this -> connection -> real_escape_string($this -> userID));
+        AND `leaveDate` IS NULL", $this -> connection -> real_escape_string($this -> userID));
         $result = $this -> connection -> query($sql);
         $sessionArr = [];
         while($row = $result -> fetch_object()){
