@@ -16,6 +16,7 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="/styles/general/our_sports.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+                <link rel="stylesheet" href="/styles/user/coaching_sessions.css">
         <title>Our Sports</title>
             </head>
             <body>
@@ -50,6 +51,35 @@
                 <?php
                     require_once("../../public/general/footer.php");
                 ?>
+
+                <div class="body-container" id="coachFeedbackFormDiv">
+                    <div class="content-box">
+                        <h2>Give Your Thoughts About </h2>
+                        <form>
+                            <input name="coachID" hidden>
+                            <div id="userRating">
+                                <i class="fas fa-star rating" style="font-size:1.2rem" id="rating1"></i>
+                                <i class="fas fa-star rating" style="font-size:1.2rem" id="rating2"></i>
+                                <i class="fas fa-star rating" style="font-size:1.2rem" id="rating3"></i>
+                                <i class="fas fa-star rating" style="font-size:1.2rem" id="rating4"></i>
+                                <i class="fas fa-star rating" style="font-size:1.2rem" id="rating5"></i>
+                            </div>
+
+                            <div>
+                                <textarea name="feedback" id="feedback" cols="30" rows="10" placeholder="Your Feedback" required></textarea>
+                            </div>
+
+                            <div style="display: flex; flex-direction:row; justify-content:space-between">
+                                <button id="sendFeedback" style="width:25%;" type="submit">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                                <button id="cancelFeedback" style="width:25%;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </body>
             <script src="/js/user/account_links.js"></script>
             <script type="module" src="/js/user/coaching_sessions.js"></script>
