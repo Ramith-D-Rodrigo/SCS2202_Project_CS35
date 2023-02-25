@@ -27,6 +27,17 @@ const animateGateWayClosing = () => {
         //clear the card element
         cardElement.clear();
         errorElement.textContent = "";
+
+        //enable all buttons and inputs in the main content
+        const buttons = main.querySelectorAll("button");
+        const inputs = main.querySelectorAll("input");
+
+        buttons.forEach((button) => {
+            button.disabled = false;
+        });
+        inputs.forEach((input) => {
+            input.disabled = false;
+        });
     };
 };
 
@@ -73,6 +84,17 @@ reservationForm.addEventListener('submit', (event) => {
 
     //animate the opacity
     main.style.transition = "opacity 0.5s ease-in-out";
+
+    //disable all buttons and inputs in the main content
+    const buttons = main.querySelectorAll("button");
+    const inputs = main.querySelectorAll("input");
+    
+    buttons.forEach((button) => {
+        button.disabled = true;
+    });
+    inputs.forEach((input) => {
+        input.disabled = true;
+    });
 
     //click event listener for the close button
     main.addEventListener("click", function mainClick(){
