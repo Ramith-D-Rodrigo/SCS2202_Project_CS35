@@ -26,6 +26,9 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/system_admin/branch_request.php?'){  //to view particular branch request
                     echo "Branch Request";
                 }
+                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/account_settings.php'){  //to view particular branch request
+                    echo "Account Settings";
+                }
             ?>
         </div>
         <div style="align-items:flex-end">
@@ -37,7 +40,7 @@
             ?>
                 <div style="float:right">
                     <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button>
-                    <button class ="btn" id="" onclick="window.location.href=''">Settings<i class="fa-solid fa-gear" style="margin: 0 5px"></i></button>
+                    <button class ="btn" id="" onclick="window.location.href='/public/system_admin/account_settings.php'">Settings<i class="fa-solid fa-gear" style="margin: 0 5px"></i></button>
                     <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-from-bracket" style="margin: 0 5px"></i></button>        
                 </div>
                     

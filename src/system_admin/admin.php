@@ -5,7 +5,6 @@ require_once("../../src/general/actor.php");
 class Admin extends Actor{
 
     private static $admin;
-    private $adminID;
 
     private function __construct() {}  //make the construct private so that no new object can be created
 
@@ -23,7 +22,21 @@ class Admin extends Actor{
     }
 
     public function getAdminID(){    //adminID getter
-        return $this -> adminID;
+        return $this -> userID;
+    }
+
+    public function setDetails($database){
+        $sql = $database -> query("SELECT `userID`,
+        `emailAddress`,`username`
+        FROM `login_details`
+        WHERE `userRole` = 'admin'");
+
+        $profile = $sql -> fetch_object();
+
+        $this -> userID = $profile -> userID;
+        $this -> emailAddress = $profile -> emailAddress;
+        $this -> username = $profile -> username;
+        $this -> isActive = 1;
     }
 
     // public function login($username, $password, $database){
@@ -210,19 +223,24 @@ class Admin extends Actor{
 
     public function makeBranchActive($decision,$branchID,$database){
         if($decision==="Accept"){
-            $sql = sprintf("UPDATE `branch` SET `requestStatus` = 'a' WHERE `branchID` = '%s'",
+            $updateBranch= sprintf("UPDATE `branch` SET `requestStatus` = 'a' WHERE `branchID` = '%s'",
             $database -> real_escape_string($branchID));   //make the branch availalbe
-            $sql = sprintf("UPDATE `sports_court` SET `requestStatus` = 'a' WHERE `branchID` = '%s'",
+            $updateCourts = sprintf("UPDATE `sports_court` SET `requestStatus` = 'a' WHERE `branchID` = '%s'",
             $database -> real_escape_string($branchID));   //make the sport_courts available too
         }else{
-            $sql = sprintf("UPDATE `branch` SET `requestStatus` = 'd' WHERE `branchID` = '%s'",
+            $updateBranch = sprintf("UPDATE `branch` SET `requestStatus` = 'd' WHERE `branchID` = '%s'",
             $database -> real_escape_string($branchID));
-            $sql = sprintf("UPDATE `sports_court` SET `requestStatus` = 'a' WHERE `branchID` = '%s'",
+            $updateCourts = sprintf("UPDATE `sports_court` SET `requestStatus` = 'd' WHERE `branchID` = '%s'",
             $database -> real_escape_string($branchID));
         }
 
-        $result = $database -> query($sql);
-        return $result;
+        $result1 = $database -> query($updateBranch);
+        $result2 = $database -> query($updateCourts);
+        if($result1 && $result2){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 
