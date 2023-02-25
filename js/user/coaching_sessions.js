@@ -1,4 +1,4 @@
-import {changeToLocalTime, capitalizeFirstLetter} from "../FUNCTIONS.js";
+import {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain} from "../FUNCTIONS.js";
 import {currency} from "../CONSTANTS.js";
 
 
@@ -8,6 +8,12 @@ let successflag = false;
 
 const sportFilter = document.querySelector('#sportFilter');
 const statusFilter = document.querySelector('#statusFilter');
+
+let selectedSession = null; //to store the selected session for the feedback form or the leave session confirmation form
+let selectedCoach = null;   //to store the selected coach for the feedback form 
+
+const confirmBtn = document.querySelector('#confirmBtn'); //confirm button for session requests cancellation and leave session confirmation
+const confirmationDiv = document.querySelector('#leaveSessionConfirmationDiv'); //popup div for session requests cancellation and leave session confirmation
 
 const filterSessions = (e) => {
     const sessions = document.querySelectorAll('.session'); //select all session divs
@@ -38,7 +44,7 @@ const filterSessions = (e) => {
 
 const findInputFieldValue = (inputName, btnDiv) => {    //a function to find the input field value of the given input name
     const hiddenInputs = btnDiv.querySelectorAll('input');
-    const input = Array.from(hiddenInputs).find(input => input.name === inputName);
+    const input = Array.from(hiddenInputs).find(currInput => currInput.name === inputName);
     return input.value;
 }
 
@@ -51,27 +57,83 @@ const coachProfile = (e) => {   //a function to redirect to the coach profile pa
     return;
 }
 
-const leaveSession = (e) => {   //a function to leave the session functionality
+const leaveSessionPopUp = (e) => {   //popup confirmation for leaving the session
+    e.preventDefault();
+    confirmBtn.value = 'leave';
     const btnDiv = e.target.parentElement;
     const sessionID = findInputFieldValue('sessionID', btnDiv);
 
-    const formData = new FormData();
-    formData.append('sessionID', sessionID);
+    selectedSession = sessionID;    //store the session id
 
-    console.log(Object.fromEntries(formData));
+    confirmationDiv.style.display = 'block'; //display the confirmation div
+    const header = confirmationDiv.querySelector('h2');
+
+    header.innerHTML = "Are you sure you want to leave this session?";
+
+    //blur the main and disable click
+    const main = document.querySelector('main');
+    main.classList.add('main-blur');
+    disableElementsInMain(main);
 }
 
-const cancelSessionRequest = (e) => {   //a function to cancel the session request functionality
+const leaveSession = (e) => {   //a function to leave the session functionality (upon confirmation)
+    const formData = new FormData();
+    formData.append('sessionID', selectedSession);
+
+    console.log(Object.fromEntries(formData));
+    selectedSession = null; //reset the selected session
+}
+
+const cancelSessionRequestPopUp = (e) => {   //popup confirmation for session request cancellation
+    e.preventDefault();
+    confirmBtn.value = 'cancel';
     const btnDiv = e.target.parentElement;
     const sessionID = findInputFieldValue('sessionID', btnDiv);
 
-    const formData = new FormData();
-    formData.append('sessionID', sessionID);
+    selectedSession = sessionID;    //store the session id
 
-    console.log(Object.fromEntries(formData));
+    confirmationDiv.style.display = 'block'; //display the confirmation div
+    const header = confirmationDiv.querySelector('h2');
+
+    header.innerHTML = "Are you sure you want to cancel your request to join this session?";
+
+    //blur the main and disable click
+    const main = document.querySelector('main');
+    main.classList.add('main-blur');
+    disableElementsInMain(main);
 }
 
-const giveFeedback = (e) => {   //a function to give feedback functionality
+const cancelSessionRequest = (e) => {   //a function to cancel the session request functionality (upon confirmation)
+    const formData = new FormData();
+
+    formData.append('sessionID', selectedSession);
+
+    console.log(Object.fromEntries(formData));
+    selectedSession = null; //reset the selected session
+}
+
+const popUpCancellation = (e) => {   //close the confirmation div
+    confirmationDiv.style.display = 'none';
+
+    confirmBtn.value = '';  //reset the value of the confirm butto
+    selectedSession = null; //reset the selected session
+
+    const main = document.querySelector('main');
+    main.classList.remove('main-blur');
+    enableElementsInMain(main);
+}
+
+const popUpConfirmation = (e) => {   //close the confirmation div
+    if(e.target.value === 'leave'){
+        leaveSession(e);
+    }else if(e.target.value === 'cancel'){
+        cancelSessionRequest(e);
+    }
+}
+
+
+const giveFeedbackPopUp = (e) => {   //give feedback popup
+    e.stopPropagation();
     const btnDiv = e.target.parentElement;
     const coachID = findInputFieldValue('coachID', btnDiv);
 
@@ -81,7 +143,21 @@ const giveFeedback = (e) => {   //a function to give feedback functionality
 
     const feedbackHeader = feedbackDiv.querySelector("h2");
 
-    feedbackHeader.innerHTML +=  " " + Array.from(coachSet).find(coach => coach.id === coachID).name;   //find the coach name and add it to the header
+    feedbackHeader.innerHTML = "Give your thoughts about " + Array.from(coachSet).find(coach => coach.id === coachID).name;   //find the coach name and add it to the header
+
+    const main = document.querySelector('main');
+    main.classList.add('main-blur');
+
+    //disable all inputs and buttons
+    disableElementsInMain(main);
+
+    main.addEventListener('click', function mainBlur(e){
+        feedbackDiv.style.display = 'none';
+        main.classList.remove('main-blur');
+        enableElementsInMain(main);
+        main.removeEventListener('click', mainBlur);
+    });
+
 }
 
 let sportSet = new Set();   //to store the sports of the coaching sessions
@@ -102,6 +178,7 @@ fetch("../../controller/user/coaching_sessions_controller.php")
                 sessionDiv.className = 'content-box';
 
                 sessionDiv.classList.add("session");
+                sessionDiv.id = data.coachingSessions[i].sessionID;
 
                 //coach name
                 const coachObj = {
@@ -296,22 +373,30 @@ fetch("../../controller/user/coaching_sessions_controller.php")
         //leave session button
         const leaveSessionBtns = document.querySelectorAll('.leaveSession');
         leaveSessionBtns.forEach(btn => {
-            btn.addEventListener('click', leaveSession);
+            btn.addEventListener('click', leaveSessionPopUp);
         });
 
         //cancel session request button
         const cancelSessionBtns = document.querySelectorAll('.cancelRequest');
         cancelSessionBtns.forEach(btn => {
-            btn.addEventListener('click', cancelSessionRequest);
+            btn.addEventListener('click', cancelSessionRequestPopUp);
         });
 
+        //feedback button
         const feedbackBtns = document.querySelectorAll('.feedbackBtn');
         feedbackBtns.forEach(btn => {
-            btn.addEventListener('click', giveFeedback);
+            btn.addEventListener('click', giveFeedbackPopUp);
         });
 
-        console.log(coachSet);
+        //popup button cancel event
+        const popupCancelBtn = document.querySelector('#cancelBtn');
 
+        popupCancelBtn.addEventListener('click', popUpCancellation);
+
+        //popup button confirm event
+        const popupConfirmBtn = document.querySelector('#confirmBtn');
+
+        popupConfirmBtn.addEventListener('click', popUpConfirmation);
 
     });
 

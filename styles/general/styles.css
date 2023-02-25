@@ -275,3 +275,8 @@ tr:last-of-type td:last-of-type {
     display: flex;
     align-items: center;
 }
+
+.main-blur{
+    filter: blur(5px);
+    transition: 500ms;
+}

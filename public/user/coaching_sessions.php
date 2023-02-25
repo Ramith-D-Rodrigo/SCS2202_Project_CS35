@@ -52,9 +52,9 @@
                     require_once("../../public/general/footer.php");
                 ?>
 
-                <div class="body-container" id="coachFeedbackFormDiv">
+                <div class="body-container popup" id="coachFeedbackFormDiv">
                     <div class="content-box">
-                        <h2>Give Your Thoughts About </h2>
+                        <h2></h2>
                         <form>
                             <input name="coachID" hidden>
                             <div id="userRating">
@@ -69,15 +69,24 @@
                                 <textarea name="feedback" id="feedback" cols="30" rows="10" placeholder="Your Feedback" required></textarea>
                             </div>
 
-                            <div style="display: flex; flex-direction:row; justify-content:space-between">
-                                <button id="sendFeedback" style="width:25%;" type="submit">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
-                                <button id="cancelFeedback" style="width:25%;">
-                                    <i class="fas fa-times"></i>
+                            <div style="display: flex; flex-direction:row; justify-content:center">
+                                <button id="sendFeedback" type="submit">
+                                    Send<i class="fas fa-paper-plane" style="margin: 0 0.5rem"></i>
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+
+                <div class="body-container popup" id="leaveSessionConfirmationDiv">
+                    <div class="content-box">
+                        <h2></h2>
+                        <div style="display: flex; flex-direction:row; justify-content:space-between;">
+                            <button id="confirmBtn" class="user-selection-btn">Yes<i class="fas fa-check" style="margin: 0 0.5rem"></i>
+                            </button>
+                            <button id="cancelBtn" class="user-selection-btn">No<i class="fas fa-times" style="margin: 0 0.5rem"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </body>
