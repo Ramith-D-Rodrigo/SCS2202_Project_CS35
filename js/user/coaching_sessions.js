@@ -1,4 +1,5 @@
-import {changeToLocalTime} from "../FUNCTIONS.js";
+import {changeToLocalTime, capitalizeFirstLetter} from "../FUNCTIONS.js";
+import {currency} from "../CONSTANTS.js";
 
 
 const coachingSessionsContainer = document.querySelector('#coachingSessionsContainer');
@@ -35,21 +36,81 @@ const filterSessions = (e) => {
     }
 }
 
+const findInputFieldValue = (inputName, btnDiv) => {    //a function to find the input field value of the given input name
+    const hiddenInputs = btnDiv.querySelectorAll('input');
+    const input = Array.from(hiddenInputs).find(input => input.name === inputName);
+    return input.value;
+}
+
+
+const coachProfile = (e) => {   //a function to redirect to the coach profile page
+    const btnDiv = e.target.parentElement;
+    const coachID = findInputFieldValue('coachID', btnDiv);
+
+    window.location.href = "/public/general/coach_profile.php?coachID=" + coachID;
+    return;
+}
+
+const leaveSession = (e) => {   //a function to leave the session functionality
+    const btnDiv = e.target.parentElement;
+    const sessionID = findInputFieldValue('sessionID', btnDiv);
+
+    const formData = new FormData();
+    formData.append('sessionID', sessionID);
+
+    console.log(Object.fromEntries(formData));
+}
+
+const cancelSessionRequest = (e) => {   //a function to cancel the session request functionality
+    const btnDiv = e.target.parentElement;
+    const sessionID = findInputFieldValue('sessionID', btnDiv);
+
+    const formData = new FormData();
+    formData.append('sessionID', sessionID);
+
+    console.log(Object.fromEntries(formData));
+}
+
+const giveFeedback = (e) => {   //a function to give feedback functionality
+    const btnDiv = e.target.parentElement;
+    const coachID = findInputFieldValue('coachID', btnDiv);
+
+    const feedbackDiv = document.querySelector('#coachFeedbackFormDiv');
+
+    feedbackDiv.style.display = 'block'; //display the feedback div
+
+    const feedbackHeader = feedbackDiv.querySelector("h2");
+
+    feedbackHeader.innerHTML +=  " " + Array.from(coachSet).find(coach => coach.id === coachID).name;   //find the coach name and add it to the header
+}
+
+let sportSet = new Set();   //to store the sports of the coaching sessions
+let coachSet = new Set();   //to store the coaches of the coaching sessions
+
+
 fetch("../../controller/user/coaching_sessions_controller.php")
     .then(res => {
         successflag = res.ok;
         return res.json();
     })
     .then(data => {
+        console.log(data);
         if(successflag){
-            let sportSet = new Set();   //to store the sports
-
             for(let i = 0; i < data.coachingSessions.length; i++){
                 //create a div for each coaching session
                 const sessionDiv = document.createElement('div');
                 sessionDiv.className = 'content-box';
 
                 sessionDiv.classList.add("session");
+
+                //coach name
+                const coachObj = {
+                    name: data.coaches[data.coachingSessions[i].coachID].name,
+                    sport: data.coaches[data.coachingSessions[i].coachID].sport,
+                    id: data.coachingSessions[i].coachID,
+                    photo: data.coaches[data.coachingSessions[i].coachID].photo
+                }
+                coachSet.add(coachObj);
 
                 //add coach image to the div
                 const coachImgContainer = document.createElement('div');
@@ -96,12 +157,22 @@ fetch("../../controller/user/coaching_sessions_controller.php")
 
                 //status
                 const sessionStatus = document.createElement('p');
-                sessionStatus.innerHTML = coachingSessions[i].status.toUpperCase();
+                sessionStatus.innerHTML = capitalizeFirstLetter(data.coachingSessions[i].status);
                 sessionDiv.appendChild(sessionStatus);
+
+                //session fee
+                const sessionFee = document.createElement('p');
+                sessionFee.innerHTML =  data.coachingSessions[i].paymentAmount + " " + currency;
+                sessionDiv.appendChild(sessionFee);
+
+                //div cointaining buttons
+                const btnDiv = document.createElement('div');
+                btnDiv.className = 'btnDiv';
 
                 //buttons and filtering based on status
                 if(data.coachingSessions[i].status === "pending"){
                     const cancelBtn = document.createElement('button');
+                    cancelBtn.className = 'cancelRequest';
                     cancelBtn.innerHTML = 'Cancel Request';
                     
                     //icon
@@ -109,33 +180,88 @@ fetch("../../controller/user/coaching_sessions_controller.php")
                     cancelIcon.style.margin = '0 0.5rem';
                     cancelIcon.className = 'fas fa-times';
                     cancelBtn.appendChild(cancelIcon);
+                    btnDiv.appendChild(cancelBtn);
 
-                    cancelBtn.setAttribute('onclick', 'cancelSessionRequest(' + data.coachingSessions[i].sessionID + ')');
-                    sessionDiv.appendChild(cancelBtn);
-
+                    sessionDiv.appendChild(btnDiv);
                     sessionDiv.classList.add('pending');
+
                 }
                 else if(data.coachingSessions[i].status === "ongoing"){
-                    const viewMoreBtn = document.createElement('button');
-                    viewMoreBtn.innerHTML = 'View More';
-                    viewMoreBtn.className = 'sessionViewMore';  //to add event listeners
+                    //coach profile
+                    const coachProfile = document.createElement('button');
+                    coachProfile.innerHTML = 'Coach Profile';
+                    coachProfile.className = 'coachProfile';  //to add event listeners
 
-                    const viewMoreIcon = document.createElement('i');
-                    viewMoreIcon.style.margin = '0 0.5rem';
-                    viewMoreIcon.className = 'fas fa-chevron-right';
-                    viewMoreBtn.appendChild(viewMoreIcon);
+                    const coachProfileIcon = document.createElement('i');
+                    coachProfileIcon.style.margin = '0 0.5rem';
+                    coachProfileIcon.className = 'fas fa-user';
+                    coachProfile.appendChild(coachProfileIcon);
+                    btnDiv.appendChild(coachProfile);
 
+                    //feedback button
+                    const feedbackBtn = document.createElement('button');
+                    feedbackBtn.innerHTML = 'Give Feedback';
+                    feedbackBtn.className = 'feedbackBtn';  //to add event listeners
+
+                    const feedbackIcon = document.createElement('i');
+                    feedbackIcon.style.margin = '0 0.5rem';
+                    feedbackIcon.className = 'fas fa-comment';
+                    feedbackBtn.appendChild(feedbackIcon);
+
+                    btnDiv.appendChild(feedbackBtn);
                     
+                    //leave session button
+                    const leaveBtn = document.createElement('button');
+                    leaveBtn.innerHTML = 'Leave Session';
+                    leaveBtn.className = 'leaveSession';  //to add event listeners
+
+                    const leaveIcon = document.createElement('i');
+                    leaveIcon.style.margin = '0 0.5rem';
+                    leaveIcon.className = 'fas fa-sign-out-alt';
+                    leaveBtn.appendChild(leaveIcon);
+                    btnDiv.appendChild(leaveBtn);
+
+
+                    sessionDiv.appendChild(btnDiv);
+                    sessionDiv.classList.add('ongoing');                                   
 
                 }
-                coachingSessionsContainer.appendChild(sessionDiv);
+                else if(data.coachingSessions[i].status === "left"){
+                    //coach profile
+                    const coachProfile = document.createElement('button');
+                    coachProfile.innerHTML = 'Coach Profile';
+                    coachProfile.className = 'coachProfile';  //to add event listeners
 
+                    const coachProfileIcon = document.createElement('i');
+                    coachProfileIcon.style.margin = '0 0.5rem';
+                    coachProfileIcon.className = 'fas fa-user';
+                    coachProfile.appendChild(coachProfileIcon);
+                    btnDiv.appendChild(coachProfile);
+
+                    sessionDiv.appendChild(btnDiv);
+                    sessionDiv.classList.add('left');
+                
+                }
+                //add hidden inputs for sessionID and coachID
+                const sessionID = document.createElement('input');
+                sessionID.type = 'hidden';
+                sessionID.value = data.coachingSessions[i].sessionID;
+                sessionID.name = 'sessionID';
+                btnDiv.appendChild(sessionID);
+
+                const coachID = document.createElement('input');
+                coachID.type = 'hidden';
+                coachID.value = data.coachingSessions[i].coachID;
+                coachID.name = 'coachID';
+                btnDiv.appendChild(coachID);
+
+                coachingSessionsContainer.appendChild(sessionDiv);
             }
 
             return sportSet;
         }
-        console.log(data);
 
+        //if no sessions
         const msgDiv = document.createElement('div');
         msgDiv.className = 'content-box';
         msgDiv.innerHTML = data.msg;
@@ -144,10 +270,9 @@ fetch("../../controller/user/coaching_sessions_controller.php")
         return new Set();   //empty set
 
 
-    }).then((sportSet) => {
-        //filtering
-        
+    }).then((sportSet) => { //filtering and adding event listeners
 
+        //filtering
         sportSet.forEach(sport => { //add sports to the filter
             const option = document.createElement('option');
             option.value = sport;
@@ -159,5 +284,34 @@ fetch("../../controller/user/coaching_sessions_controller.php")
         sportFilter.addEventListener('change', filterSessions);
 
         statusFilter.addEventListener('change', filterSessions);
+
+        //button event listeners
+
+        //coach profile button
+        const coachProfileBtns = document.querySelectorAll('.coachProfile');
+        coachProfileBtns.forEach(btn => {
+            btn.addEventListener('click', coachProfile);
+        });
+
+        //leave session button
+        const leaveSessionBtns = document.querySelectorAll('.leaveSession');
+        leaveSessionBtns.forEach(btn => {
+            btn.addEventListener('click', leaveSession);
+        });
+
+        //cancel session request button
+        const cancelSessionBtns = document.querySelectorAll('.cancelRequest');
+        cancelSessionBtns.forEach(btn => {
+            btn.addEventListener('click', cancelSessionRequest);
+        });
+
+        const feedbackBtns = document.querySelectorAll('.feedbackBtn');
+        feedbackBtns.forEach(btn => {
+            btn.addEventListener('click', giveFeedback);
+        });
+
+        console.log(coachSet);
+
+
     });
 
