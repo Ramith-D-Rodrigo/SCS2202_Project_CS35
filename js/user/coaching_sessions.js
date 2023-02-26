@@ -292,6 +292,14 @@ const giveFeedback = (e) => {   //give feedback functionality
         feedbackErrMsg.innerHTML = "Please Enter Your Feedback";
         return;
     }
+    else if(formData.get('feedback').length > 500){   //check if the feedback is too long
+        feedbackErrMsg.innerHTML = "Feedback is too long";
+        return;
+    }
+    else if(formData.get('feedback').length < 5){   //check if the feedback is too short
+        feedbackErrMsg.innerHTML = "Feedback is too short";
+        return;
+    }
 
     //check rating stars
     let rating = 0;
