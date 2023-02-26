@@ -553,14 +553,14 @@ class User extends Actor implements JsonSerializable{
         return $sessionArr;
     }
 
-    public function requestCoachingSession($sessionID, $message){
+    public function requestCoachingSession($sessionObj, $message){
         date_default_timezone_set(SERVER_TIMEZONE);
         $date = date('Y-m-d');   
         $sql = sprintf("INSERT INTO `user_request_coaching_session` 
         (`userID`, `sessionID`, `message`, `requestDate`) 
         VALUES ('%s', '%s', NULLIF('%s', ''), '%s')",
         $this -> connection -> real_escape_string($this -> userID),
-        $this -> connection -> real_escape_string($sessionID),
+        $this -> connection -> real_escape_string($sessionObj -> getSessionID()),
         $this -> connection -> real_escape_string($message),
         $this -> connection -> real_escape_string($date));
 

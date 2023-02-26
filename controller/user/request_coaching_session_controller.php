@@ -46,6 +46,16 @@
     $requestingUser = new User();
     $requestingUser -> setUserID($_SESSION['userid']);
 
+    //check the session's capacity
+    $requestingSession = new Coaching_Session($userRequest['requestingSession']);
+    if(!$requestingSession -> getAvailability($requestingUser -> getConnection())){  //the session is not available
+        http_response_code(400);
+        header('Content-Type: application/json');
+        $returnMsg['msg'] = 'The session has reached its capacity';
+        echo json_encode($returnMsg);
+        die();
+    }
+
     if($requestingUser -> isStudent()){ //the user is already a student
         //check if the user has already joined the session
         $ongoingSessions = $requestingUser -> getOngoingCoachingSessions();
@@ -77,18 +87,8 @@
         }
     }
 
-    //check the session's capacity
-    $requestingSession = new Coaching_Session($userRequest['requestingSession']);
-    if(!$requestingSession -> getAvailability($requestingUser -> getConnection())){  //the session is not available
-        http_response_code(400);
-        header('Content-Type: application/json');
-        $returnMsg['msg'] = 'The session has reached its capacity';
-        echo json_encode($returnMsg);
-        die();
-    }
-
     //the user can request now
-    $status = $requestingUser -> requestCoachingSession($userRequest['requestingSession'], $userRequest['userMessage']);
+    $status = $requestingUser -> requestCoachingSession($requestingSession, $userRequest['userMessage']);
     if(!$status){   //request failed
         http_response_code(400);
         header('Content-Type: application/json');
