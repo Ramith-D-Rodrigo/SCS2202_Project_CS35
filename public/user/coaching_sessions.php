@@ -55,18 +55,22 @@
                 <div class="body-container popup" id="coachFeedbackFormDiv">
                     <div class="content-box">
                         <h2></h2>
+                        <div id="feedbackErrMsg" class="err-msg"></div>
                         <form>
                             <input name="coachID" hidden>
-                            <div id="userRating">
-                                <i class="fas fa-star rating" style="font-size:1.2rem" id="rating1"></i>
-                                <i class="fas fa-star rating" style="font-size:1.2rem" id="rating2"></i>
-                                <i class="fas fa-star rating" style="font-size:1.2rem" id="rating3"></i>
-                                <i class="fas fa-star rating" style="font-size:1.2rem" id="rating4"></i>
-                                <i class="fas fa-star rating" style="font-size:1.2rem" id="rating5"></i>
-                            </div>
+                            <input name="sessionID" hidden>
+                            <div style="display: flex; flex-direction:column; justify-content:center; align-items:center">
+                                <div id="userRating" class="ratingOption">
+                                    <i class="fas fa-star rating" id="rating1"></i>
+                                    <i class="fas fa-star rating" id="rating2"></i>
+                                    <i class="fas fa-star rating" id="rating3"></i>
+                                    <i class="fas fa-star rating" id="rating4"></i>
+                                    <i class="fas fa-star rating" id="rating5"></i>
+                                </div>
 
-                            <div>
-                                <textarea name="feedback" id="feedback" cols="30" rows="10" placeholder="Your Feedback" required></textarea>
+                                <div>
+                                    <textarea name="feedback" id="feedback" cols="30" rows="10" placeholder="Your Feedback" required></textarea>
+                                </div>
                             </div>
 
                             <div style="display: flex; flex-direction:row; justify-content:center">
