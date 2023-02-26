@@ -606,7 +606,24 @@ class User extends Actor implements JsonSerializable{
     }
 
     private function giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //give feedback to a coach
+        $feedbackID = uniqid('coachFB');
 
+        $sql = sprintf("INSERT INTO `student_coach_feedback` 
+            (`feedbackID`, `stuID`, `coachID`, `description`, `rating`, `feedbackDate`)
+            VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
+            $this -> connection -> real_escape_string($feedbackID),
+            $this -> connection -> real_escape_string($this -> userID),
+            $this -> connection -> real_escape_string($feedbackOwner -> getUserID()),   //feedback owner is the coach
+            $this -> connection -> real_escape_string($feedback),
+            $this -> connection -> real_escape_string($rating),
+            $this -> connection -> real_escape_string(date('Y-m-d')));
+
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+
+        return true;
     }
 
     private function giveBranchFeedback($reservationObj, $branchObj, $feedback, $rating){ //give feedback to a branch
