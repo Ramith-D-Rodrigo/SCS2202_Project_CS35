@@ -7,6 +7,7 @@
     flex-wrap: wrap;
 }
 
+
 .btnDiv button{
     width: 60%;
     display: flex;
@@ -61,6 +62,7 @@
 .popup > div > h2{
     text-align: center;
     margin-bottom: 5rem;
+    font-size: 1.7rem;
 }
 
 #msgBox{
@@ -76,6 +78,15 @@
 #msg{
     text-align: center;
     font-size: 2rem;
+}
+.ratingOption{
+    font-size: 2rem;
+    margin: 10px;
+
+}
+
+.rating{
+    font-size: 1.5rem;
 }
 
 @keyframes slideBottom {
