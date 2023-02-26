@@ -417,11 +417,6 @@ editForm.addEventListener('submit', (e) => {
             }
             continue;
         }
-        if(key === 'height' || key === 'weight'){
-            if(value === ''){
-                value = null;
-            }
-        }
 
         if(currValues[key] !== value){  //if the value has changed
             newValues[key] = value; //add the new value to the newValues object

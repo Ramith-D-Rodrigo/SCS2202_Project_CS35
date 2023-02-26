@@ -418,7 +418,15 @@ class User extends Actor implements JsonSerializable{
     public function isStudent(){    //check if the user is a student
         $sql = sprintf("SELECT `stuID` FROM `student` WHERE  `stuID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
         $result = $this -> connection -> query($sql);
-        if($result -> num_rows === 0){
+        if($result -> num_rows === 0){  //haven't registered as a student
+            return false;
+        }
+
+        //registered as a student, but he might have left all coaching sessions (resulting he is not a student anymore)
+
+        //check for ongoing coaching sessions
+        $ongoingSessions = $this -> getOngoingCoachingSessions();
+        if(count($ongoingSessions) === 0){  //no ongoing coaching sessions
             return false;
         }
         return true;
@@ -499,7 +507,7 @@ class User extends Actor implements JsonSerializable{
                 unset($editingValArr[$key]);
                 continue;
             }
-            $sql .= sprintf(" `%s` = '%s',", $key, $this -> connection -> real_escape_string($value));
+            $sql .= sprintf(" `%s` = NULLIF('%s', ''),", $key, $this -> connection -> real_escape_string($value));
         }
 
         if(sizeof($editingValArr) === 0){   //no need to update the user profile (only have medical concerns and dependents)
