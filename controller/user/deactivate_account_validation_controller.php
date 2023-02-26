@@ -64,6 +64,16 @@
             }
         }
     }
+    
+    //check for pending coaching session requests of the user
+    $coachingSessionRequests = $deactivatingUser -> getPendingCoachingSessionRequests();
+    if($coachingSessionRequests !== []){    //if the user has pending coaching session requests
+        unset($coachingSessionRequests);
+        http_response_code(401);
+        header('Content-Type: application/json;');
+        echo json_encode(array("msg" => "You have pending coaching session requests.<br> Please Cancel them before deactivating your account"));
+        die();
+    }
 
     //check for ongoing coaching sessions of the user
     if($deactivatingUser -> isStudent()){
