@@ -15,6 +15,32 @@ let selectedCoach = null;   //to store the selected coach for the feedback form
 const confirmBtn = document.querySelector('#confirmBtn'); //confirm button for session requests cancellation and leave session confirmation
 const confirmationDiv = document.querySelector('#leaveSessionConfirmationDiv'); //popup div for session requests cancellation and leave session confirmation
 
+
+const ratingStarsDiv = document.querySelector("#userRating");
+
+//get star icons and add event listener to each star
+const stars = ratingStarsDiv.querySelectorAll("i");
+
+for(let i = 0; i < stars.length; i++){
+    stars[i].addEventListener("click", (e) => {
+
+        for(let j = 0; j < stars.length; j++){  //reset the color of all the stars
+            stars[j].style.color = "black";
+        }
+
+        //get the checkbox associated with label star
+        const ratingID = stars[i].getAttribute("id");
+        //get the number of the star
+        const starNum = ratingID.charAt(ratingID.length - 1);
+
+        //color all the stars up to the selected star
+        for(let j = 0; j < starNum; j++){
+            stars[j].style.color = "gold";
+        }
+
+    });
+}
+
 const filterSessions = (e) => {
     const sessions = document.querySelectorAll('.session'); //select all session divs
 
@@ -47,7 +73,6 @@ const findInputFieldValue = (inputName, btnDiv) => {    //a function to find the
     const input = Array.from(hiddenInputs).find(currInput => currInput.name === inputName);
     return input.value;
 }
-
 
 const coachProfile = (e) => {   //a function to redirect to the coach profile page
     const btnDiv = e.target.parentElement;
@@ -201,7 +226,10 @@ const popUpConfirmation = (e) => {   //close the confirmation div
 const giveFeedbackPopUp = (e) => {   //give feedback popup
     e.stopPropagation();
     const btnDiv = e.target.parentElement;
+
+    //need to get the coach id and session id 
     const coachID = findInputFieldValue('coachID', btnDiv);
+    const sessionID = findInputFieldValue('sessionID', btnDiv);
 
     const feedbackDiv = document.querySelector('#coachFeedbackFormDiv');
 
@@ -211,6 +239,13 @@ const giveFeedbackPopUp = (e) => {   //give feedback popup
 
     feedbackHeader.innerHTML = "Give your thoughts about " + Array.from(coachSet).find(coach => coach.id === coachID).name;   //find the coach name and add it to the header
 
+    const coachInput = feedbackDiv.querySelector("input");
+    coachInput.value = coachID;  //set the coach id to the hidden input
+
+    const sessionInput = coachInput.nextElementSibling;
+    sessionInput.value = sessionID; //set the session id to the hidden input
+
+    //blur the main
     const main = document.querySelector('main');
     main.classList.add('main-blur');
 
@@ -222,9 +257,107 @@ const giveFeedbackPopUp = (e) => {   //give feedback popup
         main.classList.remove('main-blur');
         enableElementsInMain(main);
         main.removeEventListener('click', mainBlur);
+
+        //clear the rating colors
+        for(let j = 0; j < stars.length; j++){  //reset the color of all the stars
+            stars[j].style.color = "black";
+        }
+
+        //clear the error message
+        const feedbackErrMsg = feedbackDiv.querySelector('#feedbackErrMsg');
+
+        //clear the text area
+        feedbackDiv.querySelector('textarea').value = "";
+        feedbackErrMsg.innerHTML = "";
     });
 
+    //add the event listener to the form submission
+    const form = feedbackDiv.querySelector("form");
+    form.addEventListener('submit', giveFeedback);
 }
+
+const giveFeedback = (e) => {   //give feedback functionality
+    e.preventDefault();
+
+    const feedbackFormDiv = document.querySelector('#coachFeedbackFormDiv');
+
+    const feedbackForm = feedbackFormDiv.querySelector('form');
+
+    const feedbackErrMsg = feedbackFormDiv.querySelector('#feedbackErrMsg');
+    feedbackErrMsg.innerHTML = "";
+
+    const formData = new FormData(feedbackForm);
+
+    if(!feedbackForm.reportValidity() || !formData.get('feedback')){  //check if the form is valid
+        feedbackErrMsg.innerHTML = "Please Enter Your Feedback";
+        return;
+    }
+
+    //check rating stars
+    let rating = 0;
+    for(let i = 0; i < stars.length; i++){
+        if(stars[i].style.color === "gold"){
+            rating++;
+        }
+    }
+
+    if(rating === 0){   //not rated
+        feedbackErrMsg.innerHTML = "Please Give your Rating";
+        return;
+    }
+
+    formData.append('rating', rating);
+
+    let successflag = false;
+    const icon = document.createElement('i'); //for the icon to be displayed in the message box
+    icon.style.fontSize = '6rem';
+    icon.style.color = 'green';
+
+    //send the feedback data to the server
+    fetch("../../controller/user/give_coach_feedback_controller.php", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(Object.fromEntries(formData))
+    })
+    .then(res => {
+        successflag = res.ok;
+        return res.json();
+    })
+    .then(data => {
+        if(successflag){    //if the feedback is successfully sent
+            feedbackFormDiv.style.display = 'none'; //close the feedback div
+
+            const msgBox = document.querySelector('#msgBox');   //the message box
+            const msg = msgBox.querySelector("#msg");
+
+            msg.innerHTML = data.msg;
+            icon.className = 'fas fa-check-circle';
+            msg.appendChild(icon);
+            msgBox.style.display = 'block';
+
+            //blur the main
+            const main = document.querySelector('main');
+            main.classList.add('main-blur');
+            disableElementsInMain(main);
+
+            main.addEventListener('click', function mainBlur(e){    //one time event listener for the main
+                msgBox.style.display = 'none';
+                main.classList.remove('main-blur');
+                enableElementsInMain(main);
+                main.removeEventListener('click', mainBlur);
+            });
+        }
+        else{
+            feedbackErrMsg.innerHTML = data.msg;    //display the error message in the feedback div
+        }
+    })
+    .catch(err => {
+        console.log(err);
+    });
+}
+
 
 let sportSet = new Set();   //to store the sports of the coaching sessions
 let coachSet = new Set();   //to store the coaches of the coaching sessions
