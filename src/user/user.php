@@ -571,6 +571,20 @@ class User extends Actor implements JsonSerializable{
         return true;
     }
 
+    public function cancelCoachingSessionRequest($sessionObj){
+        $sql = sprintf("DELETE FROM `user_request_coaching_session` 
+        WHERE `userID` = '%s'
+        AND `sessionID` = '%s'",
+        $this -> connection -> real_escape_string($this -> userID),
+        $this -> connection -> real_escape_string($sessionObj -> getSessionID()));
+
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+        return true;
+    }
+
     public function giveFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //generalized function to give feedback to coach or branch
         if(get_class($feedbackObj) === 'Coaching_Session'){ //the user is giving feedback to a coach
             return $this -> giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating);

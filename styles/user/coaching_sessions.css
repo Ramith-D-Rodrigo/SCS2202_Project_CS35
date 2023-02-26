@@ -62,3 +62,31 @@
     text-align: center;
     margin-bottom: 5rem;
 }
+
+#msgBox{
+    padding: 25px;
+    position:absolute; 
+    display:none; 
+    top:50%; 
+    left:50%; 
+    transform: translate(-50%, -50%);
+    animation: slideBottom 0.5s ease-in-out;
+}
+
+#msg{
+    text-align: center;
+    font-size: 2rem;
+}
+
+@keyframes slideBottom {
+    0% {
+        transform: translate(-50%, -50%);
+        top: -50%;
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%);
+        top: 50%;
+        opacity: 1;
+    }
+}

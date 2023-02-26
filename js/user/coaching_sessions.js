@@ -109,7 +109,73 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
     formData.append('sessionID', selectedSession);
 
     console.log(Object.fromEntries(formData));
-    selectedSession = null; //reset the selected session
+
+    let successflag = false;
+
+    let icon = null;    //for the icon to be displayed in the message box
+    icon = document.createElement('i');
+    icon.style.fontSize = '6rem';
+    icon.style.margin = '4rem 0';
+
+    //send the request to the server
+    fetch("../../controller/user/cancel_coaching_session_request_controller.php", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(Object.fromEntries(formData))
+    })
+    .then(res => {
+
+        if(res.ok){
+            successflag = true;
+            const removingSession = document.getElementById(selectedSession); //select the session div
+            removingSession.remove();   //remove the session div
+
+            //successful icon
+            icon.classList.add('fas', 'fa-check-circle', 'success-icon');
+            icon.style.color = 'green';
+        }
+        else{
+            //error icon
+            icon.classList.add('fas', 'fa-times-circle', 'error-icon');
+            icon.style.color = 'red';
+        }
+                //reset the selected session
+        selectedSession = null;
+
+        return res.json();
+    })
+    .then(data => {
+        //close the popup
+        popUpCancellation(e);
+
+        const msgBox = document.querySelector('#msgBox');
+        const msg = msgBox.querySelector("#msg");
+
+        msg.innerHTML = data.msg;
+        msg.appendChild(icon);
+        msgBox.style.display = 'block';
+
+
+        //display the message box
+        msgBox.style.display = 'block';
+
+        //blur the main
+        const main = document.querySelector('main');
+        main.classList.add('main-blur');
+        disableElementsInMain(main);
+
+        main.addEventListener('click', function mainBlur(e){
+            msgBox.style.display = 'none';
+            main.classList.remove('main-blur');
+            enableElementsInMain(main);
+            main.removeEventListener('click', mainBlur);
+        });
+    })
+    .catch(err => {
+        console.log(err);
+    });
 }
 
 const popUpCancellation = (e) => {   //close the confirmation div

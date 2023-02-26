@@ -17,7 +17,7 @@
                 <link rel="stylesheet" href="/styles/general/our_sports.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
                 <link rel="stylesheet" href="/styles/user/coaching_sessions.css">
-        <title>Our Sports</title>
+        <title>Coaching Sessions</title>
             </head>
             <body>
                 <?php
@@ -87,6 +87,11 @@
                             <button id="cancelBtn" class="user-selection-btn">No<i class="fas fa-times" style="margin: 0 0.5rem"></i>
                             </button>
                         </div>
+                    </div>
+                </div>
+                <div class="content-box" id="msgBox">
+                    <div style="text-align:center">
+                        <div id="msg" style="display:flex; flex-direction:column;"></div>
                     </div>
                 </div>
             </body>
