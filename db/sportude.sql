@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 25, 2023 at 02:53 PM
+-- Generation Time: Feb 26, 2023 at 03:49 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -500,18 +500,20 @@ INSERT INTO `student` (`stuID`) VALUES
 
 CREATE TABLE `student_coach_feedback` (
   `feedbackID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `description` varchar(250) NOT NULL,
+  `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `rating` int NOT NULL,
   `coachID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `stuID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `stuID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `feedbackDate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `student_coach_feedback`
 --
 
-INSERT INTO `student_coach_feedback` (`feedbackID`, `description`, `rating`, `coachID`, `stuID`) VALUES
-('feedback1', 'Amazing', 4, 'coach_tha63cce6a49befd', 'ramRod63816dc9007b4');
+INSERT INTO `student_coach_feedback` (`feedbackID`, `description`, `rating`, `coachID`, `stuID`, `feedbackDate`) VALUES
+('coachFB63fb6d8cde7ca', 'waeasd', 4, 'coach_tha63cce6a49befd', 'ramRod63816dc9007b4', '2023-02-26'),
+('feedback1', 'Amazing', 4, 'coach_tha63cce6a49befd', 'ramRod63816dc9007b4', '2022-02-03');
 
 -- --------------------------------------------------------
 
@@ -733,13 +735,6 @@ CREATE TABLE `user_request_coaching_session` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `user_request_coaching_session`
---
-
-INSERT INTO `user_request_coaching_session` (`userID`, `sessionID`, `requestDate`, `message`) VALUES
-('ramRod63816dc9007b4', 'session2', '2023-02-22', 'i wanna play basketball');
-
---
 -- Indexes for dumped tables
 --
 
@@ -902,7 +897,7 @@ ALTER TABLE `student_coach_feedback`
 -- Indexes for table `student_registered_session`
 --
 ALTER TABLE `student_registered_session`
-  ADD PRIMARY KEY (`stuID`,`sessionID`),
+  ADD PRIMARY KEY (`stuID`,`sessionID`,`joinDate`) USING BTREE,
   ADD KEY `session_id` (`sessionID`);
 
 --
@@ -955,7 +950,7 @@ ALTER TABLE `user_medical_concern`
 -- Indexes for table `user_request_coaching_session`
 --
 ALTER TABLE `user_request_coaching_session`
-  ADD PRIMARY KEY (`userID`,`sessionID`,`requestDate`) USING BTREE,
+  ADD PRIMARY KEY (`userID`,`sessionID`) USING BTREE,
   ADD KEY `session_id` (`sessionID`);
 
 --
