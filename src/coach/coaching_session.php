@@ -1,5 +1,6 @@
 <?php
     require_once("../../src/general/sport.php");
+    require_once("../../src/coach/coach.php");
 
     class Coaching_Session implements JsonSerializable{
         private $sessionID;
@@ -67,6 +68,22 @@
             $result -> free_result();
             
             return $this;
+        }
+
+        public function getCoach($database) : Coach{    //returns the coach who is conducting the coaching session as a Coach object
+            $sql = sprintf("SELECT `coachID` FROM `coaching_session` WHERE `sessionID` = '%s'",
+            $database -> real_escape_string($this -> sessionID));
+
+            $result = $database -> query($sql);
+
+            $obj = $result -> fetch_object();
+
+            $coach = new Coach();
+            $coach -> setUserID($obj -> coachID);
+            $result -> free_result();
+            unset($obj);
+
+            return $coach;
         }
 
         public function getAvailability($database){
