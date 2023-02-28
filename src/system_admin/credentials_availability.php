@@ -90,4 +90,14 @@
         }
         return $unavailable;
     }
+
+    function checkSystemMaintenance($database){
+        $result = $database -> query("SELECT * FROM `system_maintenance`");
+        $unavailable = false;
+        if($result ->num_rows > 0){
+            $unavailable = true;
+        }
+
+        return $unavailable;
+    }
 ?>

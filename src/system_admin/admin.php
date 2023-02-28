@@ -242,6 +242,18 @@ class Admin extends Actor{
             return false;
         }
     }
+
+    public function addSystemMaintenance($startDate,$hrs,$mins,$startTime,$database){
+        $downTime = $hrs.":".$mins.":00";
+        $sql = sprintf("INSERT INTO `system_maintenance`(`startingDate`,`adminID`,`expectedDowntime`,`startingTime`) VALUES ('%s','%s','%s','%s')",
+        $database -> real_escape_string($startDate),
+        $database -> real_escape_string($this -> userID),
+        $database -> real_escape_string($downTime),
+        $database -> real_escape_string($startTime));
+
+        $result = $database -> query($sql);
+        return $result;
+    }
 }
 
 ?>
