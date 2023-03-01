@@ -29,4 +29,39 @@ main::before{
     content: none;
 }
 
+.dashboard-cards{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: stretch;
+    align-content: stretch;
+    flex-wrap: wrap;
+
+}
+
+.card-title{
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    text-align: center;
+}
+
+.single-card{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    min-width: 30%;
+}
+
+
+.card-button{
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    margin: 2rem auto;
+    width: 100%;
+}
 
