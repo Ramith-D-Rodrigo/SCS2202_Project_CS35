@@ -150,7 +150,7 @@
             return $managerID;
         } */
 
-        public function getReceptionistID($database){  //get Receptionist ID
+/*         public function getReceptionistID($database){  //get Receptionist ID
             if(isset($this -> receptionist)){
                 return $this -> receptionist;
             }
@@ -167,6 +167,53 @@
             $this -> currReceptionist = $receptionist;
             return $receptionist;
         }
+
+        public function getCurrentReceptionist($database){
+            $sql = sprintf("SELECT currReceptionist FROM branch WHERE branchID = '%s'",
+            $database -> real_escape_string($this -> branchID));
+
+            $result = $database -> query($sql);
+
+            $receptionist = $result -> fetch_object();
+            $this -> currReceptionist = $receptionist -> currReceptionist;
+
+            $recep = new Receptionist();
+            $recep -> setUserID($receptionist -> currReceptionist);
+
+            return $recep;
+        }
+
+        public function getCurrentManager($database){
+            $sql = sprintf("SELECT currManager FROM branch WHERE branchID = '%s'",
+            $database -> real_escape_string($this -> branchID));
+
+            $result = $database -> query($sql);
+
+            $manager = $result -> fetch_object();
+            $this -> currManager = $manager -> currManager;
+
+            $man = new Manager();
+            $man -> setUserID($manager -> currManager);
+
+            return $man;
+        }
+
+        public function offeringSports($database){  //return an array of sports offered by the branch (the sports that have courts with accepted status)
+            $sports = [];
+            //get all the courts
+            $courts = $this -> getBranchCourts(database : $database,  courtStatus : 'a');
+
+            $sportIDs = [];
+            foreach($courts as $court){
+                $courtSport = $court -> getSport($database);
+
+                if(!in_array($courtSport -> getID(), $sportIDs)){   //exclude duplicate sports
+                    array_push($sports, $courtSport);
+                }
+            }
+
+            return $sports;
+        } */
 
 
         public function getAllSports($database){    //only courts with accepted status
@@ -425,15 +472,17 @@
             return $allMaintenances;
         }
 
-        public function getBranchCourts($database,Sport $sport = null){ //get courts of the branch (null means all, otherwise courts of specific court)
+        public function getBranchCourts($database,Sport $sport = null, $courtStatus = '%'){ //get courts of the branch (null means all, otherwise courts of specific court)
             if($sport == null){
-                $sql = sprintf("SELECT `courtID` FROM `sports_court` WHERE `branchID` = '%s'",
-                $database -> real_escape_string($this -> branchID));
+                $sql = sprintf("SELECT `courtID` FROM `sports_court` WHERE `branchID` = '%s' AND `requestStatus` LIKE '%s'",
+                $database -> real_escape_string($this -> branchID),
+                $database -> real_escape_string($courtStatus));
             }
             else{
-                $sql = sprintf("SELECT `courtID` FROM `sports_court` WHERE `branchID` = '%s' AND `sportID` = '%s'",
+                $sql = sprintf("SELECT `courtID` FROM `sports_court` WHERE `branchID` = '%s' AND `sportID` = '%s' AND `requestStatus` LIKE '%s'",
                 $database -> real_escape_string($this -> branchID),
-                $database -> real_escape_string($sport -> getID()));
+                $database -> real_escape_string($sport -> getID()),
+                $database -> real_escape_string($courtStatus));
             }
 
             $result = $database -> query($sql);
