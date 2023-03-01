@@ -254,6 +254,27 @@ class Admin extends Actor{
         $result = $database -> query($sql);
         return $result;
     }
+
+    public function removeSystemMaintenance($database){
+        $sql = sprintf("DELETE FROM `system_maintenance` WHERE `adminID` = '%s'",
+        $database -> real_escape_string($this -> userID));
+
+        $result = $database -> query($sql);
+        return $result;
+    }
+
+    public function viewSystemMaintenance($database){
+        $sql = sprintf("SELECT * FROM `system_maintenance` WHERE `adminID` = '%s'",
+        $database -> real_escape_string($this -> userID));
+
+        $result = $database -> query($sql) -> fetch_object();
+        $maintenanceR = [];
+        if($result !== NULL){
+            $maintenanceR = [$result];
+        }
+        
+        return $maintenanceR;
+    }
 }
 
 ?>

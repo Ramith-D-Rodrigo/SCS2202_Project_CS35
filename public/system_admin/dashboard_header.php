@@ -21,13 +21,16 @@
                     echo "Owner Requests";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/system_admin/add_system_maintenance.php'){  //add system maintenance
-                    echo "System Maintenance";
+                    echo "Add System Maintenance";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/system_admin/branch_request.php?'){  //to view particular branch request
                     echo "Branch Request";
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/system_admin/account_settings.php'){  //to view particular branch request
                     echo "Account Settings";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/system_admin/remove_system_maintenance.php'){  //to view particular branch request
+                    echo "View System Maintenance";
                 }
             ?>
         </div>
