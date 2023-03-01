@@ -593,6 +593,24 @@ class User extends Actor implements JsonSerializable{
         return true;
     }
 
+    public function leaveCoachingSession($sessionObj){
+        date_default_timezone_set(SERVER_TIMEZONE);
+        $date = date('Y-m-d');
+        $sql = sprintf("UPDATE `student_registered_session` 
+        SET `leaveDate` = '%s'
+        WHERE `stuID` = '%s'
+        AND `sessionID` = '%s'",
+        $this -> connection -> real_escape_string($date),
+        $this -> connection -> real_escape_string($this -> userID),
+        $this -> connection -> real_escape_string($sessionObj -> getSessionID()));
+
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+        return true;
+    }
+
     public function giveFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //generalized function to give feedback to coach or branch
         if(get_class($feedbackObj) === 'Coaching_Session'){ //the user is giving feedback to a coach
             return $this -> giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating);
