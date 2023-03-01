@@ -95,6 +95,17 @@ const leaveSessionPopUp = (e) => {   //popup confirmation for leaving the sessio
 
     header.innerHTML = "Are you sure you want to leave this session?";
 
+    //add a small notice
+    const notice = document.createElement('p');
+    notice.innerHTML = "If you have any feedback for the coach, please add it before leaving the session.";
+
+    notice.style.fontSize = '0.8rem';
+    notice.style.marginTop = '4rem';
+
+    notice.style.fontStyle = 'italic';
+
+    header.appendChild(notice);
+
     //blur the main and disable click
     const main = document.querySelector('main');
     main.classList.add('main-blur');
@@ -106,7 +117,69 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
     formData.append('sessionID', selectedSession);
 
     console.log(Object.fromEntries(formData));
-    selectedSession = null; //reset the selected session
+
+    let icon = null;    //for the icon to be displayed in the message box
+    icon = document.createElement('i');
+    icon.style.fontSize = '6rem';
+    icon.style.margin = '4rem 0';
+
+    //send the sessionID to the server
+    fetch("../../controller/user/leave_coaching_session_controller.php", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(Object.fromEntries(formData))
+    })
+    .then(res => {
+        if(res.ok){
+            //success icon
+            icon.classList.add('fas', 'fa-check-circle');
+            icon.style.color = 'green';
+        }
+        else{
+            //error icon
+            icon.classList.add('fas', 'fa-times-circle', 'error-icon');
+            icon.style.color = 'red';
+        }
+
+        selectedSession = null; //reset the selected session
+
+        return res.json();
+    })
+    .then(data => {
+        //close the popup
+        popUpCancellation(e);
+
+        const msgBox = document.querySelector('#msgBox');
+        const msg = msgBox.querySelector("#msg");
+
+        msg.innerHTML = data.msg;
+        msg.appendChild(icon);
+        msgBox.style.display = 'block';
+
+
+        //display the message box
+        msgBox.style.display = 'block';
+
+        //blur the main
+        const main = document.querySelector('main');
+        main.classList.add('main-blur');
+        disableElementsInMain(main);
+
+        main.addEventListener('click', function mainBlur(e){
+            msgBox.style.display = 'none';
+            main.classList.remove('main-blur');
+            enableElementsInMain(main);
+            main.removeEventListener('click', mainBlur);
+
+            //refresh the page for new data
+            window.location.reload();
+        });
+    })
+    .catch(err => {
+        console.error(err);
+    });
 }
 
 const cancelSessionRequestPopUp = (e) => {   //popup confirmation for session request cancellation
@@ -395,6 +468,7 @@ fetch("../../controller/user/coaching_sessions_controller.php")
                     photo: data.coaches[data.coachingSessions[i].coachID].photo
                 }
                 coachSet.add(coachObj);
+                console.log(coachSet);
 
                 //add coach image to the div
                 const coachImgContainer = document.createElement('div');
