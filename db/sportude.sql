@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 26, 2023 at 03:49 PM
+-- Generation Time: Mar 01, 2023 at 04:58 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -49,7 +49,7 @@ CREATE TABLE `branch` (
 
 INSERT INTO `branch` (`branchID`, `address`, `branchEmail`, `city`, `openingTime`, `closingTime`, `openingDate`, `revenue`, `ownerID`, `currManager`, `currReceptionist`, `ownerRequestDate`, `requestStatus`) VALUES
 ('col128423', 'Colombo Branch, Colombo', 'colombobr@sp.com', 'Colombo', '09:00:00', '20:00:00', '2022-12-07', NULL, NULL, 'managersecond1234', 'receptionisttwo123', NULL, 'a'),
-('kiri987521', 'Example Road, Kiribathgoda', 'kribathgodabr@sp.com', 'Kiribathgoda', '08:00:00', '19:00:00', '2022-11-26', NULL, NULL, 'managerkiri5436', NULL, NULL, 'a');
+('kiri987521', 'Example Road, Kiribathgoda', 'kribathgodabr@sp.com', 'Kiribathgoda', '08:00:00', '19:00:00', '2022-11-26', 0, NULL, 'managerkiri5436', NULL, NULL, 'a');
 
 -- --------------------------------------------------------
 
@@ -169,6 +169,43 @@ CREATE TABLE `coach_session_payment` (
   `processDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Triggers `coach_session_payment`
+--
+DELIMITER $$
+CREATE TRIGGER `update_branch_revenue_coach_insert` AFTER INSERT ON `coach_session_payment` FOR EACH ROW BEGIN
+    DECLARE currBranch VARCHAR(35) DEFAULT NULL;
+    DECLARE currRevenue double;
+    DECLARE paymentCourt VARCHAR(35);
+    
+    IF(New.status LIKE 'Processed') THEN
+    	SELECT sc.courtID INTO paymentCourt FROM sports_court sc INNER JOIN coaching_session cs ON cs.courtID = sc.courtID WHERE cs.sessionID = New.sessionID;
+    	SELECT b.revenue , b.branchID INTO currRevenue, currBranch FROM branch b INNER JOIN sports_court sc ON sc.branchID = b.branchID WHERE sc.courtID = paymentCourt;
+        IF(currRevenue IS NULL) THEN 
+    		UPDATE branch SET revenue = New.paymentAmount WHERE branchID = currBranch;
+    	ELSE 
+    		UPDATE branch SET revenue = currRevenue + New.paymentAmount WHERE branchID = currBranch;
+		END IF;
+	END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `update_branch_revenue_coach_update` AFTER UPDATE ON `coach_session_payment` FOR EACH ROW BEGIN
+    DECLARE currBranch VARCHAR(35) DEFAULT NULL;
+    DECLARE currRevenue double;
+    DECLARE paymentCourt VARCHAR(35);
+    
+    IF(New.status LIKE 'Refunded') THEN
+    	SELECT sc.courtID INTO paymentCourt FROM sports_court sc INNER JOIN coaching_session cs ON cs.courtID = sc.courtID WHERE cs.sessionID = New.sessionID;
+    	SELECT b.revenue , b.branchID INTO currRevenue, currBranch FROM branch b INNER JOIN sports_court sc ON sc.branchID = b.branchID WHERE sc.courtID = paymentCourt;
+    	UPDATE branch SET revenue = New.paymentAmount WHERE branchID = currBranch;
+    	UPDATE branch SET revenue = currRevenue + New.paymentAmount WHERE branchID = currBranch;
+	END IF;
+END
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -243,6 +280,7 @@ INSERT INTO `login_details` (`userID`, `username`, `emailAddress`, `password`, `
 ('managerkiri5436', 'manager_test', 'manager@kiribathgoda.com', '$2a$12$WSDZ.Td2VvI4CxwDHuFCUOZucTdUwG0dkdsXGvI7v2AuOf1rNHCUK', 'manager', 1),
 ('managersecond1234', 'manager_test2', 'managersecond@gmail.com', '$2a$12$2JO5RyV0bbGQjJn3UEc2seM4EWzQyF5gP9KfYmboH.1ZsXamyVpEe', 'manager', 1),
 ('nihWij638657d83c715', 'nihal_wij', 'nihal_wije@gmail.com', '$2y$10$dWp4y/hWGGWNICJzgTdM.e0EBAZcd7qUZEOJAQrEQ43ptT3kVcPfK', 'user', 1),
+('ownermn74625612', 'sportude_owner', 'owner@gmail.com', '$2a$12$SZojPsXrTIFuqKS9HBMmDO4RytRbnYvSIOeifZEqZaeCg9AsbB51q', 'owner', 1),
 ('ramRod63816dc9007b4', 'ramith_rodrigo', 'ramithrodrigo@hotmail.com', '$2y$10$Eqr0.DoRjgxqGq2pAZSwK.Xl1jThxRLKRXQU6QM3qNXh693P6mx7O', 'user', 1),
 ('receptionistkiri1241', 'recep_test', 'receptionist@kiribathgoda.com', '$2a$12$PFT9firhsYibGVVtHel8Me/hGaVe9gflyxRmY6DyrlQUERJorny02', 'receptionist', 1),
 ('receptionisttwo123', 'recep_test2', 'receptionisttwo@gmail.com', '$2a$12$LkkvBKEkL707dptt.X8hSuwoOaOaXG9iwrxa33s5zGofANtLgaxyG', 'receptionist', 1),
@@ -385,7 +423,44 @@ INSERT INTO `reservation` (`reservationID`, `date`, `startingTime`, `endingTime`
 ('Res-ram63ee56b99b8cf', '2023-02-25', '13:00:00', '16:00:00', 2, 1050, 'badcourt1213', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-02-16 16:15:53', ''),
 ('Res-ram63ee57da3e981', '2023-02-20', '10:00:00', '14:00:00', 2, 2000, 'basket345', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-02-16 16:20:42', ''),
 ('Res-ram63f48625b04c0', '2023-02-25', '10:00:00', '12:00:00', 2, 700, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-02-21 08:51:49', ''),
-('Res-ram63f8dc83d1add', '2023-03-02', '11:00:00', '12:00:00', 2, 350, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-02-24 15:49:23', 'ch_3Mf3WkKUOfa0wCPZ10vmygDn');
+('Res-ram63f8dc83d1add', '2023-03-02', '11:00:00', '12:00:00', 2, 350, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-02-24 15:49:23', 'ch_3Mf3WkKUOfa0wCPZ10vmygDn'),
+('Res-ram63ff5779743f6', '2023-03-16', '10:00:00', '12:00:00', 2, 700, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-01 13:47:37', 'ch_3Mgq0eKUOfa0wCPZ1itZhsUD'),
+('Res-ram63ff57af98ddf', '2023-03-16', '12:00:00', '14:00:00', 2, 700, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-01 13:48:31', 'ch_3Mgq1XKUOfa0wCPZ1ic7SswC'),
+('Res-ram63ff599745df5', '2023-03-17', '12:00:00', '14:00:00', 2, 700, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-01 13:56:39', 'ch_3Mgq9OKUOfa0wCPZ0ropNH5h'),
+('Res-ram63ff5e9117ab5', '2023-03-06', '12:00:00', '15:00:00', 2, 1050, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-01 14:17:53', 'ch_3MgqTwKUOfa0wCPZ03sgHEjx'),
+('Res-ram63ff607f02abf', '2023-03-09', '10:00:00', '13:00:00', 2, 1500, 'basket345', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-01 14:26:07', 'ch_3MgqbuKUOfa0wCPZ1lLk9EJN'),
+('Res-ram63ff61aabfe0e', '2023-03-07', '10:00:00', '12:00:00', 2, 700, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-01 14:31:06', 'ch_3MgqgkKUOfa0wCPZ1zaWVmGS');
+
+--
+-- Triggers `reservation`
+--
+DELIMITER $$
+CREATE TRIGGER `update_branch_revenue_insert` AFTER INSERT ON `reservation` FOR EACH ROW BEGIN
+    DECLARE currBranch VARCHAR(35) DEFAULT NULL;
+    DECLARE amount double;
+    DECLARE currRevenue double;
+    
+    SELECT b.revenue , b.branchID INTO currRevenue, currBranch FROM branch b INNER JOIN sports_court sc ON sc.branchID = b.branchID WHERE sc.courtID = New.sportCourt;
+    IF(currRevenue IS NULL) THEN 
+    	UPDATE branch SET revenue = New.paymentAmount WHERE branchID = currBranch;
+    ELSE 
+    	UPDATE branch SET revenue = currRevenue + New.paymentAmount WHERE branchID = currBranch;
+	END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `update_branch_revenue_update` AFTER UPDATE ON `reservation` FOR EACH ROW BEGIN
+    DECLARE currBranch VARCHAR(35) DEFAULT NULL;
+    DECLARE currRevenue double;
+    
+    IF(Old.status LIKE 'Cancelled' AND New.status LIKE 'Refunded') THEN
+    	SELECT b.revenue , b.branchID INTO currRevenue, currBranch FROM branch b INNER JOIN sports_court sc ON sc.branchID = b.branchID WHERE sc.courtID = New.sportCourt;
+    	UPDATE branch SET revenue = currRevenue - New.paymentAmount WHERE branchID = currBranch;
+	END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -533,7 +608,7 @@ CREATE TABLE `student_registered_session` (
 --
 
 INSERT INTO `student_registered_session` (`stuID`, `sessionID`, `joinDate`, `leaveDate`) VALUES
-('ramRod63816dc9007b4', 'session1', '2023-02-01', NULL);
+('ramRod63816dc9007b4', 'session1', '2023-02-01', '2023-03-01');
 
 -- --------------------------------------------------------
 
