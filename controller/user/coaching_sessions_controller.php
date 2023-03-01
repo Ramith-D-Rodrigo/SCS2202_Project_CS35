@@ -16,8 +16,19 @@
 
     $returnMsg = [];
 
-    //check whether the user is a student
-    if(!$user -> isStudent()){  
+    //get ongoing registered coaching sessions
+    $ongoingCoachingSessions = $user -> getOngoingCoachingSessions();
+
+    //get pending coaching session requests
+    $pendingCoachingSessions = $user -> getPendingCoachingSessionRequests();    //returns an array of coaching session objects
+
+    //get left coaching sessions
+    $leftCoachingSessions = $user -> getLeftCoachingSessions();
+
+
+    $allSessions = array_merge($ongoingCoachingSessions, $pendingCoachingSessions, $leftCoachingSessions); //merge all the arrays
+
+    if(empty($allSessions)){    //no sessions
         $returnMsg['msg'] = "You haven't joined any coaching sessions yet.";
         http_response_code(400);
         header('Content-Type: application/json');
@@ -25,21 +36,23 @@
         die();
     }
 
-    //get ongoing registered coaching sessions
-    $ongoingCoachingSessions = $user -> getOngoingCoachingSessions();
-
-    $pendingCoachingSessions = $user -> getPendingCoachingSessionRequests();    //returns an array of coaching session objects
-
-    $leftCoachingSessions = $user -> getLeftCoachingSessions();
-
-
-    $allSessions = array_merge($ongoingCoachingSessions, $pendingCoachingSessions, $leftCoachingSessions); //merge all the arrays
+    
     $coaches = [];
     $courts = [];
 
+    //store the session ids in an array for excluding duplicates (if the user has requested to join a session which he has previously left
+    //or if the user has joined a session which he has previously left)
+
+    $sessionIDs = [];
+
     //get general details of the coaching sessions (day, time, sport, coach)
 
-    foreach($allSessions as $currSession){
+    foreach($allSessions as $key => $currSession){
+        if(in_array($currSession -> getSessionID(), $sessionIDs)){ //if the session is already in the array
+            //remove the currentSession from allSessions
+            unset($allSessions[$key]);
+        }
+
         $currSession -> getDetails($user -> getConnection(), ['day', 'startingTime', 'endingTime', 'coachID', 'courtID', 'paymentAmount']);
         $temp = json_decode(json_encode($currSession), true);
 
@@ -87,6 +100,8 @@
         }else if(in_array($currSession, $leftCoachingSessions)){    //left
             $currSession -> status = 'left';
         }
+
+        array_push($sessionIDs, $currSession -> getSessionID());
 
     }
 
