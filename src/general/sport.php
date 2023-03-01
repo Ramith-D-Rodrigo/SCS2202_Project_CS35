@@ -45,6 +45,10 @@
             $this -> sportID = $id;
         }
 
+        public function getID(){
+            return $this -> sportID;
+        }
+
         public function getSportID($spName, $database) {
             $sql = sprintf("SELECT `sportID` FROM `sport`
             WHERE `sportName`

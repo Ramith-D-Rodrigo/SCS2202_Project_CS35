@@ -15,6 +15,10 @@
             $this -> courtID = $court_id;
         }
 
+        public function getID(){
+            return $this -> courtID;
+        }
+
         public function getSchedule($database){ //get the reservation schedule of a certain court
             //get user reservations
             $sql = sprintf("SELECT * FROM `reservation` 

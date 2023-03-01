@@ -2,6 +2,8 @@
     require_once("../../src/manager/manager.php");
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/general/branch_feedback.php");
+    require_once("../../src/general/sport.php");
+    require_once("../../src/general/sport_court.php");
 
     class Branch implements JsonSerializable{
         private $branchID;
@@ -421,6 +423,93 @@
             }
 
             return $allMaintenances;
+        }
+
+        public function getBranchCourts($database,Sport $sport = null){ //get courts of the branch (null means all, otherwise courts of specific court)
+            if($sport == null){
+                $sql = sprintf("SELECT `courtID` FROM `sports_court` WHERE `branchID` = '%s'",
+                $database -> real_escape_string($this -> branchID));
+            }
+            else{
+                $sql = sprintf("SELECT `courtID` FROM `sports_court` WHERE `branchID` = '%s' AND `sportID` = '%s'",
+                $database -> real_escape_string($this -> branchID),
+                $database -> real_escape_string($sport -> getID()));
+            }
+
+            $result = $database -> query($sql);
+
+            $allCourts = [];
+            while($row = $result -> fetch_object()){
+                $tempCourt = new Sports_Court($row -> courtID);
+                array_push($allCourts, $tempCourt);
+                unset($tempCourt);
+                unset($row);
+            }
+
+            return $allCourts;
+        }
+
+        public function getBranchRevenue($database, $dateFrom, $dateTo){    //function to get the revenue of the branch within specific range
+            $totalRevenue = 0;
+
+            //get the revenue of the branch from the reservations
+            $totalRevenue += $this -> courtReservationRevenue($dateFrom, $dateTo, $database);
+
+            //get the revenue of the branch from the coach session payments
+            $totalRevenue += $this -> coachSessionPaymentRevenue($dateFrom, $dateTo, $database);
+
+            return $totalRevenue;
+        }
+
+        public function courtReservationRevenue($dateFrom, $dateTo, $database){
+            //first get all the courts of the branch
+            $allCourts = $this -> getBranchCourts($database);
+
+            //build the sql query for user reservations
+            $userSql = "SELECT SUM(`paymentAmount`) as `total` FROM `reservation` WHERE `sportCourt` IN (";
+            foreach($allCourts as $court){
+                $userSql .= "'".$court -> getID()."',";
+            }
+
+            $userSql = substr($userSql, 0, -1); //remove the last comma
+
+            $userSql .= sprintf(") AND `date` >= '%s' AND `date` <= '%s' AND `status` NOT LIKE 'Cancelled' OR `status` NOT LIKE 'Refunded'",
+            $database -> real_escape_string($dateFrom),
+            $database -> real_escape_string($dateTo));
+
+            $result = $database -> query($userSql);
+            $row = $result -> fetch_object();
+            $totalRevenue = $row -> total;
+
+            return $totalRevenue;
+        }
+
+        public function coachSessionPaymentRevenue($dateFrom, $dateTo, $database){
+            //first get all the courts of the branch
+            $allCourts = $this -> getBranchCourts($database);
+
+            //build the sql query for coaching session payments of the coach
+            $coachSql = "SELECT SUM(`csp`.`paymentAmount`) as `total` 
+            FROM `coach_session_payment` `csp` 
+            INNER JOIN `coaching_session` `cs` 
+            ON `cs`.`sessionID` = `csp`.`sessionID` 
+            WHERE `cs`.`courtID` IN (";
+
+            foreach($allCourts as $court){
+                $coachSql .= "'".$court -> getID()."',";
+            }
+
+            $coachSql = substr($coachSql, 0, -1); //remove the last comma
+
+            $coachSql .= sprintf(") AND `csp`.`paymentDate` >= '%s' AND `csp`.`paymentDate` <= '%s' AND `csp`.`status` LIKE 'Processed'",
+            $database -> real_escape_string($dateFrom),
+            $database -> real_escape_string($dateTo));
+
+            $result = $database -> query($coachSql);
+            $row = $result -> fetch_object();
+            $totalRevenue = $row -> total;
+            
+            return $totalRevenue;
         }
 
         public function jsonSerialize():mixed{
