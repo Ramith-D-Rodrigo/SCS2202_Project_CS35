@@ -32,8 +32,6 @@
             }
             else{
                 $sql .= implode(", ", $wantedColumns);
-                //remove last comma
-                $sql = substr($sql, 0, -2);
             }
 
             $sql .= sprintf(" FROM `branch`
