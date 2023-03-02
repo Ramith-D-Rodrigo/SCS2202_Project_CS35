@@ -32,10 +32,9 @@
             }
             else{
                 $sql .= implode(", ", $wantedColumns);
+                //remove last comma
+                $sql = substr($sql, 0, -2);
             }
-
-            //remove last comma
-            $sql = substr($sql, 0, -2);
 
             $sql .= sprintf(" FROM `branch`
             WHERE
@@ -596,6 +595,8 @@
                     $returnJSON[$key] = $value;
                 }
             }
+
+            return $returnJSON;
         }
 
         public  function get_time($database){

@@ -23,7 +23,9 @@
             $branch = new Branch($i['branch']);
             $branch -> getDetails($user -> getConnection());    //get branch details
 
-            $courts = $branch -> getSportCourts($i['sportID'], $user -> getConnection(), 'a');    //get the number of courts of the current considering branch (request status should be accepted)
+            $tempSport = new Sport();
+            $tempSport -> setID($i['sportID']);
+            $courts = $branch -> getBranchCourts($user -> getConnection(), $tempSport, 'a');    //get the number of courts of the current considering branch (request status should be accepted)
             $brRating = $branch -> getBranchRating($user -> getConnection());  //get the branch rating
             $brDiscount = $branch -> getCurrentDiscount($user -> getConnection());    //get the branch discount
             $branchJSON = json_encode($branch);
