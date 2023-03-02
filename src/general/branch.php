@@ -438,11 +438,16 @@
         }
 
         public  function get_time($database){
-            $sql=sprintf( "SELECT `openingTime`,`closingTime` FROM `branch` WHERE `branchID`LIKE '%s' ",
+            $sql=sprintf( "SELECT `openingTime`,`closingTime` FROM `branch` WHERE `branchID` LIKE '%s' ",
             $database -> real_escape_string($this -> branchID));
             $Result = $database -> query($sql);
             $timeResult=[];
              
+            $row = $Result -> fetch_object();
+
+            $timeResult['openingTime'] = $row -> openingTime;
+
+
             foreach($Result as $time){
                 $temporaryOpen =$time['openingTime'];
                 $temporaryClose= $time['closingTime'];
@@ -451,8 +456,27 @@
             // while($row =  $Result  -> fetch_object()) {
             //     array_push($timeResult,[ $row['openingTime'] -> openingTime,$row['closingTime'] -> closingTime]);
             // }
+
+           
             return  $timeResult;
-    }
+        }
+
+        public function changeTime($database, $openingTime ,$closingTime){
+            $result = $database -> query(sprintf("UPDATE `branch` 
+            SET `openingTime` = '%s', `closingTime` = '%s' WHERE `branchID` = '%s'",
+            // $database -> real_escape_string($this -> managerID),
+            // $database -> real_escape_string($this -> contactNum),
+            $database -> real_escape_string($openingTime),
+            $database -> real_escape_string($closingTime),
+            $database -> real_escape_string($this ->branchID)));
+    
+            return $result;
+    
+        }
+
+      
+
+        
     
     }
    
