@@ -23,6 +23,7 @@
             $branch = new Branch($i['branch']);
             $branch -> getDetails($user -> getConnection());    //get branch details
 
+            $branch -> getBranchPictures($user -> getConnection());  //get the branch pictures
             $tempSport = new Sport();
             $tempSport -> setID($i['sportID']);
             $courts = $branch -> getBranchCourts($user -> getConnection(), $tempSport, 'a');    //get the number of courts of the current considering branch (request status should be accepted)
@@ -38,8 +39,7 @@
             unset($neededInfo['closingTime']);
 
             foreach($courts as $currCourt){ //to get the court pictures
-                $court = new Sports_Court($currCourt);
-                $courtPics = $court -> getPhotos($user -> getConnection());
+                $courtPics = $currCourt -> getPhotos($user -> getConnection());
                 
                 foreach($courtPics as $currPic){    //add the court photos to the branch photos
                     array_push($neededInfo['photos'], $currPic);
