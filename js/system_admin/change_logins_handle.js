@@ -1,4 +1,15 @@
-//Event Handling and Client Side Validation in Staff Registration
+const currEmail = document.getElementById("currEmail");
+const confirmBtn = document.getElementById("confirmBtn");
+const role = document.getElementById("role");
+fetch("../../controller/system_admin/admin_login_details_controller.php")
+    .then((res) => res.json())
+    .then((data) => {
+        //console.log(data);
+        currEmail.value = data[1];
+        confirmBtn.value = data[0];
+        role.value = "Admin";
+    });
+
 
 var verbose = true; //debugging
 
@@ -24,18 +35,9 @@ function togglePassword(element){
     });
 }
 
-function validateForm(event){
-    const errMsg = document.getElementById("err-msg");   //For Displaying the Error messages
-    const password = document.getElementById("newPwd");
-    const cPassword = document.getElementById("confirmPwd");
-    const branch = document.getElementById("branchName");
-    const staffRole = document.getElementById("staffRole");
-
-    if(branch.value === "" || staffRole.value === ""){   //Haven't selected any specific role 
-        event.preventDefault(); //do not submit
-        errMsg.innerHTML = "Haven't Selected any Specific Role";
-        return false;
-    }
+const password = document.getElementById("password");
+const cPassword = document.getElementById("cPassword");
+function validateForm(element){
     const form = document.querySelector("form");
 
     if(verbose){
@@ -51,11 +53,7 @@ function validateForm(event){
         errMsg.innerHTML = "Please Add Valid Information";
         return false;
     }
-        
-    errMsg.innerHTML = '' //empty before the validation
+
     return true;
     
 }
-
-
-

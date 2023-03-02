@@ -25,30 +25,51 @@
     ?>
     <main class="body-container">
         <div class="content-box">
-            <form type="POST" action="/src/system_admin/system_maintenance_controller.php">
+            <form method="POST" action="../../controller/system_admin/system_maintenance_controller.php">
                 <div class="row-container">
                     <div class="left-side">Starting Date: </div>
                     <div class="right-side"><input required type="date" name="startingDate" id="startingDate"></div>
                 </div>
                 <div class="row-container">
                     <div class="left-side">Starting Time: </div>
-                    <div class="right-side"><input required type="time" placeholder="Hrs:Mins AM/PM" name="startingTime" id="startingTime"></div>
+                    <div class="right-side"><input required type="time" name="startingTime" id="startingTime"></div>
                 </div>
                 <div class="row-container">
                     <div class="left-side">Expected Down Time: </div>
-                    <div class="right-side"><input required name="mainTime" 
-                    id="mainTime" placeholder="Hrs:Mins Format"></div>
+                    <div class="right-side" style="display:flex;flex-direction:row">
+                        <input style="width: 100px;" required type="number" 
+                        name="Hrs" id="Hrs" placeholder="Hrs"
+                        min="0" max="168"> </input>
+                        <input style="width: 15px;" readonly value=":"></input>
+                        <input style="width: 100px;" required type="number" 
+                        id="Mins" name="Mins" placeholder="Mins"
+                        min="0" max="59"></input>
+                    </div>
                 </div>
                 <div class="row-container" style="justify-content: flex-end;">
-                    <button onclick="return validateForm(event)" type="submit" class="viewBtn">Add</button> 
-                    <button class="viewBtn" onclick="window.location.href='/public/system_admin/add_system_maintenance.php'">Cancel</button>
+                    <button onclick="return validateForm(event)" type="submit">Add</button> 
+                    <button  onclick="window.location.href='/public/system_admin/add_system_maintenance.php'">Cancel</button>
+                </div>
+                <div id="err-msg" class="err-msg">
+                    <?php
+                        if(isset($_SESSION['maintenanceErr'])){
+                            echo $_SESSION['maintenanceErr'];
+                            echo '<br>';
+                            unset ($_SESSION['maintenanceErr']);
+                        }
+                    ?>
+
+                </div>
+                <div id="successmsg" class="success-msg">
+                    <?php 
+                        if(isset($_SESSION['successMsg'])){
+                            echo $_SESSION['successMsg'];
+                            echo '<br>';
+                            unset($_SESSION['successMsg']);
+                        }
+                    ?>
                 </div>
             </form>
-            <div id="err-msg">
-
-            </div>
-            <div id="successmsg" class="success-msg">
-            </div>
         </div>
     </main>
     <?php

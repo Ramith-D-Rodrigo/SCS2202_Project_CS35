@@ -13,7 +13,7 @@
     $accountDetails = $admin -> getAccountDetails($role,$branchID,$connection);
 
     if(count($accountDetails)===0){
-        array_push($accountDetails,['errMsg' =>"Sorry no record of such role in the particular branch"]);
+        array_push($accountDetails,['errMsg' =>"Sorry No Record of Such Role in the Particular Branch"]);
     }
 
     header('Content-Type: application/json;');

@@ -24,7 +24,7 @@
     <div class="long-container">
         <div class=longTab>
             <div> System Maintenance</div> 
-            <div> <button> Finish </button> </div>
+            <div> <button onclick="window.location.href='/public/system_admin/remove_system_maintenance.php'"> Finish </button> </div>
             <div> <button onclick="window.location.href='/public/system_admin/add_system_maintenance.php'"> Add </button> </div>
         </div>
     </div>

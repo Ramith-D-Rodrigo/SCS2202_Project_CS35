@@ -23,7 +23,7 @@
         require_once("dashboard_header.php")
     ?>
     <main class="body-container">
-        <div class="content-box">
+        <div>
             <div id="err-msg">
             </div>
             <div id="requests" style="display:flex;flex-direction:column">
