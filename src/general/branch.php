@@ -146,7 +146,7 @@
             return $manager;
         }
 
-        public function getManagerID($database){ //get Manager ID (currently working)
+/*         public function getManagerID($database){ //get Manager ID (currently working)
             if(isset($this -> manager) || $this -> manager !== ''){ //the manager is set
                 return $this -> manager -> getID($database);
             }
@@ -169,9 +169,9 @@
             unset($row);
             $result -> free_result();
             return $managerID;
-        }
+        } */
 
-         public function getReceptionistID($database){  //get Receptionist ID
+/*          public function getReceptionistID($database){  //get Receptionist ID
             if(isset($this -> receptionist)){
                 return $this -> receptionist;
             }
@@ -187,7 +187,7 @@
             $receptionist = $result -> fetch_object();
             $this -> currReceptionist = $receptionist;
             return $receptionist;
-        }
+        } */
 
         public function getCurrentReceptionist($database){
             $sql = sprintf("SELECT currReceptionist FROM branch WHERE branchID = '%s'",
@@ -237,7 +237,7 @@
         }
 
 
-        public function getAllSports($database){    //only courts with accepted status
+/*         public function getAllSports($database){    //only courts with accepted status
             $sql = sprintf("SELECT DISTINCT `s`.`sportID`,`s`.`sportName` from `sport` `s`
             INNER JOIN `sports_court` `sc`
             ON `s`.`sportID` = `sc`.`sportID`
@@ -257,9 +257,9 @@
             $result -> free_result();
             
             return $sports;
-        }
+        } */
 
-        public function getAllCourts($database) {
+/*         public function getAllCourts($database) {
             $sql = sprintf("SELECT `courtName`
             FROM
             `sports_court`
@@ -277,9 +277,9 @@
             }
             $result -> free_result();
             return $courtNames;
-        }
+        } */
 
-        public function getSportCourts($sportID, $database, $status = ''){
+/*         public function getSportCourts($sportID, $database, $status = ''){
 
             if($status === ''){ //want all the courts of that sportID
                 $status = '%';  //wildcard
@@ -306,8 +306,8 @@
             }
             $result -> free_result();
             return $courts;
-        }
-
+        } */
+/* 
         public function getSportCourtNames($sportID, $database){
             $sql = sprintf("SELECT `courtName`
             FROM
@@ -331,7 +331,7 @@
             }
             $result -> free_result();
             return $courtNames;
-        }
+        } */
 
         public function updateBranchEmail($newEmail,$database) {
             $updateSQL = sprintf("UPDATE `branch` SET `branchEmail` = '%s' WHERE `branch`.`branchID` = '%s'",
@@ -341,6 +341,7 @@
             $result = $database -> query($updateSQL);
             return $result;
         }
+
         public function getBranchPictures($database){   //function get branch photos and store in the object
             $this -> photos = [];
             $sql = sprintf("SELECT `photo`
@@ -633,12 +634,6 @@
             return $result;
     
         }
-
-      
-
-        
     
     }
-   
-
 ?>
