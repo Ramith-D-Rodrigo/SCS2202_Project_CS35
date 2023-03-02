@@ -25,11 +25,35 @@
             $this -> branchID = $branch_id;
         }
 
-        public function getDetails($database, $wantedProperty = ''){
-            if($wantedProperty === 'branchID'){
-                return $this -> branchID;
+        public function getDetails($database, $wantedColumns = []){
+            $sql = "SELECT ";
+            if($wantedColumns === []){
+                $sql .= "*";
             }
-            else if($wantedProperty === ''){
+            else{
+                $sql .= implode(", ", $wantedColumns);
+            }
+
+            //remove last comma
+            $sql = substr($sql, 0, -2);
+
+            $sql .= sprintf(" FROM `branch`
+            WHERE
+            `branchID`
+            LIKE '%s'",
+            $database -> real_escape_string($this -> branchID));
+
+            $result =  $database -> query($sql);
+
+            $row = $result -> fetch_object();
+            $result -> free_result();
+
+            foreach($row as $key => $value){
+                $this -> $key = $value;
+            }
+
+
+/*            else if($wantedProperty === ''){
                 $branchSql = sprintf("SELECT * FROM `branch`
                 WHERE
                 `branchID`
@@ -71,7 +95,7 @@
                 unset($row);
                 $result -> free_result();
                 return $wantedInfo;
-            }
+            }*/
 
         }
 
@@ -100,7 +124,7 @@
             }
         }
 
-/*         public function getManager($database){      //get manager Info
+         public function getManager($database){      //get manager Info
             if(isset($this -> manager) || $this -> manager !== ''){
                 return $this -> manager;
             }
@@ -148,9 +172,9 @@
             unset($row);
             $result -> free_result();
             return $managerID;
-        } */
+        }
 
-/*         public function getReceptionistID($database){  //get Receptionist ID
+         public function getReceptionistID($database){  //get Receptionist ID
             if(isset($this -> receptionist)){
                 return $this -> receptionist;
             }
@@ -213,7 +237,7 @@
             }
 
             return $sports;
-        } */
+        }
 
 
         public function getAllSports($database){    //only courts with accepted status
@@ -562,17 +586,16 @@
         }
 
         public function jsonSerialize():mixed{
-            return [
-                'branchID' => $this -> branchID,
-                'city' => $this -> city,
-                'address' => $this -> address,
-                'email' => $this -> branchEmail,
-                'manager' => $this -> manager,
-                'receptionist' => $this -> receptionist,
-                'openingTime' => $this -> openingTime,
-                'closingTime' => $this -> closingTime,
-                'photos' => $this -> photos
-            ];
+            //get class properties
+            $properties = get_object_vars($this);
+
+            $returnJSON = [];
+
+            foreach($properties as $key => $value){
+                if(isset($this -> $key)){
+                    $returnJSON[$key] = $value;
+                }
+            }
         }
 
         public  function get_time($database){
@@ -590,7 +613,7 @@
             //     array_push($timeResult,[ $row['openingTime'] -> openingTime,$row['closingTime'] -> closingTime]);
             // }
             return  $timeResult;
-    }
+        }
     
     }
    

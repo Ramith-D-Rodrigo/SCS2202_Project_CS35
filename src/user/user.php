@@ -3,6 +3,7 @@
     require_once("../../src/general/actor.php");
     require_once("../../src/coach/coaching_session.php");
     require_once("../../controller/CONSTANTS.php");
+    require_once("../../src/general/sport_court.php");
 
 class User extends Actor implements JsonSerializable{
     private $firstName;
@@ -316,7 +317,7 @@ class User extends Actor implements JsonSerializable{
         return $result;
     }
 
-    public function makeReservation($date, $st, $et, $people, $payment, $chargeID, $court){
+    public function makeReservation($date, $st, $et, $people, $payment, $chargeID, Sports_Court $court){
         $result = $court -> createReservation($this -> userID, $date, $st, $et, $payment, $people, $chargeID, $this -> connection);
         return $result; //an array
     }

@@ -114,9 +114,11 @@
             $database -> real_escape_string($this -> courtID));
 
             $result = $database -> query($sql);
-            $sport = $result -> fetch_object() -> sportID;
+            $sportID = $result -> fetch_object() -> sportID;
+            $newSport = new Sport();
+            $newSport -> setID($sportID);
             $result -> free_result();
-            return $sport;
+            return $newSport;
         }
 
         public function getStatus($database){
