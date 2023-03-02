@@ -223,7 +223,7 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
 
     }
 
-    public function add_court($database, $court_name ,$sport_id, $branch_id, $court_id, $managerID){
+    public function add_court($database, $courtName ,$sportID, $branchID, $courtID, $managerID){
         $result = $database -> query(sprintf("INSERT INTO `sports_court`
         (`courtID`,
         `sportID`,
@@ -235,15 +235,16 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
         ('%s','%s','%s','%s','p','%s')",
         // $database -> real_escape_string($this -> managerID),
         // $database -> real_escape_string($this -> contactNum),
-        $database -> real_escape_string($court_id),
-        $database -> real_escape_string($sport_id),
-        $database -> real_escape_string($court_name),
-        $database -> real_escape_string($branch_id),
+        $database -> real_escape_string($courtID),
+        $database -> real_escape_string($sportID),
+        $database -> real_escape_string($courtName),
+        $database -> real_escape_string($branchID),
         $database -> real_escape_string($managerID)));
 
         return $result;
 
     }
+
 
     
     // public function getSportID($sportName, $database){
@@ -276,5 +277,31 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     //         return ['errMsg' => "Sorry, Cannot find what you are looking For"];
     //     }
     // }
+   
+   public function changeTimeofaBranch($database,$openingTime,$closingTime,$branchID){
+        $branch = new Branch($branchID);
+        $branch -> changeTime($database,$openingTime,$closingTime);
     }
+      
+    public function addDiscount($database, $managerID, $startingDate, $endingDate, $discountValue, $branchID){
+
+        $result = $database -> query(sprintf("INSERT INTO `discount`
+        ( `managerID`,`startingDate`,`endingDate`, `decision`, `discountValue`,`branchID`)
+        VALUES 
+        ('%s','%s', '%s', 'p', '%s', '%s')",
+        $database -> real_escape_string( $managerID),
+        $database -> real_escape_string($startingDate),
+        $database -> real_escape_string($endingDate),
+        $database -> real_escape_string($discountValue),
+        $database -> real_escape_string($branchID)));
+        
+        return $result;
+    }
+
+    
+
+    
+}  
+
+    
 ?>
