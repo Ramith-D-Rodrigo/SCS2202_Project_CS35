@@ -8,8 +8,11 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: auto;
     animation: slideIn 1s ease-in-out;
+}
+
+.content-box{
+    width: 75%;
 }
 
 

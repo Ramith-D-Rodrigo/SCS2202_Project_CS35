@@ -5,6 +5,9 @@
                 if($_SERVER['REQUEST_URI'] === '/public/owner/owner_dashboard.php'){
                     echo "Welcome, ".$_SESSION['username'];
                 }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/branch_details.php')){
+                    echo "Branch Details";
+                }
             ?>
         </div>
         <div>

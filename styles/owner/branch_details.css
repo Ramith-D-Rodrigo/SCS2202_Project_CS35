@@ -1,0 +1,52 @@
+.row-container{
+    display:flex; 
+    justify-content:space-around; 
+    flex-direction:row;
+    align-items: center;
+}
+
+.left-field{
+    width: 50%;
+    margin: 10px auto;
+}
+
+.right-field{
+    width: 50%;
+    margin-right: 10px;
+}
+
+.right-field > input, textarea{
+    width:100%;
+}
+
+.sport-view{
+    align-items: flex-start;
+}
+
+#courtDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#courtDiv > input{
+    margin: 10px;
+    width: 75%;
+}
+
+.body-container{
+    justify-content: space-around;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.options{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
