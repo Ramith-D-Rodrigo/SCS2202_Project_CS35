@@ -84,8 +84,9 @@
             $courtBranch = $tempCourt -> getBranch($user -> getConnection());
 
             $tempBranch = new Branch($courtBranch);
-            $branchLocation = $tempBranch -> getDetails($user -> getConnection(), 'city');
+            $tempBranch -> getDetails($user -> getConnection(), ['city']);
 
+            $branchLocation =  json_decode(json_encode($tempBranch), true)['city'];
             $courts += [$temp['courtID'] => ['name' => $courtName, 'branch' => $branchLocation]];
 
             unset($tempCourt);
