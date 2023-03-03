@@ -34,7 +34,7 @@
                     </button>
                 </div>
 
-                <div id="branchContainer">
+                <form id="branchContainer">
                     <div class="row-container">
                         <div class="left-field">
                             Address
@@ -97,7 +97,6 @@
                         </div>
                         <div class="right-field">
                             <select id="contactNumbers" readonly>
-                                <option value="">Select</option>
                             </select>
                         </div>
                     </div>
@@ -106,18 +105,26 @@
                             Providing Sports
                         </div>
                         <div class="right-field">
-                            <input type="text" id="manager" readonly>
+                            <select type="text" id="sports" readonly>
+                            </select>
                             <div id="courtDiv">
-                                Number of Courts <input>
+                                Number of Courts <input id="courtCount">
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
 
             <div class="content-box">
                 <div class="card-title">Feedback</div>
-                <div id="userFeedback">
+                <div id="currRating">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <div id="userFeedback" class="card-content">
                 </div>
             </div>
         </main>

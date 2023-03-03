@@ -15,7 +15,7 @@
     margin-right: 10px;
 }
 
-.right-field > input, textarea{
+.right-field > *{
     width:100%;
 }
 
@@ -48,5 +48,17 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+}
+.content-box{
+    min-width: 40%;
+}
+
+#currRating > i{
+    font-size: 3rem;
+    margin: 0 1rem;
+}
+
+.checked{
+    color: gold;
 }
 
