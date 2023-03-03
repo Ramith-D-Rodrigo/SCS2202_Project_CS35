@@ -173,54 +173,48 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     }
 
 
-    public function getDetails($database){
-        $sql = sprintf("SELECT * FROM `staff`
+    public function getDetails($wantedColumns = []){
+        $sql = "SELECT ";
+
+        if(empty($wantedColumns)){
+            $sql .= "*";
+        }
+        else{
+            $sql .= implode(", ", $wantedColumns);
+        }
+
+        $sql .= sprintf(" FROM `staff`
         WHERE
         `staffID` = '%s'
-        AND
+        AND 
         `staffRole` = 'manager'",
-        $database -> real_escape_string($this -> userID));
+        $this -> connection -> real_escape_string($this -> userID));
 
-        $result = $database -> query($sql);
+        $result = $this -> connection -> query($sql);
+
         $row = $result -> fetch_object();
 
-        if($row === NULL){
-            return FALSE;
+        foreach($row as $key => $value){
+            $this -> $key = $value;
         }
-        $this -> setDetails(fName: $row -> firstName,
-            lName: $row -> lastName,
-            contactNo: $row -> contactNum,
-            dob: $row -> dateOfBirth,
-            brID: $row -> branchID,
-            gender: $row -> gender);
 
-        $this -> joinDate = $row -> joinDate;
-        $this -> leaveDate = $row -> leaveDate;
-        $this -> staffRole = $row -> staffRole;
-
-
-        $result -> free_result();
-        unset($row);
         return $this;
     }
 
     public function jsonSerialize() : mixed{
-        return [
-            'managerID' => $this -> userID,
-            'firstName' => $this -> firstName,
-            'lastName' => $this -> lastName,
-            'emailAddress' => $this -> emailAddress,
-            'contactNum' => $this -> contactNum,
-            'joinDate' => $this -> joinDate,
-            'leaveDate' => $this -> leaveDate,
-            'dateOfBirth' => $this -> dateOfBirth,
-            'username' => $this -> username,
-            'password' => $this -> password,
-            'gender' => $this -> gender,
-            'branchID' => $this -> branchID,
-            'staffRole' => $this -> staffRole
-        ];
+        $classProperties = get_object_vars($this);
+        $jsonProperties = [];
 
+        foreach($classProperties as $key => $value){    //to get the properties that are set
+            if($key === 'connection'){
+                continue;
+            }
+            if(isset($value)){
+                $jsonProperties[$key] = $value;
+            }
+        }
+
+        return $jsonProperties;
     }
 
     public function add_court($database, $courtName ,$sportID, $branchID, $courtID, $managerID){

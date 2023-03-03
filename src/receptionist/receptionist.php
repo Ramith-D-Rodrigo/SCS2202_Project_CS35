@@ -43,34 +43,28 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         $this -> staffRole = 'receptionist';
     }
 
-    public function getDetails($database){
-        $sql = sprintf("SELECT * FROM `staff`
+    public function getDetails($wantedColumns = []){
+        $sql = "SELECT ";
+        if(empty($wantedColumns)){
+            $sql .= "*";
+        }else{
+            $sql .= implode(", ", $wantedColumns);
+        }
+
+        $sql .= sprintf(" FROM `staff`
         WHERE
         `staffID` = '%s'
         AND
         `staffRole` = 'receptionist'",
-        $database -> real_escape_string($this -> receptionistID));
+        $this -> connection -> real_escape_string($this -> userID));
 
-        $result = $database -> query($sql);
+        $result = $this -> connection -> query($sql);
         $row = $result -> fetch_object();
 
-        if($row === NULL){
-            return FALSE;
+        foreach($row as $key => $value){
+            $this -> $key = $value;
         }
 
-        $this -> setDetails(fName: $row -> firstName, 
-            lName: $row -> lastName,
-            contactNo: $row -> contactNum,
-            dob: $row -> dateOfBirth,
-            brID: $row -> branchID,
-            gender: $row -> gender);
-
-        $this -> joinDate = $row -> joinDate;
-        $this -> leaveDate = $row -> leaveDate;
-        $this -> staffRole = $row -> staffRole;
-
-        $result -> free_result();
-        unset($row);
         return $this;
     }
 
@@ -503,22 +497,21 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $result;
     }
     public function jsonSerialize() : mixed {
-        return [
-            'receptionistID' => $this -> receptionistID,
-            'firstName' => $this -> firstName,
-            'lastName' => $this -> lastName,
-            'emailAddress' => $this -> emailAddress,
-            'contactNum' => $this -> contactNum,
-            'joinDate' => $this -> joinDate,
-            'leaveDate' => $this -> leaveDate,
-            'dateOfBirth' => $this -> dateOfBirth,
-            'username' => $this -> username,
-            'password' => $this -> password,
-            'gender' => $this -> gender,
-            'branchID' => $this -> branchID,
-            'staffRole' => $this -> staffRole
-        ];
+        $classProperties = get_object_vars($this);
 
+        $returnJSON = [];
+
+        foreach($classProperties as $key => $value){
+            if($key === 'connection'){
+                continue;
+            }
+
+            if(isset($value)){
+                $returnJSON[$key] = $value;
+            }
+        }
+
+        return $returnJSON;
     }
 }
 
