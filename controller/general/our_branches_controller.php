@@ -26,6 +26,9 @@
         $branchJSON = json_encode($tempBranch); //encode and decode to unset un-necessary info
         $branchASSOC = json_decode($branchJSON, true);
 
+        //get branch pictures
+        $branchASSOC['photos'] = $tempBranch -> getBranchPictures($connection);
+
 
         $branchManager = new Manager(); //to get manager details
         $branchManager -> setUserID($branchASSOC['currManager']);
