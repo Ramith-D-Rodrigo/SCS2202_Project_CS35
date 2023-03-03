@@ -13,8 +13,8 @@ fetch("../../controller/owner/dashboard_controller.php")
         console.log(data);
 
         //add the data to the revenue card
-        revenueCard.innerHTML = `${currency} ${data.revenue}`;
-
+        revenueCard.innerHTML = `${currency} ${parseFloat(data.revenue).toFixed(2)}`;
+        
         //add the data to the branches card
         //create a list
         const branchesList = document.createElement("ul");

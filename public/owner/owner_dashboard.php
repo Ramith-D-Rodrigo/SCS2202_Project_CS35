@@ -37,21 +37,21 @@
                 <div class="card-title"> Branches</div> 
                 <div id="branches" class="card-content"></div>
                 <div class="card-button"> 
-                    <button> View More</button> 
+                    <button onclick="window.location.href='/public/owner/branch_details.php'"> View More </button> 
                 </div>
             </div>
             <div class="content-box single-card">
                 <div class="card-title">Branch Feedback</div> 
                 <div id="feedbacks" class="card-content"></div>
                 <div class="card-button"> 
-                    <button> View More</button> 
+                    <button> View More </button> 
                 </div>
             </div>
             <div class="content-box single-card">
                 <div class="card-title"> Manager Requests</div> 
                 <div id="requests" class="card-content"></div>
                 <div class="card-button">  
-                    <button> View More</button> 
+                    <button> View More </button> 
                 </div>
             </div>
             <div class="content-box single-card">
@@ -62,7 +62,7 @@
                 </div>
             </div>
             <div class="content-box single-card">
-                <div class="card-title">Make a Request</div> 
+                <div class="card-title"> Make a Request </div> 
             </div>
         </main>
         <?php
