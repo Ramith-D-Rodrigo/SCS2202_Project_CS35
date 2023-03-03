@@ -58,14 +58,17 @@
         }
 
         public function jsonSerialize() : mixed{
-            return [
-                "sportID" => $this -> sportID,
-                "sportName" => $this -> sportName,
-                "description" => $this -> description,
-                "reservationPrice" => $this -> reservationPrice,
-                "maxNoOfStudents" => $this -> maxNoOfStudents
-            ];
+            $classProperties = get_object_vars($this);
 
+            $returnJSON = [];
+
+            foreach($classProperties as $key => $value){
+                if(isset($value)){
+                    $returnJSON[$key] = $value;
+                }
+            }
+
+            return $returnJSON;
         }
     }
 
