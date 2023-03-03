@@ -107,17 +107,15 @@
     $reservingUser -> setDetails(uid : $user);//create an user with logged in userid
 
     $reservingCourt = new Sports_Court($court_id);
-    $sport = $reservingCourt -> getSport($reservingUser -> getConnection());
+    $reservingSport = $reservingCourt -> getSport($reservingUser -> getConnection());
 
-    if($sport === false){   //no sport
+    if($reservingSport === false){   //no sport
         $returningMsg['errMsg'] = "Invalid Inputs";
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($returningMsg);
         exit();
     }
     
-    $reservingSport = new Sport();
-    $reservingSport -> setID($sport);
     $temp = $reservingSport -> getDetails($reservingUser -> getConnection(), ['reservationPrice']);
     $reservationPrice = json_decode(json_encode($temp)) -> reservationPrice; //get the reservation price
     $calculation = ($timeDifference -> h + ($timeDifference -> i/60));  //get hours and minutes and convert minutes to hours to get the period in hours
@@ -235,7 +233,9 @@
     $fName = $reservingUser -> getProfileDetails('firstName');
     $lName = $reservingUser -> getProfileDetails('lastName');
 
-    $branchName = $branch -> getDetails($reservingUser -> getConnection(), 'city');
+
+    $branch -> getDetails($reservingUser -> getConnection(), ['city']);
+    $branchName =  json_decode(json_encode($branch), true)['city'];
     //current timestamp for the timezone of the server
     date_default_timezone_set(SERVER_TIMEZONE);
     $timestamp = date('Y-m-d H:i:s');   
