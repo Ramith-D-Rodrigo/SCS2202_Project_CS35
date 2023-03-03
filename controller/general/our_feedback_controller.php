@@ -12,8 +12,10 @@
 
         $branchFeedback = $tempBranch -> getBranchFeedback($connection);    //get the branch feedback for that created branch obj
 
-        $branchCity = $tempBranch -> getDetails($connection, 'city');
-        
+        $tempBranch -> getDetails($connection, ['city']);
+
+        $branchCity = json_decode(json_encode($tempBranch), true)['city'];    //get the city of the branch
+
         $allFeedbacksBranchWise[$currBranchID." ".$branchCity] = $branchFeedback;   //branch id and branch city as indices
         unset($tempBranch);
         unset($branchFeedback);
