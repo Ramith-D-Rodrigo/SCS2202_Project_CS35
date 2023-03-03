@@ -7,14 +7,26 @@
         private $firstName;
         private $lastName;
         private $contactNum;
+        private static Owner $ownerInstance;  //singleton instance
 
-        public function __construct($actor = null){
-            if($actor !== null){
-                $this -> userID = $actor -> getUserID();
-                $this -> username = $actor -> getUsername();
+        private function __construct(){ //singleton constructor
+
+        }
+
+        public static function getInstance(Actor $actor = null){  //singleton instance getter
+            if(!isset(self::$ownerInstance)){
+                self::$ownerInstance = new Owner();
             }
-            require("dbconnection.php");   //get the user connection to the db
-            $this -> connection = $connection;
+            //set the actor values
+            if($actor != null){
+                self::$ownerInstance -> userID = $actor -> getUserID();
+                self::$ownerInstance -> username = $actor -> getUsername();
+            }
+
+            //set the database connection
+            require("dbconnection.php");
+            self::$ownerInstance -> connection = $connection;
+            return self::$ownerInstance;
         }
 
 
