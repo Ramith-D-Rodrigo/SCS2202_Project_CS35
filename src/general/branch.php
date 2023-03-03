@@ -14,6 +14,7 @@
         private $receptionist;
         private $openingTime;
         private $closingTime;
+        private $openingDate;
         private $photos;
         private $currManager;
         private $currReceptionist;
@@ -23,6 +24,10 @@
 
         public function __construct($branch_id){
             $this -> branchID = $branch_id;
+        }
+
+        public function getBranchID(){
+            return $this -> branchID;
         }
 
         public function getDetails($database, $wantedColumns = []){

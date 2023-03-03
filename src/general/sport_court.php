@@ -1,7 +1,7 @@
 <?php
     require_once("reservation.php");
 
-    class Sports_Court{
+    class Sports_Court implements JsonSerializable{
         private $courtID;
         private $courtName;
         private $revenue;
@@ -115,6 +115,9 @@
 
             $result = $database -> query($sql);
             $sportID = $result -> fetch_object() -> sportID;
+
+            $this -> sportID = $sportID;
+
             $newSport = new Sport();
             $newSport -> setID($sportID);
             $result -> free_result();
@@ -146,6 +149,19 @@
             }
             $result -> free_result();
             return $photos;
+        }
+
+        public function jsonSerialize(): mixed{
+            $classProperties = get_object_vars($this);
+            $returnJSON = [];
+
+            foreach($classProperties as $key => $value){
+                if(isset($value) && $value != ''){
+                    $returnJSON[$key] = $value;
+                }
+            }
+
+            return $returnJSON;
         }
     }
 ?>
