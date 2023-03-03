@@ -372,9 +372,17 @@
         }
 
 
-        public function getBranchFeedback($database){
+        public function getBranchFeedback($database, int $limit = null, $wantedFeedbackDetails = []){
             $sql = sprintf("SELECT `userFeedbackID` FROM `user_branch_feedback` WHERE `branchID` = '%s'",
             $database -> real_escape_string($this -> branchID));    //sql to get the feedback ids
+
+            if($limit != null){ //if limited number of feedbacks are required
+                //normally the limit is given when only the latest feedbacks are required
+                //so the feedbacks are sorted by date
+                $sql .= " ORDER BY `date` DESC";
+
+                $sql .= sprintf(" LIMIT %d", $limit);
+            }
 
             $result = $database -> query($sql);
 
@@ -385,7 +393,7 @@
                 $tempFeedback = new Branch_Feedback();  //create an feedback object for each result
                 $tempFeedback -> setDetails(userfeedback_id: $currFeedbackID);
 
-                $tempFeedback -> getDetails($database); //get feedback details
+                $tempFeedback -> getDetails($database, $wantedFeedbackDetails); //get feedback details
                 array_push($allFeedbacks, $tempFeedback);
                 unset($tempFeedback);
                 unset($row);
@@ -544,7 +552,7 @@
 
             $userSql = substr($userSql, 0, -1); //remove the last comma
 
-            $userSql .= sprintf(") AND `date` >= '%s' AND `date` <= '%s' AND `status` NOT LIKE 'Cancelled' OR `status` NOT LIKE 'Refunded'",
+            $userSql .= sprintf(") AND `date` >= '%s' AND `date` <= '%s' AND (`status` NOT LIKE 'Cancelled' AND `status` NOT LIKE 'Refunded')",
             $database -> real_escape_string($dateFrom),
             $database -> real_escape_string($dateTo));
 
@@ -590,7 +598,7 @@
             $returnJSON = [];
 
             foreach($properties as $key => $value){
-                if(isset($this -> $key)){
+                if(isset($this -> $key) && $value != ''){
                     $returnJSON[$key] = $value;
                 }
             }

@@ -166,8 +166,10 @@
             $result = $this -> connection -> query($sql);
             $sportArr = array();
 
+
             while($row = $result -> fetch_object()){
-                $tempSport = new Sport($row -> sportID);
+                $tempSport = new Sport();
+                $tempSport -> setID($row -> sportID);
                 array_push($sportArr, $tempSport);
                 unset($tempSport);
             }
@@ -189,8 +191,8 @@
             }
         }
 
-        public function managerRequests(){
-            $totalRequests =  array_merge($this -> getDiscountRequests(), $this -> getSportCourtRequests());
+        public function managerRequests($manager = null, $discountDecision = '%', $courtDecision = '%'){   //% for wildcard
+            $totalRequests =  array_merge($this -> getDiscountRequests(manager: $manager, decision: $discountDecision), $this -> getSportCourtRequests(manager: $manager, decision: $courtDecision));
             return $totalRequests;
         }
 
@@ -217,14 +219,15 @@
             return $discountArr;
         }
 
-        public function getSportCourtRequests($manager = null){ //get all the sport court requests (adding new sports court to some branch)
+        public function getSportCourtRequests($manager = null, $decision = '%'){ //get all the sport court requests (adding new sports court to some branch)
             if($manager == null){
-                $sql = sprintf("SELECT * FROM `sports_court` WHERE `requestStatus` LIKE 'p'");
+                $sql = sprintf("SELECT * FROM `sports_court` WHERE `requestStatus` LIKE '%s'", $this -> connection -> real_escape_string($decision));
                 $result = $this -> connection -> query($sql);
             }
             else{
-                $sql = sprintf("SELECT * FROM `sports_court` WHERE `managerID` = '%s' AND `requestStatus` LIKE 'p'",
-                $this -> connection -> real_escape_string($manager -> getUserID()));
+                $sql = sprintf("SELECT * FROM `sports_court` WHERE `managerID` = '%s' AND `requestStatus` LIKE '%s'",
+                $this -> connection -> real_escape_string($manager -> getUserID()),
+                $this -> connection -> real_escape_string($decision));
                 $result = $this -> connection -> query($sql);
             }
 
