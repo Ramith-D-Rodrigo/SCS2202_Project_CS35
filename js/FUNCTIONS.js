@@ -47,7 +47,7 @@ const enableElementsInMain = (mainElement) => {
     elements.forEach((element) => {
         element.disabled = false;
     });
-
 }
+
 
 export {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain};

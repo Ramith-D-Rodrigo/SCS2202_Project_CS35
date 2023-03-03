@@ -26,32 +26,37 @@
                 require_once("header.php");
         ?>
         <main class="body-container dashboard-cards">
-            <div class="content-box single-card revenue-card">
+            <div class="content-box single-card revenue-card" >
                 <div class="card-title"> Total Revenue for This Month</div> 
+                <div id="revenue" class="card-content"></div>
                 <div class="card-button"> 
                     <button> View Branch Wise </button> 
                 </div>
             </div>
             <div class="content-box single-card">
                 <div class="card-title"> Branches</div> 
+                <div id="branches" class="card-content"></div>
                 <div class="card-button"> 
                     <button> View More</button> 
                 </div>
             </div>
             <div class="content-box single-card">
                 <div class="card-title">Branch Feedback</div> 
+                <div id="feedbacks" class="card-content"></div>
                 <div class="card-button"> 
                     <button> View More</button> 
                 </div>
             </div>
             <div class="content-box single-card">
                 <div class="card-title"> Manager Requests</div> 
+                <div id="requests" class="card-content"></div>
                 <div class="card-button">  
                     <button> View More</button> 
                 </div>
             </div>
             <div class="content-box single-card">
                 <div class="card-title"> Sports</div> 
+                <div id="sports" class="card-content"></div>
                 <div class="card-button">  
                     <button> View More </button> 
                 </div>
@@ -64,4 +69,5 @@
                 require_once("../general/footer.php");
         ?>
     </body>
+    <script type="module" src="/js/owner/dashboard.js"></script>
 </html>
