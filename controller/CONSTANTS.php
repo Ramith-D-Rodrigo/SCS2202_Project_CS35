@@ -16,4 +16,12 @@
 
     define("SERVER_TIMEZONE", "Asia/Colombo");  //the timezone of the server (default is Asia/Colombo)
 
+    define("MAX_COURT_COUNT", 10); //maximum number of courts in a branch (default is 10)
+
+    //array to store the alphabet characters
+    $alphabet = array(
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+    );
+
+    define("ALPHABET", $alphabet);  //the alphabet array
 ?>

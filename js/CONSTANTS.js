@@ -13,4 +13,6 @@ const MAX_RESERVATION_DAYS = 30;   //maximum reservation date in days (default i
 
 const currency = "LKR";
 
-export {verbose, MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS, MIN_RESERVATION_TIME_HOURS, currency};
+const MAX_COURT_COUNT = 10; //maximum number of courts that can be added to a branch (default is 10)
+
+export {verbose, MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS, MIN_RESERVATION_TIME_HOURS, currency, MAX_COURT_COUNT};
