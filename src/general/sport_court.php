@@ -19,6 +19,30 @@
             return $this -> courtID;
         }
 
+        public function setDetails($courtName = '', $branchID = '', $sportID = '', $addedManager = ''){
+            $funcArgs = get_defined_vars();
+            foreach($funcArgs as $key => $value){
+                if($value != '' || $value != NULL){
+                    $this -> $key = $value;
+                }
+            }
+        }
+
+        public function createCourtEntry($database){    //to create a new court entry in the database 
+            $sql = sprintf("INSERT INTO `sports_court` (`courtID`, `branchID`, `sportID`, `addedManager`, `requestStatus`, `courtName`)
+                VALUES ('%s', '%s', '%s', NULLIF('%s', ''), '%s', '%s')",
+                $database -> real_escape_string($this -> courtID),
+                $database -> real_escape_string($this -> branchID),
+                $database -> real_escape_string($this -> sportID),
+                $database -> real_escape_string(isset($this -> addedManager) ? $this -> addedManager : ''),
+                $database -> real_escape_string('p'),
+                $database -> real_escape_string($this -> courtName));
+
+            $result = $database -> query($sql);
+
+            return $result;
+        }
+
         public function getSchedule($database){ //get the reservation schedule of a certain court
             //get user reservations
             $sql = sprintf("SELECT * FROM `reservation` 

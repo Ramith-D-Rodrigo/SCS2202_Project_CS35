@@ -20,6 +20,8 @@
         private $currReceptionist;
         private $requestStatus;
         private $revenue;
+        private $latitude;
+        private $longitude;
 
 
         public function __construct($branch_id){
@@ -101,29 +103,83 @@
 
         }
 
-        public function setDetails($city = '', $address = '', $email = '', $manager = '', $receptionist = '', $opening_time = '', $closing_time = ''){
-            //conditions to check if the property is set or passing the default value
-            if(!isset($this -> city) || $city  !== ''){
-                $this -> city = $city;
+        public function setDetails($city = '', $address = '', $branchEmail = '', $currManager = '', $currReceptionist = '', $openingTime = '', $closingTime = '', $latitude = '', $longitude = '', $openingDate = ''){
+            //get argument names and values as an array
+            $args = get_defined_vars();
+
+            foreach($args as $key => $value){
+                if($value !== ''){
+                    $this -> $key = $value;
+                }
             }
-            if(!isset($this -> address) || $address  === ''){
-                $this -> address = $address;
+        }
+
+        public function createBranchEntry($database, $ownerID){
+
+            $sql = sprintf("INSERT INTO `branch` 
+                (`branchID`,
+                `city`, 
+                `address`, 
+                `branchEmail`, 
+                `openingTime`, 
+                `closingTime`, 
+                `latitude`, 
+                `longitude`, 
+                `openingDate`,
+                `ownerID`,
+                `ownerRequestDate`,
+                `requestStatus`)
+                VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+                $database -> real_escape_string($this -> branchID),
+                $database -> real_escape_string($this -> city),
+                $database -> real_escape_string($this -> address),
+                $database -> real_escape_string($this -> branchEmail),
+                $database -> real_escape_string($this -> openingTime),
+                $database -> real_escape_string($this -> closingTime),
+                $database -> real_escape_string($this -> latitude),
+                $database -> real_escape_string($this -> longitude),
+                $database -> real_escape_string($this -> openingDate),
+                $database -> real_escape_string($ownerID),
+                $database -> real_escape_string(date("Y-m-d")),
+                $database -> real_escape_string("p"));
+
+            $result = $database -> query($sql);
+            if($result){
+                return TRUE;
             }
-            if(!isset($this -> branchEmail) || $email  === ''){
-                $this -> branchEmail = $email;
+            else{
+                return FALSE;
             }
-            if(!isset($this -> manager) || $manager  === ''){
-                $this -> manager = $manager;
+        }
+
+        public function addSportCourt($sport, $database){   //add a sport court to the branch
+            $sport -> getDetails($database, wantedColumns: ['sportName']);
+
+            $sportName = json_decode(json_encode($sport), true)['sportName'];
+
+            $courIDPrefix = substr($this -> branchID, 0, 3) . substr($sportName, 0, 3);
+            $courtID = uniqid($courIDPrefix);
+
+            //to select the courtName, we need to number of courts of the same sport in the branch
+
+            $courtCount = count($this -> getBranchCourts($database, sport: $sport));
+            $newCourtNo = $courtCount + 1;
+
+            if($newCourtNo > count(ALPHABET)){  
+                //if the number of courts is greater than the number of letters in the alphabet, we need to add the next letter to the new court name
+                $courtName = ALPHABET[($newCourtNo / count(ALPHABET)) - 1] . (ALPHABET[($newCourtNo % count(ALPHABET)) - 1]);
             }
-            if(!isset($this -> receptionist) || $receptionist  === ''){
-                $this -> receptionist = $receptionist;
+            else{
+                $courtName = ALPHABET[$courtCount];
+
             }
-            if(!isset($this -> openingTime) || $opening_time  === ''){
-                $this -> openingTime = $opening_time;
-            }
-            if(!isset($this -> closingTime) || $closing_time  === ''){
-                $this -> closingTime = $closing_time;
-            }
+
+            $court = new Sports_Court($courtID);
+            $court -> setDetails($courtName, $this -> branchID, $sport -> getID());
+
+            $status = $court -> createCourtEntry($database);
+
+            return $status;
         }
 
          public function getManager($database){      //get manager Info
