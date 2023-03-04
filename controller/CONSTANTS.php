@@ -8,6 +8,7 @@
     define("MAX_RESERVATION_TIME_HOURS", 6);  //maximum reservation time in hours (default is 6)
     define("MIN_RESERVATION_DAYS", 3);    //minimum reservation date in days (default is 3)
     define("MAX_RESERVATION_DAYS", 30);   //maximum reservation date in days (default is 30)
+    define("MIN_COACHING_SESSION_PERCENTAGE", 0.2);  //minimum coaching session percentage (default is 0.25)
 
     //seconds are not defined as they are always considered to be 0 to making reservations
     //minutes are not defined as they are always considered to be 0 or 30 to making reservations

@@ -7,6 +7,7 @@ const MIN_RESERVATION_TIME_HOURS = 1;  //minimum reservation time in hours (defa
 const MAX_RESERVATION_TIME_HOURS = 6;  //maximum reservation time in hours (default is 6)
 const MIN_RESERVATION_DAYS = 3;    //minimum reservation date in days (default is 3)
 const MAX_RESERVATION_DAYS = 30;   //maximum reservation date in days (default is 30)
+const MIN_COACHING_SESSION_PERCENTAGE = 0.2; //minimum percentage of coaching session (default is 20%)
 
 //seconds are not defined as they are always considered to be 0 for making reservations
 //minutes are not defined as they are always considered to be 0 for making reservations

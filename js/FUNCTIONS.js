@@ -49,5 +49,18 @@ const enableElementsInMain = (mainElement) => {
     });
 }
 
+const togglePassword = (button, passwordInput) => {
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        button.querySelector("i").classList.remove("fa-eye");
+        button.querySelector("i").classList.add("fa-eye-slash");
+    } else {
+        passwordInput.type = "password";
+        button.querySelector("i").classList.remove("fa-eye-slash");
+        button.querySelector("i").classList.add("fa-eye");
+    }
+}
 
-export {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain};
+
+
+export {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain, togglePassword};
