@@ -12,7 +12,6 @@
     <head>
         <meta charset="UTF-8" />
         <title>Owner's Dashboard</title>
-        <link rel="stylesheet" href="/styles/owner/owner_dashboard.css" />
         <link rel="stylesheet" href="/styles/general/styles.css" />
         <link rel="stylesheet" href="/styles/owner/owner_dashboard.css" />
         <link rel="stylesheet" href="/styles/general/staff.css" />
@@ -55,7 +54,7 @@
                 <div class="card-title"> Sports</div> 
                 <div id="sports" class="card-content"></div>
                 <div class="card-button">  
-                    <button> View More </button> 
+                    <button onclick="window.location.href='/public/owner/sports.php'"> View More </button> 
                 </div>
             </div>
             <div class="content-box single-card">

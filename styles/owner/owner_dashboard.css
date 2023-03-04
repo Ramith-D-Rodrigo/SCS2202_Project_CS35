@@ -20,6 +20,8 @@
     height: 12rem;
     border-radius: 50%;
     object-fit: cover;
+    opacity: 1;
+    transition: 500ms;
 }
 .sport-icon:hover{
     /*lower the opacity to darken*/

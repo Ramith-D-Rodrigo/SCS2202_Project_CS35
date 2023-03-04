@@ -8,6 +8,12 @@
                 if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/branch_details.php')){
                     echo "Branch Details";
                 }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/sports.php')){
+                    echo "Sports";
+                }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/add_new_branch.php')){
+                    echo "Request to Add a New Branch";
+                }
             ?>
         </div>
         <div>

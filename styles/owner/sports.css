@@ -1,0 +1,60 @@
+.options{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#changeTitle{
+    margin: 2rem 0;
+    font-size: 2rem;
+    width: 100%;
+    text-align: center;
+}
+
+
+.note{
+    font-size: 0.8rem;
+    color: gray;
+    margin: 0.5rem;
+    font-style: italic;
+    width: 100%;
+    text-align: center;
+}
+
+.content-box{
+    min-width: 60%;
+}
+
+.sport-info{
+    width: 60%;
+}
+
+.sport-img-div{
+    width: 40%;
+}
+
+.sport-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#sport-icon{
+    width: 22rem;
+    height: 22rem;
+    border-radius: 50%;
+    object-fit: cover;
+    opacity: 1;
+    transition: 500ms;
+}
+
+.sport-icon-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
