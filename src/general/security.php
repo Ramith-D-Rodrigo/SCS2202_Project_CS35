@@ -38,7 +38,10 @@
 
             require("dbconnection.php");
             self::$connection = $connection;
-            $sql = sprintf("SELECT `emailAddress` FROM `login_details` WHERE `emailAddress` = '%s'", self::$connection -> real_escape_string($santizedEmail));
+            $sql = sprintf("SELECT `ld`.`emailAddress`, `b`.`branchEmail` FROM `login_details` `ld` CROSS JOIN 
+            `branch` `b` WHERE `ld`.`emailAddress` = '%s' OR `b`.`branchEmail` = '%s'", 
+            self::$connection -> real_escape_string($santizedEmail),
+            self::$connection -> real_escape_string($santizedEmail));
 
             $result = self::$connection -> query($sql);
             //$row = $result -> fetch_object();
