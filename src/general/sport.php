@@ -57,6 +57,21 @@
             return $result;
         }
 
+        public function updateDetails($updatingColumns, $database){
+            $sql = "UPDATE `sport` SET ";
+            foreach($updatingColumns as $column => $value){
+                $sql .= sprintf("`%s` = '%s',", 
+                $database -> real_escape_string($column),
+                $database -> real_escape_string($value));
+            }
+            $sql = substr($sql, 0, -1); //remove the last comma
+            $sql .= sprintf(" WHERE `sportID` LIKE '%s'", $database -> real_escape_string($this -> sportID));
+
+            $result = $database -> query($sql);
+
+            return $result;
+        }
+
         public function jsonSerialize() : mixed{
             $classProperties = get_object_vars($this);
 

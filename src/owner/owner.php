@@ -263,5 +263,9 @@
 
         }
 
+        public function updateSportDetails($sport, $updatingColumns){
+            return $sport -> updateDetails($updatingColumns, $this -> connection);
+        }
+
     }
 ?>
