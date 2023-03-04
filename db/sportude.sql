@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 01, 2023 at 04:58 PM
+-- Generation Time: Mar 04, 2023 at 07:07 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -40,16 +40,20 @@ CREATE TABLE `branch` (
   `currManager` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `currReceptionist` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `ownerRequestDate` date DEFAULT NULL,
-  `requestStatus` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `requestStatus` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `latitude` varchar(30) NOT NULL,
+  `longitude` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `branch`
 --
 
-INSERT INTO `branch` (`branchID`, `address`, `branchEmail`, `city`, `openingTime`, `closingTime`, `openingDate`, `revenue`, `ownerID`, `currManager`, `currReceptionist`, `ownerRequestDate`, `requestStatus`) VALUES
-('col128423', 'Colombo Branch, Colombo', 'colombobr@sp.com', 'Colombo', '09:00:00', '20:00:00', '2022-12-07', NULL, NULL, 'managersecond1234', 'receptionisttwo123', NULL, 'a'),
-('kiri987521', 'Example Road, Kiribathgoda', 'kribathgodabr@sp.com', 'Kiribathgoda', '08:00:00', '19:00:00', '2022-11-26', 0, NULL, 'managerkiri5436', NULL, NULL, 'a');
+INSERT INTO `branch` (`branchID`, `address`, `branchEmail`, `city`, `openingTime`, `closingTime`, `openingDate`, `revenue`, `ownerID`, `currManager`, `currReceptionist`, `ownerRequestDate`, `requestStatus`, `latitude`, `longitude`) VALUES
+('Alaw640320e9a2e9a', 'Alawathupitiya', 'ramithrosdrigo@hotmail.com', 'Alawathupitiya', '10:00:00', '18:00:00', '2023-03-07', NULL, 'ownermn74625612', NULL, NULL, '2023-03-04', 'p', '7.110521037850345', '79.88800764083864'),
+('col128423', 'Colombo Branch, Colombo', 'colombobr@sp.com', 'Colombo', '09:00:00', '20:00:00', '2022-12-07', NULL, NULL, 'managersecond1234', 'receptionisttwo123', NULL, 'a', '7.28683660', '80.243020505'),
+('Kand64030c042c114', 'Kandy Branch', 'kandybr@gmail.com', 'Kandy', '08:00:00', '18:00:00', '2023-03-01', NULL, 'ownermn74625612', NULL, NULL, '2023-03-04', 'p', '7.28683660', '80.63020505'),
+('kiri987521', 'Example Road, Kiribathgoda', 'kribathgodabr@sp.com', 'Kiribathgoda', '08:00:00', '19:00:00', '2022-11-26', 1050, NULL, 'managerkiri5436', 'receptionistkiri1241', NULL, 'a', '0.00000000', '0.00000000');
 
 -- --------------------------------------------------------
 
@@ -334,6 +338,13 @@ CREATE TABLE `owner` (
   `lastName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `owner`
+--
+
+INSERT INTO `owner` (`ownerID`, `contacNum`, `firstName`, `lastName`) VALUES
+('ownermn74625612', '0767567823', 'Walter', 'White');
+
 -- --------------------------------------------------------
 
 --
@@ -429,7 +440,9 @@ INSERT INTO `reservation` (`reservationID`, `date`, `startingTime`, `endingTime`
 ('Res-ram63ff599745df5', '2023-03-17', '12:00:00', '14:00:00', 2, 700, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-01 13:56:39', 'ch_3Mgq9OKUOfa0wCPZ0ropNH5h'),
 ('Res-ram63ff5e9117ab5', '2023-03-06', '12:00:00', '15:00:00', 2, 1050, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-01 14:17:53', 'ch_3MgqTwKUOfa0wCPZ03sgHEjx'),
 ('Res-ram63ff607f02abf', '2023-03-09', '10:00:00', '13:00:00', 2, 1500, 'basket345', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-01 14:26:07', 'ch_3MgqbuKUOfa0wCPZ1lLk9EJN'),
-('Res-ram63ff61aabfe0e', '2023-03-07', '10:00:00', '12:00:00', 2, 700, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-01 14:31:06', 'ch_3MgqgkKUOfa0wCPZ1zaWVmGS');
+('Res-ram63ff61aabfe0e', '2023-03-07', '10:00:00', '12:00:00', 2, 700, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-01 14:31:06', 'ch_3MgqgkKUOfa0wCPZ1zaWVmGS'),
+('Res-ram640168561938e', '2023-03-10', '10:00:00', '12:00:00', 2, 700, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-03 03:24:06', 'ch_3MhPEMKUOfa0wCPZ0Hbe6GTx'),
+('Res-ram64019a45bcf40', '2023-03-11', '16:00:00', '19:00:00', 2, 1050, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-03 06:57:09', 'ch_3MhSYYKUOfa0wCPZ1g7IrPbK');
 
 --
 -- Triggers `reservation`
@@ -482,8 +495,11 @@ CREATE TABLE `sport` (
 --
 
 INSERT INTO `sport` (`sportID`, `sportName`, `description`, `reservationPrice`, `minCoachingSessionPrice`, `maxNoOfStudents`) VALUES
-('bad65421', 'Badminton', 'Fun game to play with friends', 350, 1000, 10),
-('basket17212', 'Basketball', 'A sport that requires speed', 500, 3500, 20);
+('bad65421', 'Badminton', 'Fun game to play with friends', 350, 420, 10),
+('basket17212', 'Basketball', 'A sport that requires speed', 550, 660, 25),
+('cricket23871', 'Cricket', 'wanna play 11 vs 11?', 800, 5000, 20),
+('Tabl64038296afcad', 'Table Tennis', 'highly competitive and engaging for a 2v2 sport', 200, 240, NULL),
+('Voll64037fe13cf3a', 'Volleyball', 'Another fun game', 800, 960, 12);
 
 -- --------------------------------------------------------
 
@@ -505,10 +521,14 @@ CREATE TABLE `sports_court` (
 --
 
 INSERT INTO `sports_court` (`courtID`, `sportID`, `courtName`, `branchID`, `requestStatus`, `addedManager`) VALUES
+('AlaBas640320e9a4563', 'basket17212', 'A', 'Alaw640320e9a2e9a', 'p', NULL),
 ('badcourt1212', 'bad65421', 'A', 'kiri987521', 'a', NULL),
 ('badcourt1213', 'bad65421', 'B', 'kiri987521', 'a', NULL),
 ('baskcourt45', 'basket17212', 'A', 'kiri987521', 'a', NULL),
-('basket345', 'basket17212', 'A', 'col128423', 'a', NULL);
+('basket345', 'basket17212', 'A', 'col128423', 'a', NULL),
+('KanBas64030c042d150', 'basket17212', 'A', 'Kand64030c042c114', 'p', NULL),
+('KanBas64030c042e430', 'basket17212', 'B', 'Kand64030c042c114', 'p', NULL),
+('KanCri64030c042fa53', 'cricket23871', 'A', 'Kand64030c042c114', 'p', NULL);
 
 -- --------------------------------------------------------
 
@@ -713,12 +733,13 @@ CREATE TABLE `user_branch_feedback` (
 --
 
 INSERT INTO `user_branch_feedback` (`userFeedbackID`, `userID`, `date`, `rating`, `description`, `branchID`) VALUES
-('FB63d246278a096', 'ramRod63816dc9007b4', '2023-01-26', 5, 'Wonderful time, Thank you for the amazing facilities!', 'kiri987521'),
-('FB63d246eaca834', 'ramRod63816dc9007b4', '2023-01-26', 1, 'Absolutely horrible!', 'col128423'),
-('FB63d398eec2e7f', 'ramRod63816dc9007b4', '2023-01-27', 4, 'wonderful', 'kiri987521'),
-('FB63e52d728cf07', 'ramRod63816dc9007b4', '2023-02-09', 3, 'It was ok', 'kiri987521'),
+('FB63d246278a096', 'ramRod63816dc9007b4', '2023-01-26', 5, 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibu', 'kiri987521'),
+('FB63d246eaca834', 'ramRod63816dc9007b4', '2023-01-26', 1, 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibu', 'col128423'),
+('FB63d398eec2e7f', 'ramRod63816dc9007b4', '2023-01-27', 4, 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibu', 'kiri987521'),
+('FB63e52d728cf07', 'ramRod63816dc9007b4', '2023-02-09', 3, 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibu', 'kiri987521'),
 ('feedback1', 'ramRod63816dc9007b4', '2022-12-29', 4, 'Amazing Experience!', 'kiri987521'),
-('feedback2', 'dihHan6384813878b75', '2022-12-27', 1, 'Worst Experience Ever!', 'kiri987521');
+('feedback2', 'dihHan6384813878b75', '2022-12-27', 1, 'Worst Experience Ever!', 'kiri987521'),
+('feedbackwolololo', 'kamPer638656b5362c7', '2023-03-15', 5, 'Had alot of fun', 'kiri987521');
 
 -- --------------------------------------------------------
 
@@ -819,6 +840,7 @@ CREATE TABLE `user_request_coaching_session` (
 ALTER TABLE `branch`
   ADD PRIMARY KEY (`branchID`),
   ADD UNIQUE KEY `branch_email` (`branchEmail`),
+  ADD UNIQUE KEY `latitude` (`latitude`,`longitude`),
   ADD UNIQUE KEY `curr_manager` (`currManager`),
   ADD UNIQUE KEY `curr_receptionist` (`currReceptionist`),
   ADD KEY `owner_id` (`ownerID`);
