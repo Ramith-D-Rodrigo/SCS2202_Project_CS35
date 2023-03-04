@@ -280,3 +280,8 @@ tr:last-of-type td:last-of-type {
     filter: blur(8px);
     transition: 500ms;
 }
+
+.disabled{
+    pointer-events: none;
+    opacity: 0.5;
+}

@@ -26,7 +26,6 @@
             <div class="content-box">
                 <div class="options">
                     <select id="branchFilter">
-                        <option value="">Branch</option>
                     </select>
                     <button id="addBranch">
                         New Branch ?
@@ -125,6 +124,11 @@
                     <i class="fa-solid fa-star"></i>
                 </div>
                 <div id="userFeedback" class="card-content">
+                </div>
+
+                <div id="navIcons">
+                    <button id="prevPage"><i class="fa-solid fa-chevron-circle-left" ></i></button>
+                    <button id="nextPage"><i class="fa-solid fa-chevron-circle-right" ></i></button>
                 </div>
             </div>
         </main>
