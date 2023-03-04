@@ -1,36 +1,48 @@
-let sports = [];    // Array to hold sports
-
 import {currency} from "../CONSTANTS.js";
 
-fetch("../../controller/owner/sport_details_controller.php")
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
+let sports = [];    //array to store the sports
 
-        sports = data;
-    })
-    .then(() => {
-        //first add the sports to the filtering
-        const sportFilter = document.getElementById("sportsFilter");
+const init = async () => {
+    await fetch("../../controller/owner/sport_details_controller.php")
+        .then(response => response.json())
+        .then(data => {
 
-        sports.forEach(sport => {
-            const option = document.createElement("option");
-            option.value = sport.sportID;
-            option.innerHTML = sport.sportName;
-            sportFilter.appendChild(option);
+            //clear the sports array
+            for(let i = 0; i < sports.length; i++){
+                sports.pop();
+            }
+            sports.pop();
+           
+            for(const sport of data){   //add the sports to the array
+                sports.push(sport);
+            }
+        })
+        .then(() => {
+            //first add the sports to the filtering
+            const sportFilter = document.getElementById("sportsFilter");
+
+            //clear the filter
+            sportFilter.innerHTML = "";
+
+            sports.forEach(sport => {
+                const option = document.createElement("option");
+                option.value = sport.sportID;
+                option.innerHTML = sport.sportName;
+                sportFilter.appendChild(option);
+            });
+
+            //add an event listener to the filter
+            sportFilter.addEventListener("change", displaySportInfo);
         });
-
-        //add an event listener to the filter
-        sportFilter.addEventListener("change", displaySportInfo);
-
-        //display the first sport
-        displaySportInfo({target: {value: sports[0].sportID}});
-
-    });
+}
 
 
 const displaySportInfo = (e) => {
     const sportID = e.target.value;
+
+    //set the hidden input
+    const sportIDInput = document.getElementById("sportID");
+    sportIDInput.value = sportID;
 
     const sport = sports.find(sport => sport.sportID == sportID);   //find the sport from the array
 
@@ -50,4 +62,9 @@ const displaySportInfo = (e) => {
     const sportImage = document.getElementById("sport-icon");
     sportImage.src = "/uploads/sport_images/" + sport.sportName + ".jpg";
 
+    //reset the change form
+    const changeForm = document.getElementById("changeForm");
+    changeForm.reset();
 }
+
+export {displaySportInfo, init, sports};

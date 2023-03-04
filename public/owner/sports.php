@@ -62,20 +62,29 @@
                         </div>
 
                         <form id="changeForm">
+                            <input type="hidden" id="sportID" name="sportID">
+                            <div class="row-container">
+                                <div class="left-field">New Description</div>
+                                <div class="right-field">
+                                    <textarea id="newDescription" name="newDescription"></textarea>
+                                </div>
+                            </div>
                             <div class="row-container">
                                 <div class="left-field">New Reservation Price</div>
                                 <div class="right-field">
-                                    <input type="number" id="newPrice" name="newPrice" required>
+                                    <input type="number" id="newPrice" name="newPrice">
                                 </div>
                             </div>
                             <div class="row-container">
                                 <div class="left-field">New Maximum Number of Players</div>
                                 <div class="right-field">
-                                    <input type="number" id="newMaxPlayers" name="newMaxPlayers" min="1" max="100" required>
+                                    <input type="number" id="newMaxPlayers" name="newMaxPlayers" min="1" max="100">
                                 </div>
                             </div>
                             <div class="note">
-                                If you only wish to change one item, enter the current value of the one that is not being changed as the new value.
+                                Keep the field empty that you do not want to change.
+                            </div>
+                            <div class="msg" id="msg">  
                             </div>
                             <div class="btn-container">
                                 <button type="submit" id="changeBtn">Change</button>
@@ -93,6 +102,30 @@
             </div>
         </main>
         <?php require_once("../../public/general/footer.php"); ?>
+        <div id="authFormDiv" class="content-box">
+            <form>
+                <p style="text-align:center">Please Authenticate Yourself<br>to Make Changes</p>
+                <p style="text-align:center"><i class="fas fa-user-lock" style="font-size:1.5rem"></i></p>
+                <p id="authMsg" style="text-align:center"></p>
+                <div style="display:flex; flex-direction:column">
+                    <input type="text" name="username" id="username" placeholder="Username" required minlength="6" maxlength="15">
+                    <input type="password" name="password" id="password" placeholder="Password" required>
+                    <div class="err-msg"></div>
+                    <div class="success-msg"></div>
+
+                    <div class="btn-container">
+                        <button id="togglePasswordBtn">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button type="submit">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </button>
+                    </div>
+                    <div id="altMsg"></div>
+                </div>
+            </form>
+        </div>
     </body>
     <script type="module" src="/js/owner/sports.js"></script>
+    <script type="module" src="/js/owner/change_reservation_price.js"></script>
 </html>
