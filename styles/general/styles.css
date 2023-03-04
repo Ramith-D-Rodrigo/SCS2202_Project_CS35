@@ -285,3 +285,28 @@ tr:last-of-type td:last-of-type {
     pointer-events: none;
     opacity: 0.5;
 }
+
+::-webkit-scrollbar{
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb{
+    background: #696969;
+    border-radius: 10px;
+}
+
+div::-webkit-scrollbar{
+    width: 6px;
+}
+
+div::-webkit-scrollbar-track{
+    background: none;
+
+}
+
+div::-webkit-scrollbar-thumb{
+    background: #383838;
+    border-radius: 10px;
+    transition:  1000ms ease-in-out;
+
+}
