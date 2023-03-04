@@ -16,10 +16,13 @@
     }
 
     //check for authorization
-    if($_SESSION['userAuth'] != true){
+    if(!isset($_SESSION['userAuth']) || $_SESSION['userAuth'] != true){
         http_response_code(401);
         die();
     }
+
+    //unset the userAuth session variable
+    unset($_SESSION['userAuth']);
 
     require_once("../../src/owner/owner.php");
     require_once("../../src/general/sport.php");

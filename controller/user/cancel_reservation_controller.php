@@ -15,6 +15,9 @@
         exit();
     }
 
+    //now that user is authenticated, we can proceed with the cancellation process
+    unset($_SESSION['userAuth']);   //unset the userAuth session variable
+
     require_once("../../src/user/user.php");
     require_once("../../src/general/reservation.php");
     require_once("../../controller/CONSTANTS.php");
