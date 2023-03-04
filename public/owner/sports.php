@@ -30,7 +30,7 @@
                         </select>
                     </div>
                     <div id="addSport">
-                        <button onclick="window.location.href='/public/owner/add_sport.php'">Add New Sport <i class="fa-solid fa-person-running"></i></button>
+                        <button onclick="window.location.href='/public/owner/add_new_sport.php'">Add New Sport <i class="fa-solid fa-person-running"></i></button>
                     </div>
                 </div>
 
@@ -110,8 +110,6 @@
                 <div style="display:flex; flex-direction:column">
                     <input type="text" name="username" id="username" placeholder="Username" required minlength="6" maxlength="15">
                     <input type="password" name="password" id="password" placeholder="Password" required>
-                    <div class="err-msg"></div>
-                    <div class="success-msg"></div>
 
                     <div class="btn-container">
                         <button id="togglePasswordBtn">
