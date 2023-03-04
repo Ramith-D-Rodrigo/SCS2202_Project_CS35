@@ -31,14 +31,35 @@
                 $this -> $key = $value;
             }
 
-/*             $this -> sportName = $row -> sportName;
-            $this -> description = $row -> description;
-            $this -> reservationPrice = $row -> reservationPrice;
-            $this -> manNoOfStudents = $row -> manNoOfStudents; */
-
             $result -> free_result();
             unset($row);
             return $this;
+        }
+
+        public function setDetails($sportName = '', $description = '', $reservationPrice = '', $minCoachingSessionPrice = '', $maxNoOfStudents = ''){
+            $args = get_defined_vars();
+
+            foreach($args as $key => $value){
+                if($value !== ''){
+                    $this -> $key = $value;
+                }
+            }
+        }
+
+        public function createSportEntry($database){
+            $sql = sprintf("INSERT INTO `sport` 
+                (`sportID`,`sportName`, `description`, `reservationPrice`, `minCoachingSessionPrice`, `maxNoOfStudents`) 
+                VALUES ('%s','%s', '%s', '%s', '%s', NULLIF('%s', ''))",
+                $database -> real_escape_string($this -> sportID),
+                $database -> real_escape_string($this -> sportName),
+                $database -> real_escape_string($this -> description),
+                $database -> real_escape_string($this -> reservationPrice),
+                $database -> real_escape_string($this -> minCoachingSessionPrice),
+                $database -> real_escape_string($this -> maxNoOfStudents));
+
+            $result = $database -> query($sql);
+
+            return $result;
         }
 
         public function setID($id){

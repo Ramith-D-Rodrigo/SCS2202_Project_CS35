@@ -267,5 +267,20 @@
             return $sport -> updateDetails($updatingColumns, $this -> connection);
         }
 
+        public function addNewSport($sportName, $description, $reservationPrice, $maxPlayers){
+            $newSport = new Sport();
+
+            $sportID = uniqid(substr($sportName, 0, 4));    //set the sport ID
+            $newSport -> setID($sportID);
+
+            $coachingSessionPrice = $reservationPrice * MIN_COACHING_SESSION_PERCENTAGE  + $reservationPrice;   //set the coaching session price
+
+            $newSport -> setDetails($sportName, $description, $reservationPrice, $coachingSessionPrice, $maxPlayers);
+
+            $result = $newSport -> createSportEntry($this -> connection);
+
+            return $result;
+        }
+
     }
 ?>
