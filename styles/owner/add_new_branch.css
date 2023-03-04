@@ -1,0 +1,9 @@
+.content-box{
+    min-width: 40%;
+}
+
+.body-container{
+    justify-content: space-around;
+    align-items: stretch;
+    flex-wrap: wrap;
+}

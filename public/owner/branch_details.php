@@ -27,7 +27,7 @@
                 <div class="options">
                     <select id="branchFilter">
                     </select>
-                    <button id="addBranch">
+                    <button id="addBranch"onclick="window.location.href='/public/owner/add_new_branch.php'">
                         New Branch ?
                         <i class="fa-solid fa-building-circle-arrow-right"></i>
                     </button>
