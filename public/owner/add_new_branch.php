@@ -26,81 +26,95 @@
 
     <body>
         <?php require_once("header.php"); ?>
+
         <main class="body-container">
             <div class="content-box">
-                <div class="row-container">
-                    <div class="left-field">
-                        City
-                    </div>
-                    <div class="right-field">
-                        <textarea id="city" name="city" required></textarea>
-                    </div>
-                </div>
-                <div class="row-container">
-                    <div class="left-field">
-                        Address
-                    </div>
-                    <div class="right-field">
-                        <textarea id="address" name="address" required></textarea>
-                    </div>
-                </div>
-
-                <div class="row-container">
-                    <div class="left-field">
-                        Opening Time
-                    </div>
-                    <div class="right-field">
-                        <input type="time" id="openingTime" name="openingTime" required>
-                    </div>
-                </div>
-
-                <div class="row-container">
-                    <div class="left-field">
-                        Closing Time
-                    </div>
-                    <div class="right-field">
-                        <input type="time" id="closingTime" name="closingTime" required>
-                    </div>
-                </div>
-
-                <div class="row-container">
-                    <div class="left-field">
-                        Email Address
-                    </div>
-                    <div class="right-field">
-                        <input id="email" name="email" required>
-                    </div>
-                </div>
-
-                <div class="row-container">
-                    <div class="left-field">
-                        Offering Sports
-                    </div>
-                    <div class="right-field">
-                        <select id="sports" name="sports" required multiple>
-                        </select>
-                        <div>
-                            <select>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
-                            Courts
+                <form>
+                    <div class="row-container">
+                        <div class="left-field">
+                            City
+                        </div>
+                        <div class="right-field">
+                            <textarea id="city" name="city" required></textarea>
                         </div>
                     </div>
-                </div>
+                    <div class="row-container">
+                        <div class="left-field">
+                            Address
+                        </div>
+                        <div class="right-field">
+                            <textarea id="address" name="address" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Opening Time
+                        </div>
+                        <div class="right-field">
+                            <input type="time" id="openingTime" name="openingTime" required>
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Closing Time
+                        </div>
+                        <div class="right-field">
+                            <input type="time" id="closingTime" name="closingTime" required>
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Email Address
+                        </div>
+                        <div class="right-field">
+                            <input id="email" name="email" required>
+                        </div>
+                    </div>
+
+                    <div class="row-container">
+                        <div class="left-field">
+                            Offering Sports
+                        </div>
+                        <div class="right-field">
+                            <select id="sports" name="sports" required multiple>
+                            </select>
+                            <div>
+                                <select>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                                Courts
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-container">
+                        <button type="submit">Add Branch</button>
+                    </div>
+                </form>
             </div>
+
             <div class="content-box">
-                Select the Location of the Branch on the Map
+                <div class="card-title">Location of the Branch</div>
+                <div class="btn-container">
+                    <button id="currLocation">Current Location</button>
+                </div>
+                <div class="map" id="map">
+                </div>
             </div>
         </main>
         <?php require_once("../../public/general/footer.php"); ?>
     </body>
+    <script type="module" src="/js/owner/add_new_branch.js"></script>
 </html>
