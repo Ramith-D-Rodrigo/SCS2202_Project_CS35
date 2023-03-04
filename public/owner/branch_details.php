@@ -16,6 +16,9 @@
         <link rel="stylesheet" href="/styles/owner/branch_details.css">
         <link rel="stylesheet" href="/styles/general/staff.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css">
         <title>Branch Details</title>
     </head>
 
@@ -112,6 +115,10 @@
                         </div>
                     </div>
                 </form>
+
+                <div class="map-icon-container">
+                    <i class="fa-solid fa-map-location-dot map-icon" id="mapIcon"></i>
+                </div>
             </div>
 
             <div class="content-box">
@@ -134,6 +141,13 @@
         </main>
 
         <?php require_once("../../public/general/footer.php"); ?>
+
+        <div class="map-container content-box">
+            <div id="map"></div>
+            <div class="google-link">
+                <a href="">Open in <i class="fa-brands fa-google"></i></a>
+            </div>
+        </div>
     </body>
     <script type="module" src="/js/owner/branch_details.js"></script>
 </html>

@@ -41,11 +41,8 @@
                 </div>
             </div>
             <div class="content-box single-card">
-                <div class="card-title">Branch Feedback</div> 
+                <div class="card-title">Recent Feedback</div> 
                 <div id="feedbacks" class="card-content"></div>
-                <div class="card-button"> 
-                    <button> View More </button> 
-                </div>
             </div>
             <div class="content-box single-card">
                 <div class="card-title"> Manager Requests</div> 

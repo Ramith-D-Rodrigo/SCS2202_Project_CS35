@@ -19,7 +19,7 @@
 
 
     foreach($branches as $currBranch){
-        $currBranch -> getDetails($owner -> getConnection(), ['address', 'branchEmail', 'city', 'openingTime', 'closingTime', 'revenue', 'openingDate']);  //get branch details
+        $currBranch -> getDetails($owner -> getConnection(), ['address', 'branchEmail', 'city', 'openingTime', 'closingTime', 'revenue', 'openingDate', 'latitude', 'longitude']);  //get branch details
 
         $branchManager = $currBranch -> getCurrentManager($owner -> getConnection());  //branch manager
         $branchReceptionist = $currBranch -> getCurrentReceptionist($owner -> getConnection());    //branch receptionist

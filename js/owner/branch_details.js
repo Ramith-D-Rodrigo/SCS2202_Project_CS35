@@ -1,3 +1,6 @@
+import {intializeMap, setMarker} from "../MAP_FUNCTIONS.js";
+import {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain} from "../FUNCTIONS.js";
+
 let feedbacks = []; //to store the feedbacks for pagination
 let branches = [];  //store the branches
 let currPage = 1;   //current page of the feedbacks
@@ -71,7 +74,57 @@ fetch("../../controller/owner/branch_details_controller.php")
         displayBranchDetails({target: {value: branches[0].branchDetails.branchID}});
     })
     .then(() => {
-        console.log(branches);
+        //event listener for map icon
+        const mapIcon = document.querySelector("#mapIcon");
+        mapIcon.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const branchID = document.querySelector("#branchFilter").value;
+            if(branchID == ""){
+                return;
+            }
+            const branch = branches.find(branch => {
+                return branch.branchDetails.branchID == branchID;
+            });
+
+            const latitude = branch.branchDetails.latitude;
+            const longitude = branch.branchDetails.longitude;
+
+                //display the map
+            const mapContainer = document.querySelector(".map-container");
+            mapContainer.style.display = "flex";
+
+            const map = intializeMap('map', latitude, longitude);
+            setMarker(map, latitude, longitude);
+
+            //add the google maps link
+            const googleMapsLink = mapContainer.lastElementChild;
+            const link = googleMapsLink.querySelector("a");
+            link.href = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+
+            //disable the main and darken it
+            const main = document.querySelector("main");
+            disableElementsInMain(main);
+
+            main.style.opacity = "0.5";
+
+            main.addEventListener("click", function closeMap() {
+                mapContainer.style.display = "none";
+                enableElementsInMain(main);
+                main.style.opacity = "1";
+
+                //delete the map
+                const map = document.querySelector("#map");
+                map.remove();
+
+                const newMap = document.createElement("div");
+                newMap.id = "map";
+                newMap.className = "map";
+                mapContainer.insertBefore(newMap, googleMapsLink);
+
+
+                main.removeEventListener("click", closeMap);
+            });
+        });
     })
 
 
@@ -128,8 +181,8 @@ const displayBranchDetails = (e) => {
         branchDetailsForm.querySelector("#receptionist").value = receptionist;
 
         branchDetailsForm.querySelector("#startDate").value = branch.branchDetails.openingDate;
-        branchDetailsForm.querySelector("#openingTime").value = branch.branchDetails.openingTime;
-        branchDetailsForm.querySelector("#closingTime").value = branch.branchDetails.closingTime;
+        branchDetailsForm.querySelector("#openingTime").value = changeToLocalTime(branch.branchDetails.openingTime);
+        branchDetailsForm.querySelector("#closingTime").value = changeToLocalTime(branch.branchDetails.closingTime);
 
         //contact numbers 
         const contactOption1 = document.createElement("option");
