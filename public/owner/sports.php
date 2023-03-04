@@ -25,7 +25,7 @@
         <main class="body-container">
             <div class="content-box">
                 <div class="options">
-                    <div id="sportsFilter">
+                    <div>
                         <select id="sportsFilter">
                         </select>
                     </div>
@@ -52,7 +52,7 @@
                             <div class="row-container">
                                 <div class="left-field">Current Reservation Price</div>
                                 <div class="right-field">
-                                    <input type="number" id="reservationPrice" readonly>
+                                    <input id="reservationPrice" readonly>
                                 </div>
                             </div>
                         </form>
@@ -94,4 +94,5 @@
         </main>
         <?php require_once("../../public/general/footer.php"); ?>
     </body>
+    <script type="module" src="/js/owner/sports.js"></script>
 </html>
