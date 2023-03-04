@@ -97,3 +97,19 @@
     align-items: center;
     font-size: 3rem;
 }
+
+.several-btns{
+    flex-direction: column;
+    width: 100%;
+}
+
+.several-btns > button{
+    margin: 1rem;
+    width: 50%;
+    height: 5rem;
+    font-size: 1.2rem;
+}
+
+.several-btns > button > i {
+    font-size: 1.5rem;
+}

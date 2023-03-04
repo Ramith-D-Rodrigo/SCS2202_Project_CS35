@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="content-box single-card">
-                <div class="card-title">Recent Feedback</div> 
+                <div class="card-title">Recent Feedbacks</div> 
                 <div id="feedbacks" class="card-content"></div>
             </div>
             <div class="content-box single-card">
@@ -58,7 +58,11 @@
                 </div>
             </div>
             <div class="content-box single-card">
-                <div class="card-title"> Make a Request </div> 
+                <div class="card-title"> Quick Links </div> 
+                <div class="btn-container card-content several-btns">
+                    <button onclick="window.location.href='/public/owner/add_new_branch.php'"> Add New Branch <i class="fa-solid fa-building-circle-arrow-right"></i></button>
+                    <button onclick="window.location.href='/public/owner/add_new_sport.php'"> Add New Sport <i class="fa-solid fa-basketball"></i> <i class="fa-solid fa-circle-plus"></i></button>
+                </div>
             </div>
         </main>
         <?php
