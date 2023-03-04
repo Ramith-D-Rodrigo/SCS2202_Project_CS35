@@ -35,7 +35,7 @@
                             City
                         </div>
                         <div class="right-field">
-                            <textarea id="city" name="city" required></textarea>
+                            <textarea id="city" name="city" required pattern="[a-zA-Z]+"></textarea>
                         </div>
                     </div>
                     <div class="row-container">
@@ -70,7 +70,16 @@
                             Email Address
                         </div>
                         <div class="right-field">
-                            <input id="email" name="email" required>
+                            <input id="email" name="email" required type="email">
+                        </div>
+                    </div>
+                    
+                    <div class="row-container">
+                        <div class="left-field">
+                            Opening Date
+                        </div>
+                        <div class="right-field">
+                            <input type="date" id="openingDate" name="openingDate" required>
                         </div>
                     </div>
 
@@ -79,27 +88,13 @@
                             Offering Sports
                         </div>
                         <div class="right-field">
-                            <select id="sports" name="sports" required multiple>
-                            </select>
-                            <div>
-                                <select>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                </select>
-                                Courts
+                            <!-- check box -->
+                            <div class="sports-container" id="sports">
                             </div>
                         </div>
                     </div>
-
-                    <div class="btn-container">
+                    <div class="msg" id="msg"></div>
+                    <div class="submit-btn-container">
                         <button type="submit">Add Branch</button>
                     </div>
                 </form>
@@ -110,7 +105,9 @@
                 <div class="btn-container">
                     <button id="currLocation">Current Location</button>
                 </div>
-                <div class="map" id="map">
+                <div class="map-container">
+                    <div id="map">
+                    </div>
                 </div>
             </div>
         </main>
