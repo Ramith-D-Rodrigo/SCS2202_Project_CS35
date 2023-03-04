@@ -34,13 +34,29 @@
     $changingSport -> setID($sportID);
 
     $changingColumns = array();
+    $retunMsg = array();
 
     //check for changing values
     if(isset($userInputs['newDescription'])){
+        if(strlen($userInputs['newDescription']) > 100){
+            http_response_code(400);
+            $retunMsg['msg'] = "Description should be less than 100 characters";
+            header("Content-Type: application/json");
+            echo json_encode($retunMsg);
+            die();
+        }
        $changingColumns['description'] = $userInputs['newDescription'];
+
     }
 
     if(isset($userInputs['newPrice'])){
+        if($userInputs['newPrice'] <= 0 || $userInputs['newPrice'] % 10 != 0){
+            http_response_code(400);
+            $retunMsg['msg'] = "Invalid Reservation Price";
+            header("Content-Type: application/json");
+            echo json_encode($retunMsg);
+            die();
+        }
         $changingColumns['reservationPrice'] = $userInputs['newPrice'];
 
         //calculate the new min coaching session price 
@@ -48,13 +64,19 @@
     }
 
     if(isset($userInputs['newMaxPlayers'])){
+        if($userInputs['newMaxPlayers'] <= 0){
+            http_response_code(400);
+            $retunMsg['msg'] = "Invalid Max Players";
+            header("Content-Type: application/json");
+            echo json_encode($retunMsg);
+            die();
+        }
         $changingColumns['maxNoOfStudents'] = $userInputs['newMaxPlayers'];
     }
 
 
     $status = $owner -> updateSportDetails($changingSport, $changingColumns);
 
-    $retunMsg = array();
     if($status){
         http_response_code(200);
         $retunMsg['msg'] = "Details updated successfully";
