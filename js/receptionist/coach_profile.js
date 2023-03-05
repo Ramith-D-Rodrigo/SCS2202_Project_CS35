@@ -77,19 +77,24 @@ fetch("../../controller/receptionist/view_cProfile_controller.php?coachID=".conc
             }
             
 
-            const branch = document.getElementById("sessionBranch");
-            const defaultOption = document.createElement("option");
-            defaultOption.innerHTML = "Choose One...";
-            defaultOption.value = "";
-            branch.appendChild(defaultOption);
+            // const branch = document.getElementById("sessionBranch");
+            // const defaultOption = document.createElement("option");
+            // defaultOption.innerHTML = "Choose One...";
+            // defaultOption.value = "";
+            // branch.appendChild(defaultOption);
             
-            for(j = 0; j < data[3].length; j++){   
-                const branchName = document.createElement("option");
-                branchName.innerHTML = data[3][j];
-                branchName.value = data[3][j];
-                branch.appendChild(branchName);
-            }
-            
+            // for(j = 0; j < data[3].length; j++){   
+            //     const branchName = document.createElement("option");
+            //     branchName.innerHTML = data[3][j];
+            //     branchName.value = data[3][j];
+            //     branch.appendChild(branchName);
+            // }
+            const sessionInfo = document.getElementById("sessionInfo");
+            for(i=0;i<data.length;i++){
+                const session = document.createElement("input");
+                session.value = data[i][0].concat("From: ",data[i][1]," To: ",data[i][2]);
+                sessionInfo.appendChild(session);
+            }   
             if(data[2].length === 0){
                 const noFeedback  = document.getElementById("errFeedback-msg");
                 noFeedback.innerHTML = "No Feedback yet.";
@@ -106,28 +111,28 @@ fetch("../../controller/receptionist/view_cProfile_controller.php?coachID=".conc
         }
     });
 
-    const branchName = document.getElementById("sessionBranch");
-    branchName.addEventListener("change", (e) => {
-        if(e.target.value !== ""){
-            fetch("../../controller/receptionist/view_sessionInfo_controller.php?coachID=".concat(coachProfile,"&branch=",e.target.value))
-            .then((res)=>res.json())
-            .then((data)=>{
-                // console.log(data);
-                if(data[0]['errMsg'] !== undefined){   //not any dependent
-                    const searchError = document.getElementById("sessionInfo");
-                    searchError.innerHTML = data[0]['errMsg'];
-                }else{
-                    const sessionInfo = document.getElementById("sessionInfo");
-                    for(i=0;i<data.length;i++){
-                        const session = document.createElement("input");
-                        session.value = data[i][0].concat("From: ",data[i][1]," To: ",data[i][2]);
-                        sessionInfo.appendChild(session);
-                    }   
-                }
-            });
-        }else{
-            const sessionInfo = document.getElementById("sessionInfo");
-            sessionInfo.innerHTML = "";
-        }
+    // const branchName = document.getElementById("sessionBranch");
+    // branchName.addEventListener("change", (e) => {
+    //     if(e.target.value !== ""){
+    //         fetch("../../controller/receptionist/view_sessionInfo_controller.php?coachID=".concat(coachProfile,"&branch=",e.target.value))
+    //         .then((res)=>res.json())
+    //         .then((data)=>{
+    //             // console.log(data);
+    //             if(data[0]['errMsg'] !== undefined){   //not any dependent
+    //                 const searchError = document.getElementById("sessionInfo");
+    //                 searchError.innerHTML = data[0]['errMsg'];
+    //             }else{
+    //                 const sessionInfo = document.getElementById("sessionInfo");
+    //                 for(i=0;i<data.length;i++){
+    //                     const session = document.createElement("input");
+    //                     session.value = data[i][0].concat("From: ",data[i][1]," To: ",data[i][2]);
+    //                     sessionInfo.appendChild(session);
+    //                 }   
+    //             }
+    //         });
+    //     }else{
+    //         const sessionInfo = document.getElementById("sessionInfo");
+    //         sessionInfo.innerHTML = "";
+    //     }
         
-    });
+    // });

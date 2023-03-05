@@ -38,14 +38,17 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/user/reservation_history.php'){  //reservation history
                     echo "Reservation History";
                 }
-                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/coach_profile.php')){  //reservation history
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/coach_profile.php')){  //coach profile
                     echo "Coach Profile";
                 }
-                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/our_feedback.php')){  //reservation history
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/our_feedback.php')){  //feedback page
                     echo "Our Feedback";
                 }
-                else if(str_contains($_SERVER['REQUEST_URI'],'/public/user/edit_profile.php')){  //reservation history
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/user/edit_profile.php')){  //edit profile
                     echo "Edit Profile";
+                }
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/user/coaching_sessions.php')){  //coaching sessions
+                    echo "Coaching Sessions";
                 }
             ?>
         </div>

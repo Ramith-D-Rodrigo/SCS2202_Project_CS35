@@ -8,7 +8,9 @@ const MAX_RESERVATION_TIME_HOURS = 6;  //maximum reservation time in hours (defa
 const MIN_RESERVATION_DAYS = 3;    //minimum reservation date in days (default is 3)
 const MAX_RESERVATION_DAYS = 30;   //maximum reservation date in days (default is 30)
 
-//seconds are not defined as they are always considered to be 0 to making reservations
-//minutes are not defined as they are always considered to be 0 or 30 to making reservations
+//seconds are not defined as they are always considered to be 0 for making reservations
+//minutes are not defined as they are always considered to be 0 for making reservations
 
-export {verbose, MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS, MIN_RESERVATION_TIME_HOURS};
+const currency = "LKR";
+
+export {verbose, MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS, MIN_RESERVATION_TIME_HOURS, currency};

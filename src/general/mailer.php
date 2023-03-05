@@ -57,13 +57,34 @@
         }
 
         public static function passwordReset($recipientEmail, $recipient_username, $verificationCode){   //this function is used to send the verification code for account activation
-            $subject = "Password Reset";
+            $subject = "Password Reset Verification";
             $body = "<p>Hi $recipient_username,</p>
                     <p>You have requested to reset your password. Please use the following code to verify the action.</p>
                     <p?>Code : {$verificationCode} </p>
                     <p>If you did not request to reset your password, please ignore this email.</p>
                     <p>Regards,<br>Sportude Support</p>";
             return self::sendMail($recipientEmail, $recipient_username, $subject, $body);
+        }
+
+        public static function deactivateAccount($recipientEmail, $recipientUsername, $verifcationCode){
+            $subject = "Account Deactivation Verification";
+            $body = "<p>Hi $recipientUsername,</p>
+                    <p>You have requested to deactivate your account. Please use the following code to verify the action.</p>
+                    <p?>Code : {$verifcationCode} </p>
+                    <p>If you did not request to deactivate your account, please ignore this email.</p>
+                    <p>Regards,<br>Sportude Support</p>";
+            return self::sendMail($recipientEmail, $recipientUsername, $subject, $body);
+        }
+
+        public static function deactivateAccountNotification($recipientEmail, $recipientUsername){
+            $subject = "Your Sportude Account Deactivation";
+            $body = "<p>Hi $recipientUsername,</p>
+                    <p>It is sad to see you go, Thank you for being part of our website.</p>
+                    <p?>If you want to reactivate your account in the future, log in with the same credentials and follow the shown process.</p>
+                    <p>Until next time, Thank you.</p>
+                    <p>Regards,<br>Sportude Support</p>";
+                    
+            return self::sendMail($recipientEmail, $recipientUsername, $subject, $body);
         }
     }
 ?>

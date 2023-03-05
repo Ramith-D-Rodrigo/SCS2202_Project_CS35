@@ -16,8 +16,8 @@
                 <title>Sports Complex</title>
                 <link rel="stylesheet" href="./styles/general/styles.css">
                 <link rel="stylesheet" href="./styles/general/index.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    </head>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+            </head>
             <body>
                 <?php
                     require_once("./public/general/header.php");
@@ -58,7 +58,7 @@
             </body>
             <script src="/js/general/search_validation.js"></script>
             <script src="/js/general/index_animation.js"></script>
-    <script src="/js/user/account_links.js"></script>
+            <script src="/js/user/account_links.js"></script>
         </html>
 
     <?php

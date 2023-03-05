@@ -28,6 +28,7 @@ require_once("../../src/general/uuid.php");
 
     <main class="body_container">
         <div class="content_box">
+        <form action="/controller/manager/change_time_controller.php" method="POST">
             <div class="open_close">
                 <div id="but_Open">Current Opening Time:
                     <input type="text" value="" id="OpenTime">
@@ -43,16 +44,16 @@ require_once("../../src/general/uuid.php");
 
             <div class="NewOpenClose">
                 <div id="but_NewOpen">New Opening Time:
-                    <input type="time" value="" id="NewOpen">
+                    <input type="time" value="" id="NewOpen" name="newOpen">
                 </div>
                 <div id="but_NewClose">New ClosingTime:
-                    <input type="time" value="" id="Newclose">
+                    <input type="time" value="" id="Newclose" name="newClose">
                 </div>
             </div>
 
             <div class="button">
                 <div>
-                    <button>Change</button>
+                    <button name="cha-man">Change</button>
                 </div>
                 <div>
                     <button onclick="window.location.href='manager_dashboard.php'">Cancel</button>
@@ -79,5 +80,6 @@ require_once("../../src/general/uuid.php");
     require_once("../general/footer.php");
     ?>
 </body>
+<script src="/js/manager/view_time.js"></script>
 
 </html>

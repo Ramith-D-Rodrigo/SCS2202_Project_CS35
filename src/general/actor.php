@@ -43,7 +43,18 @@
         }
 
         public function getEmailAddress(){
-            return $this -> emailAddress;
+            if(isset($this -> emailAddress)){
+                return $this -> emailAddress;
+            }
+            else{ //get from the database
+                $sql = sprintf("SELECT emailAddress FROM `login_details` WHERE userID = '%s'", $this -> connection -> real_escape_string($this -> userID));
+                $result = $this -> connection -> query($sql);
+                $resultRow = $result -> fetch_object();
+                $this -> emailAddress = $resultRow -> emailAddress;
+                $result -> free_result();
+                unset($resultRow);
+                return $this -> emailAddress;
+            }
         }
 
         public function login($inputUsername, $inputPassword){

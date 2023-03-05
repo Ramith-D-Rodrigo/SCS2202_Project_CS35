@@ -1,6 +1,6 @@
 <?php
     //owner connection to the database
-    include("../../hostChange.php");
+    require_once("../../hostChange.php");
     if(localFlag){
         $serverName = "localhost";
         $username = "root";

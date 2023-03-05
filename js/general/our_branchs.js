@@ -178,7 +178,7 @@ fetch("../../controller/general/our_branches_controller.php")
 
             const branchEmail = document.createElement("div");  //branch email
             branchEmail.className = "info";
-            branchEmail.innerHTML = "Branch Email : " + branches[i].email;
+            branchEmail.innerHTML = "Branch Email : " + branches[i].branchEmail;
             form.appendChild(branchEmail);
 
             const receptionist_contact = document.createElement("div"); //branch receptionist contact div
