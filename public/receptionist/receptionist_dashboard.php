@@ -12,7 +12,7 @@
   <meta charset="UTF-8" />
   <title>Receptionist's Dashboard</title>
   <link rel="stylesheet" href="/styles/general/styles.css">
-  <link rel="stylesheet" href="/styles/general/staff.css">
+  <link rel="stylesheet" href="/styles/receptionist/receptionistDashboard.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
 </head>
