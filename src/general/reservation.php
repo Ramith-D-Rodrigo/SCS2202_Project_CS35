@@ -17,6 +17,7 @@
         private $courtName;
         private $reservedDate;  //the date and time when the reservation is made
         private $chargeID;  //the charge id from the payment gateway
+        private $notificationID;
 
         public function onlineReservation($date, $st, $et, $people, $payment, $court, $user, $chargeID, $database){
             $this -> userID = $user;
@@ -189,7 +190,19 @@
 
 
         public function JsonSerialize() : mixed{
-            return [
+            $objectProperties = get_object_vars($this);
+
+            $returnJSON = [];
+
+            foreach($objectProperties as $key => $value){
+                if(!isset($value) || $value == ''){
+                    continue;
+                }
+                $returnJSON[$key] = $value;
+            }
+
+            return $returnJSON;
+/*             return [
                 "reservationID" => $this -> reservationID,
                 "date" => $this -> date,
                 "startingTime" => $this -> startingTime,
@@ -206,7 +219,7 @@
                 "court_name" => $this -> courtName,
                 "reservedDate" => $this -> reservedDate,
                 "chargeID" => $this -> chargeID
-            ];
+            ]; */
         }
     }
 ?>
