@@ -1,18 +1,21 @@
 <?php
     session_start();
-    if(!(isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is not logged in
-        header("Location: /index.php");
-        exit();
-    }
-
-    if($_SESSION['userrole'] !== 'user'){   //not a user (might be another actor)
-        header("Location: /index.php");
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck :  TRUE, acceptingUserRoles : ['user'])){
+        Security::redirectUserBase();
+        die();
     }
 
     if(!isset($_SESSION['userAuth']) || $_SESSION['userAuth'] !== true){   //if the user is not authenticated
-        header("Location: /index.php");
-        exit();
+        http_response_code(401);
+        echo json_encode(['msg' => 'User is not authenticated']);
+        die();
+    }
+
+    //server request method check
+    if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        http_response_code(405);
+        die();
     }
 
     //now that user is authenticated, we can proceed with the cancellation process
@@ -30,11 +33,18 @@
     $cancellingReservation = new Reservation();
     $cancellingReservation -> setID($selectedReservation);
 
-    $cancellingReservation -> getDetails($cancellingUser -> getConnection(), ['chargeID', 'status', 'reservedDate', 'paymentAmount']);
+    $cancellingReservation -> getDetails($cancellingUser -> getConnection(), ['chargeID', 'status', 'reservedDate', 'paymentAmount', 'userID']);
 
     $reservationDetails = json_decode(json_encode($cancellingReservation), true);
 
     if($reservationDetails['status'] !== 'Pending'){   //if the reservation is not in pending state
+        http_response_code(400);
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode(array('msg' => "Invalid Reservation"));
+        die();
+    }
+
+    if($reservationDetails['userID'] !== $_SESSION['userid']){   //if the reservation is not made by the requesting user
         http_response_code(400);
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode(array('msg' => "Invalid Reservation"));

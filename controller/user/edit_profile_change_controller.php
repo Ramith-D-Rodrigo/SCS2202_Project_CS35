@@ -4,6 +4,18 @@
     require_once("../../src/user/user_dependent.php");
     require_once("../../src/general/security.php");
 
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
+
+    //server request method check
+    if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        http_response_code(405);
+        die();
+    }
+    
+
     $editableFields = ['contactNo', 
     'height', 
     'weight', 
