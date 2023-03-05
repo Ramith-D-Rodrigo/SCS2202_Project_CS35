@@ -10,11 +10,20 @@
 
   $manager = new Manager();
 
- $manager -> changeTimeofaBranch($connection,$openingTime,$closingTime,$_SESSION['branchID']);
+  $manager -> setUserID($_SESSION['userid']);
+
+  $status = $manager -> changeTimeofaBranch($openingTime,$closingTime,$_SESSION['branchID']);
+
+  if($status){
+    echo json_encode(array("successMsg" => "Time Edited Successfully"));
+  }
+  else{
+    echo json_encode(array("errMsg" => "Failed to Edit Time"));
+  }
 
 
-  header("Location: /public/manager/manager_edit_time.php");
-  $connection -> close();
+ // header("Location: /public/manager/manager_edit_time.php");
+  //$connection -> close();
 ?>
  
 

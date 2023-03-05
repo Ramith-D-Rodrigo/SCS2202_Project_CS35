@@ -68,17 +68,12 @@
                 <div class="right-side" id="rating"> </div>
             </div>
             <br>
-            Qualifications
-            <br>
-            <br>
-            <div id="qualifications"> </div>
-
             <div class="row-container">
-                <div class="left-side"> Session Branches:  </div>
-                <div class="right-side">
-                    <select id="sessionBranch"> </select>
-                </div>
+                <div class="left-side"> Qualifications: </div>
+                <div class="right-side" id="qualifications"> </div>
             </div>
+            <br>
+            <br>
             <div class="row-container">
                 <div class="left-side"> Coaching Sessions:  </div>
                 <div class="right-side" id="sessionInfo">   
@@ -86,12 +81,13 @@
             </div>
         </div>
         <div class="content-box" style="width:44%" id="feedbackData">  
-            Student Feedback
+            <input readonly id="feedbackCaption"></input> 
             <br>
             <br>
             <div id="errFeedback-msg">
             </div>   
-            <div id="feedback"> </div>
+            <div id="feedback">
+            </div>
         </div>
     </div>
     </main>

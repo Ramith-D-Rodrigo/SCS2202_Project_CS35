@@ -69,65 +69,45 @@ fetch("../../controller/receptionist/view_cProfile_controller.php?coachID=".conc
             }else{
                 for(i = 0; i < data[4].length; i++){
                     const qualificationsOut = document.createElement("input");
+                    qualificationsOut.readOnly = true;
                     qualificationsOut.value = data[4][i].qualification;
                     qualificationsDiv.appendChild(qualificationsOut);
-                    qualificationsDiv.appendChild(document.createElement("br"));
-                    qualificationsDiv.appendChild(document.createElement("br"));
                 }
             }
             
 
-            const branch = document.getElementById("sessionBranch");
-            const defaultOption = document.createElement("option");
-            defaultOption.innerHTML = "Choose One...";
-            defaultOption.value = "";
-            branch.appendChild(defaultOption);
-            
-            for(j = 0; j < data[3].length; j++){   
-                const branchName = document.createElement("option");
-                branchName.innerHTML = data[3][j];
-                branchName.value = data[3][j];
-                branch.appendChild(branchName);
-            }
-            
+            const sessionInfo = document.getElementById("sessionInfo");
+            for(i=0;i<data[3].length;i++){
+                const session = document.createElement("input");
+                session.readOnly = true;
+                session.value = data[3][i][0].concat(" From: ",data[3][i][1]," To: ",data[3][i][2]);
+                sessionInfo.appendChild(session);
+            }   
             if(data[2].length === 0){
                 const noFeedback  = document.getElementById("errFeedback-msg");
                 noFeedback.innerHTML = "No Feedback yet.";
             }else{
                 const feedbackDiv = document.getElementById("feedback");
+                const feedbackCaption = document.getElementById("feedbackCaption");
+                feedbackCaption.value = "Feedbacks";
+                feedbackCaption.style.width = "200px";
                 for(i = 0; i < data[2].length; i++){
-                    const feedbackOut = document.createElement("input");
-                    feedbackOut.value = data[2][i].description;
-                    feedbackDiv.appendChild(feedbackOut);
-                    feedbackDiv.appendChild(document.createElement("br"));
+                    container = document.createElement("div");
+                    container.className = "row-container";
+                    left = document.createElement("div");
+                    left.className = "left-side";
+                    left.style.width = "200px";
+                    left.innerHTML = "Name: ".concat("<br>","Rating: ","<br>","View: ");
+                    right = document.createElement("div");
+                    right.className = "right-side";
+                    right.style.marginLeft = "0px";
+                    right.innerHTML = data[2][i][1].concat(" ",data[2][i][2],"<br>",data[2][i][0].rating," Stars","<br>",data[2][i][0].description);
+                    container.appendChild(left);
+                    container.appendChild(right);
+                    feedbackDiv.appendChild(container);
                     feedbackDiv.appendChild(document.createElement("br"));
                 }
             }
         }
     });
 
-    const branchName = document.getElementById("sessionBranch");
-    branchName.addEventListener("change", (e) => {
-        if(e.target.value !== ""){
-            fetch("../../controller/receptionist/view_sessionInfo_controller.php?coachID=".concat(coachProfile,"&branch=",e.target.value))
-            .then((res)=>res.json())
-            .then((data)=>{
-                // console.log(data);
-                if(data[0]['errMsg'] !== undefined){   //not any dependent
-                    const searchError = document.getElementById("sessionInfo");
-                    searchError.innerHTML = data[0]['errMsg'];
-                }else{
-                    const sessionInfo = document.getElementById("sessionInfo");
-                    for(i=0;i<data.length;i++){
-                        const session = document.createElement("input");
-                        session.value = data[i][0].concat("From: ",data[i][1]," To: ",data[i][2]);
-                        sessionInfo.appendChild(session);
-                    }   
-                }
-            });
-        }else{
-            const sessionInfo = document.getElementById("sessionInfo");
-            sessionInfo.innerHTML = "";
-        }
-        
-    });
