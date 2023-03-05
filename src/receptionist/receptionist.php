@@ -408,8 +408,14 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         }
 
         $rating = $coach -> getRating($database);
-        $feedbackArray = $coach -> getFeedback($database);
-
+        $feedbackResults = $coach -> getFeedback($database);
+        $feedbackArray = [];
+        foreach($feedbackResults as $feedback){
+            $stuID = $feedback -> stuID;
+            $user = new User();
+            $user -> setDetails(uid:$stuID);
+            array_push($feedbackArray,[$feedback,$user -> getProfileDetails("firstName"),$user -> getProfileDetails("lastName")]);
+        }
         $coachInfo = [];
         array_push($coachInfo,$coachProfile,$rating,$feedbackArray,$sessionInfo,$qualificationArr);
         return $coachInfo;
