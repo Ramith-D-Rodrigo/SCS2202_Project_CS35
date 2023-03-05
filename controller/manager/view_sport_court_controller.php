@@ -9,17 +9,18 @@
 
     $branch = new Branch($managerBranchID);
 
-    $branchSports = $branch -> getAllSports($connection);
+    $branchCourts = $branch -> getBranchCourts($connection);
 
     $allCourts = [];
-    foreach($branchSports as $currSport){
-        $courts = $branch -> getSportCourts($currSport -> sportID, $connection);
-        foreach($courts as $currCourt){
-            $tempCourt = new Sports_Court($currCourt);
-            $status = $tempCourt -> getStatus($connection);
-            $tempCourtName = $tempCourt -> getName($connection);
-            array_push($allCourts, ['courtID' => $currCourt, 'courtName' => $tempCourtName, 'sport' => $currSport -> sportName, "status" => $status]);
-        }
+    foreach($branchCourts as $currCourt){
+        $courtID = $currCourt -> getID();
+        $courtStatus = $currCourt -> getStatus($connection);
+        $courtName = $currCourt -> getName($connection);
+        $currSport = $currCourt -> getSport($connection);
+        $currSport -> getDetails($connection, ['sportName']);
+        $sportName = json_decode(json_encode($currSport), true)['sportName'];
+        array_push($allCourts, ['courtID' => $courtID, 'courtName' => $courtName, 'sport' => $sportName, "status" => $courtStatus]);
+        
     }
     $_SESSION['branchCourts'] = $allCourts;
     header("Location: /public/manager/sport_court.php");
