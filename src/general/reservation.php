@@ -107,7 +107,7 @@
         public function getDetails($database, $wantedColumns = []){
             $sql = "SELECT ";
             if(empty($wantedColumns)){
-                $sql .= "`r`.*, `b`.`city` AS `branch`, `s`.`sportName` as `sport`, `sc`.`courtName`";
+                $sql .= "`r`.*";
             }else{
                 foreach($wantedColumns as $column){
                     $sql .= "`r`.`$column`,";
@@ -115,6 +115,8 @@
                 //remove the last comma
                 $sql = substr($sql, 0, -1);
             }
+
+            $sql .= sprintf(", `b`.`city` AS `branch`, `s`.`sportName` as `sport`, `sc`.`courtName`");
             
             $sql .= sprintf(" FROM `reservation` `r`
             INNER JOIN `sports_court` `sc`

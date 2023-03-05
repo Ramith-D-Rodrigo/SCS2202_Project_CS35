@@ -17,7 +17,7 @@
     $notifications = $actor -> getNotifications();
 
     foreach($notifications as $notification){
-        $notification -> getDetails($actor -> getConnection(), ['subject', 'status', 'description', 'reservationID']);
+        $notification -> getDetails($actor -> getConnection(), ['subject', 'status', 'description']);
     }
 
     header("Content-Type: application/json");

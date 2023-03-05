@@ -9,7 +9,6 @@
         private $date;
         private $lifetime;
         private $userID;
-        private $reservationID; //for reservation notifications
         private $readTimeStamp;
 
         public function __construct($notificationID){
@@ -39,12 +38,9 @@
                 $this -> readTimeStamp = null;
             }
 
-            if(!isset($this -> reservationID)){
-                $this -> reservationID = null;
-            }
 
             $sql = sprintf("INSERT INTO `notification` 
-                (`notificationID`,`subject`, `status`, `description`, `date`, `lifetime`, `userID`, `reservationID`, `readTimeStamp`) 
+                (`notificationID`,`subject`, `status`, `description`, `date`, `lifetime`, `userID`, `readTimeStamp`) 
                 VALUES ('%s', '%s', '%s', '%s', NULLIF('%s', ''), '%s', '%s', NULLIF('%s', ''), NULLIF('%s', ''))",
                 $database -> real_escape_string($this -> notificationID),
                 $database -> real_escape_string($this -> subject),
@@ -53,7 +49,6 @@
                 $database -> real_escape_string($this -> date),
                 $database -> real_escape_string($this -> lifetime),
                 $database -> real_escape_string($this -> userID),
-                $database -> real_escape_string($this -> reservationID),
                 $database -> real_escape_string($this -> readTimeStamp));
 
             $result = $database -> query($sql);
