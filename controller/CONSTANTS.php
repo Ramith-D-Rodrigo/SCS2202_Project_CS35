@@ -25,4 +25,7 @@
     );
 
     define("ALPHABET", $alphabet);  //the alphabet array
+
+    define("NOTIFICATION_LIFE_TIME_DAYS", 3);  //the life time of a notification in days (default is 3 days)
+    define("NOTIFICATION_LIFE_TIME_HOURS", 24 * NOTIFICATION_LIFE_TIME_DAYS);  //the life time of a notification in hours 
 ?>
