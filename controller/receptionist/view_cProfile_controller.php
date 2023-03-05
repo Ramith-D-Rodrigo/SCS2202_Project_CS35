@@ -10,7 +10,7 @@
     $staffM = new Staff();
     $receptionist = $staffM -> getStaffMemeber($_SESSION['userrole']);
 
-    $coachProfile = $receptionist -> getWantedCoachProfile($coachID,$connection);
+    $coachProfile = $receptionist -> getWantedCoachProfile($coachID,$_SESSION['branchID'],$connection);
 
     if(count($coachProfile)===0){
         array_push($userProfile,['errMsg'=>"Sorry, No record of such user"]);

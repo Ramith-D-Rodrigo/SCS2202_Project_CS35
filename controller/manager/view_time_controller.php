@@ -3,16 +3,17 @@
     // require_once("../../src/manager/manager.php");
     require_once("../../src/manager/manager_dbconnection.php");
     require_once("../../src/general/branch.php");
-    require_once("../../src/manager/manager_dbconnection.php");
+    // require_once("../../src/manager/manager_dbconnection.php");
 
 
     $managerBranchID = $_SESSION['branchID'];
     
     $branch = new Branch($managerBranchID);
-    $openingTime =  $branch -> getDetails($connection, 'openingTime');
-    $closingTime = $branch -> getDetails($connection, 'closingTime');
+    $branch -> getDetails($connection, ['openingTime', 'closingTime']);
+    
+    $branchASSOC = json_decode(json_encode($branch), true);
 
-    $returnMsg = ['openingTime' => $openingTime, 'closingTime' => $closingTime];
+    $returnMsg = ['openingTime' => $branchASSOC['openingTime'], 'closingTime' => $branchASSOC['closingTime']];
     
     echo json_encode($returnMsg);
 /*     foreach($timeResult as $time){
