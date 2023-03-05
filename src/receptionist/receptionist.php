@@ -287,22 +287,30 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
     public function getAllSports($branchID,$database) {
         $branch = new Branch($branchID);
-        $sportDetails = $branch -> getAllSports($database);
-
-        return $sportDetails;
+        $sportObjects = $branch -> offeringSports($database);
+        $sportNames = [];
+        foreach($sportObjects as $sportObject){
+            array_push($sportNames,$sportObject -> getDetails($database,['sportName']));
+        }
+        return $sportNames;
     }
 
-    public function getAllCourts($branchID,$database) {
-        $branch = new Branch($branchID);
-        $courtNames = $branch -> getAllCourts($database);
+    // public function getAllCourts($branchID,$database) {
+    //     $branch = new Branch($branchID);
+    //     $courtNames = $branch -> getBranchCourts($database,);
 
-        return $courtNames;
-    }
+    //     return $courtNames;
+    // }
 
     public function getAvailableCourts($branchID,$sportID,$database) {
         $branch = new Branch($branchID);
-        $courtNames = $branch -> getSportCourtNames($sportID, $database);
-
+        $sport  = new Sport();
+        $sport ->setID($sportID);
+        $courts = $branch -> getBranchCourts($database,$sport,'a');
+        $courtNames = [];
+        foreach($courts as $court){
+            array_push($courtNames,$court -> getName($database));
+        }
         return $courtNames;
     }
 
@@ -368,7 +376,7 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $profileResult;
     }
 
-    public function getWantedCoachProfile($coachID,$database){
+    public function getWantedCoachProfile($coachID,$branchID,$database){
 
         $coach = new Coach();
         $coach -> setDetails(uid:$coachID);
@@ -382,42 +390,47 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         $qualificationsql = sprintf("SELECT `qualification` FROM `coach_qualification` WHERE `coachID` = '%s'",
         $database -> real_escape_string($coachID)); //get the coach qualifications
         $qualificationArr = $database -> query($qualificationsql) -> fetch_all(MYSQLI_ASSOC);
+        
 
-        $coachingSessionsql = sprintf("SELECT `sessionID` FROM `coaching_session` WHERE `coachID` = '%s'",
-        $database -> real_escape_string($coachID));
-        $coachingSessions = $database -> query($coachingSessionsql);
-        $branchNames = [];
-        while($row = $coachingSessions -> fetch_object()){
-            $session = new Coaching_Session($row -> sessionID);
-            $branchName = $session -> getDetails($database,"branchName");
-            array_push($branchNames,$branchName);
-        }
-
-        $uniBranchNames = array_unique($branchNames);
-        $rating = $coach -> getRating($database);
-        $feedbackArray = $coach -> getFeedback($database);
-
-        $coachInfo = [];
-        array_push($coachInfo,$coachProfile,$rating,$feedbackArray,$uniBranchNames,$qualificationArr);
-        return $coachInfo;
-    }
-
-    public function getSeesionOnBranch($coachID,$branchName,$database){
         $coachingSessionsql = sprintf("SELECT `sessionID` FROM `coaching_session` WHERE `coachID` = '%s'",
         $database -> real_escape_string($coachID));
         $coachingSessions = $database -> query($coachingSessionsql);
         $sessionInfo = [];
         while($row = $coachingSessions -> fetch_object()){
-            $session = new Coaching_Session($row -> sessionID);
-            if($session -> getDetails($database,"branchName") === $branchName){
-                $sTime = $session -> getDetails($database,"startingTime");
-                $eTime = $session -> getDetails($database,"endingTime");
-                $day = $session -> getDetails($database,"day");
-                array_push($sessionInfo,[$day,$sTime,$eTime]);
-            }  
+            $sql = sprintf("SELECT * FROM coaching_session cs
+            INNER JOIN sports_court c ON  `c`.`courtID` = `cs`.`courtID`
+            INNER JOIN branch b ON `c`.`branchID` = `b`.`branchID`
+            WHERE cs.sessionID = '%s' AND b.branchID = '%s'",
+            $database -> real_escape_string($row -> sessionID),
+            $database -> real_escape_string($branchID));
+            $session = $database -> query($sql) -> fetch_object();
+            array_push($sessionInfo,[$session->day,$session->startingTime,$session->endingTime]);
         }
-        return $sessionInfo;
+
+        $rating = $coach -> getRating($database);
+        $feedbackArray = $coach -> getFeedback($database);
+
+        $coachInfo = [];
+        array_push($coachInfo,$coachProfile,$rating,$feedbackArray,$sessionInfo,$qualificationArr);
+        return $coachInfo;
     }
+
+    // public function getSeesionOnBranch($coachID,$branchName,$database){
+    //     $coachingSessionsql = sprintf("SELECT `sessionID` FROM `coaching_session` WHERE `coachID` = '%s'",
+    //     $database -> real_escape_string($coachID));
+    //     $coachingSessions = $database -> query($coachingSessionsql);
+    //     $sessionInfo = [];
+    //     while($row = $coachingSessions -> fetch_object()){
+    //         $session = new Coaching_Session($row -> sessionID);
+    //         if($session -> getDetails($database,"branchName") === $branchName){
+    //             $sTime = $session -> getDetails($database,"startingTime");
+    //             $eTime = $session -> getDetails($database,"endingTime");
+    //             $day = $session -> getDetails($database,"day");
+    //             array_push($sessionInfo,[$day,$sTime,$eTime]);
+    //         }  
+    //     }
+    //     return $sessionInfo;
+    // }
 
     public function viewReservations($branchID,$database){
         
