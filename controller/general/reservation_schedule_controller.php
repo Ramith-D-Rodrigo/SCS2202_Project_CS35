@@ -92,6 +92,9 @@
     //branch maintenance
     $branchMaintenance = $branch -> getBranchMaintenance($connection, ['startingDate', 'endingDate'], date("Y-m-d"), 'a');
 
+    //get branch discount
+    $branchDiscount = $branch -> getCurrentDiscount($connection);
+
 
     $branchJSON = json_encode($branch);
     $neededInfo = json_decode($branchJSON, true);
@@ -99,6 +102,7 @@
     $neededInfo['reservingSport'] = $sport;
     $neededInfo['branchReservationSchedule'] = $allCourts;
     $neededInfo['branchMaintenance'] = $branchMaintenance;
+    $neededInfo['branchDiscount'] = $branchDiscount;
 
     unset($allCourts);
     unset($sport);

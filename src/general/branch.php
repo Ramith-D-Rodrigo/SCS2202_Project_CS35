@@ -4,6 +4,7 @@
     require_once("../../src/general/branch_feedback.php");
     require_once("../../src/general/sport.php");
     require_once("../../src/general/sport_court.php");
+    require_once("../../controller/CONSTANTS.php");
 
     class Branch implements JsonSerializable{
         private $branchID;
@@ -504,6 +505,7 @@
         }
 
         public function getCurrentDiscount($database){ //function to get the current discount of the branch (available during the current date)
+            date_default_timezone_set(SERVER_TIMEZONE);
             $today = date('Y-m-d');
 
             $sql = sprintf("SELECT `discountValue`
