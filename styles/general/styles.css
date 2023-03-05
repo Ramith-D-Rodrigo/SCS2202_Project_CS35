@@ -41,12 +41,13 @@ a:hover{
 
 header{
     flex: none;
-    padding: 8px 0;
+    padding: 0.5rem 0;
     position: sticky;
     height:auto;
     width:100vw;
     background-color: black;
     color: white;
+    z-index: 1000;
 }
 
 .header-top{
