@@ -520,13 +520,13 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         console.log(currValues);
 
         const nameField = document.getElementById("nameField"); //set the name field
-        nameField.innerHTML = data["fName"] + " " + data["lName"];
+        nameField.innerHTML = data["firstName"] + " " + data["lastName"];
 
         const birthdayField = document.getElementById("birthdayField"); //set the birthday field
-        birthdayField.innerHTML = data["dob"];
+        birthdayField.innerHTML = data["birthday"];
 
         const userContact = document.getElementById("usercontact"); //set the contact field
-        userContact.value = data['contactNo'];
+        userContact.value = data['contactNum'];
 
         const homeAddress = document.getElementById("userHomeAddress"); //set the home address field
         homeAddress.innerHTML = decodeHtml(data['homeAddress']);
@@ -546,7 +546,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         }
 
         const currEmailField = document.getElementById("currentEmailField");    //set the current email field
-        currEmailField.innerHTML = data['email'];
+        currEmailField.innerHTML = data['emailAddress'];
 
         const usernameField = document.getElementById("usernameField");   //set the username field
         usernameField.innerHTML = data['username'];
@@ -600,7 +600,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         profilePicImg.style.maxHeight = "100%";
 
         if(data['profilePic'] !== null){    //has a profile picture  
-            profilePicImg.src = data['profilePic'];
+            profilePicImg.src = data['profilePhoto'];
         }
         else{
             profilePicImg.src = "/styles/icons/profile_icon.svg";

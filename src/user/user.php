@@ -405,7 +405,6 @@ class User extends Actor implements JsonSerializable{
             height: $detailsrow -> height,
             weight: $detailsrow -> weight,
             email: $loginrow -> emailAddress,
-            password: $loginrow -> password,
             username: $loginrow -> username,
             medicalConcerns: $medicalConcernsArr,
             dependents: $dependentArr);
