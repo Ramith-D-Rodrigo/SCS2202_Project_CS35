@@ -17,7 +17,7 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="/styles/user/edit_profile.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-                <link rel="stylesheet" href="./styles/general/notification.css">
+                <link rel="stylesheet" href="/styles/general/notification.css">
             </head>
             <body>
                 <?php   require_once("../../public/general/header.php"); ?>
