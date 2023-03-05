@@ -230,6 +230,7 @@
 
                 if(!in_array($courtSport -> getID(), $sportIDs)){   //exclude duplicate sports
                     array_push($sports, $courtSport);
+                    array_push($sportIDs, $courtSport -> getID());
                 }
             }
 
