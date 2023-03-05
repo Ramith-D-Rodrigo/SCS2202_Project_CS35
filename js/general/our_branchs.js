@@ -1,3 +1,6 @@
+import { intializeMap, setMarker} from "../MAP_FUNCTIONS.js";
+import {disableElementsInMain, enableElementsInMain} from "../FUNCTIONS.js";
+
 const result = document.getElementById("branches");
 
 function changeBtnValue(e){
@@ -18,6 +21,66 @@ function viewFeedback(e){
     console.log(branchID);
     localStorage.setItem("feedbackBranch", branchID);
     window.location.href = "/public/general/our_feedback.php";
+}
+
+const showMap = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    //get the latitude and longitude
+    const parentDiv = e.target.parentNode;
+    console.log(parentDiv);
+    const latitude = parentDiv.querySelector(".latitude").value;
+    const longitude = parentDiv.querySelector(".longitude").value;
+
+    //get the map div
+    const mapDiv = document.querySelector(".map-container");
+
+    //show the map div
+    mapDiv.style.display = "block";
+
+    //initialize the map
+    const map = intializeMap("map", latitude, longitude);
+
+    //set the marker
+    setMarker(map, latitude, longitude);
+    
+    //google link
+    const googleLinkDiv = document.querySelector(".google-link");
+
+    //set the google link
+    const link = googleLinkDiv.querySelector("a");
+
+    link.setAttribute("href", `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`);
+
+    //open in new tab
+    link.setAttribute("target", "_blank");
+
+    //select main and disable
+    const main = document.querySelector("main");
+    main.style.opacity = "0.5";
+
+    disableElementsInMain(main);
+
+    main.addEventListener("click", function mainClick(e){
+        //hide the map div
+        mapDiv.style.display = "none";
+        //enable main
+        main.style.opacity = "1";
+        enableElementsInMain(main);
+        main.removeEventListener("click", mainClick);
+
+        const map = mapDiv.querySelector("#map");
+
+        //remove the map
+        map.remove();
+
+        //add the map div again
+        const newMapDiv = document.createElement("div");
+        newMapDiv.setAttribute("id", "map");
+        mapDiv.insertBefore(newMapDiv, mapDiv.firstChild);
+
+    });
 }
 
 let branches = [];
@@ -97,6 +160,35 @@ fetch("../../controller/general/our_branches_controller.php")
             const location = document.createElement("div"); //branch location div
             location.className = "info";
             location.innerHTML = "Location : " + branches[i].city;
+
+            const branchLocation = document.createElement("div"); //branch location div
+            branchLocation.style.display = "inline-block";
+            branchLocation.style.marginLeft = "1em";
+            //hidden inputs for  latitude and longitude
+            const latitude = document.createElement("input");
+            latitude.type = "hidden";
+            latitude.className = "latitude";
+            latitude.value = branches[i].latitude;
+
+            const longitude = document.createElement("input");
+            longitude.type = "hidden";
+            longitude.className = "longitude";
+            longitude.value = branches[i].longitude;
+
+            branchLocation.appendChild(latitude);
+            branchLocation.appendChild(longitude);
+
+            //map icon 
+            const mapIcon = document.createElement("i");
+            mapIcon.className = "fa fa-map";
+            mapIcon.classList.add("map-icon");
+            mapIcon.style.fontSize = "2em";
+            mapIcon.style.cursor = "pointer";
+            mapIcon.addEventListener("click", showMap);
+
+            branchLocation.appendChild(mapIcon);
+
+            location.appendChild(branchLocation);
             form.appendChild(location);
 
             const rating = document.createElement("div");   //branch rating div
@@ -200,7 +292,7 @@ fetch("../../controller/general/our_branches_controller.php")
             emptyOption.text = "Choose One";
             sportSelector.appendChild(emptyOption);
 
-            for(j = 0; j < branches[i].sports.length; j++){ //adding the sports to the drop dowm
+            for(let j = 0; j < branches[i].sports.length; j++){ //adding the sports to the drop dowm
                 const sportOption = document.createElement("option");
                 sportOption.text = branches[i].sports[j].sportName;
                 sportOption.value = branches[i].sports[j].sportID;
