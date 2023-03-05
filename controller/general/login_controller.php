@@ -130,7 +130,7 @@
             $returnJSON['userrole'] = 'manager';
         }
         else if($result[1] === 'owner'){    //owner login
-            $loginOwner = new Owner($loginActor);
+            $loginOwner = Owner::getInstance($loginActor);
             $_SESSION['userid'] = $loginOwner -> getUserID();
             $_SESSION['username'] = $username;  //store the username in the session
             $_SESSION['userrole'] = 'owner';

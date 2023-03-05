@@ -342,7 +342,7 @@ class User extends Actor implements JsonSerializable{
             $endingTime = $row -> ending_time; */
 
             //$row -> {"time_period"} = $startingTime . " to " . $endingTime;
-            $currReservation -> getDetails($this -> connection);  //get the reservation details
+            $currReservation -> getDetails($this -> connection, ['date', 'startingTime', 'endingTime', 'status', 'reservedDate', 'paymentAmount']);  //get the reservation details
 
             array_push($reservations, $currReservation);
             unset($currReservation);
@@ -357,18 +357,20 @@ class User extends Actor implements JsonSerializable{
         return $result;
     }
 
-    public function getProfileDetails($wantedProperty = ''){   //get the profile details and store in the object
-        if($wantedProperty !== ''){ //when needed only single property
-            $detailsSql = sprintf("SELECT `%s` FROM `user` WHERE `userID` = '%s'",
-            $this -> connection -> real_escape_string($wantedProperty),
-            $this -> connection -> real_escape_string($this -> userID)); //user details
+    public function getProfileDetails($wantedColumns = []){   //get the profile details and store in the object
+        if($wantedColumns !== []){  //if the user wants to get specific columns
+            $wantedColumns = implode(", ", $wantedColumns);
+            $sql = sprintf("SELECT %s FROM `user` WHERE `userID` = '%s'", $wantedColumns, $this -> connection -> real_escape_string($this -> userID));
+            $result = $this -> connection -> query($sql);
 
-            $result = $this -> connection -> query($detailsSql);
-            $resultObj = $result -> fetch_object();
-            $returnVal = $resultObj -> {$wantedProperty};
+            $row = $result -> fetch_object();
+
             $result -> free_result();
-            unset($resultObj);
-            return $returnVal;
+
+            foreach($row as $key => $value){
+                $this -> $key = $value;
+            }
+            return $this;
         }
 
         $detailsSql = sprintf("SELECT * FROM `user` WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID)); //user details
@@ -403,7 +405,6 @@ class User extends Actor implements JsonSerializable{
             height: $detailsrow -> height,
             weight: $detailsrow -> weight,
             email: $loginrow -> emailAddress,
-            password: $loginrow -> password,
             username: $loginrow -> username,
             medicalConcerns: $medicalConcernsArr,
             dependents: $dependentArr);
@@ -670,22 +671,25 @@ class User extends Actor implements JsonSerializable{
     }
 
     public function jsonSerialize() : mixed{    //to json encode
-        return [
-            'username' => $this -> username,
-            'password' => $this -> password,
-            'fName' => $this -> firstName,
-            'lName' => $this -> lastName,
-            'homeAddress' => $this -> homeAddress,
-            'gender' => $this -> gender,
-            'dob' => $this -> birthday,
-            'height' => $this -> height,
-            'weight' => $this -> weight,
-            'profilePic' => $this -> profilePhoto,
-            'email' => $this -> emailAddress,
-            'contactNo' => $this -> contactNum,
-            'medicalConcerns' => $this -> medicalConcerns,
-            'dependents' => $this -> dependents
-        ];
+        $ObjectProperties = get_object_vars($this);
+        $returnJSON = [];
+
+        foreach($ObjectProperties as $key => $value){
+            if($key === 'connection'){
+                continue;
+            }
+
+            if($key === 'password'){
+                continue;
+            }
+
+            if(!isset($value)){
+                continue;
+            }
+            $returnJSON[$key] = $value;
+        }
+
+        return $returnJSON;
     }
 }
 ?>

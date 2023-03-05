@@ -14,7 +14,7 @@
 
         $tempBranch = new Branch($branchID);    //create new branch object
 
-        $tempBranch -> getDetails($connection, ['address', 'city', 'branchEmail', 'openingTime', 'closingTime', 'currManager', 'currReceptionist']);
+        $tempBranch -> getDetails($connection, ['address', 'city', 'branchEmail', 'openingTime', 'closingTime', 'currManager', 'currReceptionist', 'latitude', 'longitude']);
         $branchSports = $tempBranch -> offeringSports($connection);
 
         //traverse the sports array and get the sport name

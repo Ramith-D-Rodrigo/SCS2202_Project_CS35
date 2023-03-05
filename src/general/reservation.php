@@ -17,6 +17,7 @@
         private $courtName;
         private $reservedDate;  //the date and time when the reservation is made
         private $chargeID;  //the charge id from the payment gateway
+        private $notificationID;
 
         public function onlineReservation($date, $st, $et, $people, $payment, $court, $user, $chargeID, $database){
             $this -> userID = $user;
@@ -106,7 +107,7 @@
         public function getDetails($database, $wantedColumns = []){
             $sql = "SELECT ";
             if(empty($wantedColumns)){
-                $sql .= "`r`.*, `b`.`city` AS `branch`, `s`.`sportName` as `sport`, `sc`.`courtName`";
+                $sql .= "`r`.*";
             }else{
                 foreach($wantedColumns as $column){
                     $sql .= "`r`.`$column`,";
@@ -114,6 +115,8 @@
                 //remove the last comma
                 $sql = substr($sql, 0, -1);
             }
+
+            $sql .= sprintf(", `b`.`city` AS `branch`, `s`.`sportName` as `sport`, `sc`.`courtName`");
             
             $sql .= sprintf(" FROM `reservation` `r`
             INNER JOIN `sports_court` `sc`
@@ -189,7 +192,19 @@
 
 
         public function JsonSerialize() : mixed{
-            return [
+            $objectProperties = get_object_vars($this);
+
+            $returnJSON = [];
+
+            foreach($objectProperties as $key => $value){
+                if(!isset($value) || $value == ''){
+                    continue;
+                }
+                $returnJSON[$key] = $value;
+            }
+
+            return $returnJSON;
+/*             return [
                 "reservationID" => $this -> reservationID,
                 "date" => $this -> date,
                 "startingTime" => $this -> startingTime,
@@ -206,7 +221,7 @@
                 "court_name" => $this -> courtName,
                 "reservedDate" => $this -> reservedDate,
                 "chargeID" => $this -> chargeID
-            ];
+            ]; */
         }
     }
 ?>

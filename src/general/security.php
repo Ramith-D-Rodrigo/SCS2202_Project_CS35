@@ -38,7 +38,10 @@
 
             require("dbconnection.php");
             self::$connection = $connection;
-            $sql = sprintf("SELECT `emailAddress` FROM `login_details` WHERE `emailAddress` = '%s'", self::$connection -> real_escape_string($santizedEmail));
+            $sql = sprintf("SELECT `ld`.`emailAddress`, `b`.`branchEmail` FROM `login_details` `ld` CROSS JOIN 
+            `branch` `b` WHERE `ld`.`emailAddress` = '%s' OR `b`.`branchEmail` = '%s'", 
+            self::$connection -> real_escape_string($santizedEmail),
+            self::$connection -> real_escape_string($santizedEmail));
 
             $result = self::$connection -> query($sql);
             //$row = $result -> fetch_object();
@@ -104,8 +107,8 @@
                     return true; //can access
                 }
                 else{   //the user is logged in
-                    if(!($_SESSION['userrole'] === 'user')){   //if the logged in person is not a coach or an user
-                        return false;   //they cannot access (we are referring to staff here)
+                    if(!($_SESSION['userrole'] === 'user')){   //if the logged in person is not a user
+                        return false;   //they cannot access (we are referring to staff and coach here)
                     }
                     else{
                         return true;

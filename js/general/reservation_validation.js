@@ -101,8 +101,20 @@ reserveStartingTime.addEventListener('change', (e)=>{
         return;
     }
     
-    const minRevPrice = reservationPrice.min;
-    const calulatedPrice = minRevPrice * timeDiffHours;
+    let minRevPrice = reservationPrice.min;
+    let calulatedPrice = minRevPrice * timeDiffHours;
+
+    //check for discount
+    const discount = document.getElementById("discountInput");
+
+    console.log(discount);
+    if(discount != null){ //calculate the price with the discount
+        const discountValue = discount.value;
+        minRevPrice = minRevPrice - (minRevPrice * (discountValue/100));
+
+        calulatedPrice = minRevPrice * timeDiffHours;
+    }
+
     reservationPrice.value = calulatedPrice;
 });
 
@@ -150,8 +162,19 @@ reserveEndingTime.addEventListener('change', (e)=>{
     errorMsg.innerHTML = "";
     console.log(timeDiffHours);
     
-    const minRevPrice = reservationPrice.min;
-    const calulatedPrice = minRevPrice * timeDiffHours;
+    let minRevPrice = reservationPrice.min;
+    let calulatedPrice = minRevPrice * timeDiffHours;
+    //check for discount
+    const discount = document.getElementById("discountInput");
+
+    console.log(discount);
+    if(discount != null){ //calculate the price with the discount
+        const discountValue = discount.value;
+        minRevPrice = minRevPrice - (minRevPrice * (discountValue/100));
+
+        calulatedPrice = minRevPrice * timeDiffHours;
+    }
+
     reservationPrice.value = calulatedPrice;
 });
 

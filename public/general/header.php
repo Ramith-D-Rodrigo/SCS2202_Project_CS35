@@ -60,7 +60,15 @@
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
         ?>  
             <div style="float:right" id="accountIcons">
-            
+                <input type="checkbox" class="dropdown-check" id="notificationCheck">
+                <div class='notification-container'>
+                    <label for="notificationCheck">
+                        <i class="fa-solid fa-bell btn bell"></i>
+                        <i class="fa-solid fa-plus notification-count" id="notificationCount"></i>
+                    </label>
+                    <ul class="dropdown">
+                    </ul>
+                </div>
                 <?php if(isset($_SESSION['userProfilePic'])){?>
                     
                     <button class ="btn" id='profileBtn'><img src="<?php echo $_SESSION['userProfilePic']?>" class="acc-img" style="border: solid thin black"></button>
@@ -68,7 +76,7 @@
                 }
                 else{
                 ?>
-                    <button class ="btn" id='profileBtn'><img src="/styles/icons/profile_icon.svg" class="acc-img"></button>
+                    <button class ="btn" id='profileBtn'><i class="fa-solid fa-circle-user"></i></button>
                 <?php
                 }
                 ?>

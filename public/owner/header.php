@@ -5,10 +5,31 @@
                 if($_SERVER['REQUEST_URI'] === '/public/owner/owner_dashboard.php'){
                     echo "Welcome, ".$_SESSION['username'];
                 }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/branch_details.php')){
+                    echo "Branch Details";
+                }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/sports.php')){
+                    echo "Sports";
+                }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/add_new_branch.php')){
+                    echo "Request to Add a New Branch";
+                }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/add_new_sport.php')){
+                    echo "Add a New Sport";
+                }
             ?>
         </div>
         <div>
-            <div style="float:right" id="logout">
+            <div style="float:right" id="accountIcons">
+            <input type="checkbox" class="dropdown-check" id="notificationCheck">
+                <div class='notification-container'>
+                    <label for="notificationCheck">
+                        <i class="fa-solid fa-bell btn bell"></i>
+                        <i class="fa-solid fa-plus notification-count" id="notificationCount"></i>
+                    </label>
+                    <ul class="dropdown">
+                    </ul>
+                </div>
             <?php
                 if($_SERVER['REQUEST_URI'] !== '/public/owner/owner_dashboard.php'){
             ?>

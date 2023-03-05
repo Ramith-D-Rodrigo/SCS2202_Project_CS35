@@ -57,6 +57,8 @@
         exit();
     }
 
+    date_default_timezone_set(SERVER_TIMEZONE);
+
     $startingTimeObj = new DateTime($startingTime);
     $endingTimeObj = new DateTime($endingTime);
     $timeDifference = date_diff($startingTimeObj, $endingTimeObj);
@@ -76,7 +78,7 @@
     else if($endingTimeObj -> format('s') != '00'){    //seconds should be 0
         $validationFlag = true;
     }
-    else if($timeDifference -> h < MIN_RESERVATION_TIME_HOURS || $timeDifference -> h > MAX_RESERVATION_TIME_HOURS || ($timeDifference -> h === MAX_RESERVATION_TIME_HOURS && $timeDifference -> i === 30)){ //minimum and maximum reservation time period check
+    else if($timeDifference -> h < MIN_RESERVATION_TIME_HOURS || $timeDifference -> h > MAX_RESERVATION_TIME_HOURS || ($timeDifference -> h === MAX_RESERVATION_TIME_HOURS && $timeDifference -> i != 0)){ //minimum and maximum reservation time period check
         $validationFlag = true;
     }
     if($validationFlag === true){
@@ -121,14 +123,21 @@
     $calculation = ($timeDifference -> h + ($timeDifference -> i/60));  //get hours and minutes and convert minutes to hours to get the period in hours
     $payment = $reservationPrice * $calculation;//calculate the payment
 
+    //check for branch discount
+    $branchID = $reservingCourt -> getBranch($reservingUser -> getConnection());
+    $branch = new Branch($branchID);
+
+    $discountValue = $branch -> getCurrentDiscount($reservingUser -> getConnection());
+
+    if($discountValue != null){    //branch has a discount
+        $payment = $payment - ($payment * ($discountValue/100));
+    }
+
 
     //reservation availability check
     $schedule = $reservingCourt -> getSchedule($reservingUser -> getConnection());
 
-
     //branch maintenance
-    $branchID = $reservingCourt -> getBranch($reservingUser -> getConnection());
-    $branch = new Branch($branchID);
     $branchMaintenance = $branch -> getBranchMaintenance($reservingUser -> getConnection(),['startingDate', 'endingDate'], $date, 'a');
 
     if(count($branchMaintenance) !== 0){   //branch has maintenance
@@ -230,8 +239,11 @@
     //payment 
     require_once("../../src/general/paymentGateway.php");
 
-    $fName = $reservingUser -> getProfileDetails('firstName');
-    $lName = $reservingUser -> getProfileDetails('lastName');
+    $reservingUser -> getProfileDetails(['firstName', 'lastName']);
+    $userJSON = json_decode(json_encode($reservingUser), true);
+
+    $fName = $userJSON['firstName'];
+    $lName = $userJSON['lastName'];
 
 
     $branch -> getDetails($reservingUser -> getConnection(), ['city']);

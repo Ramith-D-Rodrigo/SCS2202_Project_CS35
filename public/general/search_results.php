@@ -17,6 +17,7 @@
                 <link rel="stylesheet" href="/styles/general/reg_coaches.css">
                 <link rel="stylesheet" href="/styles/general/our_branches.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+                <link rel="stylesheet" href="/styles/general/notification.css">
                 <title>Search a Sport</title>
             </head>
 
@@ -42,6 +43,7 @@
             </body>
             <script src="/js/user/account_links.js"></script>
             <script src="/js/general/search_results.js"></script>
+            <script type="module" src="/js/general/notifications.js"></script>
         </html>
     <?php
     }

@@ -34,3 +34,46 @@
 .checked{
     color: gold;
 }
+
+.map-icon{
+    color: #02135f;
+    transition: all 0.3s ease-in-out;
+}
+
+.map-icon:hover{
+    color: #860404;
+    scale: 1.2;
+}
+
+.map-container{
+    display: none;
+    height: 400px;
+    width: 400px;
+    position: absolute;
+    top: calc(100vh / 2);
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#map{
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+}
+
+.map-container > div> a {
+    color: black;
+    margin: 1rem;
+}
+
+.map-container > div {
+    text-align: center;
+}
+
+.map-container > div > a:hover{
+    background-color: transparent;
+}
+
+body{
+    position: relative;
+}

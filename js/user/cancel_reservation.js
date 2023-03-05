@@ -139,7 +139,7 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
         const formData = new FormData(authForm);
 
         //send the form data to the server
-        fetch("../../controller/user/authentication_controller.php", {  //authentication first
+        fetch("../../controller/general/authentication_controller.php", {  //authentication first
             method: "POST",
             body: JSON.stringify(Object.fromEntries(formData)),
             Headers: {
