@@ -17,42 +17,33 @@
             $this -> branchID = $branch_id;
         }
 
-        public function getDetails($database, $wantedProperty = ''){
-            if($wantedProperty === 'userFeedbackID'){
-                return $this -> userFeedbackID;
-            }
-            else if($wantedProperty === ''){
-                $sql = sprintf("SELECT `uf`.*, CONCAT(`u`.`firstName`,' ', `u`.`lastName`) AS fullName FROM `user_branch_feedback` `uf` INNER JOIN user u ON `u`.`userID` = `uf`.`userID` WHERE `userFeedbackID`  = '%s'",
+        public function getUserFeedbackID(){
+            return $this -> userFeedbackID;
+        }
+
+        public function getDetails($database, $wantedColumns = []){
+            $sql = "SELECT ";
+
+            if($wantedColumns == []){
+                $sql .= sprintf("`uf`.*, CONCAT(`u`.`firstName`,' ', `u`.`lastName`) AS userFullName FROM `user_branch_feedback` `uf` INNER JOIN user u ON `u`.`userID` = `uf`.`userID` WHERE `userFeedbackID`  = '%s'",
                 $database -> real_escape_string($this -> userFeedbackID));
-
-                $sql = $database -> query($sql);
-
-                $row = $sql -> fetch_object();
-
-                $this -> setDetails(userfeedback_id : $row -> userFeedbackID,
-                user_id: $row -> userID,
-                date: $row -> date,
-                rating: $row -> rating,
-                description: $row -> description,
-                branch_id: $row -> branchID);
-
-                $this -> userFullName = $row -> fullName;
-                return $this;
             }
-            else{   //any other property (single)
-                $sql = sprintf("SELECT `%s` as `wanted_property` FROM `user_branch_feedback` WHERE `userFeedbackID`  = '%s'",
-                $database -> real_escape_string($wantedProperty),
+            else{
+                $sql .= implode(", ", $wantedColumns);
+                $sql .= sprintf(" FROM `user_branch_feedback` WHERE `userFeedbackID` = '%s'",
                 $database -> real_escape_string($this -> userFeedbackID));
-
-                $result = $database -> query($sql);
-
-                $row = $result -> fetch_object();
-                $wantedInfo = $row -> wanted_property;
-                unset($row);
-                $result -> free_result();
-                return $wantedInfo;
             }
 
+            $result = $database -> query($sql);
+            $row = $result -> fetch_object();
+
+            foreach($row as $key => $value){
+                $this -> $key = $value;
+            }
+
+            $result -> free_result();
+
+            return $this;
         }
 
         public function addFeedback($database){
@@ -72,14 +63,17 @@
         }
 
         public function jsonSerialize() : mixed{
-            return [
-                "feedbackID" => $this -> userFeedbackID,
-                "date" => $this -> date,
-                "rating" => $this -> rating,
-                "description" => $this -> description,
-                "branch" => $this -> branchID,
-                "userFullName" => $this -> userFullName
-            ];
+            $classProperties = get_object_vars($this);
+
+            $jsonProperties = [];
+
+            foreach($classProperties as $key => $value){
+                if(isset($value) && $value != ''){
+                    $jsonProperties[$key] = $value;
+                }
+            }
+
+            return $jsonProperties;
         }
     }
 ?>

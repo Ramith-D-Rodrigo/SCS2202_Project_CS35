@@ -370,80 +370,6 @@ function validateChanges(e){
     }
 }
 
-const  credentialForm = document.getElementById("credentialForm");
-
-function validateEmailPasswordForm(event){
-    //passwords matching or not
-    const password = document.getElementById("password");
-    const passwordConfirm = document.getElementById("confirmPassword");
-
-    if(!credentialForm.reportValidity()){
-        return false;
-    }
-
-    let flag = true;
-
-    if(password.value !== "" || passwordConfirm.value !== ""){  //the user is changing the password
-        if(password.value !== passwordConfirm.value){
-            errMsg.innerHTML = errMsg.innerHTML + "Passwords do not match<br>";
-            flag = false;
-        }
-        else{
-            errMsg.innerHTML.replace("Passwords do not match<br>", "");
-        }
-    }
-
-    const email = document.getElementById("emailAddress");  //email address check
-    if(email.value !== ""){
-        if(!email.value.includes("@") || !email.value.includes(".")){
-            errMsg.innerHTML = errMsg.innerHTML + "Invalid Email Address<br>";
-            flag = false;
-        }
-        else if(email.value === currValues.email){
-            errMsg.innerHTML.replace("Invalid Email Address<br>", "");
-            errMsg.innerHTML = errMsg.innerHTML + "You have entered the previous Email as the new Email<br>";
-        }
-
-        else{
-            errMsg.innerHTML.replace("Invalid Email Address<br>", "");
-            errMsg.innerHTML.replace("You have entered the previous Email as the new Email<br>", "");
-        }
-    }
-
-    if(flag === false){ //Has invalid inputs
-        console.log("Form is invalid");
-        return false;
-    }
-    else{   //valid to submit the data
-        console.log("Form is valid");
-        return true;
-    }
-}
-
-credentialForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    let newValues = []; //new values to be updated
-    const formData = new FormData(credentialForm);
-
-
-
-    if(formData.get("newPassword") === ""){    //if the user is not changing the password
-        formData.delete("newPassword");
-        formData.delete("newPasswordConfirm");
-    }
-    if(formData.get("email") === ""){   //if the user is not changing the email
-        formData.delete("email");
-    }
-    const arr = Array.from(formData.entries());
-    console.log(arr);
-    if(arr.length === 0){  //if the user is not changing anything
-        errMsg.innerHTML = "You have not changed anything";
-        return;
-    }
-
-
-});
-
 editForm.addEventListener('submit', (e) => {
     let newValues = []; //new values to be updated
     e.preventDefault();
@@ -490,11 +416,6 @@ editForm.addEventListener('submit', (e) => {
                 contactNum: ""
             }
             continue;
-        }
-        if(key === 'height' || key === 'weight'){
-            if(value === ''){
-                value = null;
-            }
         }
 
         if(currValues[key] !== value){  //if the value has changed
@@ -599,13 +520,13 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         console.log(currValues);
 
         const nameField = document.getElementById("nameField"); //set the name field
-        nameField.innerHTML = data["fName"] + " " + data["lName"];
+        nameField.innerHTML = data["firstName"] + " " + data["lastName"];
 
         const birthdayField = document.getElementById("birthdayField"); //set the birthday field
-        birthdayField.innerHTML = data["dob"];
+        birthdayField.innerHTML = data["birthday"];
 
         const userContact = document.getElementById("usercontact"); //set the contact field
-        userContact.value = data['contactNo'];
+        userContact.value = data['contactNum'];
 
         const homeAddress = document.getElementById("userHomeAddress"); //set the home address field
         homeAddress.innerHTML = decodeHtml(data['homeAddress']);
@@ -625,7 +546,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         }
 
         const currEmailField = document.getElementById("currentEmailField");    //set the current email field
-        currEmailField.innerHTML = data['email'];
+        currEmailField.innerHTML = data['emailAddress'];
 
         const usernameField = document.getElementById("usernameField");   //set the username field
         usernameField.innerHTML = data['username'];
@@ -679,7 +600,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         profilePicImg.style.maxHeight = "100%";
 
         if(data['profilePic'] !== null){    //has a profile picture  
-            profilePicImg.src = data['profilePic'];
+            profilePicImg.src = data['profilePhoto'];
         }
         else{
             profilePicImg.src = "/styles/icons/profile_icon.svg";

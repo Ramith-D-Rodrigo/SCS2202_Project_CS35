@@ -75,7 +75,7 @@ fetch("../../controller/general/reg_coaches_controller.php")
 
                 //decimal rating
                 if(data[i].rating % 1 !== 0 && j === Math.ceil(data[i].rating)){
-                    star.className = "fa fa-star-half-o checked";
+                    star.className = "fa-solid fa-star-half-stroke checked";
                 }
 
                 ratingDiv.appendChild(star);

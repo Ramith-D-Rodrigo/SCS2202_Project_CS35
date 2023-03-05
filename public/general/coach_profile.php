@@ -16,6 +16,8 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="/styles/general/coach_profile.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+                <link rel="stylesheet" href="/styles/general/notification.css">
                 <title>Coach Profile</title>
             </head>
             <body>
@@ -42,49 +44,49 @@
                             </div>
                             <div>
                                 <div id="coachQulifationsDiv">
-                                    Qualifications : 
+                                    Qualifications  
                                     <select id="coachQulifations" style="min-width:25%">
                                     </select>
                                 </div>
                                 <div id="sessionBranchesDiv">
-                                    Session Branches : 
+                                    Session Branches  
                                     <select id="sessionBranches" style="min-width:25%">
                                         <option value="">Select One</option>
                                     </select>
                                 </div>
                                 <div id="coachingSessionsDiv">
-                                    Coaching Sessions : 
+                                    Coaching Sessions  
                                     <select id="coachingSessions" style="min-width:25%">
                                         <option value="">Please Select a Branch</option>
                                     </select>
 
                                     <div>
                                         <div class="row-container">
-                                            <div class="left-field">Court : </div>
+                                            <div class="left-field">Court  </div>
                                             <div class="right-field"><input id="courtName" readonly></div>
                                         </div>
                                         <div class="row-container">
-                                            <div class="left-field">Day : </div>
+                                            <div class="left-field">Day  </div>
                                             <div class="right-field"><input id="day" readonly></div>
                                         </div>
                                         <div class="row-container">
-                                            <div class="left-field">Time Period : </div>
+                                            <div class="left-field">Time Period  </div>
                                             <div class="right-field"><input id="timePeriod" readonly></div>
                                         </div>
                                         <div class="row-container">
-                                            <div class="left-field">Starting Time : </div>
+                                            <div class="left-field">Starting Time  </div>
                                             <div class="right-field"><input id="startingTime" readonly></div>
                                         </div>
                                         <div class="row-container">
-                                            <div class="left-field">Ending Time : </div>
+                                            <div class="left-field">Ending Time  </div>
                                             <div class="right-field"><input id="endingTime" readonly></div>
                                         </div>
                                         <div class="row-container">
-                                            <div class="left-field">Paymount Amount : </div>
+                                            <div class="left-field">Paymount Amount  </div>
                                             <div class="right-field"><input id="paymentAmount" readonly></div>
                                         </div>
                                         <div class="row-container">
-                                            <div class="left-field">Current Number of Students : </div>
+                                            <div class="left-field">Current Number of Students  </div>
                                             <div class="right-field"><input id="noOfStudents" readonly></div>
                                         </div>
                                     </div>
@@ -98,10 +100,10 @@
                     </div>
                     <div class="content-box" id="joinSession">
                         <div style="text-align:center; margin-bottom: 20px">Request to Join a Session</div>
-                        <form>
+                        <form id="requestForm">
                             <div class="row-container">
                                 <div class="left-field" style="width:50%">
-                                    Branch :
+                                    Branch 
                                 </div>
                                 <div class="right-field" style="width:50%">
                                     <select id="requestingSessionBranch">
@@ -111,21 +113,21 @@
                             </div>
                             <div class="row-container">
                                 <div class="left-field" style="width:50%">
-                                Coaching Session : 
+                                Coaching Session 
                                 </div>
                                 <div class="right-field" style="display:flex; flex-direction: row; align-items:baseline; width:50%"">
-                                    <select id="requestingSession">
+                                    <select id="requestingSession" name="requestingSession">
                                         <option value="">Please Select a Branch</option>
                                     </select>
-                                    <div style="margin-left: 10px" id="sessionFee">Session Fee : </div>
+                                    <div style="margin-left: 10px" id="sessionFee">Session Fee  </div>
                                 </div> 
                             </div>
                             <div class="row-container">
                                 <div class="left-field" style="width:50%">
-                                    Any Note / Message :
+                                    Any Note / Message 
                                 </div>
                                 <div class="right-field" style="width:50%">
-                                    <textarea ></textarea> 
+                                    <textarea name="userMessage"></textarea> 
                                 </div>
                             </div>
                             <div class="err-msg" id="errMsg"></div>
@@ -146,7 +148,9 @@
                 ?>
             </body>
             <script src="/js/user/account_links.js"></script>
-            <script src="/js/general/coach_profile.js"></script>
+            <script type="module" src="/js/general/coach_profile.js"></script>
+            <script src="/js/user/request_coaching_session.js"></script>
+            <script type="module" src="/js/general/notifications.js"></script>
         </html>
     <?php
     }

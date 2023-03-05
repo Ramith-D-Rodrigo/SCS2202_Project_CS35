@@ -20,23 +20,24 @@ session_start();
     ?>
     <main class="body_container">
         <div class="content_box">
+        <form action="/controller/manager/add_new_discount_controller.php" method="POST">
             <div class="start_close">
                 <div id="but_Open">Starting Date:
-                    <input type="date" value="" id="StartDate">
+                    <input type="date" value="" name="startDate" id="StartDate">
                 </div>
-                <div id="but_Close">Closing Date:
-                    <input type="date" value="" id="CloseDate">
+                <div id="but_Close">Ending Date:
+                    <input type="date" value="" name="endDate" id="CloseDate">
                 </div>
             </div>
 
             <div id="but_Discount">Discount Percentage:
-                <input type="text" value="Enter Here" id="Percentage">
+                <input type="text" value="" name="percentage" id="Percentage">
             </div>
 
 
             <div class="ReservationPrice">
                 <div id="Reservation">Reservation Price with Entered value:
-                    <input type="text" value="" id="Price">
+                    <input type="text" value="" name="price" id="Price">
 
                     <select required name="sport">
                         <option value="">Choose Sports</option>
@@ -57,12 +58,23 @@ session_start();
 
             <div class="button">
                 <div>
-                    <button >Add</button>
+                    <button type="submit" id="ADD" > Add</button>
                 </div>
                 <div>
                     <button onclick="window.location.href='manager_dashboard.php'">Cancel</button>
                 </div>
             </div>
+
+            <div class="success-msg">
+              <?php
+                if(isset($_SESSION['resultMsg'])){
+                  echo $_SESSION['resultMsg'];
+                  unset($_SESSION['resultMsg']);
+                }
+              ?>
+            </div>
+            
+        </form>    
         </div>
 
 

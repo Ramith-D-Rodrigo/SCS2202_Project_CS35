@@ -1,15 +1,25 @@
 <?php
     session_start();
-    if(isset($_SESSION['userid'])){  //if the user is logged in previously (not at the login time)
-        header("Location: /index.php"); //the user shouldn't be able to access the login page
-        exit();
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : true)){
+        Security::redirectUserBase();
+        die();
     }
+
+    //server request type check
+    if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        Security::redirectUserBase();
+        die();
+    }
+
     require_once("../../src/general/actor.php");
     require_once("../../src/user/user.php");
     require_once("../../src/coach/coach.php");
     require_once("../../src/manager/manager.php");
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/system_admin/admin.php");
+    require_once("../../src/owner/owner.php");
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
 
@@ -60,6 +70,9 @@
     else{   //login success
         //unset the session variables
         session_unset();
+        session_destroy();  //for new session
+
+        session_start();    //start a new session
 
         $returnJSON['successMsg'] = $result[0];
         $userrole = $result[1];
@@ -117,7 +130,14 @@
             $returnJSON['userrole'] = 'manager';
         }
         else if($result[1] === 'owner'){    //owner login
+            $loginOwner = Owner::getInstance($loginActor);
+            $_SESSION['userid'] = $loginOwner -> getUserID();
+            $_SESSION['username'] = $username;  //store the username in the session
+            $_SESSION['userrole'] = 'owner';
 
+            $loginOwner -> closeConnection();
+            unset($loginOwner);
+            $returnJSON['userrole'] = 'owner';
         }
         else if($result[1] === 'receptionist'){ //receptionist login
             $loginRecep = new Receptionist($loginActor);
@@ -132,6 +152,7 @@
             $returnJSON['userrole'] = 'receptionist';
         }
         else{
+            unset($returnJSON['successMsg']);
             $returnJSON['errMsg'] = "Error Logging in. Please try again later";
         }
     }

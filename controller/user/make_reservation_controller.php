@@ -1,18 +1,23 @@
 <?php
     session_start();
+    require_once("../../src/general/security.php");
+    //check the authentication
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
+
+    //post request check
+    if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        Security::redirectUserBase();
+        die();
+    }
 
     $returningMsg = [];
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
     $reservationDetails = json_decode($requestJSON, true);
 
-    if(!isset($_SESSION['userrole']) || !isset($_SESSION['userid'])){  //not logged in
-        //$_SESSION['reservationFail'] = "Please Log in to make a Reservation";
-        $returningMsg['errMsg'] = "Please Log in to make a Reservation";
-        header('Content-Type: application/json;');    //because we are sending json
-        echo json_encode($returningMsg);
-        exit();
-    }
 
     if(empty($requestJSON) || $requestJSON == null){ //have not made the reservation
         $returningMsg['errMsg'] = "Not made any reservations yet";
@@ -28,10 +33,6 @@
     require_once("../../src/general/branch.php");
     require_once("../CONSTANTS.php");
 
-    if($_SESSION['userrole'] !== 'user'){   //not a user
-        header("Location: /index.php");
-        exit();
-    }
     
     //store the reservation details
 
@@ -41,6 +42,7 @@
     $endingTime = $reservationDetails['reservingEndTime'];
     $date = $reservationDetails['reservingDate'];
     $user = $_SESSION['userid'];
+    $token = $reservationDetails['tokenID'];
     
     //user inputs validation
     $validationFlag = false;
@@ -54,6 +56,8 @@
         echo json_encode($returningMsg);
         exit();
     }
+
+    date_default_timezone_set(SERVER_TIMEZONE);
 
     $startingTimeObj = new DateTime($startingTime);
     $endingTimeObj = new DateTime($endingTime);
@@ -74,7 +78,7 @@
     else if($endingTimeObj -> format('s') != '00'){    //seconds should be 0
         $validationFlag = true;
     }
-    else if($timeDifference -> h < MIN_RESERVATION_TIME_HOURS || $timeDifference -> h > MAX_RESERVATION_TIME_HOURS || ($timeDifference -> h === MAX_RESERVATION_TIME_HOURS && $timeDifference -> i === 30)){ //minimum and maximum reservation time period check
+    else if($timeDifference -> h < MIN_RESERVATION_TIME_HOURS || $timeDifference -> h > MAX_RESERVATION_TIME_HOURS || ($timeDifference -> h === MAX_RESERVATION_TIME_HOURS && $timeDifference -> i != 0)){ //minimum and maximum reservation time period check
         $validationFlag = true;
     }
     if($validationFlag === true){
@@ -105,29 +109,35 @@
     $reservingUser -> setDetails(uid : $user);//create an user with logged in userid
 
     $reservingCourt = new Sports_Court($court_id);
-    $sport = $reservingCourt -> getSport($reservingUser -> getConnection());
+    $reservingSport = $reservingCourt -> getSport($reservingUser -> getConnection());
 
-    if($sport === false){   //no sport
+    if($reservingSport === false){   //no sport
         $returningMsg['errMsg'] = "Invalid Inputs";
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($returningMsg);
         exit();
     }
     
-    $reservingSport = new Sport();
-    $reservingSport -> setID($sport);
-    $reservationPrice = $reservingSport -> getDetails($reservingUser -> getConnection(), 'reservationPrice');
+    $temp = $reservingSport -> getDetails($reservingUser -> getConnection(), ['reservationPrice']);
+    $reservationPrice = json_decode(json_encode($temp)) -> reservationPrice; //get the reservation price
     $calculation = ($timeDifference -> h + ($timeDifference -> i/60));  //get hours and minutes and convert minutes to hours to get the period in hours
     $payment = $reservationPrice * $calculation;//calculate the payment
+
+    //check for branch discount
+    $branchID = $reservingCourt -> getBranch($reservingUser -> getConnection());
+    $branch = new Branch($branchID);
+
+    $discountValue = $branch -> getCurrentDiscount($reservingUser -> getConnection());
+
+    if($discountValue != null){    //branch has a discount
+        $payment = $payment - ($payment * ($discountValue/100));
+    }
 
 
     //reservation availability check
     $schedule = $reservingCourt -> getSchedule($reservingUser -> getConnection());
 
-
     //branch maintenance
-    $branchID = $reservingCourt -> getBranch($reservingUser -> getConnection());
-    $branch = new Branch($branchID);
     $branchMaintenance = $branch -> getBranchMaintenance($reservingUser -> getConnection(),['startingDate', 'endingDate'], $date, 'a');
 
     if(count($branchMaintenance) !== 0){   //branch has maintenance
@@ -224,14 +234,61 @@
             }
         }
     }
+    //can be reserved
 
-    //now making the reservation
-    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $reservingCourt);   //pass the reserving court object to the function
-    if($result === TRUE){
+    //payment 
+    require_once("../../src/general/paymentGateway.php");
+
+    $reservingUser -> getProfileDetails(['firstName', 'lastName']);
+    $userJSON = json_decode(json_encode($reservingUser), true);
+
+    $fName = $userJSON['firstName'];
+    $lName = $userJSON['lastName'];
+
+
+    $branch -> getDetails($reservingUser -> getConnection(), ['city']);
+    $branchName =  json_decode(json_encode($branch), true)['city'];
+    //current timestamp for the timezone of the server
+    date_default_timezone_set(SERVER_TIMEZONE);
+    $timestamp = date('Y-m-d H:i:s');   
+
+    //reservation description
+    $reservationDescription = "Reservation for ".$date." from ".$startingTime." to ".$endingTime." for ".$numOfpeople." people on ".$branchName. " by ".$fName." ".$lName." at ".$timestamp;
+
+    $paymentResult = paymentGateway::userReservationPayment($payment, $reservationDescription, CURRENCY, $token);
+    if(!$paymentResult[0]){ //0th index is the status of the payment
+        //payment failed
+        $returningMsg['errMsg'] = $paymentResult[1]; //1st index is the error message
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($returningMsg);
+        exit();
+    }
+
+    $chargeID = $paymentResult[2]; //2nd index is the charge id
+
+    //now making the reservation since the payment succeeded
+    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $chargeID, $reservingCourt);   //pass the reserving court object to the function
+    if($result[0] === TRUE){
         $returningMsg['successMsg'] = "Reservation has been made Successfully";
         echo json_encode($returningMsg);
     }
-    else{
+    else{//error while inserting the reservation
+        $resID = $result[1];    //1st index is the reservation id
+        $deletingReservation = new Reservation();
+        $deletingReservation -> setID($resID);
+
+        $deletingReservation -> deleteReservation($reservingUser -> getConnection()); //delete the reservation that was made
+
+        //refund the payment
+        $refundResult = paymentGateway::chargeRefund($chargeID, $payment);
+        if(!$refundResult[0]){  //0th index is the status of the refund
+            //refund failed
+            $returningMsg['errMsg'] = "Couldn't make the reservation and for Refund : " . $refundResult[1]; //1st index is the error message
+            header('Content-Type: application/json;');    //because we are sending json
+            echo json_encode($returningMsg);
+            exit();
+        }
+
         $returningMsg['errMsg'] = "Reservation has not been made";
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($returningMsg);

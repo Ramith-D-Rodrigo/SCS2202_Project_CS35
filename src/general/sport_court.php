@@ -1,7 +1,7 @@
 <?php
     require_once("reservation.php");
 
-    class Sports_Court{
+    class Sports_Court implements JsonSerializable{
         private $courtID;
         private $courtName;
         private $revenue;
@@ -13,6 +13,34 @@
 
         public function __construct($court_id){
             $this -> courtID = $court_id;
+        }
+
+        public function getID(){
+            return $this -> courtID;
+        }
+
+        public function setDetails($courtName = '', $branchID = '', $sportID = '', $addedManager = ''){
+            $funcArgs = get_defined_vars();
+            foreach($funcArgs as $key => $value){
+                if($value != '' || $value != NULL){
+                    $this -> $key = $value;
+                }
+            }
+        }
+
+        public function createCourtEntry($database){    //to create a new court entry in the database 
+            $sql = sprintf("INSERT INTO `sports_court` (`courtID`, `branchID`, `sportID`, `addedManager`, `requestStatus`, `courtName`)
+                VALUES ('%s', '%s', '%s', NULLIF('%s', ''), '%s', '%s')",
+                $database -> real_escape_string($this -> courtID),
+                $database -> real_escape_string($this -> branchID),
+                $database -> real_escape_string($this -> sportID),
+                $database -> real_escape_string(isset($this -> addedManager) ? $this -> addedManager : ''),
+                $database -> real_escape_string('p'),
+                $database -> real_escape_string($this -> courtName));
+
+            $result = $database -> query($sql);
+
+            return $result;
         }
 
         public function getSchedule($database){ //get the reservation schedule of a certain court
@@ -84,11 +112,11 @@
             return $result -> fetch_object() -> courtName;
         }
 
-        public function createReservation($user, $date, $starting_time, $ending_time, $payment, $num_of_people, $database){
+        public function createReservation($user, $date, $starting_time, $ending_time, $payment, $num_of_people, $chargeID, $database){
             $reservation = new Reservation();
-            $result = $reservation -> onlineReservation($date, $starting_time, $ending_time, $num_of_people, $payment, $this -> courtID, $user, $database);
+            $result = $reservation -> onlineReservation($date, $starting_time, $ending_time, $num_of_people, $payment, $this -> courtID, $user, $chargeID, $database);
             unset($reservation);
-            return $result;
+            return $result; //an array
         }
 
         public function getBranch($database){
@@ -110,9 +138,14 @@
             $database -> real_escape_string($this -> courtID));
 
             $result = $database -> query($sql);
-            $sport = $result -> fetch_object() -> sportID;
+            $sportID = $result -> fetch_object() -> sportID;
+
+            $this -> sportID = $sportID;
+
+            $newSport = new Sport();
+            $newSport -> setID($sportID);
             $result -> free_result();
-            return $sport;
+            return $newSport;
         }
 
         public function getStatus($database){
@@ -140,6 +173,19 @@
             }
             $result -> free_result();
             return $photos;
+        }
+
+        public function jsonSerialize(): mixed{
+            $classProperties = get_object_vars($this);
+            $returnJSON = [];
+
+            foreach($classProperties as $key => $value){
+                if(isset($value) && $value != ''){
+                    $returnJSON[$key] = $value;
+                }
+            }
+
+            return $returnJSON;
         }
     }
 ?>

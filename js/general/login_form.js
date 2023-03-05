@@ -37,35 +37,25 @@ loginForm.addEventListener("submit", (e) => {
             forgotBtn.disabled = true;
             forgotBtn.style.cursor = "not-allowed";
 
+            successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected, Please Wait...";
+
             if(data.userrole === 'user'){
-                successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to the home page in 2 seconds";
-                setTimeout(() =>{
-                    window.location.href = "/index.php";
-                }, 2000);
+                window.location.href = "/index.php";
             }
             else if(data.userrole === 'coach'){
-                successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to your Dashboard in 2 seconds";
-                setTimeout(() =>{
-                    window.location.href = "/public/coach/coach_dashboard.php";
-                }, 2000);
+                window.location.href = "/public/coach/coach_dashboard.php";
             }
             else if(data.userrole === 'manager'){
-                successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to your Dashboard in 2 seconds";
-                setTimeout(() =>{
-                    window.location.href = "/public/manager/Manager_Dashboard.php";
-                }, 2000);
+                window.location.href = "/public/manager/Manager_Dashboard.php";
             }
             else if(data.userrole === 'receptionist'){
-                successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to your Dashboard in 2 seconds";
-                setTimeout(() =>{
-                    window.location.href = "/public/receptionist/receptionist_dashboard.php";
-                }, 2000);
+                window.location.href = "/public/receptionist/receptionist_dashboard.php";
             }
             else if(data.userrole === 'admin'){
-                successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to your Dashboard in 2 seconds";
-                setTimeout(() =>{
-                    window.location.href = "/public/system_admin/admin_dashboard.php";
-                }, 2000);
+                window.location.href = "/public/system_admin/admin_dashboard.php";
+            }
+            else if(data.userrole === 'owner'){
+                window.location.href = "/public/owner/owner_dashboard.php";
             }
         }else{  //login failed
             successMsgBox.innerHTML = "";

@@ -1,4 +1,5 @@
 let reservationAndTimeStampArr = [];   //array of objects of reservation id and reserved timestamp
+const msg = document.getElementById("msg"); //message div
 
 const authFormDisplay = (e) => {
     e.preventDefault();
@@ -138,7 +139,7 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
         const formData = new FormData(authForm);
 
         //send the form data to the server
-        fetch("../../controller/user/authentication_controller.php", {  //authentication first
+        fetch("../../controller/general/authentication_controller.php", {  //authentication first
             method: "POST",
             body: JSON.stringify(Object.fromEntries(formData)),
             Headers: {
@@ -176,7 +177,6 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                     //disable main 
                     main.style.pointerEvents = "none";
 
-                    const msg = document.getElementById("msg");
                     msg.innerHTML = "";   //clear the message
                     msg.style.fontSize = "1.5rem";
                     msg.style.fontWeight = "bold";
@@ -192,8 +192,6 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                         msg.appendChild(icon);
                         icon.style.color = "green";
 
-                        msg.innerHTML += "Reservation Cancelled Successfully";
-
                         //update the reservation history table by refreshing the page
 
                         //session storage to let know dismiss button to refresh the page
@@ -205,12 +203,14 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                         icon.classList.add("fas", "fa-times-circle", "error-icon");
                         msg.appendChild(icon);
                         icon.style.color = "red";
-
-                        msg.innerHTML += "Unable to Cancel the Reservation";
                     }
 
                     //display the message box
                     msgBox.style.display = "block";
+                    return res.json();
+                })
+                .then(data =>{
+                    msg.innerHTML += data.msg;   //display the message
                 })
 
             }

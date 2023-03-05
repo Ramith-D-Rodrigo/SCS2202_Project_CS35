@@ -1,0 +1,136 @@
+.dropdown-check{
+    display: none;
+}
+.notification-container{
+    position: relative;
+}
+
+
+.dropdown{
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    color:black;
+    padding: 1rem;
+    filter:drop-shadow(0px 0.5rem 4rem rgba(0, 0, 0, 0.25));
+    border-radius: 5px;
+    width: 300px;
+    visibility: hidden;
+    opacity: 0;
+    transition: 500ms;
+}
+
+
+
+
+.dropdown li{
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgb(83, 83, 83);
+    padding-bottom: 1rem;
+}
+
+
+.dropdown li:last-child{
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.dropdown-check:checked ~ .notification-container >.dropdown{
+    visibility: visible;
+    opacity: 1;
+    transition: 500ms;
+}
+
+.bell{
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    transition: 500ms;
+    font-size: 1.5rem;
+}
+
+.bell:hover{
+    background-color: white;
+    color: black;
+    transition: 500ms;
+    cursor: pointer;
+}
+
+
+.notification-subject{
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.notification-content{
+    font-size: 1rem;
+}
+
+.notification-read{
+    color: rgb(104, 104, 104);
+}
+
+.notification-read > *{
+    color: rgb(104, 104, 104);
+    font-style: italic;
+}
+.notification-read > .notification-subject{
+    font-size: 1rem;
+}
+
+.notification-read > .notification-content{
+    font-size: 0.8rem;
+}
+
+.notification-read > .mark-as-read-container > .mark-as-read{
+    display: none;
+}
+
+.mark-as-read{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: rgb(66, 0, 0);
+    font-size: 1rem;
+    transition: 500ms;
+}
+
+.mark-as-read:hover{
+    color: rgb(18, 13, 82);
+    transition: 500ms;
+    scale: 1.2;
+    cursor: pointer;
+}
+
+.mark-as-read-container{
+    position: relative;
+    width: 100%;
+}
+
+.notification-count{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 0.2rem 0.2rem;
+    font-size: 0.8rem;
+    visibility: hidden;
+    opacity: 0;
+    transition: 500ms;
+}
+
+.have-notifications{
+    visibility: visible;
+    opacity: 1;
+    transition: 500ms;
+}
+
+.bell:hover ~ .notification-count{
+    background-color: rgb(8, 0, 122);
+}

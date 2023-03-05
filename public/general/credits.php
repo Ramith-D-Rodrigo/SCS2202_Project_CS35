@@ -44,6 +44,12 @@
                     <li>
                         Background Image : <a class="link" href="https://www.freepik.com/free-vector/street-basketball-court-cartoon-night-city_31904194.htm#query=sports%20complex%20background&position=36&from_view=search&track=ais">Image by upklyak</a> on Freepik
                     </li>
+                    <li>
+                        Volleyball Photo by <a href="https://unsplash.com/@miguelteirlinck?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Miguel Teirlinck</a> on <a href="https://unsplash.com/photos/VDkRsT649C0?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+                    </li>
+                    <li>
+                        Table Tennis Photo by Anna Shvets: <a href="https://www.pexels.com/photo/table-tennis-rackets-3846048/">Pexels</a>
+                    </li>
                 </ul>
             </div>
                 </main>

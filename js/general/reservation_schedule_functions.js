@@ -1,4 +1,5 @@
-import { MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS } from "../CONSTANTS.js";
+import { MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, currency } from "../CONSTANTS.js";
+import {changeToLocalTime} from "../FUNCTIONS.js";
 
 
 function createReservationSchedulePage(jsonData){
@@ -41,13 +42,13 @@ function addReservationInformation(jsonData){   //function to add the reservatio
     reservingBranchLocationDiv.innerHTML = reservingBranchLocationDiv.innerHTML + " " + jsonData.city;
 
     const reservationPriceDiv = document.getElementById("reservationPriceDisplay"); //reservation price display
-    reservationPriceDiv.innerHTML = reservationPriceDiv.innerHTML + " Rs. " + jsonData.reservingSport.reservationPrice + " per Hour";
+    reservationPriceDiv.innerHTML = reservationPriceDiv.innerHTML + currency + " " + jsonData.reservingSport.reservationPrice + " per Hour";
 
     const branchOpeningTimeDiv = document.getElementById("branchOpeningTime");  //branch opening time
-    branchOpeningTimeDiv.innerHTML = branchOpeningTimeDiv.innerHTML + " " + jsonData.openingTime;
+    branchOpeningTimeDiv.innerHTML = branchOpeningTimeDiv.innerHTML + " " + changeToLocalTime(jsonData.openingTime);
 
     const branchClosingTimeDiv = document.getElementById("branchClosingTime");  //branch closing time
-    branchClosingTimeDiv.innerHTML = branchClosingTimeDiv.innerHTML + " " + jsonData.closingTime;
+    branchClosingTimeDiv.innerHTML = branchClosingTimeDiv.innerHTML + " " + changeToLocalTime(jsonData.closingTime);
 }
 
 function createScheduleNavigation(jsonData){
@@ -365,7 +366,26 @@ function makeReservationBox(jsonData){
     const reservationPrice = document.getElementById("reservationPrice");  //reservation price input
     reservationPrice.min = jsonData.reservingSport['reservationPrice'];
     
+    if(jsonData.branchDiscount != null){
+        const discount = document.createElement("div");
+        discount.id = "discount";
+        discount.style.fontSize = "1.5em";
+        discount.style.fontWeight = "bold";
+        discount.style.fontStyle = "italic";
+        discount.innerHTML = jsonData.branchDiscount + "% off for reserving at this branch!";
+        discount.innerHTML = discount.innerHTML.toUpperCase();
 
+        //hidden input for the discount
+        const discountInput = document.createElement("input");
+        discountInput.type = "hidden";
+        discountInput.id = "discountInput";
+
+        discountInput.value = jsonData.branchDiscount;
+        discount.appendChild(discountInput);
+
+        discount.style.marginTop = "10px";
+        reservationPrice.parentNode.appendChild(discount);
+    }
     
     const courtBtns = document.getElementsByClassName('courtBtn');
     const reserveBtn = document.getElementById("makeReserveBtn");   //make reservation button

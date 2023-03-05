@@ -17,6 +17,7 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="/styles/user/edit_profile.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+                <link rel="stylesheet" href="./styles/general/notification.css">
             </head>
             <body>
                 <?php   require_once("../../public/general/header.php"); ?>
@@ -161,23 +162,12 @@
 
                         <div class="content-box" style="min-width:40%">
                             <form id="credentialForm">
-                                <div style="text-align:center">Change Email / Password</div>
+                                <div style="text-align:center">Change Password</div>
                                 <div class="row-container">
                                     <div class="left-field">
-                                        Current Email Address
+                                        Email Address
                                     </div>
                                     <div class="right-field" id="currentEmailField">
-                                    </div>
-                                </div>
-
-                                <div class="row-container">
-                                    <div class="left-field">
-                                        New Email Address
-                                    </div>
-                                    <div class="right-field">
-                                        <input type="email" 
-                                                name="email"
-                                                id="emailAddress">
                                     </div>
                                 </div>
 
@@ -188,26 +178,77 @@
                                     <div class="right-field" id="usernameField">
                                     </div>
                                 </div>
-
-                                <div class="row-container">
-                                    <div class="left-field">
-                                        New Password
+                                <div id="passwordFields">
+                                    <div class="row-container">
+                                        <div class="left-field">
+                                            New Password
+                                        </div>
+                                        <div class="right-field">
+                                            <input type="password" 
+                                                name="newPassword" 
+                                                id="password" 
+                                                pattern="(?=.*\d)(?=.*[A-Z]).{8,}" 
+                                                minlength="8"
+                                                title="Password length must be atleast 8 characters. Must include an uppercase letter and a number"
+                                                required><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
+                                        </div>
                                     </div>
-                                    <div class="right-field">
-                                        <input type="password" name="newPassword" id="password" pattern="(?=.*\d)(?=.*[A-Z]).{8,}" minlength="8"><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
+
+                                    <div class="row-container">
+                                        <div class="left-field">
+                                            Confirm New Password
+                                        </div>
+                                        <div class="right-field">
+                                            <input type="password" 
+                                                name="newPasswordConfirm" 
+                                                id="confirmPassword"
+                                                required><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="row-container">
-                                    <div class="left-field">
-                                        Confirm New Password
-                                    </div>
-                                    <div class="right-field">
-                                        <input type="password" name="newPasswordConfirm" id="confirmPassword"><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
-                                    </div>
+                                <div class="row-container" style="display:none" id="verificationCode">
+                                        <div class="left-field">
+                                                Verification Code
+                                        </div>
+                                        <div class="right-field">
+                                            <input name="verificationCode"></button>
+                                        </div>
                                 </div>
+                                <div class="err-msg" id="errMsg2"></div>
+                                <div class="success-msg" id="successMsg2"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="submitBtn2" onclick="return validateEmailPasswordForm(event)">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
+                                    <button type="submit" id="submitBtn2" onclick="return validateCredentialsForm(event)">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="content-box" style="min-width:40%">
+                            <div style="text-align:center">Deactivate Account</div>
+                            <form id ="deactivateForm">
+                                <div class="row-container">
+                                    <div class="left-field">
+                                        Enter Password
+                                    </div>
+                                    <div class="right-field">
+                                        <input type="password" 
+                                            name="password" 
+                                            required><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
+                                    </div>
+                                </div>
+                                <div class="row-container">
+                                    <div class="left-field">
+                                        Confirm Password
+                                    </div>
+                                    <div class="right-field">
+                                        <input type="password" 
+                                            name="confirmPassword" 
+                                            required><button class="togglePassword"><i class="fa-solid fa-eye"></i></button>
+                                    </div>
+                                </div>
+                                <div class="err-msg" id="errMsg3"></div>
+                                <div class="success-msg" id="successMsg3"></div>
+                                <div class="btn-container">
+                                    <button type="submit" id="submitBtn3" onclick="return validateDeactivateForm(event)">Deactivate Account <i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -218,7 +259,10 @@
             </body>
             <script src="/js/user/edit_profile_handle.js"></script>
             <script src="/js/user/edit_profile_getdetails.js"></script>
+            <script src="/js/user/change_password.js"></script>
             <script src="/js/user/account_links.js"></script>
+            <script src="/js/user/deactivate_account.js"></script>
+            <script type="module" src="/js/general/notifications.js"></script>
         </html>
     <?php
     }
