@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="/styles/general/styles.css" />
         <link rel="stylesheet" href="/styles/owner/owner_dashboard.css" />
         <link rel="stylesheet" href="/styles/general/staff.css" />
+        <link rel="stylesheet" href="/styles/general/notification.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     </head>
 
@@ -70,4 +71,5 @@
         ?>
     </body>
     <script type="module" src="/js/owner/dashboard.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html>
