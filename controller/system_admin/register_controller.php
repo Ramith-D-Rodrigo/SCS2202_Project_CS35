@@ -31,7 +31,7 @@
         unset($_SESSION['successMsg']);
     }
 
-    if($hasEmailResult -> num_rows > 0){    //account already exists
+    if($hasEmailResult){    //account already exists
         $_SESSION['emailError'] = "Account with same Email Address exists.";
         header("Location: /public/system_admin/staff_register.php");
         $connection -> close(); //close the database connection
@@ -44,7 +44,7 @@
     //contact number availability
     $hasContactNumber = checkContactNumber($_POST['contactNum'],$connection);
 
-    if($hasContactNumber -> num_rows > 0){    //contact number already exists
+    if($hasContactNumber){    //contact number already exists
         $_SESSION['numberError'] = "Contact Number already exists.";
         header("Location: /public/system_admin/staff_register.php");
         $connection -> close(); //close the database connection
@@ -56,7 +56,7 @@
     //username availability    
     $hasUsernameResult = checkUsername($_POST['username'], $connection);
 
-    if($hasUsernameResult -> num_rows > 0){    //account already exists
+    if($hasUsernameResult){    //account already exists
         $_SESSION['usernameError'] = "Account with same Username exists.";
         header("Location: /public/system_admin/staff_register.php");
         $connection -> close(); //close the database connection
@@ -72,7 +72,7 @@
     if($staffRole === 'receptionist') {
         $hasReceptionist = checkReceptionist($branchName,$connection);
 
-        if($hasReceptionist -> num_rows > 0){    //receptionist already exists
+        if($hasReceptionist){    //receptionist already exists
             $_SESSION['staffError'] = "Receptionist exists in the particular branch.";
             header("Location: /public/system_admin/staff_register.php");
             $connection -> close(); //close the database connection
@@ -84,7 +84,7 @@
     }else {
         $hasManager = checkManager($branchName,$connection);
 
-        if($hasManager -> num_rows > 0){    //manager already exists
+        if($hasManager){    //manager already exists
             $_SESSION['staffError'] = "Manager exists in the particular branch.";
             header("Location: /public/system_admin/staff_register.php");
             $connection -> close(); //close the database connection
@@ -127,7 +127,7 @@
     $result = false;
     $result = $admin -> registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$connection);
     
-    if($result === TRUE){   //successfully registered
+    if($result){   //successfully registered
             // echo "Successfully Registered";
         foreach($inputFields as $i){    //store session details
             if(isset($_SESSION[$i])){   //unsetting input values

@@ -24,61 +24,72 @@
     ?>
     <main class="body-container">
         <div class="content-box">
-            <div style="display:flex;flex-direction:row">
-                <div class="row-container" style="margin-right:-100px;display:flex;align-items:center;flex-direction:row">
-                    <div> Staff Role: </div>
-                    <div>
-                        <select name="staffRole" id="staffRole">
-                            <option value="">Choose Role</option>
-                            <option value="receptionist">Receptionist</option>
-                            <option value="manager">Manager</option>
-                        </select>
+            <form action="../../controller/system_admin/deactivate_account_controller.php" method="POST">
+                <div style="display:flex;flex-direction:row">
+                    <div class="row-container" style="margin-right:-100px;display:flex;align-items:center;flex-direction:row">
+                        <div> Staff Role: </div>
+                        <div>
+                            <select name="staffRole" id="staffRole">
+                                <option value="">Choose Role</option>
+                                <option value="receptionist">Receptionist</option>
+                                <option value="manager">Manager</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row-container" style="margin-left:-100px;display:flex;align-items:center;flex-direction:row">
+                        <div> Registered Branch: </div>
+                        <div>
+                            <select name="branchName" id="branchName">
+                                <option value="">Choose Branch</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="row-container" style="margin-left:-100px;display:flex;align-items:center;flex-direction:row">
-                    <div> Registered Branch: </div>
-                    <div>
-                        <select name="branchName" id="branchName">
-                            <option value="">Choose Branch</option>
-                        </select>
-                    </div>
+                <div class="row-container">
+                    <div class="left-side" > Email Address: </div>
+                    <div class="right-side"><input readonly id="email"></input>
+                    </div>    
                 </div>
-            </div>
-            <div class="row-container">
-                <div class="left-side" > Email Address: </div>
-                <div class="right-side"><input readonly id="email"></input>
-                </div>    
-            </div>
-            <div class="row-container">
-                <div class="left-side"> First Name: </div>
-                <div class="right-side"><input readonly id="fName"></input>
-                </div>    
-            </div>
-            <div class="row-container">
-                <div class="left-side"> Last Name: </div>
-                <div class="right-side"><input readonly id="lName"></input>
-                </div>    
-            </div>
-            <div class="row-container">
-                <div class="left-side"> Username: </div>
-                <div class="right-side"><input readonly id="username"></input>
-                </div>    
-            </div>
-            <div class="row-container">
-                <div class="left-side"> Contact No: </div>
-                <div class="right-side"><input readonly id="contactN"></input>
-                </div>    
-            </div>
-            <div class="row-container">
-                <div class="left-side"> Joined Date: </div>
-                <div class="right-side"><input readonly id="jDate"></input>
-                </div>    
-            </div>
-            <div class="errMsg" id="err-msg">
-            </div>
-            <div class="row-container" style="justify-content: flex-end;">
-                <button type="submit" class="viewBtn">Deactivate Account</button>
-            </div>
+                <div class="row-container">
+                    <div class="left-side"> First Name: </div>
+                    <div class="right-side"><input readonly id="fName"></input>
+                    </div>    
+                </div>
+                <div class="row-container">
+                    <div class="left-side"> Last Name: </div>
+                    <div class="right-side"><input readonly id="lName"></input>
+                    </div>    
+                </div>
+                <div class="row-container">
+                    <div class="left-side"> Username: </div>
+                    <div class="right-side"><input readonly id="username"></input>
+                    </div>    
+                </div>
+                <div class="row-container">
+                    <div class="left-side"> Contact No: </div>
+                    <div class="right-side"><input readonly id="contactN"></input>
+                    </div>    
+                </div>
+                <div class="row-container">
+                    <div class="left-side"> Joined Date: </div>
+                    <div class="right-side"><input readonly id="jDate"></input>
+                    </div>    
+                </div>
+                <div class="err-msg" id="err-msg">
+                </div>
+                <div class="success-msg">
+                        <?php 
+                            if(isset($_SESSION['successMsg'])){
+                                echo $_SESSION['successMsg'];
+                                echo '<br>';
+                                unset($_SESSION['successMsg']);
+                            }
+                        ?>
+                </div>
+                <div class="row-container" style="justify-content: flex-end;">
+                    <button name="deactivateBtn" id="deactivateBtn" type="submit">Deactivate Account</button>
+                </div>
+            </form>
         </div>
     </main>
     <?php

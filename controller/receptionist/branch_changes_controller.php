@@ -22,7 +22,7 @@
     elseif($newEmail ==='' && $newContactN !== ''){
         $hasContactNumber = checkContactNumber($newContactN,$connection);
 
-        if($hasContactNumber -> num_rows > 0){    //contact number already exists
+        if($hasContactNumber){    //contact number already exists
             $_SESSION['numberError'] = "Contact Number already exists.";
             header("Location: /public/receptionist/edit_branch.php");
             $connection -> close(); //close the database connection
@@ -36,7 +36,7 @@
         $hasEmailAddress1 = checkStaffEmail($newEmail,$connection);
         $hasEmailAddress2 = checkBranchEmail($newEmail,$connection);
 
-        if($hasEmailAddress1 -> num_rows > 0 || $hasEmailAddress2 -> num_rows > 0){    //email address already exists
+        if($hasEmailAddress1 || $hasEmailAddress2){    //email address already exists
             $_SESSION['emailError'] = "Email Address already exists.";
             header("Location: /public/receptionist/edit_branch.php");
             $connection -> close(); //close the database connection
@@ -49,7 +49,7 @@
     }else{
         $hasContactNumber = checkContactNumber($newContactN,$connection);
 
-        if($hasContactNumber -> num_rows > 0){    //contact number already exists
+        if($hasContactNumber){    //contact number already exists
             $_SESSION['numberError'] = "Contact Number already exists.";
             header("Location: /public/receptionist/edit_branch.php");
             $connection -> close(); //close the database connection
@@ -59,7 +59,7 @@
         $hasEmailAddress1 = checkStaffEmail($newEmail,$connection);
         $hasEmailAddress2 = checkBranchEmail($newEmail,$connection);
 
-        if($hasEmailAddress1 -> num_rows > 0 || $hasEmailAddress2 -> num_rows > 0){    //email address already exists
+        if($hasEmailAddress1 || $hasEmailAddress2){    //email address already exists
             $_SESSION['emailError'] = "Email Address already exists.";
             header("Location: /public/receptionist/edit_branch.php");
             $connection -> close(); //close the database connection

@@ -15,6 +15,10 @@
             $this -> courtID = $court_id;
         }
 
+        public function getID(){
+            return $this -> courtID;
+        }
+
         public function getSchedule($database){ //get the reservation schedule of a certain court
             //get user reservations
             $sql = sprintf("SELECT * FROM `reservation` 
@@ -84,11 +88,11 @@
             return $result -> fetch_object() -> courtName;
         }
 
-        public function createReservation($user, $date, $starting_time, $ending_time, $payment, $num_of_people, $database){
+        public function createReservation($user, $date, $starting_time, $ending_time, $payment, $num_of_people, $chargeID, $database){
             $reservation = new Reservation();
-            $result = $reservation -> onlineReservation($date, $starting_time, $ending_time, $num_of_people, $payment, $this -> courtID, $user, $database);
+            $result = $reservation -> onlineReservation($date, $starting_time, $ending_time, $num_of_people, $payment, $this -> courtID, $user, $chargeID, $database);
             unset($reservation);
-            return $result;
+            return $result; //an array
         }
 
         public function getBranch($database){
@@ -110,9 +114,11 @@
             $database -> real_escape_string($this -> courtID));
 
             $result = $database -> query($sql);
-            $sport = $result -> fetch_object() -> sportID;
+            $sportID = $result -> fetch_object() -> sportID;
+            $newSport = new Sport();
+            $newSport -> setID($sportID);
             $result -> free_result();
-            return $sport;
+            return $newSport;
         }
 
         public function getStatus($database){

@@ -82,14 +82,16 @@ fetch("../../controller/user/reservation_history_controller.php")
 
                 const currStatus = document.createElement("td");  //status
                 if(data[i].status.includes("feedbackGiven")){
-                    //if feedback is given, remove the feedbackGiven part
-                    data[i].status = data[i].status.replace("feedbackGiven", "");
+                    //if feedback is given, just add checked in to the status
+                    currStatus.innerHTML = "Checked In";
                 }
-                currStatus.innerHTML = data[i].status;
+                else{
+                    currStatus.innerHTML = data[i].status;
+                }
                 currRow.appendChild(currStatus);
 
                 const reservedTimestamp = document.createElement("td");  //reserved timestamp
-                const timeStamp = new Date(data[i].reserved_date);
+                const timeStamp = new Date(data[i].reservedDate);
                 reservedTimestamp.innerHTML = timeStamp.toLocaleString();
                 const resObj = {
                     reservationID: data[i].reservationID,

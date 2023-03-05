@@ -25,11 +25,17 @@ function togglePassword(element){
 }
 
 function validateForm(event){
-    const errMsg = document.getElementById("errmsg");   //For Displaying the Error messages
+    const errMsg = document.getElementById("err-msg");   //For Displaying the Error messages
     const password = document.getElementById("newPwd");
     const cPassword = document.getElementById("confirmPwd");
+    const branch = document.getElementById("branchName");
+    const staffRole = document.getElementById("staffRole");
 
-    errMsg.innerHTML = '';
+    if(branch.value === "" || staffRole.value === ""){   //Haven't selected any specific role 
+        event.preventDefault(); //do not submit
+        errMsg.innerHTML = "Haven't Selected any Specific Role";
+        return false;
+    }
     const form = document.querySelector("form");
 
     if(verbose){
@@ -37,14 +43,17 @@ function validateForm(event){
     }
 
     if(password.value != cPassword.value) {    //compare the password and the confirm password fields
-        errMsg.innerHTML = errMsg.innerHTML + "Passwords are mismatched";
+        errMsg.innerHTML = "Passwords are mismatched";
         return false;
     }
 
-    if(form.reportValidity() === false){ //Form is invalid from HTML persepective
-        errMsg.innerHTML = errMsg.innerHTML + "Please Add Valid Information";
+    if(!form.reportValidity()){ //Form is invalid from HTML persepective
+        errMsg.innerHTML = "Please Add Valid Information";
         return false;
     }
+        
+    errMsg.innerHTML = '' //empty before the validation
+    return true;
     
 }
 

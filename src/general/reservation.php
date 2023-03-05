@@ -16,8 +16,9 @@
         private $sport;
         private $courtName;
         private $reservedDate;  //the date and time when the reservation is made
+        private $chargeID;  //the charge id from the payment gateway
 
-        public function onlineReservation($date, $st, $et, $people, $payment, $court, $user, $database){
+        public function onlineReservation($date, $st, $et, $people, $payment, $court, $user, $chargeID, $database){
             $this -> userID = $user;
 
             //unique id prefixes
@@ -32,11 +33,12 @@
             $this -> noOfPeople = $people;
             $this -> paymentAmount = $payment;
             $this -> sportCourt = $court;
+            $this -> chargeID = $chargeID;
 
             $this -> status = 'Pending';
             $this -> formalManagerID = '';
             $this -> onsiteReceptionistID = '';
-            $queryResult = $this -> create_online_reservation_entry($database);
+            $queryResult = $this -> create_online_reservation_entry($database); //returns an array with the result and the reservation id
             return $queryResult;
         }
 
@@ -51,9 +53,10 @@
             `paymentAmount`,
             `sportCourt`,
             `userID`,
-            `status`)
+            `status`,
+            `chargeID`)
             VALUES
-            ('%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+            ('%s','%s','%s','%s','%s','%s','%s','%s','%s', '%s')",
             $database -> real_escape_string($this -> reservationID),
             $database -> real_escape_string($this -> date),
             $database -> real_escape_string($this -> startingTime),
@@ -62,11 +65,12 @@
             $database -> real_escape_string($this -> paymentAmount),
             $database -> real_escape_string($this -> sportCourt),
             $database -> real_escape_string($this -> userID),
-            $database -> real_escape_string($this -> status));
+            $database -> real_escape_string($this -> status),
+            $database -> real_escape_string($this -> chargeID));
             //print_r($sql);
 
             $result = $database -> query($sql);
-            return $result;
+            return [$result, $this -> reservationID];   //return the result and the reservation id incase of failure
         }
 
         public function setID($reserveID){
@@ -87,21 +91,31 @@
             return $result;
         }
 
+        public function deleteReservation($database){
+            $sql = sprintf("DELETE FROM `reservation`
+            WHERE `reservationID` = '%s'",
+            $database -> real_escape_string($this -> reservationID));
+
+            $result = $database -> query($sql);
+
+            return $result;
+        }
+
 
 
         public function getDetails($database, $wantedColumns = []){
-            if($wantedColumns != []){  //specific columns are wanted
-                //concat the array elements with comma
-                $wantedColumns = implode(',', $wantedColumns);
+            $sql = "SELECT ";
+            if(empty($wantedColumns)){
+                $sql .= "`r`.*, `b`.`city` AS `branch`, `s`.`sportName` as `sport`, `sc`.`courtName`";
+            }else{
+                foreach($wantedColumns as $column){
+                    $sql .= "`r`.`$column`,";
+                }
+                //remove the last comma
+                $sql = substr($sql, 0, -1);
             }
-            else{   //all columns are wanted
-                $wantedColumns = '*';
-            }
-            $sql = sprintf("SELECT `r`.{$wantedColumns},
-            `b`.`city` AS `branch`,
-            `s`.`sportName` as `sport`,
-            `sc`.`courtName`
-            FROM `reservation` `r`
+            
+            $sql .= sprintf(" FROM `reservation` `r`
             INNER JOIN `sports_court` `sc`
             ON `sc`.`courtID` = `r`.`sportCourt`
             INNER JOIN `sport` `s`
@@ -165,7 +179,7 @@
             $sql = sprintf("UPDATE `reservation`
             SET `status` = '%s'
             WHERE `reservationID` = '%s'",
-            $this -> status ." ". $database -> real_escape_string($status),
+            $database -> real_escape_string($status),
             $database -> real_escape_string($this -> reservationID));
 
             $result = $database -> query($sql);
@@ -190,7 +204,8 @@
                 "branch" => $this -> branch,
                 "sport" => $this -> sport,
                 "court_name" => $this -> courtName,
-                "reserved_date" => $this -> reservedDate
+                "reservedDate" => $this -> reservedDate,
+                "chargeID" => $this -> chargeID
             ];
         }
     }

@@ -18,22 +18,23 @@
     //branch id -> 0th index, sport id -> 1st index
 
     $branch = new Branch($reservationPlace[0]);
-    $branch -> getDetails($connection);
-    $sports_courts = $branch -> getSportCourts($reservationPlace[1], $connection, 'a');  //get all the sports court of that branch's sport (request status should be accepted)
+    $branch -> getDetails($connection, ['city', 'openingTime', 'closingTime']);
 
-    $sport = new Sport();   //to get sport details
+    $sport = new Sport();   
     $sport -> setID($reservationPlace[1]);
-    $sport -> getDetails($connection);
+    $sports_courts = $branch -> getBranchCourts($connection, $sport, 'a');  //get all the sports court of that branch's sport (request status should be accepted)
+
+    //to get sport details
+    $sport -> getDetails($connection, ['sportName', 'reservationPrice']);
 
     $allCourts = [];
 
 
     foreach($sports_courts as $currCourt){ //traverse all the sports courts
-        $tempCourt = new Sports_Court($currCourt); 
-        $tempSchedule = $tempCourt -> getSchedule($connection); //get the schedule of that particular sport (all the reservations)
+        $tempSchedule = $currCourt -> getSchedule($connection); //get the schedule of that particular sport (all the reservations)
 
         $courtSchedule = [];    //to store each court's reservations
-        $courtName = $tempCourt -> getName($connection);
+        $courtName = $currCourt -> getName($connection);
 
         //user reservations
         $i = 0;
@@ -84,7 +85,7 @@
             unset($currCourtMaintenance);
         }
 
-        $allCourts[$currCourt] = ['schedule' => $courtSchedule, 'courtName' => $courtName];  //reservation schedule of the court is stored in the courts array
+        $allCourts[$currCourt -> getID()] = ['schedule' => $courtSchedule, 'courtName' => $courtName];  //reservation schedule of the court is stored in the courts array
         unset($tempCourt);
     }
 
@@ -94,11 +95,7 @@
 
     $branchJSON = json_encode($branch);
     $neededInfo = json_decode($branchJSON, true);
-    unset($neededInfo['manager']);
-    unset($neededInfo['email']);
-    unset($neededInfo['address']);
-    unset($neededInfo['photos']);
-    unset($neededInfo['receptionist']);
+
     $neededInfo['reservingSport'] = $sport;
     $neededInfo['branchReservationSchedule'] = $allCourts;
     $neededInfo['branchMaintenance'] = $branchMaintenance;
@@ -109,9 +106,5 @@
 
     $connection -> close();
     header('Content-Type: application/json');    //because we are sending json
-    echo json_encode($neededInfo);
-    //sending opening and closing times as a json response to be received by Javascript
-/*     $arr = ["openingTime" => $reservationPlace[4], "closingTime" => $reservationPlace[5]];
-    echo json_encode($arr); */
-    //header("Location: /public/general/reservation_schedule.php");
+    echo json_encode($neededInfo, JSON_PRETTY_PRINT);
 ?>

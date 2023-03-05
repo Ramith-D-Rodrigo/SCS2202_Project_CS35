@@ -58,7 +58,7 @@
                             <div style="text-align:center; margin-bottom: 20px">
                                 Make a Reservation
                             </div>
-                            <form method="post" action="/controller/user/make_reservation_controller.php">
+                            <form method="post">
                                 <div style="display:flex; flex-direction: row; flex-wrap: wrap; justify-content:space-around">
                                     <div style ="flex-basis: 33.333333%">
                                         Sport : <input name ="reservingSport" readonly id="reservingSportInput"> 
@@ -94,16 +94,37 @@
                                     Reservation Price : <input readonly id="reservationPrice" name="reservationPrice">
                                 </div>
                                 <div style="display:flex; align-items: center; justify-content: center;">
-                                    <button type="submit" name="makeReserveBtn" id="makeReserveBtn" onclick="return validateForm(event)" style="margin-top:10px;">Make Reservation</button>
+                                    <button type="submit" name="makeReserveBtn" id="makeReserveBtn" onclick="return validateForm(event)" style="margin-top:10px;">Proceed to Payment <i class="fa-solid fa-credit-card" style="margin:0 10px"></i>
+                                    </button>
                                 </div>
                                 <div style="text-align:center; font-style:italic; margin-top:10px; font-size:smaller">
                                     Contact Relevant branch manager for Formal reservations incase of holding events
                                 </div>
                             </form>
                     </div>
-
                 </main>
-
+                <div class="content-box" id="paymentBox">
+                    <form id="payment-form">
+                        <div style="font-size:1.5rem">
+                            Payment Details
+                        </div>
+                        <div id="amount" style="font-size:1.2rem; margin: 20px auto">
+                        </div>
+                        <div id="card-element">
+                        </div>
+                        <div id="card-errors" role="alert"></div>
+                        <button id="paymentGatewaySubmitBtn" value="paymentSubmit" name="paymentBtn" type="submit">
+                            <span id="button-text">Pay Now</span>
+                        </button>
+                        <div id="payment-message" class="hidden"></div>
+                    </form>
+                    <div class="payment-gateway-footer">
+                        <div style="font-size:0.7rem; font-style:italic">
+                            The payment gateway is powered by 
+                        </div>
+                        <i class="fa-brands fa-stripe" style="font-size:1.3rem; margin: 0 5px"></i>
+                    </div>
+                </div>
                 <?php
                     require_once("footer.php");
                 ?>
@@ -112,6 +133,7 @@
             <script type="module" src="/js/general/reservation_validation.js"></script>
             <script type="module" src="/js/user/make_reservation.js"></script>
             <script src="/js/user/account_links.js"></script>
+            <script src="https://js.stripe.com/v3/"></script>
         </html>
     <?php
     }

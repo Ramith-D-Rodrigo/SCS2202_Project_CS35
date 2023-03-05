@@ -72,13 +72,6 @@
             <br>
             <br>
             <div id="qualifications"> </div>
-
-            <div class="row-container">
-                <div class="left-side"> Session Branches:  </div>
-                <div class="right-side">
-                    <select id="sessionBranch"> </select>
-                </div>
-            </div>
             <div class="row-container">
                 <div class="left-side"> Coaching Sessions:  </div>
                 <div class="right-side" id="sessionInfo">   

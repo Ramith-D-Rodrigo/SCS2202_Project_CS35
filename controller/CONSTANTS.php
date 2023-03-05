@@ -12,4 +12,8 @@
     //seconds are not defined as they are always considered to be 0 to making reservations
     //minutes are not defined as they are always considered to be 0 or 30 to making reservations
 
+    define("CURRENCY", "LKR");  //currency used in the application (default is LKR)
+
+    define("SERVER_TIMEZONE", "Asia/Colombo");  //the timezone of the server (default is Asia/Colombo)
+
 ?>

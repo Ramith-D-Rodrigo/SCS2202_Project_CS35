@@ -2,21 +2,30 @@ verbose = true; //for debugging
 
 function validateForm(event){
     const errMsg = document.getElementById("errmsg");    //For Displaying the Error messages
-    errMsg.innerHTML = '' //empty before the validation
+    const sDate = document.getElementById("sDate");
+    const eDate = document.getElementById("eDate");
+    const stDate = new Date(sDate.value)
+    const enDate = new Date(eDate.value);
 
+    dayDiff = (enDate.getTime()-stDate.getTime())/(1000*3600*24);   //get the difference of days
+    if (dayDiff>31 || dayDiff<7) {   //invalid data range
+        event.preventDefault(); //do not submit
+        return false;
+    } 
+    
     const loginForm = document.getElementById("reqForm"); //get login form
 
     if(verbose){
         console.log(loginForm.reportValidity());
     }
 
-    if(loginForm.reportValidity() === false){   //has errors
+    if(!loginForm.reportValidity()){   //has errors
         errMsg.innerHTML = 'Please Enter valid information';
         event.preventDefault(); //do not submit
     }
-    else{   //can submit
-        return true;
-    }
+    
+    errMsg.innerHTML = '' //empty error message
+    return true;
 }
 
 // const spName = document.getElementById("sportName");

@@ -94,16 +94,6 @@
                 </div>
                 <?php
                     require_once("../../public/general/footer.php");
-                    if(isset($_SESSION['reserveCancelSuccess'])){   //cancel alert
-                        $msg = $_SESSION['reserveCancelSuccess'];
-                        echo "<script type='text/javascript'>alert('$msg');</script>";
-                        unset($_SESSION['reserveCancelSuccess']);
-                    }
-                    else if(isset($_SESSION['reserveCancelError'])){
-                        $msg = $_SESSION['reserveCancelError'];
-                        echo "<script type='text/javascript'>alert('$msg');</script>";
-                        unset($_SESSION['reserveCancelSuccess']);
-                    }
                 ?>    
             </body>
             <script src="/js/user/account_links.js"></script>
