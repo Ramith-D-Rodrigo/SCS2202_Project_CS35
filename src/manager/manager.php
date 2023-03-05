@@ -278,9 +278,9 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     //     }
     // }
    
-   public function changeTimeofaBranch($database,$openingTime,$closingTime,$branchID){
+   public function changeTimeofaBranch($openingTime,$closingTime,$branchID){
         $branch = new Branch($branchID);
-        $branch -> changeTime($database,$openingTime,$closingTime);
+        return $branch -> changeTime($this -> connection,$openingTime,$closingTime);
     }
       
     public function addDiscount($database, $managerID, $startingDate, $endingDate, $discountValue, $branchID){

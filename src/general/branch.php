@@ -439,7 +439,9 @@
 
         public  function get_time($database){
             $sql=sprintf( "SELECT `openingTime`,`closingTime` FROM `branch` WHERE `branchID` LIKE '%s' ",
+
             $database -> real_escape_string($this -> branchID));
+            
             $Result = $database -> query($sql);
             $timeResult=[];
              
