@@ -1,4 +1,3 @@
-
 <?php
     session_start();
     if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
@@ -23,22 +22,26 @@
 ?>
 <main >
     <div class="flex-container">
-            <div class=tabs style="min-width:30%; min-height:20rem">
+            <div  class="tabs" style="min-width:30%; min-height:20rem">
                 <div> Reservations</div> 
+                <div id="reservations"></div>
                 <div> <button onclick="window.location.href='/public/receptionist/view_reservations.php'"> View More </button> </div>
             </div>
-            <div class="tabs" style="min-width:30%; min-height:20rem">
+            <div  class="tabs" style="min-width:30%; min-height:20rem">
                 <div> Onsite Reservation</div> 
+                <div id="onlineR"></div>
                 <div> <button> Add </button> </div>
             </div>
-            <div class=tabs style="min-width:30%; min-height:20rem">
+            <div  class=tabs style="min-width:30%; min-height:20rem">
                 <div>Branch Details</div> 
+                <div id="branch"></div>
                 <div> <button onclick="window.location.href='/public/receptionist/edit_branch.php'"> Edit</button> </div>
             </div>   
         </div>
         <div class="flex-container">
-            <div class=tabs style="min-width:30%; min-height:20rem">
+            <div  class=tabs style="min-width:30%; min-height:20rem">
                 <div> View Profiles</div> 
+                <div id="profiles"></div>
                 <div> 
                     <button onclick="window.location.href='/public/receptionist/view_coach_profiles.php'"> View Coach Profiles </button> 
                     <button onclick="window.location.href='/public/receptionist/view_user_profiles.php'"> View User Profiles   </button> 
@@ -46,6 +49,7 @@
             </div>
             <div class=tabs style="min-width:30%; min-height:20rem">
                 <div>Request Maintenance</div> 
+                <div id="maintenance"></div>
                 <div> <button onclick="window.location.href='/public/receptionist/request_maintenance.php'" > Add </button> </div>
             </div>  
         </div>
