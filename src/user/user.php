@@ -342,7 +342,7 @@ class User extends Actor implements JsonSerializable{
             $endingTime = $row -> ending_time; */
 
             //$row -> {"time_period"} = $startingTime . " to " . $endingTime;
-            $currReservation -> getDetails($this -> connection);  //get the reservation details
+            $currReservation -> getDetails($this -> connection, ['date', 'startingTime', 'endingTime', 'status', 'reservedDate', 'paymentAmount']);  //get the reservation details
 
             array_push($reservations, $currReservation);
             unset($currReservation);

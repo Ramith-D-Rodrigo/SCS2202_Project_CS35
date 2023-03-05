@@ -73,7 +73,7 @@ fetch("../../controller/user/reservation_history_controller.php")
                 currRow.appendChild(currBranch);
 
                 const currCourt = document.createElement("td");  //Court
-                currCourt.innerHTML = data[i].court_name;
+                currCourt.innerHTML = data[i].courtName;
                 currRow.appendChild(currCourt);
 
                 const currPaymentAmount = document.createElement("td");  //payment amount
