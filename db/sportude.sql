@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 05, 2023 at 07:28 PM
+-- Generation Time: Mar 07, 2023 at 12:33 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -51,9 +51,10 @@ CREATE TABLE `branch` (
 
 INSERT INTO `branch` (`branchID`, `address`, `branchEmail`, `city`, `openingTime`, `closingTime`, `openingDate`, `revenue`, `ownerID`, `currManager`, `currReceptionist`, `ownerRequestDate`, `requestStatus`, `latitude`, `longitude`) VALUES
 ('Alaw640320e9a2e9a', 'Alawathupitiya', 'ramithrosdrigo@hotmail.com', 'Alawathupitiya', '10:00:00', '18:00:00', '2023-03-07', NULL, 'ownermn74625612', NULL, NULL, '2023-03-04', 'p', '7.110521037850345', '79.88800764083864'),
-('col128423', 'Colombo Branch, Colombo', 'colombobr@sp.com', 'Colombo', '09:00:00', '20:00:00', '2022-12-07', NULL, NULL, 'managersecond1234', 'receptionisttwo123', NULL, 'a', '7.28683660', '80.243020505'),
+('col128423', 'Colombo Branch, Colombo', 'colombobr@sp.com', 'Colombo', '09:00:00', '20:00:00', '2022-12-07', 2200, NULL, 'managersecond1234', 'receptionisttwo123', NULL, 'a', '7.28683660', '80.243020505'),
 ('Kand64030c042c114', 'Kandy Branch', 'kandybr@gmail.com', 'Kandy', '08:00:00', '18:00:00', '2023-03-01', NULL, 'ownermn74625612', NULL, NULL, '2023-03-04', 'p', '7.28683660', '80.63020505'),
-('kiri987521', 'Example Road, Kiribathgoda', 'kribathgodabr@sp.com', 'Kiribathgoda', '08:00:00', '19:00:00', '2022-11-26', 2100, NULL, 'managerkiri5436', 'receptionistkiri1241', NULL, 'a', '0.00000000', '0.00000000');
+('kiri987521', 'Example Road, Kiribathgoda', 'kribathgodabr@sp.com', 'Kiribathgoda', '08:00:00', '19:00:00', '2022-11-26', 5100, NULL, 'managerkiri5436', 'receptionistkiri1241', NULL, 'a', '0.00000000', '0.00000000'),
+('test64057012608ab', 'test address', 'testbranch@br.com', 'test', '08:00:00', '16:00:00', '2023-03-09', NULL, 'ownermn74625612', NULL, NULL, '2023-03-06', 'p', '6.926721400829939', '79.86620664596559');
 
 -- --------------------------------------------------------
 
@@ -136,7 +137,7 @@ CREATE TABLE `coaching_session` (
 
 INSERT INTO `coaching_session` (`sessionID`, `coachMonthlyPayment`, `timePeriod`, `noOfStudents`, `coachID`, `courtID`, `day`, `startingTime`, `endingTime`, `paymentAmount`, `startDate`, `cancelDate`) VALUES
 ('session1', 5000, '02:00:00', 1, 'coach_tha63cce6a49befd', 'badcourt1212', 'Wednesday', '14:00:00', '16:00:00', 2500, NULL, NULL),
-('session2', 5250, '02:00:00', 0, 'coach_sen63f62a9821f62', 'baskcourt45', 'Monday', '12:00:00', '14:00:00', 1500, NULL, NULL);
+('session2', 5250, '02:00:00', 1, 'coach_sen63f62a9821f62', 'baskcourt45', 'Monday', '12:00:00', '14:00:00', 1500, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -326,19 +327,12 @@ CREATE TABLE `notification` (
   `notificationID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `subject` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `status` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `description` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `date` date NOT NULL,
   `lifetime` time DEFAULT NULL,
   `userID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `readTimeStamp` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `notification`
---
-
-INSERT INTO `notification` (`notificationID`, `subject`, `status`, `description`, `date`, `lifetime`, `userID`, `readTimeStamp`) VALUES
-('notification2', 'Upcoming Reservation', 'Pending', 'You have a reservation on This branch', '2023-03-07', NULL, 'ramRod63816dc9007b4', NULL);
 
 -- --------------------------------------------------------
 
@@ -460,8 +454,15 @@ INSERT INTO `reservation` (`reservationID`, `date`, `startingTime`, `endingTime`
 ('Res-ram640168561938e', '2023-03-10', '10:00:00', '12:00:00', 2, 700, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-03 03:24:06', 'ch_3MhPEMKUOfa0wCPZ0Hbe6GTx', NULL),
 ('Res-ram64019a45bcf40', '2023-03-11', '16:00:00', '19:00:00', 2, 1050, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-03 06:57:09', 'ch_3MhSYYKUOfa0wCPZ1g7IrPbK', NULL),
 ('Res-ram6404339438b51', '2023-03-14', '15:00:00', '19:00:00', 2, 840, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-05 06:15:48', 'ch_3MiArdKUOfa0wCPZ0V7nqYWY', NULL),
-('Res-ram6404344c73213', '2023-03-13', '15:00:00', '19:00:00', 2, 840, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-05 06:18:52', 'ch_3MiAubKUOfa0wCPZ1QCRyzRR', NULL),
-('Res-ram6404366c2eede', '2023-03-10', '10:00:00', '12:00:00', 2, 420, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-05 06:27:56', 'ch_3MiB3NKUOfa0wCPZ0cGWJEIV', NULL);
+('Res-ram6404344c73213', '2023-03-13', '15:00:00', '19:00:00', 2, 840, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-05 06:18:52', 'ch_3MiAubKUOfa0wCPZ1QCRyzRR', NULL),
+('Res-ram6404366c2eede', '2023-03-10', '10:00:00', '12:00:00', 2, 420, 'badcourt1212', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-05 06:27:56', 'ch_3MiB3NKUOfa0wCPZ0cGWJEIV', NULL),
+('Res-ram64056794992db', '2023-03-15', '15:00:00', '18:00:00', 2, 1650, 'basket345', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-06 04:09:56', 'ch_3MiVNOKUOfa0wCPZ1Zb8hqyX', NULL),
+('Res-ram64056d4e8bcbe', '2023-03-12', '10:00:00', '12:00:00', 2, 1100, 'basket345', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-06 04:34:22', 'ch_3MiVl2KUOfa0wCPZ1UKcuSwT', NULL),
+('Res-ram64060d9db7428', '2023-03-11', '10:00:00', '12:00:00', 2, 1100, 'basket345', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-06 15:58:21', 'ch_3MigQyKUOfa0wCPZ00v8zY04', NULL),
+('Res-ram6407199b96467', '2023-03-13', '09:00:00', '13:00:00', 2, 960, 'badcourt1213', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-07 11:01:47', 'ch_3MiyHVKUOfa0wCPZ1xbcAunC', NULL),
+('Res-ram64071a2b72d75', '2023-03-14', '12:00:00', '18:00:00', 2, 1440, 'badcourt1213', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-07 11:04:11', 'ch_3MiyJpKUOfa0wCPZ1StouLWm', NULL),
+('Res-ram64071a6c69f22', '2023-03-15', '10:00:00', '16:00:00', 2, 1440, 'badcourt1213', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-07 11:05:16', 'ch_3MiyKsKUOfa0wCPZ1ux7HwPK', NULL),
+('Res-ram640720e441d6c', '2023-03-12', '14:00:00', '18:00:00', 2, 960, 'badcourt1213', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-07 11:32:52', 'ch_3MiylaKUOfa0wCPZ1Prj4ZLv', NULL);
 
 --
 -- Triggers `reservation`
@@ -514,9 +515,10 @@ CREATE TABLE `sport` (
 --
 
 INSERT INTO `sport` (`sportID`, `sportName`, `description`, `reservationPrice`, `minCoachingSessionPrice`, `maxNoOfStudents`) VALUES
-('bad65421', 'Badminton', 'Fun game to play with friends', 350, 420, 10),
+('bad65421', 'Badminton', 'Fun game to play with friends', 400, 480, 10),
 ('basket17212', 'Basketball', 'A sport that requires speed', 550, 660, 25),
 ('cricket23871', 'Cricket', 'wanna play 11 vs 11?', 800, 5000, 20),
+('Swim6405710541644', 'Swimming', 'test description', 500, 600, NULL),
 ('Tabl64038296afcad', 'Table Tennis', 'highly competitive and engaging for a 2v2 sport', 200, 240, NULL),
 ('Voll64037fe13cf3a', 'Volleyball', 'Another fun game', 800, 960, 12);
 
@@ -547,7 +549,9 @@ INSERT INTO `sports_court` (`courtID`, `sportID`, `courtName`, `branchID`, `requ
 ('basket345', 'basket17212', 'A', 'col128423', 'a', NULL),
 ('KanBas64030c042d150', 'basket17212', 'A', 'Kand64030c042c114', 'p', NULL),
 ('KanBas64030c042e430', 'basket17212', 'B', 'Kand64030c042c114', 'p', NULL),
-('KanCri64030c042fa53', 'cricket23871', 'A', 'Kand64030c042c114', 'p', NULL);
+('KanCri64030c042fa53', 'cricket23871', 'A', 'Kand64030c042c114', 'p', NULL),
+('tesBad6405701261bb3', 'bad65421', 'A', 'test64057012608ab', 'p', NULL),
+('tesTab6405701263373', 'Tabl64038296afcad', 'A', 'test64057012608ab', 'p', NULL);
 
 -- --------------------------------------------------------
 
@@ -648,7 +652,8 @@ CREATE TABLE `student_registered_session` (
 --
 
 INSERT INTO `student_registered_session` (`stuID`, `sessionID`, `joinDate`, `leaveDate`) VALUES
-('ramRod63816dc9007b4', 'session1', '2023-02-01', '2023-03-01');
+('ramRod63816dc9007b4', 'session1', '2023-02-01', '2023-03-06'),
+('ramRod63816dc9007b4', 'session1', '2023-03-06', '2023-03-06');
 
 -- --------------------------------------------------------
 
@@ -856,7 +861,8 @@ CREATE TABLE `user_request_coaching_session` (
 --
 
 INSERT INTO `user_request_coaching_session` (`userID`, `sessionID`, `requestDate`, `message`) VALUES
-('ramRod63816dc9007b4', 'session2', '2023-03-05', 'sada');
+('ramRod63816dc9007b4', 'session1', '2023-03-06', 'asdada'),
+('ramRod63816dc9007b4', 'session2', '2023-03-06', 'asdasd');
 
 --
 -- Indexes for dumped tables
@@ -973,7 +979,7 @@ ALTER TABLE `reservation`
   ADD KEY `user_id` (`userID`),
   ADD KEY `formal_manager_id` (`formalManagerID`),
   ADD KEY `onsite_receptionist_id` (`onsiteReceptionistID`),
-  ADD KEY `notificationID` (`notificationID`);
+  ADD KEY `reservation_ibfk_5` (`notificationID`);
 
 --
 -- Indexes for table `sport`
@@ -1177,7 +1183,7 @@ ALTER TABLE `reservation`
   ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `reservation_ibfk_3` FOREIGN KEY (`formalManagerID`) REFERENCES `manager` (`managerID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `reservation_ibfk_4` FOREIGN KEY (`onsiteReceptionistID`) REFERENCES `receptionist` (`receptionistID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `reservation_ibfk_5` FOREIGN KEY (`notificationID`) REFERENCES `notification` (`notificationID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `reservation_ibfk_5` FOREIGN KEY (`notificationID`) REFERENCES `notification` (`notificationID`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `sports_court`
