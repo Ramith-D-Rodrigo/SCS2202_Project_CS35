@@ -281,7 +281,7 @@
         //notification trigger date is 3 days before the reservation date
         $notificationTriggerDate = date('Y-m-d', strtotime($date. ' - 3 days'));
         $notification -> setDetails(subject: "Upcoming Reservation", 
-            status: 'Pending', 
+            status: 'Unread', 
             description: $notificationDescription, 
             date : $notificationTriggerDate, 
             userID: $reservingUser -> getUserID());

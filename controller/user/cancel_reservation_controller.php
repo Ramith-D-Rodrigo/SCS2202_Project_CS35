@@ -33,7 +33,7 @@
     $cancellingReservation = new Reservation();
     $cancellingReservation -> setID($selectedReservation);
 
-    $cancellingReservation -> getDetails($cancellingUser -> getConnection(), ['chargeID', 'status', 'reservedDate', 'paymentAmount', 'userID']);
+    $cancellingReservation -> getDetails($cancellingUser -> getConnection(), ['chargeID', 'status', 'reservedDate', 'paymentAmount', 'userID', 'notificationID']);
 
     $reservationDetails = json_decode(json_encode($cancellingReservation), true);
 
@@ -62,6 +62,14 @@
     if($result === TRUE){   //if cancelling the reservation is successful
         $statusCode = 200;
         $returnMsg['msg'] = "Reservation Cancelled Successfully";
+
+        //delete reservation notification
+        require_once("../../src/general/notification.php");
+        $notificationID = $reservationDetails['notificationID'];
+
+        $deletingNotification = new Notification($notificationID);
+        $deletingNotification -> deleteNotification($cancellingUser -> getConnection());
+
         //server timezone set
         date_default_timezone_set(SERVER_TIMEZONE);
 
