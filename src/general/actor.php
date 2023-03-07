@@ -175,7 +175,7 @@
         }
 
         public function getNotifications(){
-            $sql = sprintf("SELECT `notificationID` FROM `notification` WHERE `userID` = '%s' AND `date` >='%s' ORDER BY `date` DESC",
+            $sql = sprintf("SELECT `notificationID` FROM `notification` WHERE `userID` = '%s' AND `date` <= '%s' ORDER BY `date` DESC",
             $this -> connection -> real_escape_string($this -> userID),
             $this -> connection -> real_escape_string(date("Y-m-d")));
 
