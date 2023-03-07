@@ -270,6 +270,31 @@
     $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $chargeID, $reservingCourt);   //pass the reserving court object to the function
     if($result[0] === TRUE){
         $returningMsg['successMsg'] = "Reservation has been made Successfully";
+
+        //add notification
+        require_once("../../src/general/notification.php");
+        $notificationID = uniqid("not". substr($fName, 0, 3));
+
+        $notification = new Notification($notificationID);
+
+        $notificationDescription = "You have a upcoming reservation on ".$date." from ".$startingTime." to ".$endingTime." at ".$branchName." on Court ".$reservingCourt -> getName($reservingUser -> getConnection());
+        //notification trigger date is 3 days before the reservation date
+        $notificationTriggerDate = date('Y-m-d', strtotime($date. ' - 3 days'));
+        $notification -> setDetails(subject: "Upcoming Reservation", 
+            status: 'Pending', 
+            description: $notificationDescription, 
+            date : $notificationTriggerDate, 
+            userID: $reservingUser -> getUserID());
+
+        $notification -> setNotificationEntry($reservingUser -> getConnection());
+
+        //update the reservation notification id
+        $createdReservation = new Reservation();
+        $createdReservation -> setID($result[1]); //1st index is the reservation id
+        $createdReservation -> addNotificationID($notificationID, $reservingUser -> getConnection());
+
+
+        header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($returningMsg);
     }
     else{//error while inserting the reservation

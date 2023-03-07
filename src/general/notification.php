@@ -15,7 +15,7 @@
             $this->notificationID = $notificationID;
         }
 
-        public function setDetails($subject = '', $status = '', $description = '', $date ='', $lifetime ='', $userID ='', $reservationID ='', $readTimeStamp =''){
+        public function setDetails($subject = '', $status = '', $description = '', $date ='', $lifetime ='', $userID ='', $readTimeStamp =''){
             $args = get_defined_vars();
 
             foreach($args as $key => $value){
@@ -41,7 +41,7 @@
 
             $sql = sprintf("INSERT INTO `notification` 
                 (`notificationID`,`subject`, `status`, `description`, `date`, `lifetime`, `userID`, `readTimeStamp`) 
-                VALUES ('%s', '%s', '%s', '%s', NULLIF('%s', ''), '%s', '%s', NULLIF('%s', ''), NULLIF('%s', ''))",
+                VALUES ('%s', '%s', '%s', '%s', '%s', NULLIF('%s', ''), '%s', NULLIF('%s', ''))",
                 $database -> real_escape_string($this -> notificationID),
                 $database -> real_escape_string($this -> subject),
                 $database -> real_escape_string($this -> status),

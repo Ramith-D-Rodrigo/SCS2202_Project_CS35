@@ -102,6 +102,18 @@
             return $result;
         }
 
+        public function addNotificationID($notificationID, $database){
+            $this -> notificationID = $notificationID;
+
+            $sql = sprintf("UPDATE `reservation`
+            SET `notificationID` = '%s'
+            WHERE `reservationID` = '%s'",
+            $database -> real_escape_string($this -> notificationID),
+            $database -> real_escape_string($this -> reservationID));
+
+            return $database -> query($sql);
+        }
+
 
 
         public function getDetails($database, $wantedColumns = []){
