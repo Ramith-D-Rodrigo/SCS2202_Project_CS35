@@ -11,9 +11,9 @@ import {createReservationSchedulePage, createScheduleObjects, createReservationT
 import { MAX_RESERVATION_DAYS } from '../CONSTANTS.js';
 
 //store in window object so that we can access it from other js files
-window.createReservationSchedulePage = createReservationSchedulePage;
-window.createScheduleObjects = createScheduleObjects;
-window.createReservationTable = createReservationTable;
+//window.createReservationSchedulePage = createReservationSchedulePage;
+//window.createScheduleObjects = createScheduleObjects;
+//window.createReservationTable = createReservationTable;
 
 
 fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn=".concat(getReq))

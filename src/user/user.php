@@ -566,22 +566,58 @@ class User extends Actor implements JsonSerializable{
     public function requestCoachingSession($sessionObj, $message){
         date_default_timezone_set(SERVER_TIMEZONE);
         $date = date('Y-m-d');   
+        
+        $notificationID = uniqid("notReq".substr($this -> userID, 0, 3));
+
+        //send a notification to the coach
+        //add the notification first because the notificationID is needed to add the request (foreign key)
+        require_once("../../src/general/notification.php");
+        $requestNotification = new Notification($notificationID);
+
+        $sessionCoach = $sessionObj -> getCoach($this -> connection);
+
+        $notDescription = "You have a new request from an user to join your Coaching Session. Please check your Coaching Session Requests to accept or reject the request.";
+        
+
+        $requestNotification -> setDetails(subject : "New Student Request",
+            status : "Unread",
+            description : $notDescription,
+            date : date("Y-m-d"),
+            userID : $sessionCoach -> getUserID());
+
+        $requestNotification -> setNotificationEntry($this -> connection);
+
+        
         $sql = sprintf("INSERT INTO `user_request_coaching_session` 
-        (`userID`, `sessionID`, `message`, `requestDate`) 
-        VALUES ('%s', '%s', NULLIF('%s', ''), '%s')",
+        (`userID`, `sessionID`, `message`, `requestDate`, `notificationID`) 
+        VALUES ('%s', '%s', NULLIF('%s', ''), '%s', '%s')",
         $this -> connection -> real_escape_string($this -> userID),
         $this -> connection -> real_escape_string($sessionObj -> getSessionID()),
         $this -> connection -> real_escape_string($message),
-        $this -> connection -> real_escape_string($date));
+        $this -> connection -> real_escape_string($date),
+        $this -> connection -> real_escape_string($notificationID));
 
         $result = $this -> connection -> query($sql);
         if($result === false){
             return false;
         }
+
         return true;
     }
 
     public function cancelCoachingSessionRequest($sessionObj){
+        //first get the notificationID of the request
+        $sql = sprintf("SELECT `notificationID` FROM `user_request_coaching_session` 
+        WHERE `userID` = '%s'
+        AND `sessionID` = '%s'",
+        $this -> connection -> real_escape_string($this -> userID),
+        $this -> connection -> real_escape_string($sessionObj -> getSessionID()));
+
+        $result = $this -> connection -> query($sql);
+        $row = $result -> fetch_object();
+        $notificationID = $row -> notificationID;
+
+        //delete the session request
         $sql = sprintf("DELETE FROM `user_request_coaching_session` 
         WHERE `userID` = '%s'
         AND `sessionID` = '%s'",
@@ -592,6 +628,11 @@ class User extends Actor implements JsonSerializable{
         if($result === false){
             return false;
         }
+
+        //delete the notification
+        require_once("../../src/general/notification.php");
+        $notification = new Notification($notificationID);
+        $notification -> deleteNotification($this -> connection);
         return true;
     }
 
