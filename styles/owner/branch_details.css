@@ -30,7 +30,9 @@
     flex-wrap: wrap;
 }
 .content-box{
-    min-width: 40%;
+    flex-basis: 45%;
+    flex-grow: 1;
+    height: 100vh;
 }
 
 #currRating{
