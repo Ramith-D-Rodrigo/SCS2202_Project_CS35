@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 07, 2023 at 12:33 PM
+-- Generation Time: Mar 08, 2023 at 03:48 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -734,7 +734,7 @@ INSERT INTO `user` (`userID`, `firstName`, `lastName`, `gender`, `profilePhoto`,
 ('lahKum63a5b560507af', 'Lahiru', 'Kumara', 'm', '../../uploads/user_profile_images/lahiru_kumara263a5b56050808.jpg', 'Lahiru&amp;#039;s Address', '0774145632', '2002-02-06', '2022-12-23', 175, 66),
 ('lahRod63a6ff48ce0c4', 'Lahiru', 'Rodrigo', 'm', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-12-02', '2022-12-24', NULL, NULL),
 ('nihWij638657d83c715', 'Nihal', 'Wijesinghe', 'm', NULL, 'Some road, Galle', '0789654125', '1996-07-26', '2022-11-29', 177, 69),
-('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', '../../uploads/user_profile_images/ramith_rodrigo63f8d69aa0fc9.jpg', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', 180, 55),
+('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', '../../uploads/user_profile_images/ramith_rodrigo63f8d69aa0fc9.jpg', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', NULL, NULL),
 ('samKum63e523eab8d76', 'Saman', 'Kumara', 'm', '../../uploads/user_profile_images/saman_kumara63e52426da49d.jpg', 'Saman address', '0774587452', '2009-02-04', '2023-02-09', NULL, NULL),
 ('thaSam639a02d983325', 'Tharindu', 'Sampath', 'm', NULL, 'Some road, Kaluthara', '0774125478', '1999-06-25', '2022-12-14', 170, 70);
 
@@ -853,16 +853,9 @@ CREATE TABLE `user_request_coaching_session` (
   `userID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `sessionID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `requestDate` date NOT NULL,
-  `message` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
+  `message` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `notificationID` varchar(35) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `user_request_coaching_session`
---
-
-INSERT INTO `user_request_coaching_session` (`userID`, `sessionID`, `requestDate`, `message`) VALUES
-('ramRod63816dc9007b4', 'session1', '2023-03-06', 'asdada'),
-('ramRod63816dc9007b4', 'session2', '2023-03-06', 'asdasd');
 
 --
 -- Indexes for dumped tables
@@ -1083,7 +1076,8 @@ ALTER TABLE `user_medical_concern`
 --
 ALTER TABLE `user_request_coaching_session`
   ADD PRIMARY KEY (`userID`,`sessionID`) USING BTREE,
-  ADD KEY `session_id` (`sessionID`);
+  ADD KEY `session_id` (`sessionID`),
+  ADD KEY `notificationID` (`notificationID`);
 
 --
 -- Constraints for dumped tables
@@ -1275,7 +1269,8 @@ ALTER TABLE `user_medical_concern`
 --
 ALTER TABLE `user_request_coaching_session`
   ADD CONSTRAINT `user_request_coaching_session_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `user_request_coaching_session_ibfk_2` FOREIGN KEY (`sessionID`) REFERENCES `coaching_session` (`sessionID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `user_request_coaching_session_ibfk_2` FOREIGN KEY (`sessionID`) REFERENCES `coaching_session` (`sessionID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `user_request_coaching_session_ibfk_3` FOREIGN KEY (`notificationID`) REFERENCES `notification` (`notificationID`) ON DELETE CASCADE ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
