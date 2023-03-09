@@ -470,28 +470,33 @@ fetch("../../controller/user/coaching_sessions_controller.php")
                 coachSet.add(coachObj);
                 console.log(coachSet);
 
+                const imagesContainer = document.createElement('div');  //container for the images (both coach and sport)
+                imagesContainer.className = 'images-container';
                 //add coach image to the div
                 const coachImgContainer = document.createElement('div');
+                coachImgContainer.className = 'coach-img-container';
+
                 const coachImg = document.createElement('img');
+                coachImg.className = 'coach-img';
                 coachImg.src = data.coaches[data.coachingSessions[i].coachID].photo;
-                coachImg.style.width = "18rem";
-                coachImg.style.height = 'auto';
 
                 coachImg.setAttribute('onerror', 'this.src = "/styles/icons/no-results.png"');
                 coachImgContainer.appendChild(coachImg);
-                sessionDiv.appendChild(coachImgContainer);
+                imagesContainer.appendChild(coachImgContainer);
 
                 //add sport image to the div
                 const sportImgContainer = document.createElement('div');
+                sportImgContainer.className = 'sport-img-container';
+
                 const sportImg = document.createElement('img');
-                //resize the image
-                sportImg.style.width = "10rem";
-                sportImg.style.height = 'auto';
+                sportImg.className = 'sport-img';
 
                 sportImg.src = "/uploads/sport_images/" + data.coaches[data.coachingSessions[i].coachID].sport + ".jpg";
 
                 sportImgContainer.appendChild(sportImg);
-                sessionDiv.appendChild(sportImgContainer);
+                imagesContainer.appendChild(sportImgContainer);
+
+                sessionDiv.appendChild(imagesContainer);
 
                 //sport class for filtering
                 sessionDiv.classList.add(data.coaches[data.coachingSessions[i].coachID].sport);

@@ -26,7 +26,7 @@
                 ?>
                 <main>
                     <div class="body-container">
-                        <div class="content-box" style="flex-direction:row">
+                        <div class="content-box filter-box">
                             <div>
                                 Status
                                 <select id="statusFilter">
