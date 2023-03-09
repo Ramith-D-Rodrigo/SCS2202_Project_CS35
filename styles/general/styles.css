@@ -244,32 +244,18 @@ textarea{
 table{
     background-color: white;
     text-align: center;
-    border-radius: 10px;
-    border-spacing: 0;
     border-collapse:collapse;
+    width: 100%;
     
 }
 
-td,th{
-    padding: 10px;
-    border: 1px solid black;
- 
+table,td,th{
+    padding: 1rem;
 }
 
-th:first-of-type {
-    border-top-left-radius: 10px;
-}
-
-th:last-of-type {
-    border-top-right-radius: 10px;
-}
-
-tr:last-of-type td:first-of-type {
-    border-bottom-left-radius: 10px;
-}
-
-tr:last-of-type td:last-of-type {
-    border-bottom-right-radius: 10px;
+table{
+    border-radius: 1rem;
+    box-shadow: 0 .4rem .8rem #0005;
 }
 
 #accountIcons{

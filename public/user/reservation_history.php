@@ -16,6 +16,7 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
                 <link rel="stylesheet" href="/styles/user/cancel_reservation.css">
+                <link rel="stylesheet" href="/styles/user/reservation_history.css">
                 <link rel="stylesheet" href="/styles/general/notification.css">
                 <link rel="stylesheet" href="/styles/user/give_feedback.css">
                 <title>Reservation History</title>
@@ -25,7 +26,7 @@
                     require_once("../../public/general/header.php");
                 ?>
                 <main>
-                    <div class="content-box" style="overflow-x:auto;" id="reservationHistoryBox">
+                    <div class="content-box" id="reservationHistoryBox">
                     </div>
                 </main>
                 <div id="authFormDiv" class="content-box">
