@@ -532,10 +532,21 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         homeAddress.innerHTML = decodeHtml(data['homeAddress']);
 
         const weight = document.getElementById("weight");   //set the weight field
-        weight.value = data['weight'];
+        if(data['weight'] === null || data['weight'] === undefined){
+            weight.value = "";
+        }
+        else{
+            weight.value = data['weight'];
+        }
+
         
         const height = document.getElementById("height");   //set the height field
-        height.value = data['height'];
+        if(data['height'] === null || data['height'] === undefined){
+            height.value = "";
+        }
+        else{
+            height.value = data['height'];
+        }
 
         const gender = document.getElementById("genderField");  //set the gender field
         if(data['gender'] === 'm'){
