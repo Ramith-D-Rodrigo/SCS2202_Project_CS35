@@ -23,16 +23,18 @@
                 <?php
                     require_once("header.php");
                 ?>
-                <main class="body-container">
-                    <div class="content-box" style="align-items:center">
-                        <div id="filter">
-                            Filter By : 
-                            <select id="sportSelect">
-                                <option value="">Sport</option>
-                            </select>
+                <main>
+                    <div class="body-container">
+                        <div class="content-box">
+                            <div id="filter">
+                                Filter By : 
+                                <select id="sportSelect">
+                                    <option value="">Sport</option>
+                                </select>
+                            </div>
                         </div>
-                        <div id="coachList">
-                        </div>
+                    </div>
+                    <div class="body-container" id="coachList">
                     </div>
                 </main>
                 <?php

@@ -14,7 +14,8 @@ fetch("../../controller/general/reg_coaches_controller.php")
 
         for(let i = 0; i < data.length; i++){
             const coachInfoDiv = document.createElement("div");
-            coachInfoDiv.className = "coach-row";
+            coachInfoDiv.className = "coach";
+            coachInfoDiv.classList.add("content-box");
 
             const coachImgContainer = document.createElement("div");
             coachImgContainer.className = "coach-image-container";
@@ -29,10 +30,10 @@ fetch("../../controller/general/reg_coaches_controller.php")
             coachInfoDiv.appendChild(coachImgContainer);
 
             const formDiv = document.createElement("div");
+            formDiv.className = "coach-info";
             const form = document.createElement("form");
 
             form.id = data[i].coachID; //coach id for each form
-            form.className = "coachInfo";
             form.action = "/public/general/coach_profile.php";
             form.method = "get";
 
@@ -54,7 +55,12 @@ fetch("../../controller/general/reg_coaches_controller.php")
             const sportDiv = document.createElement("div"); //coach sport
             sportDiv.className = "info";
             sportDiv.innerHTML = "Sport : " + data[i].sport;
+
+            //add sport to set
             sportSet.add(data[i].sport);
+
+            //add sport name as a class to the coach div
+            coachInfoDiv.classList.add(data[i].sport);
 
             form.appendChild(sportDiv);
 
@@ -107,19 +113,19 @@ fetch("../../controller/general/reg_coaches_controller.php")
         sportsFilter.addEventListener("change", () => {
             const sport = sportsFilter.value;   //get selected sport
 
-            const coachList = document.getElementsByClassName("coachInfo"); //get all coach info divs
+            const coachList = document.getElementsByClassName("coach"); //get all coach info divs
 
             for(let j = 0; j < coachList.length; j++){
-                const coachSport = coachList[j].children[1].innerHTML.split(" : ")[1];  //get the sport of that coach
+                const coachSport = coachList[j].classList[2]; //get coach sport
 
                 if(sport === ""){   //if no sport is selected, show all coaches
-                    coachList[j].parentElement.parentElement.style.display = "flex";
+                    coachList[j].style.display = "flex";
                 }
                 else if(coachSport === sport){
-                    coachList[j].parentElement.parentElement.style.display = "flex";
+                    coachList[j].style.display = "flex";
                 }
                 else{
-                    coachList[j].parentElement.parentElement.style.display = "none";
+                    coachList[j].style.display = "none";
                 }
             }
         });
