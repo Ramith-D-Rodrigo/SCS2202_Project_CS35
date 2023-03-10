@@ -29,3 +29,11 @@
     align-items:center; 
     width:50%;
 }
+
+#sportsContainer{
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+    flex-direction:row;
+    flex-wrap:wrap;
+}
