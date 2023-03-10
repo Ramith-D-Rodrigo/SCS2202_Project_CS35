@@ -26,10 +26,15 @@
                 ?>
                 <main>
                     <div class="search">
-                            <form action="/public/general/search_results.php" method="get" id="searchBar" style="min-width: 80%;">
+                        <input type="checkbox" id="searchCheck">
+                        <div class="search-box">
+                            <form action="/public/general/search_results.php" method="get" id="searchBar" style="min-width:80%">
                                 <input class="search-input" type="text" name="sportName" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
-                                <button type="submit" class="search-icon-btn" onclick="return searchValidation(event)">Search</button>
+                                <label for="searchCheck" class="search-icon">
+                                    <i class="fa-solid fa-magnifying-glass" ></i>
+                                </label>
                             </form>
+                        </div>
                     </div>
                     <div style="display:flex; flex-direction:row; justify-content:space-between">
                         <div class="content-box" style="flex:auto;" id="searchResult"></div>
