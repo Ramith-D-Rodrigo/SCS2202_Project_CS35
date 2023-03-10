@@ -55,7 +55,7 @@
 
                 <div class="content-box" id="msgBox">
                     <div style="text-align:center">
-                        <div id="msg" style="display:flex; flex-direction:column"></div>
+                        <div id="msg" style=""></div>
                     </div>
                     <div style="text-align:center; margin-top: 3rem">
                         <span id="dismiss">

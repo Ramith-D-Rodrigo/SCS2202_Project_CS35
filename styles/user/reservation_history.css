@@ -38,6 +38,14 @@
     border-bottom: none;
 }
 
+.res-history-table-body > tr:last-child > td:first-child{
+    border-bottom-left-radius: 1rem;
+}
+
+.res-history-table-body > tr:last-child > td:last-child{
+    border-bottom-right-radius: 1rem;
+}
+
 .res-history-table-body > tr:hover{
     background-color: black;
     color: white;
@@ -123,7 +131,7 @@
         top: 50%;
         width: 50%;
         transform: translateY(-50%);
-        padding-left: 15px;
+        padding-left: 0.5rem;
         font-size: 1rem;
         text-align: left;
         text-transform: uppercase;

@@ -15,17 +15,18 @@ const authFormDisplay = (e) => {
     const authenticationFormDiv = document.querySelector("#authFormDiv");
     authenticationFormDiv.style.display = "block";
 
+
+    //scroll to the authentication form and animate it
+    authenticationFormDiv.scrollIntoView({behavior: "smooth", block: "center"});
+    
+    
     //scroll to the authentication form and animate it
     authenticationFormDiv.scrollIntoView({behavior: "smooth", block: "center"});
     
     //blur the main content and darken it
     const main = document.querySelector("main");
-    main.style.filter = "blur(5px)";
-    //animate the blur effect
-    main.style.transition = "filter 0.5s ease-in-out";
-
-    //disable main 
-    main.style.pointerEvents = "none";
+    main.classList.add("main-darken");
+    main.classList.add("disabled");
 
     const altMsgDiv = document.querySelector("#altMsg");
 
@@ -44,21 +45,12 @@ const authFormDisplay = (e) => {
         altMsgDiv.innerHTML = "Note : You are eligible for a refund if you cancel the reservation within 3 days of making the reservation.";
     }
 
-    //italic the note
-    altMsgDiv.style.fontStyle = "italic";
-    altMsgDiv.style.fontAlign = "center";
-
-    authenticationFormDiv.style.maxWidth = "4in";
-    authenticationFormDiv.style.maxHeight = "4in";
 }
 
 const animateClose = (formDiv) => {
     const main = document.querySelector("main");
 
-    //closing the authentication form should remove the blur effect
-    main.style.filter = "blur(0px)";
-    main.style.pointerEvents = "auto";
-
+    //closing the authentication form
     formDiv.animate([
         {top: "50%", transform: "translate(-50%, -50%)", opacity: 1},
         {top: "-50%", transform: "translate(-50%, -50%)", opacity: 0}
@@ -66,6 +58,8 @@ const animateClose = (formDiv) => {
         duration: 500,
         easing: "ease-in-out"
     }).finished.then(() => {    //when the animation is finished
+        main.classList.remove("main-darken");
+        main.classList.remove("disabled");
         formDiv.style.display = "none";
     });
 }
@@ -76,6 +70,7 @@ const validateAuthForm = (e) => {
     const authForm = document.querySelector("#authFormDiv form");
     const authMsg = document.querySelector("#authMsg");
     authMsg.innerHTML = "";
+    authMsg.classList.remove("altMsg-invalid");
 
     if(authForm.reportValidity() === false){
         return false;
@@ -102,7 +97,8 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
     authCancel.addEventListener("click", (e) => {   //cancel the authentication form
         e.preventDefault();
         const authenticationFormDiv = document.querySelector("#authFormDiv");
-
+        const authMsg = document.querySelector("#authMsg");
+        authMsg.innerHTML = "";
         //add closing animation keyframes
         animateClose(authenticationFormDiv);
 
@@ -171,16 +167,10 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                     const msgBox = document.querySelector("#msgBox");
                     //blur the main content and darken it
                     const main = document.querySelector("main");
-                    main.style.filter = "blur(5px)";
-                    //animate the blur effect
-                    main.style.transition = "filter 0.5s ease-in-out";
-                    //disable main 
-                    main.style.pointerEvents = "none";
+                    main.classList.add("main-darken");
+                    main.classList.add("disabled");
 
                     msg.innerHTML = "";   //clear the message
-                    msg.style.fontSize = "1.5rem";
-                    msg.style.fontWeight = "bold";
-                    msg.style.textAlign = "center";
 
                     const icon = document.createElement("i");    //icon
                     icon.style.fontSize = "2.5rem";
@@ -217,10 +207,7 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
             else{   //if the status code is not 200
                 const authMsg = document.querySelector("#authMsg");
                 authMsg.innerHTML = "Invalid credentials";
-                authMsg.style.color = "red";
-                authMsg.style.fontWeight = "bold";
-                authMsg.style.fontSize = "1.2rem";
-                authMsg.style.marginTop = "0.5rem";
+                authMsg.classList.add("altMsg-invalid");
                 throw new Error("Invalid credentials");
             }
         })
