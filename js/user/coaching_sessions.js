@@ -85,7 +85,7 @@ const coachProfile = (e) => {   //a function to redirect to the coach profile pa
 const leaveSessionPopUp = (e) => {   //popup confirmation for leaving the session
     e.preventDefault();
     confirmBtn.value = 'leave';
-    const btnDiv = e.target.parentElement;
+    const btnDiv = e.currentTarget.parentElement;
     const sessionID = findInputFieldValue('sessionID', btnDiv);
 
     selectedSession = sessionID;    //store the session id
@@ -185,7 +185,8 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
 const cancelSessionRequestPopUp = (e) => {   //popup confirmation for session request cancellation
     e.preventDefault();
     confirmBtn.value = 'cancel';
-    const btnDiv = e.target.parentElement;
+    //get session id from e's current target
+    const btnDiv = e.currentTarget.parentElement;
     const sessionID = findInputFieldValue('sessionID', btnDiv);
 
     selectedSession = sessionID;    //store the session id
@@ -288,9 +289,9 @@ const popUpCancellation = (e) => {   //close the confirmation div
 }
 
 const popUpConfirmation = (e) => {   //close the confirmation div
-    if(e.target.value === 'leave'){
+    if(e.currentTarget.value === 'leave'){
         leaveSession(e);
-    }else if(e.target.value === 'cancel'){
+    }else if(e.currentTarget.value === 'cancel'){
         cancelSessionRequest(e);
     }
 }
@@ -298,7 +299,7 @@ const popUpConfirmation = (e) => {   //close the confirmation div
 
 const giveFeedbackPopUp = (e) => {   //give feedback popup
     e.stopPropagation();
-    const btnDiv = e.target.parentElement;
+    const btnDiv = e.currentTarget.parentElement;
 
     //need to get the coach id and session id 
     const coachID = findInputFieldValue('coachID', btnDiv);
