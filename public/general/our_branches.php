@@ -16,7 +16,6 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="/styles/general/our_branches.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-                <link rel="stylesheet" href="/styles/general/notification.css">
 
                 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
                 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css">
