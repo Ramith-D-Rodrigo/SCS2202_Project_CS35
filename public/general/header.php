@@ -1,6 +1,6 @@
 <header>
     <div class='header-top'>
-        <div> <!-- For the current visiting page of the site -->
+        <div class="header-top-left"> <!-- For the current visiting page of the site -->
             <?php
                 if($_SERVER['REQUEST_URI'] === '/index.php' || $_SERVER['REQUEST_URI'] === '/'){    //home page
                     echo "Welcome";
@@ -52,14 +52,14 @@
                 }
             ?>
         </div>
-        <div style="text-align:center"> <!--- sports complex name -->
+        <div class="header-top-middle"> <!--- sports complex name -->
            Example Sports Complex
         </div>
-        <div>
+        <div class="header-top-right">
         <?php
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
         ?>  
-            <div style="float:right" id="accountIcons" class="header-right">
+            <div id="accountIcons" class="header-right">
                 <input type="checkbox" class="dropdown-check" id="notificationCheck">
                 <div class='notification-container'>
                     <label for="notificationCheck">
@@ -93,20 +93,63 @@
         <?php
             }
         ?>
+            <div>
+                <input type="checkbox" class="nav-checkbox" id="navCheckbox">
+                <label for="navCheckbox" class="nav-check-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </label>
+            </div>
         </div>
     </div>
 
     <nav class="header-links">
-        <a href="/index.php">Home</a>
-        <a href="/public/general/our_sports.php">Our Sports</a>
-        <a href="/public/general/our_branches.php">Our Branches</a>
-        <a href="/public/general/reg_coaches.php">Registered Coaches</a>
-        <a href="/public/general/our_feedback.php">Our Feedback</a>
-        <a href="/public/general/about_us.php">About Us</a>
-        <div id="profile-links" style="float:right; margin-right:20px; display:none">
-            <a href="/public/user/coaching_sessions.php">Coaching Sessions</a>
-            <a href="/public/user/reservation_history.php">Reservation History</a>
-            <a href="/public/user/edit_profile.php">Edit Profile</a>
-        </div>
+        <ul>
+            <li>
+                <a href="/index.php">Home</a>
+            </li>
+            <li>
+                <a href="/public/general/our_sports.php">Our Sports</a>
+            </li>
+            <li>
+                <a href="/public/general/our_branches.php">Our Branches</a>
+            </li>
+            <li>
+                <a href="/public/general/reg_coaches.php">Registered Coaches</a>
+            </li>
+            <li>
+                <a href="/public/general/our_feedback.php">Our Feedback</a>
+            </li>
+            <li>
+                <a href="/public/general/about_us.php">About Us</a>
+            </li>
+            <?php
+                if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
+            ?>
+                 <li class="profile-links">
+                    <a href="/public/user/edit_profile.php">Edit Profile</a>
+                </li>
+                <li class="profile-links">
+                    <a href="/public/user/coaching_sessions.php">Coaching Sessions</a>
+                </li>
+                <li class="profile-links">
+                    <a href="/public/user/reservation_history.php">Reservation History</a>
+                </li>
+                <li class="session-links-responsive">
+                    <a href="/controller/general/logout_controller.php">Log out</a>
+                </li>
+            <?php
+                }
+                else{
+            ?>
+                <li class="session-links-responsive">
+                    <a href="/public/general/register.php">Register</a>
+                </li>
+                <li class="session-links-responsive">
+                    <a href="/public/general/login.php">Log in</a>
+                </li>
+            <?php
+                }
+            ?>
+        </ul>
     </nav>
 </header>

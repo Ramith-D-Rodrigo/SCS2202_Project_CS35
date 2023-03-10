@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('header.css');
 
 *{
     margin: 0;
@@ -32,35 +33,11 @@ a{
 }
 
 a:hover{
-    color: rgb(86, 85, 85);
+    color: rgb(0, 0, 0);
     background-color: white;
     transition: 500ms;
     text-decoration: none;
-    border-radius: 5px;
-}
-
-header{
-    flex: none;
-    padding: 0.5rem 0;
-    position: sticky;
-    height:auto;
-    width:100vw;
-    background-color: black;
-    color: white;
-    z-index: 1000;
-}
-
-.header-top{
-    display:flex;
-    color: white;
-    justify-content: space-between;
-    padding: 0 15px;
-    align-items: center;
-    margin: auto;
-}
-
-.header-top > div {
-    height: auto;
+    border-radius: 1rem;
 }
 
 .body-container{
@@ -258,11 +235,6 @@ table{
     box-shadow: 0 .4rem .8rem #0005;
 }
 
-.header-right{
-    display: flex;
-    align-items: center;
-}
-
 .main-blur{
     filter: blur(8px);
     transition: 500ms;
@@ -301,29 +273,5 @@ div::-webkit-scrollbar-thumb{
     background: #383838;
     border-radius: 10px;
     transition:  1000ms ease-in-out;
-
-}
-
-
-/* media query for nav bar */
-@media(max-width: 1200px){
-    nav a{
-      padding: 0 0.3rem;
-    }
-    header *{
-        font-size: 0.6rem; 
-    }
-}
-
-
-@media(max-width: 680px){
-    nav{
-        display: none;
-    }
-
-    .header-right{
-        display: none;
-    }
-
 
 }
