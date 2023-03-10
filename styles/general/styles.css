@@ -27,7 +27,7 @@ body{
 a{
     color:white;
     text-decoration: none;
-    padding: 0 15px;
+    padding: 0 1rem;
     transition: 500ms;
 }
 
@@ -60,7 +60,6 @@ header{
 }
 
 .header-top > div {
-    width: 33.333%;
     height: auto;
 }
 
@@ -259,7 +258,7 @@ table{
     box-shadow: 0 .4rem .8rem #0005;
 }
 
-#accountIcons{
+.header-right{
     display: flex;
     align-items: center;
 }
@@ -302,5 +301,29 @@ div::-webkit-scrollbar-thumb{
     background: #383838;
     border-radius: 10px;
     transition:  1000ms ease-in-out;
+
+}
+
+
+/* media query for nav bar */
+@media(max-width: 1200px){
+    nav a{
+      padding: 0 0.3rem;
+    }
+    header *{
+        font-size: 0.6rem; 
+    }
+}
+
+
+@media(max-width: 680px){
+    nav{
+        display: none;
+    }
+
+    .header-right{
+        display: none;
+    }
+
 
 }

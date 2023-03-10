@@ -59,7 +59,7 @@
         <?php
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
         ?>  
-            <div style="float:right" id="accountIcons">
+            <div style="float:right" id="accountIcons" class="header-right">
                 <input type="checkbox" class="dropdown-check" id="notificationCheck">
                 <div class='notification-container'>
                     <label for="notificationCheck">
@@ -86,7 +86,7 @@
             }
             else{
         ?>
-            <div style="float:right" id="userOptions">
+            <div style="float:right" id="userOptions" class="header-right">
                 <button class="btn" id ="register" onclick="window.location.href='/public/general/register.php'">Register<i class="fa-solid fa-user-plus" style="margin: 0 10px"></i></button>
                 <button class="btn" id="login" onclick="window.location.href='/public/general/login.php'">Log in<i class="fa-solid fa-right-to-bracket" style="margin: 0 10px"></i></button>
             </div>
