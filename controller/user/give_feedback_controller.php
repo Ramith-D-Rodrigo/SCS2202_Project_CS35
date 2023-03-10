@@ -16,7 +16,7 @@
     require_once("../../src/general/reservation.php");
     require_once("../../src/general/branch.php");
 
-    $headerCode = null;
+    $headerCode = 400;  //initially set the header code to 400 (bad request)
 
     $userInput = file_get_contents("php://input");
     $userInput = json_decode($userInput, true);
@@ -39,9 +39,10 @@
     $user = new User();
     $user -> setUserID($_SESSION['userid']);
 
-    $reservation -> getDetails($user -> getConnection(), ['`status`']);
+    $reservation -> getDetails($user -> getConnection(), ['status']);
 
     $status = json_decode(json_encode($reservation), true)['status'];   //get the status of the reservation
+
 
     if($status !== 'Checked In' && $status !== 'Declined'){    //if the reservation is not checked in or declined
         $headerCode = 400;
