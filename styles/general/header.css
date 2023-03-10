@@ -14,26 +14,39 @@ header{
     display:flex;
     color: white;
     justify-content: space-between;
-    padding: 0 2rem;
+    padding: 0;
     align-items: center;
     margin: auto;
     text-align: center;
+}
+
+.header-top > div{
+    width: 33.33%;
 }
 
 .header-top-middle{
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.header-top-left{
+    text-align: left;
 }
 
 .header-top-right{
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-end;
 }
 
-.header-top > div {
-    height: auto;
+.header-top > div:first-child {
+    padding-left: 1rem;
+}
+
+.header-top > div:last-child {
+    padding-right: 1rem;
 }
 
 .header-links ul{
@@ -102,12 +115,18 @@ header{
     }
 
     .header-top > div{
-        font-size: 0.7rem;
+        font-size: 0.6rem;
     }
 
-    .header-top-right{
-        justify-content: space-around;
+
+    .header-top-right > * {
+        zoom: 0.7;
     }
+
+    .header-top-right .header-right .dropdown{
+        zoom: 1;
+    }
+
 
     .header-links ul{
         position: sticky;

@@ -139,3 +139,14 @@
 .bell:hover ~ .notification-count{
     background-color: rgb(8, 0, 122);
 }
+
+@media(max-width: 525px){
+    .dropdown{
+        position: fixed;
+        height: min-content;
+        width: 100%;
+        top: 5rem;
+        left: 0;
+    }
+
+}
