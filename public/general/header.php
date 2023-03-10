@@ -64,7 +64,7 @@
                 <div class='notification-container'>
                     <label for="notificationCheck">
                         <i class="fa-solid fa-bell btn bell"></i>
-                        <i class="fa-solid fa-plus notification-count" id="notificationCount"></i>
+                        <i class="notification-count" id="notificationCount"></i>
                     </label>
                     <ul class="dropdown">
                     </ul>

@@ -123,6 +123,11 @@
     visibility: hidden;
     opacity: 0;
     transition: 500ms;
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .have-notifications{
