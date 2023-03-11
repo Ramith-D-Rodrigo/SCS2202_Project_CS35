@@ -50,6 +50,9 @@
                     <li>
                         Table Tennis Photo by Anna Shvets: <a href="https://www.pexels.com/photo/table-tennis-rackets-3846048/">Pexels</a>
                     </li>
+                    <li>
+                        <a href="https://www.freepik.com/free-vector/mobile-login-concept-illustration_4957136.htm#query=login&position=0&from_view=search&track=sph">Image by storyset</a> on Freepik
+                    </li>
                 </ul>
             </div>
                 </main>
