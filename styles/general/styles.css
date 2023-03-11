@@ -186,6 +186,12 @@ textarea{
     background: #ECFCFF;
 }
 
+.search-box form{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
 .search-box .search-icon{
     position: absolute;
     height: 100%;

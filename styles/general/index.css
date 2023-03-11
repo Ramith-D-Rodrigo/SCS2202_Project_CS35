@@ -118,18 +118,18 @@ main::before{
     #reservationBtn{
         position: absolute;
         padding: initial calc(0.1vw + 0.1rem);
-        top: 79%;
-        left: 10.5%;
+        top: 75%;
+        left: 8%;
         margin:0;
-        font-size: calc(1vw + 0.02rem);
+        font-size: calc(1vw + 0.5rem);
     }
     #coachBtn{
         top: 72.83950617283951%;
-        left:2%;
+        left:1.5%;
         position: absolute;
         padding: initial calc(0.1vw + 0.1rem);
         margin:0;
-        font-size: calc(1vw + 0.02rem);
+        font-size: calc(1vw + 0.5rem);
     }
 
     #radio1:checked ~ .first{
