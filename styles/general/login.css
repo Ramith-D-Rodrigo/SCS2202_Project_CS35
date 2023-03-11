@@ -1,0 +1,80 @@
+#loginForm{
+    width: 300px;
+    margin: 0 auto;
+}
+
+.login-img-container{
+    width: 40%;
+}
+
+.login-img{
+    width: 100%;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.login-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 60%;
+}
+
+.credentials{
+    width: 100%;
+    margin: 0 auto;
+}
+
+.credentials input{
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.msg{
+    height:1rem;
+}
+
+@media(max-width:950px){
+
+    .login-img-container{
+        width: 50%;
+    }
+    .credentials{
+        width: 80%;
+    }
+    .credentials input{
+        width: 100%;
+    }
+
+    .content-box{
+        width: 100%;
+    }
+}
+
+@media(max-width:680px){
+    .login-box{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .username{
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .password{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-img{
+        border-radius: 15%;
+    }
+}
