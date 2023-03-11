@@ -24,20 +24,20 @@
                 ?>
                 <main class="body-container">
                     <div class="content-box">
-                        <div style="display:flex; flex-direction:row; justify-content:space-around;">
-                            <div style="margin-left: 1rem; margin-right:1rem">
+                        <div class="filter-div">
+                            <div class="filter-option">
                                 <input placeholder="Search a Feedback" id="feedbackSearch">
                             </div>
-                            <div style="margin-left: 1rem; margin-right:1rem">
-                                Branch
+                            <div class="filter-option">
+
                                 <select id="branchFilter">
-                                    <option value="">All</option>
+                                    <option value="">Branch</option>
                                 </select>
                             </div>
-                            <div style="margin-left: 1rem; margin-right:1rem">
-                                Rating
+                            <div class="filter-option">
+                                
                                 <select id="ratingFilter">
-                                    <option value="">All</option>
+                                    <option value="">Rating</option>
                                     <option value="5">5</option>
                                     <option value="4">4</option>
                                     <option value="3">3</option>

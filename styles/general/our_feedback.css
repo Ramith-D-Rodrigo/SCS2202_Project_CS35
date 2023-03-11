@@ -1,5 +1,21 @@
+input{
+    margin-left: unset;
+}
+
+
 .checked{
     color: gold;
+}
+
+.filter-div{
+    display:flex; 
+    flex-direction:row; 
+    justify-content:space-around;
+}
+
+
+.filter-option{
+    margin: 0 1rem;
 }
 
 .feedbackDiv{
@@ -15,7 +31,6 @@
     width: 75%;
 }
 
-
 @keyframes slideIn{
     0%{
         transform: translateX(40%);
@@ -25,4 +40,27 @@
         transform: translateX(0%);
         opacity: 1;
     }
+}
+
+
+@media(max-width: 900px){
+    .content-box{
+        width: 100%;
+    }
+    .filter-option{
+        margin: 0 0.5rem;
+    }
+}
+
+@media(max-width: 680px){
+    .filter-option{
+       font-size: 0.8rem;
+        margin: 0 1rem;
+    }
+
+    .filter-option *{
+        width: 100%;
+        font-size: 0.6rem;
+    }
+
 }
