@@ -24,13 +24,13 @@
                     require_once("header.php");
                 ?>
                 <main>
-                    <div style="display:flex; flex-direction:row; justify-content:center">
-                        <div class="content-box" style="width:100%;" id="coachInfoContainer">
-                            <div style="display:flex; flex-direction: row;">
+                    <div class="body-container">
+                        <div class="content-box" id="coachInfoContainer">
+                            <div class="coach-info">
                                 <div class="coach-image-container">
                                     <img class="coach-image" id="coachProfilePic">
                                 </div>
-                                <div class="detailsContainer" style="margin: 10px">
+                                <div class="detailsContainer">
                                     <div id="coachName">Name : </div>
                                     <div id="coachUsername">Coach Username : </div>
                                     <div id="coachAge">Age : </div>
@@ -42,90 +42,96 @@
                                 </div>
                             </div>
                             <div>
-                                <div id="coachQulifationsDiv">
-                                    Qualifications  
-                                    <select id="coachQulifations" style="min-width:25%">
-                                    </select>
-                                </div>
-                                <div id="sessionBranchesDiv">
-                                    Session Branches  
-                                    <select id="sessionBranches" style="min-width:25%">
-                                        <option value="">Select One</option>
-                                    </select>
-                                </div>
-                                <div id="coachingSessionsDiv">
-                                    Coaching Sessions  
-                                    <select id="coachingSessions" style="min-width:25%">
-                                        <option value="">Please Select a Branch</option>
-                                    </select>
+                                <div id="coachQulifationsDiv" class="row-container">
+                                    <div class="left-field">Qualifications</div>  
+                                    <div class="right-field">
+                                        <select id="coachQulifations" style="min-width:25%">
+                                        </select>
+                                    </div>
 
-                                    <div>
-                                        <div class="row-container">
-                                            <div class="left-field">Court  </div>
-                                            <div class="right-field"><input id="courtName" readonly></div>
-                                        </div>
-                                        <div class="row-container">
-                                            <div class="left-field">Day  </div>
-                                            <div class="right-field"><input id="day" readonly></div>
-                                        </div>
-                                        <div class="row-container">
-                                            <div class="left-field">Time Period  </div>
-                                            <div class="right-field"><input id="timePeriod" readonly></div>
-                                        </div>
-                                        <div class="row-container">
-                                            <div class="left-field">Starting Time  </div>
-                                            <div class="right-field"><input id="startingTime" readonly></div>
-                                        </div>
-                                        <div class="row-container">
-                                            <div class="left-field">Ending Time  </div>
-                                            <div class="right-field"><input id="endingTime" readonly></div>
-                                        </div>
-                                        <div class="row-container">
-                                            <div class="left-field">Paymount Amount  </div>
-                                            <div class="right-field"><input id="paymentAmount" readonly></div>
-                                        </div>
-                                        <div class="row-container">
-                                            <div class="left-field">Current Number of Students  </div>
-                                            <div class="right-field"><input id="noOfStudents" readonly></div>
-                                        </div>
+                                </div>
+                                <div id="sessionBranchesDiv" class="row-container">
+                                    <div class="left-field">Session Branches</div>  
+                                    <div class="right-field">
+                                        <select id="sessionBranches" style="min-width:25%">
+                                            <option value="">Select One</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="coachingSessionsDiv" class="row-container">
+                                    <div class="left-field">Coaching Sessions</div>
+                                    <div class="right-field">
+                                        <select id="coachingSessions" style="min-width:25%">
+                                            <option value="">Please Select a Branch</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row-container">
+                                        <div class="left-field">Court  </div>
+                                        <div class="right-field"><input id="courtName" readonly></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div class="left-field">Day  </div>
+                                        <div class="right-field"><input id="day" readonly></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div class="left-field">Time Period  </div>
+                                        <div class="right-field"><input id="timePeriod" readonly></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div class="left-field">Starting Time  </div>
+                                        <div class="right-field"><input id="startingTime" readonly></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div class="left-field">Ending Time  </div>
+                                        <div class="right-field"><input id="endingTime" readonly></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div class="left-field">Paymount Amount  </div>
+                                        <div class="right-field"><input id="paymentAmount" readonly></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div class="left-field">Current Number of Students  </div>
+                                        <div class="right-field"><input id="noOfStudents" readonly></div>
                                     </div>
                                 </div>
                             </div>
 
                         </div>
-                        <div class="content-box" style="width:100%" id="feedbackContainer">
-                            <div style="text-align:center; margin-bottom: 20px">Student Feedback</div>
+                        <div class="content-box" id="feedbackContainer">
+                            <div class="title">Student Feedback</div>
                         </div>
                     </div>
                     <div class="content-box" id="joinSession">
-                        <div style="text-align:center; margin-bottom: 20px">Request to Join a Session</div>
+                        <div class="title">Request to Join a Session</div>
                         <form id="requestForm">
                             <div class="row-container">
-                                <div class="left-field" style="width:50%">
+                                <div class="left-field">
                                     Branch 
                                 </div>
-                                <div class="right-field" style="width:50%">
+                                <div class="right-field">
                                     <select id="requestingSessionBranch">
                                         <option value="">Select One</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="row-container">
-                                <div class="left-field" style="width:50%">
+                                <div class="left-field">
                                 Coaching Session 
                                 </div>
-                                <div class="right-field" style="display:flex; flex-direction: row; align-items:baseline; width:50%"">
+                                <div class="right-field">
                                     <select id="requestingSession" name="requestingSession">
                                         <option value="">Please Select a Branch</option>
                                     </select>
-                                    <div style="margin-left: 10px" id="sessionFee">Session Fee  </div>
+                                    <div id="sessionFee">Session Fee : </div>
                                 </div> 
                             </div>
                             <div class="row-container">
-                                <div class="left-field" style="width:50%">
+                                <div class="left-field">
                                     Any Note / Message 
                                 </div>
-                                <div class="right-field" style="width:50%">
+                                <div class="right-field">
                                     <textarea name="userMessage"></textarea> 
                                 </div>
                             </div>
@@ -139,7 +145,6 @@
                                 </button>
                             </div>
                         </form>
-
                     </div>
                 </main>
                 <?php

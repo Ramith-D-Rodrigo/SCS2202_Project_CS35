@@ -80,7 +80,7 @@ const sessionInfo = (e) => {    //function to get the session info when a sessio
             }
             else if(e.target.id === "requestingSession"){  //if the event is triggered from the join request form
                 const sessionFee = document.querySelector("#sessionFee");
-                sessionFee.innerHTML = "Session Fee: ";
+                sessionFee.innerHTML = "Session Fee : ";
                 const errMsg = document.querySelector("#errMsg");
                 errMsg.innerHTML = "";
             }
@@ -189,9 +189,8 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         for(let i = 1; i <= 5; i++){
             const star = document.createElement("i");
             star.ariaHidden = "true";   //for screen readers
-            star.className = "fa fa-star";
-            star.style.margin = "0 0.2em";
-            star.style.fontSize = "1.5em";
+            star.className = "fa fa-star rating-star";
+
             if(i <= data.coachRating){
                 star.classList.add("checked");
             }
