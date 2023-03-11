@@ -27,7 +27,7 @@
                         require_once("header.php");
                     ?>
                     <main>
-                        <div class="body-container" id="branches" style="flex-direction:column">
+                        <div class="body-container branch-list" id="branches">
 
                         </div>
                     </main>
