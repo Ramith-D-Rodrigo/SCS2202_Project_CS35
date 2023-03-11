@@ -26,6 +26,7 @@
                         <div class="content-box" style="min-width:40%">
                             <form id="editForm">
                                 <div id="profilePicField" class="row-container">
+                                    <div class="pic-text">Upload New Photo</div>
                                     <img id="profilePicImg">
                                     <input type="file" 
                                     name="profilePic" 
@@ -101,14 +102,14 @@
                                     <div class="right-field" id="genderField"></div>
                                 </div>
 
-                                <div style="text-align:center">
+                                <div style="text-align:center" class="title">
                                     Medical Concerns <button id="medicalConcernBtn"><i class="fa-solid fa-circle-plus"></i></button>
                                 </div>
 
                                 <div id="medicalConcernsField" style="width:100%">
                                 </div>
 
-                                <div style="text-align:center">Emergency Contact Details</div>
+                                <div class="title">Emergency Contact Details</div>
 
                                 <div id="emergencyDetails">
                                     <div id="emergencydetail1">
@@ -161,7 +162,7 @@
 
                         <div class="content-box" style="min-width:40%">
                             <form id="credentialForm">
-                                <div style="text-align:center">Change Password</div>
+                                <div class="title">Change Password</div>
                                 <div class="row-container">
                                     <div class="left-field">
                                         Email Address
@@ -222,7 +223,7 @@
                         </div>
 
                         <div class="content-box" style="min-width:40%">
-                            <div style="text-align:center">Deactivate Account</div>
+                            <div class="title">Deactivate Account</div>
                             <form id ="deactivateForm">
                                 <div class="row-container">
                                     <div class="left-field">
