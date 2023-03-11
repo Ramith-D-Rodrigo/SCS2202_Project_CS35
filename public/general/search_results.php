@@ -16,6 +16,7 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="/styles/general/reg_coaches.css">
                 <link rel="stylesheet" href="/styles/general/our_branches.css">
+                <link rel="stylesheet" href="/styles/general/search_results.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
                 <title>Search a Sport</title>
             </head>
@@ -36,7 +37,7 @@
                             </form>
                         </div>
                     </div>
-                    <div style="display:flex; flex-direction:row; justify-content:space-between">
+                    <div class="search-results">
                         <div class="content-box" style="flex:auto;" id="searchResult"></div>
                     </div>
 
