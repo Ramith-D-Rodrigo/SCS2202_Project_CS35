@@ -54,15 +54,21 @@ function addReservationInformation(jsonData){   //function to add the reservatio
 function createScheduleNavigation(jsonData){
     const allScheduleDetailsDiv = document.getElementById("allScheduleDetails");
 
+    const navBtnsDiv = document.getElementById("scheduleNavBtns");
+
+    const courtBtnDiv = document.createElement("div");
+    courtBtnDiv.className = "courtBtnDiv";
+    //allScheduleDetailsDiv.insertBefore(courtBtnDiv, navBtnsDiv); //append the buttons before the nav buttons
+
+    allScheduleDetailsDiv.appendChild(courtBtnDiv);
+
     for(var key in jsonData.branchReservationSchedule){   //to create the buttons and store reservation details
         const courtBtn = document.createElement("button");
         courtBtn.className = "courtBtn";
         courtBtn.id = key;
         courtBtn.innerHTML = "Court " + jsonData.branchReservationSchedule[key].courtName;
 
-        const navBtnsDiv = document.getElementById("scheduleNavBtns");
-        allScheduleDetailsDiv.insertBefore(courtBtn, navBtnsDiv); //append the buttons before the nav buttons
-
+        courtBtnDiv.appendChild(courtBtn); //append the buttons before the nav buttons
         
         //create divs for reservation tables
         const courtScheduleDiv = document.createElement("div");
@@ -200,19 +206,28 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
 
     for(let i = 0; i < scheduleObjs.length - 1; i++){//going through each reservation schedule of the courts ( - 1 because the last element is the branch maintenance)
         const table = document.createElement("table");  //initial table
-        const tableRow = table.insertRow();
-        const tableCell = tableRow.insertCell();    //first empty cell
+        const tableHeader = document.createElement("thead");   //table header
+
+        const headerRow = document.createElement("tr"); //header row
+        const firstCell = document.createElement("th");   //first empty cell
+
+        headerRow.appendChild(firstCell);
+        tableHeader.appendChild(headerRow);
     
         for(let j = 0;  j < 10; j++){   //adding days to the header of the table (only 10 days)
-            const weekdayTab = tableRow.insertCell();
+            const weekdayCell = document.createElement("th");
+            headerRow.appendChild(weekdayCell);
             const tempDate = new Date();
             tempDate.setDate(tempDate.getDate() + 1);   //ignoring the current day
             if(dateIncrement !== ''){    //not the initial table (the user has pressed the navigation buttons)
                 tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
             }
             tempDate.setDate(tempDate.getDate() + j);
-            weekdayTab.innerHTML =  tempDate.toLocaleDateString() +"<br>" + weekdays[tempDate.getDay()];
+            weekdayCell.innerHTML =  tempDate.toLocaleDateString() +"<br>" + weekdays[tempDate.getDay()];
         }
+
+        tableHeader.appendChild(headerRow);
+        table.appendChild(tableHeader);
     
         const openingTime = new Date();
         openingTime.setHours(branchOpeningTime[0]);
@@ -228,9 +243,13 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
     
     
         let currTime = openingTime; //starting the time periods
+
+        //table body
+        const tableBody = document.createElement("tbody");
+        table.appendChild(tableBody);
     
         while(currTime < closingTime){
-            const tableRow = table.insertRow();
+            const tableRow = tableBody.insertRow();
     
             const timePeriod = tableRow.insertCell();
 
@@ -394,10 +413,7 @@ function makeReservationBox(jsonData){
     
     selectedCourt.value = courtBtns[0].innerHTML;   //at the start, the first court is the selected
     reserveBtn.value = courtBtns[0].id;
-    courtBtns[0].style.backgroundColor = "lightblue";
-    courtBtns[0].style.color = "black";
-    courtBtns[0].style.boxShadow = "0 0 10px 0 rgba(0,0,0,0.5)";
-
+    courtBtns[0].classList.add("selected");
     
     //court button to display the schedule of each court when pressed
     for(let i = 0; i < courtBtns.length; i++){
@@ -405,13 +421,9 @@ function makeReservationBox(jsonData){
         const btn = document.getElementById(courtBtns[i].id);
         btn.addEventListener('click', ()=>{
             for(let j = 0; j < courtBtns.length; j++){  //changing back to default color
-                courtBtns[j].style.backgroundColor = "";
-                courtBtns[j].style.color = "";
-                courtBtns[j].style.boxShadow = "";
+                courtBtns[j].classList.remove("selected");
             }
-            btn.style.backgroundColor = "lightblue";
-            btn.style.color = "black";
-            btn.style.boxShadow = "0 0 10px 0 rgba(0,0,0,0.5)";
+            btn.classList.add("selected");  //change the color of the pressed button
     
             const allSchedules = document.getElementsByClassName('court-schedule'); //get all the schedule divs
     
@@ -432,9 +444,7 @@ function createReservationCell(innerText, timeDiff){   //create a reservation ce
     const cell = document.createElement("td");
     cell.rowSpan = timeDiff;
     cell.innerText = innerText;
-    cell.style.background = "linear-gradient(180deg, rgba(5,5,108,1) 0%, rgba(0,0,0,1) 48%, rgba(167,0,0,1) 100%)";
-    cell.style.color = "white";
-    cell.style.borderRadius = "10px";
+    cell.classList.add("reserved");
     return cell;
 }
 
@@ -494,8 +504,8 @@ function createMaintenanceCell(maintenanceObj, openingTime, closingTime, courtNu
         tempDate.setDate(maintenance.startingDate.getDate() + k);    //increment the date by 1
         const newCell = createReservationCell("Unable Due to Maintenance", timeDiff);   //create the cell
         const namingID = createCellID(courtNum, tempDate.toLocaleDateString(), startingTimeObj.toLocaleTimeString());
-        newCell.style.background = "";
-        newCell.style.backgroundColor = "grey";
+        newCell.classList.remove("reserved");
+        newCell.classList.add("maintenance");
 
         newCell.id = namingID;
 
