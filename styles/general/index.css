@@ -94,6 +94,18 @@ main::before{
     font-size: calc(1vw + 0.02rem);
 }
 
+@media(max-width: 900px){
+    #landing-img1{
+        content: url(../landing_res_res_1.png);
+        height: auto;
+    }
+
+    #landing-img2{
+        height: auto;
+        content: url(../landing_coach_res_1.png);
+    }
+}
+
 @media(max-width: 680px){
     .slides{
         display: block;
@@ -101,11 +113,6 @@ main::before{
 
     .slide{
         width: 100%;
-    }
-
-    .slide img{
-        width: 25%;
-        height: auto;
     }
 
     #reservationBtn{
