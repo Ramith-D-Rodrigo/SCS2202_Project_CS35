@@ -93,3 +93,54 @@ main::before{
     margin:0;
     font-size: calc(1vw + 0.02rem);
 }
+
+@media(max-width: 680px){
+    .slides{
+        display: block;
+    }
+
+    .slide{
+        width: 100%;
+    }
+
+    .slide img{
+        width: 25%;
+        height: auto;
+    }
+
+    #reservationBtn{
+        position: absolute;
+        padding: initial calc(0.1vw + 0.1rem);
+        top: 79%;
+        left: 10.5%;
+        margin:0;
+        font-size: calc(1vw + 0.02rem);
+    }
+    #coachBtn{
+        top: 72.83950617283951%;
+        left:2%;
+        position: absolute;
+        padding: initial calc(0.1vw + 0.1rem);
+        margin:0;
+        font-size: calc(1vw + 0.02rem);
+    }
+
+    #radio1:checked ~ .first{
+        margin-left: 0;
+    }
+
+    .manual-btn{
+        display: none;
+    }
+    
+    #radio2:checked ~ .first{
+        margin-left: 0;
+    }
+
+    main{
+        display: flex;
+        flex-direction: column; 
+        align-items: stretch;
+        justify-content: space-evenly;
+    }
+}
