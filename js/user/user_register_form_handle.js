@@ -159,15 +159,13 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
         }
         parent.remove();
         if(emergencyCount < 3){
-            emergencyDetailsBtn.parentElement.style.display = 'block';
+            emergencyDetailsBtn.parentElement.style.display = '';
         }
     });
 
-/*     const breakpoint1 = document.createElement("br");
-    const breakpoint2 = document.createElement("br"); */
-    const nameField = document.createTextNode("Name : ");
-    const relationshipField = document.createTextNode("Relationship :");
-    const contactNoField = document.createTextNode("Contact Number :");
+    const nameField = document.createTextNode("Name");
+    const relationshipField = document.createTextNode("Relationship");
+    const contactNoField = document.createTextNode("Contact Number");
     
     for(info = 1; info <= 3; info++){   //info = 1 -> name, info = 2 -> relationship, info = 3 -> contact number
         const row = document.createElement("div");

@@ -34,6 +34,48 @@
     margin-right: 10px;
 }
 
-.right-field > input, textarea{
-    max-width:100%;
+.right-field > *{
+    width:100%;
+}
+
+.title{
+    text-align: center;
+    margin:1rem;
+}
+#medCon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.option-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.btn-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin: 1rem;
+}
+
+.btn-container > button{
+    font-size: 1.5rem;
+}
+
+@media(max-width: 680px){
+    .row-container{
+        flex-direction: column;
+    }
+    .left-field{
+        width: 100%;
+        text-align: center;
+    }
+    .right-field{
+        width: 100%;
+    }
 }
