@@ -34,7 +34,7 @@ fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn="
             navDateIncrement += 10;   //because we are displaying the schedule for the next 10 days
             if(navDateIncrement > 0){ //re-enable the previous button
                 prevBtn.disabled = false;
-                prevBtn.style.backgroundColor = "";
+                prevBtn.classList.remove("nav-disable");
             }
             const tables = document.querySelectorAll("table");
             let tableParents = [];   //to store the parent
@@ -57,7 +57,7 @@ fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn="
 
             if(navDateIncrement >= MAX_RESERVATION_DAYS - 10){  //now reached the limit (disable the button)
                 nextBtn.disabled = true;
-                nextBtn.style.backgroundColor = "grey";
+                nextBtn.classList.add("nav-disable");
             }
         });
 
@@ -72,7 +72,7 @@ fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn="
             navDateIncrement -= 10;   //because we are displaying the schedule for the previous 10 days (more like going back)
             if(navDateIncrement < MAX_RESERVATION_DAYS - 10){ //re-enable the next button
                 nextBtn.disabled = false;
-                nextBtn.style.backgroundColor = "";
+                nextBtn.classList.remove("nav-disable");
             }
             const tables = document.querySelectorAll("table");
             let tableParents = [];   //to store the parent
@@ -95,8 +95,12 @@ fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn="
 
             if(navDateIncrement === 0){  //now reached the limit (disable the button)
                 prevBtn.disabled = true;
-                prevBtn.style.backgroundColor = "grey";
+                prevBtn.classList.add("nav-disable");
             }
         });
+
+        //at the start, disable the previous button
+        prevBtn.disabled = true;
+        prevBtn.classList.add("nav-disable");
 
     });
