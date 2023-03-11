@@ -12,6 +12,11 @@ loginForm.addEventListener("submit", (e) => {
     const password = formData.get("password");
     const user = { username, password };
 
+    //disable the login button
+    const loginBtn = document.getElementById("loginBtn");   //disabling login button
+    loginBtn.disabled = true;
+    loginBtn.style.cursor = "not-allowed";
+
     fetch("../../controller/general/login_controller.php", {
         method: "POST",
         headers: {
@@ -23,12 +28,7 @@ loginForm.addEventListener("submit", (e) => {
         if(data.successMsg !== undefined){  //login success
             successMsgBox.innerHTML = data.successMsg;
 
-            //disabling buttons
-
-            const loginBtn = document.getElementById("loginBtn");   //disabling login button
-            loginBtn.disabled = true;
-            loginBtn.style.cursor = "not-allowed";
-
+            //disabling other buttons
             const regBtn = document.getElementById("regBtn"); //disabling register button
             regBtn.disabled = true;
             regBtn.style.cursor = "not-allowed";
@@ -102,6 +102,10 @@ loginForm.addEventListener("submit", (e) => {
                             successMsgBox.innerHTML = data.successMsg;
                             successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>Now you can login to your account.";
                             activateDiv.innerHTML = ""; //remove the activation div
+
+                            //renabling the login button
+                            loginBtn.disabled = false;
+                            loginBtn.style.cursor = "pointer";
 
                         }
                         else if(data.errMsg !== undefined){  //verification failed

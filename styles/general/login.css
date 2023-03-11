@@ -32,10 +32,6 @@
     margin: 1rem 0;
 }
 
-.msg{
-    height:1rem;
-}
-
 @media(max-width:950px){
 
     .login-img-container{
