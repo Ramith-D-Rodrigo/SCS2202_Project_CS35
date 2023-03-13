@@ -69,9 +69,19 @@
                     $flag = $editingUser -> isStudent();   //to check if user is student (students cannot remove height and weight)
 
                     if($flag == true){
-                        $returnMsg["errMsg"] = "You cannot change your height and weight as you are a student";
+                        $returnMsg["errMsg"] = "You cannot change your height and weight as you have joined for a session(s).";
                         $validationErrFlag = true;
                         break;
+                    }
+                    else{ //if not a student, then check for pending coaching session requests
+                        $sessionRequests = $editingUser -> getPendingCoachingSessionRequests();
+
+                        if(count($sessionRequests) != 0){   //has pending requests, thus cannot edit
+                            $returnMsg["errMsg"] = "You cannot change your height and weight as you have requested for a session(s).";
+                            $validationErrFlag = true;
+                            break;
+                        }
+
                     }
                 }
                 //floating point number regex
