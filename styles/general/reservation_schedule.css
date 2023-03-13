@@ -29,8 +29,9 @@
 }
 
 .court-schedule table{
-    box-shadow: none;
+    box-shadow:0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.5);
     table-layout: fixed;
+    
 }
 
 .court-schedule table tr td, .court-schedule table tr th{
