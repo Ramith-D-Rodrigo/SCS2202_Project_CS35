@@ -8,7 +8,7 @@
     transform: translate(-50%, -50%);
     animation: slideIn 0.5s ease-in-out; 
     width: calc(100vw - 70%);
-    height: calc(100vh - 60%);
+    height: calc(100vh - 50%);
 }
 
 #msgBox{
@@ -60,7 +60,6 @@
 @media(max-width: 840px){
     #authFormDiv{
         width: calc(100vw - 40%);
-        height: calc(100vh - 60%);
     }
 }
 
