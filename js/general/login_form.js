@@ -119,6 +119,12 @@ loginForm.addEventListener("submit", (e) => {
                     });
                 });
             }
+            else{   //probably wrong username or password
+                //renabling the login button
+                loginBtn.disabled = false;
+                loginBtn.style.cursor = "pointer";
+                
+            }
         }
     }).catch((err) => {
         console.log(err);
