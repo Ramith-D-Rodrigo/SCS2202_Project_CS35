@@ -106,11 +106,29 @@
 
 .several-btns > button{
     margin: 1rem;
-    width: 50%;
+    min-width: 50%;
     height: 5rem;
     font-size: 1.2rem;
 }
 
 .several-btns > button > i {
     font-size: 1.5rem;
+}
+
+@media(max-width: 680px){
+    .sport-icon{
+        width: 7rem;
+        height: 7rem;
+    }
+    .sport-icon-container{
+        height: 7rem;
+    }
+
+    .sport-name{
+        font-size: 1rem;
+    }
+
+    #revenue{
+        font-size: 3rem;
+    }
 }
