@@ -68,7 +68,7 @@
         }
 
         public function getEmailAddress(){
-            if(isset($this -> emailAddress)){
+            if(isset($this -> emailAddress) && $this -> emailAddress != ''){
                 return $this -> emailAddress;
             }
             else{ //get from the database

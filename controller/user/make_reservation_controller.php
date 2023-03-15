@@ -277,7 +277,8 @@
 
         $notification = new Notification($notificationID);
 
-        $notificationDescription = "You have a upcoming reservation on ".$date." from ".$startingTime." to ".$endingTime." at ".$branchName." on Court ".$reservingCourt -> getName($reservingUser -> getConnection());
+        $courtName = $reservingCourt -> getName($reservingUser -> getConnection());
+        $notificationDescription = "You have a upcoming reservation on ".$date." from ".$startingTime." to ".$endingTime." at ".$branchName." on Court ".$courtName;
         //notification trigger date is 3 days before the reservation date
         $notificationTriggerDate = date('Y-m-d', strtotime($date. ' - 3 days'));
         $notification -> setDetails(subject: "Upcoming Reservation", 
@@ -293,6 +294,11 @@
         $createdReservation -> setID($result[1]); //1st index is the reservation id
         $createdReservation -> addNotificationID($notificationID, $reservingUser -> getConnection());
 
+        //send email regarding the reservation payment
+        require_once("../../src/general/mailer.php");
+        $reservingSport -> getDetails($reservingUser -> getConnection(), ['sportName']);
+        $sportName = json_decode(json_encode($reservingSport), true)['sportName'];
+        Mailer::onlineReservationPayment($reservingUser -> getEmailAddress(), $reservingUser -> getUsername(), $branchName, $sportName, $courtName, $date, $startingTime, $endingTime, $reservationPrice, CURRENCY);
 
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($returningMsg);
