@@ -15,15 +15,8 @@ const authFormDisplay = (e) => {
     const authenticationFormDiv = document.querySelector("#authFormDiv");
     authenticationFormDiv.style.display = "block";
 
-
-    //scroll to the authentication form and animate it
-    authenticationFormDiv.scrollIntoView({behavior: "smooth", block: "center"});
     
-    
-    //scroll to the authentication form and animate it
-    authenticationFormDiv.scrollIntoView({behavior: "smooth", block: "center"});
-    
-    //blur the main content and darken it
+    //darken the main content and disable it
     const main = document.querySelector("main");
     main.classList.add("main-darken");
     main.classList.add("disabled");
@@ -85,7 +78,7 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
 
     reservationAndTimeStampArr = reservationAndTimeStamp;   //store the reservation id and reserved timestamp array in the global variable
 
-    console.log(cancelButtons);
+    //console.log(cancelButtons);
 
     //add event listener to each cancel button
     for(let i = 0; i < cancelButtons.length; i++){
@@ -130,8 +123,6 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
             return;
         }
         e.preventDefault();
-        //get the reservation id from the session storage
-        //add the reservation id to the form data
         const formData = new FormData(authForm);
 
         //send the form data to the server

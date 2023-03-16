@@ -24,7 +24,7 @@
     $requestInput = json_decode(file_get_contents("php://input"), true);
     if($requestInput == null || !isset($requestInput['verificationCode'])){ //some error with post request
         $returnMsg['errMsg'] = "Invalid Request";
-        http_response_code(401);
+        http_response_code(400);
         header('Content-Type: application/json;');
         echo json_encode($returnMsg);
         die();
@@ -33,7 +33,7 @@
     if($requestInput['verificationCode'] != $_SESSION['verificationCode']){
         $returnMsg['errMsg'] = "Invalid Code";
         //invalid request code
-        http_response_code(400);
+        http_response_code(401);
         header('Content-Type: application/json;');
         echo json_encode($returnMsg);
         die();
