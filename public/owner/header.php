@@ -1,6 +1,6 @@
 <header>
     <div class='header-top'>
-        <div> <!-- For the current visiting page of the site -->
+        <div class="header-top-left"> <!-- For the current visiting page of the site -->
             <?php
                 if($_SERVER['REQUEST_URI'] === '/public/owner/owner_dashboard.php'){
                     echo "Welcome, ".$_SESSION['username'];
