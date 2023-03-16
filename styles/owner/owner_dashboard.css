@@ -17,7 +17,7 @@
 
 .sport-icon{
     width: 12rem;
-    height: 12rem;
+    aspect-ratio: 1/1;
     border-radius: 50%;
     object-fit: cover;
     opacity: 1;
