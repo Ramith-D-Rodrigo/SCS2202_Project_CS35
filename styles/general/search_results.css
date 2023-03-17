@@ -20,6 +20,10 @@
     text-align: center;
 }
 
+#coachResults > div > form{
+    margin: 1.5rem auto;
+}
+
 .coachInfo{
     display:flex; 
     flex-direction:column; 
@@ -94,6 +98,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
     }
 
     .content-box .branch-row .branch-info .result-info{
