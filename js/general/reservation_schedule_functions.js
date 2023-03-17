@@ -403,7 +403,32 @@ function makeReservationBox(jsonData){
         discount.appendChild(discountInput);
 
         discount.style.marginTop = "10px";
-        reservationPrice.parentNode.appendChild(discount);
+
+        //read only input for price without discount
+        const priceWithoutDiscount = document.createElement("input");
+        priceWithoutDiscount.type = "text";
+        priceWithoutDiscount.id = "priceWithoutDiscount";
+        priceWithoutDiscount.setAttribute("readonly", "");
+
+        //textNode 
+        const textNode = document.createTextNode("Price without Discount");
+        
+        const tempDiv = document.createElement("div");
+        tempDiv.className = "reservation-price";
+        tempDiv.appendChild(textNode);
+        tempDiv.appendChild(priceWithoutDiscount);
+
+        reservationPrice.parentNode.parentNode.insertBefore(tempDiv, reservationPrice.parentNode);
+
+        //clear the reservation price
+        const priceParent = reservationPrice.parentNode;
+        priceParent.innerHTML = "";
+
+        //new text node
+        const newTextNode = document.createTextNode("The Price You are Paying");
+        priceParent.appendChild(newTextNode);
+        priceParent.appendChild(reservationPrice);
+        priceParent.appendChild(discount);
     }
     
     const courtBtns = document.getElementsByClassName('courtBtn');

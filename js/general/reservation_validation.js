@@ -108,7 +108,11 @@ reserveStartingTime.addEventListener('change', (e)=>{
     const discount = document.getElementById("discountInput");
 
     console.log(discount);
-    if(discount != null){ //calculate the price with the discount
+    if(discount != null){ //calculate the price with the discount  
+        //price without discount value
+        const priceWithoutDiscount = document.getElementById("priceWithoutDiscount");
+        priceWithoutDiscount.value = calulatedPrice;
+
         const discountValue = discount.value;
         minRevPrice = minRevPrice - (minRevPrice * (discountValue/100));
 
@@ -169,6 +173,10 @@ reserveEndingTime.addEventListener('change', (e)=>{
 
     console.log(discount);
     if(discount != null){ //calculate the price with the discount
+        //price without discount value
+        const priceWithoutDiscount = document.getElementById("priceWithoutDiscount");
+        priceWithoutDiscount.value = calulatedPrice;
+
         const discountValue = discount.value;
         minRevPrice = minRevPrice - (minRevPrice * (discountValue/100));
 
