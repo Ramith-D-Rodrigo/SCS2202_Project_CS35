@@ -49,9 +49,15 @@
                                 </div>
                             </div>
                             <div class="row-container">
-                                <div class="left-field">Current Reservation Price</div>
+                                <div class="left-field">Current Reservation Price (Per Hour)</div>
                                 <div class="right-field">
                                     <input id="reservationPrice" readonly>
+                                </div>
+                            </div>
+                            <div class="row-container">
+                                <div class="left-field">Minimum Coaching Session Price (Per Hour)</div>
+                                <div class="right-field">
+                                    <input id="minCoachingSessionPrice" readonly>
                                 </div>
                             </div>
                         </form>
@@ -69,9 +75,15 @@
                                 </div>
                             </div>
                             <div class="row-container">
-                                <div class="left-field">New Reservation Price</div>
+                                <div class="left-field">New Reservation Price (Per Hour)</div>
                                 <div class="right-field">
                                     <input type="number" id="newPrice" name="newPrice">
+                                </div>
+                            </div>
+                            <div class="row-container">
+                                <div class="left-field">New Calculated Minimum Coaching Session Price (Per Hour)</div>
+                                <div class="right-field">
+                                    <input id="newCoachingSessionPrice" readonly>
                                 </div>
                             </div>
                             <div class="row-container">
