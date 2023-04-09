@@ -232,6 +232,10 @@
         
     }
 
+    .branch-info > div{
+        margin: 0.25rem auto;
+    }
+
     #paymentBox{
         width: 80%;
     }
