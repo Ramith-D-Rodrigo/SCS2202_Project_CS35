@@ -63,13 +63,154 @@ reservationForm.addEventListener('submit', (event) => {
     const formData = new FormData(reservationForm);
     const reserveBtn = document.getElementById("makeReserveBtn");
 
+    const errMsgBox = document.getElementById("errMsg");
+    errMsgBox.innerHTML = "";
+
     sendingRequest = {
         "numOfPeople" : formData.get("numOfPeople"),
         "reservingStartTime" : formData.get("reservingStartTime"),
         "reservingEndTime" : formData.get("reservingEndTime"),
         "reservingDate" : formData.get("reservingDate"),
-        "makeReserveBtn" : reserveBtn.value
+        "courtID" : reserveBtn.value
     };
+
+    //client side validation
+    let clientValFlag = true;
+    //get the schedule
+    const schedules = Object.values(JSON.parse(sessionStorage.getItem("schedule")));
+    //console.log(schedules);
+    const reservingDate = new Date(sendingRequest.reservingDate);
+    const reserveStartingTime = sendingRequest.reservingStartTime + ":00";
+    const reserveEndingTime = sendingRequest.reservingEndTime + ":00";
+
+    const reservingCourtSchedule = schedules.filter((schedule) => reserveBtn.value === schedule.courtID);
+
+    //check if the reserving time is not in court maintenance time
+    try{
+        reservingCourtSchedule[0].courtMaintenance.forEach((maintenance) => {
+            const maintenanceStartDate = new Date(maintenance.startingDate);
+            const maintenanceEndDate = new Date(maintenance.endingDate);
+    
+            if(reservingDate >= maintenanceStartDate && reservingDate <= maintenanceEndDate){
+                clientValFlag = false;
+                throw new Error("The court is under maintenance at this time");
+            }
+        });
+    }
+    catch(err){
+        errMsgBox.innerHTML = err.message;
+        return;
+    }
+
+    //check if the reserving time is in branch maintenance date
+    try{
+        schedules[2].forEach((maintenance) => {
+            const maintenanceStartDate = new Date(maintenance.startingDate);
+            const maintenanceEndDate = new Date(maintenance.endingDate);
+    
+            if(reservingDate >= maintenanceStartDate && reservingDate <= maintenanceEndDate){
+                clientValFlag = false;
+                throw new Error("The branch is under maintenance at this time");
+            }
+        });
+    }
+    catch(err){
+        errMsgBox.innerHTML = err.message;
+        return;
+    }
+
+    //check if the reserving time is in a coaching session
+    try{
+        reservingCourtSchedule[0].coachingSessions.forEach((coaching) => {
+            const day = reservingDate.toLocaleDateString('en-US', { weekday: 'long' });
+            if(day === coaching.day){
+                //4 cases
+                const startingTimeObj = new Date(coaching.startingTime);
+                const endingTimeObj = new Date(coaching.endingTime);
+    
+                const startingTime = startingTimeObj.toLocaleTimeString('en-US', { hour12: false });
+                const endingTime = endingTimeObj.toLocaleTimeString('en-US', { hour12: false });
+    
+                //1. the reserving time is in the middle of the coaching session
+                if(reserveStartingTime >= startingTime && reserveEndingTime <= endingTime){
+                    clientValFlag = false;
+                }
+    
+                //2. the reserve starting start time is before the coaching session start time but the reserve ending time is in the middle of the coaching session
+                else if(reserveStartingTime < startingTime && reserveEndingTime > startingTime && reserveEndingTime <= endingTime){
+                    clientValFlag = false;
+                }
+    
+                //3. the reserve starting start time is in the middle of the coaching session but the reserve ending time is after the coaching session end time
+                else if(reserveStartingTime >= startingTime && reserveStartingTime < endingTime && reserveEndingTime > endingTime){
+                    clientValFlag = false;
+                }
+    
+                //4. the reserve starting start time is before the coaching session start time and the reserve ending time is after the coaching session end time
+                else if(reserveStartingTime < startingTime && reserveEndingTime > endingTime){
+                    clientValFlag = false;
+                }
+
+                if(!clientValFlag){
+                    throw new Error("The Time is already reserved for a Coaching Session");
+                }
+            }  
+        });
+    }
+    catch(err){
+        errMsgBox.innerHTML = err.message;
+        return;
+    }
+
+    //check if the reserving time is in a reservation
+    try{
+        reservingCourtSchedule[0].reservations.forEach((reservation) => {
+            const startingTime = new Date(reservation.startingTime);
+            const endingTime = new Date(reservation.endingTime);
+    
+            const checkingReservationDate = startingTime.toISOString().split('T')[0];
+    
+            if(checkingReservationDate === sendingRequest.reservingDate){
+                const startingTimeStr = startingTime.toLocaleTimeString('en-US', { hour12: false });
+                const endingTimeStr = endingTime.toLocaleTimeString('en-US', { hour12: false });
+    
+                //4 cases
+                //1. the reserving time is in the middle of the reservation
+                if(reserveStartingTime >= startingTimeStr && reserveEndingTime <= endingTimeStr){
+                    clientValFlag = false;
+                    console.log("middle");
+                    throw new Error("The Time is already reserved");
+                }
+    
+                //2. the reserve starting start time is before the reservation start time but the reserve ending time is in the middle of the reservation
+                else if(reserveStartingTime < startingTimeStr && reserveEndingTime > startingTimeStr && reserveEndingTime <= endingTimeStr){
+                    clientValFlag = false;
+                    console.log("before");
+                    throw new Error("The Time is already reserved");
+                }
+    
+                //3. the reserve starting start time is in the middle of the reservation but the reserve ending time is after the reservation end time
+                else if(reserveStartingTime >= startingTimeStr && reserveStartingTime < endingTimeStr && reserveEndingTime > endingTimeStr){
+                    clientValFlag = false;
+                    console.log("after");
+                    throw new Error("The Time is already reserved");
+                }
+    
+                //4. the reserve starting start time is before the reservation start time and the reserve ending time is after the reservation end time
+                else if(reserveStartingTime < startingTimeStr && reserveEndingTime > endingTimeStr){
+                    clientValFlag = false;
+                    console.log("before and after");
+                    throw new Error("The Time is already reserved");
+                }
+            }
+        });
+    }
+    catch(err){
+        errMsgBox.innerHTML = err.message;
+        return;
+    }
+
+
 
     //add the amount to the payment gateway
     const amount = document.getElementById("amount");

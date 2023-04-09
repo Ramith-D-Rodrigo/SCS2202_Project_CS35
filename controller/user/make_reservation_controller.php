@@ -36,7 +36,7 @@
     
     //store the reservation details
 
-    $court_id = $reservationDetails['makeReserveBtn'];
+    $court_id = $reservationDetails['courtID'];
     $numOfpeople = htmlspecialchars($reservationDetails['numOfPeople'], ENT_QUOTES);
     $startingTime = $reservationDetails['reservingStartTime'];
     $endingTime = $reservationDetails['reservingEndTime'];

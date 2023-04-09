@@ -154,14 +154,15 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
             //console.log(startingTimeDateObj, endingTimeDateObj);
 
             const courtMaintenance = {
-                startingDate : startingTimeDateObj,
-                endingDate : endingTimeDateObj,
+                startingDate : jsonData.branchReservationSchedule[key].schedule.courtMaintenance[resInfo]['startingDate'],
+                endingDate : jsonData.branchReservationSchedule[key].schedule.courtMaintenance[resInfo]['endingDate'],
                 noOfDays : ((endingTimeDateObj - startingTimeDateObj)/1000/60/60/24) + 1 //+1 because the ending date is included
             };
 
             currCourtMaintenance.push(courtMaintenance);
         }
         courtSchedule['courtMaintenance'] = currCourtMaintenance;
+        courtSchedule['courtID'] = key;
 
         schedulesArr[i] = courtSchedule;
         i++;
@@ -169,17 +170,17 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
 
     //branch maintenance
     let branchMaintenance = Array();
-    for(var resInfo in jsonData.branchMaintenance){  //go through all the reservation of each court
+    for(var resInfo in jsonData.branchMaintenance){  //go through all the maintenance info of the branch
         const startingDate = jsonData.branchMaintenance[resInfo]['startingDate'].split("-");
         const endingDate = jsonData.branchMaintenance[resInfo]['endingDate'].split("-");
 
-        //create date objects for the reservation starting and ending times
+        //create date objects for maintenance starting and ending dates
         const startingTimeDateObj = new Date(startingDate[0], startingDate[1] - 1, startingDate[2]);
         const endingTimeDateObj = new Date(endingDate[0], endingDate[1] - 1, endingDate[2]);
 
         const branchMaintenanceObj = {
-            startingDate : startingTimeDateObj,
-            endingDate : endingTimeDateObj,
+            startingDate : jsonData.branchMaintenance[resInfo]['startingDate'],
+            endingDate : jsonData.branchMaintenance[resInfo]['endingDate'],
             noOfDays : ((endingTimeDateObj - startingTimeDateObj)/1000/60/60/24) + 1 //+1 because the ending date is included
         };
 

@@ -89,9 +89,8 @@
 }
 
 .reserved{
-    background:linear-gradient(180deg, rgba(5,5,108,1) 0%, rgba(0,0,0,1) 48%, rgba(167,0,0,1) 100%);
+    background:linear-gradient(120deg, rgba(5,5,108,1) 0%, rgba(0,0,0,1) 60%, rgba(167,0,0,1) 100%);
     color: white;
-    border-radius: 1rem;
 }
 
 #paymentBox{
