@@ -7,6 +7,7 @@ import { currency } from '../CONSTANTS.js';
 let sendingRequest = null;  //to store the reservation details
 let stripe = null;  //to store the payment gateway
 let cardElement = null;  //to store the card element
+const cardHolderName = document.getElementById("card-holder-name");
 
 const errorElement = document.getElementById("card-errors");
 const paymentGatewayPopup = document.getElementById("paymentBox");
@@ -27,6 +28,8 @@ const animateGateWayClosing = () => {
         //clear the card element
         cardElement.clear();
         errorElement.textContent = "";
+        //clear the card holder name
+        cardHolderName.value = "";
 
         //enable all buttons and inputs in the main content
         const buttons = main.querySelectorAll("button");
@@ -109,15 +112,14 @@ const paymentForm = document.querySelector("#payment-form");
 
 paymentForm.addEventListener("submit", (event) => {
     event.preventDefault(); //prevent the form from submitting
-    stripe.createToken(cardElement).then((result) => {  //create the token
+
+    stripe.createToken(cardElement, {
+        name: cardHolderName.value
+    }).then((result) => {  //create the token
         if(result.error){   //if there is an error
             errorElement.textContent = result.error.message;
         }
         else{
-            //animate the payment gateway popup
-            animateGateWayClosing();
-            main.click();
-
             //send the token to the server
             stripeTokenHandler(result.token);
         }
@@ -129,6 +131,14 @@ const stripeTokenHandler = (token) => {
     const tokenID = token.id;
     sendingRequest.tokenID = tokenID;   //add the token to the request
 
+    //pay button to please wait
+    const payBtn = document.getElementById("paymentGatewaySubmitBtn");
+    payBtn.innerHTML = "Please wait...";
+    payBtn.classList.add("disabled");
+    payBtn.disabled = true;
+
+
+
     fetch("../../controller/user/make_reservation_controller.php", {
         method: "POST",
         headers: {
@@ -139,6 +149,8 @@ const stripeTokenHandler = (token) => {
     .then((res) => res.json())
     .then((data) => {
         //console.log(data);
+        sendingRequest = null;  //clear the request
+        
         if(data.successMsg !== undefined){  //reservation success
             const successMsgBox = document.getElementById("successMsg");
             const errMsgBox = document.getElementById("errMsg");
@@ -170,6 +182,15 @@ const stripeTokenHandler = (token) => {
             errMsgBox.innerHTML = "";
             errMsgBox.innerHTML = data.errMsg;
         }
+
+        //animate the payment gateway popup
+        animateGateWayClosing();
+        main.click();
+
+        //reset the pay button
+        payBtn.innerHTML = "Pay Now";
+        payBtn.classList.remove("disabled");
+        payBtn.disabled = false;
     })
     .catch((err) => {
         console.log(err);

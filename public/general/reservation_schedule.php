@@ -131,6 +131,10 @@
                         </div>
                         <div id="amount" style="font-size:1.2rem; margin: 20px auto">
                         </div>
+                        <div id="card-holder-name-div">
+                        <i class="fa-solid fa-signature" style="color: gray"></i>
+                            <input type="text" id="card-holder-name" name="card-holder-name" placeholder="Name on Card" required>
+                        </div>
                         <div id="card-element">
                         </div>
                         <div id="card-errors" role="alert"></div>

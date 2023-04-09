@@ -115,6 +115,35 @@
     margin: 10px 0;
 }
 
+#card-holder-name-div{
+    text-align: left;
+    width: 100%;
+}
+
+#card-holder-name > *{
+    all: unset;
+    color: gray;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+#card-holder-name{
+    width: 100%;
+    all: unset;
+    margin: 0.45rem;
+    font-weight: lighter;
+}
+
+#card-holder-name::placeholder{
+    all: unset;
+    color: gray;
+    font-size: 0.9rem;
+}
+
+#card-element > *{
+    font-family: 'Poppins', sans-serif;
+}
+
 @keyframes slideUp {
     0% {
         opacity: 0;
