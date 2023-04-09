@@ -94,6 +94,16 @@ main::before{
     font-size: calc(1vw + 0.02rem);
 }
 
+#system-notify{
+    background-color: #ECFCFF;
+    color: black;
+}
+
+#system-notify marquee{
+    font-size: 1.2rem;
+    white-space: nowrap;
+}
+
 @media(max-width: 900px){
     #landing-img1{
         content: url(../landing_res_res_1.png);
@@ -104,6 +114,10 @@ main::before{
         height: auto;
         content: url(../landing_coach_res_1.png);
     }
+
+    #system-notify marquee{
+        font-size: 1rem;
+    }
 }
 
 @media(max-width: 680px){
@@ -113,6 +127,10 @@ main::before{
 
     .slide{
         width: 100%;
+    }
+
+    #system-notify marquee{
+        font-size: 0.8rem;
     }
 
     #reservationBtn{

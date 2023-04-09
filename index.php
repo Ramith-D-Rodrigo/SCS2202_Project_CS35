@@ -24,6 +24,7 @@
                     require_once("./public/general/header.php");
                 ?>
                 <main>
+                    <div id="system-notify"></div>
                     <div class="search">
                         <input type="checkbox" id="searchCheck">
                         <div class="search-box">
@@ -65,6 +66,7 @@
             <script src="/js/general/search_validation.js"></script>
             <script src="/js/general/index_animation.js"></script>
             <script src="/js/user/account_links.js"></script>
+            <script src="/js/general/system_maintenance_notify.js"></script>
             <script type="module" src="/js/general/notifications.js"></script>
         </html>
 
