@@ -22,6 +22,10 @@
     $receptionist -> setDetails(uid : $recepID);
     $court = new Sports_Court($courtID);
     $result = $receptionist -> makeReservation($resID, $date, $startingTime, $endingTime, $numOfPeople, $reservationFee, $court, $connection);
-    print_r($result);
+    // print_r($result);
+
+    header('Content-Type: application/json;');    //because we are sending json
+    echo json_encode($result);
+    $connection -> close();
 
 ?>
