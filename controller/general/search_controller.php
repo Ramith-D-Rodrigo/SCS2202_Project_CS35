@@ -6,6 +6,13 @@
     require_once("../../src/coach/coach.php");
     require_once("../../src/general/sport_court.php");
 
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
+
     $user = new User();
     $sportName = htmlspecialchars($_GET['sportName']);
 

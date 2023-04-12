@@ -5,6 +5,13 @@
     require_once("../../src/general/website_functions/reg_coaches_functions.php");
     require_once("../../src/coach/coach.php");
 
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
+
     $coaches = getAllCoaches($connection);
     
     $result = array();

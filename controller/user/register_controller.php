@@ -4,7 +4,7 @@
     require_once("../../src/user/user_dependent.php");
     require_once("../../src/general/security.php");
     
-    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
+    if(!Security::userAuthentication(logInCheck: TRUE)){
         Security::redirectUserBase();
         die();
     }

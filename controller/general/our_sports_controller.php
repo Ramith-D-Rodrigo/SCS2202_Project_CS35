@@ -6,6 +6,13 @@
     require_once("../../src/general/sport.php");
     require_once("../../src/general/website_functions/our_sports_functions.php");
 
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
+
     $allSports = getAllSports($connection); //get all sports
 
     $returningResult = [];

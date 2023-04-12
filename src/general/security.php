@@ -117,13 +117,18 @@
             }
             else{   //access is based on the userRole
                 if(!isset($_SESSION['userid'])){    //the user is not logged in
-                    if(empty($acceptingUserRoles)){ //no one can access when logged in (register, login pages, etc)
+                    if(empty($acceptingUserRoles)){     //the page can be accessed by anyone (not logged in) 
+                        //because if the logincheck is true but the array is empty, it means that the page can be accessed by anyone when not logged in
                         return true;
+                    }
+                    else{   //the array is not empty, meaning that the page access is restricted to certain user roles 
+                        //since the user is not logged in, they cannot access
+                        return false;   //no access
                     }   
-                    return false;   //no access
                 }
                 else{   //is logged in
-                    if(!in_array($_SESSION['userrole'], $acceptingUserRoles)){  //the user is trying to access a page that cannot be accessed by their role (works for empty array)
+                    if(!in_array($_SESSION['userrole'], $acceptingUserRoles)){  //the user is trying to access a page that cannot be accessed by their role 
+                        //(works for empty array because no one can access when logged in (register, login pages, etc))
                         return false;
                     }
                     else{   //can access

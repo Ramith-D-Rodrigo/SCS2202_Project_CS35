@@ -5,13 +5,12 @@
     require_once("../../src/general/sport_court.php");
     require_once("../../src/general/sport.php");
 
-/*     if($_SERVER['REQUEST_METHOD'] === 'POST'){  //we are coming from a post request
-        $reservationPlace = $_SESSION[$_POST['reserveBtn']];    //get the array
-        $_SESSION['reservationPlace'] = $reservationPlace;  //assign the array to session
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
     }
-    else{
-        $reservationPlace = $_SESSION['reservationPlace'];
-    } */
 
     $reservationPlace = explode(",",$_GET['reserveBtn']);
 

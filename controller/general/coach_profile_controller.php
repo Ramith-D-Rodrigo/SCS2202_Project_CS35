@@ -1,8 +1,12 @@
 <?php
+
+use Stripe\LoginLink;
+
     session_start();
     //script authentication
-    if(isset($_SESSION['userid']) && isset($_SESSION['userrole']) && ($_SESSION['userrole'] === 'manager' || $_SESSION['userrole'] === 'owner' || $_SESSION['userrole'] === 'admin' || $_SESSION['userrole'] === 'receptionist')){
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        die();
     }
 
     if(isset($_GET['coachID'])){    //coming from a get request

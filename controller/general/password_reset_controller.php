@@ -1,8 +1,10 @@
 <?php
     session_start();
-    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is logged in
-        header("Location: /index.php"); //the user shouldn't be able to access the register page
-        exit();
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : TRUE)){
+        Security::redirectUserBase();
+        die();
     }
 
     if(!isset($_SESSION['resetCheck']) || $_SESSION['resetCheck'] !== true){  //if the user is not logged in and has not checked the reset code

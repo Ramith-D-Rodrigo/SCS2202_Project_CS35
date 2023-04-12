@@ -5,6 +5,13 @@
 
     $allBranches = getAllBranches($connection); //get all the branches
 
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
+
     $allFeedbacksBranchWise = [];
     
     foreach($allBranches as $currBranchID){
