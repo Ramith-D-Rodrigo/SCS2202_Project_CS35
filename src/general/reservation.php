@@ -74,6 +74,44 @@
             return [$result, $this -> reservationID];   //return the result and the reservation id incase of failure
         }
 
+        public function onsiteReservation($resID, $date, $st, $et, $people, $payment, $court, $recep, $database){
+            $this -> reservationID = $resID;
+            $this -> onsiteReceptionistID = $recep;
+            $this -> date = $date;
+            $this -> startingTime = $st;
+            $this -> endingTime = $et;
+            $this -> noOfPeople = $people;
+            $this -> paymentAmount = $payment;
+            $this -> sportCourt = $court;
+            $this -> status = 'Pending';
+
+            //reserved date and time is added automatically
+            $sql = sprintf("INSERT INTO `reservation`
+            (`reservationID`,
+            `date`,
+            `startingTime`,
+            `endingTime`,
+            `noOfPeople`,
+            `paymentAmount`,
+            `sportCourt`,
+            `onsiteReceptionistID`,
+            `status`)
+            VALUES
+            ('%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+            $database -> real_escape_string($this -> reservationID),
+            $database -> real_escape_string($this -> date),
+            $database -> real_escape_string($this -> startingTime),
+            $database -> real_escape_string($this -> endingTime),
+            $database -> real_escape_string($this -> noOfPeople),
+            $database -> real_escape_string($this -> paymentAmount),
+            $database -> real_escape_string($this -> sportCourt),
+            $database -> real_escape_string($this -> onsiteReceptionistID),
+            $database -> real_escape_string($this -> status));
+            //print_r($sql);
+
+            $result = $database -> query($sql);
+            return $result;
+        }
         public function setID($reserveID){
             $this -> reservationID = $reserveID;
         }

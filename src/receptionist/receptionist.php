@@ -31,6 +31,7 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
     public function setDetails($fName='', $lName='', $email='', $contactNo='', $dob='', $gender='', $uid='', $username='', $password='', $brID = ''){
         $this -> receptionistID = $uid;
+        $this -> userID = $uid;
         $this -> firstName = $fName;
         $this -> lastName = $lName;
         $this -> emailAddress = $email;
@@ -515,6 +516,12 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
         return $result;
     }
+
+    public function makeReservation($resID, $date, $st, $et, $people, $payment, Sports_Court $court, $database){
+        $result = $court -> createOnsiteReservation($this -> userID, $resID, $date, $st, $et, $payment, $people, $database);
+        return $result; 
+    }
+
     public function jsonSerialize() : mixed {
         $classProperties = get_object_vars($this);
 

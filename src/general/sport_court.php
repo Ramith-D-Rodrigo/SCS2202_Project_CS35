@@ -119,6 +119,13 @@
             return $result; //an array
         }
 
+        public function createOnsiteReservation($recep, $resID, $date, $starting_time, $ending_time, $payment, $num_of_people, $database){
+            $reservation = new Reservation();
+            $result = $reservation -> onsiteReservation($resID, $date, $starting_time, $ending_time, $num_of_people, $payment, $this -> courtID, $recep, $database);
+            unset($reservation);
+            return $result; 
+        }
+        
         public function getBranch($database){
             $sql = sprintf("SELECT `branchID` FROM `sports_court`
             WHERE `courtID`
