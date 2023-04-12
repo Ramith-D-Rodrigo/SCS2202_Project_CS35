@@ -26,9 +26,14 @@
                     <div class="body-container">
                         <div class="content-box">
                             <div id="filter">
-                                Filter By : 
+                                Filter By 
                                 <select id="sportSelect">
                                     <option value="">Sport</option>
+                                </select>
+
+                                Show 
+                                <select id="showSelect">
+                                    <option value="">All</option>
                                 </select>
                             </div>
                         </div>
