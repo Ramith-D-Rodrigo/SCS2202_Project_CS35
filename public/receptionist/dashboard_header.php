@@ -25,8 +25,21 @@
                 }
                 else if($_SERVER['REQUEST_URI'] === '/public/receptionist/coach_profile.php'){  //view selected profile
                     echo "Coach Profile";
-                }else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_reservations.php'){   //view today's reservations
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_reservations.php'){   //view today's reservations
                     echo "Reservations";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/onsite_reservation_entry.php'){   //select sport for onsite r.
+                    echo "Select Sport";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/onsite_reservation.php'){   //make onsite reservation
+                    echo "Make Onsite Reservation";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/reservation_payment.php'){   //payment receipt
+                    echo "Reservation Payment";
+                }
+                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/cancel_onsite_reservations.php'){   //cancel onsite reservations
+                    echo "Cancel Onsite Reservations";
                 }
             ?>
         </div>

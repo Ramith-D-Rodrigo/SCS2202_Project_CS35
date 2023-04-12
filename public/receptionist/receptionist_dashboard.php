@@ -30,7 +30,8 @@
             <div  class="tabs" style="min-width:30%; min-height:20rem">
                 <div> Onsite Reservation</div> 
                 <div id="onlineR"></div>
-                <div> <button onclick="window.location.href='/public/receptionist/onsite_reservation_entry.php'"> Add </button> </div>
+                <div> <button style="width:100%" onclick="window.location.href='/public/receptionist/onsite_reservation_entry.php'"> Add </button> </div>
+                <div> <button onclick="window.location.href='/public/receptionist/cancel_onsite_reservations.php'"> Cancel </button> </div>
             </div>
             <div  class=tabs style="min-width:30%; min-height:20rem">
                 <div>Branch Details</div> 
