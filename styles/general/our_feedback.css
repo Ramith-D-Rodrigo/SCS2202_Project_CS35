@@ -47,20 +47,25 @@ input{
     .content-box{
         width: 100%;
     }
-    .filter-option{
-        margin: 0 0.5rem;
-    }
 }
 
 @media(max-width: 680px){
     .filter-option{
        font-size: 0.8rem;
-        margin: 0 1rem;
+       margin: 1rem;
     }
 
     .filter-option *{
         width: 100%;
-        font-size: 0.6rem;
+        margin: 0;
+    }
+
+    .filter-option input{
+        margin-right: 0;
+    }
+
+    .filter-div{
+        flex-direction: column;
     }
 
 }
