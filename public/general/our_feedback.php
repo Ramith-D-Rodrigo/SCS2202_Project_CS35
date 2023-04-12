@@ -29,13 +29,11 @@
                                 <input placeholder="Search a Feedback" id="feedbackSearch">
                             </div>
                             <div class="filter-option">
-
                                 <select id="branchFilter">
                                     <option value="">Branch</option>
                                 </select>
                             </div>
-                            <div class="filter-option">
-                                
+                            <div class="filter-option">   
                                 <select id="ratingFilter">
                                     <option value="">Rating</option>
                                     <option value="5">5</option>
@@ -43,6 +41,11 @@
                                     <option value="3">3</option>
                                     <option value="2">2</option>
                                     <option value="1">1</option>
+                                </select>
+                            </div>
+                            <div class="filter-option">
+                                <select id="amountFilter">
+                                    <option value="">Show All</option>
                                 </select>
                             </div>
                         </div>

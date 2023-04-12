@@ -1,8 +1,8 @@
 //getting the elements
-
 const branchFilter = document.getElementById("branchFilter");   //branch filter
 const searchBar = document.querySelector("#feedbackSearch");    //searchbar
 const ratingFilter = document.getElementById("ratingFilter");   //rating filter
+const showAmountFilter = document.getElementById("amountFilter");   //show amount filter
 
 const feedbackContainer = document.querySelector("#feedbackContainer"); //feedback container
 
@@ -36,6 +36,7 @@ const filterFeedback = (e) =>{
         branchVal = branchFilter.value;
     }
     const ratingVal = ratingFilter.value;
+    const showAmountVal = showAmountFilter.value;
 
     const allDivs = feedbackContainer.children; //get all the feedback divs
     
@@ -69,7 +70,6 @@ const filterFeedback = (e) =>{
         filteredDivs = [...allDivs];
     }
 
-    //console.log(filteredRows);
 
     let temp = null;
 
@@ -96,8 +96,6 @@ const filterFeedback = (e) =>{
     else{
         filteredDivs = [...temp];
     }
-
-    //console.log(filteredRows);
  
     //filtering the rating
     if(filteredDivs.length === 0){  // no results
@@ -108,7 +106,6 @@ const filterFeedback = (e) =>{
         filteredDivs.length = 0;
     }
 
-    console.log(temp);
 
     if(ratingVal !== ""){   //if the user wants to filter the rating 
         temp.forEach(i => {
@@ -121,8 +118,24 @@ const filterFeedback = (e) =>{
             }
         }); 
     }
+    else{
+        filteredDivs = [...temp];
+    }
 
-    //console.log(filteredRows);
+    if(filteredDivs.length === 0){  //no results
+        return;
+    }
+    else{
+        temp = [...filteredDivs];
+        filteredDivs.length = 0;
+    }
+
+
+    if(showAmountVal != ""){ //if the user wants to filter the amount of feedbacks to show
+        for(let i = showAmountVal; i < temp.length; i++){
+            temp[i].style.display = "none";
+        }
+    }
 }
 
 //event listeners
@@ -130,6 +143,7 @@ const filterFeedback = (e) =>{
 searchBar.addEventListener("keyup", filterFeedback);    //add event listener to the searchbar
 branchFilter.addEventListener("change", filterFeedback);  //add event listener to the branchfilter
 ratingFilter.addEventListener("change", filterFeedback);  //add event listener to the ratingfilter
+showAmountFilter.addEventListener("change", filterFeedback);  //add event listener to the show amount filter
 
 //data fetch from server
 
@@ -240,5 +254,17 @@ fetch("../../controller/general/our_feedback_controller.php")
 
             branchFilter.value = selectedBranch;    //set the value to display the correct filter option
         }
+
+        //add show amount filter
+        let inc = 0;
+        while(inc < branchFeedbacks.length){
+            inc += 5;
+            const option = document.createElement("option");
+            option.value = inc;
+            option.text = inc;
+            showAmountFilter.appendChild(option);
+        }
+
+
     })
     .catch(err => console.error(err));

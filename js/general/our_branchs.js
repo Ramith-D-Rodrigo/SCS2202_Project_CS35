@@ -17,8 +17,8 @@ function changeBtnValue(e){
 
 function viewFeedback(e){
     e.preventDefault();
-    const branchID = e.target.parentElement.id;
-    console.log(branchID);
+    const parent = e.target.parentNode.parentNode;
+    const branchID = parent.querySelector("form").id;
     localStorage.setItem("feedbackBranch", branchID);
     window.location.href = "/public/general/our_feedback.php";
 }
