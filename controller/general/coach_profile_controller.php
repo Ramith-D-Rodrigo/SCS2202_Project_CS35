@@ -36,9 +36,16 @@
         foreach($coachingSessionsObjs as $currSession){
             $currSession -> getDetails($connection);
 
-            //filtering session needed information
             $tempJSON = json_encode($currSession);  
             $neededInfo = json_decode($tempJSON, true);
+
+            if(isset($neededInfo['cancelDate']) && $neededInfo['cancelDate'] !== NULL){ //if the session is cancelled
+                //we do not need this session
+                unset($neededInfo);
+                continue;
+            }
+
+            //filtering session needed information
             unset($neededInfo["coachMonthlyPayment"]);
             array_push($coachingSessionsArr, $neededInfo);
             unset($currSession);
