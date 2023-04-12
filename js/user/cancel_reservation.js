@@ -40,11 +40,11 @@ const authFormDisplay = (e) => {
 
 }
 
-const animateClose = (formDiv) => {
+const animateClose = async (formDiv) => {
     const main = document.querySelector("main");
 
     //closing the authentication form
-    formDiv.animate([
+    await formDiv.animate([
         {top: "50%", transform: "translate(-50%, -50%)", opacity: 1},
         {top: "-50%", transform: "translate(-50%, -50%)", opacity: 0}
     ], {
@@ -92,18 +92,17 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
         const authenticationFormDiv = document.querySelector("#authFormDiv");
         const authMsg = document.querySelector("#authMsg");
         authMsg.innerHTML = "";
-        //add closing animation keyframes
-        animateClose(authenticationFormDiv);
 
         //remove the reservation id from the session storage
         sessionStorage.removeItem("reservationID");
 
         authenticationFormDiv.childNodes[1].reset();    //reset the form
+        //add closing animation keyframes
+        animateClose(authenticationFormDiv);
     });
 
     //dismiss button event listener of the message box
     const dismiss = document.querySelector("#dismiss");
-    dismiss.style.cursor = "pointer";
     dismiss.addEventListener("click", (e) => {
         e.preventDefault();
         const msgBox = document.querySelector("#msgBox");
@@ -133,7 +132,7 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                 "Content-Type" : "application/json"
             }
 
-        }).then((res) => {
+        }).then(async (res) => {
             if(res.ok){ //ok means the status code is 200
                 //can cancel the reservation
                 //get the reservation id from the session storage
@@ -144,8 +143,9 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
 
                 //close the authentication form
                 const authenticationFormDiv = document.querySelector("#authFormDiv");
-                animateClose(authenticationFormDiv);
+                await animateClose(authenticationFormDiv);
                 
+                const msgBox = document.querySelector("#msgBox");
                 //send the reservation id to the server
                 fetch("../../controller/user/cancel_reservation_controller.php", {
                     method: "POST",
@@ -155,7 +155,6 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                     }
                 }).then((res) => {  //response from the server
 
-                    const msgBox = document.querySelector("#msgBox");
                     //blur the main content and darken it
                     const main = document.querySelector("main");
                     main.classList.add("main-darken");
@@ -186,12 +185,12 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                         icon.style.color = "red";
                     }
 
-                    //display the message box
-                    msgBox.style.display = "block";
                     return res.json();
                 })
                 .then(data =>{
                     msg.innerHTML += data.msg;   //display the message
+                    //display the message box
+                    msgBox.style.display = "block";
                 })
 
             }

@@ -8,7 +8,6 @@
     transform: translate(-50%, -50%);
     animation: slideIn 0.5s ease-in-out; 
     width: calc(100vw - 70%);
-    height: calc(100vh - 50%);
 }
 
 #msgBox{
@@ -35,6 +34,10 @@
     text-align: center;
     font-size: 0.8rem;
     margin: 1.5rem 2rem;
+}
+
+#dismiss{
+    cursor: pointer;
 }
 
 .altMsg-invalid{
@@ -66,7 +69,6 @@
 @media(max-width: 680px){
     #authFormDiv{
         width: calc(100vw - 25%);
-        height: calc(100vh - 55%);
     }
 
     #altMsg{
@@ -76,7 +78,6 @@
 
     #msgBox{
         width: calc(100vw - 25%);
-        height: calc(100vh - 55%);
     }
 }
 
