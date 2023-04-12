@@ -101,6 +101,11 @@
                         </div>
                         <div class="content-box" id="feedbackContainer">
                             <div class="title">Student Feedback</div>
+                            <div id="stu-feedbacks"></div>
+                            <div id="navIcons">
+                                <button id="prevPage"><i class="fa-solid fa-chevron-circle-left" ></i></button>
+                                <button id="nextPage"><i class="fa-solid fa-chevron-circle-right" ></i></button>
+                            </div>
                         </div>
                     </div>
                     <div class="content-box" id="joinSession">

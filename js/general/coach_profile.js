@@ -1,5 +1,6 @@
-import {currency} from "../../js/CONSTANTS.js";
-import {changeToLocalTime} from "../../js/FUNCTIONS.js";
+import {currency, MAX_FEEDBACK_DISPLAY_COUNT} from "../../js/CONSTANTS.js";
+import {changeToLocalTime, feedbackPagination} from "../../js/FUNCTIONS.js";
+
 
 const url = new URL(window.location);   //get the url
 const params = new URLSearchParams(url.search); //search parameters
@@ -15,6 +16,48 @@ let maxStudents = 0;
 
 let branchSet = new Set();  //to store the branch names
 let branchSessionMap = new Map();   //to map the branch to the sessions
+
+//feedback objects stored in this array
+let feedbacks = [];
+let currPage = 1;   //current page of the feedbacks
+
+//feedback navigation buttons
+const nextPage = document.querySelector("#nextPage");
+const prevPage = document.querySelector("#prevPage");
+
+const feedbackContainer = document.querySelector("#stu-feedbacks"); //feedback container
+
+//disable the previous button
+prevPage.classList.add("disabled");
+
+//disable the next button
+nextPage.classList.add("disabled");
+
+
+const nextFeedbacks = (e) => {
+    if(currPage * MAX_FEEDBACK_DISPLAY_COUNT >= feedbacks.length){   //if the current page is the last page
+        //disable the next button
+        e.target.classList.add("disabled");
+        return;
+    }
+    feedbackPagination(currPage + 1, currPage, feedbackContainer, feedbacks, MAX_FEEDBACK_DISPLAY_COUNT, nextPage, prevPage, {name : false, date : true});
+    currPage++;
+}
+
+const prevFeedbacks = (e) => {
+    if(currPage == 1){  //if the current page is the first page
+        //disable the previous button
+        e.target.classList.add("disabled");
+        return;
+    }
+    feedbackPagination(currPage - 1, currPage, feedbackContainer, feedbacks, MAX_FEEDBACK_DISPLAY_COUNT, nextPage, prevPage, {name : false, date : true});
+    currPage--;
+}
+
+//add the event listeners
+nextPage.addEventListener("click", nextFeedbacks);
+prevPage.addEventListener("click", prevFeedbacks);
+
 
 const sessionBranches = document.querySelector("#sessionBranches"); //branches that the coach conducts the sessions
 const coachingSessions = document.querySelector("#coachingSessions");   //sessions that the coach conducts by branch
@@ -233,30 +276,9 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         //event listener for the branch select and coaching sessions (added at the very end)
         
         //student feedback
-        const feedbackDiv = document.querySelector("#feedbackContainer");
-        for(let i = 0; i < data.coachFeedback.length; i++){
-            const feedback = document.createElement("div");
-            feedback.innerHTML = data.coachFeedback[i].description;
+        feedbacks = data.coachFeedback;
 
-            //rating stars
-            const rating = document.createElement("span");
-            rating.style.marginLeft = "10px";
-
-            //add the stars
-            for(let j = 1; j <= 5; j++){
-                const star = document.createElement("i");
-                star.className = "fa fa-star";
-                star.ariaHidden = "true";   //for screen readers
-                if(j <= data.coachFeedback[i].rating){
-                    star.classList.add("checked");
-                }
-                rating.appendChild(star);
-            }
-
-            feedback.appendChild(rating);
-            feedbackDiv.appendChild(feedback);
-        }
-
+        feedbackPagination(1, currPage, feedbackContainer, feedbacks, MAX_FEEDBACK_DISPLAY_COUNT, nextPage, prevPage, {name : false, date : true});
 
         //join session form
 

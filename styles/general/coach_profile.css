@@ -88,6 +88,18 @@
     margin-left: 1rem;
 }
 
+#stu-feedbacks{
+    height: 100%;
+}
+
+#navIcons{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 @media(max-width:1275px){
     .coach-info .detailsContainer > *{
         font-size: 0.8rem;

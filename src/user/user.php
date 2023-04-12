@@ -670,7 +670,7 @@ class User extends Actor implements JsonSerializable{
         $feedbackID = uniqid('coachFB');
 
         $sql = sprintf("INSERT INTO `student_coach_feedback` 
-            (`feedbackID`, `stuID`, `coachID`, `description`, `rating`, `feedbackDate`)
+            (`feedbackID`, `stuID`, `coachID`, `description`, `rating`, `date`)
             VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
             $this -> connection -> real_escape_string($feedbackID),
             $this -> connection -> real_escape_string($this -> userID),

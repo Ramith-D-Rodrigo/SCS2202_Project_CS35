@@ -362,7 +362,7 @@ class Coach extends Actor implements JsonSerializable{
 
     
     public function getFeedback(){
-        $sql = sprintf("SELECT `description`, `rating`, `feedbackDate`, `stuID` FROM student_coach_feedback WHERE `coachID` = '%s'", 
+        $sql = sprintf("SELECT `description`, `rating`, `date` FROM `student_coach_feedback` WHERE `coachID` = '%s'", 
         $this -> connection -> real_escape_string($this -> userID));
 
         $result = $this -> connection -> query($sql);
