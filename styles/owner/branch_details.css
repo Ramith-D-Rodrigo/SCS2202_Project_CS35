@@ -47,22 +47,6 @@
     color: gold;
 }
 
-.feedback-header{
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-.feedback-header > i {
-    font-size: 1.5rem;
-}
-
-
-.feedback-footer{
-    font-style: italic;
-    font-size: 0.8rem;
-    color: gray;
-}
-
 #navIcons{
     display: flex;
     flex-direction: row;

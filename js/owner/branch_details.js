@@ -1,5 +1,6 @@
 import {intializeMap, setMarker} from "../MAP_FUNCTIONS.js";
-import {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain} from "../FUNCTIONS.js";
+import {changeToLocalTime, feedbackPagination, disableElementsInMain, enableElementsInMain} from "../FUNCTIONS.js";
+import {MAX_FEEDBACK_DISPLAY_COUNT} from "../CONSTANTS.js";
 
 let feedbacks = []; //to store the feedbacks for pagination
 let branches = [];  //store the branches
@@ -7,8 +8,6 @@ let currPage = 1;   //current page of the feedbacks
 
 const nextPage = document.querySelector("#nextPage");
 const prevPage = document.querySelector("#prevPage");
-
-const MAX_NUM_FEEDBACKS = 5;    //max number of feedbacks to display
 
 //disable the previous button
 prevPage.classList.add("disabled");
@@ -21,12 +20,13 @@ let selectedBranch = null; //store the selected branch
 const feedbackContainer = document.querySelector("#userFeedback");  //feedback container
 
 const nextFeedbacks = (e) => {
-    if(currPage * MAX_NUM_FEEDBACKS >= feedbacks[selectedBranch].feedback.length){   //if the current page is the last page
+    if(currPage * MAX_FEEDBACK_DISPLAY_COUNT >= feedbacks[selectedBranch].feedback.length){   //if the current page is the last page
         //disable the next button
         e.target.classList.add("disabled");
         return;
     }
-    feedbackPagination(currPage + 1);
+    feedbackPagination(currPage + 1, currPage, feedbackContainer, feedbacks[selectedBranch].feedback, MAX_FEEDBACK_DISPLAY_COUNT, nextPage, prevPage);
+    currPage++;
 }
 
 const prevFeedbacks = (e) => {
@@ -35,7 +35,8 @@ const prevFeedbacks = (e) => {
         e.target.classList.add("disabled");
         return;
     }
-    feedbackPagination(currPage - 1);
+    feedbackPagination(currPage - 1, currPage, feedbackContainer, feedbacks[selectedBranch].feedback, MAX_FEEDBACK_DISPLAY_COUNT, nextPage, prevPage);
+    currPage--;
 }
 
 //add the event listeners
@@ -272,73 +273,11 @@ const displayFeedbacks = (branchID) => {
         i++;
     });
 
-    feedbackPagination(1);  //1 is the first page
+    feedbackPagination(1, currPage, feedbackContainer, feedbacks[selectedBranch].feedback, MAX_FEEDBACK_DISPLAY_COUNT, nextPage, prevPage);  //1 is the first page
 }
 
 const sortFeedbacks = (feedbackArr) => {
     feedbackArr.sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
     });
-}
-
-const feedbackPagination = (newPage) => {
-
-    //add the rating according to the feedbacks
-    const currBranchFeedbacks = feedbacks[selectedBranch];
-
-    //add the feedbacks
-
-    //feedback range
-    const start = (newPage - 1) * MAX_NUM_FEEDBACKS;
-    const end = start + MAX_NUM_FEEDBACKS;
-
-    currPage = newPage;
-
-    feedbackContainer.innerHTML = "";
-
-    for(let i = start; i < end && i < currBranchFeedbacks.feedback.length; i++){
-        const currUserFeedback = document.createElement("div");
-        const currUserFeedbackHeader = document.createElement("div");
-        const currUserFeedbackBody = document.createElement("div");
-        const currUserFeedbackFooter = document.createElement("div");
-
-        currUserFeedbackHeader.className = "feedback-header";
-        currUserFeedbackFooter.className = "feedback-footer";
-
-        for(let j = 1; j <= 5; j++){
-            const star = document.createElement("i");
-            star.className = "fa-solid fa-star";
-            currUserFeedbackHeader.appendChild(star);
-
-            if(j <= currBranchFeedbacks.feedback[i].rating){
-                star.classList.add("checked");
-            }
-        }
-
-        currUserFeedbackBody.innerHTML = currBranchFeedbacks.feedback[i].description;
-
-        currUserFeedbackFooter.innerHTML = currBranchFeedbacks.feedback[i].userFullName + " on " + currBranchFeedbacks.feedback[i].date;
-
-        currUserFeedback.appendChild(currUserFeedbackHeader);
-        currUserFeedback.appendChild(currUserFeedbackBody);
-        currUserFeedback.appendChild(currUserFeedbackFooter);
-
-        feedbackContainer.appendChild(currUserFeedback);
-    }
-
-    //enable next if there are more feedbacks
-    if(currBranchFeedbacks.feedback.length > end){
-        nextPage.classList.remove("disabled");
-    }
-    else{
-        nextPage.classList.add("disabled");
-    }
-
-    //enable previous if there are previous feedbacks
-    if(currPage > 1){
-        prevPage.classList.remove("disabled");
-    }
-    else{
-        prevPage.classList.add("disabled");
-    }
 }
