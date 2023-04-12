@@ -522,6 +522,29 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $result; 
     }
 
+    public function getOnsiteReservations($database){
+        $sql = sprintf("SELECT `reservationID` from reservation WHERE `onsiteReceptionistID` =  '%s'",
+        $database -> real_escape_string($this -> userID));
+        $result = $database -> query($sql);
+        $reservationInfo = [];
+
+        while($row = $result -> fetch_object()){
+            $reservation = new Reservation();
+            $reservation -> setID($row -> reservationID);
+            $onsiteRes = $reservation -> getDetails($database);
+            array_push($reservationInfo,$onsiteRes);
+        }
+
+        return $reservationInfo;
+    }
+
+    public function cancelOnsiteReservation($resID,$database){
+        $reservation = new Reservation();
+        $reservation -> setID($resID);
+        $result = $reservation -> updateStatus($database,"Cancelled");
+        return $result;
+    }
+    
     public function jsonSerialize() : mixed {
         $classProperties = get_object_vars($this);
 
