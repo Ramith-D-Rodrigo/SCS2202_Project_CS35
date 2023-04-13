@@ -12,6 +12,8 @@ regForm.addEventListener("submit", (e) => {
     regBtn.disabled = true;
     regBtn.style.cursor = "not-allowed";
 
+    regBtn.innerHTML = "Registering...";
+
 
     //adding just formData is enough since the browser will automatically set the header as multipart/form-data (this is useful for file uplaoding)
 
@@ -29,6 +31,7 @@ regForm.addEventListener("submit", (e) => {
             //enabling register button
             regBtn.disabled = false;
             regBtn.style.cursor = "pointer";
+            regBtn.innerHTML = "Register";
 
         }
         else if(data.RegSuccessMsg !== undefined){  //registration success
@@ -67,6 +70,7 @@ regForm.addEventListener("submit", (e) => {
                 //disable the button
                 verifyBtn.disabled = true;
                 verifyBtn.style.cursor = "not-allowed";
+                verifyBtn.innerHTML = "Verifying...";
 
     
                 const verificationData = new FormData(verifyForm);
@@ -102,6 +106,7 @@ regForm.addEventListener("submit", (e) => {
                         //re-enable the button
                         verifyBtn.disabled = false;
                         verifyBtn.style.cursor = "pointer";
+                        verifyBtn.innerHTML = "Verify Email";
                     }
                 })
                 .catch((err) => {
@@ -110,6 +115,7 @@ regForm.addEventListener("submit", (e) => {
                     //re-enable the button
                     verifyBtn.disabled = false;
                     verifyBtn.style.cursor = "pointer";
+                    verifyBtn.innerHTML = "Verify Email";
                 });
             });
         }
@@ -120,5 +126,6 @@ regForm.addEventListener("submit", (e) => {
         //enabling register button
         regBtn.disabled = false;
         regBtn.style.cursor = "pointer";
+        regBtn.innerHTML = "Register";
     });
 });
