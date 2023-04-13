@@ -7,6 +7,12 @@ regForm.addEventListener("submit", (e) => {
 
     const formData = new FormData(regForm);
 
+    const regBtn = document.getElementById("registerBtn"); //disabling register button
+
+    regBtn.disabled = true;
+    regBtn.style.cursor = "not-allowed";
+
+
     //adding just formData is enough since the browser will automatically set the header as multipart/form-data (this is useful for file uplaoding)
 
     fetch("../../controller/user/register_controller.php", {
@@ -19,6 +25,11 @@ regForm.addEventListener("submit", (e) => {
             successMsgBox.innerHTML = "";
             errMsgBox.innerHTML = "";
             errMsgBox.innerHTML = data.RegUnsuccessMsg;
+
+            //enabling register button
+            regBtn.disabled = false;
+            regBtn.style.cursor = "pointer";
+
         }
         else if(data.RegSuccessMsg !== undefined){  //registration success
             errMsgBox.innerHTML = "";
@@ -52,9 +63,15 @@ regForm.addEventListener("submit", (e) => {
                 e.preventDefault(); //prevent default submit
                 successMsgBox.innerHTML = "";
                 errMsgBox.innerHTML = "";
+
+                //disable the button
+                verifyBtn.disabled = true;
+                verifyBtn.style.cursor = "not-allowed";
+
     
                 const verificationData = new FormData(verifyForm);
                 const userCode = verificationData.get("verificationCode");
+
 
                 const request = {"verificationCode" : userCode, "activationType" : "registration"};    //create a json object to send to the server
                 fetch("../../controller/user/account_activation_controller.php", {
@@ -81,15 +98,27 @@ regForm.addEventListener("submit", (e) => {
                         errMsgBox.innerHTML = "";
                         successMsgBox.innerHTML = "";
                         errMsgBox.innerHTML = data.errMsg;
+
+                        //re-enable the button
+                        verifyBtn.disabled = false;
+                        verifyBtn.style.cursor = "pointer";
                     }
                 })
                 .catch((err) => {
                     console.log(err);
+
+                    //re-enable the button
+                    verifyBtn.disabled = false;
+                    verifyBtn.style.cursor = "pointer";
                 });
             });
         }
     })
     .catch((err) => {
         console.log(err);
+
+        //enabling register button
+        regBtn.disabled = false;
+        regBtn.style.cursor = "pointer";
     });
 });
