@@ -73,7 +73,7 @@ const displaySportInfo = (e) => {
 
     //set the sport image
     const sportImage = document.getElementById("sport-icon");
-    sportImage.src = "/uploads/sport_images/" + sport.sportName + ".jpg";
+    sportImage.src = "/uploads/sport_images/" + sport.sportName.toLowerCase() + ".jpg";
 
     //reset the change form
     const changeForm = document.getElementById("changeForm");

@@ -492,7 +492,7 @@ fetch("../../controller/user/coaching_sessions_controller.php")
                 const sportImg = document.createElement('img');
                 sportImg.className = 'sport-img';
 
-                sportImg.src = "/uploads/sport_images/" + data.coaches[data.coachingSessions[i].coachID].sport + ".jpg";
+                sportImg.src = "/uploads/sport_images/" + data.coaches[data.coachingSessions[i].coachID].sport.toLowerCase() + ".jpg";
 
                 sportImgContainer.appendChild(sportImg);
                 imagesContainer.appendChild(sportImgContainer);
