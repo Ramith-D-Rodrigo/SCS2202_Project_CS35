@@ -179,6 +179,7 @@ const CoachFilter = () => {
 
             //remove coach from currDisplayingCoaches
             currDisplayingCoaches.splice(i, 1);
+            i--;    //decrement i to account for the removed coach
         }
     }
 

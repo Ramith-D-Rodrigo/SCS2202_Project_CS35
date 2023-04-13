@@ -45,3 +45,19 @@ form {
     flex-wrap: wrap;
 
 }
+
+#filter{
+    display: flex;
+    flex-direction: row;
+}
+
+
+@media(max-width: 680px){
+    #filter{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+}
