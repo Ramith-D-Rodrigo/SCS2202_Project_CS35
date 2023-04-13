@@ -62,7 +62,7 @@ main::before{
     right: 0;
     bottom: 0;
     opacity: 0.5;
-    background-image: url('../bg_image.jpg');
+    background-image: url('../bg_image.webp');
     background-repeat: repeat;
 }
 

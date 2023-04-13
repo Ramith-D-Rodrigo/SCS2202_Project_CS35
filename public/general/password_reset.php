@@ -25,7 +25,7 @@
                 <main class="body-container">
                     <div class="content-box">
                         <div class="img-container">
-                            <img class="img" src="/styles/password_reset.jpg">
+                            <img class="img" src="/styles/password_reset.webp">
                         </div>
                         <div class="dynamic-fields">
                             <form>

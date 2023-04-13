@@ -41,11 +41,11 @@
                             <input type="radio" name="radio-btn" id="radio1">
                             <input type="radio" name="radio-btn" id="radio2">
                             <div class="slide first">
-                                <img class="landing-img" id="landing-img1" src="/styles/landing_res.png">
+                                <img class="landing-img" id="landing-img1" src="/styles/landing_res.webp">
                                 <button id="reservationBtn" onclick="window.location.href='/public/general/our_sports.php'">Make a Reservation Now!</button>
                             </div>
                             <div class="slide">
-                                <img class="landing-img" id="landing-img2" src="/styles/landing_coach.png">
+                                <img class="landing-img" id="landing-img2" src="/styles/landing_coach.webp">
                                 <button id="coachBtn" onclick="window.location.href='/public/general/reg_coaches.php'">Choose Your Trainer!</button>
                             </div>
                             <div class="navigation-auto">

@@ -106,13 +106,13 @@ main::before{
 
 @media(max-width: 900px){
     #landing-img1{
-        content: url(../landing_res_res_1.png);
+        content: url(../landing_res_res_1.webp);
         height: auto;
     }
 
     #landing-img2{
         height: auto;
-        content: url(../landing_coach_res_1.png);
+        content: url(../landing_coach_res_1.webp);
     }
 
     #system-notify marquee{

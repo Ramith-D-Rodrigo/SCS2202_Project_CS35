@@ -25,7 +25,7 @@
                 <main class="body-container">
                     <div class="content-box login-box">
                         <div class="login-img-container">
-                            <img class="login-img" src="/styles/login_img.png">
+                            <img class="login-img" src="/styles/login_img.webp">
                         </div>
                         <div class="login-form">
                             <form id="loginForm">
