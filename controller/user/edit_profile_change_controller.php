@@ -101,6 +101,15 @@
                         $validationErrFlag = true;
                         break;
                     }
+                    else{ //if not a student, then check for pending coaching session requests
+                        $sessionRequests = $editingUser -> getPendingCoachingSessionRequests();
+
+                        if(count($sessionRequests) != 0){   //has pending requests, thus cannot edit
+                            $returnMsg["errMsg"] = "You cannot change your height and weight as you have requested for a session(s).";
+                            $validationErrFlag = true;
+                            break;
+                        }
+                    }
                 }
                 if(!preg_match("/^\d*\.?\d*$/", $_POST[$field])){
                     $returnMsg["errMsg"] = "Invalid Weight";
