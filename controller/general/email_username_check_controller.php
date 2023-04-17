@@ -30,6 +30,7 @@
     else if($returnVal[2] === 'admin'){
         header('Content-Type: application/json;');
         echo json_encode(array("errMsg" => "Unable to send the email. <br>Please try again later"));
+        exit();
     }
 
     $email = $returnVal[0];
