@@ -12,15 +12,14 @@
         die();
     }
 
-    $reservationPlace = explode(",",$_GET['reserveBtn']);
+    $scheduleBranchID = $_GET['branch'];
+    $scheduleSport = $_GET['sport'];
 
-    //branch id -> 0th index, sport id -> 1st index
-
-    $branch = new Branch($reservationPlace[0]);
+    $branch = new Branch($scheduleBranchID);
     $branch -> getDetails($connection, ['city', 'openingTime', 'closingTime']);
 
     $sport = new Sport();   
-    $sport -> setID($reservationPlace[1]);
+    $sport -> setID($scheduleSport);
     $sports_courts = $branch -> getBranchCourts($connection, $sport, 'a');  //get all the sports court of that branch's sport (request status should be accepted)
 
     //to get sport details

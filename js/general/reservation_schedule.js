@@ -1,9 +1,6 @@
 const url = new URL(window.location);   //get the url
 const params = new URLSearchParams(url.search); //search parameters
-//console.log(params);
 
-const getReq = params.get("reserveBtn");
-//console.log(getReq);
 
 //import the functions from the other js files
 import {createReservationSchedulePage, createScheduleObjects, createReservationTable, updateTheReservationTables} from '../general/reservation_schedule_functions.js';
@@ -16,7 +13,7 @@ import { MAX_RESERVATION_DAYS } from '../CONSTANTS.js';
 //window.createReservationTable = createReservationTable;
 
 
-fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn=".concat(getReq))
+fetch("../../controller/general/reservation_schedule_controller.php?" + params)
     .then(res => res.json())
     .then(data => {
         console.log(data);
