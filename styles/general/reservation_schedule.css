@@ -29,7 +29,7 @@
 }
 
 .court-schedule table{
-    box-shadow:0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.5);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     table-layout: fixed;
     
 }
@@ -196,6 +196,14 @@
     margin: 1rem;
 }
 
+.reservation-price #reservationPrice{
+    background-color: unset;
+    color: black;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+
 @media(max-width: 1100px){
     *{
         font-size: 0.8rem;
@@ -281,6 +289,11 @@
         align-items: center;
         justify-content: center;
         width: auto;
+    }
+
+    .reservation-price > *{
+        width: 100%;
+        margin: unset;
     }
 
     .row-container{

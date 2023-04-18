@@ -1,4 +1,4 @@
-import { verbose, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, MAX_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS } from "../CONSTANTS.js";
+import { verbose, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, MAX_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS, currency } from "../CONSTANTS.js";
 
 const reserveStartingTime = document.getElementById("reserveStartingTime");
 const reserveEndingTime = document.getElementById("reserveEndingTime");
@@ -119,7 +119,7 @@ reserveStartingTime.addEventListener('change', (e)=>{
         calulatedPrice = minRevPrice * timeDiffHours;
     }
 
-    reservationPrice.value = calulatedPrice;
+    reservationPrice.value = currency + " " +  parseFloat(calulatedPrice).toFixed(2);
 });
 
 reserveEndingTime.addEventListener('change', (e)=>{
@@ -183,7 +183,7 @@ reserveEndingTime.addEventListener('change', (e)=>{
         calulatedPrice = minRevPrice * timeDiffHours;
     }
 
-    reservationPrice.value = calulatedPrice;
+    reservationPrice.value = currency + " " +  parseFloat(calulatedPrice).toFixed(2);
 });
 
 
