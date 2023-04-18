@@ -19,6 +19,11 @@
     foreach($coaches as $currCoach){
         $tempCoach = new Coach();
         $tempCoach -> setDetails(uid: $currCoach -> coachID, sport: $currCoach -> sport);
+
+        if($tempCoach -> getAllSessions() === null){
+            continue;   //if the coach has no sessions, skip the coach
+        }
+        
         $fName = $tempCoach -> getDetails('firstName');
         $lName = $tempCoach -> getDetails('lastName');
         $gender = $tempCoach -> getDetails('gender');
