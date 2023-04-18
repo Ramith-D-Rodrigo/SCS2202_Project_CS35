@@ -31,7 +31,7 @@
                     require_once("footer.php");
                 ?>
             </body>
-            <script src="/js/general/our_sports.js"></script>
+            <script type="module" src="/js/general/our_sports.js"></script>
             <script src="/js/user/account_links.js"></script>
             <script type="module" src="/js/general/notifications.js"></script>
         </html>
