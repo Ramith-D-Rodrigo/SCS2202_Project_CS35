@@ -212,13 +212,18 @@
             return $discountArr;
         }
 
-        public function getSportCourtRequests($manager = null, $decision = '%'){ //get all the sport court requests (adding new sports court to some branch)
+        public function getSportCourtRequests($manager = null, $decision = '%'){ //get all the sport court requests including court photos(adding new sports court to some branch)
             if($manager == null){
-                $sql = sprintf("SELECT * FROM `sports_court` WHERE `requestStatus` LIKE '%s' AND `addedManager` IS NOT NULL", $this -> connection -> real_escape_string($decision));
+                $sql = sprintf("SELECT `sc`.*,`scp`.`courtPhoto` FROM 
+                `sports_court` `sc` LEFT JOIN `sports_court_photo` `scp` ON `sc`.`courtID` = `scp`.`courtID` 
+                WHERE `sc`.`requestStatus` LIKE '%s' AND `sc`.`addedManager` IS NOT NULL", 
+                $this -> connection -> real_escape_string($decision));
                 $result = $this -> connection -> query($sql);
             }
             else{
-                $sql = sprintf("SELECT * FROM `sports_court` WHERE `managerID` = '%s' AND `requestStatus` LIKE '%s'",
+                $sql = sprintf("SELECT `sc`.*,`scp`.`courtPhoto` FROM 
+                `sports_court` `sc` LEFT JOIN `sports_court_photo` `scp` ON `sc`.`courtID` = `scp`.`courtID`
+                WHERE `managerID` = '%s' AND `requestStatus` LIKE '%s'",
                 $this -> connection -> real_escape_string($manager -> getUserID()),
                 $this -> connection -> real_escape_string($decision));
                 $result = $this -> connection -> query($sql);

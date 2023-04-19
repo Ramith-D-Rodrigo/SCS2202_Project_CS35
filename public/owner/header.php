@@ -17,6 +17,9 @@
                 if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/add_new_sport.php')){
                     echo "Add a New Sport";
                 }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/view_manager_requests.php')){
+                    echo "View Manager Requests";
+                }
             ?>
         </div>
         <div>
