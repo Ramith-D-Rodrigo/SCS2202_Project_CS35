@@ -123,6 +123,11 @@
     visibility: hidden;
     opacity: 0;
     transition: 500ms;
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .have-notifications{
@@ -133,4 +138,15 @@
 
 .bell:hover ~ .notification-count{
     background-color: rgb(8, 0, 122);
+}
+
+@media(max-width: 525px){
+    .dropdown{
+        position: fixed;
+        height: min-content;
+        width: 100%;
+        top: 5rem;
+        left: 0;
+    }
+
 }

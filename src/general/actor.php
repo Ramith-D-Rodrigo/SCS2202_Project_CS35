@@ -68,7 +68,7 @@
         }
 
         public function getEmailAddress(){
-            if(isset($this -> emailAddress)){
+            if(isset($this -> emailAddress) && $this -> emailAddress != ''){
                 return $this -> emailAddress;
             }
             else{ //get from the database
@@ -175,7 +175,7 @@
         }
 
         public function getNotifications(){
-            $sql = sprintf("SELECT `notificationID` FROM `notification` WHERE `userID` = '%s' AND `date` >='%s' ORDER BY `date` DESC",
+            $sql = sprintf("SELECT `notificationID` FROM `notification` WHERE `userID` = '%s' AND `date` <= '%s' ORDER BY `date` DESC",
             $this -> connection -> real_escape_string($this -> userID),
             $this -> connection -> real_escape_string(date("Y-m-d")));
 

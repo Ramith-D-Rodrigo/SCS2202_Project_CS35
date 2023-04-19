@@ -6,6 +6,13 @@
     require_once("../../src/coach/coach.php");
     require_once("../../src/general/sport_court.php");
 
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
+
     $user = new User();
     $sportName = htmlspecialchars($_GET['sportName']);
 
@@ -21,7 +28,7 @@
 
         foreach($result['branches'] as $i){ //traverse the search result array
             $branch = new Branch($i['branch']);
-            $branch -> getDetails($user -> getConnection());    //get branch details
+            $branch -> getDetails($user -> getConnection(), ['address', 'city']);    //get branch details
 
             $branch -> getBranchPictures($user -> getConnection());  //get the branch pictures
             $tempSport = new Sport();
@@ -31,12 +38,6 @@
             $brDiscount = $branch -> getCurrentDiscount($user -> getConnection());    //get the branch discount
             $branchJSON = json_encode($branch);
             $neededInfo = json_decode($branchJSON, true);
-
-            unset($neededInfo['manager']);  //do not need manager and receptionist info
-            unset($neededInfo['receptionist']);
-            unset($neededInfo['email']);
-            unset($neededInfo['openingTime']);
-            unset($neededInfo['closingTime']);
 
             foreach($courts as $currCourt){ //to get the court pictures
                 $courtPics = $currCourt -> getPhotos($user -> getConnection());
@@ -66,6 +67,10 @@
             $coach = new Coach();
             $coach -> setDetails(uid: $i['coachID'], sport: $i['sportID']);
 
+            if($coach -> getAllSessions() === null){
+                continue;   //if the coach has no sessions, do not add him to the list
+            }
+
             $rating = $coach -> getRating();
             $coachName = $coach -> getDetails('firstName') . " " . $coach -> getDetails('lastName');
             $gender = $coach -> getDetails('gender');
@@ -91,9 +96,10 @@
             unset($coachInfo);
             unset($coach);
         }
-        function cmp($a, $b){   //to sort the branches by rating
+        function cmp($a, $b){   //function to sort coaches by rating
             return $b['rating'] - $a['rating'];
         }
+
         usort($coaches, "cmp");    //sort the coaches by rating
 
         //select the top 5 coaches

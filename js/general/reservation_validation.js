@@ -1,4 +1,4 @@
-import { verbose, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, MAX_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS } from "../CONSTANTS.js";
+import { verbose, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, MAX_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS, currency } from "../CONSTANTS.js";
 
 const reserveStartingTime = document.getElementById("reserveStartingTime");
 const reserveEndingTime = document.getElementById("reserveEndingTime");
@@ -108,14 +108,18 @@ reserveStartingTime.addEventListener('change', (e)=>{
     const discount = document.getElementById("discountInput");
 
     console.log(discount);
-    if(discount != null){ //calculate the price with the discount
+    if(discount != null){ //calculate the price with the discount  
+        //price without discount value
+        const priceWithoutDiscount = document.getElementById("priceWithoutDiscount");
+        priceWithoutDiscount.value = calulatedPrice;
+
         const discountValue = discount.value;
         minRevPrice = minRevPrice - (minRevPrice * (discountValue/100));
 
         calulatedPrice = minRevPrice * timeDiffHours;
     }
 
-    reservationPrice.value = calulatedPrice;
+    reservationPrice.value = currency + " " +  parseFloat(calulatedPrice).toFixed(2);
 });
 
 reserveEndingTime.addEventListener('change', (e)=>{
@@ -169,13 +173,17 @@ reserveEndingTime.addEventListener('change', (e)=>{
 
     console.log(discount);
     if(discount != null){ //calculate the price with the discount
+        //price without discount value
+        const priceWithoutDiscount = document.getElementById("priceWithoutDiscount");
+        priceWithoutDiscount.value = calulatedPrice;
+
         const discountValue = discount.value;
         minRevPrice = minRevPrice - (minRevPrice * (discountValue/100));
 
         calulatedPrice = minRevPrice * timeDiffHours;
     }
 
-    reservationPrice.value = calulatedPrice;
+    reservationPrice.value = currency + " " +  parseFloat(calulatedPrice).toFixed(2);
 });
 
 

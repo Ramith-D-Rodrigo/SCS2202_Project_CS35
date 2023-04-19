@@ -1,11 +1,14 @@
 .register-imgs{
     border-radius: 50%;
     object-fit:cover;
-    height: 400px;
     width: 400px;
+    aspect-ratio: 1/1;
     margin: 20px;
     background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
+
+
 
 .register-option{
     display:flex; 
@@ -16,4 +19,27 @@
 .register-options-container{
     display:flex; 
     flex-direction:row;
+}
+
+@media(max-width: 970px){
+    .register-imgs{
+        height: 300px;
+        width: 300px;
+    }
+}
+
+@media(max-width: 760px){
+    .register-options-container{
+        flex-direction: column;
+    }
+    .content-box{
+        width: 100%;
+    }
+}
+
+@media(max-width: 500px){
+    .register-imgs{
+        height: 250px;
+        width: 250px;
+    }
 }

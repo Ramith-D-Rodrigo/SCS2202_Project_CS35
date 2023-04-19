@@ -53,6 +53,13 @@ form.addEventListener('submit', checkuserInput = (e)=>{
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
+    //disable the button to prevent multiple submissions
+    const checkBtn = document.getElementById('checkBtn');
+    checkBtn.disabled = true;
+    checkBtn.innerHTML = "Checking...";
+
+    
+
     //send data to server
     fetch('../../controller/general/email_username_check_controller.php', { //check the user input
         method: 'POST',
@@ -74,6 +81,9 @@ form.addEventListener('submit', checkuserInput = (e)=>{
             inputDiv.innerHTML = "Enter the code sent to your email: <input type='text' name='userInputCode' id='code' required>";
             
             const checkBtn = document.getElementById('checkBtn'); //check button
+
+            //re enable the button
+            checkBtn.disabled = false;
             checkBtn.innerHTML = "Verify Code";
             checkBtn.setAttribute('id', 'verifyBtn');
 

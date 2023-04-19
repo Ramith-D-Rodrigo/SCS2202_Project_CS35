@@ -13,10 +13,8 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="/styles/general/styles.css" />
+        <link rel="stylesheet" href="/styles/owner/styles.css" />
         <link rel="stylesheet" href="/styles/owner/sports.css" />
-        <link rel="stylesheet" href="/styles/general/notification.css" />
-        <link rel="stylesheet" href="/styles/general/staff.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
         <title>Sports</title>
     </head>
@@ -51,9 +49,15 @@
                                 </div>
                             </div>
                             <div class="row-container">
-                                <div class="left-field">Current Reservation Price</div>
+                                <div class="left-field">Current Reservation Price (Per Hour)</div>
                                 <div class="right-field">
                                     <input id="reservationPrice" readonly>
+                                </div>
+                            </div>
+                            <div class="row-container">
+                                <div class="left-field">Minimum Coaching Session Price (Per Hour)</div>
+                                <div class="right-field">
+                                    <input id="minCoachingSessionPrice" readonly>
                                 </div>
                             </div>
                         </form>
@@ -71,9 +75,15 @@
                                 </div>
                             </div>
                             <div class="row-container">
-                                <div class="left-field">New Reservation Price</div>
+                                <div class="left-field">New Reservation Price (Per Hour)</div>
                                 <div class="right-field">
                                     <input type="number" id="newPrice" name="newPrice">
+                                </div>
+                            </div>
+                            <div class="row-container">
+                                <div class="left-field">New Calculated Minimum Coaching Session Price (Per Hour)</div>
+                                <div class="right-field">
+                                    <input id="newCoachingSessionPrice" readonly>
                                 </div>
                             </div>
                             <div class="row-container">

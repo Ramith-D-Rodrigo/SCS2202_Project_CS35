@@ -32,9 +32,10 @@ main::before{
 .dashboard-cards{
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: stretch;
     flex-wrap: wrap;
+    width: 100%;
 
 }
 
@@ -51,8 +52,7 @@ main::before{
     align-items: center;
     display: flex;
     flex-direction: column;
-    flex: 0 0 auto;
-    width: 30%;
+    flex-basis: 30%;
     height: 40vh;
 }
 
@@ -89,4 +89,15 @@ main::before{
 
 .right-field > *{
     width:100%;
+}
+
+
+@media (max-width: 850px){
+    .dashboard-cards{
+        flex-direction: column;
+    }
+
+    .card-title{
+        font-size: 1.5rem;
+    }
 }

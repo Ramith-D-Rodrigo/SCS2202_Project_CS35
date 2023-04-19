@@ -1,7 +1,10 @@
 <?php
     session_start();
-    if(isset($_SESSION['userid'])){   //user is logged in
-        header("Location: ../../index.php");
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : TRUE)){
+        Security::redirectUserBase();
+        die();
     }
 
     require_once('../../src/user/user.php');

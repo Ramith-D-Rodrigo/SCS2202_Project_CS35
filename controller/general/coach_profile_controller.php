@@ -1,8 +1,12 @@
 <?php
+
+use Stripe\LoginLink;
+
     session_start();
     //script authentication
-    if(isset($_SESSION['userid']) && isset($_SESSION['userrole']) && ($_SESSION['userrole'] === 'manager' || $_SESSION['userrole'] === 'owner' || $_SESSION['userrole'] === 'admin' || $_SESSION['userrole'] === 'receptionist')){
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        die();
     }
 
     if(isset($_GET['coachID'])){    //coming from a get request
@@ -36,9 +40,16 @@
         foreach($coachingSessionsObjs as $currSession){
             $currSession -> getDetails($connection);
 
-            //filtering session needed information
             $tempJSON = json_encode($currSession);  
             $neededInfo = json_decode($tempJSON, true);
+
+            if(isset($neededInfo['cancelDate']) && $neededInfo['cancelDate'] !== NULL){ //if the session is cancelled
+                //we do not need this session
+                unset($neededInfo);
+                continue;
+            }
+
+            //filtering session needed information
             unset($neededInfo["coachMonthlyPayment"]);
             array_push($coachingSessionsArr, $neededInfo);
             unset($currSession);

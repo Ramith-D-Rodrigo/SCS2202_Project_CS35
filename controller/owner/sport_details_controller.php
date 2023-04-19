@@ -13,7 +13,7 @@
     $sports = $owner -> getSports();
 
     foreach($sports as $currSport){
-        $currSport -> getDetails($owner -> getConnection(), ['sportName', 'description', 'reservationPrice', 'MaxNoOfStudents']);
+        $currSport -> getDetails($owner -> getConnection(), ['sportName', 'description', 'reservationPrice', 'MaxNoOfStudents', 'minCoachingSessionPrice']);
 
     }
 

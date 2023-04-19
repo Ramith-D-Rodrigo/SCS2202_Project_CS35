@@ -31,7 +31,7 @@
             $notification -> getDetails($actor -> getConnection(), ['status']);
             $status = json_decode(json_encode($notification), true)['status'];
 
-            if($status === 'Pending'){  //status is pending, so can mark as read
+            if($status === 'Unread'){  //status is Unread, so can mark as read
                 $flag = true;
                 $markingNotifcation = $notification;
                 break;

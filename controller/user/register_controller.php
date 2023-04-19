@@ -1,8 +1,19 @@
 <?php
+    session_start();
     require_once("../../src/user/user.php");
     require_once("../../src/user/user_dependent.php");
-    require_once("../../src/general/dbconnection.php");
-    require_once("../../src/user/credentials_availability.php");
+    require_once("../../src/general/security.php");
+    
+    if(!Security::userAuthentication(logInCheck: TRUE)){
+        Security::redirectUserBase();
+        die();
+    }
+
+    //server request method check
+    if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        http_response_code(405);
+        die();
+    }
 
 
     //all possible inputs for prefilling

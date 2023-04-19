@@ -16,7 +16,6 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="/styles/general/our_sports.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-                <link rel="stylesheet" href="/styles/general/notification.css">
         <title>Our Sports</title>
             </head>
             <body>
@@ -24,7 +23,7 @@
                     require_once("header.php");
                 ?>
                 <main>
-                    <div style="display:flex; justify-content:center; align-items:center; flex-direction:row" id="sportsContainer">
+                    <div id="sportsContainer">
                     </div>
                 </main> 
 
@@ -32,7 +31,7 @@
                     require_once("footer.php");
                 ?>
             </body>
-            <script src="/js/general/our_sports.js"></script>
+            <script type="module" src="/js/general/our_sports.js"></script>
             <script src="/js/user/account_links.js"></script>
             <script type="module" src="/js/general/notifications.js"></script>
         </html>
