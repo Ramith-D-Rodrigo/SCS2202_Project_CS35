@@ -16,4 +16,8 @@ const currency = "LKR";
 
 const MAX_COURT_COUNT = 10; //maximum number of courts that can be added to a branch (default is 10)
 
-export {verbose, MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS, MIN_RESERVATION_TIME_HOURS, currency, MAX_COURT_COUNT};
+const MAX_FEEDBACK_DISPLAY_COUNT = 5; //maximum number of feedbacks to be displayed in the feedback page (default is 10)
+
+export {verbose, MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS, 
+    MIN_RESERVATION_TIME_HOURS, currency, MAX_COURT_COUNT, MIN_COACHING_SESSION_PERCENTAGE
+    , MAX_FEEDBACK_DISPLAY_COUNT};

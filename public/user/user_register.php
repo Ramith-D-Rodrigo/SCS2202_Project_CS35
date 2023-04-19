@@ -27,7 +27,7 @@
                         <div class="content-box">
                             <form>
                                 <div class="row-container">
-                                    <div class="left-field">Name :</div>
+                                    <div class="left-field">Name </div>
                                     <div class="right-field">
                                         <input type="text" 
                                                 pattern="[a-zA-Z]+" 
@@ -45,7 +45,7 @@
                                 
                                 
                                 <div class="row-container">
-                                    <div class="left-field">Date of Birth : </div>
+                                    <div class="left-field">Date of Birth  </div>
                                     <div class="right-field">                        
                                         <input type="date"
                                                 id ="bday" 
@@ -55,7 +55,7 @@
                                 </div>
 
                                 <div class="row-container">
-                                    <div class="left-field">Contact Number :</div>
+                                    <div class="left-field">Contact Number </div>
                                     <div class="right-field">
                                         <input type="text"
                                             pattern="[0-9]{10,11}" 
@@ -66,7 +66,7 @@
                                 </div>
 
                                 <div class="row-container">
-                                    <div class="left-field">Home Address :</div>
+                                    <div class="left-field">Home Address </div>
                                     <div class="right-field">                            
                                         <textarea 
                                             name="homeAddress"
@@ -77,7 +77,7 @@
                                 </div>
 
                                 <div class="row-container">
-                                    <div class="left-field">Height : </div>
+                                    <div class="left-field">Height  </div>
                                     <div class="right-field">
                                         <input 
                                             type="text" 
@@ -91,7 +91,7 @@
                                 
                                 
                                 <div class="row-container">
-                                    <div class="left-field">Weight :</div>
+                                    <div class="left-field">Weight </div>
                                     <div class="right-field">
                                         <input 
                                             type="text" 
@@ -104,7 +104,7 @@
                                 </div>
 
                                 <div class="row-container">
-                                    <div class="left-field">Gender :</div>
+                                    <div class="left-field">Gender </div>
                                     <div class="right-field">
                                         <label>
                                             <input type="radio" name="gender" value="m" required> Male
@@ -116,7 +116,7 @@
                                 </div>
                                 
                                 <div class="row-container">
-                                    <div class="left-field">Email Address :</div>
+                                    <div class="left-field">Email Address </div>
                                     <!-- pattern indicates that it must follow somename@topleveldomain.domain-->
                                     <div class="right-field">
                                         <input 
@@ -129,7 +129,7 @@
 
 
                                 <div class="row-container">
-                                    <div class="left-field">Username :</div>
+                                    <div class="left-field">Username </div>
                                     <div class="right-field">
                                         <input 
                                             type="text" 
@@ -145,7 +145,7 @@
                                 
                                 
                                 <div class='row-container'>
-                                    <div class="left-field">Password :</div>
+                                    <div class="left-field">Password </div>
                                     <div class="right-field">
                                         <input 
                                             type="password"  
@@ -159,14 +159,16 @@
                                 </div>
 
                                 <div class="row-container">
-                                    <div class="left-field">Confirm Password :</div>
+                                    <div class="left-field">Confirm Password </div>
                                     <div class="right-field">
                                         <input type="password" id="passwordConfirm" required name="passwordConfirm"> <button class="togglePassword"> Show Password</button>
                                     </div>
                                 </div>
 
                                 <div id="medCon">
-                                    Medical Concerns : (Maximum of 5 | Please Add one Concern per Field)<br>
+                                    <div class="title">
+                                        Medical Concerns  (Maximum of 5 | Please Add one Concern per Field)
+                                    </div>
                                     <button id="medConbtn"> Add </button>
                                 </div>
 
@@ -180,15 +182,15 @@
                                 
 
                                 <div id="emergencyDetails">
-                                    Emergency Contact Details:
+                                    <div class="title">Emergency Contact Details</div>
                                     <div id="emergencydetail1">
                                         <div class="row-container">
-                                            <div class="left-field">Name :</div>
+                                            <div class="left-field">Name </div>
                                             <div class="right-field"><input type="text" name="name1" pattern ="[a-zA-Z ]+" required></div>
                                         </div>
 
                                         <div class="row-container">
-                                            <div class="left-field">Relationship :</div>
+                                            <div class="left-field">Relationship </div>
                                             <div class="right-field">
                                                 <select required name="relationship1">
                                                     <option value="">Choose One</option>
@@ -205,7 +207,7 @@
                                         </div>
                                         
                                         <div class="row-container">
-                                            <div class="left-field">Contact Number :</div>
+                                            <div class="left-field">Contact Number </div>
                                             <div class="right-field">
                                                 <input 
                                                     type="text" 
@@ -218,9 +220,8 @@
                                     </div>
                                 </div>
 
-                                <div>
+                                <div class="option-btn">
                                     Want to Add More? (Maximum of 3)
-                                    <br>
                                     <button id="emergencyDetailsbtn">Add More</button>
                                 </div>
                                 <div id="mailVerificationBox"></div>

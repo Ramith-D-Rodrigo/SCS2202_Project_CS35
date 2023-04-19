@@ -5,6 +5,13 @@
     require_once("../../src/general/branch.php");
     require_once("../../src/manager/manager.php");
     require_once("../../src/receptionist/receptionist.php");
+
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
     
     $allBranches = getAllBranches($connection); //get all branch IDs (in an array)
 

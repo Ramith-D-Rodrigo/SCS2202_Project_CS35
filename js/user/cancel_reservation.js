@@ -15,17 +15,11 @@ const authFormDisplay = (e) => {
     const authenticationFormDiv = document.querySelector("#authFormDiv");
     authenticationFormDiv.style.display = "block";
 
-    //scroll to the authentication form and animate it
-    authenticationFormDiv.scrollIntoView({behavior: "smooth", block: "center"});
     
-    //blur the main content and darken it
+    //darken the main content and disable it
     const main = document.querySelector("main");
-    main.style.filter = "blur(5px)";
-    //animate the blur effect
-    main.style.transition = "filter 0.5s ease-in-out";
-
-    //disable main 
-    main.style.pointerEvents = "none";
+    main.classList.add("main-darken");
+    main.classList.add("disabled");
 
     const altMsgDiv = document.querySelector("#altMsg");
 
@@ -44,28 +38,21 @@ const authFormDisplay = (e) => {
         altMsgDiv.innerHTML = "Note : You are eligible for a refund if you cancel the reservation within 3 days of making the reservation.";
     }
 
-    //italic the note
-    altMsgDiv.style.fontStyle = "italic";
-    altMsgDiv.style.fontAlign = "center";
-
-    authenticationFormDiv.style.maxWidth = "4in";
-    authenticationFormDiv.style.maxHeight = "4in";
 }
 
-const animateClose = (formDiv) => {
+const animateClose = async (formDiv) => {
     const main = document.querySelector("main");
 
-    //closing the authentication form should remove the blur effect
-    main.style.filter = "blur(0px)";
-    main.style.pointerEvents = "auto";
-
-    formDiv.animate([
+    //closing the authentication form
+    await formDiv.animate([
         {top: "50%", transform: "translate(-50%, -50%)", opacity: 1},
         {top: "-50%", transform: "translate(-50%, -50%)", opacity: 0}
     ], {
         duration: 500,
         easing: "ease-in-out"
     }).finished.then(() => {    //when the animation is finished
+        main.classList.remove("main-darken");
+        main.classList.remove("disabled");
         formDiv.style.display = "none";
     });
 }
@@ -76,6 +63,7 @@ const validateAuthForm = (e) => {
     const authForm = document.querySelector("#authFormDiv form");
     const authMsg = document.querySelector("#authMsg");
     authMsg.innerHTML = "";
+    authMsg.classList.remove("altMsg-invalid");
 
     if(authForm.reportValidity() === false){
         return false;
@@ -90,7 +78,7 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
 
     reservationAndTimeStampArr = reservationAndTimeStamp;   //store the reservation id and reserved timestamp array in the global variable
 
-    console.log(cancelButtons);
+    //console.log(cancelButtons);
 
     //add event listener to each cancel button
     for(let i = 0; i < cancelButtons.length; i++){
@@ -102,19 +90,19 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
     authCancel.addEventListener("click", (e) => {   //cancel the authentication form
         e.preventDefault();
         const authenticationFormDiv = document.querySelector("#authFormDiv");
-
-        //add closing animation keyframes
-        animateClose(authenticationFormDiv);
+        const authMsg = document.querySelector("#authMsg");
+        authMsg.innerHTML = "";
 
         //remove the reservation id from the session storage
         sessionStorage.removeItem("reservationID");
 
         authenticationFormDiv.childNodes[1].reset();    //reset the form
+        //add closing animation keyframes
+        animateClose(authenticationFormDiv);
     });
 
     //dismiss button event listener of the message box
     const dismiss = document.querySelector("#dismiss");
-    dismiss.style.cursor = "pointer";
     dismiss.addEventListener("click", (e) => {
         e.preventDefault();
         const msgBox = document.querySelector("#msgBox");
@@ -134,8 +122,6 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
             return;
         }
         e.preventDefault();
-        //get the reservation id from the session storage
-        //add the reservation id to the form data
         const formData = new FormData(authForm);
 
         //send the form data to the server
@@ -146,7 +132,7 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                 "Content-Type" : "application/json"
             }
 
-        }).then((res) => {
+        }).then(async (res) => {
             if(res.ok){ //ok means the status code is 200
                 //can cancel the reservation
                 //get the reservation id from the session storage
@@ -157,8 +143,9 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
 
                 //close the authentication form
                 const authenticationFormDiv = document.querySelector("#authFormDiv");
-                animateClose(authenticationFormDiv);
+                await animateClose(authenticationFormDiv);
                 
+                const msgBox = document.querySelector("#msgBox");
                 //send the reservation id to the server
                 fetch("../../controller/user/cancel_reservation_controller.php", {
                     method: "POST",
@@ -168,19 +155,12 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                     }
                 }).then((res) => {  //response from the server
 
-                    const msgBox = document.querySelector("#msgBox");
                     //blur the main content and darken it
                     const main = document.querySelector("main");
-                    main.style.filter = "blur(5px)";
-                    //animate the blur effect
-                    main.style.transition = "filter 0.5s ease-in-out";
-                    //disable main 
-                    main.style.pointerEvents = "none";
+                    main.classList.add("main-darken");
+                    main.classList.add("disabled");
 
                     msg.innerHTML = "";   //clear the message
-                    msg.style.fontSize = "1.5rem";
-                    msg.style.fontWeight = "bold";
-                    msg.style.textAlign = "center";
 
                     const icon = document.createElement("i");    //icon
                     icon.style.fontSize = "2.5rem";
@@ -205,22 +185,19 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                         icon.style.color = "red";
                     }
 
-                    //display the message box
-                    msgBox.style.display = "block";
                     return res.json();
                 })
                 .then(data =>{
                     msg.innerHTML += data.msg;   //display the message
+                    //display the message box
+                    msgBox.style.display = "block";
                 })
 
             }
             else{   //if the status code is not 200
                 const authMsg = document.querySelector("#authMsg");
                 authMsg.innerHTML = "Invalid credentials";
-                authMsg.style.color = "red";
-                authMsg.style.fontWeight = "bold";
-                authMsg.style.fontSize = "1.2rem";
-                authMsg.style.marginTop = "0.5rem";
+                authMsg.classList.add("altMsg-invalid");
                 throw new Error("Invalid credentials");
             }
         })

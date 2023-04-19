@@ -16,8 +16,8 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="/styles/general/reg_coaches.css">
                 <link rel="stylesheet" href="/styles/general/our_branches.css">
+                <link rel="stylesheet" href="/styles/general/search_results.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-                <link rel="stylesheet" href="/styles/general/notification.css">
                 <title>Search a Sport</title>
             </head>
 
@@ -27,12 +27,17 @@
                 ?>
                 <main>
                     <div class="search">
-                            <form action="/public/general/search_results.php" method="get" id="searchBar" style="min-width: 80%;">
+                        <input type="checkbox" id="searchCheck">
+                        <div class="search-box">
+                            <form action="/public/general/search_results.php" method="get" id="searchBar" style="min-width:80%">
                                 <input class="search-input" type="text" name="sportName" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
-                                <button type="submit" class="search-icon-btn" onclick="return searchValidation(event)">Search</button>
+                                <label for="searchCheck" class="search-icon">
+                                    <i class="fa-solid fa-magnifying-glass" ></i>
+                                </label>
                             </form>
+                        </div>
                     </div>
-                    <div style="display:flex; flex-direction:row; justify-content:space-between">
+                    <div class="search-results">
                         <div class="content-box" style="flex:auto;" id="searchResult"></div>
                     </div>
 

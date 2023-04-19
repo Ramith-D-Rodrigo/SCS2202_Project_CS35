@@ -1,14 +1,24 @@
+.branch-list{
+    flex-direction:column;
+    flex-wrap: wrap;
+}
+
 .branch-image{
     border-radius: 50%;
     background: linear-gradient(180deg, #dac340, #e6800d);
-    height: 250px;
-    width: 250px;
+    width: 100%;
+    aspect-ratio: 1/1;
     object-fit: cover;
 }
 
 .branch-image-container{
-    margin: 0 20px;
-    border-radius: 50%;
+    margin: 0 1rem;
+    width: 25rem;
+}
+
+.branch-info{
+    width: auto;
+    margin: 0 2rem;
 }
 
 .branch-row{
@@ -16,19 +26,17 @@
     display:flex; 
     flex-direction:row; 
     align-items: center;
+    justify-content: space-around;
+
 }
 
 .branchInfo{
     display:flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
+
 }
 
 .info{
-    min-width:50%;
-    padding: 1%;
-
+    margin: 1rem;
 }
 
 .checked{
@@ -49,7 +57,8 @@
     display: none;
     height: 400px;
     width: 400px;
-    position: absolute;
+    margin: 1rem auto;
+    position: fixed;
     top: calc(100vh / 2);
     left: 50%;
     transform: translate(-50%, -50%);
@@ -74,6 +83,57 @@
     background-color: transparent;
 }
 
+
 body{
     position: relative;
+}
+
+
+@media(max-width: 950px){
+    .branch-row{
+        flex-direction: column;
+        align-items: center;
+    }
+    .branch-image-container{
+        margin: 1rem;
+    }
+    .branchInfo{
+        flex-direction: column;
+        align-items: center;
+    }
+    .info{
+        margin: 0.5rem;
+        text-align: center;
+        display: flex;
+        align-items: center;
+    }
+    .info > button{
+        margin: auto;
+    }
+
+    .map-container{
+        height: 40vh;
+        width: 60vw;
+        position: fixed;
+
+    }
+}
+
+
+@media (max-width: 600px){
+    .branch-image-container{
+        width: 100%;
+    }
+
+    .branch-info{
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .info{
+        font-size: 0.8rem;
+    }
 }

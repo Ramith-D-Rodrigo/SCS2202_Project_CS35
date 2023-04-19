@@ -137,32 +137,6 @@
             return $status;
         }
 
-         public function getManager($database){      //get manager Info
-            if(isset($this -> manager) || $this -> manager !== ''){
-                return $this -> manager;
-            }
-
-            $this -> manager = new Manager();
-            $managerID = $this -> manager -> getID($database);
-            $this -> manager -> setDetails(uid: $managerID, brID: $this -> branchID);
-            $this -> manager -> getDetails($database);  //get details of the manager
-
-
-            $sql = sprintf("SELECT `staff_id`
-            FROM `staff`
-            WHERE `branch_id` = '%s'
-            AND `leave_date` IS NULL
-            AND `staff_role` = 'manager'",
-            $database -> real_escape_string($this -> branchID));
-
-            $result = $database -> query($sql);
-
-            $manager = $result -> fetch_object();
-            $this -> manager = $manager;
-            return $manager;
-        }
-
-
         public function getCurrentReceptionist($database){
             $sql = sprintf("SELECT currReceptionist FROM branch WHERE branchID = '%s'",
             $database -> real_escape_string($this -> branchID));

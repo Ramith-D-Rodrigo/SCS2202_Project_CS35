@@ -87,6 +87,18 @@
         }
     }
 
+    //check if the user has weight and height entered in his profile
+    $requestingUser -> getProfileDetails(['height', 'weight']);
+
+    $userArr = json_decode(json_encode($requestingUser), true);
+    if(!isset($userArr['height']) || !isset($userArr['weight']) || $userArr['height'] == null || $userArr['weight'] == null){    //the user has not entered his weight and height
+        http_response_code(400);
+        header('Content-Type: application/json');
+        $returnMsg['msg'] = 'Please enter your weight and height in your profile';
+        echo json_encode($returnMsg);
+        die();
+    }
+
     //the user can request now
     $status = $requestingUser -> requestCoachingSession($requestingSession, $userRequest['userMessage']);
     if(!$status){   //request failed

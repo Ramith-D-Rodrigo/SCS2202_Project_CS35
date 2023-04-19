@@ -118,11 +118,11 @@ function removeEmergencyContact(e){
         return;
     }
     const clickedBtn = e.currentTarget;
-    const parent = clickedBtn.parentElement.parentElement.parentElement; //first parent is right field, grandparent is row container, 3rd one is the inputDiv
+    const deletingID = clickedBtn.id.slice(-1);
+    const parent = document.querySelector("#emergencydetail" + deletingID);
     emergencyCount--;
 
-    const freedID = clickedBtn.id.slice(-1);
-    emergencydetailID.push(freedID);    //available for next use
+    emergencydetailID.push(deletingID);    //available for next use
     parent.remove();
     if(emergencyCount < 3){
         emergencyDetailsBtn.parentElement.style.display = '';
@@ -207,7 +207,6 @@ function addEmergencyContact(e){
         else if(info === 2){    //relationship
             leftField.appendChild(relationshipField);
             rightField.appendChild(inputRelationship);
-            rightField.appendChild(removeBtn);
             row.appendChild(leftField);
             row.appendChild(rightField);
         }
@@ -221,6 +220,7 @@ function addEmergencyContact(e){
         }
         inputDiv.appendChild(row);
     }
+    inputDiv.appendChild(removeBtn);
     emergencyDetailsContainer.appendChild(inputDiv);
     if(emergencyCount == 3){
         emergencyDetailsBtn.parentElement.style.display = 'none';   //hide the whole div
@@ -532,10 +532,21 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         homeAddress.innerHTML = decodeHtml(data['homeAddress']);
 
         const weight = document.getElementById("weight");   //set the weight field
-        weight.value = data['weight'];
+        if(data['weight'] === null || data['weight'] === undefined){
+            weight.value = "";
+        }
+        else{
+            weight.value = data['weight'];
+        }
+
         
         const height = document.getElementById("height");   //set the height field
-        height.value = data['height'];
+        if(data['height'] === null || data['height'] === undefined){
+            height.value = "";
+        }
+        else{
+            height.value = data['height'];
+        }
 
         const gender = document.getElementById("genderField");  //set the gender field
         if(data['gender'] === 'm'){
@@ -593,11 +604,6 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         //set the profile picture
         const currProfilePicField = document.getElementById("profilePicField");
         const profilePicImg = document.getElementById("profilePicImg");
-        //change the img container size to 100px
-        currProfilePicField.style.width = "auto";
-        currProfilePicField.style.height = "15rem";
-
-        profilePicImg.style.maxHeight = "100%";
 
         if(data['profilePic'] !== null){    //has a profile picture  
             profilePicImg.src = data['profilePhoto'];
@@ -605,7 +611,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         else{
             profilePicImg.src = "/styles/icons/profile_icon.svg";
         }
-        profilePicImg.style.borderRadius = "50%";
+
         profilePicImg.setAttribute("onerror", "this.src='/styles/icons/profile_icon.svg';");
 
         //add event listener to the file upload input

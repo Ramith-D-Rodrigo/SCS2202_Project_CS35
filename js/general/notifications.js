@@ -70,6 +70,7 @@ const getNotifications = async (notificationList) => {
                 if(unreadCount > 0){
                     //set the badge to the show unread notifications
                     notificationCount.classList.add("have-notifications");
+                    notificationCount.innerHTML = unreadCount;
                 }
                 else{
                     //remove the badge

@@ -65,6 +65,22 @@
     require_once("../../src/owner/owner.php");
     $owner = Owner::getInstance();
 
+    //same sport name check
+    $sports = $owner -> getSports();
+    foreach($sports as $sport){
+        $sport -> getDetails($owner -> getConnection(), ['sportName']);
+        $spName = json_decode(json_encode($sport), true)['sportName'];
+
+        if($spName == $userInputs['name']){
+            http_response_code(400);
+            $returnMsg['msg'] = "Sport Already Exists";
+            header("Content-Type: application/json");
+            echo json_encode($returnMsg);
+            die();
+        }
+    }
+
+
     $result = $owner -> addNewSport($userInputs['name'], $userInputs['description'], $userInputs['reservationPrice'], $maxPlayers);
         
     if($result){

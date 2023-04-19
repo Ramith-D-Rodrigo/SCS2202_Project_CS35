@@ -70,6 +70,7 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                 form.appendChild(photoDiv);
 
                 const branchInfoDiv = document.createElement("div");
+                branchInfoDiv.className = "branch-info";
 
                 const sportDiv = document.createElement("div"); //sport name
                 sportDiv.innerHTML = "Sport : "+ branches[i].sport_name;
@@ -95,8 +96,6 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                 for(let j = 1; j <= 5; j++){
                     const star = document.createElement("i");
                     star.className = "fa fa-star";
-                    star.style.margin = "0 2px";
-                    star.style.fontSize = "1.5em";
                     if(j <= branches[i].rating){
                         star.className = "fa fa-star checked";
                     }
@@ -105,6 +104,8 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                         star.className = "fa-solid fa-star-half-stroke";
                         star.style.color = "gold";
                     }
+
+                    star.classList.add("star");
                     rating.appendChild(star);
                 }
                 ratingDiv.appendChild(rating);
@@ -148,8 +149,10 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
 
             const coachTitle = document.createElement("h2");
             coachTitle.innerHTML = "Coaches";
-            coachTitle.style.textAlign = "center";
+            coachTitle.className = "coach-title";
             coachResults.appendChild(coachTitle);
+
+            const coachContainer = document.createElement("div");
             
             //creating coach results
             const coaches = data.coaches;
@@ -160,7 +163,6 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                 const form = document.createElement("form");
                 form.action = "/public/general/coach_profile.php";
                 form.method = "get";
-                form.style.margin = "1em 0";
 
                 const coachPicDiv = document.createElement("div");  //coach image
                 coachPicDiv.className = "coach-image-container";
@@ -195,8 +197,6 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                 for(let j = 1; j <= 5; j++){
                     const star = document.createElement("i");
                     star.className = "fa fa-star";
-                    star.style.margin = "0 0.2em";
-                    star.style.fontSize = "1.5em";
                     if(j <= coaches[i].rating){
                         star.className = "fa fa-star checked";
                     }
@@ -205,6 +205,8 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                         star.className = "fa-solid fa-star-half-stroke";
                         star.style.color = "gold";
                     }
+
+                    star.classList.add("star");
                     coachRating.appendChild(star);
                 }
                 
@@ -225,8 +227,9 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                 coachInfoDiv.appendChild(button);
 
                 form.appendChild(coachInfoDiv);
-                coachResults.appendChild(form);
+                coachContainer.appendChild(form);
             }
+            coachResults.appendChild(coachContainer);
 
             resultContainer.parentNode.appendChild(coachResults);
         }

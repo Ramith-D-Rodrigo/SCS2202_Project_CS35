@@ -16,23 +16,32 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="/styles/general/reg_coaches.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-                <link rel="stylesheet" href="/styles/general/notification.css">
                 <title>Registered Coaches</title>
             </head>
             <body>
                 <?php
                     require_once("header.php");
                 ?>
-                <main class="body-container">
-                    <div class="content-box" style="align-items:center">
-                        <div id="filter">
-                            Filter By : 
-                            <select id="sportSelect">
-                                <option value="">Sport</option>
-                            </select>
+                <main>
+                    <div class="body-container">
+                        <div class="content-box">
+                            <div id="filter">
+                                <div>
+                                    Filter By 
+                                    <select id="sportSelect">
+                                        <option value="">Sport</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    Show 
+                                    <select id="showSelect">
+                                        <option value="">All</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div id="coachList">
-                        </div>
+                    </div>
+                    <div class="body-container" id="coachList">
                     </div>
                 </main>
                 <?php

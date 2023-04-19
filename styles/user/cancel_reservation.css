@@ -1,21 +1,50 @@
 #authFormDiv{
     padding: 25px;
-    position:absolute; 
+    position: fixed; 
     display:none; 
-    top:50%; 
-    left:50%; 
+    margin: 2rem auto;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     animation: slideIn 0.5s ease-in-out; 
+    width: calc(100vw - 70%);
 }
 
 #msgBox{
     padding: 25px;
-    position:absolute; 
-    display:none; 
+    position: fixed; 
+    margin: 2rem auto;
+    display:none;
     top:50%; 
     left:50%; 
     transform: translate(-50%, -50%);
     animation: slideIn 0.5s ease-in-out;
+}
+
+#msg{
+    display:flex; 
+    flex-direction:column;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+#altMsg{
+    font-style: italic;
+    text-align: center;
+    font-size: 0.8rem;
+    margin: 1.5rem 2rem;
+}
+
+#dismiss{
+    cursor: pointer;
+}
+
+.altMsg-invalid{
+    color: red;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
 }
 
 @keyframes slideIn {
@@ -29,4 +58,29 @@
         top: 50%;
         opacity: 1;
     }
+}
+
+@media(max-width: 840px){
+    #authFormDiv{
+        width: calc(100vw - 40%);
+    }
+}
+
+@media(max-width: 680px){
+    #authFormDiv{
+        width: calc(100vw - 25%);
+    }
+
+    #altMsg{
+        font-size: 0.7rem;
+        margin: 1rem;
+    }
+
+    #msgBox{
+        width: calc(100vw - 25%);
+    }
+}
+
+body{
+    position: relative;
 }
