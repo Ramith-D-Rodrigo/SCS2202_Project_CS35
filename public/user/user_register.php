@@ -25,9 +25,10 @@
                 <main>
                     <div class='body-container'>
                         <div class="content-box">
+                            Compulsary Fields are marked with an asterisk (*)
                             <form>
                                 <div class="row-container">
-                                    <div class="left-field">Name </div>
+                                    <div class="left-field">Name*</div>
                                     <div class="right-field">
                                         <input type="text" 
                                                 pattern="[a-zA-Z]+" 
@@ -45,7 +46,7 @@
                                 
                                 
                                 <div class="row-container">
-                                    <div class="left-field">Date of Birth  </div>
+                                    <div class="left-field">Date of Birth*</div>
                                     <div class="right-field">                        
                                         <input type="date"
                                                 id ="bday" 
@@ -55,7 +56,7 @@
                                 </div>
 
                                 <div class="row-container">
-                                    <div class="left-field">Contact Number </div>
+                                    <div class="left-field">Contact Number*</div>
                                     <div class="right-field">
                                         <input type="text"
                                             pattern="[0-9]{10,11}" 
@@ -66,7 +67,7 @@
                                 </div>
 
                                 <div class="row-container">
-                                    <div class="left-field">Home Address </div>
+                                    <div class="left-field">Home Address*</div>
                                     <div class="right-field">                            
                                         <textarea 
                                             name="homeAddress"
@@ -77,7 +78,7 @@
                                 </div>
 
                                 <div class="row-container">
-                                    <div class="left-field">Height  </div>
+                                    <div class="left-field">Height</div>
                                     <div class="right-field">
                                         <input 
                                             type="text" 
@@ -91,7 +92,7 @@
                                 
                                 
                                 <div class="row-container">
-                                    <div class="left-field">Weight </div>
+                                    <div class="left-field">Weight</div>
                                     <div class="right-field">
                                         <input 
                                             type="text" 
@@ -104,7 +105,7 @@
                                 </div>
 
                                 <div class="row-container">
-                                    <div class="left-field">Gender </div>
+                                    <div class="left-field">Gender*</div>
                                     <div class="right-field">
                                         <label>
                                             <input type="radio" name="gender" value="m" required> Male
@@ -116,8 +117,7 @@
                                 </div>
                                 
                                 <div class="row-container">
-                                    <div class="left-field">Email Address </div>
-                                    <!-- pattern indicates that it must follow somename@topleveldomain.domain-->
+                                    <div class="left-field">Email Address*</div>
                                     <div class="right-field">
                                         <input 
                                             type="email" 
@@ -129,23 +129,23 @@
 
 
                                 <div class="row-container">
-                                    <div class="left-field">Username </div>
+                                    <div class="left-field">Username*</div>
                                     <div class="right-field">
                                         <input 
                                             type="text" 
                                             required 
                                             minlength="6" 
-                                            maxlength="15"
-                                            pattern="^[a-z]([a-z0-9_]){5,15}"
+                                            maxlength="16"
+                                            pattern="^[a-z]([a-z0-9_]){5,15}$"
                                             name="username"
                                             id="username"
-                                            title="Minimum length of 6 and Maximum of 15. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed">
+                                            title="Minimum length of 6 and Maximum of 16. Must start with a letter and all letters should be lowercase. Only letters, numbers and '_' allowed">
                                     </div>
                                 </div>
                                 
                                 
                                 <div class='row-container'>
-                                    <div class="left-field">Password </div>
+                                    <div class="left-field">Password*</div>
                                     <div class="right-field">
                                         <input 
                                             type="password"  
@@ -159,7 +159,7 @@
                                 </div>
 
                                 <div class="row-container">
-                                    <div class="left-field">Confirm Password </div>
+                                    <div class="left-field">Confirm Password*</div>
                                     <div class="right-field">
                                         <input type="password" id="passwordConfirm" required name="passwordConfirm"> <button class="togglePassword"> Show Password</button>
                                     </div>
@@ -182,15 +182,15 @@
                                 
 
                                 <div id="emergencyDetails">
-                                    <div class="title">Emergency Contact Details</div>
+                                    <div class="title">Emergency Contact Details (Atleast One Required*)</div>
                                     <div id="emergencydetail1">
                                         <div class="row-container">
-                                            <div class="left-field">Name </div>
+                                            <div class="left-field">Name*</div>
                                             <div class="right-field"><input type="text" name="name1" pattern ="[a-zA-Z ]+" required></div>
                                         </div>
 
                                         <div class="row-container">
-                                            <div class="left-field">Relationship </div>
+                                            <div class="left-field">Relationship*</div>
                                             <div class="right-field">
                                                 <select required name="relationship1">
                                                     <option value="">Choose One</option>
@@ -207,7 +207,7 @@
                                         </div>
                                         
                                         <div class="row-container">
-                                            <div class="left-field">Contact Number </div>
+                                            <div class="left-field">Contact Number*</div>
                                             <div class="right-field">
                                                 <input 
                                                     type="text" 

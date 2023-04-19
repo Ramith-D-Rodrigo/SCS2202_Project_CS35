@@ -33,7 +33,7 @@
             $santizedEmail = filter_var($email, FILTER_SANITIZE_EMAIL); //sanitize the email address
 
             if(!filter_var($santizedEmail, FILTER_VALIDATE_EMAIL) ){ //check if the email is valid
-                return false;
+                return [false, "Invalid"];
             }
 
             require("dbconnection.php");
@@ -48,11 +48,11 @@
             self::$connection -> close();
 
             if($result -> num_rows == 0){  //if the email address is not in the database, it is available
-                return true;
+                return [true, "Available"];
             }
             else{
                 
-                return false;
+                return [false, "Unavailable"];
             }
         }
 

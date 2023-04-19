@@ -28,7 +28,7 @@
         unset($_SESSION['successMsg']);
     }
 
-    if($hasEmailResult == false ){    //account already exists
+    if($hasEmailResult[0] == false ){    //account already exists
         $_SESSION['emailError'] = "Account with same Email Address exists.";
         header("Location: /public/coach/coach_register.php");
         $connection -> close(); //close the database connection

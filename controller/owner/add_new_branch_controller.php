@@ -79,10 +79,18 @@
         }
 
         if($field == 'email'){
-            if(!Security::checkEmailAvailability($_POST[$field])){  //invalid email or unavailable email
-                $msg['msg'] = 'invalid Email Address';
-                $flag = false;
-                break;
+            $status = Security::checkEmailAvailability($_POST[$field]); //check if the email is valid and available
+            if(!$status[0]){  //invalid email or unavailable email
+                if($status[1] == 'Invalid'){
+                    $msg['msg'] = 'invalid Email Address';
+                    $flag = false;
+                    break;
+                }
+                else if($status[1] == 'Unavailable'){
+                    $msg['msg'] = 'Email Address is Already Used In This System';
+                    $flag = false;
+                    break;
+                }
             }
         }
 
