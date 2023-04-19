@@ -206,12 +206,7 @@ function validateForm(e){
     const todayDate = now.toLocaleDateString().split("/");
 
     if(reserveDateInput[0]==todayDate[0] && reserveDateInput[1]==todayDate[1] && reserveDateInput[2]==todayDate[2]){  //check if the reservation date is today
-        if(reserveStartTime[0]==currentHour || reserveEndTime[0]==currentHour){  //compare the current hour with the reservation hour
-            if(currentMinute>15){
-                errorMsg.innerHTML = "Can't make a reservation.<br> Reservation has to make at maximum after 15 minutes of current hour";
-                return false;
-            }
-        }else if(reserveStartTime[0]<currentHour || reserveEndTime[0]<currentHour){
+        if(reserveStartTime[0]<currentHour || reserveEndTime[0]<currentHour){
             errorMsg.innerHTML = "Can't make a reservation.<br> Specific time slot has already passed or partially passed";
             return false;
         }

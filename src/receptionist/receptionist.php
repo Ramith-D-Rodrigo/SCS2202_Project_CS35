@@ -409,16 +409,9 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         }
 
         $rating = $coach -> getRating($database);
-        $feedbackResults = $coach -> getFeedback($database);
-        $feedbackArray = [];
-        foreach($feedbackResults as $feedback){
-            $stuID = $feedback -> stuID;
-            $user = new User();
-            $user -> setDetails(uid:$stuID);
-            array_push($feedbackArray,[$feedback,$user -> getProfileDetails("firstName"),$user -> getProfileDetails("lastName")]);
-        }
+        $feedbackResults = $coach -> getFeedback();
         $coachInfo = [];
-        array_push($coachInfo,$coachProfile,$rating,$feedbackArray,$sessionInfo,$qualificationArr);
+        array_push($coachInfo,$coachProfile,$rating,$feedbackResults,$sessionInfo,$qualificationArr);
         return $coachInfo;
     }
 
@@ -454,7 +447,7 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         ON `sc`.`sportID` = `s`.`sportID`
         INNER JOIN `branch` `b`
         ON `b`.`branchID` = `sc`.`branchID`
-        WHERE `b`.`branchID` = '%s' AND `r`.`date` = '%s'",
+        WHERE `b`.`branchID` = '%s' AND `r`.`date` = '%s' AND `r`.`status` <> 'Cancelled'",
         $database -> real_escape_string($branchID),
         $database -> real_escape_string($currentDate));
         $userReservations = $database -> query($uReservationSql) -> fetch_all(MYSQLI_ASSOC);
@@ -477,6 +470,25 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         
         foreach($permanentReservations as $row){
             array_push($userReservations,$row);   //push the permanent reservations to the same array
+        }
+
+        $onReservationSql = sprintf("SELECT `r`.`reservationID`,`r`.`startingTime`,`r`.`endingTime`,`r`.`noOfPeople`,`r`.`status`,`s`.`sportName`,
+        `sc`.`courtName`
+        FROM `reservation` `r`              
+        INNER JOIN `sports_court` `sc`
+        ON `sc`.`courtID` = `r`.`sportCourt`
+        INNER JOIN `sport` `s`
+        ON `sc`.`sportID` = `s`.`sportID`
+        INNER JOIN `branch` `b`
+        ON `b`.`branchID` = `sc`.`branchID`
+        WHERE `r`.`onsiteReceptionistID` is NOT NULL AND `b`.`branchID` = '%s' 
+        AND `r`.`date` = '%s' AND `r`.`status` <> 'Cancelled'",
+        $database -> real_escape_string($branchID),
+        $database -> real_escape_string($currentDate));
+        $onsiteReservations = $database -> query($onReservationSql) -> fetch_all(MYSQLI_ASSOC);
+
+        foreach($onsiteReservations as $row){
+            array_push($userReservations,$row);   //push the onsite reservations to the same array
         }
 
         return $userReservations;

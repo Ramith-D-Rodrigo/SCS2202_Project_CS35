@@ -48,7 +48,7 @@
             $sql = sprintf("SELECT * FROM `reservation` 
             WHERE `sportCourt` 
             LIKE '%s'
-            AND `date` >= NOW()
+            AND `date` >= CURDATE()
             ORDER BY `date`",
             $database -> real_escape_string($this -> courtID));
 

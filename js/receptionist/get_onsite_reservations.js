@@ -9,16 +9,16 @@ fetch("../../controller/receptionist/view_onsite_reservations_controller.php")
             searchResults.appendChild(errMsg);
         }  
         else{
+            let flag = false;
             for(let i=0;i<data.length;i++){
-                date = new Date(data[i].date);
+                reservedDate = new Date(data[i].date);
+                startingHour = data[i].startingTime.split(":")[0]; //get the hour of starting time of the reservation
                 today = new Date();
-                if(date >= today.setDate(today.getDate()+2)){   //get only the reservations two days or more days after today's date
+                if((reservedDate === today && startingHour >= today.getHours()) || (reservedDate > today)){   //get only the relevant reservations
+                    flag = true;
                     const container = document.createElement('div');
                     container.className = 'container';
                     container.style.width = '100%';
-                    // const form = document.createElement("form");
-                    // form.action = ;
-                    // form.method = "GET";
                     const leftContainer = document.createElement('div');
                     const rightContainer = document.createElement('div');
                     const cancelBtn = document.createElement('div');
@@ -32,8 +32,6 @@ fetch("../../controller/receptionist/view_onsite_reservations_controller.php")
                     "Starting Time: ",data[i].startingTime, "<br>", "Ending Time: ",data[i].endingTime, "<br>");
                     btn.innerHTML = "Cancel";
                     btn.value = data[i].reservationID;
-                    // btn.name = "reservationID";
-                    // btn.type = "submit";
                     if(data[i].status !== 'Pending'){   //disable the cancel btn if the status is not pending
                         btn.disabled = true;
                         btn.style.opacity = 0.4;
@@ -41,19 +39,23 @@ fetch("../../controller/receptionist/view_onsite_reservations_controller.php")
                         btn.disabled = false;
                     }
                     btn.onclick = function(){
-                        // console.log("Hello");
                         window.location.href = "../../controller/receptionist/cancel_onsite_reservation_controller.php?reservationID=".concat(btn.value);
                     }
-                    // form.appendChild(btn);
                     cancelBtn.appendChild(btn);
-                    // container.appendChild(form);
                     container.appendChild(leftContainer);
                     container.appendChild(rightContainer);
                     container.appendChild(cancelBtn);
                     searchResults.appendChild(container);
                 }
             }
-        }      
+            if(!flag){
+                const div = document.createElement('div');
+                div.className = 'container';
+                div.style.width = '60%';
+                div.innerHTML = "No onsite reservations found";
+                searchResults.appendChild(div);
+            } 
+        }     
     });
 
 function cancelReservation(reservationID){
