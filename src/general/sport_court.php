@@ -48,7 +48,7 @@
             $sql = sprintf("SELECT * FROM `reservation` 
             WHERE `sportCourt` 
             LIKE '%s'
-            AND `date` >= NOW()
+            AND `date` >= CURDATE()
             ORDER BY `date`",
             $database -> real_escape_string($this -> courtID));
 
@@ -80,8 +80,8 @@
             WHERE `courtID`
             LIKE '%s'
             AND `decision` = 'a'
-            AND (`startingDate` >= NOW()
-            OR `endingDate` >= NOW())",
+            AND (`startingDate` >= CURDATE()
+            OR `endingDate` >= CURDATE())",
             $database -> real_escape_string($this -> courtID));
 
             $maintenance = [];
