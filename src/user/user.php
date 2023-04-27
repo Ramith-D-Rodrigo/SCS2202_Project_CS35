@@ -49,10 +49,6 @@ class User extends Actor implements JsonSerializable{
         $this -> profilePhoto = $profilePic;
     }
 
-    public function getUserID(){    //userID getter
-        return $this -> userID;
-    }
-
     public function getProfilePic(){
         $sqlPic = sprintf("SELECT `profilePhoto`
         FROM `user`
