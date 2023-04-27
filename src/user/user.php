@@ -17,7 +17,6 @@ class User extends Actor implements JsonSerializable{
     private $dependents;
     private $medicalConcerns;
     private $gender;
-    private $isactive;
     private $profilePhoto;
 
     public function __construct($actor = null){
@@ -85,7 +84,7 @@ class User extends Actor implements JsonSerializable{
         $this -> connection -> real_escape_string($this -> username),
         $this -> connection -> real_escape_string($this -> emailAddress),
         $this -> connection -> real_escape_string($this -> password),
-        $this -> connection -> real_escape_string($this -> isactive)));
+        $this -> connection -> real_escape_string($this -> isActive)));
 
 /*         if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
@@ -165,7 +164,7 @@ class User extends Actor implements JsonSerializable{
 
     public function registerUser(){    //public function to register the user
         $this -> registerDate = date("Y-m-d");
-        $this -> isactive = 0;  //still pending, has to verify using the email
+        $this -> isActive = 0;  //still pending, has to verify using the email
         $loginEntry = $this -> create_login_details_entry();
         $userEntry = $this -> create_user_entry();
         $medicalConcernEntry = $this -> create_user_medicalConcerns();
@@ -246,20 +245,6 @@ class User extends Actor implements JsonSerializable{
             return FALSE;
         }
 
-        return TRUE;
-    }
-
-    public function activateAccount(){
-        $this -> isactive = 1;
-        $sql = sprintf("UPDATE `login_details` SET `isActive` = '%s' WHERE `userID` = '%s'",
-        $this -> connection -> real_escape_string($this -> isactive),
-        $this -> connection -> real_escape_string($this -> userID));
-
-        $result = $this -> connection -> query($sql);
-
-        if($result === FALSE){
-            return FALSE;
-        }
         return TRUE;
     }
 
