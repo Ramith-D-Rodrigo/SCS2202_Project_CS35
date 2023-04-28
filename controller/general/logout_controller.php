@@ -9,5 +9,5 @@
     }while($result === false);  //maks sure that the session is destroyed
 
     unset($logOutActor);
-    header("Location: /index.php"); //redirect back to the homepage
+    header("Location: /"); //redirect back to the homepage
 ?>

@@ -94,7 +94,7 @@ regForm.addEventListener("submit", (e) => {
                         successMsgBox.innerHTML = data.successMsg;
                         successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to the home page in 2 seconds";
                         setTimeout(() =>{
-                            window.location.href = "/index.php";
+                            window.location.href = "/";
                         }
                         , 2000);
                     }

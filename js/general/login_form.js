@@ -40,7 +40,7 @@ loginForm.addEventListener("submit", (e) => {
             successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected, Please Wait...";
 
             if(data.userrole === 'user'){
-                window.location.href = "/index.php";
+                window.location.href = "/";
             }
             else if(data.userrole === 'coach'){
                 window.location.href = "/public/coach/coach_dashboard.php";

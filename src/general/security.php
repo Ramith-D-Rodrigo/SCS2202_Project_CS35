@@ -140,7 +140,7 @@
 
         public static function redirectUserBase(){  //redirects the user to the appropriate page (starting page) based on the user role
             if(!isset($_SESSION['userrole'])){  //homepage
-                header("Location: /index.php");
+                header("Location: /");
                 return;
             }
             switch($_SESSION['userrole']){
@@ -160,7 +160,7 @@
                     header("Location: /public/coach/coach_dashboard.php");
                     break;
                 case 'any' || 'user':
-                    header("Location: /index.php");
+                    header("Location: /");
                     break;
             }
         }

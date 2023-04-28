@@ -18,7 +18,7 @@
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
 
     if($requestJSON == '' || $requestJSON === false){ //if the json string is empty
-        header("Location: /index.php"); //the user shouldn't be able to access the page
+        Security::redirectUserBase(); //the user shouldn't be able to access the page
         exit();
     }
 
