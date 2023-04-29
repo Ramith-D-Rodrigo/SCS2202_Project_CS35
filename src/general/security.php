@@ -33,7 +33,7 @@
             $santizedEmail = filter_var($email, FILTER_SANITIZE_EMAIL); //sanitize the email address
 
             if(!filter_var($santizedEmail, FILTER_VALIDATE_EMAIL) ){ //check if the email is valid
-                return false;
+                return [false, "Invalid"];
             }
 
             require("dbconnection.php");
@@ -48,11 +48,11 @@
             self::$connection -> close();
 
             if($result -> num_rows == 0){  //if the email address is not in the database, it is available
-                return true;
+                return [true, "Available"];
             }
             else{
                 
-                return false;
+                return [false, "Unavailable"];
             }
         }
 
@@ -140,7 +140,7 @@
 
         public static function redirectUserBase(){  //redirects the user to the appropriate page (starting page) based on the user role
             if(!isset($_SESSION['userrole'])){  //homepage
-                header("Location: /index.php");
+                header("Location: /");
                 return;
             }
             switch($_SESSION['userrole']){
@@ -160,7 +160,7 @@
                     header("Location: /public/coach/coach_dashboard.php");
                     break;
                 case 'any' || 'user':
-                    header("Location: /index.php");
+                    header("Location: /");
                     break;
             }
         }

@@ -80,8 +80,8 @@
             WHERE `courtID`
             LIKE '%s'
             AND `decision` = 'a'
-            AND (`startingDate` >= NOW()
-            OR `endingDate` >= NOW())",
+            AND (`startingDate` >= CURDATE()
+            OR `endingDate` >= CURDATE())",
             $database -> real_escape_string($this -> courtID));
 
             $maintenance = [];

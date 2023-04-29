@@ -43,12 +43,12 @@
         if(isset($_POST[$i])){  //the user has entered it
             if(($i === 'firstName' || $i === 'lastName')){    //first name and last name validation
                 if(!preg_match("/^[a-zA-Z]+$/", $_POST[$i])){ //doesn't match the pattern
-                    $returnMsg['RegUnsuccessMsg'] = 'Name Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Please Enter Your Name Correctly';
                     $validationErrFlag = true;
                     break;
                 }
                 else if(strlen($i) > 50){  //maximum is 100 (varchar100) but keeping it lower than 50 to make sure
-                    $returnMsg['RegUnsuccessMsg'] = 'Name Length Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Name Length Is Too Long';
                     $validationErrFlag = true;
                     break;
                 }
@@ -56,14 +56,14 @@
             }
             else if($i === 'gender'){ //gender validation
                 if($_POST[$i] !== 'm' && $_POST[$i] !== 'f'){
-                    $returnMsg['RegUnsuccessMsg'] = 'Gender Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Please Enter The Correct Gender';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'birthday'){ //birthday validation
                 if(!strtotime($_POST[$i])){ //not a valid date
-                    $returnMsg['RegUnsuccessMsg'] = 'Birthday Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Please Enter A Valid Date';
                     $validationErrFlag = true;
                     break;
                 }
@@ -73,21 +73,21 @@
                 $diff = date_diff($currDate, $bDay);
                 
                 if($diff -> y < 14){    //age should be atleast 14 years
-                    $returnMsg['RegUnsuccessMsg'] = 'Age Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Minimum Age Should Be 14 Years';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'contactNum' || $i === 'emgcontactNum1' || $i === 'emgcontactNum2' || $i === 'emgcontactNum3'){
                 if(!preg_match("/^[0-9]{10,11}$/", $_POST[$i])){  //doesn't match the pattern
-                    $returnMsg['RegUnsuccessMsg'] = 'Contact Number Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'You Have Duplicate Contact Numbers';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'homeAddress'){
                 if(strlen($_POST[$i]) > 225){ //max is varchar250 in db
-                    $returnMsg['RegUnsuccessMsg'] = 'Address length Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Address Length Is Too Long';
                     $validationErrFlag = true;
                     break;
                 }
@@ -95,7 +95,7 @@
             else if($i === 'height' || $i === 'weight'){
                 if($_POST[$i] !== ''){  //has entered some value
                     if(!preg_match("/^\d*\.?\d*$/", $_POST[$i])){   //doesn't match the pattern
-                        $returnMsg['RegUnsuccessMsg'] = 'Height/Weight Error';
+                        $returnMsg['RegUnsuccessMsg'] = 'Height And Weight Should Be Numbers';
                         $validationErrFlag = true;
                         break;
                     }
@@ -103,40 +103,40 @@
             }
             else if($i === 'username'){ //username validation
                 if(!preg_match("/^[a-z]([a-z0-9_]){5,15}$/", $_POST[$i])){
-                    $returnMsg['RegUnsuccessMsg'] = 'Username Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Username Should Be 6-16 Characters Long And Should Contain Only Lowercase Letters, Numbers And Underscores.<br>It Should Start With A Letter';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'password'){ //password validation
                 if(!preg_match("/(?=.*\d)(?=.*[A-Z]).{8,}/", $_POST[$i])){
-                    $returnMsg['RegUnsuccessMsg'] = 'Password Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Password Should Be Atleast 8 Characters Long And Should Contain Atleast One Uppercase Letter And One Number';
                     $validationErrFlag = true;
                     break;
                 }
 
                 if($_POST[$i] !== $_POST['passwordConfirm']){   //password is not equal
-                    $returnMsg['RegUnsuccessMsg'] = 'Password Not Matching Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Passwords Do Not Match';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'medical_concern1' || $i === 'medical_concern2' || $i === 'medical_concern3' || $i === 'medical_concern4' || $i === 'medical_concern5' || $i === 'name1' || $i === 'name2' || $i === 'name3'){
                 if(!preg_match("/^[a-zA-Z ]+$/", $_POST[$i])){
-                    $returnMsg['RegUnsuccessMsg'] = 'Medical Concerns/Emergency Contact Names Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'You Have Entered Duplicate Medical Concerns/Emergency Contact Names';
                     $validationErrFlag = true;
                     break;
                 }
 
                 if(strlen($_POST[$i]) > 40){    //max is 50varchar
-                    $returnMsg['RegUnsuccessMsg'] = 'Medical Concerns/Emergency Contact Names Length Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'Medical Concern/Emergency Contact Name Length Is Too Long';
                     $validationErrFlag = true;
                     break;
                 }
             }
             else if($i === 'relationship1' || $i === 'relationship2' || $i === 'relationship3'){
                 if(!(in_array($_POST[$i], $relationshipFields))){   //invalid relationship
-                    $returnMsg['RegUnsuccessMsg'] = 'Relationship Error';
+                    $returnMsg['RegUnsuccessMsg'] = 'You Have Entered Duplicate Relationships';
                     $validationErrFlag = true;
                     break;
                 }
@@ -146,7 +146,7 @@
         }
         else{  //user has not entered it
             if(in_array($i, $compulsaryFields)){    //a compulsary field
-                $returnMsg['RegUnsuccessMsg'] = 'Compulsary Field Error';
+                $returnMsg['RegUnsuccessMsg'] = 'Please Fill All Compulsary Fields';
                 $validationErrFlag = true;
                 break;
             }
@@ -154,7 +154,6 @@
     }
 
     if($validationErrFlag === true){
-        $returnMsg['RegUnsuccessMsg'] = $returnMsg['RegUnsuccessMsg'] . '<br>Please Enter Valid Information';
         echo json_encode($returnMsg);
         exit();
     }
@@ -163,8 +162,13 @@
     require_once("../../src/general/security.php");
     //email availability   
     $emailCheck = Security::checkEmailAvailability($_POST['emailAddress']);
-    if($emailCheck === false){  //email is not valid
-        $returnMsg['RegUnsuccessMsg'] = 'Email Address Error';
+    if($emailCheck[0] == false){  //email is not valid
+        if($emailCheck[1] == 'Invalid'){    //email is not valid
+            $returnMsg['RegUnsuccessMsg'] = 'The Email Address You Have Entered Is Invalid';
+        }
+        else if($emailCheck[1] == 'Unavailable'){   //email is already in use
+            $returnMsg['RegUnsuccessMsg'] = 'The Email Address You Have Entered Is Already In Use';
+        }
         echo json_encode($returnMsg);
         exit();
     }
@@ -172,7 +176,7 @@
     //username availability    
     $usernameCheck = Security::checkUsernameAvailability($_POST['username']);
     if($usernameCheck === false){   //username is not valid
-        $returnMsg['RegUnsuccessMsg'] = 'Username Error';
+        $returnMsg['RegUnsuccessMsg'] = 'The Username You Have Entered Is Already In Use';
         echo json_encode($returnMsg);
         exit();
     }
@@ -255,14 +259,12 @@
 
     //profile picture
     $profilePicFlag = false;
-/*     echo $_FILES['user_pic']['name'];
-    echo "<br>";
-    echo $_FILES['user_pic']['tmp_name']; */
+
 
     if(!empty($_FILES['user_pic']['name'])){    //user has uploaded a picture
         //check image size
         if($_FILES['user_pic']['size'] > 2097152){ //image size is greater than 1MB
-            $returnMsg['RegUnsuccessMsg'] = 'Image size is too large';
+            $returnMsg['RegUnsuccessMsg'] = 'Image Size Is Too Large';
             echo json_encode($returnMsg);
             exit();
         }
@@ -273,7 +275,7 @@
 
         //check image extension
         if(!in_array(strtolower(end($picExtension)), $allowedExtensions)){
-            $returnMsg['RegUnsuccessMsg'] = 'Invalid image type';
+            $returnMsg['RegUnsuccessMsg'] = 'Invalid Image Extension';
             echo json_encode($returnMsg);
             exit();
         }
@@ -300,7 +302,6 @@
 
     if($result === TRUE){   //successfully registered
         //time for email verification and account activation
-        session_start();
         $_SESSION['username'] = $username;
         $_SESSION['email'] = $email;
 

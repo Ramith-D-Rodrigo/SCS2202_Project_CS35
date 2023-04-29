@@ -91,6 +91,7 @@ body{
 
 @media(max-width: 950px){
     .branch-row{
+        margin: 1rem 0;
         flex-direction: column;
         align-items: center;
     }
@@ -123,6 +124,7 @@ body{
 @media (max-width: 600px){
     .branch-image-container{
         width: 100%;
+        margin: 0.5rem;
     }
 
     .branch-info{

@@ -192,43 +192,39 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         let nameOpening; 
         if(data.coachInfo.gender === 'm'){
             nameOpening = "Mr. ";
-            genderDiv.innerHTML = genderDiv.innerHTML + "Male";
+            genderDiv.nextElementSibling.innerHTML = "Male";
         }
         else{
             nameOpening = "Mrs. ";
-            genderDiv.innerHTML = genderDiv.innerHTML + "Female";
+            genderDiv.nextElementSibling.innerHTML = "Female";
         }
 
         //coach name
         const nameDiv = document.querySelector("#coachName");
-        nameDiv.innerHTML = nameDiv.innerHTML + nameOpening + data.coachInfo.firstName + " " + data.coachInfo.lastName;
-
-        //coach username
-        const usernameDiv = document.querySelector("#coachUsername");
-        usernameDiv.innerHTML = usernameDiv.innerHTML + data.coachInfo.username;
+        nameDiv.nextElementSibling.innerHTML = nameOpening + data.coachInfo.firstName + " " + data.coachInfo.lastName;
 
         //coach age
         const ageDiv = document.querySelector("#coachAge");
-        ageDiv.innerHTML = ageDiv.innerHTML + data.coachInfo.age;
+        ageDiv.nextElementSibling.innerHTML = data.coachInfo.age;
 
         //coach sport
         const sportDiv = document.querySelector("#coachSport");
-        sportDiv.innerHTML = sportDiv.innerHTML + data.sportInfo.sportName;
+        sportDiv.nextElementSibling.innerHTML = data.sportInfo.sportName;
 
         //coach email
         const emailDiv = document.querySelector("#coachEmail");
-        emailDiv.innerHTML = emailDiv.innerHTML + data.coachInfo.emailAddress;
+        emailDiv.nextElementSibling.innerHTML = data.coachInfo.emailAddress;
 
         //coach contact num
         const contactDiv = document.querySelector("#coachContactNo");
-        contactDiv.innerHTML = contactDiv.innerHTML + data.coachInfo.contactNum;
+        contactDiv.nextElementSibling.innerHTML = data.coachInfo.contactNum;
 
         //coach rating
         const ratingDiv = document.querySelector("#coachRating");
         
         //rating stars
         const rating = document.createElement("span");
-        rating.style.marginLeft = "10px";
+
         for(let i = 1; i <= 5; i++){
             const star = document.createElement("i");
             star.ariaHidden = "true";   //for screen readers
@@ -244,7 +240,7 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
             }
             rating.appendChild(star);
         }
-        ratingDiv.appendChild(rating);
+        ratingDiv.nextElementSibling.appendChild(rating);
 
         //coach qulifications 
         const qualifications = document.querySelector("#coachQulifations");

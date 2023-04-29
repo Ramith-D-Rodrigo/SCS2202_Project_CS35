@@ -24,8 +24,8 @@
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
 
     if($requestJSON === '' || $requestJSON === false){ //if the json string is empty
-        header("Location: /index.php"); //the user shouldn't be able to access the login controller
-        exit();
+        Security::redirectUserBase();
+        die();
     }
 
     $userInput = json_decode($requestJSON, true);
@@ -76,8 +76,13 @@
 
         $returnJSON['successMsg'] = $result[0];
         $userrole = $result[1];
-        // $loginUser = new $userrole($loginActor);
-        if($result[1] === 'user'){  //user login
+        $_SESSION['userid'] = $loginActor -> getUserID();
+        $_SESSION['username'] = $username;  //store the username in the session
+        $_SESSION['userrole'] = $userrole;  //store the userrole in the session
+
+        $returnJSON['userrole'] = $userrole; //store the userrole in the json string [for the frontend]
+       
+        if($userrole === 'user'){  //user login
             $loginUser = new User($loginActor);
             $profilePic = $loginUser -> getProfilePic();
 
@@ -85,73 +90,39 @@
                 $_SESSION['userProfilePic'] = $profilePic;
             }
 
-            $_SESSION['userid'] = $loginUser -> getUserID();
             $loginUser -> closeConnection();
             unset($loginUser);
-
-            $_SESSION['userrole'] = 'user';
-            $returnJSON['userrole'] = 'user';
         }
-        else if($result[1] === 'coach'){  //coach login
+        else if($userrole === 'coach'){  //coach login
             $loginCoach = new Coach($loginActor);
             $profilePic = $loginCoach -> getProfilePic();
+            $_SESSION['userProfilePic'] = $profilePic;
 
-            if($profilePic !== ''){ //coach has set an profile pic
-                $_SESSION['userProfilePic'] = $profilePic;
-            }
-
-            $_SESSION['userid'] = $loginCoach -> getUserID();
             $_SESSION['coachsportid'] = $loginCoach -> getSport();  //store the coach's sport in the session
             $loginCoach -> closeConnection();
             unset($loginCoach);
-            $_SESSION['username'] = $username;  //store the username in the session
-            $_SESSION['userrole'] = 'coach';
-            $returnJSON['userrole'] = 'coach';
         }
-        else if($result[1] === 'admin'){  //admin login
-            $loginAdmin = Admin::getInstance($loginActor);
-            $_SESSION['userid'] = $loginAdmin -> getUserID();
-            $_SESSION['username'] = $username;  //store the username in the session
-            $_SESSION['userrole'] = 'admin';
-            $loginAdmin -> closeConnection();
-            unset($loginAdmin);
-            $returnJSON['userrole'] = 'admin';
-        }
-        else if($result[1] === 'manager'){  //manager login
+        else if($userrole === 'manager'){  //manager login
             $loginManager = new Manager($loginActor);
-            $result = $loginManager -> login($username, $password);
-            $_SESSION['userid'] = $loginManager -> getUserID();
-            $_SESSION['city'] = $result[0];
-            $_SESSION['branchID'] = $result[1];
-            $_SESSION['username'] = $username;  //store the username in the session
+            $result = $loginManager -> getSessionData();
+            $_SESSION['city'] = $result[1];
+            $_SESSION['branchID'] = $result[0];
             $loginManager -> closeConnection();
             unset($loginManager);
-            $_SESSION['userrole'] = 'manager';
-            $returnJSON['userrole'] = 'manager';
         }
-        else if($result[1] === 'owner'){    //owner login
-            $loginOwner = Owner::getInstance($loginActor);
-            $_SESSION['userid'] = $loginOwner -> getUserID();
-            $_SESSION['username'] = $username;  //store the username in the session
-            $_SESSION['userrole'] = 'owner';
-
-            $loginOwner -> closeConnection();
-            unset($loginOwner);
-            $returnJSON['userrole'] = 'owner';
+        else if($userrole === 'owner' || $userrole === 'admin'){    //owner login or admin login
+            //no need to store any additional data in the session
         }
-        else if($result[1] === 'receptionist'){ //receptionist login
+        else if($userrole === 'receptionist'){ //receptionist login
             $loginRecep = new Receptionist($loginActor);
             $sessionData = $loginRecep -> getSessionData();
-            $_SESSION['userid'] = $loginRecep -> getUserID();
             $_SESSION['branchName'] = $sessionData[0];
             $_SESSION['branchID'] = $sessionData[1];
-            $_SESSION['username'] = $username;  //store the username in the session
             $loginRecep -> closeConnection();
             unset($loginRecep);
-            $_SESSION['userrole'] = 'receptionist';
-            $returnJSON['userrole'] = 'receptionist';
         }
         else{
+            unset($returnJSON['userrole']);
             unset($returnJSON['successMsg']);
             $returnJSON['errMsg'] = "Error Logging in. Please try again later";
         }

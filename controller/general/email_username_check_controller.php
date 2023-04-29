@@ -5,12 +5,18 @@
     require_once("../../src/general/mailer.php");
 
     if(!Security::userAuthentication(logInCheck : TRUE)){
+        http_response_code(401);
         die();
     }
 
     //get the json data from the request
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
+    
+    if($data == null){
+        http_response_code(400);
+        die();
+    }
     $userInput = $data['userInput'];
 
     //check if the user input is an email address or a username

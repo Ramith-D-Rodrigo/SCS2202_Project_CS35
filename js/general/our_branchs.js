@@ -3,18 +3,6 @@ import {disableElementsInMain, enableElementsInMain} from "../FUNCTIONS.js";
 
 const result = document.getElementById("branches");
 
-function changeBtnValue(e){
-    const form = e.target.parentNode.parentNode;    //form
-    const reseveBtn = form.lastChild;   //button
-    if(e.target.value === ""){  //selected "Choose One" option
-        reseveBtn.value = "";
-        return;
-    }
-    //console.log(form);
-    reseveBtn.value = [form.id, e.target.value];    //branch id first, then the sport id (here, form has the branch id)
-    //console.log(reseveBtn.value);
-}
-
 function viewFeedback(e){
     e.preventDefault();
     const parent = e.target.parentNode.parentNode;
@@ -142,10 +130,16 @@ fetch("../../controller/general/our_branches_controller.php")
             formDiv.className = "branch-info";
 
             const form = document.createElement("form");
-            form.id = branches[i].branchID; //branch id for each form
             form.className = "branchInfo";
             form.action = "/public/general/reservation_schedule.php";
             form.method = "get";
+
+            //hidden input for branch id
+            const branchID = document.createElement("input");
+            branchID.setAttribute("type", "hidden");
+            branchID.setAttribute("name", "branch");
+            branchID.setAttribute("value", branches[i].branchID);
+            form.appendChild(branchID);
 
             const openingTimeArr = branches[i].openingTime.split(":"); //setting opening time
             const openingTime = new Date();
@@ -294,6 +288,7 @@ fetch("../../controller/general/our_branches_controller.php")
             const sportSelector = document.createElement("select");
             sportSelector.setAttribute("required", "");
             sportSelector.className = "providing_sports";
+            sportSelector.name = "sport";
 
             const emptyOption = document.createElement("option");
             emptyOption.value = "";
@@ -313,7 +308,6 @@ fetch("../../controller/general/our_branches_controller.php")
 
             const reserveBtn = document.createElement("button");    //reservation button
             reserveBtn.innerHTML = "Make a Reservation";
-            reserveBtn.name = "reserveBtn";
             reserveBtn.type = "submit";
 
             form.appendChild(reserveBtn);
@@ -324,11 +318,6 @@ fetch("../../controller/general/our_branches_controller.php")
             branchContainer.appendChild(branchRow);
             result.appendChild(branchContainer);
         }
-
-        //event listener for the select options
-        const selectOption = document.querySelectorAll(".providing_sports");
-        //console.log(selectOption);
-        selectOption.forEach(element => element.addEventListener("change", changeBtnValue));
     });
 
 

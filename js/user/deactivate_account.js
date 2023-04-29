@@ -134,7 +134,7 @@ deactivateForm.addEventListener("submit", function deactivatePasswordCheck(e){
                         deactivateErrMsgBox.innerHTML = "";
 
                         if(res.ok){ //successful deactivation
-                            window.location.href = "../../index.php";
+                            window.location.href = "../../";
                             success = true;
                         }
                         else{   //unsuccessful deactivation
