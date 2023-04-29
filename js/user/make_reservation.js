@@ -302,12 +302,9 @@ const stripeTokenHandler = (token) => {
             //update the table
             const url = new URL(window.location);   //get the url
             const params = new URLSearchParams(url.search); //search parameters
-            //console.log(params);
-            const getReq = params.get("reserveBtn");
-            //console.log(getReq);
 
             //update the reservation table
-            fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn=".concat(getReq))
+            fetch("../../controller/general/reservation_schedule_controller.php?" + params)
                 .then(res => res.json())
                 .then(data => {
                     const scheduleObjs = createScheduleObjects(data);

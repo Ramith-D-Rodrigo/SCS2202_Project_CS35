@@ -102,6 +102,84 @@
             return $schedule;
         }
 
+        public function reservationAvailability($date, $startingTime, $endingTime, $database) : array{
+            //first check court maintenance
+            $sql = sprintf("SELECT `courtID` FROM `court_maintenance` WHERE
+            `courtID` = '%s' AND
+            `decision` = 'a' AND
+            `startingDate` <= '%s' AND
+            `endingDate` >= '%s'",
+
+            $database -> real_escape_string($this -> courtID),
+            $database -> real_escape_string($date),
+            $database -> real_escape_string($date));
+
+            $result = $database -> query($sql);
+
+            if($result -> num_rows > 0){
+                return [false, 'Court is Under Maintenance'];
+            }
+            
+            //second check coaching sessions
+
+            $conditions = sprintf("(('%s' < `startingTime` AND '%s' > `endingTime`) OR 
+            ('%s' >= `startingTime` AND '%s'<= `endingTime`) OR
+            ('%s' < `startingTime` AND '%s'<= `endingTime` AND '%s' > `startingTime`) OR
+            ('%s' >= `startingTime` AND '%s' < `endingTime` AND '%s' > `endingTime`))",
+            //1st condition - starting time is before the reservation starting time and ending time is after the reservation ending time
+            $database -> real_escape_string($startingTime),
+            $database -> real_escape_string($endingTime),
+
+            //2nd condition - reserving time is between the reservation starting time and ending time
+            $database -> real_escape_string($startingTime),
+            $database -> real_escape_string($endingTime),
+
+            //3rd condition - starting time is before the reservation starting time and ending time is between the reservation starting time and ending time
+            $database -> real_escape_string($startingTime),
+            $database -> real_escape_string($endingTime),
+            $database -> real_escape_string($endingTime),
+
+            //4th condition - starting time is between the reservation starting time and ending time and ending time is after the reservation ending time
+            $database -> real_escape_string($startingTime),
+            $database -> real_escape_string($startingTime),
+            $database -> real_escape_string($endingTime));
+
+            //find the day of the week of the date
+            $day = date('l', strtotime($date));
+
+            $sql = sprintf("SELECT `sessionID` FROM `coaching_session` WHERE
+            `courtID` = '%s' AND
+            `day` = '%s' AND ",           
+            $database -> real_escape_string($this -> courtID),
+            $database -> real_escape_string($day));
+
+            $sql .= $conditions;
+
+            $result = $database -> query($sql);
+            if($result -> num_rows > 0){
+                return [false, 'Court is Reserved for Coaching Session During the Given Time Period'];
+            }
+            
+            //third check reservations
+
+            $sql = sprintf("SELECT `reservationID` FROM `reservation` WHERE 
+            `sportCourt` = '%s' AND
+            `status` = 'Pending' AND
+            `date` = '%s' AND " ,
+            $database -> real_escape_string($this -> courtID), 
+            $database -> real_escape_string($date));
+
+            $sql .= $conditions;
+            
+            $result = $database -> query($sql);
+
+            if($result -> num_rows > 0){
+                return [false, 'Court is Already Reserved During the Given Time Period'];
+            }
+
+            return [true, 'Court is Available'];
+        }
+
         public function getName($database){ // Get sports court name
             $sql = sprintf("SELECT `courtName` FROM `sports_court`
             WHERE `courtID`
