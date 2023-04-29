@@ -25,10 +25,10 @@
     ?>
     <main class="body-container" style="display:flex;flex-direction:column">
         <div id="discount_results" style="display:flex;flex-direction:column">
-            <div class="content-box" style="display:flex;justify-content:left;width:50%">New Discount Requests</div>
+            <div class="content-box" id="discountTitle" style="display:flex;justify-content:left;width:50%">New Discount Requests</div>
         </div>
         <div id="court_results" style="display:flex;flex-direction:column">
-            <div class="content-box" style="display:flex;justify-content:left;margin-left:12%;width:50%">New Court Requests</div>
+            <div class="content-box" id="courtTitle" style="display:flex;justify-content:left;margin-left:10%;width:50%">New Court Requests</div>
         </div>
     </main>
     <?php

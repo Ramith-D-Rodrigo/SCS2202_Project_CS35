@@ -12,6 +12,8 @@ fetch("../../controller/owner/get_manager_requests_controller.php")
             container.style.width = '100%';
             const leftContainer = document.createElement('div');
             const rightContainer = document.createElement('div');
+            const form = document.createElement('form');
+            form.method = "GET";
             const viewBtn = document.createElement('div');
             const btn = document.createElement('button');
             container.style.display = 'flex';
@@ -19,20 +21,25 @@ fetch("../../controller/owner/get_manager_requests_controller.php")
             container.style.justifyContent = 'space-between';
             rightContainer.innerHTML = "";
             btn.innerHTML = "View Request";
-            btn.value = data[i].reservationID;
+            btn.name = "requestDetails";
+            btn.type = "submit";
+            btn.value = JSON.stringify(data[i]);
             if(data[i].type === "discount"){
                 flag1 = 1;
+                form.action = "../../public/owner/view_discount_request.php";
                 leftContainer.innerHTML = "Managed By: ".concat(data[i]['manager'].firstName, " ", data[i]['manager'].lastName, "<br>",
                 "Branch: ",data[i]['branch'].city,"<br>","Discount Value: ".concat(data[i].discountValue));
             }else{
                 flag2 = 1;
-                container.style.marginLeft = '12%';
+                container.style.marginLeft = '10%';
+                form.action = "../../public/owner/view_court_request.php";
                 leftContainer.innerHTML = "Sport: ".concat(data[i]['sport'].sportName, "<br>",
                 "Court Name: ",data[i].courtName);
                 rightContainer.innerHTML = "Managed By: ".concat(data[i]['manager'].firstName, " ", data[i]['manager'].lastName, "<br>",
                 "Branch: ",data[i]['branch'].city);
             }
-            viewBtn.appendChild(btn);
+            form.appendChild(btn);
+            viewBtn.appendChild(form);
             container.appendChild(leftContainer);
             container.appendChild(rightContainer);
             container.appendChild(viewBtn);
@@ -44,8 +51,14 @@ fetch("../../controller/owner/get_manager_requests_controller.php")
         }
 
         if(flag1 === 0){
-            discounts.innerHTML = "No Discount Requests";
+            const title = document.getElementById('discountTitle');
+            title.innerHTML = "No Discount Requests To Display";
+            title.style.marginLeft = '-20%';
+            title.style.width = '100%';
         }if(flag2 === 0){
-            courts.innerHTML = "No Court Requests";
+            const title = document.getElementById('courtTitle');
+            title.innerHTML = "No Court Requests To Display";
+            title.style.marginLeft = '-20%';
+            title.style.width = '100%';
         }
     });
