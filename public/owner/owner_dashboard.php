@@ -47,9 +47,9 @@
                     <div class="card-title"> Manager Requests</div> 
                     <div id="requests" class="card-content"></div>
                     <div class="card-button">  
-                        <button> View More </button> 
+                        <button onclick="window.location.href='/public/owner/view_manager_requests.php'"> View More </button> 
                     </div>
-                </div>
+                </div>    
                 <div class="content-box single-card">
                     <div class="card-title"> Sports</div> 
                     <div id="sports" class="card-content"></div>

@@ -125,13 +125,14 @@ class Admin extends Actor{
         $generalDetails  = $database -> query($sql) -> fetch_object();
         $pendingBranch = [];
         array_push($pendingBranch,$generalDetails);
-        $sports = $pendingBr -> getAllSports($database);
-        foreach($sports as $sport){
-            $courts = $pendingBr -> getSportCourtNames($sport->sportID,$database);
-            $courtCount = count($courts);
-            array_push($pendingBranch,[$sport->sportName,$courtCount]);
-        }
 
+        $courts = $pendingBr -> getBranchCourts(database: $database,courtStatus:'p');  //get the pending courts
+
+        foreach($courts as $court){
+            $sport = $court->getSport($database)->getDetails($database,['sportName']);   //get the sport objetcs with sport name
+            array_push($pendingBranch,$sport);
+        }
+        
         return $pendingBranch;
     }
 

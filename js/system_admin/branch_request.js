@@ -33,13 +33,26 @@ fetch("../../controller/system_admin/view_branch_request_controller.php?branchID
             const contactNum = document.getElementById("contactNum");
             contactNum.value = "Not Assigned Yet";
             const sportOptions = document.getElementById("sports");
-            for(i=1;i<data.length;i++){
+            sportNames = [];
+            occurrences = {};
+            for(i=1;i<data.length;i++){    //store the sport names in an array
+                sportNames[i-1] = data[i].sportName;   
+            }
+            for (var i = 0; i < sportNames.length; i++) {
+                var sportName = sportNames[i];
+                if (occurrences[sportName]) {   //store the occurences of the same sport
+                    occurrences[sportName]++;
+                } else {
+                    occurrences[sportName] = 1;
+                }
+            }
+            for (var sport in occurrences) {
                 const opt = document.createElement("option");
-                opt.value = data[i][1];     //store the court count in the value attribute
-                opt.innerHTML = data[i][0];
+                opt.value = occurrences[sport];     //store the court count in the value attribute
+                opt.innerHTML = sport;
                 sportOptions.appendChild(opt);
             }
-
+                
         }
     });
 
