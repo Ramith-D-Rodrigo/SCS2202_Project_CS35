@@ -1,3 +1,5 @@
+import {currency} from "../CONSTANTS.js";
+
 const url = new URL(window.location);   //get the url
 const params = new URLSearchParams(url.search); //search parameters
 //console.log(params);
@@ -117,7 +119,7 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                 branchInfoDiv.appendChild(courtCountDiv);
 
                 const reservationPrice = document.createElement("div"); //reservation price
-                reservationPrice.innerHTML = "Reservation Price : Rs. "+ branches[i].reserve_price;
+                reservationPrice.innerHTML = "Reservation Price : "+ currency + " " + branches[i].reserve_price;
                 reservationPrice.className = "result-info";
                 branchInfoDiv.appendChild(reservationPrice);
 
@@ -132,8 +134,19 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                 branchInfoDiv.appendChild(discountDiv);
 
                 const button = document.createElement("button");
-                button.name = "reserveBtn";
-                button.value = [branches[i].branchID, branches[i].sport_id];
+
+                //two hidden inputs for the branchID and sportID
+                const branchID = document.createElement("input");
+                branchID.type = "hidden";
+                branchID.name = "branch";
+                branchID.value = branches[i].branchID;
+                form.appendChild(branchID);
+
+                const sportID = document.createElement("input");
+                sportID.type = "hidden";
+                sportID.name = "sport";
+                sportID.value = branches[i].sport_id;
+                form.appendChild(sportID);
 
                 button.innerHTML = "Make a Reservation";
 

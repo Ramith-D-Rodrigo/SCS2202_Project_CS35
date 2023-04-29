@@ -47,7 +47,7 @@
                 ?>
             </body>
             <script src="/js/user/account_links.js"></script>
-            <script src="/js/general/search_results.js"></script>
+            <script type="module" src="/js/general/search_results.js"></script>
             <script type="module" src="/js/general/notifications.js"></script>
         </html>
     <?php
