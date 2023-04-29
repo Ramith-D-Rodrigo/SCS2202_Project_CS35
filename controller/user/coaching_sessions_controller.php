@@ -3,6 +3,7 @@
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){ //cannot access (NOT operator)
         Security::redirectUserBase();
+        die();
     }
 
     require_once("../../src/user/user.php");
@@ -51,6 +52,7 @@
         if(in_array($currSession -> getSessionID(), $sessionIDs)){ //if the session is already in the array
             //remove the currentSession from allSessions
             unset($allSessions[$key]);
+            continue;
         }
 
         $currSession -> getDetails($user -> getConnection(), ['day', 'startingTime', 'endingTime', 'coachID', 'courtID', 'paymentAmount']);

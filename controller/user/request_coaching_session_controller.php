@@ -4,17 +4,20 @@
     //check the authentication
     if(!Security::userAuthentication(logInCheck : TRUE, acceptingUserRoles : ['user'])){
         Security::redirectUserBase();
+        die();
     }
 
     //check request method
     if($_SERVER['REQUEST_METHOD'] != 'POST'){
         Security::redirectUserBase();
+        die();
     }
 
     //get user response json
     $requestJSON = file_get_contents('php://input');
     if($requestJSON == NULL){
         Security::redirectUserBase();
+        die();
     }
 
     //decode json
