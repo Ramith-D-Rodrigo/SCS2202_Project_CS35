@@ -121,6 +121,27 @@
             return $totalRequests;
         }
 
+        public function updateManagerRequest($manager = null,$courtID = null, $startingDate = null,$decision = '%'){
+            
+            $sql = '';
+            if($manager == null){
+                $sql = sprintf("UPDATE `sports_court` SET `requestStatus` = '%s' WHERE `courtID` = '%s'",
+                $this -> connection -> real_escape_string($decision),
+                $this -> connection -> real_escape_string($courtID));
+
+            }else{
+                $sql = sprintf("UPDATE `discount` SET `decision` = '%s' WHERE `managerID` = '%s' AND `startingDate` = '%s'",
+                $this -> connection -> real_escape_string($decision),
+                $this -> connection -> real_escape_string($manager),
+                $this -> connection -> real_escape_string($startingDate));
+
+            }
+
+            $result = $this -> connection -> query($sql);
+            return $result;
+        }
+
+
         public function getDiscountRequests($manager = null, $decision = '%'){   //% for wildcard
 
             if($manager == null){   //get all discount requests
