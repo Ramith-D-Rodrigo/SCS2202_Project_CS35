@@ -7,7 +7,7 @@ const coachProfile = parameters.get("coachProfile");
 fetch("../../controller/receptionist/view_cProfile_controller.php?coachID=".concat(coachProfile))
     .then((res)=>res.json())
     .then((data)=>{
-        // console.log(data); 
+        console.log(data); 
         if(data[0]['errMsg'] !== undefined){   //no such coach
             const searchError = document.getElementById("errorProfile-msg");
             const searchErrorDiv = document.createElement("div");
@@ -97,11 +97,11 @@ fetch("../../controller/receptionist/view_cProfile_controller.php?coachID=".conc
                     left = document.createElement("div");
                     left.className = "left-side";
                     left.style.width = "200px";
-                    left.innerHTML = "Name: ".concat("<br>","Rating: ","<br>","View: ");
+                    left.innerHTML = "Description: ".concat("<br>","Rating: ","<br>","View: ");
                     right = document.createElement("div");
                     right.className = "right-side";
-                    right.style.marginLeft = "0px";
-                    right.innerHTML = data[2][i][1].concat(" ",data[2][i][2],"<br>",data[2][i][0].rating," Stars","<br>",data[2][i][0].description);
+                    right.style.marginLeft = "10px";
+                    right.innerHTML = data[2][i].description.concat("<br>",data[2][i].rating," Stars","<br>",data[2][i].date);
                     container.appendChild(left);
                     container.appendChild(right);
                     feedbackDiv.appendChild(container);

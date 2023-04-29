@@ -183,6 +183,26 @@
                 return FALSE;
             }
         }
+        
+        public function updateManagerRequest($manager = null,$courtID = null, $startingDate = null,$decision = '%'){
+            
+            $sql = '';
+            if($manager == null){
+                $sql = sprintf("UPDATE `sports_court` SET `requestStatus` = '%s' WHERE `courtID` = '%s'",
+                $this -> connection -> real_escape_string($decision),
+                $this -> connection -> real_escape_string($courtID));
+
+            }else{
+                $sql = sprintf("UPDATE `discount` SET `decision` = '%s' WHERE `managerID` = '%s' AND `startingDate` = '%s'",
+                $this -> connection -> real_escape_string($decision),
+                $this -> connection -> real_escape_string($manager),
+                $this -> connection -> real_escape_string($startingDate));
+
+            }
+
+            $result = $this -> connection -> query($sql);
+            return $result;
+        }
 
         public function managerRequests($manager = null, $discountDecision = '%', $courtDecision = '%'){   //% for wildcard
             $totalRequests =  array_merge($this -> getDiscountRequests(manager: $manager, decision: $discountDecision), $this -> getSportCourtRequests(manager: $manager, decision: $courtDecision));
@@ -212,13 +232,27 @@
             return $discountArr;
         }
 
-        public function getSportCourtRequests($manager = null, $decision = '%'){ //get all the sport court requests (adding new sports court to some branch)
+        public function getSportCourtRequests($manager = null, $decision = '%'){ //get all the sport court requests including court photos(adding new sports court to some branch)
+
+            $existingCourtsSQL = $this -> connection -> query("SELECT COUNT(`courtID`) AS `Count`,`sportID`,`branchID` FROM `sports_court` WHERE 
+            `requestStatus` LIKE 'a' AND `addedManager` IS NULL GROUP BY `branchID`,`sportID`"); 
+
+           $existingCourts = array();
+            while($row = $existingCourtsSQL -> fetch_object()){
+                array_push($existingCourts, $row);
+            }
+            
             if($manager == null){
-                $sql = sprintf("SELECT * FROM `sports_court` WHERE `requestStatus` LIKE '%s' AND `addedManager` IS NOT NULL", $this -> connection -> real_escape_string($decision));
+                $sql = sprintf("SELECT `sc`.*,`scp`.`courtPhoto` FROM 
+                `sports_court` `sc` LEFT JOIN `sports_court_photo` `scp` ON `sc`.`courtID` = `scp`.`courtID` 
+                WHERE `sc`.`requestStatus` LIKE '%s' AND `sc`.`addedManager` IS NOT NULL", 
+                $this -> connection -> real_escape_string($decision));
                 $result = $this -> connection -> query($sql);
             }
             else{
-                $sql = sprintf("SELECT * FROM `sports_court` WHERE `managerID` = '%s' AND `requestStatus` LIKE '%s'",
+                $sql = sprintf("SELECT `sc`.*,`scp`.`courtPhoto` FROM 
+                `sports_court` `sc` LEFT JOIN `sports_court_photo` `scp` ON `sc`.`courtID` = `scp`.`courtID`
+                WHERE `managerID` = '%s' AND `requestStatus` LIKE '%s'",
                 $this -> connection -> real_escape_string($manager -> getUserID()),
                 $this -> connection -> real_escape_string($decision));
                 $result = $this -> connection -> query($sql);
@@ -227,6 +261,7 @@
             $sportCourtArr = array();
 
             while($row = $result -> fetch_object()){
+                $row -> existingCourts = $existingCourts; //adding the existing courts details of each sport in each branch
                 array_push($sportCourtArr, $row);
             }
 

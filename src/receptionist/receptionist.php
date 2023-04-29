@@ -31,6 +31,7 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
     public function setDetails($fName='', $lName='', $email='', $contactNo='', $dob='', $gender='', $uid='', $username='', $password='', $brID = ''){
         $this -> receptionistID = $uid;
+        $this -> userID = $uid;
         $this -> firstName = $fName;
         $this -> lastName = $lName;
         $this -> emailAddress = $email;
@@ -408,16 +409,9 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         }
 
         $rating = $coach -> getRating($database);
-        $feedbackResults = $coach -> getFeedback($database);
-        $feedbackArray = [];
-        foreach($feedbackResults as $feedback){
-            $stuID = $feedback -> stuID;
-            $user = new User();
-            $user -> setDetails(uid:$stuID);
-            array_push($feedbackArray,[$feedback,$user -> getProfileDetails("firstName"),$user -> getProfileDetails("lastName")]);
-        }
+        $feedbackResults = $coach -> getFeedback();
         $coachInfo = [];
-        array_push($coachInfo,$coachProfile,$rating,$feedbackArray,$sessionInfo,$qualificationArr);
+        array_push($coachInfo,$coachProfile,$rating,$feedbackResults,$sessionInfo,$qualificationArr);
         return $coachInfo;
     }
 
@@ -453,7 +447,7 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         ON `sc`.`sportID` = `s`.`sportID`
         INNER JOIN `branch` `b`
         ON `b`.`branchID` = `sc`.`branchID`
-        WHERE `b`.`branchID` = '%s' AND `r`.`date` = '%s'",
+        WHERE `b`.`branchID` = '%s' AND `r`.`date` = '%s' AND `r`.`status` <> 'Cancelled'",
         $database -> real_escape_string($branchID),
         $database -> real_escape_string($currentDate));
         $userReservations = $database -> query($uReservationSql) -> fetch_all(MYSQLI_ASSOC);
@@ -476,6 +470,25 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         
         foreach($permanentReservations as $row){
             array_push($userReservations,$row);   //push the permanent reservations to the same array
+        }
+
+        $onReservationSql = sprintf("SELECT `r`.`reservationID`,`r`.`startingTime`,`r`.`endingTime`,`r`.`noOfPeople`,`r`.`status`,`s`.`sportName`,
+        `sc`.`courtName`
+        FROM `reservation` `r`              
+        INNER JOIN `sports_court` `sc`
+        ON `sc`.`courtID` = `r`.`sportCourt`
+        INNER JOIN `sport` `s`
+        ON `sc`.`sportID` = `s`.`sportID`
+        INNER JOIN `branch` `b`
+        ON `b`.`branchID` = `sc`.`branchID`
+        WHERE `r`.`onsiteReceptionistID` is NOT NULL AND `b`.`branchID` = '%s' 
+        AND `r`.`date` = '%s' AND `r`.`status` <> 'Cancelled'",
+        $database -> real_escape_string($branchID),
+        $database -> real_escape_string($currentDate));
+        $onsiteReservations = $database -> query($onReservationSql) -> fetch_all(MYSQLI_ASSOC);
+
+        foreach($onsiteReservations as $row){
+            array_push($userReservations,$row);   //push the onsite reservations to the same array
         }
 
         return $userReservations;
@@ -515,6 +528,35 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
         return $result;
     }
+
+    public function makeReservation($resID, $date, $st, $et, $people, $payment, Sports_Court $court, $database){
+        $result = $court -> createOnsiteReservation($this -> userID, $resID, $date, $st, $et, $payment, $people, $database);
+        return $result; 
+    }
+
+    public function getOnsiteReservations($database){
+        $sql = sprintf("SELECT `reservationID` from reservation WHERE `onsiteReceptionistID` =  '%s'",
+        $database -> real_escape_string($this -> userID));
+        $result = $database -> query($sql);
+        $reservationInfo = [];
+
+        while($row = $result -> fetch_object()){
+            $reservation = new Reservation();
+            $reservation -> setID($row -> reservationID);
+            $onsiteRes = $reservation -> getDetails($database);
+            array_push($reservationInfo,$onsiteRes);
+        }
+
+        return $reservationInfo;
+    }
+
+    public function cancelOnsiteReservation($resID,$database){
+        $reservation = new Reservation();
+        $reservation -> setID($resID);
+        $result = $reservation -> updateStatus($database,"Cancelled");
+        return $result;
+    }
+    
     public function jsonSerialize() : mixed {
         $classProperties = get_object_vars($this);
 
