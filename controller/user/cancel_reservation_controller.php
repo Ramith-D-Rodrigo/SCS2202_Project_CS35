@@ -27,7 +27,7 @@
     require_once("../../src/general/paymentGateway.php");
 
     $cancellingUser = new User();
-    $cancellingUser -> setDetails(uid: $_SESSION['userid']);
+    $cancellingUser -> setUserID($_SESSION['userid']);
     $selectedReservation = json_decode(file_get_contents("php://input"), true)['reservationID'];
 
     $cancellingReservation = new Reservation();
