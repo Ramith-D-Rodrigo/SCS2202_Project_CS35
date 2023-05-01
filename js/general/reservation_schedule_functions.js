@@ -544,4 +544,4 @@ function createMaintenanceCell(maintenanceObj, openingTime, closingTime, courtNu
 
 //we can export updateTheReservationTables, createScheduleObjects, and createReservationTable functions aswell to use them to update the table after a reservation is made
 
-export {updateTheReservationTables, createScheduleObjects, createReservationSchedulePage, createReservationTable};
+export {updateTheReservationTables, createScheduleObjects, createReservationSchedulePage, createReservationTable, createScheduleNavigation};

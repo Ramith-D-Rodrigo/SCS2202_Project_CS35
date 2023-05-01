@@ -1,0 +1,16 @@
+#court-select{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+@media(max-width: 680px){
+    #court-select{
+        flex-direction: column;
+    }
+
+    #court-select *{
+        width: 100%;
+    }
+}
