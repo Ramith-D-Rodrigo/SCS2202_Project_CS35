@@ -5,8 +5,10 @@ const result = document.getElementById("branches");
 
 function viewFeedback(e){
     e.preventDefault();
-    const parent = e.target.parentNode.parentNode;
-    const branchID = parent.querySelector("form").id;
+    const infoDiv = e.target.parentNode.parentNode;
+    const formEl = infoDiv.querySelector("form");
+    const form = new FormData(formEl);
+    const branchID = form.get("branch");
     localStorage.setItem("feedbackBranch", branchID);
     window.location.href = "/public/general/our_feedback.php";
 }

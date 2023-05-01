@@ -106,7 +106,7 @@
 
     //can continue
     $reservingUser = new User(); 
-    $reservingUser -> setDetails(uid : $user);//create an user with logged in userid
+    $reservingUser -> setUserID($user);//create an user with logged in userid
 
     $reservingCourt = new Sports_Court($court_id);
     $reservingSport = $reservingCourt -> getSport($reservingUser -> getConnection());
@@ -118,8 +118,8 @@
         exit();
     }
     
-    $temp = $reservingSport -> getDetails($reservingUser -> getConnection(), ['reservationPrice']);
-    $reservationPrice = json_decode(json_encode($temp)) -> reservationPrice; //get the reservation price
+    $reservingSport -> getDetails($reservingUser -> getConnection(), ['reservationPrice', 'sportName']);
+    $reservationPrice = json_decode(json_encode($reservingSport)) -> reservationPrice; //get the reservation price
     $calculation = ($timeDifference -> h + ($timeDifference -> i/60));  //get hours and minutes and convert minutes to hours to get the period in hours
     $payment = $reservationPrice * $calculation;//calculate the payment
 
@@ -222,7 +222,6 @@
 
         //send email regarding the reservation payment
         require_once("../../src/general/mailer.php");
-        $reservingSport -> getDetails($reservingUser -> getConnection(), ['sportName']);
         $sportName = json_decode(json_encode($reservingSport), true)['sportName'];
         Mailer::onlineReservationPayment($reservingUser -> getEmailAddress(), $reservingUser -> getUsername(), $branchName, $sportName, $courtName, $date, $startingTime, $endingTime, $reservationPrice, CURRENCY);
 

@@ -66,6 +66,9 @@ reservationForm.addEventListener('submit', (event) => {
     const errMsgBox = document.getElementById("errMsg");
     errMsgBox.innerHTML = "";
 
+    const successMsgBox = document.getElementById("successMsg");
+    successMsgBox.innerHTML = "";
+
     sendingRequest = {
         "numOfPeople" : formData.get("numOfPeople"),
         "reservingStartTime" : formData.get("reservingStartTime"),
@@ -98,8 +101,13 @@ reservationForm.addEventListener('submit', (event) => {
         });
     }
     catch(err){
-        errMsgBox.innerHTML = err.message;
-        return;
+        if(err.name === "TypeError"){   //if there is no court maintenance
+            clientValFlag = true;
+        }
+        else{
+            errMsgBox.innerHTML = err.message;
+            return;
+        }
     }
 
     //check if the reserving time is in branch maintenance date
@@ -115,8 +123,13 @@ reservationForm.addEventListener('submit', (event) => {
         });
     }
     catch(err){
-        errMsgBox.innerHTML = err.message;
-        return;
+        if(err.name === "TypeError"){   //if there is no branch maintenance
+            clientValFlag = true;
+        }
+        else{
+            errMsgBox.innerHTML = err.message;
+            return;
+        }
     }
 
     //check if the reserving time is in a coaching session
@@ -158,8 +171,13 @@ reservationForm.addEventListener('submit', (event) => {
         });
     }
     catch(err){
-        errMsgBox.innerHTML = err.message;
-        return;
+        if(err.name === "TypeError"){   //if there is no coaching session
+            clientValFlag = true;
+        }
+        else{
+            errMsgBox.innerHTML = err.message;
+            return;
+        }
     }
 
     //check if the reserving time is in a reservation
@@ -206,11 +224,14 @@ reservationForm.addEventListener('submit', (event) => {
         });
     }
     catch(err){
-        errMsgBox.innerHTML = err.message;
-        return;
+        if(err.name === "TypeError"){   //if there is no reservation
+            clientValFlag = true;
+        }
+        else{
+            errMsgBox.innerHTML = err.message;
+            return;
+        }
     }
-
-
 
     //add the amount to the payment gateway
     const amount = document.getElementById("amount");

@@ -36,22 +36,29 @@
         //get branch pictures
         $branchASSOC['photos'] = $tempBranch -> getBranchPictures($connection);
 
+        //get branch manager and receptionist details
+        $branchASSOC['manager'] = "";
+        $branchASSOC['receptionist'] = "";
 
-        $branchManager = new Manager(); //to get manager details
-        $branchManager -> setUserID($branchASSOC['currManager']);
+        if(isset($branchASSOC['currManager'])){
+            $branchManager = new Manager(); //to get manager details
+            $branchManager -> setUserID($branchASSOC['currManager']);
+    
+            $branchManager -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+    
+            $branchASSOC['manager'] = $branchManager;
 
-        $branchManager -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
-
-        $branchReceptionist = new Receptionist(); //to get receptionist details
-        $branchReceptionist -> setUserID($branchASSOC['currReceptionist']);
-
-        $branchReceptionist -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+        }
+        if(isset($branchASSOC['currReceptionist'])){
+            $branchReceptionist = new Receptionist(); //to get receptionist details
+            $branchReceptionist -> setUserID($branchASSOC['currReceptionist']);
+    
+            $branchReceptionist -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+            $branchASSOC['receptionist'] = $branchReceptionist;
+        }
 
         $branchASSOC['sports'] = $branchSports;
         $branchASSOC['rating'] = $branchRating;
-        $branchASSOC['manager'] = $branchManager;
-        $branchASSOC['receptionist'] = $branchReceptionist;
-
 
         array_push($branchInfo, $branchASSOC);   //push to array;
 
