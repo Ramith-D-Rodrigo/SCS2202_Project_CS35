@@ -24,8 +24,12 @@
         $branchManager = $currBranch -> getCurrentManager($owner -> getConnection());  //branch manager
         $branchReceptionist = $currBranch -> getCurrentReceptionist($owner -> getConnection());    //branch receptionist
 
-        $branchManager -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
-        $branchReceptionist -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+        if($branchManager -> getUserID() != null){
+            $branchManager -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+        }
+        if($branchReceptionist -> getUserID() != null){
+            $branchReceptionist -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+        }
 
         $currBranch -> getBranchPictures($owner -> getConnection());    //get branch photos
 

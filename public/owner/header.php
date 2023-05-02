@@ -20,6 +20,9 @@
                 if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/view_manager_requests.php')){
                     echo "View Manager Requests";
                 }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/reservation_schedule.php')){
+                    echo "Reservation Schedule";
+                }
             ?>
         </div>
         <div class="header-top-right">
