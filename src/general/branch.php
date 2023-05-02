@@ -382,21 +382,35 @@
             return $allCourts;
         }
 
-        public function getBranchRevenue($database, $dateFrom, $dateTo){    //function to get the revenue of the branch within specific range
+        public function getBranchRevenue($database, $dateFrom, $dateTo, Sport $sport = null){    //function to get the revenue of the branch within specific range
             $totalRevenue = 0;
 
-            //get the revenue of the branch from the reservations
-            $totalRevenue += $this -> courtReservationRevenue($dateFrom, $dateTo, $database);
+            if($sport == null){
+                //get the revenue of the branch from the reservations
+                $totalRevenue += $this -> courtReservationRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database, sport: null);
 
-            //get the revenue of the branch from the coach session payments
-            $totalRevenue += $this -> coachSessionPaymentRevenue($dateFrom, $dateTo, $database);
+                //get the revenue of the branch from the coach session payments
+                $totalRevenue += $this -> coachSessionPaymentRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database, sport: null);
+            }else{
+                //get the revenue of the branch from the reservations
+                $totalRevenue += $this -> courtReservationRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database,sport: $sport);
 
+                //get the revenue of the branch from the coach session payments
+                $totalRevenue += $this -> coachSessionPaymentRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database,sport: $sport);
+            
+            }
+            
             return $totalRevenue;
         }
 
-        public function courtReservationRevenue($dateFrom, $dateTo, $database){
+        public function courtReservationRevenue($dateFrom, $dateTo,Sport $sport = null, $database){
             //first get all the courts of the branch
-            $allCourts = $this -> getBranchCourts($database);
+            if($sport == null){
+                $allCourts = $this -> getBranchCourts(database: $database,sport: null);
+            }else{
+                $allCourts = $this -> getBranchCourts($database, $sport);
+            }
+            
 
             //build the sql query for user reservations
             $userSql = "SELECT SUM(`paymentAmount`) as `total` FROM `reservation` WHERE `sportCourt` IN (";
@@ -417,9 +431,13 @@
             return $totalRevenue;
         }
 
-        public function coachSessionPaymentRevenue($dateFrom, $dateTo, $database){
+        public function coachSessionPaymentRevenue($dateFrom, $dateTo, Sport $sport = null,$database){
             //first get all the courts of the branch
-            $allCourts = $this -> getBranchCourts($database);
+            if($sport == null){
+                $allCourts = $this -> getBranchCourts(database: $database);
+            }else{
+                $allCourts = $this -> getBranchCourts($database, $sport);
+            }
 
             //build the sql query for coaching session payments of the coach
             $coachSql = "SELECT SUM(`csp`.`paymentAmount`) as `total` 
