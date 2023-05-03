@@ -404,6 +404,7 @@
         }
 
         public function courtReservationRevenue($dateFrom, $dateTo,Sport $sport = null, $database){
+            $totalRevenue = 0;
             //first get all the courts of the branch
             if($sport == null){
                 $allCourts = $this -> getBranchCourts(database: $database,sport: null);
@@ -426,12 +427,13 @@
 
             $result = $database -> query($userSql);
             $row = $result -> fetch_object();
-            $totalRevenue = $row -> total;
+            $totalRevenue += $row -> total;   //avoid getting the revenue as null
 
             return $totalRevenue;
         }
 
         public function coachSessionPaymentRevenue($dateFrom, $dateTo, Sport $sport = null,$database){
+            $totalRevenue = 0;
             //first get all the courts of the branch
             if($sport == null){
                 $allCourts = $this -> getBranchCourts(database: $database);
@@ -458,7 +460,7 @@
 
             $result = $database -> query($coachSql);
             $row = $result -> fetch_object();
-            $totalRevenue = $row -> total;
+            $totalRevenue += $row -> total;   //avoid getting the revenue as null
             
             return $totalRevenue;
         }

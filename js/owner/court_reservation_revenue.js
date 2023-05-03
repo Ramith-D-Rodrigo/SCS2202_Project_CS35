@@ -31,6 +31,11 @@ fetch("../../controller/owner/branch_info_revenue_controller.php")
 function filterSports(event){
     if(branch3.value !== ''){
         const branchID = branch3.value;
+        sport3.innerHTML = '';
+        const option = document.createElement("option");   
+        option.value = 'all';
+        option.innerHTML = 'All Sports';   //default option
+        sport3.appendChild(option);
         for(let i=0; i<branchData3.length; i++){
             if(branchData3[i]['basicInfo'].branchID == branchID){
                 for(let j=0; j<branchData3[i]['sports'].length; j++){
