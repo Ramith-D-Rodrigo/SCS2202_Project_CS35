@@ -43,6 +43,11 @@
                                 <div class='img-container'>
                                     <img src="/uploads/gifs/reservation.gif" alt="reservation" class="gif">
                                 </div>
+
+                                <div id="guidelines">
+                                    Reservation Guidelines :
+                                </div>
+                                
                                 <br>
                                 Not only that, Personal Trainers/Coaches can register on our website and provide their services to our members by booking coaching sessions.
                                 We provide facilities to our members to join coaching sessions with their favourite coaches via our website.

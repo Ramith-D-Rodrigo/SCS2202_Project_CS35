@@ -2,6 +2,10 @@ import { togglePassword } from "../FUNCTIONS.js";
 
 let currValues = [];    //array of current values of the fields (associative array)
 
+//code for getting data from the server is starting from line 526
+
+//code for editing the profile is starting from line 40 to 522
+
 //editable fields
 const editableFields = ['contactNum', 'dependents', 'height', 'weight', 'homeAddress', 'medicalConcerns', 'profilePhoto'];
 

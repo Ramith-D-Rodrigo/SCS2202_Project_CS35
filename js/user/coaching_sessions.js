@@ -1,6 +1,7 @@
 import {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain} from "../FUNCTIONS.js";
 import {currency} from "../CONSTANTS.js";
 
+//code for getting data from the server starts from line 479
 
 const coachingSessionsContainer = document.querySelector('#coachingSessionsContainer');
 
@@ -474,6 +475,7 @@ let sportSet = new Set();   //to store the sports of the coaching sessions
 let coachSet = new Set();   //to store the coaches of the coaching sessions
 
 
+//get the coaching sessions from the server
 fetch("../../controller/user/coaching_sessions_controller.php")
     .then(res => {
         successflag = res.ok;

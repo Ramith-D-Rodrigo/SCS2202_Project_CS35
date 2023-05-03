@@ -120,6 +120,9 @@
                                 </div>
                                 <div style="text-align:center; font-style:italic; margin-top:10px; font-size:smaller">
                                     Contact Relevant branch manager for Formal reservations incase of holding events
+
+                                    <br>
+                                    Refer <a href="/public/general/about_us.php#guidelines" style="all:unset; cursor:pointer">Here</a> for Reservation Guidelines
                                 </div>
                             </form>
                     </div>

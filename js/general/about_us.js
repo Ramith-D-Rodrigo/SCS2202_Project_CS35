@@ -5,6 +5,8 @@ let branchPhotosIndex = 0;
 let courtPhotos = [];
 let courtPhotosIndex = 0;
 
+import { MAX_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS } from "../CONSTANTS.js";
+
 
 fetch("../../controller/general/about_us_controller.php")
 .then(response => response.json())
@@ -31,6 +33,27 @@ fetch("../../controller/general/about_us_controller.php")
     courtImg.src = courtPhotos[courtPhotosIndex];
     courtImg.alt = "Court Photo";
     courtPhotosContainer.appendChild(courtImg);
+
+    //guidelines
+    const guidelines = document.querySelector("#guidelines");
+
+    const unorderedList = document.createElement("ul");
+
+    const listItems = [
+        "You can make a reservation for a maximum of " + MAX_RESERVATION_TIME_HOURS + " hours.",
+        "You can make a reservation for a minimum of " + MIN_RESERVATION_TIME_HOURS + " hours.",
+        "You have to make the reservation at least " + MIN_RESERVATION_DAYS + " days before the reservation date.",
+        "You cannot make a reservation for a date that is more than " + MAX_RESERVATION_DAYS + " days from today."
+    ];
+
+    for(let i = 0; i < listItems.length; i++){
+        const listItem = document.createElement("li");
+        listItem.textContent = listItems[i];
+        unorderedList.appendChild(listItem);
+    }
+
+    guidelines.appendChild(unorderedList);
+
 
     //time interval for branch photos
     setInterval(() => {
