@@ -124,10 +124,7 @@ fetch("../../controller/user/reservation_history_controller.php")
                     cancelForm.className = "cancel-form";
 
                     const cancelBtn = document.createElement("button");
-                    cancelBtn.style.background = "revert";
                     cancelBtn.className = "cancel-button";
-                    cancelBtn.style.backgroundColor = "transparent";
-                    cancelBtn.style.border = "none";
                     cancelBtn.type = "submit";
                     cancelBtn.name = "cancelBtn";
                     cancelBtn.value = "cancel";
@@ -155,10 +152,7 @@ fetch("../../controller/user/reservation_history_controller.php")
                     feedbackForm.className = "feedback-form";
 
                     const feedbackBtn = document.createElement("button");
-                    feedbackBtn.style.background = "revert";
                     feedbackBtn.className = "feedback-button";
-                    feedbackBtn.style.backgroundColor = "transparent";
-                    feedbackBtn.style.border = "none";
                     feedbackBtn.value = "cancel";
 
                     //icon for feedback button

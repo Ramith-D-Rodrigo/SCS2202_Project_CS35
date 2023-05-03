@@ -123,6 +123,11 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
     icon.style.fontSize = '6rem';
     icon.style.margin = '4rem 0';
 
+    //disable the confirm button
+    confirmBtn.disabled = true;
+    confirmBtn.style.cursor = 'not-allowed';
+    confirmBtn.classList.add('disabled');
+
     //send the sessionID to the server
     fetch("../../controller/user/leave_coaching_session_controller.php", {
         method: 'POST',
@@ -147,7 +152,12 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
 
         return res.json();
     })
-    .then(data => {
+    .then(data => { //for the message to be displayed in the message box
+        //reset the confirm button
+        confirmBtn.disabled = false;
+        confirmBtn.style.cursor = 'pointer';
+        confirmBtn.classList.remove('disabled');
+
         //close the popup
         popUpCancellation(e);
 
@@ -156,8 +166,6 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
 
         msg.innerHTML = data.msg;
         msg.appendChild(icon);
-        msgBox.style.display = 'block';
-
 
         //display the message box
         msgBox.style.display = 'block';
@@ -216,6 +224,11 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
     icon.style.fontSize = '6rem';
     icon.style.margin = '4rem 0';
 
+    //disable the confirm button
+    confirmBtn.disabled = true;
+    confirmBtn.style.cursor = 'not-allowed';
+    confirmBtn.classList.add('disabled');
+    
     //send the request to the server
     fetch("../../controller/user/cancel_coaching_session_request_controller.php", {
         method: 'POST',
@@ -245,7 +258,12 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
 
         return res.json();
     })
-    .then(data => {
+    .then(data => { //for the message to be displayed in the message box
+        //reset the confirm button
+        confirmBtn.disabled = false;
+        confirmBtn.style.cursor = 'pointer';
+        confirmBtn.classList.remove('disabled');
+
         //close the popup
         popUpCancellation(e);
 
@@ -395,6 +413,12 @@ const giveFeedback = (e) => {   //give feedback functionality
     icon.style.fontSize = '6rem';
     icon.style.color = 'green';
 
+    //disable the submit button
+    const submitBtn = feedbackForm.querySelector('input[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.style.cursor = 'not-allowed';
+    submitBtn.classList.add('disabled');
+    
     //send the feedback data to the server
     fetch("../../controller/user/give_coach_feedback_controller.php", {
         method: 'POST',
@@ -408,6 +432,11 @@ const giveFeedback = (e) => {   //give feedback functionality
         return res.json();
     })
     .then(data => {
+        //enable the submit button
+        submitBtn.disabled = false;
+        submitBtn.style.cursor = 'pointer';
+        submitBtn.classList.remove('disabled');
+        
         if(successflag){    //if the feedback is successfully sent
             feedbackFormDiv.style.display = 'none'; //close the feedback div
 

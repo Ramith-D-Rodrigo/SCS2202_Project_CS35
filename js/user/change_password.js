@@ -62,6 +62,7 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
     //disable the submit button
     passwordChangeButton.disabled = true;
     passwordChangeButton.style.cursor = "not-allowed";
+    passwordChangeButton.classList.add("disabled");
     
     //send the data to the server
     fetch('../../controller/user/change_password_validation_controller.php', {
@@ -99,6 +100,7 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
                 //re enable the submit button
                 passwordChangeButton.disabled = false;
                 passwordChangeButton.style.cursor = "pointer";
+                passwordChangeButton.classList.remove("disabled");
 
                 //add the verification code form submit event listener
                 credentialForm.addEventListener('submit', function verifyCode(e){
@@ -111,6 +113,7 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
                     //disable the submit button
                     passwordChangeButton.disabled = true;
                     passwordChangeButton.style.cursor = "not-allowed";
+                    passwordChangeButton.classList.add("disabled");
 
                     //reset messages
                     passwordErrMsg.innerHTML = "";
@@ -139,6 +142,7 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
                             //re enable the submit button
                             passwordChangeButton.disabled = false;
                             passwordChangeButton.style.cursor = "pointer";
+                            passwordChangeButton.classList.remove("disabled");
                             
                             if(data.errMsg === undefined){  //if there is no error message
                                 passwordErrMsg.innerHTML = "";

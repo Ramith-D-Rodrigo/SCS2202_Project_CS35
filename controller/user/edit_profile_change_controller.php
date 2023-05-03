@@ -16,7 +16,7 @@
     }
     
 
-    $editableFields = ['contactNo', 
+    $editableFields = ['contactNum', 
     'height', 
     'weight', 
     'homeAddress', 
@@ -56,7 +56,7 @@
         if(isset($_POST[$field])){  //check if field is set ( the user has inputted something)
             $_POST[$field] = trim($_POST[$field]);  //remove leading and trailing whitespace
             $_POST[$field] = htmlspecialchars($_POST[$field], ENT_QUOTES);  //convert special characters to html entities
-            if($field == "contactNo"){  // contact number validation
+            if($field == "contactNum"){  // contact number validation
                 if(!preg_match("/^[0-9]{10,11}$/", $_POST[$field])){
                     $returnMsg["errMsg"] = "Invalid Contact Number";
                     $validationErrFlag = true;

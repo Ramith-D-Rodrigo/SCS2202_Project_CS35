@@ -8,6 +8,18 @@
     padding: 2rem 5px;
 }
 
+.cancel-button{
+    background: revert;
+    background-color: transparent;
+    border: none;
+}
+
+.feedback-button{
+    background: revert;
+    background-color: transparent;
+    border: none;
+}
+
 .res-history-table-header td{
     background-color: rgb(6, 2, 65);
     color: white;

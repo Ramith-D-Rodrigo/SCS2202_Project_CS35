@@ -228,7 +228,7 @@
                                 <div id="errmsg" class="err-msg"></div>
                                 <div id="successmsg" class="success-msg"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="registerBtn"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
+                                    <button type="submit" id="registerBtn"  name= "regSubmitBtn" value="submit"> Register </button>
                                 </div>
                             </form>                    
                         </div>
@@ -240,9 +240,8 @@
             ?>
 
             </body>
-            <script src="/js/user/user_register_form.js"></script>
-            <script src="/js/user/user_register_form_handle.js"></script>
-            <script src="/js/user/user_register_validation.js"></script>
+            <script type="module" src="/js/user/user_register_form.js"></script>
+            <script type="module" src="/js/user/user_register_form_handle.js"></script>
         </html>
     <?php
     }

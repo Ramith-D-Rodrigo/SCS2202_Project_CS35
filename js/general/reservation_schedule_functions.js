@@ -1,4 +1,4 @@
-import { MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, currency } from "../CONSTANTS.js";
+import { MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, currency } from "../CONSTANTS.js";
 import {changeToLocalTime} from "../FUNCTIONS.js";
 
 
@@ -255,12 +255,10 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
             const timePeriod = tableRow.insertCell();
 
             const periodStartPrint = currTime.toLocaleTimeString(); //print to print in the page
-            const periodStartCompare = currTime.toTimeString(); //compare to compare the times
     
-            currTime.setMinutes(currTime.getMinutes() + 60);    //append time period by 60 minutes
+            currTime.setMinutes(currTime.getMinutes() + MIN_RESERVATION_TIME_HOURS * 60);    //append the time period by the reservation time (in minutes)
     
             const periodEndPrint = currTime.toLocaleTimeString();
-            const periodEndCompare = currTime.toTimeString();
 
             for(let j = 0; j < 10; j++){
                 const cell = tableRow.insertCell();
@@ -285,8 +283,9 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
 function updateTheReservationTables(scheduleObjs, jsonData){
     //convert object to array
     scheduleObjs = Object.values(scheduleObjs);
+    console.log(scheduleObjs);
    
-    for(let i = 0; i < scheduleObjs.length - 1; i++){   //go through each schedule
+    for(let i = 0; i < scheduleObjs.length - 1; i++){   //go through each schedule (i-1 because the last element is the branch maintenance)
         //user reservations
         if(scheduleObjs[i].reservations !== undefined){    //if there are reservations
             for(let j = 0; j < scheduleObjs[i]['reservations'].length; j++){    //replace the empty cells with reserved cells

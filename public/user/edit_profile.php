@@ -53,7 +53,7 @@
                                         Contact Number
                                     </div>
                                     <div class="right-field">
-                                        <input type="text" name="contactNo"
+                                        <input type="text" name="contactNum"
                                             pattern="[0-9]{10,11}" 
                                             id="usercontact"
                                             required>
@@ -257,8 +257,7 @@
 
                 <?php require_once("../../public/general/footer.php"); ?>
             </body>
-            <script src="/js/user/edit_profile_handle.js"></script>
-            <script src="/js/user/edit_profile_getdetails.js"></script>
+            <script type="module" src="/js/user/edit_profile_getdetails.js"></script>
             <script src="/js/user/change_password.js"></script>
             <script src="/js/user/account_links.js"></script>
             <script src="/js/user/deactivate_account.js"></script>

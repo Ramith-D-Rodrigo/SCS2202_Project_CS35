@@ -1,3 +1,5 @@
+import { validateForm } from "./user_register_validation.js";
+
 const regForm = document.querySelector("form");
 const errMsgBox = document.getElementById("errmsg");
 const successMsgBox = document.getElementById("successmsg");
@@ -5,12 +7,17 @@ const successMsgBox = document.getElementById("successmsg");
 regForm.addEventListener("submit", (e) => {
     e.preventDefault(); //prevent default submit
 
+    if(!validateForm(e)){   //validate the form
+        return;
+    }
+
     const formData = new FormData(regForm);
 
     const regBtn = document.getElementById("registerBtn"); //disabling register button
 
     regBtn.disabled = true;
     regBtn.style.cursor = "not-allowed";
+    regBtn.classList.add("disabled");
 
     regBtn.innerHTML = "Registering...";
 
@@ -28,10 +35,11 @@ regForm.addEventListener("submit", (e) => {
             errMsgBox.innerHTML = "";
             errMsgBox.innerHTML = data.RegUnsuccessMsg;
 
-            //enabling register button
+            //re-enabling register button
             regBtn.disabled = false;
             regBtn.style.cursor = "pointer";
             regBtn.innerHTML = "Register";
+            regBtn.classList.remove("disabled");
 
         }
         else if(data.RegSuccessMsg !== undefined){  //registration success
@@ -39,12 +47,7 @@ regForm.addEventListener("submit", (e) => {
             successMsgBox.innerHTML = "";
             successMsgBox.innerHTML = data.RegSuccessMsg;
 
-            const regBtn = document.getElementById("registerBtn"); //disabling register button
-            regBtn.disabled = true;
-            regBtn.style.cursor = "not-allowed";
-
             //email verification
-
             const formDiv = document.getElementById("mailVerificationBox");  //get the verification div
 
             const verifyForm = document.createElement("form");  //new form verification
@@ -71,6 +74,7 @@ regForm.addEventListener("submit", (e) => {
                 verifyBtn.disabled = true;
                 verifyBtn.style.cursor = "not-allowed";
                 verifyBtn.innerHTML = "Verifying...";
+                verifyBtn.classList.add("disabled");
 
     
                 const verificationData = new FormData(verifyForm);
@@ -92,11 +96,8 @@ regForm.addEventListener("submit", (e) => {
                         errMsgBox.innerHTML = "";
                         successMsgBox.innerHTML = "";
                         successMsgBox.innerHTML = data.successMsg;
-                        successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to the home page in 2 seconds";
-                        setTimeout(() =>{
-                            window.location.href = "/";
-                        }
-                        , 2000);
+                        successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to the home page, Please wait...";
+                        window.location.href = "/";
                     }
                     else if(data.errMsg !== undefined){  //verification failed
                         errMsgBox.innerHTML = "";
@@ -107,6 +108,7 @@ regForm.addEventListener("submit", (e) => {
                         verifyBtn.disabled = false;
                         verifyBtn.style.cursor = "pointer";
                         verifyBtn.innerHTML = "Verify Email";
+                        verifyBtn.classList.remove("disabled");
                     }
                 })
                 .catch((err) => {
@@ -116,6 +118,7 @@ regForm.addEventListener("submit", (e) => {
                     verifyBtn.disabled = false;
                     verifyBtn.style.cursor = "pointer";
                     verifyBtn.innerHTML = "Verify Email";
+                    verifyBtn.classList.remove("disabled");
                 });
             });
         }
@@ -127,5 +130,6 @@ regForm.addEventListener("submit", (e) => {
         regBtn.disabled = false;
         regBtn.style.cursor = "pointer";
         regBtn.innerHTML = "Register";
+        regBtn.classList.remove("disabled");
     });
 });

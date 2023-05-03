@@ -1,5 +1,7 @@
+import {MAX_USER_PROFILE_PICTURE_SIZE, verbose}  from '../CONSTANTS.js';
+
 function pictureSize(size){ //max size 2mb
-    if(size > 2097152){
+    if(size > MAX_USER_PROFILE_PICTURE_SIZE){
         return false;
     }
     else{
@@ -91,7 +93,24 @@ function validateForm(event){
         //each field has 1 element ( we need the right fields children element for input value)
 
         //div container -> emgcontact children -> rows -> fields -> field's children
-        for(i = 0; i < emergencyDetailsChildren.length; i++){
+        for(let i = 0; i < emergencyDetailsChildren.length; i++){
+            if(emergencyDetailsChildren[i].classList.contains("title")){ //the title of the div container
+                continue;
+            }
+            //children[0] -> first row
+            //children[1] -> second row
+            //children[2] -> third row
+
+            //children[0].children[0] -> left field (label container)
+            //children[0].children[1] -> right field (input container)
+
+            //children[0].children[0].children[0] -> left field's children (label)
+            //children[0].children[1].children[0] -> right field's children (input)
+
+            //children[0].children[0].children[0].value -> left field's children's value (label value)
+            //children[0].children[1].children[0].value -> right field's children's value (input value)
+
+
             names[i] = emergencyDetailsChildren[i].children[0].children[1].children[0].value.toLowerCase();
             relationship[i] = emergencyDetailsChildren[i].children[1].children[1].children[0].value.toLowerCase();
             contactNum[i] = emergencyDetailsChildren[i].children[2].children[1].children[0].value; 
@@ -105,7 +124,7 @@ function validateForm(event){
 
         contactNum.push(usercontact);
         names.push(user);
-        console.log(user);
+        //console.log(user);
         //removing empty fields
         contactNum = contactNum.filter(i => i !== '');   
         relationship = relationship.filter(i => i !== '');   
@@ -157,6 +176,9 @@ function validateForm(event){
 
         medicalArr.forEach((val, i, arr)=> {    //traverse the array
             if(val.tagName.toLowerCase() === 'div'){    //find the child divs
+                if(val.classList.contains('title')){    //skip the title div
+                    return;
+                }
                 console.log(val.children);
                 concerns.push(val.children.item(0).value.toLowerCase());  //push the input value 
             }
@@ -186,3 +208,5 @@ function validateForm(event){
         }
     } 
 }
+
+export {validateForm};

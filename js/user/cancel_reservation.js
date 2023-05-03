@@ -124,6 +124,12 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
         e.preventDefault();
         const formData = new FormData(authForm);
 
+        //disable the submit button
+        const submitButton = authForm.querySelector("button[type='submit']");
+        submitButton.disabled = true;
+        submitButton.style.cursor = "not-allowed";
+        submitButton.classList.add("disabled");
+
         //send the form data to the server
         fetch("../../controller/general/authentication_controller.php", {  //authentication first
             method: "POST",
@@ -132,7 +138,7 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                 "Content-Type" : "application/json"
             }
 
-        }).then(async (res) => {
+        }).then(async (res) => {            
             if(res.ok){ //ok means the status code is 200
                 //can cancel the reservation
                 //get the reservation id from the session storage
@@ -185,6 +191,11 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                         icon.style.color = "red";
                     }
 
+                    //enable the submit button
+                    submitButton.disabled = false;
+                    submitButton.style.cursor = "pointer";
+                    submitButton.classList.remove("disabled");
+                    
                     return res.json();
                 })
                 .then(data =>{
@@ -198,6 +209,12 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                 const authMsg = document.querySelector("#authMsg");
                 authMsg.innerHTML = "Invalid credentials";
                 authMsg.classList.add("altMsg-invalid");
+
+                //enable the submit button
+                submitButton.disabled = false;
+                submitButton.style.cursor = "pointer";
+                submitButton.classList.remove("disabled");
+
                 throw new Error("Invalid credentials");
             }
         })

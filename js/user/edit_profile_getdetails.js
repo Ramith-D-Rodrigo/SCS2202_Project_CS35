@@ -1,9 +1,9 @@
-//editable fields
+import { togglePassword } from "../FUNCTIONS.js";
 
 let currValues = [];    //array of current values of the fields (associative array)
 
 //editable fields
-const editableFields = ['contactNo', 'dependents', 'height', 'weight', 'homeAddress', 'medicalConcerns', 'profilePic', 'email'];
+const editableFields = ['contactNum', 'dependents', 'height', 'weight', 'homeAddress', 'medicalConcerns', 'profilePhoto'];
 
 function decodeHtml(str){     //function to decode escaped html special characters
     var map =
@@ -20,24 +20,18 @@ function decodeHtml(str){     //function to decode escaped html special characte
 //Toggle Password
 
 const togglePasswordbtns = document.querySelectorAll(".togglePassword");
-togglePasswordbtns.forEach(togglePassword);
 
-function togglePassword(element){
-    element.addEventListener('click',(e)=>{
+for(let i = 0; i < togglePasswordbtns.length; i++){
+    const currBtn = togglePasswordbtns[i];
+    const parentDiv = currBtn.parentElement;
+    const passwordField = parentDiv.children[0];
+
+    currBtn.addEventListener('click',(e)=>{
         e.preventDefault();
-        const parentDiv = element.parentElement;
-        const passwordField = parentDiv.children[0];
-
-        if(passwordField.type === 'password'){  //Show password
-            passwordField.type = 'text';
-            element.innerHTML = "<i class='fa-solid fa-eye-slash'></i>";
-        }
-        else{   //Hide Password
-            passwordField.type = 'password';
-            element.innerHTML = "<i class='fa-solid fa-eye'></i>";
-        }
+        togglePassword(currBtn, passwordField);
     });
 }
+
 
 const concernAddBtn = document.getElementById("medicalConcernBtn");
 
@@ -275,7 +269,7 @@ function validateChanges(e){
     }
 
 
-//have to check input values validity (similary)
+    //have to check input values validity (similary)
     const emergencyDetails = document.getElementById("emergencyDetails");
     const emergencyDetailsChildren = emergencyDetails.children;
     
@@ -291,7 +285,20 @@ function validateChanges(e){
     //each field has 1 element ( we need the right fields children element for input value)
 
     //div container -> emgcontact children -> rows -> fields -> field's children
-    for(i = 0; i < emergencyDetailsChildren.length; i++){
+    for(let i = 0; i < emergencyDetailsChildren.length; i++){
+        //children[0] -> first row
+        //children[1] -> second row
+        //children[2] -> third row
+
+        //children[0].children[0] -> left field (label container)
+        //children[0].children[1] -> right field (input container)
+
+        //children[0].children[0].children[0] -> left field's children (label)
+        //children[0].children[1].children[0] -> right field's children (input)
+
+        //children[0].children[0].children[0].value -> left field's children's value (label value)
+        //children[0].children[1].children[0].value -> right field's children's value (input value)
+
         names[i] = emergencyDetailsChildren[i].children[0].children[1].children[0].value.toLowerCase();
         relationship[i] = emergencyDetailsChildren[i].children[1].children[1].children[0].value.toLowerCase();
         contactNum[i] = emergencyDetailsChildren[i].children[2].children[1].children[0].value; 
@@ -339,10 +346,10 @@ function validateChanges(e){
         medicalArr = Array.from(medicalConcernDiv.children[0].children);  //create an array for the elements inside (list elements) the medical concern div
         medicalArr.forEach((val, i, arr)=> {    //traverse the array
             if(val.tagName.toLowerCase() === 'li'){    //find the child list elements
-                if(val.childNodes[0].nodeType === 3){  //check if the child is a text node
+                if(val.childNodes[0].nodeType === 3){  //check if the child is a text node (text node has nodeType 3)
                     concerns.push(val.childNodes[0].nodeValue.toLowerCase());    //push the text node value
                 }
-                else{
+                else{   //if the child is not a text node (it is an input field)
                     concerns.push(val.children.item(0).value.toLowerCase());  //push the input value 
                 }
             }
@@ -407,7 +414,7 @@ editForm.addEventListener('submit', (e) => {
             tempDependent.relationship = value;
             continue;
         }
-        else if(key.includes("contact") && key !== "contactNo"){  //not the user's contact number
+        else if(key.includes("contact") && key !== "contactNum"){  //not the user's contact number
             tempDependent.contactNum = value;
             newEmergencyDetails.push(tempDependent);
             tempDependent = {
@@ -485,6 +492,10 @@ editForm.addEventListener('submit', (e) => {
         sendingData.append(key, newValues[key]);
     }
 
+    //disable the submit button
+    submitBtn.disabled = true;
+    submitBtn.classList.add("disabled");
+
     //send the data to the server
     fetch("/controller/user/edit_profile_change_controller.php", {
         method: "POST",
@@ -492,6 +503,11 @@ editForm.addEventListener('submit', (e) => {
     })
     .then((res) => res.json())
     .then((data) => {
+        //enable the submit button
+        submitBtn.disabled = false;
+        submitBtn.classList.remove("disabled");
+
+
         if(data.errMsg !== undefined){
             errMsg.innerHTML = data.errMsg;
         }
@@ -605,7 +621,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         const currProfilePicField = document.getElementById("profilePicField");
         const profilePicImg = document.getElementById("profilePicImg");
 
-        if(data['profilePic'] !== null){    //has a profile picture  
+        if(data['profilePhoto'] !== null){    //has a profile picture  
             profilePicImg.src = data['profilePhoto'];
         }
         else{

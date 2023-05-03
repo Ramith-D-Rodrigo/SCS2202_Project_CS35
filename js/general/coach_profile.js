@@ -109,6 +109,8 @@ const sessionInfo = (e) => {    //function to get the session info when a sessio
                     errMsg.innerHTML = "This Session has Reached the Maximum Number of Students";
                 }
             }
+            //found the session
+            return;
         }
         else{
             //clear the fields
@@ -153,7 +155,7 @@ const branchSelected = (e) => { //function to get the sessions when a branch is 
             }
         }
     }
-    coachingSessionElement.innerHTML = "";    //remove the current sessions
+    coachingSessionElement.innerHTML = "";    //remove the current sessions (clear the select element)
     if(branch === ""){  //if no branch is selected
         const defaultOption = document.createElement("option");
         defaultOption.text = "Please Select a Branch";
@@ -173,10 +175,7 @@ const branchSelected = (e) => { //function to get the sessions when a branch is 
     sessionInfo(nextObj);
 }
 
-//change time to local
-
-
-
+//fetch the coach info
 fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(coachID))
     .then(res => res.json())
     .then(data => { //data is added to the page
@@ -299,7 +298,7 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
                 endingTime: changeToLocalTime(data.coachingSessions[i].endingTime),
                 branchName: data.coachingSessions[i].branchName,
                 courtName: data.coachingSessions[i].courtName,
-                paymentAmount: currency + " " + data.coachingSessions[i].paymentAmount,
+                paymentAmount: currency + " " + parseFloat(data.coachingSessions[i].paymentAmount).toFixed(2),
             }
 
             sessions.push(session);

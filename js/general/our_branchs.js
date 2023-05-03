@@ -97,7 +97,7 @@ fetch("../../controller/general/our_branches_controller.php")
                 branchImage.src = branches[i].photos[0];    //add the first photo
             }
             else{
-                branchImage.src = "/public/general/branch_images/";
+                branchImage.src = "/uploads/branch_images/";
             }
 
             setInterval(() =>{

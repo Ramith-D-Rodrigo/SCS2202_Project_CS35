@@ -34,6 +34,7 @@ deactivateForm.addEventListener("submit", function deactivatePasswordCheck(e){
 
     //disable the deactivate button
     deactivateBtn.disabled = true;
+    deactivateBtn.classList.add("disabled");
       
     //send the data to the server
     fetch("../../controller/user/deactivate_account_validation_controller.php", {
@@ -49,6 +50,7 @@ deactivateForm.addEventListener("submit", function deactivatePasswordCheck(e){
 
         //enable the deactivate button
         deactivateBtn.disabled = false;
+        deactivateBtn.classList.remove("disabled");
 
         if(res.ok){ //if the response status is ok
             msgDiv = deactivateSuccessMsgBox;
@@ -110,7 +112,7 @@ deactivateForm.addEventListener("submit", function deactivatePasswordCheck(e){
 
                 //disable the button
                 deactivateBtn.disabled = true;
-
+                deactivateBtn.classList.add("disabled");
 
                 const verificationCode = verificationCodeInput.value;
 
@@ -143,6 +145,7 @@ deactivateForm.addEventListener("submit", function deactivatePasswordCheck(e){
 
                             //re-enable the button
                             deactivateBtn.disabled = false;
+                            deactivateBtn.classList.remove("disabled");
 
                         }
                         return res.json();
