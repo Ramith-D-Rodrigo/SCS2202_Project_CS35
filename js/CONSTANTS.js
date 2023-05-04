@@ -20,7 +20,7 @@ const MAX_FEEDBACK_DISPLAY_COUNT = 5; //maximum number of feedbacks to be displa
 
 //constants regarding user goes here
 const MIN_USER_REGISTRATION_AGE = 14;    //minimum age for registration (default is 14)
-const MAX_USER_PROFILE_PICTURE_SIZE = 2097152;  //maximum size of the profile picture in bytes (default is 2MB)
+const MAX_USER_PROFILE_PICTURE_SIZE = 1048576;  //maximum size of the profile picture in bytes (default is 1MB)
 
 export {verbose, MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS, 
     MIN_RESERVATION_TIME_HOURS, currency, MAX_COURT_COUNT, MIN_COACHING_SESSION_PERCENTAGE

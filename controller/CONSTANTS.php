@@ -28,4 +28,8 @@
 
     define("NOTIFICATION_LIFE_TIME_DAYS", 3);  //the life time of a notification in days (default is 3 days)
     define("NOTIFICATION_LIFE_TIME_HOURS", 24 * NOTIFICATION_LIFE_TIME_DAYS);  //the life time of a notification in hours 
+
+    //constants regarding the user goes here
+    define("MIN_USER_REGISTRATION_AGE", 14);  //minimum age of a user (default is 14)
+    define("MAX_USER_PROFILE_PICTURE_SIZE", 1048576);   //maximum size of a user's profile picture in bytes (default is 1MB)
 ?>

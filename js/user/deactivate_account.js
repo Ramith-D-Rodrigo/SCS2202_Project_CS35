@@ -21,6 +21,14 @@ function validateDeactivateForm(event){
     }
 }
 
+deactivateBtn.addEventListener("click", (e) => {
+    if(!validateDeactivateForm(e)){
+        e.preventDefault();
+        return;
+    }
+});
+
+
 deactivateForm.addEventListener("submit", function deactivatePasswordCheck(e){
     e.preventDefault();
     const formData = new FormData(deactivateForm);

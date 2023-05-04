@@ -155,7 +155,7 @@
                                 <div class="err-msg" id="errMsg"></div>
                                 <div class="success-msg" id="successMsg"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="submitBtn" onclick="return validateChanges(event)">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
+                                    <button type="submit" id="submitBtn"">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -217,7 +217,7 @@
                                 <div class="err-msg" id="errMsg2"></div>
                                 <div class="success-msg" id="successMsg2"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="submitBtn2" onclick="return validateCredentialsForm(event)">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
+                                    <button type="submit" id="submitBtn2">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -248,7 +248,7 @@
                                 <div class="err-msg" id="errMsg3"></div>
                                 <div class="success-msg" id="successMsg3"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="submitBtn3" onclick="return validateDeactivateForm(event)">Deactivate Account <i class="fa-solid fa-trash"></i></button>
+                                    <button type="submit" id="submitBtn3">Deactivate Account <i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </form>
                         </div>

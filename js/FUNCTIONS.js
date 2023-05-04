@@ -1,3 +1,5 @@
+import {MAX_USER_PROFILE_PICTURE_SIZE} from "./CONSTANTS.js";
+
 const changeToLocalTime = (time) => {
     //split the time
     const timeArr = time.split(":");
@@ -125,6 +127,26 @@ const feedbackPagination = (newPage, currPage, feedbackContainer, feedbackArr, m
     }
 }
 
+const pictureSize = (size) =>{ //max size 2mb
+    if(size > MAX_USER_PROFILE_PICTURE_SIZE){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
+const decodeHtml = (str) => {
+    var map =
+    {
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        '&#039;': "'"
+    };
+    return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
+}
 
 
-export {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain, togglePassword, feedbackPagination};
+export {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain, togglePassword, feedbackPagination, pictureSize, decodeHtml};

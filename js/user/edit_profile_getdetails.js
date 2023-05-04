@@ -1,4 +1,4 @@
-import { togglePassword } from "../FUNCTIONS.js";
+import { togglePassword, pictureSize , decodeHtml } from "../FUNCTIONS.js";
 
 let currValues = [];    //array of current values of the fields (associative array)
 
@@ -8,18 +8,6 @@ let currValues = [];    //array of current values of the fields (associative arr
 
 //editable fields
 const editableFields = ['contactNum', 'dependents', 'height', 'weight', 'homeAddress', 'medicalConcerns', 'profilePhoto'];
-
-function decodeHtml(str){     //function to decode escaped html special characters
-    var map =
-    {
-        '&amp;': '&',
-        '&lt;': '<',
-        '&gt;': '>',
-        '&quot;': '"',
-        '&#039;': "'"
-    };
-    return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
-}
 
 //Toggle Password
 
@@ -226,16 +214,6 @@ function addEmergencyContact(e){
     return currID;
 }
 
-//profile pic upload size check
-function pictureSize(size){ //max size 2mb
-    if(size > 2097152){
-        return false;
-    }
-    else{
-        return true;
-    }
-}
-
 const editForm = document.querySelector("#editForm");   //edit form
 
 const submitBtn = document.querySelector("#submitBtn");
@@ -396,7 +374,7 @@ editForm.addEventListener('submit', (e) => {
         contactNum: ""
     }
 
-    for([key,value] of formData){
+    for(const [key,value] of formData){
         if(key === "profilePic"){
             const photoSize = formData.get("profilePic").size;
 
@@ -521,7 +499,16 @@ editForm.addEventListener('submit', (e) => {
     });
 });
 
+//adding event listeners to the submit button
+const editProfileSubmitBtn = document.getElementById("submitBtn");
+const deactivateAccountSubmitBtn = document.getElementById("submitBtn3");
 
+editProfileSubmitBtn.addEventListener('click', (e) => {
+    if(!validateChanges(e)){
+        e.preventDefault();
+        return;
+    }
+});
 
 fetch("/controller/user/edit_profile_entry_controller.php") //get the details of the user from the server
     .then((res) => res.json())
@@ -596,7 +583,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
 
             data['medicalConcerns'].forEach((concern, index) => {
                 const concernItem = document.createElement("li");
-                concernInput = document.createElement("input");
+                const concernInput = document.createElement("input");
                 concernInput.type = "text";
                 concernInput.value = concern.medicalConcern;
                 concernInput.name = "medicalConcern" + (index+1);

@@ -6,7 +6,6 @@ const passwordFieldsDiv = document.querySelector("#passwordFields");
 const passwordChangeButton = document.getElementById("submitBtn2");
 const verificationCodeField = document.getElementById("verificationCode");
 
-
 function validateCredentialsForm(event){
     //passwords matching or not
     const password = document.getElementById("password");
@@ -42,6 +41,13 @@ function validateCredentialsForm(event){
         return true;
     }
 }
+
+passwordChangeButton.addEventListener('click', (e)=>{
+    if(!validateCredentialsForm(e)){
+        e.preventDefault();
+        return;
+    }
+});
 
 credentialForm.addEventListener('submit', function passwordRequest(e){
     e.preventDefault();
