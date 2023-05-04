@@ -3,6 +3,7 @@
     require_once("../../src/user/user.php");
     require_once("../../src/user/user_dependent.php");
     require_once("../../src/general/security.php");
+    require_once("../CONSTANTS.php");
     
     if(!Security::userAuthentication(logInCheck: TRUE)){
         Security::redirectUserBase();
@@ -72,7 +73,7 @@
                 $bDay = date_create($_POST[$i]);
                 $diff = date_diff($currDate, $bDay);
                 
-                if($diff -> y < 14){    //age should be atleast 14 years
+                if($diff -> y < MIN_USER_REGISTRATION_AGE){    //age should be atleast 14 years
                     $returnMsg['RegUnsuccessMsg'] = 'Minimum Age Should Be 14 Years';
                     $validationErrFlag = true;
                     break;
@@ -96,6 +97,11 @@
                 if($_POST[$i] !== ''){  //has entered some value
                     if(!preg_match("/^\d*\.?\d*$/", $_POST[$i])){   //doesn't match the pattern
                         $returnMsg['RegUnsuccessMsg'] = 'Height And Weight Should Be Numbers';
+                        $validationErrFlag = true;
+                        break;
+                    }
+                    if($_POST[$i] < 0){ //negative value
+                        $returnMsg['RegUnsuccessMsg'] = 'Height And Weight Should Be Positive';
                         $validationErrFlag = true;
                         break;
                     }
@@ -263,7 +269,7 @@
 
     if(!empty($_FILES['user_pic']['name'])){    //user has uploaded a picture
         //check image size
-        if($_FILES['user_pic']['size'] > 2097152){ //image size is greater than 1MB
+        if($_FILES['user_pic']['size'] > MAX_USER_PROFILE_PICTURE_SIZE){ //image size is greater than 1MB
             $returnMsg['RegUnsuccessMsg'] = 'Image Size Is Too Large';
             echo json_encode($returnMsg);
             exit();

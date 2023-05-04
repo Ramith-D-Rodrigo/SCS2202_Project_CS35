@@ -4,12 +4,17 @@ const regForm = document.querySelector("form");
 const errMsgBox = document.getElementById("errmsg");
 const successMsgBox = document.getElementById("successmsg");
 
-regForm.addEventListener("submit", (e) => {
-    e.preventDefault(); //prevent default submit
+const registerBtn = document.getElementById("registerBtn");
 
+registerBtn.addEventListener("click", (e) => {
     if(!validateForm(e)){   //validate the form
+        e.preventDefault(); //prevent default submit
         return;
     }
+});
+
+regForm.addEventListener("submit", (e) => {
+    e.preventDefault(); //prevent default submit
 
     const formData = new FormData(regForm);
 

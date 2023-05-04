@@ -1,13 +1,5 @@
-import {MAX_USER_PROFILE_PICTURE_SIZE, verbose}  from '../CONSTANTS.js';
-
-function pictureSize(size){ //max size 2mb
-    if(size > MAX_USER_PROFILE_PICTURE_SIZE){
-        return false;
-    }
-    else{
-        return true;
-    }
-}
+import {verbose, MIN_USER_REGISTRATION_AGE}  from '../CONSTANTS.js';
+import { pictureSize } from '../FUNCTIONS.js';
 
 function validateForm(event){
     const errMsg = document.getElementById("errmsg");   //For Displaying the Error messages
@@ -20,6 +12,61 @@ function validateForm(event){
 
     if(form.reportValidity() === false){ //Form is invalid from HTML persepective
         errMsg.innerHTML = errMsg.innerHTML + "Please Add Valid Information";
+
+        //get the invalid fields
+        const invalidFields = form.querySelectorAll(":invalid");
+
+        for(let i = 0; i < invalidFields.length; i++){  //traverse through the invalid fields
+            //console.log(invalidFields[i].name);
+            if(invalidFields[i].name === "firstName"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>First Name is Invalid";
+            }
+            else if(invalidFields[i].name === "lastName"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Last Name is Invalid";
+            }
+            else if(invalidFields[i].name === 'birthday'){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Birthday is Invalid, You must be at least " + MIN_USER_REGISTRATION_AGE + " years old to register";
+            }
+            else if(invalidFields[i].name === "contactNum"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Contact Number is Invalid";
+            }
+            else if(invalidFields[i].name === 'homeAddress'){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Home Address is Invalid";
+            }
+            else if(invalidFields[i].name === "email"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Email is Invalid";
+            }
+            else if(invalidFields[i].name === "username"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Username is Invalid";
+            }
+            else if(invalidFields[i].name === "password"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Password is Invalid";
+            }
+            else if(invalidFields[i].name === "passwordConfirm"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Confirmation Password is Invalid";
+            }
+            else if(invalidFields[i].name === "user_pic"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Profile Picture is Invalid";
+            }
+            else if(invalidFields[i].name.includes('name') && invalidFields[i].name !== 'firstName' && invalidFields[i].name !== 'lastName'){   //if the field is an emergency contact name
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Emergency Contact Name is Invalid";
+            }
+            else if(invalidFields[i].name.includes('relationship')){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Emergency Contact Relationship is Invalid";
+            }
+            else if(invalidFields[i].name.includes('emgcontactNum')){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Emergency Contact Number is Invalid";
+            }  
+            else if(invalidFields[i].name.includes('medical_concern')){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Medical Concern is Invalid";
+            }
+            else if(invalidFields[i].name === 'height'){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Height is Invalid";
+            }
+            else if(invalidFields[i].name === 'weight'){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Weight is Invalid";
+            }
+        }
         return false;
     }
     else{   //Form is valid from HTML perspective
@@ -52,12 +99,26 @@ function validateForm(event){
             }
         }
 
-  
-        //uploaded size is okay
-/*         else{
-            errMsg.innerHTML = errMsg.innerHTML + "Uploaded Image is okay";
-            return false;
-        } */
+        //check height and weight are negative
+        const height = document.getElementById("height");
+        const weight = document.getElementById("weight");
+
+        if(height.value !== "" && height.value < 0){
+            errMsg.innerHTML = errMsg.innerHTML + "Height Cannot be Negative<br>";
+            flag = false;
+        }
+        else{
+            errMsg.innerHTML.replace("Height Cannot be Negative<br>", "");
+        }
+
+        if(weight.value !== "" && weight.value < 0){
+            errMsg.innerHTML = errMsg.innerHTML + "Weight Cannot be Negative<br>";
+            flag = false;
+        }
+        else{
+            errMsg.innerHTML.replace("Weight Cannot be Negative<br>", "");
+        }
+
     
         //passwords matching or not
         const password = document.getElementById("password");
