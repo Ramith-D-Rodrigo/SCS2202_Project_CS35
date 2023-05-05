@@ -81,7 +81,7 @@
             }
             else if($i === 'contactNum' || $i === 'emgcontactNum1' || $i === 'emgcontactNum2' || $i === 'emgcontactNum3'){
                 if(!preg_match("/^[0-9]{10,11}$/", $_POST[$i])){  //doesn't match the pattern
-                    $returnMsg['RegUnsuccessMsg'] = 'You Have Duplicate Contact Numbers';
+                    $returnMsg['RegUnsuccessMsg'] = 'Please Enter A Valid Contact Number';
                     $validationErrFlag = true;
                     break;
                 }
@@ -129,7 +129,7 @@
             }
             else if($i === 'medical_concern1' || $i === 'medical_concern2' || $i === 'medical_concern3' || $i === 'medical_concern4' || $i === 'medical_concern5' || $i === 'name1' || $i === 'name2' || $i === 'name3'){
                 if(!preg_match("/^[a-zA-Z ]+$/", $_POST[$i])){
-                    $returnMsg['RegUnsuccessMsg'] = 'You Have Entered Duplicate Medical Concerns/Emergency Contact Names';
+                    $returnMsg['RegUnsuccessMsg'] = 'Please Check Your Medical Concern/Emergency Contact Name for Invalid Characters';
                     $validationErrFlag = true;
                     break;
                 }
@@ -142,7 +142,7 @@
             }
             else if($i === 'relationship1' || $i === 'relationship2' || $i === 'relationship3'){
                 if(!(in_array($_POST[$i], $relationshipFields))){   //invalid relationship
-                    $returnMsg['RegUnsuccessMsg'] = 'You Have Entered Duplicate Relationships';
+                    $returnMsg['RegUnsuccessMsg'] = 'You Have Entered An Invalid Relationship';
                     $validationErrFlag = true;
                     break;
                 }
@@ -163,6 +163,53 @@
         echo json_encode($returnMsg);
         exit();
     }
+
+    //check if the user has entered the same value for two fields
+    //copy post array to another array and remove duplicate values
+    $postCopy = $_POST;
+    //remove passwordConfirm from the array for duplicate check
+    unset($postCopy['passwordConfirm']);
+
+    //add registering user's name to the array (can be used to check if the user has entered his/her name as an emergency contact)
+    $postCopy['name'] = $_POST['firstName'] . ' ' . $_POST['lastName'];
+    //remove empty values from the array
+    $postCopy = array_filter($postCopy);
+    //get duplicates while ignoring cases and empty values
+    $duplicateRemoved = array_unique($postCopy, SORT_STRING | SORT_FLAG_CASE);
+    
+    if(count($duplicateRemoved) !== count($postCopy)){
+        //get the duplicate values
+        $duplicateValues = array_diff_assoc($postCopy, $duplicateRemoved);
+        $returnMsg['RegUnsuccessMsg'] = json_encode($duplicateValues);
+        //get the keys of the duplicate values
+        $duplicateKeys = array_keys($duplicateValues);
+        foreach($duplicateKeys as $key){
+            if($key === 'emgcontactNum1' || $key === 'emgcontactNum2' || $key === 'emgcontactNum3' || $key === 'contactNum'){
+                if(!str_contains($returnMsg['RegUnsuccessMsg'], 'Duplicate Contact Numbers')){   //if the message is not already set
+                    $returnMsg['RegUnsuccessMsg'] .= 'Duplicate Contact Numbers<br>';
+                }
+            }
+            else if($key === 'name1' || $key === 'name2' || $key === 'name3' || $key === 'name'){
+                if(!str_contains($returnMsg['RegUnsuccessMsg'], 'Duplicate Emergency Contact Names')){   //if the message is not already set
+                    $returnMsg['RegUnsuccessMsg'] .= 'Duplicate Emergency Contact Names<br>';
+                }
+            }
+            else if($key === 'relationship1' || $key === 'relationship2' || $key === 'relationship3'){
+                if(!str_contains($returnMsg['RegUnsuccessMsg'], 'Duplicate Emergency Contact Relationships<br>')){   //if the message is not already set
+                    $returnMsg['RegUnsuccessMsg'] .= 'Duplicate Emergency Contact Relationships<br>';
+                }
+            }
+            else if($key == 'medical_concern1' || $key == 'medical_concern2' || $key == 'medical_concern3' || $key == 'medical_concern4' || $key == 'medical_concern5'){
+                if(!str_contains($returnMsg['RegUnsuccessMsg'], 'Duplicate Medical Concerns')){   //if the message is not already set
+                    $returnMsg['RegUnsuccessMsg'] .= 'Duplicate Medical Concerns<br>';
+                }
+            }  
+        }
+        echo json_encode($returnMsg);
+        exit();
+    }
+
+    unset($postCopy);
     
     //Checking if the account already exists
     require_once("../../src/general/security.php");
