@@ -26,34 +26,28 @@ fetch("../../controller/receptionist/view_sProfile_controller.php?userID=".conca
                 img.src = "/styles/icons/profile_icon.svg";
             }
             imgDiv.appendChild(img);
-            const nameDiv = document.getElementById("name");
-            const nameOut = document.createElement("input");
+            const nameOut = document.getElementById("name");           
             nameOut.setAttribute("readonly", "readonly");
             nameOut.value = data[0].firstName + " " + data[0].lastName;
-            nameDiv.appendChild(nameOut);
-            const genderDiv = document.getElementById("gender");
-            const genderOut = document.createElement("input");
+            const genderOut = document.getElementById("gender");
             genderOut.setAttribute("readonly", "readonly");
             if(data[0].gender==="m"){
                 genderOut.value = "Male";
             }else{
                 genderOut.value = "Female";
             }
-            genderDiv.appendChild(genderOut);
-            const bdayDiv = document.getElementById("bday");
-            const bdayOut = document.createElement("input");
+            const bdayOut = document.getElementById("bday");
             bdayOut.setAttribute("readonly", "readonly");
             bdayOut.value = data[0].birthday;
-            bdayDiv.appendChild(bdayOut);
-            const contactNDiv = document.getElementById("contactN");
-            const contactNOut = document.createElement("input");
+
+            const contactNOut = document.getElementById("contactN");
             contactNOut.setAttribute("readonly", "readonly");
             contactNOut.value = data[0].contactNum;
-            contactNDiv.appendChild(contactNOut);
+
             const addressDiv = document.getElementById("address");
             addressDiv.value = data[0].homeAddress;
-            const weightDiv = document.getElementById("weight");
-            const weightOut = document.createElement("input");
+
+            const weightOut = document.getElementById("weight");
             weightOut.setAttribute("readonly", "readonly");
             if(data[0].weight===null){
                 weightOut.value = "Not mentioned";
@@ -61,16 +55,14 @@ fetch("../../controller/receptionist/view_sProfile_controller.php?userID=".conca
                 weightOut.value = data[0].weight+" kg";
             
             }
-            weightDiv.appendChild(weightOut);
-            const heightDiv = document.getElementById("height");
-            const heightOut = document.createElement("input");
+
+            const heightOut = document.getElementById("height");
             heightOut.setAttribute("readonly", "readonly");
             if(data[0].height===null){
                 heightOut.value = "Not mentioned";
             }else{
                 heightOut.value = data[0].height+" cm";
             }
-            heightDiv.appendChild(heightOut);
             
             const selectEName = document.getElementById("eName");
             const defaultOption = document.createElement("option");
@@ -93,12 +85,11 @@ fetch("../../controller/receptionist/view_sProfile_controller.php?userID=".conca
                 medConcernDiv.appendChild(medConcernOut);
             }else{
                 for(i = 0; i < data[1].length; i++){
-                    const medConcerns = document.createElement("div");
                     const medConcernOut = document.createElement("input");
+                    medConcernOut.className = "right-side-multiples";
                     medConcernOut.setAttribute("readonly", "readonly");
                     medConcernOut.value = data[1][i].medicalConcern;
-                    medConcerns.appendChild(medConcernOut);
-                    medConcernDiv.appendChild(medConcerns);
+                    medConcernDiv.appendChild(medConcernOut);
                 }
             } 
         }

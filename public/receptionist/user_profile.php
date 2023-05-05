@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/styles/general/styles.css">
     <link rel="stylesheet" href="/styles/general/staff.css">
     <link rel="stylesheet" href="/styles/receptionist/receptionist.css">
+    <link rel="stylesheet" href="/styles/receptionist/profiles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <title>User Profile</title>
 </head>
@@ -30,23 +31,22 @@
             </div>
             <div class="row-container">
                 <div class="left-side"> Name: </div>
-                <div class="right-side" id="name"> </div>
+                <input class="right-side" id="name"> </input>
             </div>
             <br>
             <div class="row-container">
                 <div class="left-side"> Gender: </div>
-                <div class="right-side" id="gender"> 
-                </div>
+                <input class="right-side" id="gender"> </input>
             </div>
             <br>
             <div class="row-container">
                 <div class="left-side"> Birthday: </div>
-                <div class="right-side" id="bday"> </div>
+                <input class="right-side" id="bday"> </input>
             </div>
             <br>
             <div class="row-container">
                 <div class="left-side"> Contact Number: </div>
-                <div class="right-side" id="contactN"> </div>
+                <input class="right-side" id="contactN"> </input>
             </div>
             <br>
             <div class="row-container">
@@ -56,26 +56,26 @@
             <br>
             <div class="row-container">
                 <div class="left-side"> Height: </div>
-                <div class="right-side" id="height">
-                </div>
+                <input class="right-side" id="height">
+                </input>
             </div>
             <div class="row-container">
                 <div class="left-side"> Weight: </div>
-                <div class="right-side" id="weight"> </div>
+                <input class="right-side" id="weight"> </input>
             </div>
                     
             <h3> Emergency Details </h3>
-                <div id="" class="row-container">
+                <div class="row-container">
                     <div class="left-side">Name: </div>
                     <div class="right-side"> <select id="eName"> </select> </div>
                 </div>
                     <br>
-                <div id="" class="row-container">
+                <div class="row-container">
                     <div class="left-side">Relationship: </div>
                     <div class="right-side"> <output id="eRelationship"></output></div>
                 </div>
                     <br>
-                <div id="" class="row-container">
+                <div class="row-container">
                     <div class="left-side">Contact Number: </div>
                     <div class="right-side"><output id="eContactN"></output> </div>
                 </div>
