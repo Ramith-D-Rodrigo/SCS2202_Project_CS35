@@ -51,7 +51,6 @@ fetch("../../controller/receptionist/view_onsite_reservations_controller.php")
             if(!flag){
                 const div = document.createElement('div');
                 div.className = 'container';
-                div.style.width = '60%';
                 div.innerHTML = "No onsite reservations found";
                 searchResults.appendChild(div);
             } 

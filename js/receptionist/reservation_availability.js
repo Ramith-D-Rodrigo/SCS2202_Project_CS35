@@ -22,6 +22,8 @@ reservationForm.addEventListener('submit', (event) => {
         "reservingEndTime" : formData.get("reservingEndTime"),
         "reservingDate" : formData.get("reservingDate"),
         "reservationFee" : formData.get("reservationPrice"),
+        "name" : formData.get("name"),
+        "contactNumber" : formData.get("contactNum"),
         "makeReserveBtn" : reserveBtn.value
     }
     localStorage.setItem("formData", JSON.stringify(sendingRequest));  /*converts form data to a json string and 
@@ -36,19 +38,16 @@ reservationForm.addEventListener('submit', (event) => {
     .then((res) => res.json())
     .then((data) => {
         // console.log(data);
-        if(data.successMsg !== undefined){
-            const successMsgBox = document.getElementById("successMsg");
-            const errMsgBox = document.getElementById("errMsg");
-            successMsgBox.innerHTML = "";
-            errMsgBox.innerHTML = "";
+        const successMsgBox = document.getElementById("successMsg");
+        const errMsgBox = document.getElementById("errMsg");
+        successMsgBox.innerHTML = "";
+        errMsgBox.innerHTML = "";
+        
+        if(data.successMsg !== undefined){           
             successMsgBox.innerHTML = data.successMsg;
             window.location.href = '../../public/receptionist/reservation_payment.php';
 
         }else if(data.errMsg !== undefined){
-            const successMsgBox = document.getElementById("successMsg");
-            const errMsgBox = document.getElementById("errMsg");
-            successMsgBox.innerHTML = "";
-            errMsgBox.innerHTML = "";
             errMsgBox.innerHTML = data.errMsg;
         }
     });
