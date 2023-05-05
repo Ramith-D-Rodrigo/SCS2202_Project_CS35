@@ -10,6 +10,73 @@ const reservationHistory = document.getElementById("reservationHistoryBox");
 
 let reservationAndTimeStamp = [];   //array to store reservation id and reserved timestamp
 
+//filtering reservations
+
+const filterStartDate = document.getElementById("filter-start-date");
+const filterEndDate = document.getElementById("filter-end-date");
+
+const filterByDate = (e) => {
+    const startDate = new Date(filterStartDate.value);
+    const endDate = new Date(filterEndDate.value);
+
+    const reservationTable = document.querySelector(".res-history-table");
+    const reservationRows = reservationTable.querySelectorAll("tr");
+
+    //reset border color
+    filterStartDate.style.border = "";
+    filterEndDate.style.border = "";
+
+    //check if both start and end date are invalid (empty, that means user cleared the date input)
+    //if both are invalid, show all reservations
+    if(startDate == "Invalid Date" && endDate == "Invalid Date"){
+        for(let i = 1; i < reservationRows.length; i++){    //start from 1 to skip table header
+            const currRow = reservationRows[i];
+            currRow.style.display = ""; //make it empty to reset the display property (works for responsive table)
+        }
+        return;
+    }
+        
+
+    //check if start and end date in valid format
+    if(startDate == "Invalid Date" || endDate == "Invalid Date"){
+        //give red border to indicate invalid date
+        if(startDate == "Invalid Date"){
+            filterStartDate.style.border = "2px solid red";
+        }
+        else{
+            filterEndDate.style.border = "2px solid red";
+        }
+        return;
+    }
+
+    //check if start date is before end date
+    if(startDate > endDate){
+        filterStartDate.style.border = "2px solid red";
+        filterEndDate.style.border = "2px solid red";
+        return;
+    }
+
+    //filtering reservations from the table
+
+
+    for(let i = 1; i < reservationRows.length; i++){    //start from 1 to skip table header
+        const currRow = reservationRows[i];
+        //select date data label
+        const dateDataLabel = currRow.querySelector("[data-label='Date']");
+        const currDate = new Date(dateDataLabel.innerHTML);
+
+        if(currDate < startDate || currDate > endDate){ //if date is not within range, hide the row
+            currRow.style.display = "none";
+        }
+        else{   //if date is within range, show the row
+            currRow.style.display = "";     //make it empty to reset the display property (works for responsive table)
+        }
+    }
+}
+
+filterStartDate.addEventListener("change", filterByDate);
+filterEndDate.addEventListener("change", filterByDate);
+
 
 fetch("../../controller/user/reservation_history_controller.php")
     .then(res => res.json())

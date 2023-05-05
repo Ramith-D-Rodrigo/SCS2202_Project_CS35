@@ -72,6 +72,12 @@
     font-size: 0.9rem;
 }
 
+.filter{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
 @media(max-width: 1278px){
     .res-history-table-header td{
         font-size: 1rem;
@@ -95,6 +101,11 @@
 }
 
 @media(max-width: 620px){
+    .filter{
+        flex-direction: column;
+        align-items: center;
+    }
+    
     .res-history-table-header{
         display: none;
     }
