@@ -223,7 +223,7 @@
         //send email regarding the reservation payment
         require_once("../../src/general/mailer.php");
         $sportName = json_decode(json_encode($reservingSport), true)['sportName'];
-        Mailer::onlineReservationPayment($reservingUser -> getEmailAddress(), $reservingUser -> getUsername(), $branchName, $sportName, $courtName, $date, $startingTime, $endingTime, $reservationPrice, CURRENCY);
+        Mailer::onlineReservationPayment($reservingUser -> getEmailAddress(), $reservingUser -> getUsername(), $branchName, $sportName, $courtName, $date, $startingTime, $endingTime, $payment, CURRENCY);
 
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($returningMsg);
