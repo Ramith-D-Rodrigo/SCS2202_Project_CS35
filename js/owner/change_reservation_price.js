@@ -141,6 +141,12 @@ authForm.addEventListener("submit", (e) => {
         return;
     }
     let authStatus = null;
+
+    //disable the submit button
+    const submitBtn = authForm.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+    submitBtn.classList.add("disabled");
+
     //send the request
     fetch("../../controller/general/authentication_controller.php", {
         method: "POST",
@@ -157,6 +163,10 @@ authForm.addEventListener("submit", (e) => {
         if(!authStatus){
             const authMsg = authForm.querySelector("#authMsg");
             authMsg.innerHTML = data.errMsg;
+
+            //enable the submit button
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("disabled");
         }
         else{
             //close the authFormDiv by clicking on the main
@@ -195,6 +205,10 @@ authForm.addEventListener("submit", (e) => {
                     msg.innerHTML = data.msg;
                     msg.style.color = "red";
                 }
+
+                //enable the submit button
+                submitBtn.disabled = false;
+                submitBtn.classList.remove("disabled");
             })
         }
     });

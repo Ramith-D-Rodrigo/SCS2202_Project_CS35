@@ -28,7 +28,7 @@
                     <div class="row-container">
                         <div class="left-field">Name</div>
                         <div class="right-field">
-                            <input type="text" name="name" id="name" required pattern="^[A-Z][a-zA-Z ]*$">
+                            <input type="text" name="name" id="name" required pattern="^[A-Z][a-zA-Z ]*$" title="First letter must be capital">
                         </div>
                     </div>
 

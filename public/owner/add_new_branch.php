@@ -101,6 +101,10 @@
 
             <div class="content-box">
                 <div class="card-title">Location of the Branch</div>
+                <div class="note">Please Note that the location of the branch will be the location of the marker. Do not rely 
+                    on the Current Location button to set the location of the branch as it may not be accurate. It is recommended
+                    to manually set the location of the branch by clicking/touching the location on the map.
+                </div>
                 <div class="btn-container">
                     <button id="currLocation">Current Location</button>
                 </div>

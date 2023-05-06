@@ -65,6 +65,8 @@
     require_once("../../src/owner/owner.php");
     $owner = Owner::getInstance();
 
+    $owner -> setUserID($_SESSION['userid']);
+
     //same sport name check
     $sports = $owner -> getSports();
     foreach($sports as $sport){

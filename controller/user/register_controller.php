@@ -147,8 +147,6 @@
                     break;
                 }
             }
-
-            $_POST[$i] = htmlspecialchars($_POST[$i], ENT_QUOTES);
         }
         else{  //user has not entered it
             if(in_array($i, $compulsaryFields)){    //a compulsary field

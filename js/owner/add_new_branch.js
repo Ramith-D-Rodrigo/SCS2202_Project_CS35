@@ -56,7 +56,7 @@ fetch("../../controller/owner/add_new_branch_get_details_controller.php")
             sportInput.type = 'checkbox';
             sportInput.id = sport.sportID;
             sportInput.value = sport.sportID;
-            sportInput.name = 'sports[]';
+            sportInput.name = 'sports[]';   //name is an array so that we can get all the selected sports
 
             const sportLabel = document.createElement('label');
             sportLabel.setAttribute('for', sport.sportID);
@@ -96,7 +96,7 @@ form.addEventListener('submit', (event) => {
 
     formMsg.innerHTML = '';
 
-    if(status){
+    if(status[0]){ //if the form is valid
         const formData = new FormData(form);
         formData.append('latitude', latitude);
         formData.append('longitude', longitude);
@@ -117,7 +117,12 @@ form.addEventListener('submit', (event) => {
         });
 
         formData.delete('sports[]');
-        formData.append('sports', JSON.stringify(sendingSportArr));
+        formData.append('sports', JSON.stringify(sendingSportArr)); //add the sports array to the form data
+
+        //disable the submit button
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.classList.add('disabled');
 
         //send the data to the controller
         let status = true;
@@ -130,6 +135,10 @@ form.addEventListener('submit', (event) => {
             return response.json();
         })
         .then(data => {
+            //re-enable the submit button
+            submitButton.disabled = false;
+            submitButton.classList.remove('disabled');
+
             if(status){
                 formMsg.innerHTML = data.msg;
                 formMsg.style.color = 'green';
@@ -141,7 +150,7 @@ form.addEventListener('submit', (event) => {
         });
     }
     else{
-        formMsg.innerHTML = 'Please fill the information Correctly';
+        formMsg.innerHTML = status[1];
         formMsg.style.color = 'red';
     }
 });

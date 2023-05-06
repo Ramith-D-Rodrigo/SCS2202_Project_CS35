@@ -55,6 +55,9 @@ form.addEventListener('submit', (e) => {
 
     if(reservationPrice < 0 || reservationPrice % 10 !== 0){    //must be multiple of 10
         msg.innerHTML = 'Invalid Reservation Price';
+        if(reservationPrice % 10 !== 0){
+            msg.innerHTML = ' Price Must be a multiple of 10';
+        }
         msg.style.color = 'red';
         return;
     }
@@ -107,6 +110,12 @@ authForm.addEventListener('submit', (e) => {
     const authFormData = new FormData(authForm);
 
     let authStatus = null;
+    
+    //disable the submit button
+    const submitBtn = authForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.classList.add('disabled');
+
     fetch("../../controller/general/authentication_controller.php", {
         method: 'POST',
         headers: {
@@ -123,6 +132,11 @@ authForm.addEventListener('submit', (e) => {
             const authMsg = authFormDiv.querySelector('#authMsg');
             authMsg.innerHTML = data.errMsg;
             authMsg.style.color = 'red';
+
+            //enable the submit button
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('disabled');
+
             return;
         }
         //valid credentials
@@ -132,6 +146,11 @@ authForm.addEventListener('submit', (e) => {
 
         //send the sport data
         let status = null;
+
+        //disable main form submit button
+        const mainSubmitBtn = form.querySelector('button[type="submit"]');
+        mainSubmitBtn.disabled = true;
+        mainSubmitBtn.classList.add('disabled');
 
         fetch("../../controller/owner/add_new_sport_controller.php", {
             method: 'POST',
@@ -145,6 +164,15 @@ authForm.addEventListener('submit', (e) => {
             return res.json();
         })
         .then(data => {
+
+            //enable main form submit button
+            mainSubmitBtn.disabled = false;
+            mainSubmitBtn.classList.remove('disabled');
+
+            //enable the submit button of the auth form
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('disabled');
+            
             if(!status){
                 msg.innerHTML = data.msg;
                 msg.style.color = 'red';

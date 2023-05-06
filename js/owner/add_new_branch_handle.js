@@ -16,7 +16,7 @@ const formHandle = (form) => {
     openingTime.classList.remove('error');
     if(!timeValidation(openingTime.value)){ //opening time has minutes
         openingTime.classList.add('error');
-        return false;
+        return [false, "Opening time should be in hours only"];
     }
 
     //check the closing time
@@ -24,7 +24,7 @@ const formHandle = (form) => {
     closingTime.classList.remove('error');
     if(!timeValidation(closingTime.value)){ //closing time has minutes
         closingTime.classList.add('error');
-        return false;
+        return [false, "Closing time should be in hours only"];
     }
 
     const openHour = parseInt(openingTime.value.split(':')[0]);
@@ -33,13 +33,13 @@ const formHandle = (form) => {
     if(openHour >= closeHour){  //opening time is greater than closing time
         openingTime.classList.add('error');
         closingTime.classList.add('error');
-        return false;
+        return [false, "Closing time should be greater than opening time"];
     }
 
     if(closeHour - openHour <= MAX_RESERVATION_TIME_HOURS){ //closing time - opening time is less than or equal to the maximum reservation time
         openingTime.classList.add('error');
         closingTime.classList.add('error');
-        return false;
+        return [false, "Closing time should be greater than opening time by at least " + MAX_RESERVATION_TIME_HOURS + " hours"];
     }
 
     //check the sports
@@ -47,10 +47,10 @@ const formHandle = (form) => {
 
     //if no sports are selected
     if(sports.length == 0){
-        return false;
+        return [false, "Please select at least one sport"];
     }
 
-    return true;
+    return [true, ""];
 }
 
 
