@@ -1,57 +1,57 @@
 <header>
     <div class='header-top'>
-        <div> <!-- For the current visiting page of the site -->
+        <div class="header-top-left"> <!-- For the current visiting page of the site -->
             <?php
-                if($_SERVER['REQUEST_URI'] === '/public/receptionist/receptionist_dashboard.php'){  //receptionist dashboard
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/receptionist_dashboard.php')){  //receptionist dashboard
                     echo "Welcome, ".$_SESSION['username'];
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/receptionist_login.php'){  //staff login
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/receptionist_login.php')){  //staff login
                     echo "Receptionist Login";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/request_maintenance.php'){  //request maintenance
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/request_maintenance.php')){  //request maintenance
                     echo "Request Maintenance";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/edit_branch.php'){  //edit branch
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/edit_branch.php')){  //edit branch
                     echo "Edit Branch";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_user_profiles.php'){  //view user profiles
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/view_user_profiles.php')){  //view user profiles
                     echo "View User Profiles";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/user_profile.php'){  //view selected profile
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/user_profile.php')){  //view selected profile
                     echo "User Profile";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_coach_profiles.php'){  //view coach profiles
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/view_coach_profiles.php')){  //view coach profiles
                     echo "View Coach Profiles";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/coach_profile.php'){  //view selected profile
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/coach_profile.php')){  //view selected profile
                     echo "Coach Profile";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/view_reservations.php'){   //view today's reservations
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/view_reservations.php')){   //view today's reservations
                     echo "Reservations";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/onsite_reservation_entry.php'){   //select sport for onsite r.
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/onsite_reservation_entry.php')){   //select sport for onsite r.
                     echo "Select Sport";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/onsite_reservation.php'){   //make onsite reservation
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/onsite_reservation.php')){   //make onsite reservation
                     echo "Make Onsite Reservation";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/reservation_payment.php'){   //payment receipt
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/reservation_payment.php')){   //payment receipt
                     echo "Reservation Payment";
                 }
-                else if($_SERVER['REQUEST_URI'] === '/public/receptionist/cancel_onsite_reservations.php'){   //cancel onsite reservations
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/cancel_onsite_reservations.php')){   //cancel onsite reservations
                     echo "Cancel Onsite Reservations";
                 }
             ?>
         </div>
-        <div style="align-items:center;">
+        <div class="header-top-middle">
             <?php    
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //receptionist logged in     
                 echo "Branch: ".$_SESSION['branchName'];
             ?>
         </div>
-        <div style="align-items:flex-end;">
+        <div class="header-top-right">
             <?php
-                if($_SERVER['REQUEST_URI'] === '/public/receptionist/receptionist_dashboard.php'){  //Check whether the receptionist is in the dashboard
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/receptionist_dashboard.php')){  //Check whether the receptionist is in the dashboard
             ?>
                 <div style="float:right" >
                     <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button>

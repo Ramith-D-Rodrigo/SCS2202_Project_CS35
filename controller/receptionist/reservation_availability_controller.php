@@ -177,19 +177,19 @@
                 }
                 else if(strtotime($coachingSession -> startingTime) <= strtotime($startingTime) && strtotime($coachingSession -> endingTime) >= strtotime($endingTime)){ //before coaching session starting time, but reservation ending time is inside the coaching session
                     $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
-                    header('Content-Type: application/json;');    //because we are sending json
+                    header('Content-Type: application/json;');    
                     echo json_encode($returningMsg);
                     exit();
                 }
                 else if(strtotime($coachingSession -> startingTime) > strtotime($startingTime) && (strtotime($endingTime) <= strtotime($coachingSession -> endingTime) && strtotime($endingTime) > strtotime($coachingSession -> startingTime))){ //current reserving time slot is over an already reserved time slot
                     $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
-                    header('Content-Type: application/json;');    //because we are sending json
+                    header('Content-Type: application/json;');    
                     echo json_encode($returningMsg);
                     exit();
                 }
                 else if((strtotime($startingTime) >= strtotime($coachingSession -> startingTime) && strtotime($startingTime) < strtotime($coachingSession -> endingTime)) && strtotime($coachingSession -> endingTime) < strtotime($endingTime)){ //current reserving time slot is over an already reserved time slot
                     $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
-                    header('Content-Type: application/json;');    //because we are sending json
+                    header('Content-Type: application/json;');    
                     echo json_encode($returningMsg);
                     exit();
                 }

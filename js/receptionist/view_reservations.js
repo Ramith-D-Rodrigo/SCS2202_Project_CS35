@@ -30,10 +30,10 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
                 const leftContent = document.createElement("div");
                 const rightContent = document.createElement("div");
                 leftContent.style.display = "flex";
-                leftContent.style.marginRight = "70px";
                 rightContent.style.display = "flex";
-                rightContent.style.marginRight = "20px";
                 if(Object.keys(data[i]).length===10){   //for user made reservations
+                    leftContent.style.marginRight = "70px";
+                    rightContent.style.marginRight = "45px";
                     leftContent.innerHTML = "Reservation ID: ".concat(data[i].reservationID,
                         "<br>","Reserved By: ",data[i].firstName," ",data[i].lastName,
                         "<br>","Contact Number: ",data[i].contactNum,
@@ -43,15 +43,20 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
                         "<br>","Number of People: ",data[i].noOfPeople,
                         "<br>","Status: ",data[i].status);
                         
-                }else if(Object.keys(data[i]).length===7){  //for onsite reservations
+                }else if(Object.keys(data[i]).length===9 && data[i].sessionID === undefined){  //for onsite reservations
+                    leftContent.style.marginRight = "25px";   //the resID to long than the user made reservation
+                    rightContent.style.marginRight = "20px";
                     leftContent.innerHTML = "Reservation ID: ".concat(data[i].reservationID,
-                        "<br>","Number of People: ",data[i].noOfPeople,
+                        "<br>","Reserved By: ",data[i].reservationHolder,
+                        "<br>","Contact Number: ",data[i].contactNumber,
                         "<br>","Time Slot: ",data[i].startingTime,"-",data[i].endingTime);
                     rightContent.innerHTML = "Sport: ".concat(data[i].sportName,
-                        "<br>","Court Name: ",data[i].courtName,                 
+                        "<br>","Court Name: ",data[i].courtName,
+                        "<br>","Number of People: ",data[i].noOfPeople,                 
                         "<br>","Status: ",data[i].status);
                 }
                 else{   //for permanent reservations
+                    leftContent.style.marginRight = "150px";
                     leftContent.innerHTML = "Session ID: ".concat(data[i].sessionID,
                         "<br>","Reserved By: ",data[i].firstName," ",data[i].lastName,
                         "<br>","Contact Number: ",data[i].contactNum,
@@ -76,23 +81,26 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
                 const  cancelBtn = document.createElement("button");
                 cancelBtn.name = "btnVal";
                 cancelBtn.innerHTML = "Cancel";
-                if(data[i].status === "Pending"){
-                    resID.value = data[i].reservationID;
-                    confirmBtn.value = "Checked In";
-                    cancelBtn.value = "Declined";
-                }else{
-                    cancelBtn.disabled = true;
-                    cancelBtn.style.opacity = "50%";
-                    confirmBtn.disabled = true;
-                    confirmBtn.style.opacity = "50%";
-                }
-                
-                formInput.appendChild(confirmBtn);
-                formInput.appendChild(cancelBtn);
-                formInput.appendChild(resID);
                 reservDiv.appendChild(leftContent);
                 reservDiv.appendChild(rightContent);
-                reservDiv.appendChild(formInput);
+
+                if(data[i].status !== undefined){    //remove adding two buttons for permanent reservations
+                    if(data[i].status === "Pending"){
+                        resID.value = data[i].reservationID;
+                        confirmBtn.value = "Checked In";
+                        cancelBtn.value = "Declined";
+                    }else{    
+                        cancelBtn.disabled = true;
+                        cancelBtn.style.opacity = "50%";
+                        confirmBtn.disabled = true;
+                        confirmBtn.style.opacity = "50%";
+                    }
+                    formInput.appendChild(confirmBtn);
+                    formInput.appendChild(cancelBtn);
+                    formInput.appendChild(resID);
+                    reservDiv.appendChild(formInput);
+                }
+                    
                 reservations.appendChild(reservDiv);
             }
         }

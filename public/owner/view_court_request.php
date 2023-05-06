@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/styles/general/notification.css">
     <link rel="stylesheet" href="/styles/general/staff.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <title>View Discount Request</title>
+    <title>View Court Request</title>
 </head>
 <body>
     <?php

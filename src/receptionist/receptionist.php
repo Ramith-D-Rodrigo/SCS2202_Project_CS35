@@ -473,8 +473,10 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         }
 
         $onReservationSql = sprintf("SELECT `r`.`reservationID`,`r`.`startingTime`,`r`.`endingTime`,`r`.`noOfPeople`,`r`.`status`,`s`.`sportName`,
-        `sc`.`courtName`
-        FROM `reservation` `r`              
+        `sc`.`courtName`,`or`.`reservationHolder`,`or`.`contactNumber`
+        FROM `reservation` `r`
+        INNER JOIN `onsite_reservation_holder` `or` 
+        ON `r`.`reservationID` = `or`.`reservationID`             
         INNER JOIN `sports_court` `sc`
         ON `sc`.`courtID` = `r`.`sportCourt`
         INNER JOIN `sport` `s`
@@ -529,13 +531,33 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $result;
     }
 
-    public function makeReservation($resID, $date, $st, $et, $people, $payment, Sports_Court $court, $database){
-        $result = $court -> createOnsiteReservation($this -> userID, $resID, $date, $st, $et, $payment, $people, $database);
+    public function makeReservation($resID, $date, $st, $et, $people, $payment, Sports_Court $court, $holderName,$contactNum,$database){
+        $saveReservation = $court -> createOnsiteReservation($this -> userID, $resID, $date, $st, $et, $payment, $people, $database);
+        $saveReservationHolder = $this -> saveReservationHolder($resID,$holderName,$contactNum);
+
+        $result = false;
+        if($saveReservation && $saveReservationHolder){
+            $result = true;
+        }
         return $result; 
     }
 
+    public function saveReservationHolder($resID,$name,$contactNum){
+        $result = false;
+
+        $sql = sprintf("INSERT INTO `onsite_reservation_holder` VALUES ('%s','%s','%s')",
+        $this -> connection -> real_escape_string($resID),
+        $this -> connection -> real_escape_string($name),
+        $this -> connection -> real_escape_string($contactNum));
+
+        $result = $this -> connection -> query($sql);
+        return $result;
+    }
+
     public function getOnsiteReservations($database){
-        $sql = sprintf("SELECT `reservationID` from reservation WHERE `onsiteReceptionistID` =  '%s'",
+        $sql = sprintf("SELECT `r`.`reservationID`,`or`.`reservationHolder`,`or`.`contactNumber` from `reservation` `r`
+        INNER JOIN `onsite_reservation_holder` `or` 
+        ON `r`.`reservationID` = `or`.`reservationID` WHERE `r`.`onsiteReceptionistID` =  '%s'",
         $database -> real_escape_string($this -> userID));
         $result = $database -> query($sql);
         $reservationInfo = [];
@@ -544,7 +566,11 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
             $reservation = new Reservation();
             $reservation -> setID($row -> reservationID);
             $onsiteRes = $reservation -> getDetails($database);
-            array_push($reservationInfo,$onsiteRes);
+            $onsiteReservation = [];
+            $onsiteReservation['reservationDetails'] = $onsiteRes;
+            $onsiteReservation['name'] = $row -> reservationHolder;
+            $onsiteReservation['contactNumber'] = $row -> contactNumber;
+            array_push($reservationInfo,$onsiteReservation);
         }
 
         return $reservationInfo;

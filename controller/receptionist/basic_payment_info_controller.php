@@ -15,7 +15,7 @@
     
     //create a unique id for the reservationID
     $recepID = $_SESSION['userid'];
-    $prefix = "Res-".$recepID;
+    $prefix = "Res-recep".substr($recepID,12,(strlen($recepID)-12));   //get only the branchID from recep ID
     $reservationID = uniqid($prefix,false);
     $reservationID = substr($reservationID,0,30);  //get the first 30 characters of the generated id
 

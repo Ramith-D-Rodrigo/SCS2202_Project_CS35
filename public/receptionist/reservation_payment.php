@@ -25,16 +25,20 @@
         <div style="display: flex;flex-direction:column">
             <div class="content-box" id="paymentReceipt">
                 <h2 style="text-align: center;font-size:larger"><u>Payment Receipt</u></h2>
-                <div id="branchInfo" style="display:flex;flex-direction:column;justify-content:flex-start">
-                    <div class="row-container" style="justify-content:flex-start">
-                        <div class="left-side"> 
+                <div id="branchInfo" style="display:flex;justify-content:flex-start">
+                    <div class="row-container" style="justify-content:flex-start;">
+                        <div class="left-side" style="width:38%"> 
+                            Reservation Holder: <br>
+                            Contact Number: <br>
                             Reservation ID: <br>
                             Receptionist ID: <br>
                             Branch Location: <br>
-                            Contact Number: <br>
+                            Branch Number: <br>
                             Generated At: <br>
                         </div>
-                        <div class="right-side" style="margin-left:0px">
+                        <div class="right-side" style="margin-left:0px;width:51%">
+                            <div id="name"> </div>
+                            <div id="contactNum"> </div>
                             <div id="resID"> </div>
                             <div id="recID">  </div>
                             <div id="branchLoc">  </div>

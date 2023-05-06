@@ -71,7 +71,7 @@
                                     </div>
 
                                     <div style ="flex-basis: 33.333333%">
-                                        Sport Court : <input name="reservingSportCourt" id="selectedSportCourt" readonly>
+                                        Sport Court : <input style="width:60%" name="reservingSportCourt" id="selectedSportCourt" readonly>
                                     </div>
 
                                     <div style ="flex-basis: 33.333333%">
@@ -86,8 +86,14 @@
                                     <div style ="flex-basis: 33.333333%">
                                         Ending Time : <input type="time" required name="reservingEndTime" id="reserveEndingTime">
                                     </div>
-                                    <div style ="flex:auto">
-                                        Number of People : <input type="text" required name="numOfPeople" id="numOfPeople" min="1" pattern="[0-9]+">
+                                    <div style ="flex-basis: 33.333333%">
+                                        Name : <input style="width:75%" type="text" required name="name" id="name" pattern="[a-zA-Z. ]+">
+                                    </div>
+                                    <div style ="flex-basis: 33.333333%">
+                                        Contact Number : <input style="width:58%" type="text" required name="contactNum" id="contactNum" min="11" pattern="[0-9]+">
+                                    </div>
+                                    <div style ="flex-basis: 33.333333%">
+                                        Number of People : <input style="width:56%" type="text" required name="numOfPeople" id="numOfPeople" min="1" pattern="[0-9]+">
                                     </div>
                                 </div>
                                 <div style="text-align:center">

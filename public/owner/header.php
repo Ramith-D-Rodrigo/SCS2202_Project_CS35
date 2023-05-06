@@ -20,6 +20,15 @@
                 if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/view_manager_requests.php')){
                     echo "View Manager Requests";
                 }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/view_discount_request.php')){
+                    echo "View Discount Request";
+                }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/view_court_request.php')){
+                    echo "View Court Request";
+                }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/view_revenue.php')){
+                    echo "View Revenue";
+                }
                 if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/reservation_schedule.php')){
                     echo "Reservation Schedule";
                 }

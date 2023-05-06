@@ -39,7 +39,7 @@
             $this -> userRole = 'owner';
         }
 
-        public function getRevenue($dateFrom, $dateTo, $branch = null){    //get the revenue of the branches
+        public function getRevenue($dateFrom, $dateTo, $branch = null,$sport = null){    //get the revenue of the branches
             if($branch == null){    //all branches are needed
                 $branchArr = $this -> getBranches();
                 $revenue = 0;
@@ -51,7 +51,12 @@
                 return $revenue;
             }
             else{
-                return $branch -> getBranchRevenue($this -> connection, $dateFrom, $dateTo);
+                if($sport == null){
+                    return $branch -> getBranchRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo);
+                }else{
+                    return $branch -> getBranchRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo,sport: $sport);
+                }
+                
             }
 
         }
@@ -70,33 +75,43 @@
             return $branchArr;
         }
 
-        public function getCoachingSessionRevenue($dateFrom, $dateTo, $branch = null){    //get the revenue of the coaching sessions of the branch
+        public function getCoachingSessionRevenue($dateFrom, $dateTo, $branch = null, Sport $sport = null){    //get the revenue of the coaching sessions of the branch
             if($branch == null){    //all branches are needed
                 $branchArr = $this -> getBranches();
                 $revenue = 0;
 
                 foreach($branchArr as $branch){
-                    $revenue += $branch -> coachSessionPaymentRevenue($this -> connection, $dateFrom, $dateTo);
+                    $revenue += $branch -> coachSessionPaymentRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo);
                 }
                 return $revenue;
             }
             else{
-                return $branch -> coachSessionPaymentRevenue($this -> connection, $dateFrom, $dateTo);
+                if($sport == null){
+                    return $branch -> coachSessionPaymentRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo,sport: null);
+                }else{
+                    return $branch -> coachSessionPaymentRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo,sport: $sport);
+                }
+                
             }
         }
 
-        public function getReservationRevenue($dateFrom, $dateTo, $branch = null){    //get the revenue of the reservations of the branch
+        public function getReservationRevenue($dateFrom, $dateTo, $branch = null, Sport $sport = null){    //get the revenue of the reservations of the branch
             if($branch == null){
                 $branchArr = $this -> getBranches();
                 $revenue = 0;
 
                 foreach($branchArr as $branch){
-                    $revenue += $branch -> courtReservationRevenue($this -> connection, $dateFrom, $dateTo);
+                    $revenue += $branch -> courtReservationRevenue(database:$this -> connection,dateFrom: $dateFrom,dateTo: $dateTo);
                 }
                 return $revenue;
             }
             else{
-                return $branch -> courtReservationRevenue($this -> connection, $dateFrom, $dateTo);
+                if($sport == null) {
+                    return $branch -> courtReservationRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo,sport: null);
+                }else{
+                    return $branch -> courtReservationRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo,sport: $sport);
+                }
+                
             }
         }
 

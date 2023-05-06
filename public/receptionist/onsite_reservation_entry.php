@@ -28,12 +28,12 @@
                 <div class="left-side" style="width:200px;margin-left:10%">
                     Sport: 
                 </div>
-                <div class="right-side" style="margin-left:0px;margin-right:-20px">
+                <div class="right-side" style="margin-left:0px">
                     <select id="sport">
                         <option value="">Select Sport...</option>
                     </select>
                 </div>  
-                <button type="submit" name="sportID" id="sportID" style="width:600px">
+                <button type="submit" name="sportID" id="sportID" style="width:600px;margin-left:5%">
                 View Reservation</button>  
             </div>
         </form>

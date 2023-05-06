@@ -29,7 +29,7 @@
                     <div class="card-title"> Total Revenue for This Month</div> 
                     <div id="revenue" class="card-content"></div>
                     <div class="card-button"> 
-                        <button> View Branch Wise </button> 
+                        <button onclick="window.location.href='/public/owner/view_revenue.php'"> View Branch Wise </button> 
                     </div>
                 </div>
                 <div class="content-box single-card">
