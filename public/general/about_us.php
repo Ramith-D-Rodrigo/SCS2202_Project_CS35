@@ -54,6 +54,15 @@
                                 <div class='img-container'>
                                     <img src="/uploads/gifs/reg_coaches.gif" alt="reg_coaches" class="gif">
                                 </div>
+                                <div id='coach-guidelines'>
+                                    <ul>
+                                        <li>
+                                            Please note that your profile won't be displayed in the Registered Coaches page until you add your coaching sessions.
+                                        </li>
+
+                                    </ul>
+                                </div>
+                                
                                 <br>
                                 Your feedback is important to us. Be sure to leave us a feedback once you have checked in with your reservation.
                                 <div class='img-container'>

@@ -37,6 +37,12 @@
     list-style: none;
 }
 
+#coach-guidelines li{
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    list-style: none;
+}
+
 #branch-img-container img, #court-img-container img{
     width: 100%;
     height: auto;
