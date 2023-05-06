@@ -48,7 +48,7 @@
 
     //get sports 
 
-    $sports = $owner -> getSports($owner -> getConnection());
+    $sports = $owner -> getSports();
 
     foreach($sports as $sport){
         $sport -> getDetails($owner -> getConnection(), ['sportName']);
