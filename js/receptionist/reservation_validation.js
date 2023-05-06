@@ -1,4 +1,5 @@
 import { verbose, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, MAX_RESERVATION_DAYS, MAX_RESERVATION_TIME_HOURS } from "../CONSTANTS.js";
+import { addDays, addLeadingZeros } from "../FUNCTIONS.js";
 
 const reserveDate = document.getElementById("reservationDate");
 const reserveStartingTime = document.getElementById("reserveStartingTime");
@@ -26,21 +27,6 @@ reserveStartingTime.addEventListener('change', userInputTimeCheck);
 reserveEndingTime.addEventListener('change', userInputTimeCheck);
 
 //date constraints
-
-function addDays(date, days){   //function to add days
-    let result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-}
-
-//function to add leading zeros to the date
-function addLeadingZeros(date){
-    let result = date;
-    if(date < 10){
-        result = "0" + date;
-    }
-    return result;
-}
 
 const today = new Date();
 today.setHours(0,0,0,0); //set the time to 00:00:00:000 to avoid the date change

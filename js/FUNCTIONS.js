@@ -148,5 +148,20 @@ const decodeHtml = (str) => {
     return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
 }
 
+function addDays(date, days){   //function to add days
+    let result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
 
-export {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain, togglePassword, feedbackPagination, pictureSize, decodeHtml};
+//function to add leading zeros to the date
+function addLeadingZeros(date){
+    let result = date;
+    if(date < 10){
+        result = "0" + date;
+    }
+    return result;
+}
+
+
+export {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain, togglePassword, feedbackPagination, pictureSize, decodeHtml, addDays, addLeadingZeros};
