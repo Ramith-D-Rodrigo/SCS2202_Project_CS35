@@ -37,7 +37,7 @@ const openUserReservationDetails = (reservationID) => {
     urlParams.append("reservationID", reservationID);
     urlParams.append("type", "userReservation")
 
-    fetch("../../controller/owner/specific_reservation_session_details.controller.php?" + urlParams)
+    fetch("../../controller/owner/specific_reservation_session_details_controller.php?" + urlParams)
         .then(res => res.json())
         .then(data => {
             //add user image if available
@@ -83,7 +83,7 @@ const openCoachingSessionDetails = (sessionID) => {
     urlParams.append("sessionID", sessionID);
     urlParams.append("type", "coachingSession");
 
-    fetch("../../controller/owner/specific_reservation_session_details.controller.php?" + urlParams)
+    fetch("../../controller/owner/specific_reservation_session_details_controller.php?" + urlParams)
         .then(res => res.json())
         .then(data => {
             //add coach image

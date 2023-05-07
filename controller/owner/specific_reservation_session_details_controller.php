@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the details of a specific reservation or a coaching session when the owner clicks on a reserved spot in the reservation schedule page
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['owner'])){
