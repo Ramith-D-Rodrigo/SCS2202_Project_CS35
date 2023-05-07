@@ -119,7 +119,7 @@
                     <i class="fa-solid fa-map-location-dot map-icon" id="mapIcon"></i>
                 </div>
                 <div class="schedule-btn">
-                    <button onclick="window.location.href='/public/owner/reservation_schedule.php'">View Schedule</button>
+                    <button onclick="window.location.href='/public/owner/reservation_schedule.php'" id="scheduleBtn">View Schedule</button>
                 </div>
             </div>
 

@@ -73,6 +73,18 @@ fetch("../../controller/owner/branch_details_controller.php")
 
         //display the first branch details
         displayBranchDetails({target: {value: branches[0].branchDetails.branchID}});
+
+        //view schedule btn event listener
+        const viewScheduleBtn = document.querySelector("#scheduleBtn");
+        viewScheduleBtn.addEventListener("click", (e) => {
+            //get the branch id
+            const branchID = document.querySelector("#branchFilter").value;
+
+            //store in session storage
+            sessionStorage.setItem("branchID", branchID);
+            //redirect to the schedule page
+            window.location.href = "/public/owner/reservation_schedule.php";
+        });
     })
     .then(() => {
         //event listener for map icon

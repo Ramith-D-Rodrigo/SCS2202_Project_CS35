@@ -43,14 +43,18 @@
             return $result;
         }
 
-        public function getSchedule($database){ //get the reservation schedule of a certain court
+        public function getSchedule($database, $startDate = null){ //get the reservation schedule of a certain court
+            if($startDate == null){
+                $startDate = date("Y-m-d");
+            }
             //get user reservations
             $sql = sprintf("SELECT * FROM `reservation` 
             WHERE `sportCourt` 
             LIKE '%s'
-            AND `date` >= CURDATE()
+            AND `date` >= '%s'
             ORDER BY `date`",
-            $database -> real_escape_string($this -> courtID));
+            $database -> real_escape_string($this -> courtID),
+            $database -> real_escape_string($startDate));
 
             $result = $database -> query($sql);
             $reservations = [];
@@ -80,9 +84,11 @@
             WHERE `courtID`
             LIKE '%s'
             AND `decision` = 'a'
-            AND (`startingDate` >= CURDATE()
-            OR `endingDate` >= CURDATE())",
-            $database -> real_escape_string($this -> courtID));
+            AND (`startingDate` >= '%s'
+            OR `endingDate` >= '%s')",
+            $database -> real_escape_string($this -> courtID),
+            $database -> real_escape_string($startDate),
+            $database -> real_escape_string($startDate));
 
             $maintenance = [];
             $result = $database -> query($sql);
@@ -193,7 +199,6 @@
         public function createReservation($user, $date, $starting_time, $ending_time, $payment, $num_of_people, $chargeID, $database){
             $reservation = new Reservation();
             $result = $reservation -> onlineReservation($date, $starting_time, $ending_time, $num_of_people, $payment, $this -> courtID, $user, $chargeID, $database);
-            unset($reservation);
             return $result; //an array
         }
 

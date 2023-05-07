@@ -104,6 +104,10 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
                 timeDiff : (((endingTimeDateObj - startingTimeDateObj)/1000)/60)/60    //time difference in 1 hour slots
             };
 
+            if(jsonData.branchReservationSchedule[key].schedule.reservations[resInfo]['reservationID'] !== undefined){
+                userReservation['reservationID'] = jsonData.branchReservationSchedule[key].schedule.reservations[resInfo]['reservationID'];
+            }
+
             currCourtReservations.push(userReservation);
             
         }
@@ -134,6 +138,22 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
                 timeDiff : (((endingTimeDateObj - startingTimeDateObj)/1000)/60)/60,    //time difference in 1 hour slots
                 day : sessionDay
             };
+
+            if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['startDate'] !== undefined){
+                const startDate = jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['startDate'];
+                coachingSession['startDate'] = startDate;
+            }
+
+            if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['cancelDate'] !== undefined){
+                if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['cancelDate'] !== null){
+                    const cancelDate = jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['cancelDate'];
+                    coachingSession['cancelDate'] = cancelDate;
+                }
+            }
+
+            if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['sessionID'] !== undefined){
+                coachingSession['sessionID'] = jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['sessionID'];
+            }
 
             currCoachReservations.push(coachingSession);
         }
@@ -280,7 +300,7 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
     return createdTables;
 }
 
-function updateTheReservationTables(scheduleObjs, jsonData){
+function updateTheReservationTables(scheduleObjs, jsonData, dateIncrement = ''){    //dateIncrement is the number of days to increment the date
     //convert object to array
     scheduleObjs = Object.values(scheduleObjs);
     console.log(scheduleObjs);
@@ -323,10 +343,35 @@ function updateTheReservationTables(scheduleObjs, jsonData){
                 //we will create a cell for each day of the week, and we will check if the day of the week matches the day of the coaching session
                 //if it does, we will add the cell to the table
                 let tempDate = new Date();  //we will use this to increment the date
+                if(dateIncrement !== ''){    //not the initial table (the user has pressed the navigation buttons, or the user has changed the date)
+                    tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
+                }
+                tempDate.setHours(0, 0, 0, 0);  //set the time to 00:00:00
+
                 let inc = 1; //we will increment the date by 1 day
                 do{
                     //get the day of the week to string
                     const day = tempDate.toLocaleDateString('en-US', { weekday: 'long' });
+                    if(res.startDate !== undefined){    //if the coaching session has a start date
+                        const startDate = new Date(res.startDate);
+                        startDate.setHours(0, 0, 0, 0);  //set the time to 00:00:00
+                        if(tempDate < startDate){   //if the date is before the start date, we don't have to check it
+                            console.log(tempDate, startDate);
+                            inc++;
+                            tempDate.setDate(tempDate.getDate() + 1);    //increment the date by 1
+                            continue;
+                        }
+                    }
+
+                    if(res.cancelDate !== undefined){    //if the coaching session has an end date
+                        if(res.cancelDate !== null){    //if the end date is not null
+                            const endDate = new Date(res.cancelDate);
+                            if(tempDate > endDate){   //if the date is after the cancel date, the session is over
+                                break;
+                            }
+                        }
+                    }
+
                     if(day === sessionDay){    //if the day of the week matches the day of the coaching session
                         const resDate = tempDate.toLocaleDateString();
                         const cell = createReservationCell("Coaching Session", res.timeDiff);
@@ -543,4 +588,4 @@ function createMaintenanceCell(maintenanceObj, openingTime, closingTime, courtNu
 
 //we can export updateTheReservationTables, createScheduleObjects, and createReservationTable functions aswell to use them to update the table after a reservation is made
 
-export {updateTheReservationTables, createScheduleObjects, createReservationSchedulePage, createReservationTable, createScheduleNavigation};
+export {updateTheReservationTables, createScheduleObjects, createReservationSchedulePage, createReservationTable, createScheduleNavigation, createCellID};
