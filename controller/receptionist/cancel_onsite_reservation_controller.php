@@ -5,13 +5,17 @@
     require_once("../../src/receptionist/dbconnection.php");
     require_once("../../src/system_admin/staff.php");
 
-    $reservationID = $_GET['reservationID'];
+    $requestJson = file_get_contents("php://input");
+    $reservation = json_decode($requestJson, true);
+
+    // print_r($reservationID['reservationID']);
     $staffM = new Staff();
     $receptionist = $staffM -> getStaffMemeber($_SESSION['userrole']);
     $receptionist -> setDetails(uid: $_SESSION['userid']);
-    $onsiteReservationInfo = $receptionist -> cancelOnsiteReservation($reservationID,$connection);
+    $decision = $receptionist -> cancelOnsiteReservation($reservation['reservationID'],$connection);
 
-    header("Location: /public/receptionist/cancel_onsite_reservations.php");
-    $connection -> close();
+    header('Content-type: application/json');
+    echo json_encode($decision);
+    die();
     
 ?>

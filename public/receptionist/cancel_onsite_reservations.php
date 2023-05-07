@@ -25,6 +25,14 @@
     <main class="body-container">
         <div id="searchResults" style="display:flex;flex-direction:column">
         </div>
+        <div id="overlay"></div>
+        <div id="warning-msg" style="display:flex;flex-direction:row;display:none">
+            <button id="Yes"><i class="fa-solid fa-check"></i></button>
+            <button id="No"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="success-msg">
+        </div>
+        <div id="err-msg"></div>
     </main>
     <?php
         require_once("../general/footer.php");
