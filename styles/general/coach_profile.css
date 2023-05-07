@@ -182,5 +182,10 @@
         width: 100%;
     }
 
+    #stu-feedbacks{
+        height: 80vh;
+        overflow-y: auto;
+    }
+
     
 }
