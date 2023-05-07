@@ -196,28 +196,28 @@ reservationForm.addEventListener('submit', (event) => {
                 //1. the reserving time is in the middle of the reservation
                 if(reserveStartingTime >= startingTimeStr && reserveEndingTime <= endingTimeStr){
                     clientValFlag = false;
-                    console.log("middle");
+                    //console.log("middle");
                     throw new Error("The Time is already reserved");
                 }
     
                 //2. the reserve starting start time is before the reservation start time but the reserve ending time is in the middle of the reservation
                 else if(reserveStartingTime < startingTimeStr && reserveEndingTime > startingTimeStr && reserveEndingTime <= endingTimeStr){
                     clientValFlag = false;
-                    console.log("before");
+                    //console.log("before");
                     throw new Error("The Time is already reserved");
                 }
     
                 //3. the reserve starting start time is in the middle of the reservation but the reserve ending time is after the reservation end time
                 else if(reserveStartingTime >= startingTimeStr && reserveStartingTime < endingTimeStr && reserveEndingTime > endingTimeStr){
                     clientValFlag = false;
-                    console.log("after");
+                    //console.log("after");
                     throw new Error("The Time is already reserved");
                 }
     
                 //4. the reserve starting start time is before the reservation start time and the reserve ending time is after the reservation end time
                 else if(reserveStartingTime < startingTimeStr && reserveEndingTime > endingTimeStr){
                     clientValFlag = false;
-                    console.log("before and after");
+                    //console.log("before and after");
                     throw new Error("The Time is already reserved");
                 }
             }

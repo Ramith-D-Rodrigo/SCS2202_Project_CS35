@@ -193,7 +193,6 @@ authForm.addEventListener("submit", (e) => {
 
                     
                     init().then(() => {
-                        console.log(formData.get("sportID"));
                         //change the filter value to the current sport
                         document.getElementById("sportsFilter").value = formData.get("sportID");
 

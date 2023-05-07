@@ -24,7 +24,6 @@ myMap.on('click', (event) => {
     longitude = clickedCoordinates.longitude;
     setMarker(myMap, latitude, longitude);
 
-    console.log(latitude, longitude);
 });
 
 //current location button
@@ -105,7 +104,6 @@ form.addEventListener('submit', (event) => {
 
         let sendingSportArr = [];
         selectedSports.forEach(sport => {
-            console.log(sport+ 'Select');
             const courtCount = document.getElementById(sport + 'Select');
             
             const sportObj = {

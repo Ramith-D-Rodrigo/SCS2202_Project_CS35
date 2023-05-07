@@ -303,7 +303,6 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
 function updateTheReservationTables(scheduleObjs, jsonData, dateIncrement = ''){    //dateIncrement is the number of days to increment the date
     //convert object to array
     scheduleObjs = Object.values(scheduleObjs);
-    console.log(scheduleObjs);
    
     for(let i = 0; i < scheduleObjs.length - 1; i++){   //go through each schedule (i-1 because the last element is the branch maintenance)
         //user reservations
@@ -356,7 +355,6 @@ function updateTheReservationTables(scheduleObjs, jsonData, dateIncrement = ''){
                         const startDate = new Date(res.startDate);
                         startDate.setHours(0, 0, 0, 0);  //set the time to 00:00:00
                         if(tempDate < startDate){   //if the date is before the start date, we don't have to check it
-                            console.log(tempDate, startDate);
                             inc++;
                             tempDate.setDate(tempDate.getDate() + 1);    //increment the date by 1
                             continue;

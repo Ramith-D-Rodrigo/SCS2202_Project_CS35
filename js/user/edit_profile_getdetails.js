@@ -76,7 +76,6 @@ function removeMedicalConcern(e){   //remove medical concern when button is pres
     medicalCount--;
     const parent = e.currentTarget.parentElement;  //list element
     const freedID = parent.id.slice(-1);    //get the removing number
-    console.log(freedID);
 
     if(!medicalinputID.includes(parseInt(freedID))){    //does not include the item number
         medicalinputID.push(parseInt(freedID));
@@ -350,11 +349,9 @@ function validateChanges(e){
     }
 
     if(flag === false){ //Has invalid inputs
-        console.log("Form is invalid");
         return false;
     }
     else{   //valid to submit the data
-        console.log("Form is valid");
         return true;
     }
 }
@@ -362,7 +359,6 @@ function validateChanges(e){
 editForm.addEventListener('submit', (e) => {
     let newValues = []; //new values to be updated
     e.preventDefault();
-    console.log("Form is valid");
     const formData = new FormData(editForm);
 
     let newMedicalConcerns = [];
@@ -428,7 +424,6 @@ editForm.addEventListener('submit', (e) => {
     }
     else{
         if(newMedicalConcerns.length === 0){    //if the user has removed all the medical concerns
-            console.log("removed all");
             newValues['medicalAllRemoved'] = true;
         }
         medFlag = true;
@@ -463,7 +458,6 @@ editForm.addEventListener('submit', (e) => {
         }
     }
 
-    console.log(newValues);
     if(Object.keys(newValues).length === 0){ //nothing changed
         errMsg.innerHTML = "You haven't changed Anything";
         return;
@@ -524,7 +518,6 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
                 currValues[keys[i]] = values[i];
             }
         }
-        console.log(currValues);
 
         const nameField = document.getElementById("nameField"); //set the name field
         nameField.innerHTML = data["firstName"] + " " + data["lastName"];
@@ -683,7 +676,6 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
 
         if(emergencyCount === 3){   //maximum number of dependents
             emergencyDetailsBtn.parentElement.style.display = 'none';   //hide the whole div
-            console.log("hide");
         }
     })
     .catch((err) => {

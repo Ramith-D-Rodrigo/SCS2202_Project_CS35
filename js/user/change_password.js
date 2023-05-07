@@ -33,11 +33,9 @@ function validateCredentialsForm(event){
     }
 
     if(flag === false){ //Has invalid inputs
-        console.log("Form is invalid");
         return false;
     }
     else{   //valid to submit the data
-        console.log("Form is valid");
         return true;
     }
 }

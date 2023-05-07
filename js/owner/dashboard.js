@@ -10,8 +10,6 @@ const sportCard = document.querySelector("#sports");
 fetch("../../controller/owner/dashboard_controller.php")
     .then(res => res.json())
     .then(data => {
-        console.log(data);
-
         //add the data to the revenue card
         revenueCard.innerHTML = `${currency} ${parseFloat(data.revenue).toFixed(2)}`;
         

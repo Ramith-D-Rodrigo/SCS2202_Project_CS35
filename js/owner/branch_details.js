@@ -50,8 +50,6 @@ const branchDetailsForm = document.querySelector("#branchContainer");
 fetch("../../controller/owner/branch_details_controller.php")
     .then(res => res.json())
     .then(data => {
-        console.log(data);
-
         //initialize and store the data
         for(let i = 0; i < data.length; i++){
             branches.push(data[i]);
@@ -240,8 +238,6 @@ const displayBranchDetails = (e) => {
             fetch("../../controller/owner/branch_feedback_controller.php?branchID=" + branchID)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data);
-
                     //sort the feedbacks according to the date
                     for(let i = 0; i < data.length; i++){
                         sortFeedbacks(data[i]);

@@ -7,10 +7,6 @@ const numOfPeople = document.getElementById("numOfPeople");
 
 function userInputTimeCheck(e){ //this function check for valid time input (00 minutes check and the max and min time check (opening and closing time))
     const min = e.target.value.split(":")[1];
-    if(verbose){
-        //console.log(e.target.value);
-        //console.log(min)   //get the minutes
-    }
 
     if(!(min == '00') || !(e.target.min <= e.target.value && e.target.max >= e.target.value)){
         e.target.style.border = "medium solid red";
@@ -47,11 +43,9 @@ const reservationDate = document.getElementById("reservationDate");
 
 const minDateObj = addDays(today, MIN_RESERVATION_DAYS);
 const minDateStr = minDateObj.getFullYear() + "-" + addLeadingZeros(minDateObj.getMonth() + 1) + "-" + addLeadingZeros(minDateObj.getDate());
-console.log(minDateStr);
 
 const maxDateObj = addDays(today, MAX_RESERVATION_DAYS);
 const maxDateStr = maxDateObj.getFullYear() + "-" + addLeadingZeros(maxDateObj.getMonth() + 1) + "-" + addLeadingZeros(maxDateObj.getDate());
-console.log(maxDateStr);
 
 reservationDate.min = minDateStr;
 reservationDate.max = maxDateStr;
@@ -88,7 +82,7 @@ reserveStartingTime.addEventListener('change', (e)=>{
     }
 
     const timeDiffHours = ((timeDiffMilli/1000)/60)/60;
-    console.log(timeDiffHours);
+    
 
     if(timeDiffHours < MIN_RESERVATION_TIME_HOURS){  //minimum reservation time period
         errorMsg.innerHTML = "Minimum Reservation Period is 1 Hour";
@@ -107,7 +101,7 @@ reserveStartingTime.addEventListener('change', (e)=>{
     //check for discount
     const discount = document.getElementById("discountInput");
 
-    console.log(discount);
+    
     if(discount != null){ //calculate the price with the discount  
         //price without discount value
         const priceWithoutDiscount = document.getElementById("priceWithoutDiscount");
@@ -164,14 +158,12 @@ reserveEndingTime.addEventListener('change', (e)=>{
         return;
     }
     errorMsg.innerHTML = "";
-    console.log(timeDiffHours);
-    
+        
     let minRevPrice = reservationPrice.min;
     let calulatedPrice = minRevPrice * timeDiffHours;
     //check for discount
     const discount = document.getElementById("discountInput");
 
-    console.log(discount);
     if(discount != null){ //calculate the price with the discount
         //price without discount value
         const priceWithoutDiscount = document.getElementById("priceWithoutDiscount");
@@ -190,7 +182,6 @@ reserveEndingTime.addEventListener('change', (e)=>{
 function validateForm(e){
     const errorMsg = document.getElementById("errMsg");
     if(reserveStartingTime.value > reserveEndingTime.value){
-        console.log(reserveStartingTime, reserveEndingTime);
         errorMsg.innerHTML = "Time Range is wrong. Please check again";
         return false;
     }

@@ -117,8 +117,6 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
     const formData = new FormData();
     formData.append('sessionID', selectedSession);
 
-    console.log(Object.fromEntries(formData));
-
     let icon = null;    //for the icon to be displayed in the message box
     icon = document.createElement('i');
     icon.style.fontSize = '6rem';
@@ -215,8 +213,6 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
     const formData = new FormData();
 
     formData.append('sessionID', selectedSession);
-
-    console.log(Object.fromEntries(formData));
 
     let successflag = false;
 
@@ -482,7 +478,6 @@ fetch("../../controller/user/coaching_sessions_controller.php")
         return res.json();
     })
     .then(data => {
-        console.log(data);
         if(successflag){
             for(let i = 0; i < data.coachingSessions.length; i++){
                 //create a div for each coaching session
@@ -500,7 +495,6 @@ fetch("../../controller/user/coaching_sessions_controller.php")
                     photo: data.coaches[data.coachingSessions[i].coachID].photo
                 }
                 coachSet.add(coachObj);
-                console.log(coachSet);
 
                 const imagesContainer = document.createElement('div');  //container for the images (both coach and sport)
                 imagesContainer.className = 'images-container';

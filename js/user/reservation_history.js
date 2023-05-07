@@ -81,7 +81,6 @@ filterEndDate.addEventListener("change", filterByDate);
 fetch("../../controller/user/reservation_history_controller.php")
     .then(res => res.json())
     .then(data => {
-        console.log(data);
         if(data.length === 0){  //no reservations
             const errDiv = document.createElement("div");
             errDiv.className = "err-msg";
