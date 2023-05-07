@@ -24,10 +24,10 @@
     ?>
     <main class="body-container">
         <div>
-            <div id="err-msg">
-            </div>
-            <div id="reservations" style="display:flex;flex-direction:column">
-            </div>
+            <div id="reservations" style="display:flex;flex-direction:column"> </div>
+            <div id="overlay"></div>
+            <div id="err-msg"></div>
+            <div id="success-msg"></div>
         </div>
     </main>
     <?php
