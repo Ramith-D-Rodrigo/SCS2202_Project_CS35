@@ -1,4 +1,5 @@
 import { addLeadingZeros, addDays } from "../FUNCTIONS.js";
+import {currency} from "../CONSTANTS.js";
 
 //get current date
 const todayStr = new Date().toLocaleDateString().split("/");
@@ -109,6 +110,11 @@ const showRevenue = (e) => {
             const keys = Array.from(Object.keys(revenueData));
             labels = Object.keys(revenueData[keys[0]]);
 
+            const yAxis = "Revenue (" + currency + ")";
+            const xAxis = "Date";
+            const borderWidth = 3;
+            const tension = 0.4;
+
 
             chart = new Chart(ctx, {
                 type: "line",
@@ -120,8 +126,8 @@ const showRevenue = (e) => {
                             data: revenueData.allrevenue,
                             backgroundColor: "rgba(255, 99, 132, 0.2)",
                             borderColor: "rgba(255, 99, 132, 1)",
-                            borderWidth: 1,
-                            tension: 0.25,
+                            borderWidth: borderWidth,
+                            tension: tension,
                             fill: true,
                         },
 
@@ -130,8 +136,8 @@ const showRevenue = (e) => {
                             data: revenueData.reservation,
                             backgroundColor: "rgba(54, 162, 235, 0.2)",
                             borderColor: "rgba(54, 162, 235, 1)",
-                            borderWidth: 1,
-                            tension: 0.25,
+                            borderWidth: borderWidth,
+                            tension: tension,
                             fill: true,
 
                         },
@@ -141,18 +147,28 @@ const showRevenue = (e) => {
                             data: revenueData.coachingsession,
                             backgroundColor: "rgba(255, 206, 86, 0.2)",
                             borderColor: "rgba(255, 206, 86, 1)",
-                            borderWidth: 1,
-                            tension: 0.25,
+                            borderWidth: borderWidth,
+                            tension: tension,
                             fill: true,
                         },
-                    ],
+                    ],                   
                 },
                 options: {
                     scales: {
                         y: {
                             beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: yAxis,
+                            },
                         },
-                    },
+                        x: {
+                            title: {
+                                display: true,
+                                text: xAxis,
+                            }
+                        },
+                    }
                 },
             });  
         });

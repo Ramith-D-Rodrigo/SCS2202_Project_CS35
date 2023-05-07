@@ -31,12 +31,12 @@
                                     <div class="left-field">Name*</div>
                                     <div class="right-field">
                                         <input type="text" 
-                                                pattern="[a-zA-Z]+" 
+                                                pattern="^[a-zA-Z]+$" 
                                                 name="firstName"
                                                 id="firstName" 
                                                 required placeholder="First Name">
                                         <input type="text" 
-                                                pattern="[a-zA-Z]+" 
+                                                pattern="^[a-zA-Z]+$" 
                                                 name="lastName"
                                                 id="lastName" 
                                                 required 
@@ -84,7 +84,7 @@
                                             type="text" 
                                             placeholder="Optional (centimeters)" 
                                             min="0" 
-                                            pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
+                                            pattern = "^\d*\.?\d*$"
                                             id="height"
                                             name="height">
                                     </div>
@@ -98,7 +98,7 @@
                                             type="text" 
                                             placeholder="Optional (kilograms)" 
                                             min="0"
-                                            pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
+                                            pattern = "^\d*\.?\d*$"
                                             id="weight"
                                             name="weight">
                                     </div>

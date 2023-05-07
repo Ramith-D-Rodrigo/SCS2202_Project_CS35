@@ -171,6 +171,8 @@
 
     //add registering user's name to the array (can be used to check if the user has entered his/her name as an emergency contact)
     $postCopy['name'] = $_POST['firstName'] . ' ' . $_POST['lastName'];
+    unset($postCopy['firstName']);
+    unset($postCopy['lastName']);
     //remove empty values from the array
     $postCopy = array_filter($postCopy);
     //get duplicates while ignoring cases and empty values
@@ -179,7 +181,7 @@
     if(count($duplicateRemoved) !== count($postCopy)){
         //get the duplicate values
         $duplicateValues = array_diff_assoc($postCopy, $duplicateRemoved);
-        $returnMsg['RegUnsuccessMsg'] = json_encode($duplicateValues);
+        $returnMsg['RegUnsuccessMsg'] = '';
         //get the keys of the duplicate values
         $duplicateKeys = array_keys($duplicateValues);
         foreach($duplicateKeys as $key){

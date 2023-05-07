@@ -58,5 +58,3 @@
     echo json_encode($msg);
     die();
 ?>
-
-
