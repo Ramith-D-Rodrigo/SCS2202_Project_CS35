@@ -90,10 +90,10 @@
                                         Name : <input style="width:75%" type="text" required name="name" id="name" pattern="[a-zA-Z. ]+">
                                     </div>
                                     <div style ="flex-basis: 33.333333%">
-                                        Contact Number : <input style="width:58%" type="text" required name="contactNum" id="contactNum" min="11" pattern="[0-9]+">
+                                        Contact Number : <input style="width:58%" type="text" required name="contactNum" id="contactNum" minlength="10" maxlength="11" pattern="[0-9]+">
                                     </div>
                                     <div style ="flex-basis: 33.333333%">
-                                        Number of People : <input style="width:56%" type="text" required name="numOfPeople" id="numOfPeople" min="1" pattern="[0-9]+">
+                                        Number of People : <input style="width:56%" type="text" required name="numOfPeople" id="numOfPeople" minlength="1" pattern="[0-9]+">
                                     </div>
                                 </div>
                                 <div style="text-align:center">
