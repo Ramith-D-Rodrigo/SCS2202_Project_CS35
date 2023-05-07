@@ -22,6 +22,11 @@
     flex-wrap: wrap;
 }
 
+.card-content{
+    height: 60vh;
+    overflow-y: auto;
+}
+
 .schedule-btn{
     display: flex;
     flex-direction: row;
