@@ -1,4 +1,5 @@
 <?php
+    //this script is used to reset the password of the user after they have entered the reset code
     session_start();
     require_once("../../src/general/security.php");
 

@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the schedule of a particular branch's sport and display it in the reservation schedule page
     session_start();
     require_once("../../src/general/branch.php");
     require_once("../../src/general/dbconnection.php");

@@ -1,4 +1,5 @@
 <?php
+    //this script is used to make a reservation
     session_start();
     require_once("../../src/general/security.php");
     //check the authentication

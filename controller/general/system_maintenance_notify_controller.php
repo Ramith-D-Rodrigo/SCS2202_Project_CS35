@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the system maintenance info
     require_once("../../src/general/website_functions/system_maintenance_info.php");
     require_once("../../src/general/dbconnection.php");
 

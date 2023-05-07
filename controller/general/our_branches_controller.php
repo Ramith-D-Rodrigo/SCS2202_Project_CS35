@@ -1,4 +1,6 @@
 <?php
+    //this script is used to get all the branches and their details to display in the our branches page
+    session_start();
     $resultArr = [];
     require_once("../../src/general/dbconnection.php");
     require_once("../../src/general/website_functions/our_branches_functions.php");

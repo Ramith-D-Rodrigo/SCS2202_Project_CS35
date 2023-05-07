@@ -1,4 +1,5 @@
 <?php
+    //this script is used to add a new branch to the system (a request sent by the owner to admin)
     session_start();
     require_once("../../src/general/security.php");
     require_once("../../controller/CONSTANTS.php");

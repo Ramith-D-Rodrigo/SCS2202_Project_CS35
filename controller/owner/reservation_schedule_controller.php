@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the schedule of a branch's sport (depends on the start date) and display it in the schedule page of the owner
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['owner'])){

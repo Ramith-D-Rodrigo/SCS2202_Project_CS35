@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get all the notifications of the user
     session_start();
     require_once("../../src/general/security.php");
 

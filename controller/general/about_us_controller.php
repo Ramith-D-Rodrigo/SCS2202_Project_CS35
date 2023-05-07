@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get all the details to display in the about us page 
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: FALSE, acceptingUserRoles: ['user'])){

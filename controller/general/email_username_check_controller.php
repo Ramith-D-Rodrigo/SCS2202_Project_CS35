@@ -1,4 +1,5 @@
 <?php
+    //this script is used to check if the user input email address or username during the password reset functiontiality
     session_start();
     require_once("../../src/general/actor.php");
     require_once("../../src/general/security.php");

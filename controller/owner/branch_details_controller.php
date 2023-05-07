@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the details of the branches to display in the branch details page of the owner
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['owner'])){

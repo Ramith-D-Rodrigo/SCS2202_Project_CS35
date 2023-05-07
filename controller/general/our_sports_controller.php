@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get all the sports that are provided by the branches to display in the our sports page
     session_start();
     require_once("../../src/general/dbconnection.php");
     require_once("../../src/general/sport_court.php");

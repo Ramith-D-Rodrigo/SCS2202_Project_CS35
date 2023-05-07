@@ -1,4 +1,5 @@
 <?php
+    //this script is used to check the reset code entered by the user and send a new code if the code is wrong
     session_start();
     require_once("../../src/general/security.php");
 

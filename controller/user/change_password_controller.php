@@ -1,4 +1,5 @@
 <?php
+    //this script is used to change the password of the user, after they have entered the verification code sent to their email
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){

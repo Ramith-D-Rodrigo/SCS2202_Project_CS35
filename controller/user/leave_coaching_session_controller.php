@@ -1,4 +1,5 @@
 <?php
+    //this script is used to leave a coaching session
     session_start();
     require_once("../../src/general/security.php");
 

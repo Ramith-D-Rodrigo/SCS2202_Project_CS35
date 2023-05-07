@@ -1,4 +1,5 @@
 <?php
+    //this script is used to request to join a coaching session
     session_start();
     require_once("../../src/general/security.php");
     //check the authentication

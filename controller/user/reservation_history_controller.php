@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the reservation history of the user
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){

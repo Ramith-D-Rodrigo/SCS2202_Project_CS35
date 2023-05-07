@@ -1,4 +1,5 @@
 <?php
+    //this script is used to give feedback to the branch which the user has made a reservation
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){

@@ -1,4 +1,6 @@
 <?php
+    //this script is used to get the details of all the branches of the complex and the sports that each branch is offering to display in the reservation schedule page
+    //for owner to select the branch and the sport to get the reservation schedule
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['owner'])){

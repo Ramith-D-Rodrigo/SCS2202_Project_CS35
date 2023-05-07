@@ -1,4 +1,5 @@
 <?php
+    //this script is used to register a new user
     session_start();
     require_once("../../src/user/user.php");
     require_once("../../src/user/user_dependent.php");

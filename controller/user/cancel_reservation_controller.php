@@ -1,4 +1,5 @@
 <?php
+    //this script is used to cancel a reservation of a user
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck :  TRUE, acceptingUserRoles : ['user'])){

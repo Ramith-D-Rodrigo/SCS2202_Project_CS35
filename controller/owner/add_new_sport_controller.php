@@ -1,4 +1,5 @@
 <?php
+    //this script is used to add a new sport to the database
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['owner'])){

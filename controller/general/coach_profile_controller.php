@@ -1,7 +1,6 @@
 <?php
 
-use Stripe\LoginLink;
-
+    //this script is used to get all the details of a specific coach to display in the coach profile page
     session_start();
     //script authentication
     require_once("../../src/general/security.php");

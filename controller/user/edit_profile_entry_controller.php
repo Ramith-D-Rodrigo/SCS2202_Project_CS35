@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the profile details of the user
     session_start();
 
     require_once("../../src/user/user.php");

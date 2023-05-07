@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the dashboard data of the owner
     session_start();
     require_once("../../src/general/security.php");
     require_once("../../controller/CONSTANTS.php");

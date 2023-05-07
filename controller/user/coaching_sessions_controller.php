@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the details of all the coaching sessions that the user has joined (pending, ongoing, left)
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){ //cannot access (NOT operator)
