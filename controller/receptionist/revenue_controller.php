@@ -45,7 +45,7 @@
 
         while($currDate <= $toDate){    // loop through all days
             $currDateStr = $currDate -> format('Y-m-d');
-            $currRevenue = $branch -> getBranchRevenue($receptionist -> getConnection(), $_GET['fromDate'], $currDateStr, $sport);
+            $currRevenue = $branch -> getBranchRevenue($receptionist -> getConnection(), $currDateStr, $currDateStr, $sport);   // get revenue for this day
             $returnJSON['allrevenue'][$currDateStr] = $currRevenue;
             $currDate -> add(new DateInterval('P1D')); // add one day
         }
@@ -58,7 +58,7 @@
         while($currDate <= $toDate){    // loop through all days
             
             $currDateStr = $currDate -> format('Y-m-d');
-            $currRevenue = $branch -> courtReservationRevenue($_GET['fromDate'], $currDateStr, $sport, $receptionist -> getConnection());
+            $currRevenue = $branch -> courtReservationRevenue($currDateStr, $currDateStr, $sport, $receptionist -> getConnection());    // get revenue for this day
             $returnJSON['reservation'][$currDateStr] = $currRevenue;
             $currDate -> add(new DateInterval('P1D')); // add one day
         }
@@ -71,7 +71,7 @@
 
         while($currDate <= $toDate){    // loop through all days
             $currDateStr = $currDate -> format('Y-m-d');
-            $currRevenue = $branch -> coachSessionPaymentRevenue($_GET['fromDate'], $currDateStr, $sport, $receptionist -> getConnection());
+            $currRevenue = $branch -> coachSessionPaymentRevenue($currDateStr, $currDateStr, $sport, $receptionist -> getConnection()); // get revenue for this day
             $returnJSON['coachingsession'][$currDateStr] = $currRevenue;
             $currDate -> add(new DateInterval('P1D')); // add one day
         }
