@@ -396,8 +396,21 @@ class Coach extends Actor implements JsonSerializable{
       ];
     }
 
-   
-    
+    public function getProfileDetails($wantedProperty = ''){   //get the profile details and store in the object
+        if($wantedProperty !== ''){ //when needed only single property
+            $detailsSql = sprintf("SELECT `%s` FROM `coach` WHERE `coachID` = '%s'",
+            $this -> connection -> real_escape_string($wantedProperty),
+            $this -> connection -> real_escape_string($this -> userID)); //user details
+
+            $result = $this -> connection -> query($detailsSql);
+            $resultObj = $result -> fetch_object();
+            $returnVal = $resultObj -> {$wantedProperty};
+            $result -> free_result();
+            unset($resultObj);
+            return $returnVal;
+            }
+        }
+
+
 }
-
-
+?>
