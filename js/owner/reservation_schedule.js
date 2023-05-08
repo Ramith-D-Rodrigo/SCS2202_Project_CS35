@@ -272,7 +272,7 @@ const courtSelect = (e) =>{
             //reservations
 
             for(let j = 0; j < objs[i].reservations.length; j++){
-                const tempDate = new Date(objs[i].reservations[j].startingTime);
+                const tempDate = new Date(objs[i].reservations[j].startingTime);    //startingTime has the date and time included
                 const cellID = createCellID(i, tempDate.toLocaleDateString(), tempDate.toLocaleTimeString());
                 cellandReservationMap.set(cellID, ["reservation", objs[i].reservations[j].reservationID]);
 
@@ -280,23 +280,43 @@ const courtSelect = (e) =>{
 
             //coaching sessions
             for(let j = 0; j < objs[i].coachingSessions.length; j++){
-                const tempDate = new Date(objs[i].coachingSessions[j].startingTime);
+                const tempDate = new Date(objs[i].coachingSessions[j].startingTime);    //coaching session has the date and time but date is the start date of the table
+                //set the date to the start date
+                tempDate.setDate(startDateObj.getDate()); //set the date to the start date of the table, just in case to make sure
+                tempDate.setMonth(startDateObj.getMonth()); //set the month to the start date of the table, just in case to make sure
+                tempDate.setFullYear(startDateObj.getFullYear()); //set the year to the start date of the table, just in case to make sure
 
-                //find the index of the weekday of tempDate 
-                let index = weekdays.indexOf(objs[i].coachingSessions[j].day);
-                //add the difference between the current day and the day of the coaching session
-                index = index - startDateObj.getDay();
-                //set the date
-                tempDate.setDate(startDateObj.getDate() + index);            
-                
+                const sessionStartDate = new Date(objs[i].coachingSessions[j].startDate);
+                const sessionCancelDate = new Date(objs[i].coachingSessions[j].cancelDate);
+
+                sessionStartDate.setHours(0, 0, 0, 0); //set the time to the start of the day (to avoid any time conflicts)
+                sessionCancelDate.setHours(23, 59, 59, 999); //set the time to the end of the day (to avoid any time conflicts)
                 let count = 0;
                 do{ //because the coaching session is weekly
+                    if(tempDate < sessionStartDate){    //if the date is before the start date, continue
+                        tempDate.setDate(tempDate.getDate() + 1);
+                        count += 1;
+                        continue;
+                    }
+
+                    if(tempDate > sessionCancelDate){   //if the date is after the cancel date, break
+                        break;
+                    }
+                    const weekDay = tempDate.toLocaleDateString("en-US", {weekday: "long"});
+                    if(weekDay !== objs[i].coachingSessions[j].day){   //if the day is not the same, continue
+                        tempDate.setDate(tempDate.getDate() + 1);
+                        count += 1;
+                        continue;
+                    }
+
                     const cellID = createCellID(i, tempDate.toLocaleDateString(), tempDate.toLocaleTimeString());
                     cellandReservationMap.set(cellID, ["coaching_session", objs[i].coachingSessions[j].sessionID]);
                     tempDate.setDate(tempDate.getDate() + 7);
                     count += 7;
                 }while(count <= MAX_RESERVATION_DAYS);
             }
+
+            console.log(cellandReservationMap);
         }
     });
 }
