@@ -1,3 +1,5 @@
+import { MAX_REFUND_DAYS } from "../CONSTANTS.js";
+
 let reservationAndTimeStampArr = [];   //array of objects of reservation id and reserved timestamp
 const msg = document.getElementById("msg"); //message div
 
@@ -30,7 +32,7 @@ const authFormDisplay = (e) => {
     const currentTime = new Date().getTime();
     
     //check if 3 days have passed since the reservation was made
-    if(currentTime - reservedTimeStamp > 259200000){   //259200000 is 3 days in milliseconds
+    if((currentTime - reservedTimeStamp) > (MAX_REFUND_DAYS * 24 * 60 * 60 * 1000)){ //3 days in milliseconds
         //display the alternative message
         altMsgDiv.innerHTML = "Note : You are not eligible for a refund as 3 days have passed since the reservation was made.";
     }

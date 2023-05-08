@@ -79,7 +79,7 @@
             $reservedDateTimeStamp = new DateTime($reservedDate);
             $dateDiff = $reservedDateTimeStamp -> diff(new DateTime(date('Y-m-d H:i:s')));
 
-            if($dateDiff -> days < 3){ //can refund
+            if($dateDiff -> days < MAX_REFUND_DAYS){ //can refund
                 $result = paymentGateway::chargeRefund($reservationDetails['chargeID'], $reservationDetails['paymentAmount']);
                 if($result[0] === false){
                     $returnMsg['msg'] = "Reservation Cancelled Successfully.<br>Refund Failed : " . $result[1];
