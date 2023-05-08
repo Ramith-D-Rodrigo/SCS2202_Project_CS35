@@ -161,7 +161,7 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
 
         //go through all the court maintenance
         let currCourtMaintenance = Array();
-        for(var resInfo in jsonData.branchReservationSchedule[key].schedule.courtMaintenance){  //go through all the reservation of each court
+        for(var resInfo in jsonData.branchReservationSchedule[key].schedule.courtMaintenance){  //go through all the maintenance of each court
             const startingDate = jsonData.branchReservationSchedule[key].schedule.courtMaintenance[resInfo]['startingDate'].split("-");
             const endingDate = jsonData.branchReservationSchedule[key].schedule.courtMaintenance[resInfo]['endingDate'].split("-");
 
@@ -270,9 +270,9 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
         table.appendChild(tableBody);
     
         while(currTime < closingTime){
-            const tableRow = tableBody.insertRow();
+            const tableRow = tableBody.insertRow(); //table row
     
-            const timePeriod = tableRow.insertCell();
+            const timePeriod = tableRow.insertCell(); //time period cell
 
             const periodStartPrint = currTime.toLocaleTimeString(); //print to print in the page
     
@@ -280,7 +280,7 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
     
             const periodEndPrint = currTime.toLocaleTimeString();
 
-            for(let j = 0; j < 10; j++){
+            for(let j = 0; j < 10; j++){ //creating the table cells for the reservation table
                 const cell = tableRow.insertCell();
                 const tempDate = new Date();
                 tempDate.setDate(tempDate.getDate() + 1);   //ignoring the current day
@@ -288,12 +288,13 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
                     tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
                 }
                 tempDate.setDate(tempDate.getDate() + j);
-                cell.id = "court" + i +tempDate.toLocaleDateString().replaceAll("/", "-") + periodStartPrint.replaceAll(" ", '');   //id is => "Court , Reservation Date, Starting Time"
+                cell.id = createCellID(i, tempDate.toLocaleDateString(), periodStartPrint);
+                //cell.id = "court" + i +tempDate.toLocaleDateString().replaceAll("/", "-") + periodStartPrint.replaceAll(" ", '');   //id is => "Court , Reservation Date, Starting Time"
 
             }
             tableRow.id = "court" + i + periodStartPrint.replaceAll(" ", '') + periodEndPrint.replaceAll(" ", '');
     
-            timePeriod.innerText = periodStartPrint + " - " + periodEndPrint;    
+            timePeriod.innerText = periodStartPrint + " - " + periodEndPrint;       //setting the time period in the cell
         }
         createdTables.push(table);
     }
@@ -361,9 +362,10 @@ function updateTheReservationTables(scheduleObjs, jsonData, dateIncrement = ''){
                         }
                     }
 
-                    if(res.cancelDate !== undefined){    //if the coaching session has an end date
-                        if(res.cancelDate !== null){    //if the end date is not null
+                    if(res.cancelDate !== undefined){    //if the coaching session has a cancel date
+                        if(res.cancelDate !== null){    //if the cancel date is not null
                             const endDate = new Date(res.cancelDate);
+                            endDate.setHours(23, 59, 59, 999);  //set the time to 23:59:59:999
                             if(tempDate > endDate){   //if the date is after the cancel date, the session is over
                                 break;
                             }
@@ -389,7 +391,7 @@ function updateTheReservationTables(scheduleObjs, jsonData, dateIncrement = ''){
                         inc++;
                         tempDate.setDate(tempDate.getDate() + 1);    //increment the date by 1
                     }
-                }while(inc < 30);    //we will increment the date until we reach the 30th day
+                }while(inc <= 30);    //we will increment the date until we reach the 30th day
             }
         }
 

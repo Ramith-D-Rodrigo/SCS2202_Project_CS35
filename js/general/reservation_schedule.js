@@ -21,6 +21,10 @@ fetch("../../controller/general/reservation_schedule_controller.php?" + params)
         let navDateIncrement = 0;
         //next button
         const nextBtn = document.getElementById("nextBtn");
+
+        //previous button
+        const prevBtn = document.getElementById("prevBtn");
+
         nextBtn.addEventListener("click", ()=>{
              //get the schedule from the session storage
             const schedules = JSON.parse(sessionStorage.getItem("schedule"));
@@ -49,7 +53,7 @@ fetch("../../controller/general/reservation_schedule_controller.php?" + params)
                 i++;
             });
             //console.log(tableParents);
-            updateTheReservationTables(schedules, data);  //update the reservations
+            updateTheReservationTables(schedules, data, navDateIncrement);  //update the reservations
 
             if(navDateIncrement >= MAX_RESERVATION_DAYS - 10){  //now reached the limit (disable the button)
                 nextBtn.disabled = true;
@@ -57,8 +61,6 @@ fetch("../../controller/general/reservation_schedule_controller.php?" + params)
             }
         });
 
-        //previous button
-        const prevBtn = document.getElementById("prevBtn");
         prevBtn.addEventListener("click", ()=>{
             //get the schedule from the session storage
             const schedules = JSON.parse(sessionStorage.getItem("schedule"));
@@ -87,7 +89,7 @@ fetch("../../controller/general/reservation_schedule_controller.php?" + params)
                 i++;
             });
             //console.log(tableParents);
-            updateTheReservationTables(schedules, data);  //update the reservations
+            updateTheReservationTables(schedules, data, navDateIncrement);  //update the reservations
 
             if(navDateIncrement === 0){  //now reached the limit (disable the button)
                 prevBtn.disabled = true;
