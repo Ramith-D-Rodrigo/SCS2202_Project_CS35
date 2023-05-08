@@ -62,6 +62,8 @@
             $coachingSessionDetails['startingTime'] = $currCoachingSession -> startingTime;
             $coachingSessionDetails['endingTime'] = $currCoachingSession -> endingTime;
             $coachingSessionDetails['timePeriod'] = $currCoachingSession -> timePeriod;
+            $coachingSessionDetails['startDate'] = $currCoachingSession -> startDate;
+            $coachingSessionDetails['cancelDate'] = $currCoachingSession -> cancelDate;
 
             $courtSchedule['coachingSessions'][$i] =  $coachingSessionDetails;   //coaching session details stored in courtschedule
             $i++;
