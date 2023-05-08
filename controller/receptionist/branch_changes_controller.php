@@ -23,8 +23,8 @@
 
     $flag = false;
     $msg;
-    
-    if($newEmail ==='' && $newContactN !== ''){
+
+    if($newEmail ==='' && $newContactN !== ''){   //only the number is not empty
         $hasContactNumber = checkContactNumber($newContactN,$connection);
         if($hasContactNumber){    //contact number already exists
             $flag = true;
@@ -33,7 +33,7 @@
         else{
             $msg = $receptionist -> updateContactNumber($_SESSION['userid'],$newContactN,$connection);
         }
-    }elseif($newEmail!=='' && $newContactN === ''){
+    }elseif($newEmail!=='' && $newContactN === ''){  //only the email input is not empty
         $hasEmailAddress1 = checkStaffEmail($newEmail,$connection);
         $hasEmailAddress2 = checkBranchEmail($newEmail,$connection);
 
@@ -44,7 +44,7 @@
         else{
             $msg = $receptionist -> updateBranchEmail($_SESSION['branchID'],$newEmail,$connection);
         }
-    }else{
+    }elseif($newEmail!=='' && $newContactN !== ''){   //both email and number are not empty
         $flag2 = false;
         $hasContactNumber = checkContactNumber($newContactN,$connection);
 
