@@ -14,8 +14,8 @@ const toDate = document.getElementById("to-date");
 let chart = null;
 
 //set current date as max date for date input
-document.getElementById("from-date").setAttribute("max", today);
-document.getElementById("to-date").setAttribute("max", today);
+/* document.getElementById("from-date").setAttribute("max", today);
+document.getElementById("to-date").setAttribute("max", today); */
 
 //first get sport details (id and name for select option)
 fetch("../../controller/receptionist/revenue_selection_controller.php")
@@ -66,13 +66,26 @@ fetch("../../controller/receptionist/revenue_selection_controller.php")
 const showRevenue = (e) => {
     //check if start date is before end date
     if (fromDate.value >= toDate.value) {
+        //color the border of the date input red
+        fromDate.classList.add("border-error");
+        toDate.classList.add("border-error");
         return;
     }
 
-    //check if start date or end date is in the future
-    if(fromDate.value > today || toDate.value > today){
+    //set the max range to 1 year
+    const from = new Date(fromDate.value);
+    const to = new Date(toDate.value);
+
+    if (addDays(from, 365) < to) {
+        //color the border of the date input red
+        fromDate.classList.add("border-error");
+        toDate.classList.add("border-error");
         return;
     }
+
+    //remove the red border
+    fromDate.classList.remove("border-error");
+    toDate.classList.remove("border-error");
 
     //create url params 
     const urlParams = new URLSearchParams();
@@ -100,6 +113,8 @@ const showRevenue = (e) => {
             if(chart instanceof Chart){  //destroy old chart
                 chart.destroy();
             }
+
+            console.log(revenueData);
 
             const ctx = document.getElementById("revenue").getContext("2d");
 

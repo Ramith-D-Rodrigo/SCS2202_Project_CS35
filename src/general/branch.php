@@ -421,7 +421,7 @@
 
             $userSql = substr($userSql, 0, -1); //remove the last comma
 
-            $userSql .= sprintf(") AND `date` >= '%s' AND `date` <= '%s' AND (`status` NOT LIKE 'Cancelled' AND `status` NOT LIKE 'Refunded')",
+            $userSql .= sprintf(") AND DATE(`reservedDate`) >= '%s' AND DATE(`reservedDate`) <= '%s' AND (`status` NOT LIKE 'Cancelled' AND `status` NOT LIKE 'Refunded')",
             $database -> real_escape_string($dateFrom),
             $database -> real_escape_string($dateTo));
 
