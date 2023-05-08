@@ -8,6 +8,25 @@ const sportName = params.get("sportName");
 //console.log(sportName);
 const resultContainer = document.getElementById("searchResult");
 
+const formDiv = document.getElementById("searchBar");
+const input = formDiv.querySelector("input");
+
+function searchValidation(event){
+    if(formDiv.reportValidity() === false){
+        event.preventDefault();
+        return false;
+    }
+    else{
+        if(input.value.length < 3){
+            event.preventDefault();
+            return false;
+        }
+        return true;
+    }
+}
+
+formDiv.addEventListener("submit", searchValidation);
+
 fetch("../../controller/general/search_controller.php?sportName=".concat(sportName))    //call the controller
     .then((res) => res.json())
     .then((data) => {
