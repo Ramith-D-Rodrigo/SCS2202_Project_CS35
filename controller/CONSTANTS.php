@@ -9,6 +9,7 @@
     define("MIN_RESERVATION_DAYS", 3);    //minimum reservation date in days (default is 3)
     define("MAX_RESERVATION_DAYS", 30);   //maximum reservation date in days (default is 30)
     define("MIN_COACHING_SESSION_PERCENTAGE", 0.2);  //minimum coaching session percentage (default is 0.2)
+    define("MAX_REFUND_DAYS", 3); //maximum number of days to refund (default is 3) (this number of days after the reserved date timestamp, the reservation is not refundable)
 
     //seconds are not defined as they are always considered to be 0 to making reservations
     //minutes are not defined as they are always considered to be 0 or 30 to making reservations
