@@ -82,19 +82,38 @@ const sessionInfo = (e) => {    //function to get the session info when a sessio
     const noOfStudents = document.querySelector("#noOfStudents");
     const paymentAmount = document.querySelector("#paymentAmount");
 
-    sessions.forEach(session => {
-        if(session.sessionID === sessionID){ //if the session is found
+    //display the session info
+
+    //first clear the fields
+    if(e.target.id === "coachingSessions"){    //if the event is triggered from the coach profile container  
+        timePeriod.value = "";
+        day.value = "";
+        startingTime.value = "";
+        endingTime.value = "";
+        courtName.value = "";
+        noOfStudents.value = "";
+        paymentAmount.value = "";
+    }
+    else if(e.target.id === "requestingSession"){  //if the event is triggered from the join request form
+        const sessionFee = document.querySelector("#sessionFee");
+        sessionFee.innerHTML = "Session Fee : ";
+        const errMsg = document.querySelector("#errMsg");
+        errMsg.innerHTML = "";
+    }
+
+    for(let i = 0; i < sessions.length; i++){
+        if(sessions[i].sessionID === sessionID){ //if the session is found
             if(e.target.id === "coachingSessions"){    //if the event is triggered from the coach profile container
                 //insert the session info
-                timePeriod.value = session.timePeriod;
-                day.value = session.day;
-                startingTime.value = session.startingTime;
-                endingTime.value = session.endingTime;
-                courtName.value = session.courtName;
-                noOfStudents.value = session.noOfStudents;
-                paymentAmount.value = session.paymentAmount;
+                timePeriod.value = sessions[i].timePeriod;
+                day.value = sessions[i].day;
+                startingTime.value = sessions[i].startingTime;
+                endingTime.value = sessions[i].endingTime;
+                courtName.value = sessions[i].courtName;
+                noOfStudents.value = sessions[i].noOfStudents;
+                paymentAmount.value = sessions[i].paymentAmount;
 
-                if(parseInt(session.noOfStudents) >= parseInt(maxStudents)){   //if the session is full
+                if(parseInt(sessions[i].noOfStudents) >= parseInt(maxStudents)){   //if the session is full
                     noOfStudents.style.color = "red";
                     noOfStudents.setAttribute("title", "This Session has Reached the Maximum Number of Students");                
                 }
@@ -103,34 +122,16 @@ const sessionInfo = (e) => {    //function to get the session info when a sessio
                 const sessionFee = document.querySelector("#sessionFee");
                 const errMsg = document.querySelector("#errMsg");
                 errMsg.innerHTML = "";
-                sessionFee.innerHTML = sessionFee.innerHTML  + session.paymentAmount;
+                sessionFee.innerHTML = sessionFee.innerHTML  + sessions[i].paymentAmount;
 
-                if(parseInt(session.noOfStudents) >= parseInt(maxStudents)){   //if the session is full
+                if(parseInt(sessions[i].noOfStudents) >= parseInt(maxStudents)){   //if the session is full
                     errMsg.innerHTML = "This Session has Reached the Maximum Number of Students";
                 }
             }
             //found the session
-            return;
+            return; //exit the function
         }
-        else{
-            //clear the fields
-            if(e.target.id === "coachingSessions"){    //if the event is triggered from the coach profile container  
-                timePeriod.value = "";
-                day.value = "";
-                startingTime.value = "";
-                endingTime.value = "";
-                courtName.value = "";
-                noOfStudents.value = "";
-                paymentAmount.value = "";
-            }
-            else if(e.target.id === "requestingSession"){  //if the event is triggered from the join request form
-                const sessionFee = document.querySelector("#sessionFee");
-                sessionFee.innerHTML = "Session Fee : ";
-                const errMsg = document.querySelector("#errMsg");
-                errMsg.innerHTML = "";
-            }
-        }
-    });
+    }
 }
 
 const branchSelected = (e) => { //function to get the sessions when a branch is selected
@@ -310,5 +311,6 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         sessionBranches.addEventListener("change", branchSelected);
         coachingSessions.addEventListener("change", sessionInfo);
         requestingSessionBranch.addEventListener("change", branchSelected);
+        requestingSession.addEventListener("change", sessionInfo);
         
     })
