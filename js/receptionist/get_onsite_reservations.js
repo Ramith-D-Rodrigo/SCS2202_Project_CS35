@@ -94,6 +94,7 @@ function cancelReservation(){
             
             overlay.className = "overlay";
             successMsg.className = "dialog-box";
+            errMsg.className = "dialog-box";
             if(data){
                 successMsg.style.display = "block";
                 successMsg.innerHTML = "Cancelled Successfully";
