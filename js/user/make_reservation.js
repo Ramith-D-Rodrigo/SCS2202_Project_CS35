@@ -93,7 +93,10 @@ reservationForm.addEventListener('submit', (event) => {
         reservingCourtSchedule[0].courtMaintenance.forEach((maintenance) => {
             const maintenanceStartDate = new Date(maintenance.startingDate);
             const maintenanceEndDate = new Date(maintenance.endingDate);
-    
+
+            maintenanceStartDate.setHours(0, 0, 0, 0);
+            maintenanceEndDate.setHours(23, 59, 59, 999);
+
             if(reservingDate >= maintenanceStartDate && reservingDate <= maintenanceEndDate){
                 clientValFlag = false;
                 throw new Error("The court is under maintenance at this time");
@@ -112,9 +115,13 @@ reservationForm.addEventListener('submit', (event) => {
 
     //check if the reserving time is in branch maintenance date
     try{
-        schedules[2].forEach((maintenance) => {
+        //length - 1 because the last index has the branch maintenance schedule
+        schedules[schedules.length - 1].forEach((maintenance) => {
             const maintenanceStartDate = new Date(maintenance.startingDate);
             const maintenanceEndDate = new Date(maintenance.endingDate);
+
+            maintenanceStartDate.setHours(0, 0, 0, 0);
+            maintenanceEndDate.setHours(23, 59, 59, 999);
     
             if(reservingDate >= maintenanceStartDate && reservingDate <= maintenanceEndDate){
                 clientValFlag = false;
@@ -135,8 +142,16 @@ reservationForm.addEventListener('submit', (event) => {
     //check if the reserving time is in a coaching session
     try{
         reservingCourtSchedule[0].coachingSessions.forEach((coaching) => {
+            const sessionStartDate = new Date(coaching.startDate);
+            const sessionCancelDate = new Date(coaching.cancelDate);
+
+            sessionStartDate.setHours(0, 0, 0, 0);
+            if(sessionCancelDate != "Invalid Date"){
+                sessionCancelDate.setHours(23, 59, 59, 999);
+            }
+
             const day = reservingDate.toLocaleDateString('en-US', { weekday: 'long' });
-            if(day === coaching.day){
+            if(day === coaching.day && sessionStartDate <= reservingDate && (sessionCancelDate == "Invalid Date" || sessionCancelDate >= reservingDate)){
                 //4 cases
                 const startingTimeObj = new Date(coaching.startingTime);
                 const endingTimeObj = new Date(coaching.endingTime);

@@ -155,9 +155,13 @@
 
             $sql = sprintf("SELECT `sessionID` FROM `coaching_session` WHERE
             `courtID` = '%s' AND
-            `day` = '%s' AND ",           
+            `day` = '%s' AND `noOfStudents` > 0 AND `startDate` <= '%s' AND (`cancelDate` >= '%s' OR `cancelDate` IS NULL) AND",  
+            
+            //coaching session is on the same court, on the same day, and has students, and the date is between the start date and the cancel date (if isn't canceled then the cancel date is null)
             $database -> real_escape_string($this -> courtID),
-            $database -> real_escape_string($day));
+            $database -> real_escape_string($day),
+            $database -> real_escape_string($date),
+            $database -> real_escape_string($date));
 
             $sql .= $conditions;
 
