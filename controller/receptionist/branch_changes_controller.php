@@ -6,78 +6,87 @@
     require_once("../../src/system_admin/staff.php");
     require_once("../../src/system_admin/credentials_availability.php");
 
-    $newEmail = $_POST['newEmail'];
-    $newContactN = $_POST['newContactN'];
+    $requestJSON = file_get_contents("php://input");
+    $branchDetails = json_decode($requestJSON, true);
 
+    $newEmail = htmlspecialchars($branchDetails['Email'], ENT_QUOTES);
+    $newContactN = htmlspecialchars($branchDetails['Number'], ENT_QUOTES);
+    $newPhotos = $branchDetails['Images'];
+    // $newEmail = $_POST['newEmail'];
+    // $newContactN = $_POST['newContactN'];
+
+    // print_r($newEmail);
+    // print_r($newContactN);
+    // print_r($newPhotos);
     $staffMember = new Staff();
     $receptionist = $staffMember -> getStaffMemeber($_SESSION['userrole']);
 
-    $result = false;
-    if($newEmail === '' && $newContactN === ''){
-        $_SESSION['UpdatesuccessMsg'] = "Nothing Updated.";
-        header("Location: /public/receptionist/edit_branch.php");
-        $connection->close();
-        exit();
-    }
-    elseif($newEmail ==='' && $newContactN !== ''){
+    $flag = false;
+    $msg;
+    
+    if($newEmail ==='' && $newContactN !== ''){
         $hasContactNumber = checkContactNumber($newContactN,$connection);
-
         if($hasContactNumber){    //contact number already exists
-            $_SESSION['numberError'] = "Contact Number already exists.";
-            header("Location: /public/receptionist/edit_branch.php");
-            $connection -> close(); //close the database connection
-            exit(); //exit the registration
+            $flag = true;
+            $msg =  "Contact Number already exists.";   //send the err msg as the message
         }
         else{
-            unset($_SESSION['numberError']); //contact number is available, hence unset the error message
-            $result = $receptionist -> updateContactNumber($_SESSION['userid'],$newContactN,$connection);
+            $msg = $receptionist -> updateContactNumber($_SESSION['userid'],$newContactN,$connection);
         }
     }elseif($newEmail!=='' && $newContactN === ''){
         $hasEmailAddress1 = checkStaffEmail($newEmail,$connection);
         $hasEmailAddress2 = checkBranchEmail($newEmail,$connection);
 
         if($hasEmailAddress1 || $hasEmailAddress2){    //email address already exists
-            $_SESSION['emailError'] = "Email Address already exists.";
-            header("Location: /public/receptionist/edit_branch.php");
-            $connection -> close(); //close the database connection
-            exit(); //exit the registration
+            $msg .= "\nEmail Address already exists.";
+            $flag = true;
         }
         else{
-            unset($_SESSION['emailError']); //contact number is available, hence unset the error message
-            $result = $receptionist -> updateBranchEmail($_SESSION['branchID'],$newEmail,$connection);
+            $msg = $receptionist -> updateBranchEmail($_SESSION['branchID'],$newEmail,$connection);
         }
     }else{
+        $flag2 = false;
         $hasContactNumber = checkContactNumber($newContactN,$connection);
 
         if($hasContactNumber){    //contact number already exists
-            $_SESSION['numberError'] = "Contact Number already exists.";
-            header("Location: /public/receptionist/edit_branch.php");
-            $connection -> close(); //close the database connection
-            exit(); //exit the registration
+            $flag2 = true;
+            $msg .=  "\nContact Number already exists.";
         }
 
         $hasEmailAddress1 = checkStaffEmail($newEmail,$connection);
         $hasEmailAddress2 = checkBranchEmail($newEmail,$connection);
 
         if($hasEmailAddress1 || $hasEmailAddress2){    //email address already exists
-            $_SESSION['emailError'] = "Email Address already exists.";
-            header("Location: /public/receptionist/edit_branch.php");
-            $connection -> close(); //close the database connection
-            exit(); //exit the registration
+            $flag2 = true;
+            $msg.= "\n Email Address already exists.";
         }
-
-        unset($_SESSION['numberError']); 
-        unset($_SESSION['emailError']);
-        $result = $receptionist -> updateBranch($_SESSION['userid'],$_SESSION['branchID'],$newEmail,$newContactN,$connection);
+        if(!$flag2){
+            $msg = $receptionist -> updateBranch($_SESSION['userid'],$_SESSION['branchID'],$newEmail,$newContactN,$connection);
+        }
     }
 
-    if($result === TRUE){
-        $_SESSION['UpdatesuccessMsg'] = "Branch Details Updated Successfully";
-        header("Location: /public/receptionist/edit_branch.php");
+    if(!$flag){     //can continue to update photos
+        if(count($newPhotos) !== 0){
+            $flag3 = false;
+            for($i=0;$i<count($newPhotos);$i++){
+                $hasBranchPhoto = checkBranchPhotos($connection,$_SESSION['branchID'],$newPhotos[$i]);
+                if($hasBranchPhoto){
+                    $flag = true;
+                    $flag3 = true;
+                    $msg .= "\nPhoto already exists.";
+                }
+            }
+            if(!$flag3){
+                $msg = $receptionist -> updateBranchPhotos($_SESSION['branchID'],$newPhotos,$connection);
+            }
+        }
+        header('Content-Type: application/json');
+        echo json_encode(array("Flag"=>$flag,"Message"=>$msg));  //send the result as the message
+        die();
     }else{
-        $_SESSION['updateError'] = "There was an error when updating";
-        header("Location: /public/receptionist/edit_branch.php");
-    }
+        header('Content-Type: application/json');
+        echo json_encode(array("Flag"=>$flag,"Message"=>$msg));  //send the result as the message
+        die();
+    } 
     
-    $connection -> close();
 ?>

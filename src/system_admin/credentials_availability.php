@@ -100,4 +100,18 @@
 
         return $unavailable;
     }
+
+    function checkBranchPhotos($database,$branchID,$photo){
+        $sql = sprintf("SELECT * FROM `branch_photo` WHERE `branchID` = '../../uploads/branch_images/%s' AND `photo` = '%s'",
+        $database -> real_escape_string($branchID),
+        $database -> real_escape_string($photo));
+
+        $result = $database -> query($sql);
+        $unavailable = false;
+        if($result ->num_rows > 0){
+            $unavailable = true;
+        }
+
+        return $unavailable;
+    }
 ?>

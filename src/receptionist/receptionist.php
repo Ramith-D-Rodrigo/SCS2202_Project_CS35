@@ -511,6 +511,13 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $result;
     }
 
+    public function updateBranchPhotos($branchID,$photos,$database){
+        $branch = new Branch($branchID);
+        $result = $branch -> addBranchPhotos($photos,$database);
+
+        return $result;
+    }
+
     public function updateBranch($recepID,$branchID,$email,$number,$database){
         $updateEmail = $this -> updateBranchEmail($branchID,$email,$database);
         $updateNumber = $this -> updateContactNumber($recepID,$number,$database);
