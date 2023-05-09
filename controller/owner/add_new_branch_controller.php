@@ -180,22 +180,26 @@
 
         if($branchASSOC['requestStatus'] == 'a'){
             if($branchASSOC['city'] == $_POST['city']){
-                $msg['msg'] = 'Branch Already Exists';
+                $msg['msg'] = 'Branch with Same City Already Exists';
+                http_response_code(400);
                 echo json_encode($msg);
                 die();
             }
             else if($branchASSOC['branchEmail'] == $_POST['email']){
                 $msg['msg'] = 'Email Address is Already Used In This System';
+                http_response_code(400);
                 echo json_encode($msg);
                 die();
             }
             else if($branchASSOC['address'] == $_POST['address']){
                 $msg['msg'] = 'There is a Branch in the Same Address';
+                http_response_code(400);
                 echo json_encode($msg);
                 die();
             }
             else if($branchASSOC['latitude'] == $_POST['latitude'] && $branchASSOC['longitude'] == $_POST['longitude']){
                 $msg['msg'] = 'There is a Branch in the Same Location';
+                http_response_code(400);
                 echo json_encode($msg);
                 die();
             }     
