@@ -17,8 +17,6 @@
     z-index: 1000;
     display: none;
     margin: auto;
-    min-width: 50%;
-    max-height: 80vh;
 }
 
 .show{
@@ -26,7 +24,7 @@
 }
 
 .profile-pic{
-    width: 20rem;
+    width: 10rem;
     height: auto;
     aspect-ratio: 1/1;
     border-radius: 50%;

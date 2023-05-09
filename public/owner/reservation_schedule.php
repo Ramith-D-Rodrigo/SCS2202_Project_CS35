@@ -54,52 +54,54 @@
             <div class="img-container row-container">
                 <img src="/styles/icons/profile_icon.svg" id="userImg" class="profile-pic">
             </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Name
+            <div class="res-info">
+                <div class="row-container">
+                    <div class="left-field">
+                        Name
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="userName" name="userName" readonly>
+                    </div>
                 </div>
-                <div class="right-field">
-                    <input type="text" id="userName" name="userName" readonly>
+                <div class="row-container">
+                    <div class="left-field">
+                        Contact Number
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="userContactNum" name="UserContactNum" readonly>
+                    </div>
                 </div>
-            </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Contact Number
+                <div class="row-container">
+                    <div class="left-field">
+                        Reserved Timestamp
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="timestamp" name="timestamp" readonly>
+                    </div>
                 </div>
-                <div class="right-field">
-                    <input type="text" id="userContactNum" name="UserContactNum" readonly>
+                <div class="row-container">
+                    <div class="left-field">
+                        Number of People Attending
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="peopleCount" name="peopleCount" readonly>
+                    </div>
                 </div>
-            </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Reserved Timestamp
+                <div class="row-container">
+                    <div class="left-field">
+                        Payment Amount
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="payment" name="payment" readonly>
+                    </div>
                 </div>
-                <div class="right-field">
-                    <input type="text" id="timestamp" name="timestamp" readonly>
-                </div>
-            </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Number of People Attending
-                </div>
-                <div class="right-field">
-                    <input type="text" id="peopleCount" name="peopleCount" readonly>
-                </div>
-            </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Payment Amount
-                </div>
-                <div class="right-field">
-                    <input type="text" id="payment" name="payment" readonly>
-                </div>
-            </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Reservation Status
-                </div>
-                <div class="right-field">
-                    <input type="text" id="status" name="status" readonly>
+                <div class="row-container">
+                    <div class="left-field">
+                        Reservation Status
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="status" name="status" readonly>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,60 +110,62 @@
             <div class="img-container row-container">
                 <img src="/styles/icons/profile_icon.svg" id="coachImg" class="profile-pic">
             </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Name
+            <div class="res-info">
+                <div class="row-container">
+                    <div class="left-field">
+                        Name
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="coachName" name="coachName" readonly>
+                    </div>
                 </div>
-                <div class="right-field">
-                    <input type="text" id="coachName" name="coachName" readonly>
+                <div class="row-container">
+                    <div class="left-field">
+                        Contact Number
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="coachContactNum" name="coachContactNum" readonly>
+                    </div>
                 </div>
-            </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Contact Number
+                <div class="row-container">
+                    <div class="left-field">
+                        Coach Monthly Payment
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="monthlyPayment" name="monthlyPayment" readonly>
+                    </div>
                 </div>
-                <div class="right-field">
-                    <input type="text" id="coachContactNum" name="coachContactNum" readonly>
+                <div class="row-container">
+                    <div class="left-field">
+                        Current Number of Students
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="noOfStudents" name="noOfStudents" readonly>
+                    </div>
                 </div>
-            </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Coach Monthly Payment
+                <div class="row-container">
+                    <div class="left-field">
+                        Session Payment Amount (For Students)
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="studentPayment" name="studentPayment" readonly>
+                    </div>
                 </div>
-                <div class="right-field">
-                    <input type="text" id="monthlyPayment" name="monthlyPayment" readonly>
+                <div class="row-container">
+                    <div class="left-field">
+                        Start Date
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="sessionStartDate" name="sessionStartDate" readonly>
+                    </div>
                 </div>
-            </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Current Number of Students
-                </div>
-                <div class="right-field">
-                    <input type="text" id="noOfStudents" name="noOfStudents" readonly>
-                </div>
-            </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Session Payment Amount (For Students)
-                </div>
-                <div class="right-field">
-                    <input type="text" id="studentPayment" name="studentPayment" readonly>
-                </div>
-            </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Start Date
-                </div>
-                <div class="right-field">
-                    <input type="text" id="sessionStartDate" name="sessionStartDate" readonly>
-                </div>
-            </div>
-            <div class="row-container">
-                <div class="left-field">
-                    Cancel Date
-                </div>
-                <div class="right-field">
-                    <input type="text" id="sessionCancelDate" name="sessionCancelDate" readonly>
+                <div class="row-container">
+                    <div class="left-field">
+                        Cancel Date
+                    </div>
+                    <div class="right-field">
+                        <input type="text" id="sessionCancelDate" name="sessionCancelDate" readonly>
+                    </div>
                 </div>
             </div>
         </div>
