@@ -176,11 +176,22 @@ class Admin extends Actor{
         return $branchInfo;
     }
 
-    public function updateStaffLogin($userID,$newEmail,$newPwd,$database){
-        $sql = sprintf("UPDATE `login_details` SET `emailAddress` = '%s', `password` = '%s', `isActive` = 1 WHERE `userID` = '%s'",
-        $database -> real_escape_string($newEmail),
-        $database -> real_escape_string($newPwd),
-        $database -> real_escape_string($userID));
+    public function updateStaffLogin($database,$userID,$newEmail = NULL,$newPwd = NULL){
+        if($newEmail === NULL){
+            $sql = sprintf("UPDATE `login_details` SET `password` = '%s', `isActive` = 1 WHERE `userID` = '%s'",
+            $database -> real_escape_string($newPwd),
+            $database -> real_escape_string($userID));
+        }else if($newPwd === NULL){
+            $sql = sprintf("UPDATE `login_details` SET `emailAddress` = '%s', `isActive` = 1 WHERE `userID` = '%s'",
+            $database -> real_escape_string($newEmail),
+            $database -> real_escape_string($userID));
+        }else{
+            $sql = sprintf("UPDATE `login_details` SET `emailAddress` = '%s', `password` = '%s', `isActive` = 1 WHERE `userID` = '%s'",
+            $database -> real_escape_string($newEmail),
+            $database -> real_escape_string($newPwd),
+            $database -> real_escape_string($userID));
+        }
+        
 
         $result = $database -> query($sql);
         return $result;
