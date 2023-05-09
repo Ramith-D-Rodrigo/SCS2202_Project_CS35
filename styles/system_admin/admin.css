@@ -17,13 +17,12 @@
 }
 
 .left-side{
-    width: 600px;
-    margin-top:15px;
+    width: 50%;
     margin-right: -100px;
 }
 
 .right-side{
-    width: 1200px;
+    width: 50%;
     margin-left: 60px;
 }
 
