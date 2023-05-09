@@ -12,5 +12,12 @@
     if ($connection -> connect_error){
         die("Connection failed: " . $connection -> connect_error);  //connection failure
     }
+
+    //turn off report mode
+    //mysqli_report(MYSQLI_REPORT_OFF);
+
+    //turn on report mode
+    //mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
     //echo "Connected successfully\n";
 ?>
