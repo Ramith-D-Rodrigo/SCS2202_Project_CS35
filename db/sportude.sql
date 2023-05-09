@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2023 at 09:00 AM
+-- Generation Time: May 09, 2023 at 04:58 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.1.6
 
@@ -51,11 +51,12 @@ CREATE TABLE `branch` (
 
 INSERT INTO `branch` (`branchID`, `address`, `branchEmail`, `city`, `openingTime`, `closingTime`, `openingDate`, `revenue`, `ownerID`, `currManager`, `currReceptionist`, `ownerRequestDate`, `requestStatus`, `latitude`, `longitude`) VALUES
 ('Alaw640320e9a2e9a', 'Alawathupitiya', 'ramithrosdrigo@hotmail.com', 'Alawathupitiya', '10:00:00', '18:00:00', '2023-03-07', NULL, 'ownermn74625612', NULL, NULL, '2023-03-04', 'p', '7.110521037850345', '79.88800764083864'),
-('col128423', 'Colombo Branch, Colombo', 'colombobr@sp.com', 'Colombo', '09:00:00', '20:00:00', '2022-12-07', 4950, NULL, 'managersecond1234', 'receptionisttwo123', NULL, 'a', '7.28683660', '80.243020505'),
-('Kada6412745c32a13', 'kadawatha branch address', 'asdasdasda@sdnmfsnd.vom', 'Kadawatha', '07:00:00', '15:00:00', '2023-03-17', NULL, 'ownermn74625612', NULL, NULL, '2023-03-16', 'p', '6.9992448', '79.9506432'),
-('Kand64030c042c114', 'Kandy Branch', 'kandybr@gmail.com', 'Kandy', '08:00:00', '18:00:00', '2023-03-01', NULL, 'ownermn74625612', NULL, NULL, '2023-03-04', 'p', '7.28683660', '80.63020505'),
-('kiri987521', 'Example Road, Kiribathgoda', 'kribathgodabr@sp.com', 'Kiribathgoda', '08:00:00', '19:00:00', '2022-11-26', 8740, NULL, 'managerkiri5436', 'receptionistkiri1241', NULL, 'a', '0.00000000', '0.00000000'),
-('test64057012608ab', 'test address', 'testbranch@br.com', 'test', '08:00:00', '16:00:00', '2023-03-09', NULL, 'ownermn74625612', NULL, NULL, '2023-03-06', 'p', '6.926721400829939', '79.86620664596559');
+('Anur64560bae11051', 'Test Address', 'anuaddress@gmail.com', 'Anuradhapura', '08:00:00', '17:00:00', '2023-05-12', NULL, 'ownermn74625612', NULL, NULL, '2023-05-06', 'p', '6.9173248', '79.8588928'),
+('col128423', 'Colombo Branch, Colombo', 'colombobr@sp.com', 'Colombo', '09:00:00', '20:00:00', '2022-12-07', 9150, NULL, 'managersecond1234', 'receptionisttwo123', NULL, 'a', '7.28683660', '80.243020505'),
+('Kada6412745c32a13', 'kadawatha branch address', 'asdasdasda@sdnmfsnd.vom', 'Kadawatha', '07:00:00', '15:00:00', '2023-03-17', 500, 'ownermn74625612', 'mngr64589f895170c', 'rcptnst644f4f1f49c7b', '2023-03-16', 'a', '6.9992448', '79.9506432'),
+('Kand64030c042c114', 'Kandy Branch', 'kandybr@gmail.com', 'Kandy', '08:00:00', '18:00:00', '2023-03-01', 5800, 'ownermn74625612', 'mngr6458a04a2aa58', 'rcptnst6458a12f43d74', '2023-03-04', 'a', '7.28683660', '80.63020505'),
+('kiri987521', 'Example Road, Kiribathgoda', 'kribathgodabr@sp.com', 'Kiribathgoda', '08:00:00', '19:00:00', '2022-11-26', 20090, NULL, 'managerkiri5436', 'receptionistkiri1241', NULL, 'a', '6.977590', '79.926753'),
+('test64057012608ab', 'test address', 'testbranch@br.com', 'test', '08:00:00', '16:00:00', '2023-03-09', NULL, 'ownermn74625612', NULL, NULL, '2023-03-06', 'd', '6.926721400829939', '79.86620664596559');
 
 -- --------------------------------------------------------
 
@@ -73,13 +74,6 @@ CREATE TABLE `branch_maintenance` (
   `branchID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `branch_maintenance`
---
-
-INSERT INTO `branch_maintenance` (`decision`, `status`, `message`, `requestedReceptionist`, `startingDate`, `endingDate`, `branchID`) VALUES
-('a', 'Ongoing', 'asdasdasd', 'receptionistkiri1241', '2023-04-13', '2023-04-16', 'kiri987521');
-
 -- --------------------------------------------------------
 
 --
@@ -90,6 +84,15 @@ CREATE TABLE `branch_photo` (
   `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `branchID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `branch_photo`
+--
+
+INSERT INTO `branch_photo` (`photo`, `branchID`) VALUES
+('/uploads/branch_images/col_branch.png', 'col128423'),
+('/uploads/branch_images/kadawath_branch.jpg', 'Kada6412745c32a13'),
+('/uploads/branch_images/kiribathgoda_branch.jpg', 'kiri987521');
 
 -- --------------------------------------------------------
 
@@ -115,8 +118,13 @@ CREATE TABLE `coach` (
 --
 
 INSERT INTO `coach` (`coachID`, `firstName`, `lastName`, `homeAddress`, `birthday`, `gender`, `sport`, `contactNum`, `photo`, `registerDate`) VALUES
-('coach_sen63f62a9821f62', 'Seniru', 'Wijesinghe', 'Seniru Address', '2000-05-10', 'm', 'basket17212', '0774145218', '../../uploads/coach_profile_images/seniru_boss63f62a9821fb1.jpg', '2023-02-22'),
-('coach_tha63cce6a49befd', 'Tharuka', 'Dileepana', 'Kirulapana', '2005-01-05', 'm', 'bad65421', '0774215874', '../../uploads/coach_profile_images/tharuka_boss63cce6a49bf51.png', '2023-01-22');
+('coach_bha645a07beaa777', 'Bhathiya', 'VanDeBona', 'Panadura Address', '1997-03-08', 'm', 'basket17212', '07785412563', '../../uploads/coach_profile_images/bhathiya_bona645a07beaa788.jpg', '2023-05-09'),
+('coach_cha645a056edb3a8', 'Charith', 'Jayaranga', 'Panadura address', '1999-08-18', 'm', 'bad65421', '07711458562', '../../uploads/coach_profile_images/charith_jay645a056edb3ba.jpg', '2023-05-09'),
+('coach_pub645a052680750', 'Pubudu', 'Anuradha', 'Puththalam address', '2000-01-10', 'm', 'Swim6405710541644', '0774568541', '../../uploads/coach_profile_images/pubudu_coach645a0526809b2.png', '2023-05-09'),
+('coach_sen63f62a9821f62', 'Seniru', 'Wijesinghe', 'Seniru Address', '2000-05-10', 'm', 'basket17212', '0774145218', '../../uploads/coach_profile_images/basketball_coach.webp', '2023-02-22'),
+('coach_tha63cce6a49befd', 'Tharuka', 'Dileepana', 'Kirulapana', '2005-01-05', 'm', 'bad65421', '0774215874', '../../uploads/coach_profile_images/badminton_coach.png', '2023-01-22'),
+('coach_tha645a05cd7f35f', 'Tharindu', 'Sampath', 'Kaluthara address', '2001-08-02', 'm', 'bad65421', '07766325845', '../../uploads/coach_profile_images/tharindu_sam645a05cd7f36d.png', '2023-05-09'),
+('coach_yas64526058a9e83', 'Yasodhya', 'Sesath', 'Ysodhya address', '1999-07-12', 'm', 'cricket23871', '07741512587', '../../uploads/coach_profile_images/yaso_coach64526058aa09b.jpg', '2023-05-03');
 
 -- --------------------------------------------------------
 
@@ -144,8 +152,14 @@ CREATE TABLE `coaching_session` (
 --
 
 INSERT INTO `coaching_session` (`sessionID`, `coachMonthlyPayment`, `timePeriod`, `noOfStudents`, `coachID`, `courtID`, `day`, `startingTime`, `endingTime`, `paymentAmount`, `startDate`, `cancelDate`) VALUES
-('session1', 5000, '02:00:00', 1, 'coach_tha63cce6a49befd', 'badcourt1212', 'Wednesday', '14:00:00', '16:00:00', 2500, NULL, NULL),
-('session2', 5250, '02:00:00', 1, 'coach_sen63f62a9821f62', 'baskcourt45', 'Monday', '12:00:00', '14:00:00', 1500, NULL, NULL);
+('session1', 5000, '02:00:00', 1, 'coach_tha63cce6a49befd', 'badcourt1212', 'Wednesday', '14:00:00', '16:00:00', 2500, '2023-03-08', NULL),
+('session2', 5250, '02:00:00', 1, 'coach_sen63f62a9821f62', 'baskcourt45', 'Monday', '12:00:00', '14:00:00', 1500, '2023-03-20', NULL),
+('session3', 5000, '01:00:00', 1, 'coach_sen63f62a9821f62', 'basket345', 'Tuesday', '17:00:00', '18:00:00', 600, '2023-05-08', NULL),
+('session4', 5250, '03:00:00', 0, 'coach_sen63f62a9821f62', 'basket345', 'Friday', '10:00:00', '13:00:00', 1500, NULL, NULL),
+('session5', 2500, '03:00:00', 0, 'coach_pub645a052680750', 'KadSwi6412745c377f6', 'Monday', '09:00:00', '12:00:00', 750, NULL, NULL),
+('session6', 3600, '03:00:00', 0, 'coach_cha645a056edb3a8', 'badcourt1213', 'Friday', '15:00:00', '17:00:00', 500, NULL, NULL),
+('session7', 4000, '02:00:00', 0, 'coach_tha645a05cd7f35f', 'badcourt1212', 'Saturday', '17:00:00', '19:00:00', 250, NULL, NULL),
+('session8', 2500, '02:00:00', 0, 'coach_bha645a07beaa777', 'KanBas64030c042d150', 'Sunday', '16:00:00', '18:00:00', 600, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -163,7 +177,9 @@ CREATE TABLE `coach_qualification` (
 --
 
 INSERT INTO `coach_qualification` (`qualification`, `coachID`) VALUES
-('pro basketball', 'coach_sen63f62a9821f62');
+('pro basketball', 'coach_sen63f62a9821f62'),
+('fifteen years experience swimming', 'coach_yas64526058a9e83'),
+('five years experience coaching', 'coach_yas64526058a9e83');
 
 -- --------------------------------------------------------
 
@@ -257,13 +273,6 @@ CREATE TABLE `discount` (
   `branchID` varchar(35) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `discount`
---
-
-INSERT INTO `discount` (`managerID`, `startingDate`, `endingDate`, `decision`, `discountValue`, `branchID`) VALUES
-('managerkiri5436', '2023-03-10', '2023-03-20', 'a', 40, 'kiri987521');
-
 -- --------------------------------------------------------
 
 --
@@ -285,27 +294,26 @@ CREATE TABLE `login_details` (
 
 INSERT INTO `login_details` (`userID`, `username`, `emailAddress`, `password`, `userRole`, `isActive`) VALUES
 ('admin6389f6eef2e18', 'system_admin', 'admin@gmail.com', '$2y$10$U7g4y1GDl7YJS6KXfHJq4OOBPS0YmTNsbDmEpKvD8DU.SuMo1F08a', 'admin', 1),
-('ajiRod63a6f59abaaf7', 'ajith_rodrigo', 'ramithgamer@gmail.com', '$2y$10$2m/.RISis5I8qmP5IqjF2etr4gmJPJGRYws5g/FOZF5sJsauI8YzG', 'user', 1),
-('ajiRod63e521915a18e', 'ajith_kumara', 'tmaskr97@gmail.com', '$2y$10$lqM0RQCJQGJ.mwQZqAtS0.YS83vDJlV1uIfQ0t3Hi6A3WWRpnLJPC', 'user', 1),
-('chaJay63a1cae000958', 'charith_jay', 'charithjay@gmail.com', '$2y$10$1zOlBlNt2tgK5O227re.0O68HhCLkEjs3sDQItze.g0RIMLzr91TO', 'user', 1),
+('ajiRod645a56b71cc35', 'ajith_rodrigo', 'tmaskr14@gmail.com', '$2y$10$1BpdsB7W4GwOtPkr2puFTOgsEl2hbEDgGoHqNXx.hfShdLRopgMWe', 'user', 1),
+('coach_bha645a07beaa777', 'bhathiya_bona', 'bhathiyabona@gmail.com', '$2y$10$BGaS0Nio4I/qWVVYD2SM.eTXRE1aaBI9LImuGsSQZTGoROkRzEKdW', 'coach', 1),
+('coach_cha645a056edb3a8', 'charith_jay', 'charithpieterz@gmail.com', '$2y$10$tSYqcAnWCYEs2RERNWmrF.mYPIwNb3k4viogwXovK4KeGHazfjB1G', 'coach', 1),
+('coach_pub645a052680750', 'pubudu_coach', 'pubudurox@gmail.com', '$2y$10$nZ5vDxYoeQ3hp.2jDYxtsOVm6LR3JFcgV4q4ke38DGvARK3cLfiJe', 'coach', 1),
 ('coach_sen63f62a9821f62', 'seniru_boss', 'seniru@gmail.com', '$2y$10$9OnzUfCmxzJ3rWNDVP8SeeR.Q/88j8rEOhe.YPQIc2oM.Q3/Si/ry', 'coach', 1),
 ('coach_tha63cce6a49befd', 'tharuka_boss', 'tharuka@gmail.com', '$2y$10$FdqOvuJlt2ITwPYcrkR8XeTfCaWAom.tN3Yogfd63eyQH2h9QfLhi', 'coach', 1),
-('darRod63acc32138634', 'darbiouz', 'ramithrodrigo1@yahoo.com', '$2y$10$B8fdOjyW/vMYt/VQ2LOg0ObCS529jI179RXKU77ZnG.e1kPuuTa/u', 'user', 1),
-('dihHan6384813878b75', 'dihan_hansaja', 'dihanhansaja@gmail.com', '$2a$12$j0zGDU8fDjBsSMAaKF0Cu.GtXvacZGuuQEpmTH5TEggEMjsEon1xC', 'user', 1),
-('helRod63a5b32506d98', 'hello5432', 'ramithdulsara@gmail.com', '$2y$10$FrV600iWzHbk4aZSR//tBupa7UgbxYnN9i8lB5qumoKARi71hVLta', 'user', 1),
-('kamPer638656b5362c7', 'kamal_per', 'kamalperera@hotmail.com', '$2y$10$d3CoQvOnHJ4O4VkQwV96s.3LMfjG4.m1G.Kc7agF/aMQW4IsTZ0PG', 'user', 1),
-('lahKum63a5b52adc2df', 'lahiru_kumara', 'lahiru_kumara@gmail.com', '$2y$10$ZGWYxwSoRD8YBOrLxth1..4pMPSlKiYhxpK1LS9AKj2OmvKP8XLFO', 'user', 1),
-('lahKum63a5b560507af', 'lahiru_kumara2', 'lahiru_kumara2@gmail.com', '$2y$10$MRYyYWJ6t8R3pljzp4AiNOIKTuwQwv0n7JrbTq1qyH7KRQJCKH52a', 'user', 1),
-('lahRod63a6ff48ce0c4', 'lahiru_rodrigo', 'ramithrodrigo12@hotmail.com', '$2y$10$zvLbut8kFKAHcMty0l1zV.wIRk4sf2j883o1ca2Qf285O5wsyXqXi', 'user', 1),
+('coach_tha645a05cd7f35f', 'tharindu_sam', 'tharindusampath@gmail.com', '$2y$10$8MSMQjqG165.4V1SYA9lmuJoH9O0MYTTgk2y7STCxqmtYfuj2wIEu', 'coach', 1),
+('coach_yas64526058a9e83', 'yaso_coach', 'yasodhyasesath@gmail.com', '$2y$10$1oSd9Qz75jKqYyW9sdQTJuoqrgh7vLsc.IOtHwbA1lSojQitP.lzi', 'coach', 1),
+('johLie6453900c2e784', 'johan_liebert', 'ramithrodrigo@yahoo.com', '$2y$10$vIRrWv7/UV6N6LJz.uw7eefcbqyHWN8D6hSXVsKrVHmvDv1t5pF0S', 'user', 1),
 ('managerkiri5436', 'manager_test', 'manager@kiribathgoda.com', '$2a$12$WSDZ.Td2VvI4CxwDHuFCUOZucTdUwG0dkdsXGvI7v2AuOf1rNHCUK', 'manager', 1),
 ('managersecond1234', 'manager_test2', 'managersecond@gmail.com', '$2a$12$2JO5RyV0bbGQjJn3UEc2seM4EWzQyF5gP9KfYmboH.1ZsXamyVpEe', 'manager', 1),
-('nihWij638657d83c715', 'nihal_wij', 'nihal_wije@gmail.com', '$2y$10$dWp4y/hWGGWNICJzgTdM.e0EBAZcd7qUZEOJAQrEQ43ptT3kVcPfK', 'user', 1),
+('mngr64589f895170c', 'manager_lahiru', 'lahirukumara@gmail.com', '$2y$10$t7tNkIpOtF9Q63X5HDXOZ.eStPH4JP7qx6BDwRVhgp7o1xDj3XV8G', 'manager', 1),
+('mngr6458a04a2aa58', 'kandy_ryan', 'managergosling@gmail.com', '$2y$10$x.y2ClbDt8jaxMjAyW26qutQlw1h1m9KkJW9U8lV55DtAag5lLzaq', 'manager', 1),
 ('ownermn74625612', 'sportude_owner', 'owner@gmail.com', '$2a$12$SZojPsXrTIFuqKS9HBMmDO4RytRbnYvSIOeifZEqZaeCg9AsbB51q', 'owner', 1),
-('ramRod63816dc9007b4', 'ramith_rodrigo', 'ramithrodrigo@hotmail.com', '$2y$10$RlEhv1bMuSYeXOj3ytYAQOgMAS.lstvuD6I0a9dzNVYUsYe4jUGW.', 'user', 1),
+('ramRod63816dc9007b4', 'ramith_rodrigo', 'ramithrodrigo@hotmail.com', '$2y$10$noC4B2ROtADFEFrweyweGO27grxaX9QtJ988WqTE33SCDuB5rt0Xe', 'user', 1),
+('rcptnst644f4f1f49c7b', 'col_isuru', 'isuru@gmail.com', '$2y$10$gWGXe3JWoZVnVjxD8gtQ9OW7aG3/4ygtV/3RivDn/IomJNj1IACQ6', 'receptionist', 1),
+('rcptnst6458a12f43d74', 'kandy_recep', 'sugitaboss@gmail.com', '$2y$10$nhLaX22sDeuLQn3i0MegkulNaTJaGmaQxsRaRbhFTR6qYgib09KeS', 'receptionist', 1),
 ('receptionistkiri1241', 'recep_test', 'receptionist@kiribathgoda.com', '$2a$12$PFT9firhsYibGVVtHel8Me/hGaVe9gflyxRmY6DyrlQUERJorny02', 'receptionist', 1),
-('receptionisttwo123', 'recep_test2', 'receptionisttwo@gmail.com', '$2a$12$LkkvBKEkL707dptt.X8hSuwoOaOaXG9iwrxa33s5zGofANtLgaxyG', 'receptionist', 1),
-('samKum63e523eab8d76', 'saman_kumara', 'ramithrodrigo@yahoo.com', '$2y$10$W4dPOdlzRwS/iMbjEEZMkefsIoaN3SH3IEJV.W753LoKdSvx0mrBW', 'user', 1),
-('thaSam639a02d983325', 'tharindu_sam', 'tharindusampath@gmail.com', '$2y$10$YD3/hAsrqWALpLp2W/aof.gpJetwFNPMwTZyAQmNy57IpiQeOx6tK', 'user', 1);
+('receptionisttwo123', 'recep_test2', 'receptionisttwo2@gmail.com', '$2y$10$xDW4oVxZ0tS4083hQlp2vubmCOxjvdy0AyzMDADKQzIbfkVGUwPcO', 'receptionist', 1),
+('ucsRod645706fe1e661', 'ucsc_ramith', '2020cs150@stu.ucsc.cmb.ac.lk', '$2y$10$PbHgPhrJImhaP1ZVVABXCeV8rQfd8StSENJBbZXBlcJa4kQ0tf29.', 'user', 1);
 
 -- --------------------------------------------------------
 
@@ -323,7 +331,9 @@ CREATE TABLE `manager` (
 
 INSERT INTO `manager` (`managerID`) VALUES
 ('managerkiri5436'),
-('managersecond1234');
+('managersecond1234'),
+('mngr64589f895170c'),
+('mngr6458a04a2aa58');
 
 -- --------------------------------------------------------
 
@@ -347,7 +357,32 @@ CREATE TABLE `notification` (
 --
 
 INSERT INTO `notification` (`notificationID`, `subject`, `status`, `description`, `date`, `lifetime`, `userID`, `readTimeStamp`) VALUES
-('notReqram644cba3aa2b25', 'New Student Request', 'Unread', 'You have a new request from an user to join your Coaching Session. Please check your Coaching Session Requests to accept or reject the request.', '2023-04-29', NULL, 'coach_sen63f62a9821f62', NULL);
+('notDul64589cd3d93f7', 'Upcoming Reservation', 'Unread', 'You have a upcoming reservation on 2023-05-18 from 14:00 to 15:00 at Kandy on Court A', '2023-05-15', NULL, 'ucsRod645706fe1e661', NULL),
+('notDul64589e1e22fd6', 'Upcoming Reservation', 'Unread', 'You have a upcoming reservation on 2023-05-22 from 09:00 to 12:00 at Kiribathgoda on Court A', '2023-05-19', NULL, 'ucsRod645706fe1e661', NULL),
+('notDul6458d9d248533', 'Upcoming Reservation', 'Unread', 'You have a upcoming reservation on 2023-05-15 from 11:00 to 12:00 at Kiribathgoda on Court A', '2023-05-12', NULL, 'ucsRod645706fe1e661', NULL),
+('notDul645a4aa5951ec', 'Upcoming Reservation', 'Unread', 'You have a upcoming reservation on 2023-05-19 from 12:00 to 14:00 at Kiribathgoda on Court A', '2023-05-16', NULL, 'ucsRod645706fe1e661', NULL),
+('notJoh6453c7aed0a34', 'Upcoming Reservation', 'Read', 'You have a upcoming reservation on 2023-05-07 from 12:00 to 15:00 at Kiribathgoda on Court A', '2023-05-04', '72:00:00', 'johLie6453900c2e784', '2023-05-06 06:53:21'),
+('notJoh6453c883b36f2', 'Upcoming Reservation', 'Read', 'You have a upcoming reservation on 2023-05-07 from 17:00 to 18:00 at Kiribathgoda on Court A', '2023-05-04', '72:00:00', 'johLie6453900c2e784', '2023-05-06 06:53:20'),
+('notJoh64589c7c91e74', 'Upcoming Reservation', 'Unread', 'You have a upcoming reservation on 2023-05-18 from 15:00 to 18:00 at Kandy on Court A', '2023-05-15', NULL, 'johLie6453900c2e784', NULL),
+('notRam644d08200c3f9', 'Upcoming Reservation', 'Read', 'You have a upcoming reservation on 2023-05-03 from 13:00 to 14:00 at Kiribathgoda on Court A', '2023-04-30', '72:00:00', 'ramRod63816dc9007b4', '2023-05-03 07:03:37'),
+('notRam64589b2fd6072', 'Upcoming Reservation', 'Unread', 'You have a upcoming reservation on 2023-05-11 from 10:00 to 12:00 at Kandy on Court A', '2023-05-08', NULL, 'ramRod63816dc9007b4', NULL),
+('notRam64589bd63384c', 'Upcoming Reservation', 'Unread', 'You have a upcoming reservation on 2023-05-12 from 13:00 to 14:00 at Kadawatha on Court A', '2023-05-09', NULL, 'ramRod63816dc9007b4', NULL),
+('notRam64589c1ae97b8', 'Upcoming Reservation', 'Unread', 'You have a upcoming reservation on 2023-05-19 from 16:00 to 19:00 at Kiribathgoda on Court B', '2023-05-16', NULL, 'ramRod63816dc9007b4', NULL),
+('notRam6459344876a90', 'Upcoming Reservation', 'Unread', 'You have a upcoming reservation on 2023-06-07 from 16:00 to 18:00 at Kandy on Court A', '2023-06-04', NULL, 'ramRod63816dc9007b4', NULL),
+('notReqram644cba3aa2b25', 'New Student Request', 'Unread', 'You have a new request from an user to join your Coaching Session. Please check your Coaching Session Requests to accept or reject the request.', '2023-04-29', NULL, 'coach_sen63f62a9821f62', NULL),
+('notReqram64511d78dfc04', 'New Student Request', 'Unread', 'You have a new request from an user to join your Coaching Session. Please check your Coaching Session Requests to accept or reject the request.', '2023-05-02', NULL, 'coach_tha63cce6a49befd', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `onsite_reservation_holder`
+--
+
+CREATE TABLE `onsite_reservation_holder` (
+  `reservationID` varchar(35) NOT NULL,
+  `reservationHolder` varchar(50) NOT NULL,
+  `contactNumber` varchar(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -384,6 +419,8 @@ CREATE TABLE `receptionist` (
 --
 
 INSERT INTO `receptionist` (`receptionistID`) VALUES
+('rcptnst644f4f1f49c7b'),
+('rcptnst6458a12f43d74'),
 ('receptionistkiri1241'),
 ('receptionisttwo123');
 
@@ -415,6 +452,16 @@ CREATE TABLE `reservation` (
 --
 
 INSERT INTO `reservation` (`reservationID`, `date`, `startingTime`, `endingTime`, `noOfPeople`, `paymentAmount`, `sportCourt`, `status`, `userID`, `formalManagerID`, `onsiteReceptionistID`, `reservedDate`, `chargeID`, `notificationID`) VALUES
+('Res-joh6453c3cb28a1e', '2023-05-07', '15:00:00', '17:00:00', 2, 1200, 'baskcourt45', 'Refunded', 'johLie6453900c2e784', NULL, NULL, '2023-05-04 14:40:11', 'ch_3N43L9KUOfa0wCPZ0COwzZBn', NULL),
+('Res-joh6453c7aeccc50', '2023-05-07', '12:00:00', '15:00:00', 2, 1800, 'baskcourt45', 'feedbackGiven', 'johLie6453900c2e784', NULL, NULL, '2023-05-04 14:56:46', 'ch_3N43bDKUOfa0wCPZ1UdJS4L8', 'notJoh6453c7aed0a34'),
+('Res-joh6453c883b093d', '2023-05-07', '17:00:00', '18:00:00', 2, 600, 'baskcourt45', 'feedbackGiven', 'johLie6453900c2e784', NULL, NULL, '2023-05-04 15:00:19', 'ch_3N43eeKUOfa0wCPZ1F6jxMXd', 'notJoh6453c883b36f2'),
+('Res-joh6453d4be1e006', '2023-05-11', '11:00:00', '13:00:00', 3, 900, 'badcourt1213', 'Cancelled', 'johLie6453900c2e784', NULL, NULL, '2023-05-04 15:52:30', 'ch_3N44T8KUOfa0wCPZ08gtpCNu', NULL),
+('Res-joh64546ba25a685', '2023-05-09', '14:00:00', '17:00:00', 5, 1800, 'basket345', 'Refunded', 'johLie6453900c2e784', NULL, NULL, '2023-05-05 02:36:18', 'ch_3N4EWBKUOfa0wCPZ0G2FJ021', NULL),
+('Res-joh64546c0636184', '2023-05-09', '14:00:00', '17:00:00', 2, 1800, 'basket345', 'Cancelled', 'johLie6453900c2e784', NULL, NULL, '2023-05-05 02:37:58', 'ch_3N4EXnKUOfa0wCPZ0ZjllIyK', NULL),
+('Res-joh6456ecc22dff8', '2023-05-10', '09:00:00', '10:00:00', 2, 850, 'KanCri64030c042fa53', 'Refunded', 'johLie6453900c2e784', NULL, NULL, '2023-05-07 00:11:46', 'ch_3N4vDPKUOfa0wCPZ18ZLvag0', NULL),
+('Res-joh64589c7c8fb69', '2023-05-18', '15:00:00', '18:00:00', 2, 2550, 'KanCri64030c042fa53', 'Pending', 'johLie6453900c2e784', NULL, NULL, '2023-05-08 06:53:48', 'ch_3N5Ny2KUOfa0wCPZ1AvJ0yeo', 'notJoh64589c7c91e74'),
+('Res-joh6458cc98e2e85', '2023-05-12', '17:00:00', '18:00:00', 2, 600, 'basket345', 'Refunded', 'johLie6453900c2e784', NULL, NULL, '2023-05-08 10:19:04', 'ch_3N5RAgKUOfa0wCPZ0P6M5m74', NULL),
+('Res-joh6458ccea2f4ac', '2023-05-19', '17:00:00', '18:00:00', 2, 600, 'basket345', 'Refunded', 'johLie6453900c2e784', NULL, NULL, '2023-05-08 10:20:26', 'ch_3N5RC0KUOfa0wCPZ0ZIFyx9U', NULL),
 ('Res-ram640af5470a1d3', '2023-03-15', '12:00:00', '16:00:00', 2, 2200, 'basket345', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-10 09:15:51', 'ch_3Mk23eKUOfa0wCPZ19zoSOAh', NULL),
 ('Res-ram640af6e2946a6', '2023-03-17', '09:00:00', '11:00:00', 2, 1100, 'basket345', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-10 09:22:42', 'ch_3Mk2AIKUOfa0wCPZ1hEM41xU', NULL),
 ('Res-ram640af9403a958', '2023-03-13', '16:00:00', '18:00:00', 2, 480, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-10 09:32:48', 'ch_3Mk2K3KUOfa0wCPZ1kChuLTo', NULL),
@@ -424,14 +471,33 @@ INSERT INTO `reservation` (`reservationID`, `date`, `startingTime`, `endingTime`
 ('Res-ram641202dac45d8', '2023-03-22', '11:00:00', '13:00:00', 5, 800, 'badcourt1213', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-15 17:39:38', 'ch_3MlyIxKUOfa0wCPZ0jANnnMT', NULL),
 ('Res-ram6412034caa2cc', '2023-03-21', '16:00:00', '18:00:00', 2, 800, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-15 17:41:32', 'ch_3MlyKnKUOfa0wCPZ115j3lbj', NULL),
 ('Res-ram641203cfd208f', '2023-03-21', '10:00:00', '11:00:00', 2, 400, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-15 17:43:43', 'ch_3MlyMvKUOfa0wCPZ0f4nNnHY', NULL),
-('Res-ram6412048e3bd15', '2023-03-23', '15:00:00', '17:00:00', 2, 1100, 'basket345', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-15 17:46:54', 'ch_3MlyPzKUOfa0wCPZ0UNgqunQ', NULL),
+('Res-ram6412048e3bd15', '2023-03-23', '15:00:00', '17:00:00', 2, 1100, 'basket345', 'feedbackGiven', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-15 17:46:54', 'ch_3MlyPzKUOfa0wCPZ0UNgqunQ', NULL),
 ('Res-ram6412052e0462e', '2023-03-21', '14:00:00', '17:00:00', 2, 1650, 'basket345', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-03-15 17:49:34', 'ch_3MlySZKUOfa0wCPZ0Ai3JDmq', NULL),
 ('Res-ram6432b818d63e6', '2023-04-13', '12:00:00', '14:00:00', 2, 900, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-04-09 13:05:28', 'ch_3MuxwZKUOfa0wCPZ1KMvV47I', NULL),
 ('Res-ram6432b9e839247', '2023-04-14', '09:00:00', '12:00:00', 2, 1350, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-04-09 13:13:12', 'ch_3Muy43KUOfa0wCPZ1DnvLvgF', NULL),
 ('Res-ram6432ba671ae1b', '2023-04-18', '18:00:00', '19:00:00', 2, 450, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-04-09 13:15:19', 'ch_3Muy66KUOfa0wCPZ0WATnyxg', NULL),
 ('Res-ram6432ce421ed2d', '2023-04-14', '12:00:00', '13:00:00', 2, 450, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-04-09 14:40:02', 'ch_3MuzQ5KUOfa0wCPZ1BCg3Ir6', NULL),
 ('Res-ram6437acec2360d', '2023-04-17', '14:00:00', '16:00:00', 2, 900, 'badcourt1212', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-04-13 07:19:08', 'ch_3MwKReKUOfa0wCPZ1YKUjkho', NULL),
-('Res-ram643bf6f0cc88c', '2023-04-20', '12:00:00', '16:00:00', 2, 1800, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-04-16 13:24:00', 'ch_3MxVZPKUOfa0wCPZ0wQTmVsa', NULL);
+('Res-ram643bf6f0cc88c', '2023-04-20', '12:00:00', '16:00:00', 2, 1800, 'badcourt1212', 'feedbackGiven', 'ramRod63816dc9007b4', NULL, NULL, '2023-04-16 13:24:00', 'ch_3MxVZPKUOfa0wCPZ0wQTmVsa', NULL),
+('Res-ram644d03abaac27', '2023-05-02', '10:00:00', '12:00:00', 2, 900, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-04-29 11:46:51', 'ch_3N2CFeKUOfa0wCPZ0hW1VHgH', NULL),
+('Res-ram644d04b54cd7f', '2023-05-11', '16:00:00', '17:00:00', 2, 450, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-04-29 11:51:17', 'ch_3N2CJwKUOfa0wCPZ0JzXJgzh', NULL),
+('Res-ram644d07a3e92d6', '2023-05-02', '12:00:00', '15:00:00', 5, 1350, 'badcourt1212', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-04-29 12:03:47', 'ch_3N2CW2KUOfa0wCPZ0Lvpppnj', NULL),
+('Res-ram644d08200a013', '2023-05-03', '13:00:00', '14:00:00', 6, 450, 'badcourt1212', 'feedbackGiven', 'ramRod63816dc9007b4', NULL, NULL, '2023-04-29 12:05:52', 'ch_3N2CY2KUOfa0wCPZ08twJOJi', 'notRam644d08200c3f9'),
+('Res-ram644f3bd24fe70', '2023-05-10', '13:00:00', '15:00:00', 2, 1200, 'basket345', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-05-01 04:10:58', 'ch_3N2o5ZKUOfa0wCPZ18pZXwdI', NULL),
+('Res-ram64522bec1b125', '2023-05-06', '10:00:00', '12:00:00', 2, 1200, 'basket345', 'Cancelled', 'ramRod63816dc9007b4', NULL, NULL, '2023-05-03 09:39:56', 'ch_3N3cB1KUOfa0wCPZ00UJ8NqW', NULL),
+('Res-ram6456ec1389bb6', '2023-05-13', '14:00:00', '15:00:00', 2, 500, 'KadSwi6412745c377f6', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-05-07 00:08:51', 'ch_3N4vAbKUOfa0wCPZ062M7dtg', NULL),
+('Res-ram6456ec47f20f1', '2023-05-10', '12:00:00', '17:00:00', 10, 4250, 'KanCri64030c042fa53', 'Refunded', 'ramRod63816dc9007b4', NULL, NULL, '2023-05-07 00:09:43', 'ch_3N4vBRKUOfa0wCPZ1FezPlcF', NULL),
+('Res-ram64589b2fd366f', '2023-05-11', '10:00:00', '12:00:00', 2, 1200, 'KanBas64030c042d150', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-05-08 06:48:15', 'ch_3N5NsfKUOfa0wCPZ1a0AvAM8', 'notRam64589b2fd6072'),
+('Res-ram64589bd631391', '2023-05-12', '13:00:00', '14:00:00', 2, 500, 'KadSwi6412745c377f6', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-05-08 06:51:02', 'ch_3N5NvMKUOfa0wCPZ0GeVG0vK', 'notRam64589bd63384c'),
+('Res-ram64589c1ae6cb4', '2023-05-19', '16:00:00', '19:00:00', 2, 1500, 'badcourt1213', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-05-08 06:52:10', 'ch_3N5NwSKUOfa0wCPZ0GAHIHOK', 'notRam64589c1ae97b8'),
+('Res-ram64593448716cd', '2023-06-07', '16:00:00', '18:00:00', 2, 1200, 'KanBas64030c042d150', 'Pending', 'ramRod63816dc9007b4', NULL, NULL, '2023-05-08 17:41:28', 'ch_3N5Y4oKUOfa0wCPZ09bkZr5j', 'notRam6459344876a90'),
+('Res-ucs645707a2057af', '2023-05-12', '10:00:00', '13:00:00', 5, 1500, 'badcourt1213', 'Refunded', 'ucsRod645706fe1e661', NULL, NULL, '2023-05-07 02:06:26', 'ch_3N4x0NKUOfa0wCPZ09MzMQ14', NULL),
+('Res-ucs645708ad9eb35', '2023-05-10', '10:00:00', '12:00:00', 10, 1700, 'KanCri64030c042fa53', 'Refunded', 'ucsRod645706fe1e661', NULL, NULL, '2023-05-07 02:10:53', 'ch_3N4x4hKUOfa0wCPZ0k1qV2rb', NULL),
+('Res-ucs64589cd3d04ab', '2023-05-18', '14:00:00', '15:00:00', 2, 850, 'KanCri64030c042fa53', 'Pending', 'ucsRod645706fe1e661', NULL, NULL, '2023-05-08 06:55:15', 'ch_3N5NzRKUOfa0wCPZ15AjWnRd', 'notDul64589cd3d93f7'),
+('Res-ucs64589e1e20fef', '2023-05-22', '09:00:00', '12:00:00', 2, 1800, 'baskcourt45', 'Pending', 'ucsRod645706fe1e661', NULL, NULL, '2023-05-08 07:00:46', 'ch_3N5O4mKUOfa0wCPZ1F4QHE18', 'notDul64589e1e22fd6'),
+('Res-ucs6458d9d2453be', '2023-05-15', '11:00:00', '12:00:00', 2, 600, 'baskcourt45', 'Pending', 'ucsRod645706fe1e661', NULL, NULL, '2023-05-08 11:15:30', 'ch_3N5S3IKUOfa0wCPZ0eWcgaWP', 'notDul6458d9d248533'),
+('Res-ucs6458da0b330ac', '2023-05-22', '13:00:00', '15:00:00', 2, 1200, 'baskcourt45', 'Refunded', 'ucsRod645706fe1e661', NULL, NULL, '2023-05-08 11:16:27', 'ch_3N5S4DKUOfa0wCPZ0QDYaIJZ', NULL),
+('Res-ucs645a4aa589f0b', '2023-05-19', '12:00:00', '14:00:00', 2, 1000, 'badcourt1212', 'Pending', 'ucsRod645706fe1e661', NULL, NULL, '2023-05-09 13:29:09', 'ch_3N5qcCKUOfa0wCPZ0devp6U6', 'notDul645a4aa5951ec');
 
 --
 -- Triggers `reservation`
@@ -484,11 +550,12 @@ CREATE TABLE `sport` (
 --
 
 INSERT INTO `sport` (`sportID`, `sportName`, `description`, `reservationPrice`, `minCoachingSessionPrice`, `maxNoOfStudents`) VALUES
-('bad65421', 'Badminton', 'fun game to play with friends', 450, 540, 10),
+('bad65421', 'Badminton', 'Amazing sport to play with friends', 500, 600, 10),
 ('basket17212', 'Basketball', 'A sport that requires speed', 600, 720, 25),
 ('cricket23871', 'Cricket', 'wanna play 11 vs 11?', 850, 1020, 20),
 ('Swim6405710541644', 'Swimming', 'test description', 500, 600, NULL),
 ('Tabl64038296afcad', 'Table Tennis', 'highly competitive and engaging for a 2v2 sport', 350, 420, NULL),
+('Tenn64561aba2ede4', 'Tennis', '2v2 or 1v1, the choice is yours', 650, 780, NULL),
 ('Voll64037fe13cf3a', 'Volleyball', 'Another fun game', 800, 960, 12);
 
 -- --------------------------------------------------------
@@ -512,16 +579,17 @@ CREATE TABLE `sports_court` (
 
 INSERT INTO `sports_court` (`courtID`, `sportID`, `courtName`, `branchID`, `requestStatus`, `addedManager`) VALUES
 ('AlaBas640320e9a4563', 'basket17212', 'A', 'Alaw640320e9a2e9a', 'p', NULL),
+('AnuVol64560bae1279a', 'Voll64037fe13cf3a', 'A', 'Anur64560bae11051', 'p', NULL),
 ('badcourt1212', 'bad65421', 'A', 'kiri987521', 'a', NULL),
 ('badcourt1213', 'bad65421', 'B', 'kiri987521', 'a', NULL),
 ('baskcourt45', 'basket17212', 'A', 'kiri987521', 'a', NULL),
 ('basket345', 'basket17212', 'A', 'col128423', 'a', NULL),
-('KadSwi6412745c377f6', 'Swim6405710541644', 'A', 'Kada6412745c32a13', 'p', NULL),
-('KanBas64030c042d150', 'basket17212', 'A', 'Kand64030c042c114', 'p', NULL),
-('KanBas64030c042e430', 'basket17212', 'B', 'Kand64030c042c114', 'p', NULL),
-('KanCri64030c042fa53', 'cricket23871', 'A', 'Kand64030c042c114', 'p', NULL),
-('tesBad6405701261bb3', 'bad65421', 'A', 'test64057012608ab', 'p', NULL),
-('tesTab6405701263373', 'Tabl64038296afcad', 'A', 'test64057012608ab', 'p', NULL);
+('KadSwi6412745c377f6', 'Swim6405710541644', 'A', 'Kada6412745c32a13', 'a', NULL),
+('KanBas64030c042d150', 'basket17212', 'A', 'Kand64030c042c114', 'a', NULL),
+('KanBas64030c042e430', 'basket17212', 'B', 'Kand64030c042c114', 'a', NULL),
+('KanCri64030c042fa53', 'cricket23871', 'A', 'Kand64030c042c114', 'a', NULL),
+('tesBad6405701261bb3', 'bad65421', 'A', 'test64057012608ab', 'd', NULL),
+('tesTab6405701263373', 'Tabl64038296afcad', 'A', 'test64057012608ab', 'd', NULL);
 
 -- --------------------------------------------------------
 
@@ -533,6 +601,15 @@ CREATE TABLE `sports_court_photo` (
   `courtPhoto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `courtID` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `sports_court_photo`
+--
+
+INSERT INTO `sports_court_photo` (`courtPhoto`, `courtID`) VALUES
+('/uploads/sports_court_images/badminton_1.webp', 'badcourt1212'),
+('/uploads/sports_court_images/basketball_court.jpg', 'baskcourt45'),
+('/uploads/sports_court_images/basketball_court2.jpg', 'basket345');
 
 -- --------------------------------------------------------
 
@@ -560,6 +637,10 @@ CREATE TABLE `staff` (
 INSERT INTO `staff` (`staffID`, `contactNum`, `gender`, `dateOfBirth`, `firstName`, `lastName`, `joinDate`, `leaveDate`, `staffRole`, `branchID`) VALUES
 ('managerkiri5436', '0785412368', 'm', '1975-10-11', 'Namal', 'Rajapaksa', '2022-10-11', NULL, 'manager', 'kiri987521'),
 ('managersecond1234', '0745213698', 'm', '1994-09-09', 'Kasun', 'Perera', '2022-12-01', NULL, 'manager', 'col128423'),
+('mngr64589f895170c', '07755889962', 'm', '1998-01-01', 'Lahiru', 'Kumara', '2023-05-08', NULL, 'manager', 'Kada6412745c32a13'),
+('mngr6458a04a2aa58', '07766385421', 'm', '1988-05-22', 'Ryan', 'Gosling', '2023-05-08', NULL, 'manager', 'Kand64030c042c114'),
+('rcptnst644f4f1f49c7b', '0778542145', 'm', '2003-02-06', 'Isuru', 'Heshan', '2023-05-01', NULL, 'receptionist', 'Kada6412745c32a13'),
+('rcptnst6458a12f43d74', '0715632852', 'm', '1985-08-07', 'Sugita', 'Tomokazu', '2023-05-08', NULL, 'receptionist', 'Kand64030c042c114'),
 ('receptionistkiri1241', '0741236585', 'f', '1994-12-09', 'Amali', 'Kulasinghe', '2022-12-01', NULL, 'receptionist', 'kiri987521'),
 ('receptionisttwo123', '0774114523', 'm', '1992-12-04', 'Imesh', 'Viduranga', '2022-12-01', NULL, 'receptionist', 'col128423');
 
@@ -678,7 +759,7 @@ CREATE TABLE `system_maintenance` (
 --
 
 INSERT INTO `system_maintenance` (`expectedDowntime`, `adminID`, `startingDate`, `startingTime`) VALUES
-('02:00:00', 'admin6389f6eef2e18', '2023-04-11', '09:00:00');
+('02:00:00', 'admin6389f6eef2e18', '2023-05-11', '09:00:00');
 
 -- --------------------------------------------------------
 
@@ -705,20 +786,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`userID`, `firstName`, `lastName`, `gender`, `profilePhoto`, `homeAddress`, `contactNum`, `birthday`, `registerDate`, `height`, `weight`) VALUES
-('ajiRod63a6f59abaaf7', 'AJith', 'Rodrigo', 'm', '../../uploads/user_profile_images/ajith_rodrigo63a6f59abab54.png', 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0714831744', '1957-11-14', '2022-12-24', 174, 50),
-('ajiRod63e521915a18e', 'Ajith', 'Rodrigo', 'm', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0714831744', '1957-12-11', '2023-02-09', NULL, 62),
-('chaJay63a1cae000958', 'Charith', 'Jayaranga', 'm', '../../uploads/user_profile_images/charith_jay63a1cae0009db.png', 'Charith&amp;#039;s Address', '0779685314', '2000-06-08', '2022-12-20', 176, 60),
-('darRod63acc32138634', 'Ramith', 'Rodrigo', 'm', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-12-17', '2022-12-28', NULL, NULL),
-('dihHan6384813878b75', 'Dihan', 'Hansaja', 'm', '../../uploads/user_profile_images/dihan_hansaja6384813878ccc.jpg', 'Dihan&amp;#039;s Address, Ambalangoda', '0786541239', '2000-07-04', '2022-11-28', 170, 55),
-('helRod63a5b32506d98', 'Ramith', 'Rodrigo', 'm', '../../uploads/user_profile_images/hello543263a5b32506def.png', 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-12-05', '2022-12-23', NULL, NULL),
-('kamPer638656b5362c7', 'Kamal', 'Perera', 'm', NULL, 'Madamulana, Sri Lanka', '0715423658', '2003-05-09', '2022-11-29', 166, 66),
-('lahKum63a5b52adc2df', 'Lahiru', 'Kumara', 'm', '../../uploads/user_profile_images/lahiru_kumara63a5b52adc335.jpg', 'Lahiru&amp;#039;s Address', '0774145632', '2002-02-06', '2022-12-23', 175, 66),
-('lahKum63a5b560507af', 'Lahiru', 'Kumara', 'm', '../../uploads/user_profile_images/lahiru_kumara263a5b56050808.jpg', 'Lahiru&amp;#039;s Address', '0774145632', '2002-02-06', '2022-12-23', 175, 66),
-('lahRod63a6ff48ce0c4', 'Lahiru', 'Rodrigo', 'm', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0767275867', '2008-12-02', '2022-12-24', NULL, NULL),
-('nihWij638657d83c715', 'Nihal', 'Wijesinghe', 'm', NULL, 'Some road, Galle', '0789654125', '1996-07-26', '2022-11-29', 177, 69),
-('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', '../../uploads/user_profile_images/ramith_rodrigo63f8d69aa0fc9.jpg', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', 180, 55),
-('samKum63e523eab8d76', 'Saman', 'Kumara', 'm', '../../uploads/user_profile_images/saman_kumara63e52426da49d.jpg', 'Saman address', '0774587452', '2009-02-04', '2023-02-09', NULL, NULL),
-('thaSam639a02d983325', 'Tharindu', 'Sampath', 'm', NULL, 'Some road, Kaluthara', '0774125478', '1999-06-25', '2022-12-14', 170, 70);
+('ajiRod645a56b71cc35', 'Ajith', 'Rodrigo', 'm', NULL, 'No.301/5, Mihindu Mawatha, Makola North, Makola', '0778548479', '1980-11-14', '2023-05-09', NULL, 55),
+('johLie6453900c2e784', 'Johan', 'Liebert', 'm', '../../uploads/user_profile_images/johan_liebert6453900c2ed7e.png', 'No. 432/5A, Some Street Name, AB City', '07766451257', '1998-05-12', '2023-05-04', 180, 60),
+('ramRod63816dc9007b4', 'Ramith', 'Rodrigo', 'm', '../../uploads/user_profile_images/ramith_rodrigo645211103e821.png', 'No.301/5 Mihindu Mawatha, Makola North, Makola', '0767275867', '2000-09-01', '2022-11-26', 180, 60),
+('ucsRod645706fe1e661', 'Dulsara', 'Rodrigo', 'm', '../../uploads/user_profile_images/ucsc_ramith6457076046de0.jpg', 'No.301/5, Mihindu Mawatha, Makola North, Makola', '07736521485', '2000-09-01', '2023-05-07', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -740,13 +811,15 @@ CREATE TABLE `user_branch_feedback` (
 --
 
 INSERT INTO `user_branch_feedback` (`userFeedbackID`, `userID`, `date`, `rating`, `description`, `branchID`) VALUES
-('feedback1243wolololo', 'ramRod63816dc9007b4', '2023-04-11', 5, 'The skeleton had skeletons of his own in the closet.\r\nWe have young kids who often walk into our room at night for various reasons including clowns in the closet.\r\nI think I will buy the red car, or I will lease the blue one.\r\nHenry couldn\'t decide if he was an auto mechanic or a priest.\r\nThe random sentence generator generated a random sentence about a random sentence.\r\nShe discovered van life is difficult with 2 cats and a dog.\r\nIt was getting dark, and we weren’t there yet.', 'kiri987521'),
-('feedbackwo1lololo', 'ramRod63816dc9007b4', '2023-04-11', 5, 'The skeleton had skeletons of his own in the closet.\r\nWe have young kids who often walk into our room at night for various reasons including clowns in the closet.\r\nI think I will buy the red car, or I will lease the blue one.\r\nHenry couldn\'t decide if he was an auto mechanic or a priest.\r\nThe random sentence generator generated a random sentence about a random sentence.\r\nShe discovered van life is difficult with 2 cats and a dog.\r\nIt was getting dark, and we weren’t there yet.', 'kiri987521'),
-('feedbackwol112ololo', 'ramRod63816dc9007b4', '2023-04-11', 5, 'The skeleton had skeletons of his own in the closet.\r\nWe have young kids who often walk into our room at night for various reasons including clowns in the closet.\r\nI think I will buy the red car, or I will lease the blue one.\r\nHenry couldn\'t decide if he was an auto mechanic or a priest.\r\nThe random sentence generator generated a random sentence about a random sentence.\r\nShe discovered van life is difficult with 2 cats and a dog.\r\nIt was getting dark, and we weren’t there yet.', 'kiri987521'),
-('feedbackwol11ololo', 'ramRod63816dc9007b4', '2023-04-11', 5, 'The skeleton had skeletons of his own in the closet.\r\nWe have young kids who often walk into our room at night for various reasons including clowns in the closet.\r\nI think I will buy the red car, or I will lease the blue one.\r\nHenry couldn\'t decide if he was an auto mechanic or a priest.\r\nThe random sentence generator generated a random sentence about a random sentence.\r\nShe discovered van life is difficult with 2 cats and a dog.\r\nIt was getting dark, and we weren’t there yet.', 'kiri987521'),
-('feedbackwolol2olo', 'ramRod63816dc9007b4', '2023-04-11', 5, 'The skeleton had skeletons of his own in the closet.\r\nWe have young kids who often walk into our room at night for various reasons including clowns in the closet.\r\nI think I will buy the red car, or I will lease the blue one.\r\nHenry couldn\'t decide if he was an auto mechanic or a priest.\r\nThe random sentence generator generated a random sentence about a random sentence.\r\nShe discovered van life is difficult with 2 cats and a dog.\r\nIt was getting dark, and we weren’t there yet.', 'kiri987521'),
-('feedbackwololo2lo', 'ramRod63816dc9007b4', '2023-04-11', 5, 'The skeleton had skeletons of his own in the closet.\r\nWe have young kids who often walk into our room at night for various reasons including clowns in the closet.\r\nI think I will buy the red car, or I will lease the blue one.\r\nHenry couldn\'t decide if he was an auto mechanic or a priest.\r\nThe random sentence generator generated a random sentence about a random sentence.\r\nShe discovered van life is difficult with 2 cats and a dog.\r\nIt was getting dark, and we weren’t there yet.', 'kiri987521'),
-('feedbackwolololo', 'ramRod63816dc9007b4', '2023-04-11', 5, 'The skeleton had skeletons of his own in the closet.\r\nWe have young kids who often walk into our room at night for various reasons including clowns in the closet.\r\nI think I will buy the red car, or I will lease the blue one.\r\nHenry couldn\'t decide if he was an auto mechanic or a priest.\r\nThe random sentence generator generated a random sentence about a random sentence.\r\nShe discovered van life is difficult with 2 cats and a dog.\r\nIt was getting dark, and we weren’t there yet.', 'kiri987521');
+('FB644f866d30ed7', 'ramRod63816dc9007b4', '2023-05-01', 5, 'I had a lot of fun! what an amazing experience!', 'kiri987521'),
+('FB64522c7728484', 'ramRod63816dc9007b4', '2023-05-03', 4, 'I want to come back again. We were able to enjoy with courts to ourselves with no issues!', 'col128423'),
+('FB64570aafd8008', 'johLie6453900c2e784', '2023-05-07', 3, 'It was okay, Wish the price was cheaper', 'kiri987521'),
+('FB64570b14d23e7', 'johLie6453900c2e784', '2023-05-07', 4, 'We will be coming back for more. ', 'kiri987521'),
+('FB645898d28d1d6', 'ramRod63816dc9007b4', '2023-05-08', 3, 'Test feedback', 'kiri987521'),
+('feedback1243wolololo', 'ramRod63816dc9007b4', '2023-04-11', 5, 'Amazing! it has been a long time that me and my friends got together and played like in the old days. Well, not exactly like the old days because this place is fancy and facilities are quite nice!', 'col128423'),
+('feedbackwo1lololo', 'ramRod63816dc9007b4', '2023-04-11', 3, 'Feels like the price is bit higher. I request to lower the said prices. Other than that, no other issues. the place was quite okay', 'col128423'),
+('feedbackwol112ololo', 'ramRod63816dc9007b4', '2023-04-11', 1, 'The skeleton had skeletons of his own in the closet.\r\nWe have young kids who often walk into our room at night for various reasons including clowns in the closet.\r\nI think I will buy the red car, or I will lease the blue one.\r\nHenry couldn\'t decide if he was an auto mechanic or a priest.\r\nThe random sentence generator generated a random sentence about a random sentence.\r\nShe discovered van life is difficult with 2 cats and a dog.\r\nIt was getting dark, and we weren’t there yet.', 'kiri987521'),
+('feedbackwol11ololo', 'ramRod63816dc9007b4', '2023-04-11', 5, 'The skeleton had skeletons of his own in the closet.\r\nWe have young kids who often walk into our room at night for various reasons including clowns in the closet.\r\nI think I will buy the red car, or I will lease the blue one.\r\nHenry couldn\'t decide if he was an auto mechanic or a priest.\r\nThe random sentence generator generated a random sentence about a random sentence.\r\nShe discovered van life is difficult with 2 cats and a dog.\r\nIt was getting dark, and we weren’t there yet.', 'kiri987521');
 
 -- --------------------------------------------------------
 
@@ -766,25 +839,12 @@ CREATE TABLE `user_dependent` (
 --
 
 INSERT INTO `user_dependent` (`ownerID`, `name`, `relationship`, `contactNum`) VALUES
-('ajiRod63a6f59abaaf7', 'Champa', 'Partner', '0774521585'),
-('ajiRod63a6f59abaaf7', 'Hema', 'Mother', '0778541236'),
-('ajiRod63a6f59abaaf7', 'Vajira', 'Sibling 1', '0714863258'),
-('ajiRod63e521915a18e', 'Champa', 'Partner', '0741254856'),
-('ajiRod63e521915a18e', 'Ramith', 'Other', '0767275867'),
-('chaJay63a1cae000958', 'Daham', 'Sibling 1', '0774125635'),
-('darRod63acc32138634', 'Ajith Rodrigo', 'Father', '0714831744'),
-('dihHan6384813878b75', 'Kamal', 'Sibling 1', '0774532158'),
-('dihHan6384813878b75', 'Ramith', 'Friend 1', '0767275867'),
-('helRod63a5b32506d98', 'Rodrigo', 'Friend 1', '0774152145'),
-('kamPer638656b5362c7', 'Sunil', 'Father', '0716525854'),
-('lahKum63a5b52adc2df', 'Ramith Rodrigo', 'Sibling 1', '0774589963'),
-('lahKum63a5b560507af', 'Ramith Rodrigo', 'Sibling 1', '0774589963'),
-('lahRod63a6ff48ce0c4', 'Ramith', 'Sibling 2', '0777854521'),
-('nihWij638657d83c715', 'Amitha', 'Partner', '0774532174'),
+('ajiRod645a56b71cc35', 'Champa', 'Partner', '0776325418'),
+('ajiRod645a56b71cc35', 'Ramith Rodrigo', 'Other', '0774147852'),
+('johLie6453900c2e784', 'Anna', 'Sibling 1', '0714541369'),
+('johLie6453900c2e784', 'Tenma', 'Friend 1', '0759846328'),
 ('ramRod63816dc9007b4', 'Ajith', 'Father', '0714831744'),
-('samKum63e523eab8d76', 'Lahiru', 'Sibling 2', '0774151234'),
-('samKum63e523eab8d76', 'Ramith', 'Sibling 1', '0774151236'),
-('thaSam639a02d983325', 'Sarindu', 'Sibling 1', '0774125963');
+('ucsRod645706fe1e661', 'Champa', 'Mother', '0779965428');
 
 -- --------------------------------------------------------
 
@@ -802,26 +862,8 @@ CREATE TABLE `user_medical_concern` (
 --
 
 INSERT INTO `user_medical_concern` (`userID`, `medicalConcern`) VALUES
-('ajiRod63a6f59abaaf7', 'pain a'),
-('ajiRod63a6f59abaaf7', 'pain b'),
-('ajiRod63a6f59abaaf7', 'pain c'),
-('ajiRod63a6f59abaaf7', 'pain d'),
-('ajiRod63a6f59abaaf7', 'pain e'),
-('chaJay63a1cae000958', 'headache'),
-('chaJay63a1cae000958', 'short sighted'),
-('dihHan6384813878b75', 'back pain'),
-('dihHan6384813878b75', 'headache'),
-('dihHan6384813878b75', 'my concern'),
-('kamPer638656b5362c7', 'broken and fixed leg'),
-('lahKum63a5b52adc2df', 'eye'),
-('lahKum63a5b52adc2df', 'helo pain'),
-('lahKum63a5b52adc2df', 'nice'),
-('lahKum63a5b560507af', 'eye'),
-('lahKum63a5b560507af', 'helo pain'),
-('lahKum63a5b560507af', 'nice'),
-('samKum63e523eab8d76', 'arm pains'),
-('samKum63e523eab8d76', 'leg cramps'),
-('thaSam639a02d983325', 'chest pain');
+('ajiRod645a56b71cc35', 'eyesight'),
+('johLie6453900c2e784', 'Leg cramps');
 
 -- --------------------------------------------------------
 
@@ -842,6 +884,7 @@ CREATE TABLE `user_request_coaching_session` (
 --
 
 INSERT INTO `user_request_coaching_session` (`userID`, `sessionID`, `requestDate`, `message`, `notificationID`) VALUES
+('ramRod63816dc9007b4', 'session1', '2023-05-02', 'sdfsdfsdf', 'notReqram64511d78dfc04'),
 ('ramRod63816dc9007b4', 'session2', '2023-04-29', NULL, 'notReqram644cba3aa2b25');
 
 --
@@ -853,8 +896,6 @@ INSERT INTO `user_request_coaching_session` (`userID`, `sessionID`, `requestDate
 --
 ALTER TABLE `branch`
   ADD PRIMARY KEY (`branchID`),
-  ADD UNIQUE KEY `branch_email` (`branchEmail`),
-  ADD UNIQUE KEY `latitude` (`latitude`,`longitude`),
   ADD UNIQUE KEY `curr_manager` (`currManager`),
   ADD UNIQUE KEY `curr_receptionist` (`currReceptionist`),
   ADD KEY `owner_id` (`ownerID`);
@@ -937,6 +978,12 @@ ALTER TABLE `manager`
 ALTER TABLE `notification`
   ADD PRIMARY KEY (`notificationID`),
   ADD KEY `user_id` (`userID`);
+
+--
+-- Indexes for table `onsite_reservation_holder`
+--
+ALTER TABLE `onsite_reservation_holder`
+  ADD PRIMARY KEY (`reservationID`);
 
 --
 -- Indexes for table `owner`
@@ -1144,6 +1191,12 @@ ALTER TABLE `manager`
 --
 ALTER TABLE `notification`
   ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `login_details` (`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `onsite_reservation_holder`
+--
+ALTER TABLE `onsite_reservation_holder`
+  ADD CONSTRAINT `onsite_reservation_holder_ibfk_1` FOREIGN KEY (`reservationID`) REFERENCES `reservation` (`reservationID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `owner`
