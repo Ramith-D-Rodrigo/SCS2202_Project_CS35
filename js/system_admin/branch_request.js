@@ -3,6 +3,11 @@ const parameters = new URLSearchParams(url.search); //search parameters
 
 const branch = parameters.get("branchID");
 
+const accept = document.getElementById("acceptBtn");
+const decline = document.getElementById("cancelBtn");
+accept.addEventListener('click',submitDecsion);
+decline.addEventListener('click',submitDecsion);
+
 fetch("../../controller/system_admin/view_branch_request_controller.php?branchID=".concat(branch))
     .then(res => res.json())
     .then(data => {
@@ -56,12 +61,48 @@ fetch("../../controller/system_admin/view_branch_request_controller.php?branchID
         }
     });
 
-    const selectedSport = document.getElementById("sports");
-    selectedSport.addEventListener("change",(e) => {
-        const courtCount = document.getElementById("courts");
-        if(e.target.value !== ''){
-            courtCount.value = e.target.value;
+const selectedSport = document.getElementById("sports");
+selectedSport.addEventListener("change",(e) => {
+    const courtCount = document.getElementById("courts");
+    if(e.target.value !== ''){
+        courtCount.value = e.target.value;
+    }else{
+        courtCount.value = '';
+    }
+});
+
+function submitDecsion(event){
+    $decisionDetails = {
+        Decision: e.target.value,
+        BranchID: document.getElementById("branchID").value,
+        Location: document.getElementById("city").value,
+        Email: document.getElementById("emailAddress").value,
+
+    }
+
+    fetch("../../controller/system_admin/request_handle_controller.php",{
+        method: "POST",
+        header: {
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify($decisionDetails)
+    })
+    .then(res => res.json)
+    .then(data => {
+        console.log(data);
+        if(!data['Flag']){
+            overlay.className = "overlay";
+            successMsg.className = "dialog-box";
+            successMsg.style.display = "block";
+
+            successMsg.innerHTML = data['Message'];
+            overlay.style.display = "block";
+
+            setTimeout(function(){
+                location.reload();
+            },3000);
         }else{
-            courtCount.value = '';
+            errMsg.innerHTML = data['Message'];
         }
     });
+}

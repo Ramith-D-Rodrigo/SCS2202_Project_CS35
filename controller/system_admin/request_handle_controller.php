@@ -4,28 +4,37 @@
     require_once("../../src/system_admin/dbconnection.php");
     require_once("../../src/system_admin/credentials_availability.php");
 
+    $requestJSON = file_get_contents("php://input");
+    $decision = json_decode($requestJSON, true);
+
+    $message = null;
+    $flag = false;
     $admin = Admin::getInstance();
-    
-    $branchUnavail = checkDuplicateBranch($_POST[$location],$connection);
+   
+    $location = htmlspecialchars($decision['Location'],ENT_QUOTES);
+    $branchID = htmlspecialchars($decision['BranchID'],ENT_QUOTES);
+    $decision = htmlspecialchars($decision['Decision'],ENT_QUOTES);
+
+    $branchUnavail = checkDuplicateBranch($location,$connection);
     if($branchUnavail){
-        $_SESSION['branchExistError'] = "Branch with the Same Location Exists.<br>Option is to Decline the Request";
-        header("Location: /public/system_admin/branch_request.php");
-        $connection -> close();
-        exit();
-    }else{
-        unset($_SESSION['branchExistError']);
+        $message = "Branch with the Same Location Exists.<br>Option is to Decline the Request";
+        $flag = true;
     }
 
-    $location = htmlspecialchars($_POST['location'],ENT_QUOTES);
-    $branchID = htmlspecialchars($_POST['branchID'],ENT_QUOTES);
-    $decision = htmlspecialchars($_POST['decision'],ENT_QUOTES);
-
-    $result = $admin -> makeBranchActive($decision,$branchID,$connection);
-    if($result){
-        header("Location: /public/system_admin/view_owner_requests.php");
-        $connection -> close();
-        exit();
+    
+    if(!$flag){
+        $result = $admin -> makeBranchActive($decision,$branchID,$connection);
+        if($result){
+            $message = "Branch Request Decision Added Successfully";
+        }else{
+            $message = "Error Occured While Adding Branch Request Decision";
+            $flag = true;
+        }
     }
+
+    header('Content-type: application/json');
+    echo json_encode(["Message"=>$message,"Flag"=>$flag]);
+    die();
 
 
 ?>
