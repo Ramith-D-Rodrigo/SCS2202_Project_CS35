@@ -1,4 +1,4 @@
-//Event Handling and Client Side Validation in Staff Registration
+//Event Handling in Staff Registration
 
 var verbose = true; //debugging
 
@@ -9,7 +9,6 @@ togglePasswordbtns.forEach(togglePassword);
 
 function togglePassword(element){
     element.addEventListener('click',(e)=>{
-        e.preventDefault();
         const parentDiv = element.parentElement;
         const passwordField = parentDiv.children[0];
 
@@ -30,10 +29,17 @@ function validateForm(event){
     const cPassword = document.getElementById("confirmPwd");
     const branch = document.getElementById("branchName");
     const staffRole = document.getElementById("staffRole");
+    const male = document.getElementById("male");
+    const female = document.getElementById("female");
 
     if(branch.value === "" || staffRole.value === ""){   //Haven't selected any specific role 
         event.preventDefault(); //do not submit
         errMsg.innerHTML = "Haven't Selected any Specific Role";
+        return false;
+    }
+    if(!male.checked && !female.checked){
+        event.preventDefault(); //do not submit
+        errMsg.innerHTML = "Haven't Mentioned the Gender";
         return false;
     }
     const form = document.querySelector("form");

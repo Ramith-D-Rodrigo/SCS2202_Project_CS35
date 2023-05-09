@@ -6,139 +6,101 @@
     require_once("../../src/system_admin/dbconnection.php");
     require_once("../../src/system_admin/credentials_availability.php");
 
+    $requestJSON = file_get_contents("php://input");
+    $profile = json_decode($requestJSON, true);
 
-    //all possible inputs for prefilling
-    $inputFields = ['emailAddress', 'contactNum', 'gender', 'birthday', 'firstName', 
-                                'lastName','branchName'];
-
-    //Compulsary Details
-
-    foreach($inputFields as $i){    //store session details
-        if(isset($_POST[$i])){
-            $_POST[$i] = htmlspecialchars($_POST[$i], ENT_QUOTES);
-            $_SESSION[$i] = $_POST[$i];
-        }
-    }
-
+    $staffRole = htmlspecialchars($profile['StaffRole'], ENT_QUOTES);
+    $branchName = htmlspecialchars($profile['Branch'],ENT_QUOTES);
+    $fName = htmlspecialchars($profile['FirstName'],ENT_QUOTES);
+    $lName = htmlspecialchars($profile['LastName'],ENT_QUOTES);
+    $bday = htmlspecialchars($profile['Birthday'],ENT_QUOTES);
+    $gender = htmlspecialchars($profile['Gender'],ENT_QUOTES);
+    $email = htmlspecialchars($profile['Email'],ENT_QUOTES);
+    $contactNo = htmlspecialchars($profile['Contact'],ENT_QUOTES);
+    $username = htmlspecialchars($profile['Username'],ENT_QUOTES);
     
-    //Checking if the account already exists
-
+    $message;
+    $flag = false;
     //email availability
     $hasEmailResult = null;
-    $hasEmailResult = checkStaffEmail($_POST['emailAddress'], $connection);
-
-    if(isset($_SESSION['successMsg'])){ //same user is trying to register (in the same session) We have to unset the message
-        unset($_SESSION['successMsg']);
-    }
+    $hasEmailResult = checkStaffEmail($email, $connection);
 
     if($hasEmailResult){    //account already exists
-        $_SESSION['emailError'] = "Account with same Email Address exists.";
-        header("Location: /public/system_admin/staff_register.php");
-        $connection -> close(); //close the database connection
-        exit(); //exit the registration
-    }
-    else{
-        unset($_SESSION['emailError']); //email is available, hence unset the error message
+        $message = "Account with same Email Address exists.";
+        $flag = true;
     }
     
     //contact number availability
-    $hasContactNumber = checkContactNumber($_POST['contactNum'],$connection);
+    $hasContactNumber = checkContactNumber($contactNo,$connection);
 
     if($hasContactNumber){    //contact number already exists
-        $_SESSION['numberError'] = "Contact Number already exists.";
-        header("Location: /public/system_admin/staff_register.php");
-        $connection -> close(); //close the database connection
-        exit(); //exit the registration
+        $message = "Contact Number already exists.";
+        $flag = true;
     }
-    else{
-        unset($_SESSION['numberError']); //contact number is available, hence unset the error message
-    }
+    
     //username availability    
-    $hasUsernameResult = checkUsername($_POST['username'], $connection);
+    $hasUsernameResult = checkUsername($username, $connection);
 
     if($hasUsernameResult){    //account already exists
-        $_SESSION['usernameError'] = "Account with same Username exists.";
-        header("Location: /public/system_admin/staff_register.php");
-        $connection -> close(); //close the database connection
-        exit(); //exit the registration
+        $message = "Account with same Username exists.";
+        $flag = true;
     }
-    else{
-        unset($_SESSION['usernameError']); //username is available, hence unset the error message
-    }
-
-    $branchName = htmlspecialchars($_POST['branchName'], ENT_QUOTES);
-    $staffRole = htmlspecialchars($_POST['staffRole'], ENT_QUOTES);
 
     if($staffRole === 'receptionist') {
         $hasReceptionist = checkReceptionist($branchName,$connection);
 
         if($hasReceptionist){    //receptionist already exists
-            $_SESSION['staffError'] = "Receptionist exists in the particular branch.";
-            header("Location: /public/system_admin/staff_register.php");
-            $connection -> close(); //close the database connection
-            exit(); //exit the registration
-        }
-        else{
-            unset($_SESSION['staffError']); //staff role is available, hence unset the error message
+            $message = "Receptionist exists in the particular branch.";
+            $flag = true;
         }
     }else {
         $hasManager = checkManager($branchName,$connection);
 
         if($hasManager){    //manager already exists
-            $_SESSION['staffError'] = "Manager exists in the particular branch.";
-            header("Location: /public/system_admin/staff_register.php");
-            $connection -> close(); //close the database connection
-            exit(); //exit the registration
-        }
-        else{
-            unset($_SESSION['staffError']); //staff role is available, hence unset the error message
+            $message = "Manager exists in the particular branch.";
+            $flag = true;
         }
     }
     
-    //can create a account
-
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    //hash the password
-    $userid; 
-    if($staffRole === 'receptionist'){
-        $userid = uniqid("rcptnst");
-    }else{
-        $userid = uniqid("mngr");
-    }
-       //create an user id using uuid function
-    // $userIDResult = $connection -> query($useridsql); //get the result from query
-
-    // foreach($userIDResult as $row){   //get the user id 
-    //     $userid = $row['UUID()'];
-    // }
-
-    $username = htmlspecialchars($_POST['username'], ENT_QUOTES);
-    $email = htmlspecialchars($_POST['emailAddress'], ENT_QUOTES);
-    $contactNo = htmlspecialchars($_POST['contactNum'], ENT_QUOTES);
-    $fName = htmlspecialchars($_POST['firstName'], ENT_QUOTES);
-    $lName = htmlspecialchars($_POST['lastName'], ENT_QUOTES);
-    $bday = htmlspecialchars($_POST['birthday'], ENT_QUOTES);
-    $gender = htmlspecialchars($_POST['gender'], ENT_QUOTES);
     
     
+    //can continue to register
+    if(!$flag){
+        //can create a account
 
-    $admin = Admin::getInstance();
-    $branchID = $admin -> getBranchID($branchName,$connection);
-    
-    $result = false;
-    $result = $admin -> registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$connection);
-    
-    if($result){   //successfully registered
+        $password = password_hash($profile['Password'], PASSWORD_DEFAULT);    //hash the password
+        $userid;
+        $substr; 
+        if($staffRole === 'receptionist'){
+            $firstPart = "receptionist".substr($branchName,0,4);
+            $userid = uniqid($firstPart);
+        }else{
+            $secondPart = "manager".substr($branchName,0,4);
+            $userid = uniqid($secondPart);
+        }
+        $admin = Admin::getInstance();
+        $branchID = $admin -> getBranchID($branchName,$connection);
+        
+        $result = false;
+        $result = $admin -> registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$connection);
+        
+        if($result){   //successfully registered
             // echo "Successfully Registered";
-        foreach($inputFields as $i){    //store session details
-            if(isset($_SESSION[$i])){   //unsetting input values
-                unset($_SESSION[$i]);
-            }
-        } 
-        // session_unset(); free all current session variables 
-
-        $_SESSION['RegsuccessMsg'] = 'Registered Successfully';
-        header("Location: /public/system_admin/staff_register.php");
+            $message = 'Registered Successfully';
+            
+        }else{
+            $message = "There was Error in Registering ";
+            $flag = true;
+        }
+        header('Content-Type: application/json');
+        echo json_encode(["Message"=>$message,"Flag"=>$flag]);
+        die();
+    }else{
+        header('Content-Type: application/json');
+        echo json_encode(["Message"=>$message,"Flag"=>$flag]);
+        die();
     }
+    
 
     $connection -> close(); //close the database connection
 ?>
