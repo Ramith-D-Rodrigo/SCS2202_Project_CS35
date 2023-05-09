@@ -21,6 +21,8 @@
         WHERE `sc`.`sportID` 
         LIKE '%s' 
         AND 
+        `b`.`requestStatus` = 'a'  
+        AND
         `sc`.`requestStatus` ='a'", $database -> real_escape_string($sportID));   //requested status a means accepted
 
         $result = $database -> query($sql);

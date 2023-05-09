@@ -262,7 +262,7 @@ class User extends Actor implements JsonSerializable{
         $branchResultArr = [];
         $coachResultArr = [];
 
-        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of receptionist (pending request)
+        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of manager (pending request)
             $courtBranchSql = sprintf("SELECT DISTINCT `branchID`
             FROM `sports_court`
             WHERE `sportID`

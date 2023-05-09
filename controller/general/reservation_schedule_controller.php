@@ -8,7 +8,7 @@
 
     require_once("../../src/general/security.php");
 
-    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){   //owner because owner can also view the schedule (reusing the same script)
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
         Security::redirectUserBase();
         die();
     }

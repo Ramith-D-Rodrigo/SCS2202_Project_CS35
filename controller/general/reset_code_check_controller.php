@@ -8,7 +8,7 @@
         die();
     }
 
-    if(!isset($_SESSION['resetUserID'])){  //if the user is not logged in and has not checked the reset code
+    if(!isset($_SESSION['resetUserID'])){  //if the user has not requested to reset the password
         header('Content-Type: application/json;');
         echo json_encode(array("errMsg" => "Unable to reset your password. <br>Please try again later"));
         exit();
