@@ -92,15 +92,11 @@
             $message = "There was Error in Registering ";
             $flag = true;
         }
-        header('Content-Type: application/json');
-        echo json_encode(["Message"=>$message,"Flag"=>$flag]);
-        die();
-    }else{
-        header('Content-Type: application/json');
-        echo json_encode(["Message"=>$message,"Flag"=>$flag]);
-        die();
     }
     
+    header('Content-Type: application/json');
+    echo json_encode(["Message"=>$message,"Flag"=>$flag]);
+    die();
 
-    $connection -> close(); //close the database connection
+    
 ?>

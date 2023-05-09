@@ -61,7 +61,7 @@ function registerStaff(){
     .then((res) => res.json())
     .then((data) => {
         console.log(data);
-        if(!data[Flag]){
+        if(!data['Flag']){
             overlay.className = "overlay";
             successMsg.className = "dialog-box";
             successMsg.style.display = "block";
