@@ -101,4 +101,8 @@ fetch("../../controller/general/reservation_schedule_controller.php?" + params)
         prevBtn.disabled = true;
         prevBtn.classList.add("nav-disable");
 
-    });
+    })
+    .catch(err =>{
+        //redirect to the error page
+        window.location.href = "/500.php";
+    })

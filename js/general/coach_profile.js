@@ -314,3 +314,6 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         requestingSession.addEventListener("change", sessionInfo);
         
     })
+    .catch(err => {
+        window.location.href = "/500.php";
+    });

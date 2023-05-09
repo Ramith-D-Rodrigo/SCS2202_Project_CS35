@@ -318,5 +318,8 @@ const courtSelect = (e) =>{
 
             console.log(cellandReservationMap);
         }
+    })
+    .catch(err => {
+        window.location.href = "/500.php";
     });
 }
