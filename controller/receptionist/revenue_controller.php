@@ -20,6 +20,23 @@
         }
     }
 
+    //valid dates
+    $fromDate = new DateTime($_GET['fromDate']);
+    $toDate   = new DateTime($_GET['toDate']);
+
+    if($fromDate > $toDate){
+        http_response_code(400);    // Bad Request
+        die();
+    }
+
+    //date range difference is more than 365 days
+    $dateDiff = $fromDate -> diff($toDate);
+    if($dateDiff -> days > 365){
+        http_response_code(400);    // Bad Request
+        die();
+    }
+
+
     $staffMember  = new Staff();
     $receptionist = $staffMember -> getStaffMemeber($_SESSION['userrole']);
 
@@ -35,9 +52,7 @@
 
     $returnJSON = [];
 
-    //start with from date and to date and loop through all days
-    $toDate   = new DateTime($_GET['toDate']);
-    
+    //start with from date and loop through all days until to date
     if($_GET['all-revenue'] === 'true'){    // All revenue
         $currDate = new DateTime($_GET['fromDate']);
 
