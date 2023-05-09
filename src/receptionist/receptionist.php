@@ -288,12 +288,13 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
     public function getAllSports($branchID,$database) {
         $branch = new Branch($branchID);
-        $sportObjects = $branch -> offeringSports($database);
-        $sportNames = [];
-        foreach($sportObjects as $sportObject){
-            array_push($sportNames,$sportObject -> getDetails($database,['sportName']));
+        $allCourts = $branch -> getBranchCourts(database: $database,courtStatus: 'a');
+        $courtDetails = [];
+        foreach($allCourts as $courtObject){
+            $sport = $courtObject->getSport($database);
+            array_push($courtDetails,["Court"=>$courtObject -> getName($database),"Sport"=>$sport -> getDetails($database,['sportName'])]);
         }
-        return $sportNames;
+        return $courtDetails;
     }
 
     // public function getAllCourts($branchID,$database) {
