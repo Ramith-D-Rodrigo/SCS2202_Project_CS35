@@ -34,13 +34,15 @@
                                                 pattern="^[a-zA-Z]+$" 
                                                 name="firstName"
                                                 id="firstName" 
-                                                required placeholder="First Name">
+                                                required placeholder="First Name"
+                                                title="Letters only. No spaces">
                                         <input type="text" 
                                                 pattern="^[a-zA-Z]+$" 
                                                 name="lastName"
                                                 id="lastName" 
                                                 required 
-                                                placeholder="Last Name">
+                                                placeholder="Last Name"
+                                                title="Letters only. No spaces">
                                     </div>
                                 </div>
                                 
@@ -62,7 +64,8 @@
                                             pattern="[0-9]{10,11}" 
                                             name="contactNum"
                                             id="usercontact"
-                                            required>
+                                            required
+                                            title="Numbers only, length between 10 and 11">
                                     </div>
                                 </div>
 

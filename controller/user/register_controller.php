@@ -79,6 +79,12 @@
                     $validationErrFlag = true;
                     break;
                 }
+
+                if($diff -> y > 100){    //age should be less than 100 years
+                    $returnMsg['RegUnsuccessMsg'] = 'Maximum Age Should Be 100 Years';
+                    $validationErrFlag = true;
+                    break;
+                }
             }
             else if($i === 'contactNum' || $i === 'emgcontactNum1' || $i === 'emgcontactNum2' || $i === 'emgcontactNum3'){
                 if(!preg_match("/^[0-9]{10,11}$/", $_POST[$i])){  //doesn't match the pattern
