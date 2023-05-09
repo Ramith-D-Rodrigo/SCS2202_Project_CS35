@@ -4,57 +4,48 @@
     require_once("../../src/system_admin/dbconnection.php");
     require_once("../../src/system_admin/credentials_availability.php");
 
-    $role = htmlspecialchars($_POST['role'],ENT_QUOTES);
+    $requestJSON = file_get_contents("php://input");
+    $credentials = json_decode($requestJSON, true);
+
+   $message = null;
+   $flag = false;
+
+    $newEmail = null;
+    $profileID = null;
+    if($credentials['Email'] !== ''){
+        $newEmail = htmlspecialchars($credentials['Email'], ENT_QUOTES);
+        $emailAvail = null;
+        $emailAvailStaff = checkStaffEmail($newEmail, $connection);  //check whether the email is already exists on login table
+        $emailAvailBranch = checkBranchEmail($newEmail, $connection);  //check wehter the email is already exists on branch table
+
+        if($emailAvailStaff || $emailAvailBranch){
+            $message = "Email Address Already Exists.";
+            $flag = true;
+        }
+    }
+    
+    $profileID = htmlspecialchars($credentials['Profile'],ENT_QUOTES);
     //check for the email availability
-    $emailAvail = null;
-    $emailAvailStaff = checkStaffEmail($_POST['newEmail'], $connection);  //check whether the email is already exists on login table
-    $emailAvailBranch = checkBranchEmail($_POST['newEmail'], $connection);  //check wehter the email is already exists on branch table
-
-    if($role !== "Admin"){
-        if($emailAvailStaff || $emailAvailBranch){
-            $_SESSION['emailError'] = "Email Address Already Exists.";
-            header("Location: /public/system_admin/change_staff_logins.php");
-            $connection -> close();
-            exit();
-        }else{
-            unset($_SESSION['emailError']);
-        }
-    }else{
-        if($emailAvailStaff || $emailAvailBranch){
-            $_SESSION['emailError'] = "Email Address Already Exists.";
-            header("Location: /public/system_admin/account_settings.php");
-            $connection -> close();
-            exit();
-        }else{
-            unset($_SESSION['emailError']);
-        }
+    
+    $hashPwd = null;
+    if($credentials['Password'] !== ''){
+        $hashPwd = password_hash($credentials['Password'], PASSWORD_DEFAULT);  //hash the new password
     }
-
-    $newEmail = htmlspecialchars($_POST['newEmail'], ENT_QUOTES);
-    $profileID = htmlspecialchars($_POST['confirmBtn'],ENT_QUOTES);
-
-    $hashPwd = password_hash($_POST['newPwd'], PASSWORD_DEFAULT);  //hash the new password
+    
     $admin = Admin::getInstance();
-    $updateResult = $admin -> updateStaffLogin($profileID, $newEmail, $hashPwd, $connection);
+    $updateResult = $admin -> updateStaffLogin($connection,$profileID, $newEmail, $hashPwd);
     
-    if($role !== "Admin"){
+    if(!$flag){
         if($updateResult){
-            $_SESSION['successMsg'] = "Login Details Updated Successfully.";
-            header("Location: /public/system_admin/change_staff_logins.php");
-            $connection -> close();
-            exit();
-        }
-    }else{
-        if($updateResult){
-            $_SESSION['successMsg'] = "Login Details Updated Successfully.";
-            header("Location: /public/system_admin/account_settings.php");
-            $connection -> close();
-            exit();
+            $message = "Login Details Updated Successfully.";
+        }else{
+            $message = "Error Occured While Updating Login Details.";
         }
     }
-    
 
+    header('Content-type: application/json');
+    echo json_encode(["Message"=>$message,"Flag"=>$flag]);
+    die();
     
-
 
 ?>
