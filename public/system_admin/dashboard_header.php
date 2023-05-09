@@ -1,6 +1,6 @@
 <header>
     <div class='header-top'>
-        <div style="align-items:flex-start"> <!-- For the current visiting page of the site -->
+        <div style="display:flex;justify-content:flex-start"> <!-- For the current visiting page of the site -->
             <?php
                 if($_SERVER['REQUEST_URI'] === '/public/system_admin/admin_dashboard.php'){  //admin dashboard
                     echo "Welcome, ".$_SESSION['username'];
@@ -34,7 +34,7 @@
                 }
             ?>
         </div>
-        <div style="align-items:flex-end">
+        <div style="display:flex;justify-content:flex-end">
             <?php
             
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){    //admin logged in     

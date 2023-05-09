@@ -20,17 +20,6 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
-    width: 700px;
+    width: 100%;
     margin: 5px auto;
-}
-
-.left-side{
-    /* margin-top: 15px; */
-    width: 600px;
-}
-
-.right-side{
-    width: 1200px;
-    margin-top:-10px;
-    margin-left: 60px;
 }
