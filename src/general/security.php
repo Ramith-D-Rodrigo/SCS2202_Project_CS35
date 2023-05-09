@@ -39,7 +39,7 @@
             require("dbconnection.php");
             self::$connection = $connection;
             $sql = sprintf("SELECT `ld`.`emailAddress`, `b`.`branchEmail` FROM `login_details` `ld` CROSS JOIN 
-            `branch` `b` WHERE `ld`.`emailAddress` = '%s' OR `b`.`branchEmail` = '%s'", 
+            `branch` `b` WHERE `ld`.`emailAddress` = '%s' OR (`b`.`branchEmail` = '%s' AND `b`.`requestStatus` = 'a')",     //get the email addresses of branches that are already registered
             self::$connection -> real_escape_string($santizedEmail),
             self::$connection -> real_escape_string($santizedEmail));
 
