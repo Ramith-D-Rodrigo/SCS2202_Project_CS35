@@ -16,7 +16,7 @@
             3
             </h1>
             <p class="error__content__text">Uh oh, You are not supposed to be here!</p>
-            <button onclick="window.location.href='/'">Go Back</button>
+            <button onclick="window.location.href='/'">Go Back Home</button>
         </div>
     </body>
 </html>

@@ -15,7 +15,7 @@
     $branchID = $_GET['branchID'];
 
     if(!isset($branchID)){
-        Security::redirectUserBase();
+        http_response_code(400);
         die();
     }
 

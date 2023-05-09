@@ -10,7 +10,7 @@
     }
 
     //server request method
-    if(!$_SERVER['REQUEST_METHOD'] == 'POST'){
+    if($_SERVER['REQUEST_METHOD'] != 'POST'){
         Security::redirectUserBase();
         die();
     }
@@ -76,6 +76,10 @@
 
                 array_push($sportIDs, $sport['sportID']); //push the sportID to the array
                 array_push($sportsAndCourts, $sport); //push the sport and court count to the array
+            }
+
+            if(!$flag){ //break out from the outer loop
+                break;
             }
         }
 

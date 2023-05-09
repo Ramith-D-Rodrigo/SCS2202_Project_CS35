@@ -16,7 +16,7 @@
             4
             </h1>
             <p class="error__content__text">Oops, Sadly the thing you are looking for doesn't exist.</p>
-            <button onclick="window.location.href='/'">Go Back</button>
+            <button onclick="window.location.href='/'">Go Back Home</button>
         </div>
     </body>
 </html>
