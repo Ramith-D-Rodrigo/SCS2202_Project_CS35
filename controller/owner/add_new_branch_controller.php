@@ -171,6 +171,37 @@
 
     $owner -> setUserID($_SESSION['userid']);  //set the owner's userID
 
+    //check whether the requesting branch is already in the system
+    $registeredBranches = $owner -> getBranches(); 
+
+    foreach($registeredBranches as $currBranch){
+        $currBranch -> getDetails($owner -> getConnection(), ['city', 'branchEmail', 'address', 'requestStatus', 'latitude', 'longitude']);
+        $branchASSOC = json_decode(json_encode($currBranch), true); //convert the branch object to an associative array
+
+        if($branchASSOC['requestStatus'] == 'a'){
+            if($branchASSOC['city'] == $_POST['city']){
+                $msg['msg'] = 'Branch Already Exists';
+                echo json_encode($msg);
+                die();
+            }
+            else if($branchASSOC['branchEmail'] == $_POST['email']){
+                $msg['msg'] = 'Email Address is Already Used In This System';
+                echo json_encode($msg);
+                die();
+            }
+            else if($branchASSOC['address'] == $_POST['address']){
+                $msg['msg'] = 'There is a Branch in the Same Address';
+                echo json_encode($msg);
+                die();
+            }
+            else if($branchASSOC['latitude'] == $_POST['latitude'] && $branchASSOC['longitude'] == $_POST['longitude']){
+                $msg['msg'] = 'There is a Branch in the Same Location';
+                echo json_encode($msg);
+                die();
+            }     
+        }
+    }
+
     $status = $owner -> requestToAddBranch(htmlspecialchars($_POST['city'], ENT_QUOTES), //htmlspecialchars to prevent XSS (Cross Site Scripting)
         htmlspecialchars($_POST['address'], ENT_QUOTES), 
         $_POST['openingTime'],
