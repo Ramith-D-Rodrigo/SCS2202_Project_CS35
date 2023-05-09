@@ -6,36 +6,26 @@
     require_once("../../src/receptionist/request_availability.php");
     require_once("../../src/system_admin/staff.php");
 
-    //all possible inputs for prefilling
-    $inputFields = [`reason`, `sportName`,`courtName`,`sDate`,`eDate`];
-
-    //Compulsary Details
-
-    foreach($inputFields as $i){    //store session details
-        if(isset($_POST[$i])){
-            $_POST[$i] = htmlspecialchars($_POST[$i], ENT_QUOTES);
-            $_SESSION[$i] = $_POST[$i];
-        }
-    }
+    $requestJSON = file_get_contents("php://input");
+    $requestDetails = json_decode($requestJSON, true);
     
-    $reason = htmlspecialchars($_POST['reason'], ENT_QUOTES);
-    $sportName = htmlspecialchars($_POST['sportName'], ENT_QUOTES);
-    $courtName = htmlspecialchars($_POST['courtName'], ENT_QUOTES);
-    $sDate = htmlspecialchars($_POST['sDate'], ENT_QUOTES);
-    $eDate = htmlspecialchars($_POST['eDate'], ENT_QUOTES);
+    $reason = htmlspecialchars($requestDetails['reason'], ENT_QUOTES);     //get the necessary details
+    $sportName = htmlspecialchars($requestDetails['sport'], ENT_QUOTES);    //htmlspecailchars is used to prevent inject scripts attacks
+    $courtName = htmlspecialchars($requestDetails['court'], ENT_QUOTES);
+    $sDate = htmlspecialchars($requestDetails['start'], ENT_QUOTES);
+    $eDate = htmlspecialchars($requestDetails['end'], ENT_QUOTES);
 
-    $results = '';
-    $valid = checkAvailableSport($_SESSION['userid'],$courtName,$sportName,$connection);
+    $flag = false;
+    $msg;
+
+    $valid = checkAvailableSport($_SESSION['branchID'],$courtName,$sportName,$connection);
     if(($valid -> num_rows > 0) || ($sportName === "ALL" && $courtName === "ALL")){
         if($sportName === "ALL" && $courtName === "ALL") {
             $brAvailable = checkBranchMaintenance($_SESSION['branchID'],$sDate,$eDate,$connection);
             if($brAvailable -> num_rows > 0) {
-                $_SESSION['slotUnavailability'] = "There's an already pending branch maintenance request that overlap to this request";
-                header("Location: /public/receptionist/request_maintenance.php");
-                $connection -> close(); //close the database connection
-                exit(); //exit the submission
+                $msg = "There's an already pending branch maintenance request that overlap to this request";
+                $flag = true;
             }else {
-                unset($_SESSION['slotUnavailability']);
                 $staffMember = new Staff();
                 $receptionist = $staffMember -> getStaffMemeber($_SESSION['userrole']);
                 $results = $receptionist -> branchMaintenance($reason,$sDate,$eDate,$_SESSION['branchID'],$_SESSION['userid'],$connection);    
@@ -43,46 +33,30 @@
            
         }else if($sportName != "ALL" && $courtName != "ALL") {
             $brAvailable = checkBranchMaintenance($_SESSION['branchID'],$sDate,$eDate,$connection);
-            $crtAvailable = checkCourtMaintenance($_SESSION['userid'],$courtName,$sportName,$sDate,$eDate,$connection);
-            if( $brAvailable -> num_rows > 0 || $crtAvailable -> num_rows > 0){
-                $_SESSION['slotUnavailability'] = "There's an already pending request that overlap to this request";
-                header("Location: /public/receptionist/request_maintenance.php");
-                $connection -> close(); //close the database connection
-                exit(); //exit the submission
+            $crtAvailable = checkCourtMaintenance($_SESSION['branchID'],$courtName,$sportName,$sDate,$eDate,$connection);
+            if( $brAvailable -> num_rows > 0 ){
+                $msg = "There's a pending branch maintenance request that overlap to this request";
+                $flag = true;
+            }elseif($crtAvailable -> num_rows > 0){
+                $msg = "There's a pending court maintenance request that overlap to this request";
+                $flag = true;
             }else{
-                unset($_SESSION['slotUnavailability']);
                 $staffMember = new Staff();
                 $recep = $staffMember -> getStaffMemeber($_SESSION['userrole']);
                 $results = $recep -> reqMaintenance($reason,$sportName,$courtName,$sDate,$eDate,$_SESSION['userid'],$connection);
             }
             
-        }else {
-            $results = false;
         }
     }else {
-        $_SESSION['courtUnavailability'] = "Invalid Sport Court";
-        header("Location: /public/receptionist/request_maintenance.php");
-        $connection -> close(); //close the database connection
-        exit(); //exit the submission
+        $msg = "Invalid Sport Court";
+        $flag = true;
     }
     
-    
-
-    if($results === TRUE){   //successfully submitted
-        echo "Successfully Submitted";
-        foreach($inputFields as $i){    //store session details
-            if(isset($_SESSION[$i])){   //unsetting input values
-                session_unset($i);
-            }
-        }
-        // session_unset(); //free all current session variables  || the userid and the userrole has unset
-
-        $_SESSION['RequestsuccessMsg'] = 'Submitted';
-        header("Location: /public/receptionist/request_maintenance.php");
-    }else {
-        $_SESSION['errMsg'] = 'There was a problem when inserting data to the database';
-        header("Location: /public/receptionist/request_maintenance.php");
+    if(!$flag){   //successfully submitted
+        $msg = "Request Successfully Submitted";
     }
 
-    $connection -> close(); //close the database connection
+    header("Content-Type: application/json");
+    echo json_encode(array("Message" => $msg, "Flag" => $flag));
+    die();
 ?>
