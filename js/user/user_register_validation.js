@@ -25,7 +25,8 @@ function validateForm(event){
                 errMsg.innerHTML = errMsg.innerHTML + "<br>Last Name is Invalid";
             }
             else if(invalidFields[i].name === 'birthday'){
-                errMsg.innerHTML = errMsg.innerHTML + "<br>Birthday is Invalid, You must be at least " + MIN_USER_REGISTRATION_AGE + " years old to register";
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Birthday is Invalid, You must be at least " + MIN_USER_REGISTRATION_AGE + " years old to register<br>";
+                errMsg.innerHTML = errMsg.innerHTML + "And the age should not be greater than 100 years old";
             }
             else if(invalidFields[i].name === "contactNum"){
                 errMsg.innerHTML = errMsg.innerHTML + "<br>Contact Number is Invalid";

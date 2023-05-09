@@ -17,6 +17,8 @@
     z-index: 1000;
     display: none;
     margin: auto;
+    min-width: 50%;
+    max-height: 80vh;
 }
 
 .show{
