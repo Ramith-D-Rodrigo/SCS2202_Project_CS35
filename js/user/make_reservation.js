@@ -3,6 +3,7 @@ const reservationForm = document.querySelector('form');
 import {updateTheReservationTables, createScheduleObjects} from '../general/reservation_schedule_functions.js';
 
 import { currency } from '../CONSTANTS.js';
+import { addLeadingZeros } from '../FUNCTIONS.js';
 
 let sendingRequest = null;  //to store the reservation details
 let stripe = null;  //to store the payment gateway
@@ -200,8 +201,9 @@ reservationForm.addEventListener('submit', (event) => {
         reservingCourtSchedule[0].reservations.forEach((reservation) => {
             const startingTime = new Date(reservation.startingTime);
             const endingTime = new Date(reservation.endingTime);
-    
-            const checkingReservationDate = startingTime.toISOString().split('T')[0];
+            
+            //get date in YYYY-MM-DD format with local time
+            const checkingReservationDate = startingTime.getFullYear() + "-" + addLeadingZeros((startingTime.getMonth() + 1)) + "-" + addLeadingZeros(startingTime.getDate());
     
             if(checkingReservationDate === sendingRequest.reservingDate){
                 const startingTimeStr = startingTime.toLocaleTimeString('en-US', { hour12: false });
