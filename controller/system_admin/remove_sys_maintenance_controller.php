@@ -7,11 +7,18 @@
     $admin ->setDetails($connection);
     $result = $admin -> removeSystemMaintenance($connection);
 
+    $message = null;
+    $flag = false;
+
     if($result){
-        $_SESSION['removeSuccess'] = "System Maintenance Removed Successfully";
-        header("Location: /public/system_admin/remove_system_maintenance.php");
-        $connection -> close();
-        exit();
+        $message = "System Maintenance Removed Successfully";
+    }else{
+        $flag = true;
+        $message = "Error Occured While Removing System Maintenance";
     }
+
+    header('Content-type: application/json');
+    echo json_encode(["Message"=>$message,"Flag"=>$flag]);
+    die();
     
 ?>

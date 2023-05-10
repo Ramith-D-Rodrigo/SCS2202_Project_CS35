@@ -22,16 +22,16 @@
         require_once("dashboard_header.php");
     ?>
     <main class="body-conatainer" style="display:flex;justify-content:center;">
-        <div id="err-msg" style="display:flex;height:10%">
+        <div id="err-msg" style="display:flex;margin-top:45%;height:10%">
         </div>
         <div id="maintenance">
-            <?php
-                if(isset($_SESSION['removeSuccess'])){
-                    echo $_SESSION['removeSuccess'];
-                    echo '<br>';
-                    unset($_SESSION['removeSuccess']);
-                }
-            ?>
+        </div>
+        <div id="overlay"></div>
+        <div id="warning-msg" style="display:flex;flex-direction:row;display:none">
+            <button id="Yes"><i class="fa-solid fa-check"></i></button>
+            <button id="No"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="success-msg">
         </div>
     </main>
     <?php
