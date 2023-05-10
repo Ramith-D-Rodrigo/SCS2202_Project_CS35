@@ -6,10 +6,7 @@
         exit();
     }
 
-    // if($_SESSION['userrole'] !== 'coach'){   //not an coach (might be another actor)
-    //     header("Location: /index.php");
-    //     exit();
-    // }
+  
 ?>
 
 
