@@ -53,7 +53,7 @@ function validateForm(element){
         console.log(form.reportValidity());
     }
 
-    if(newPwd.value !== ''){
+    if(password.value !== ''){
         if(password.value != cPassword.value) {    //compare the password and the confirm password fields
             errMsg.innerHTML = "Passwords are mismatched";
             return;
@@ -66,6 +66,7 @@ function validateForm(element){
         return;
     }
 
+    errMsg.innerHTML = '';
     saveChanges();
 }
 

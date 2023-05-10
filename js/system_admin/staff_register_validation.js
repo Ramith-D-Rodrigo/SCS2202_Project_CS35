@@ -6,7 +6,8 @@ const overlay = document.getElementById("overlay");
 
 function validateForm(event){
     event.preventDefault();   //prevent the form from submitting in default way
-    
+    const male = document.getElementById("male");
+    const female = document.getElementById("female");
 
     const form = document.querySelector("form");
 
@@ -14,6 +15,12 @@ function validateForm(event){
         console.log(form.reportValidity());
     }
 
+    if(!male.checked && !female.checked){
+        event.preventDefault(); //do not submit
+        errMsg.innerHTML = "Haven't Mentioned the Gender";
+        return false;
+    }
+    
     if(password.value != cPassword.value) {    //compare the password and the confirm password fields
         errMsg.innerHTML = errMsg.innerHTML + "Passwords are Mismatched";
         return false;
