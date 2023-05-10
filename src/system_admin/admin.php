@@ -136,12 +136,18 @@ class Admin extends Actor{
         return $pendingBranch;
     }
 
-    public function getLoginDetails($role,$branch,$database) {
+    public function getLoginDetails($role,$database,$branch = NULL) {
         
-        $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` INNER JOIN
-        `staff` `s` ON `l`.`userID` = `s`.`staffID` WHERE `s`.`leaveDate` IS NULL AND `s`.`branchID` = '%s' AND `s`.`staffRole` = '%s'",
-        $database -> real_escape_string($branch),
-        $database -> real_escape_string($role));
+        if($branch === NULL){
+            $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` 
+            WHERE `l`.`userRole` = '%s' AND `l`.`isActive` = 1",
+            $database -> real_escape_string($role));
+        }else{
+            $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` INNER JOIN
+            `staff` `s` ON `l`.`userID` = `s`.`staffID` WHERE `s`.`leaveDate` IS NULL AND `s`.`branchID` = '%s' AND `s`.`staffRole` = '%s'",
+            $database -> real_escape_string($branch),
+            $database -> real_escape_string($role));
+        }
         
         $row = $database -> query($sql) -> fetch_object();
         $loginResults = [];

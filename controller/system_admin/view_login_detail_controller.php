@@ -7,9 +7,15 @@
     $role = $_GET['role'];
     $branchName = $_GET['branchName'];
 
+    $loginInfo = null;
     $admin = Admin::getInstance();
-    $branchID = $admin -> getBranchID($branchName,$connection);
-    $loginInfo = $admin -> getLoginDetails($role, $branchID, $connection);
+    if($branchName == "Empty"){
+        $loginInfo = $admin -> getLoginDetails($role, $connection, null);
+    }else{
+        $branchID = $admin -> getBranchID($branchName,$connection);
+        $loginInfo = $admin -> getLoginDetails($role, $connection, $branchID);
+    }
+    
 
     if(count($loginInfo)===0){
         array_push($loginInfo,['errMsg' =>"There is no such role exist in this branch"]);
