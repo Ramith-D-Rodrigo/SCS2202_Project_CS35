@@ -230,23 +230,7 @@
         echo json_encode($returningMsg);
     }
     else{//error while inserting the reservation
-        $resID = $result[1];    //1st index is the reservation id
-        $deletingReservation = new Reservation();
-        $deletingReservation -> setID($resID);
-
-        $deletingReservation -> deleteReservation($reservingUser -> getConnection()); //delete the reservation that was made
-
-        //refund the payment
-        $refundResult = paymentGateway::chargeRefund($chargeID, $payment);
-        if(!$refundResult[0]){  //0th index is the status of the refund
-            //refund failed
-            $returningMsg['errMsg'] = "Couldn't make the reservation and for Refund : " . $refundResult[1]; //1st index is the error message
-            header('Content-Type: application/json;');    //because we are sending json
-            echo json_encode($returningMsg);
-            exit();
-        }
-
-        $returningMsg['errMsg'] = "Reservation has not been made";
+        $returningMsg['errMsg'] = $result[1];   //1st index is the error message
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($returningMsg);
     }

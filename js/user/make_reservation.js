@@ -250,8 +250,8 @@ reservationForm.addEventListener('submit', (event) => {
 
     //add the amount to the payment gateway
     const amount = document.getElementById("amount");
-    amount.innerHTML = "You are paying " + currency + " ";
-    amount.innerHTML += formData.get("reservationPrice");
+    amount.innerHTML = "You are paying "+ " ";
+    amount.innerHTML += formData.get("reservationPrice");   //currency is already added in formData
 
     //payment gateway popup div display
     paymentGatewayPopup.style.display = "block";
@@ -335,19 +335,6 @@ const stripeTokenHandler = (token) => {
             errMsgBox.innerHTML = "";
             successMsgBox.innerHTML = data.successMsg;
 
-            //update the table
-            const url = new URL(window.location);   //get the url
-            const params = new URLSearchParams(url.search); //search parameters
-
-            //update the reservation table
-            fetch("../../controller/general/reservation_schedule_controller.php?" + params)
-                .then(res => res.json())
-                .then(data => {
-                    const scheduleObjs = createScheduleObjects(data);
-                    sessionStorage.removeItem("schedule");   //remove the previous schedule
-                    sessionStorage.setItem("schedule", JSON.stringify(scheduleObjs));
-                    updateTheReservationTables(scheduleObjs);
-                });
         }
         else if(data.errMsg !== undefined){  //reservation failed
             const successMsgBox = document.getElementById("successMsg");
@@ -357,14 +344,30 @@ const stripeTokenHandler = (token) => {
             errMsgBox.innerHTML = data.errMsg;
         }
 
-        //animate the payment gateway popup
-        animateGateWayClosing();
-        main.click();
+        //update the table
+        const url = new URL(window.location);   //get the url
+        const params = new URLSearchParams(url.search); //search parameters
 
-        //reset the pay button
-        payBtn.innerHTML = "Pay Now";
-        payBtn.classList.remove("disabled");
-        payBtn.disabled = false;
+        //update the reservation table
+        fetch("../../controller/general/reservation_schedule_controller.php?" + params)
+            .then(res => res.json())
+            .then(data => {
+                const scheduleObjs = createScheduleObjects(data);
+                sessionStorage.removeItem("schedule");   //remove the previous schedule
+                sessionStorage.setItem("schedule", JSON.stringify(scheduleObjs));
+                updateTheReservationTables(scheduleObjs, data);
+            })
+            .then(() => {
+                //animate the payment gateway popup
+                animateGateWayClosing();
+                main.click();
+
+                //reset the pay button
+                payBtn.innerHTML = "Pay Now";
+                payBtn.classList.remove("disabled");
+                payBtn.disabled = false;
+            })
+
     })
     .catch((err) => {
         console.log(err);

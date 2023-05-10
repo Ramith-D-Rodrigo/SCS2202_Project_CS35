@@ -201,9 +201,79 @@
         }
 
         public function createReservation($user, $date, $starting_time, $ending_time, $payment, $num_of_people, $chargeID, $database){
+            //returns (on success, array with reservationID, on failure, array with errMsg) [0 -> true or false, 1 -> reservationID or errMsg]
             $reservation = new Reservation();
             $result = $reservation -> onlineReservation($date, $starting_time, $ending_time, $num_of_people, $payment, $this -> courtID, $user, $chargeID, $database);
-            return $result; //an array
+
+            $refundFlag = false;   //flag to check if the user should be refunded or not
+
+            if($result[0] == true){ //if the reservation was successful (query was successful)
+                //check again for availability
+
+                //but check if there are more than 1 rows for the same reservation time range (conflict)
+                $sql = sprintf("SELECT `reservationID` FROM `reservation` WHERE
+                `sportCourt` = '%s' AND
+                `date` = '%s' AND
+                `status` = 'Pending' AND
+                `reservationID` <> '%s' AND",
+                $database -> real_escape_string($this -> courtID),
+                $database -> real_escape_string($date),
+                $database -> real_escape_string($result[1]));
+
+                $conditions = sprintf("(('%s' < `startingTime` AND '%s' > `endingTime`) OR 
+                ('%s' >= `startingTime` AND '%s'<= `endingTime`) OR
+                ('%s' < `startingTime` AND '%s'<= `endingTime` AND '%s' > `startingTime`) OR
+                ('%s' >= `startingTime` AND '%s' < `endingTime` AND '%s' > `endingTime`))",
+                //1st condition - starting time is before the reservation starting time and ending time is after the reservation ending time
+                $database -> real_escape_string($starting_time),
+                $database -> real_escape_string($ending_time),
+
+                //2nd condition - reserving time is between the reservation starting time and ending time
+                $database -> real_escape_string($starting_time),
+                $database -> real_escape_string($ending_time),
+
+                //3rd condition - starting time is before the reservation starting time and ending time is between the reservation starting time and ending time
+                $database -> real_escape_string($starting_time),
+                $database -> real_escape_string($ending_time),
+                $database -> real_escape_string($ending_time),
+
+                //4th condition - starting time is between the reservation starting time and ending time and ending time is after the reservation ending time
+                $database -> real_escape_string($starting_time),
+                $database -> real_escape_string($starting_time),
+                $database -> real_escape_string($ending_time));
+
+                $sql .= $conditions;
+
+                $checkResult = $database -> query($sql);
+
+
+                if($checkResult -> num_rows  == 0){   //if there are no conflicts
+                    return $result; //an array
+                }
+                else if($checkResult -> num_rows > 0){  //if there are conflicts
+                    $reservation -> deleteReservation($database); //delete the reservation
+                    $refundFlag = true; //set the flag to true (because the user should be refunded)
+                }
+            }
+            else{   //the query was not successful
+                $refundFlag = true; //set the flag to true (because the user should be refunded)
+            }
+
+            if($refundFlag == true){    //if the user should be refunded
+                //refund the payment
+                require_once("../../src/general/paymentGateway.php");
+
+                $refundResult = paymentGateway::chargeRefund($chargeID, $payment);
+
+                if($refundResult[0] == false){
+                    return [false, 'Reservation was not created, and payment was not refunded.<br>Error: ' . $refundResult[1] . '<br>Please contact the respective branch.'];
+                }
+
+                $result[0] = false;
+                $result[1] = 'Reservation was not created, and payment was refunded';
+            }
+
+            return $result; //an array 
         }
 
         public function createOnsiteReservation($recep, $resID, $date, $starting_time, $ending_time, $payment, $num_of_people, $database){

@@ -300,7 +300,7 @@ class User extends Actor implements JsonSerializable{
 
     public function makeReservation($date, $st, $et, $people, $payment, $chargeID, Sports_Court $court){
         $result = $court -> createReservation($this -> userID, $date, $st, $et, $payment, $people, $chargeID, $this -> connection);
-        return $result; //an array
+        return $result; //an array (on success, array with reservationID, on failure, array with errMsg) [0 -> true or false, 1 -> reservationID or errMsg]
     }
 
     public function getReservationHistory(){   //Joining sport, sport court, branch, reservation tables
