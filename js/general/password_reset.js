@@ -239,6 +239,12 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                             const formData = new FormData(form);
                             const data = Object.fromEntries(formData);
 
+                            //disable the button to prevent multiple submissions
+                            const resetBtn = document.getElementById('resetBtn');
+                            resetBtn.disabled = true;
+                            resetBtn.innerHTML = "Resetting...";
+                            resetBtn.classList.add('disabled');
+
                             fetch('../../controller/general/password_reset_controller.php', { //reset the password
                                 method: 'POST',
                                 headers: {
@@ -248,6 +254,7 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                             })
                             .then(res => res.json())
                             .then(data => {
+
                                 if(data.errMsg === undefined){  //if no error (password is reset)
                                     errMsgBox.innerHTML = "";
                                     successMsgBox.innerHTML = data.successMsg + "<br>Redirecting to the login page...";
@@ -258,6 +265,11 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                                 else{   //password reset failed
                                     errMsgBox.innerHTML = data.errMsg;
                                     successMsgBox.innerHTML = "";
+
+                                    //re enable the button
+                                    resetBtn.disabled = false;
+                                    resetBtn.innerHTML = "Reset Password";
+                                    resetBtn.classList.remove('disabled');
                                 }
                             })
                             .catch(err => {
