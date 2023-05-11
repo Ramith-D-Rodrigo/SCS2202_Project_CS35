@@ -42,7 +42,7 @@
                             Landing Page 2nd Image : Image by <a href="https://www.freepik.com/free-psd/feminine-football-banner-template_15554540.htm#page=2&query=sports%20complex&position=36&from_view=search&track=sph">Freepik</a>
                         </li>
                         <li>
-                            Background Image : <a href="https://www.freepik.com/free-vector/street-basketball-court-cartoon-night-city_31904194.htm#query=sports%20complex%20background&position=36&from_view=search&track=ais">Image by upklyak</a> on Freepik
+                            Background Image : <a href="https://www.freepik.com/free-vector/physical-activity-seamless-pattern_2874264.htm">Image by macrovector</a> on Freepik
                         </li>
                         <li>
                             Volleyball Photo by <a href="https://unsplash.com/@miguelteirlinck?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Miguel Teirlinck</a> on <a href="https://unsplash.com/photos/VDkRsT649C0?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>

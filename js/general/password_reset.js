@@ -241,7 +241,7 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                                 }
                             })
                             .catch(err => {
-                                console.log(err);
+                                //console.log(err);
                             });
                         });
                     }
@@ -251,7 +251,7 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                     }
                 })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                 });
                     
             });

@@ -19,7 +19,7 @@ const showMap = (e) => {
 
     //get the latitude and longitude
     const parentDiv = e.target.parentNode;
-    console.log(parentDiv);
+    //console.log(parentDiv);
     const latitude = parentDiv.querySelector(".latitude").value;
     const longitude = parentDiv.querySelector(".longitude").value;
 

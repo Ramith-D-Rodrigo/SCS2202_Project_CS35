@@ -316,7 +316,7 @@ const courtSelect = (e) =>{
                 }while(count <= MAX_RESERVATION_DAYS);
             }
 
-            console.log(cellandReservationMap);
+            //console.log(cellandReservationMap);
         }
     })
     .catch(err => {
