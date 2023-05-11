@@ -184,7 +184,7 @@ feedbackBox.querySelector("form").addEventListener("submit", (e) => {
     }).then((data) => {
         //console.log(data);
     }).catch((error) => {
-        console.log(error);
+        //console.log(error);
     });
 });
 

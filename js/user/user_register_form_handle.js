@@ -2,7 +2,7 @@
 
 import { MIN_USER_REGISTRATION_AGE } from "../CONSTANTS.js";
 
-var verbose = true; //debugging
+var verbose = false; //debugging
 
 //Medical Concerns 
 
@@ -240,7 +240,7 @@ bday.min = minDate;
 //message focuses
 
 const errMsg = document.getElementById("errmsg");
-console.log(errMsg.innerHTML.length);
+//console.log(errMsg.innerHTML.length);
 if(errMsg.innerHTML.length !== 0){
     window.location.hash = '#errmsg';
 }

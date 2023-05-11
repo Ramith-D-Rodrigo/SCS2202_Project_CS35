@@ -1,5 +1,5 @@
 //all the constants related to the application are defined here
-const verbose = true;
+const verbose = false;
 
 //constants regarding reservation goes here
 

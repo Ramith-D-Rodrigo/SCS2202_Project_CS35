@@ -288,7 +288,7 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
         });
     })
     .catch(err => {
-        console.log(err);
+        //console.log(err);
     });
 }
 
@@ -462,7 +462,7 @@ const giveFeedback = (e) => {   //give feedback functionality
         }
     })
     .catch(err => {
-        console.log(err);
+        //console.log(err);
     });
 }
 

@@ -221,7 +221,7 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
             }
         })
         .catch((err) => {
-            console.log(err);
+            //console.log(err);
         });
     });
 

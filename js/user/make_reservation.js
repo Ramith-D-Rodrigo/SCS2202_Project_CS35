@@ -372,6 +372,6 @@ const stripeTokenHandler = (token) => {
 
     })
     .catch((err) => {
-        console.log(err);
+        //console.log(err);
     });
 }

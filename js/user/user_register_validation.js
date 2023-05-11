@@ -241,7 +241,7 @@ function validateForm(event){
                 if(val.classList.contains('title')){    //skip the title div
                     return;
                 }
-                console.log(val.children);
+                //console.log(val.children);
                 concerns.push(val.children.item(0).value.toLowerCase());  //push the input value 
             }
         })
@@ -249,7 +249,7 @@ function validateForm(event){
         concerns = concerns.filter(i => i !== '');
         
         if(verbose){
-            console.log(concerns);
+            //console.log(concerns);
         }
 
         if(new Set(concerns).size !== concerns.length){ //check for duplicate contact numbers

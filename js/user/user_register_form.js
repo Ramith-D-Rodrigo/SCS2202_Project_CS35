@@ -117,7 +117,7 @@ regForm.addEventListener("submit", (e) => {
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
+                    //console.log(err);
 
                     //re-enable the button
                     verifyBtn.disabled = false;
@@ -129,7 +129,7 @@ regForm.addEventListener("submit", (e) => {
         }
     })
     .catch((err) => {
-        console.log(err);
+        //console.log(err);
 
         //enabling register button
         regBtn.disabled = false;

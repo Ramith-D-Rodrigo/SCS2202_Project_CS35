@@ -257,4 +257,6 @@ fetch("../../controller/user/reservation_history_controller.php")
     }).then(() => {
         cancelReservation(reservationAndTimeStamp); //initialize cancel reservation function (passing reservation id and reserved timestamp)
         giveFeedback(); //initialize give feedback function
-    }).catch(err => console.log(err));
+    }).catch(err => {
+        //console.log(err);
+    });

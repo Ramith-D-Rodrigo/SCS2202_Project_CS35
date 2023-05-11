@@ -679,5 +679,5 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         }
     })
     .catch((err) => {
-        console.log(err);
+        //console.log(err);
     });
