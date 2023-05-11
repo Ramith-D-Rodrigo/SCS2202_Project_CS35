@@ -71,25 +71,25 @@
             $notificationID = $reservationDetails['notificationID'];
             $deletingNotification = new Notification($notificationID);
             $deletingNotification -> deleteNotification($cancellingUser -> getConnection());
+        }
 
-            //server timezone set
-            date_default_timezone_set(SERVER_TIMEZONE);
+        //server timezone set
+        date_default_timezone_set(SERVER_TIMEZONE);
 
-            //check if the cancellation is within 3 days of the reserved timestamp for refund process
-            $reservedDateTimeStamp = new DateTime($reservedDate);
-            $dateDiff = $reservedDateTimeStamp -> diff(new DateTime(date('Y-m-d H:i:s')));
+        //check if the cancellation is within 3 days of the reserved timestamp for refund process
+        $reservedDateTimeStamp = new DateTime($reservedDate);
+        $dateDiff = $reservedDateTimeStamp -> diff(new DateTime(date('Y-m-d H:i:s')));
 
-            if($dateDiff -> days < MAX_REFUND_DAYS){ //can refund
-                $result = paymentGateway::chargeRefund($reservationDetails['chargeID'], $reservationDetails['paymentAmount']);
-                if($result[0] === false){
-                    $returnMsg['msg'] = "Reservation Cancelled Successfully.<br>Refund Failed : " . $result[1];
-                }
-                else{
-                    $returnMsg['msg'] = "Reservation Cancelled Successfully.<br>Refund Successful";
+        if($dateDiff -> days < MAX_REFUND_DAYS){ //can refund
+            $result = paymentGateway::chargeRefund($reservationDetails['chargeID'], $reservationDetails['paymentAmount']);
+            if($result[0] === false){
+                $returnMsg['msg'] = "Reservation Cancelled Successfully.<br>Refund Failed : " . $result[1];
+            }
+            else{
+                $returnMsg['msg'] = "Reservation Cancelled Successfully.<br>Refund Successful";
 
-                    //update the status of the reservation
-                    $cancellingReservation -> updateStatus($cancellingUser -> getConnection(), 'Refunded');
-                }
+                //update the status of the reservation
+                $cancellingReservation -> updateStatus($cancellingUser -> getConnection(), 'Refunded');
             }
         }
     }
