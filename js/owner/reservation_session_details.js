@@ -15,6 +15,13 @@ const openReservationDetails = (e) => {
     const main = document.querySelector("main");
     disableElementsInMain(main);
     main.style.opacity = "0.5";
+
+    //disable reservation cells
+    const reservationCells = document.querySelectorAll(".reserved");
+    reservationCells.forEach(cell => {
+        cell.style.pointerEvents = "none";
+    });
+
     main.addEventListener("click", function mainClick(){
         enableElementsInMain(main);
         main.style.opacity = "1";
@@ -22,6 +29,11 @@ const openReservationDetails = (e) => {
 
         coachDetails.classList.remove("show");
         userDetails.classList.remove("show");
+
+        //enable reservation cells
+        reservationCells.forEach(cell => {
+            cell.style.pointerEvents = "auto";
+        });
     });
         
     if(reservationDetails[0] === "reservation"){
