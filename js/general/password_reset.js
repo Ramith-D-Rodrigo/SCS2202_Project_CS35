@@ -106,6 +106,11 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                 resendBtn.innerHTML = "Resending...";
                 resendBtn.classList.add('disabled');
 
+                //disable verify button
+                const verifyBtn = document.getElementById('verifyBtn');
+                verifyBtn.disabled = true;
+                verifyBtn.classList.add('disabled');
+
                 fetch('../../controller/general/resend_code_controller.php', { //check the user input
                     method: 'POST',
                     headers: {
@@ -118,6 +123,13 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                     resendBtn.disabled = false;
                     resendBtn.innerHTML = "Resend Code";
                     resendBtn.classList.remove('disabled');
+
+                    //re enable the verify button
+                    verifyBtn.disabled = false;
+                    verifyBtn.classList.remove('disabled');
+
+                    successMsgBox.innerHTML = "";
+                    errMsgBox.innerHTML = "";
 
                     if(data.errMsg === undefined){  //if no error
                         successMsgBox.innerHTML = data.successMsg;
@@ -142,6 +154,11 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                 verifyBtn.disabled = true;
                 verifyBtn.innerHTML = "Verifying...";
                 verifyBtn.classList.add('disabled');
+
+                //disable the resend button
+                resendBtn.disabled = true;
+                resendBtn.classList.add('disabled');
+
                 
                 fetch('../../controller/general/reset_code_check_controller.php', { //check the user input
                     method: 'POST',
@@ -157,6 +174,9 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                     verifyBtn.innerHTML = "Verify Code";
                     verifyBtn.classList.remove('disabled');
 
+                    //re enable the resend button
+                    resendBtn.disabled = false;
+                    resendBtn.classList.remove('disabled');
 
                     if(data.errMsg === undefined){  //if no error (code is correct)
                         //remove the code input field
