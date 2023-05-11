@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once("../../src/receptionist/receptionist.php");
+    require_once("../../src/general/branch.php");
     require_once("../../src/system_admin/admin.php");
     require_once("../../src/receptionist/dbconnection.php");
     require_once("../../src/receptionist/request_availability.php");
@@ -17,8 +18,12 @@
 
     $flag = false;
     $msg;
+    $results;
 
     $valid = checkAvailableSport($_SESSION['branchID'],$courtName,$sportName,$connection);
+    $branch = new Branch($_SESSION['branchID']);      //get the manager ID to send the request about the maintenance
+    $managerID = json_decode(json_encode($branch -> getDetails($connection,['currManager'])),true)['currManager'];  
+               
     if(($valid -> num_rows > 0) || ($sportName === "ALL" && $courtName === "ALL")){
         if($sportName === "ALL" && $courtName === "ALL") {
             $brAvailable = checkBranchMaintenance($_SESSION['branchID'],$sDate,$eDate,$connection);
@@ -29,6 +34,12 @@
                 $staffMember = new Staff();
                 $receptionist = $staffMember -> getStaffMemeber($_SESSION['userrole']);
                 $results = $receptionist -> branchMaintenance($reason,$sDate,$eDate,$_SESSION['branchID'],$_SESSION['userid'],$connection);    
+
+                $desc = "You have a pending branch maintenance request starting from ".$sDate. "to".$eDate;
+                $triggerDate = date('Y-m-d', strtotime($sDate. ' - 7 days'));   //trigger the notification to the manager atleast 7 days before the maintenance
+                $notificationID = uniqid("notmainten");
+                $recep -> addNotification($notificationID,"Branch Maintenance Request",$desc,$triggerDate,$managerID);
+            
             }
            
         }else if($sportName != "ALL" && $courtName != "ALL") {
@@ -44,6 +55,11 @@
                 $staffMember = new Staff();
                 $recep = $staffMember -> getStaffMemeber($_SESSION['userrole']);
                 $results = $recep -> reqMaintenance($reason,$sportName,$courtName,$sDate,$eDate,$_SESSION['userid'],$connection);
+
+                $desc = "You have a pending court maintenance request starting from ".$sDate. "to".$eDate;
+                $triggerDate = date('Y-m-d', strtotime($sDate. ' - 7 days'));   //trigger the notification to the manager atleast 7 days before the maintenance
+                $notificationID = uniqid("notmainten");
+                $recep -> addNotification($notificationID,"Court Maintenance Request",$desc,$triggerDate,$managerID);
             }
             
         }
@@ -52,7 +68,7 @@
         $flag = true;
     }
     
-    if(!$flag){   //successfully submitted
+    if(!$flag && $results){   //successfully submitted
         $msg = "Request Successfully Submitted";
     }
 
