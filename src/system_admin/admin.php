@@ -1,6 +1,7 @@
 <?php
 require_once("../../src/system_admin/staff.php");
 require_once("../../src/general/actor.php");
+require_once("../../src/general/notification.php");
 
 class Admin extends Actor{
 
@@ -292,6 +293,14 @@ class Admin extends Actor{
         }
         
         return $maintenanceR;
+    }
+
+    public function addNotification($notificationID,$subject,$description,$date,$userID){
+        $notification = new Notification($notificationID);
+        $notification -> setDetails(subject: $subject,description: $description,date: $date,userID: $userID,status: "Unread");
+        $result = $notification -> setNotificationEntry($this -> connection);
+
+        return $result;
     }
 }
 

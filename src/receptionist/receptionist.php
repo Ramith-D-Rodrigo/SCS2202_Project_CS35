@@ -6,6 +6,7 @@
     require_once("../../src/coach/coach.php");
     require_once("../../src/coach/coaching_session.php");
     require_once("../../src/general/actor.php");
+    require_once("../../src/general/notification.php");
 
 class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
@@ -588,6 +589,14 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         $reservation = new Reservation();
         $reservation -> setID($resID);
         $result = $reservation -> updateStatus($database,"Cancelled");
+        return $result;
+    }
+    
+    public function addNotification($notificationID,$subject,$description,$date,$userID){
+        $notification = new Notification($notificationID);
+        $notification -> setDetails(subject: $subject,description: $description,date: $date,userID: $userID,status: "Unread");
+        $result = $notification -> setNotificationEntry($this -> connection);
+
         return $result;
     }
     
