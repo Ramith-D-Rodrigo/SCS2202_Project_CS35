@@ -162,8 +162,14 @@ fetch("../../controller/user/reservation_history_controller.php")
 
                 const currStatus = document.createElement("td");  //status
                 if(data[i].status.includes("feedbackGiven")){
-                    //if feedback is given, just add checked in to the status
-                    currStatus.innerHTML = "Checked In";
+                    const statusArr = data[i].status.split(" ");
+                    if(statusArr[0] === "Checked"){
+                        currStatus.innerHTML = statusArr[0] + " " + statusArr[1];   //Checked In 
+                    }
+                    else{
+                        currStatus.innerHTML = statusArr[0];    //Declined
+                    }
+                    currStatus.innerHTML += " (Feedback Given)";
                 }
                 else{
                     currStatus.innerHTML = data[i].status;

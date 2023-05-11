@@ -670,7 +670,12 @@ class User extends Actor implements JsonSerializable{
 
     private function giveBranchFeedback($reservationObj, $branchObj, $feedback, $rating){ //give feedback to a branch
         //update the status of the reservation to let that the user has given feedback
-        $updateResult = $reservationObj -> updateStatus($this -> connection, 'feedbackGiven');
+        //first get the status of the reservation
+        $reservationObj -> getDetails($this -> connection, ['status']);
+        $currStatus = json_decode(json_encode($reservationObj), true)['status'];
+
+        //append the feedbackGiven status to the current status so that the user cannot give feedback again
+        $updateResult = $reservationObj -> updateStatus($this -> connection, $currStatus . ' feedbackGiven');
         if($updateResult === false){
             return false;
         }
