@@ -136,7 +136,7 @@
                         </div>
                         <div id="card-holder-name-div">
                         <i class="fa-solid fa-signature" style="color: gray"></i>
-                            <input type="text" id="card-holder-name" name="card-holder-name" placeholder="Name on Card" required>
+                            <input type="text" id="card-holder-name" name="card-holder-name" placeholder="Name on Card" required pattern="^[a-zA-Z\s]*$" title="Enter the Name Correctly. Only Letters and Spaces Allowed">
                         </div>
                         <div id="card-element">
                         </div>
