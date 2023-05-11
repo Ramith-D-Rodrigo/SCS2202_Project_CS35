@@ -77,5 +77,6 @@
     
 </body>
 <script src="/js/system_admin/change_logins_handle.js"></script>
+<script type="module" src="/js/general/notifications.js"></script>
 <!-- <script src="/js/system_admin/account_settings.js"></script> -->
 </html>

@@ -63,4 +63,5 @@
     ?>
 </body>
     <script src="/js/system_admin/sys_maintenance_validation.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html>

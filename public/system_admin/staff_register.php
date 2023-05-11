@@ -142,4 +142,5 @@
     <script src="/js/system_admin/get_all_branches.js"></script>
     <script src="/js/system_admin/staff_register_form_handle.js"></script>
     <script src="/js/system_admin/staff_register_validation.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html>

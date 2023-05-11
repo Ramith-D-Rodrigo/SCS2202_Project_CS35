@@ -120,6 +120,7 @@
             <script type="module" src="/js/receptionist/reservation_schedule.js"></script>
             <script type="module" src="/js/receptionist/reservation_validation.js"></script>
             <script type="module" src="/js/receptionist/reservation_availability.js"></script>
+            <script type="module" src="/js/general/notifications.js"></script>
             <!-- <script src="/js/user/account_links.js"></script> -->
             <!-- <script src="https://js.stripe.com/v3/"></script> -->
             <!-- <script type="module" src="/js/general/notifications.js"></script> -->

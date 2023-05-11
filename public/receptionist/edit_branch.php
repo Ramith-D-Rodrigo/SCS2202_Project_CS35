@@ -102,4 +102,5 @@
     </body>
     <script src="/js/receptionist/edit_branch_entry.js"></script>
     <script src="/js/receptionist/edit_branch_config.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html

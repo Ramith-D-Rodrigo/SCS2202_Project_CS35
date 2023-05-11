@@ -95,4 +95,5 @@
     ?>
 </body>
 <script src="/js/receptionist/coach_profile.js"></script>
+<script type="module" src="/js/general/notifications.js"></script>
 </html>

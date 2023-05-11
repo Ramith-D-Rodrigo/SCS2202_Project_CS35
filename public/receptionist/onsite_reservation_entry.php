@@ -43,4 +43,5 @@
     ?>
 </body>
 <script src="/js/receptionist/onsite_reservation_entry.js"></script>
+<script type="module" src="/js/general/notifications.js"></script>
 </html>

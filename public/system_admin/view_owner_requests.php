@@ -35,4 +35,5 @@
     ?>
 </body>
 <script src="/js/system_admin/view_owner_requests.js"></script>
+<script type="module" src="/js/general/notifications.js"></script>
 </html>

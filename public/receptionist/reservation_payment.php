@@ -103,4 +103,5 @@
 </body>
     <script type="module" src="/js/receptionist/reservation_info.js"></script>
     <script src="/js/receptionist/make_reservation.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html>

@@ -92,4 +92,5 @@
     
 </body>
 <script src="/js/receptionist/user_profile.js"></script>
+<script type="module" src="/js/general/notifications.js"></script>
 </html>

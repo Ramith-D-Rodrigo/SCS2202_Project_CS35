@@ -97,4 +97,5 @@
     <script src="/js/system_admin/get_all_branches.js"></script>
     <script src="/js/system_admin/account_info.js"></script>
     <script src="/js/system_admin/deactivate_account.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html>

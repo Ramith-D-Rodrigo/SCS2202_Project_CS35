@@ -54,4 +54,5 @@
         require_once("../general/footer.php");
 ?>
 </body>
+<script type="module" src="/js/general/notifications.js"></script>
 </html>

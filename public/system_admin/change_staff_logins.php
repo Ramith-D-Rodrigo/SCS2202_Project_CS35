@@ -104,4 +104,5 @@
     <script src="/js/system_admin/get_all_branches.js"></script>
     <script src="/js/system_admin/staff_login_details.js"></script>
     <script src="/js/system_admin/login_details_form_handle.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html>

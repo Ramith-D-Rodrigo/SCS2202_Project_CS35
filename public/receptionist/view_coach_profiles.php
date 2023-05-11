@@ -33,4 +33,5 @@
     ?>    
 </body>
 <script src="/js/receptionist/view_coach_profiles.js"></script>
+<script type="module" src="/js/general/notifications.js"></script>
 </html>

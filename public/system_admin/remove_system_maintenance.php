@@ -39,4 +39,5 @@
     ?>
 </body>
     <script src="/js/system_admin/view_sys_maintenance.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html>

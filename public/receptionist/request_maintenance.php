@@ -79,6 +79,7 @@
         <script src="/js/receptionist/maintenance_entry_results.js"></script>
         <script src="/js/receptionist/maintenance_validation.js"></script>
         <script src="/js/receptionist/maintenance_submission.js"></script>
+        <script type="module" src="/js/general/notifications.js"></script>
     </body>
 
 </html>
