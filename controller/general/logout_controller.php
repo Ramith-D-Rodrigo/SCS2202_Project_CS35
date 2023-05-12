@@ -1,4 +1,5 @@
 <?php
+    //this script is used to log out any actor
     require_once("../../src/general/actor.php");
 
     //echo "log out button";

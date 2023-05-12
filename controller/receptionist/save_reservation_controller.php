@@ -9,6 +9,8 @@
     $reservationDetails = json_decode($requestJSON, true);
     // print_r($reservationDetails);
     $courtID = $reservationDetails['makeReserveBtn'];   //get the details of the reservation to store
+    $name = htmlspecialchars($reservationDetails['name'], ENT_QUOTES);
+    $contactNumber = htmlspecialchars($reservationDetails['contactNumber'], ENT_QUOTES);
     $numOfPeople = htmlspecialchars($reservationDetails['numOfPeople'], ENT_QUOTES);
     $startingTime = $reservationDetails['reservingStartTime'];
     $endingTime = $reservationDetails['reservingEndTime'];
@@ -21,7 +23,7 @@
     $receptionist = $staffMember -> getStaffMemeber('receptionist');   
     $receptionist -> setDetails(uid : $recepID);
     $court = new Sports_Court($courtID);
-    $result = $receptionist -> makeReservation($resID, $date, $startingTime, $endingTime, $numOfPeople, $reservationFee, $court, $connection);
+    $result = $receptionist -> makeReservation($resID, $date, $startingTime, $endingTime, $numOfPeople, $reservationFee, $court, $name, $contactNumber, $connection);
     // print_r($result);
 
     header('Content-Type: application/json;');    //because we are sending json

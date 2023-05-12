@@ -1,4 +1,5 @@
 <?php
+    //this script is used to search for a sport and return the branches that provide it (also the coaches) in search results page
     session_start();
 
     require_once("../../src/user/user.php");

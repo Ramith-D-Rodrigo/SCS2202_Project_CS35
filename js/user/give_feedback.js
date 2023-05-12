@@ -120,6 +120,11 @@ feedbackBox.querySelector("form").addEventListener("submit", (e) => {
 
     const userInput = JSON.stringify(Object.fromEntries(formData));
 
+    //disable the submit button
+    submitFeedbackBtn.disabled = true;
+    submitFeedbackBtn.style.cursor = "not-allowed";
+    submitFeedbackBtn.classList.add("disabled");
+
     //send the feedback to the server
     fetch("../../controller/user/give_feedback_controller.php", {
         method: "POST",
@@ -131,6 +136,11 @@ feedbackBox.querySelector("form").addEventListener("submit", (e) => {
         //close the feedback form
         cancelFeedbackBtn.click();
 
+        //re-enable the submit button
+        submitFeedbackBtn.disabled = false;
+        submitFeedbackBtn.style.cursor = "pointer";
+        submitFeedbackBtn.classList.remove("disabled");
+        
         const msgBox = document.querySelector("#msgBox");
         //blur the main content and darken it
         const main = document.querySelector("main");
@@ -172,9 +182,9 @@ feedbackBox.querySelector("form").addEventListener("submit", (e) => {
         return response.json();
         
     }).then((data) => {
-        console.log(data);
+        //console.log(data);
     }).catch((error) => {
-        console.log(error);
+        //console.log(error);
     });
 });
 

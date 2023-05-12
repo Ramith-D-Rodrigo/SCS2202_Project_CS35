@@ -1,4 +1,5 @@
 <?php
+    //this script is used to resend the code to the user when they click the resend code button
     session_start();
     require_once("../../src/general/security.php");
 

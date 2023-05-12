@@ -11,8 +11,8 @@ fetch("../../controller/receptionist/view_onsite_reservations_controller.php")
         else{
             let flag = false;
             for(let i=0;i<data.length;i++){
-                reservedDate = new Date(data[i].date);
-                startingHour = data[i].startingTime.split(":")[0]; //get the hour of starting time of the reservation
+                reservedDate = new Date(data[i]['reservationDetails'].date);
+                startingHour = data[i]['reservationDetails'].startingTime.split(":")[0]; //get the hour of starting time of the reservation
                 today = new Date();
                 if((reservedDate === today && startingHour >= today.getHours()) || (reservedDate > today)){   //get only the relevant reservations
                     flag = true;
@@ -26,13 +26,13 @@ fetch("../../controller/receptionist/view_onsite_reservations_controller.php")
                     container.style.display = 'flex';
                     container.style.flexDirection = 'row';
                     container.style.justifyContent = 'space-between';
-                    leftContainer.innerHTML = "Reservation ID: ".concat(data[i].reservationID, "<br>",
-                    "Sport: ",data[i].sport, "<br>", "Sport Court: ",data[i].sportCourt, "<br>");
-                    rightContainer.innerHTML = "Reservation Date: ".concat(data[i].date, "<br>",
-                    "Starting Time: ",data[i].startingTime, "<br>", "Ending Time: ",data[i].endingTime, "<br>");
+                    leftContainer.innerHTML = "Reservation ID: ".concat(data[i]['reservationDetails'].reservationID, "<br>","Reserved By: ",data[i].name ,"<br>",
+                    "Contact Number: ",data[i].contactNumber,"<br>","Sport: ",data[i]['reservationDetails'].sport,"<br>");
+                    rightContainer.innerHTML = "Sport Court: ".concat(data[i]['reservationDetails'].sportCourt,"<br>","Reservation Date: ",data[i]['reservationDetails'].date, "<br>",
+                    "Starting Time: ",data[i]['reservationDetails'].startingTime, "<br>", "Ending Time: ",data[i]['reservationDetails'].endingTime, "<br>");
                     btn.innerHTML = "Cancel";
-                    btn.value = data[i].reservationID;
-                    if(data[i].status !== 'Pending'){   //disable the cancel btn if the status is not pending
+                    btn.value = data[i]['reservationDetails'].reservationID;
+                    if(data[i]['reservationDetails'].status !== 'Pending'){   //disable the cancel btn if the status is not pending
                         btn.disabled = true;
                         btn.style.opacity = 0.4;
                     }else{
@@ -51,7 +51,6 @@ fetch("../../controller/receptionist/view_onsite_reservations_controller.php")
             if(!flag){
                 const div = document.createElement('div');
                 div.className = 'container';
-                div.style.width = '60%';
                 div.innerHTML = "No onsite reservations found";
                 searchResults.appendChild(div);
             } 

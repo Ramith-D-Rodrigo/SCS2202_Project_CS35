@@ -1,4 +1,5 @@
 <?php
+    //this script is used to authenticate the user when they enter the username and password in an authentication form
     session_start();
     require_once("../../src/general/actor.php");
     require_once("../../src/general/security.php");

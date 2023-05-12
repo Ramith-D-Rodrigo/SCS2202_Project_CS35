@@ -1,0 +1,52 @@
+#court-select{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.reserved{
+    cursor: pointer;
+}
+.pop-up{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: none;
+    margin: auto;
+}
+
+.show{
+    display: block;
+}
+
+.profile-pic{
+    width: 10rem;
+    height: auto;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+@media(max-width: 680px){
+    #court-select{
+        flex-direction: column;
+    }
+
+    #court-select *{
+        width: 100%;
+    }
+
+    .profile-pic{
+        width: 10rem;
+        height: auto;
+    }
+
+    .pop-up{
+        min-width: 80%;
+
+    }
+}

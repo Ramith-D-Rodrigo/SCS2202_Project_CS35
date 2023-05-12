@@ -53,7 +53,7 @@
                                         Contact Number
                                     </div>
                                     <div class="right-field">
-                                        <input type="text" name="contactNo"
+                                        <input type="text" name="contactNum"
                                             pattern="[0-9]{10,11}" 
                                             id="usercontact"
                                             required>
@@ -155,7 +155,7 @@
                                 <div class="err-msg" id="errMsg"></div>
                                 <div class="success-msg" id="successMsg"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="submitBtn" onclick="return validateChanges(event)">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
+                                    <button type="submit" id="submitBtn"">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -217,7 +217,7 @@
                                 <div class="err-msg" id="errMsg2"></div>
                                 <div class="success-msg" id="successMsg2"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="submitBtn2" onclick="return validateCredentialsForm(event)">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
+                                    <button type="submit" id="submitBtn2">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -248,7 +248,7 @@
                                 <div class="err-msg" id="errMsg3"></div>
                                 <div class="success-msg" id="successMsg3"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="submitBtn3" onclick="return validateDeactivateForm(event)">Deactivate Account <i class="fa-solid fa-trash"></i></button>
+                                    <button type="submit" id="submitBtn3">Deactivate Account <i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -257,8 +257,7 @@
 
                 <?php require_once("../../public/general/footer.php"); ?>
             </body>
-            <script src="/js/user/edit_profile_handle.js"></script>
-            <script src="/js/user/edit_profile_getdetails.js"></script>
+            <script type="module" src="/js/user/edit_profile_getdetails.js"></script>
             <script src="/js/user/change_password.js"></script>
             <script src="/js/user/account_links.js"></script>
             <script src="/js/user/deactivate_account.js"></script>

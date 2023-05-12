@@ -16,6 +16,7 @@ loginForm.addEventListener("submit", (e) => {
     const loginBtn = document.getElementById("loginBtn");   //disabling login button
     loginBtn.disabled = true;
     loginBtn.style.cursor = "not-allowed";
+    loginBtn.classList.add("disabled");
 
     fetch("../../controller/general/login_controller.php", {
         method: "POST",
@@ -32,10 +33,12 @@ loginForm.addEventListener("submit", (e) => {
             const regBtn = document.getElementById("regBtn"); //disabling register button
             regBtn.disabled = true;
             regBtn.style.cursor = "not-allowed";
+            regBtn.classList.add("disabled");
 
             const forgotBtn = document.getElementById("forBtn"); //disabling forgot password button
             forgotBtn.disabled = true;
             forgotBtn.style.cursor = "not-allowed";
+            forgotBtn.classList.add("disabled");
 
             successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected, Please Wait...";
 
@@ -86,6 +89,12 @@ loginForm.addEventListener("submit", (e) => {
                     const userCode = activationData.get("verificationCode");
             
                     const request = {"verificationCode" : userCode, "activationType" : "activate"};    //create a json object to send to the server
+
+                    //disable the verify button
+                    verifyBtn.disabled = true;
+                    verifyBtn.style.cursor = "not-allowed";
+                    verifyBtn.classList.add("disabled");
+
                     fetch("../../controller/user/account_activation_controller.php", {
                         method: "POST",
                         header: {
@@ -106,16 +115,22 @@ loginForm.addEventListener("submit", (e) => {
                             //renabling the login button
                             loginBtn.disabled = false;
                             loginBtn.style.cursor = "pointer";
+                            loginBtn.classList.remove("disabled");
 
                         }
                         else if(data.errMsg !== undefined){  //verification failed
                             errMsgBox.innerHTML = "";
                             successMsgBox.innerHTML = "";
                             errMsgBox.innerHTML = data.errMsg;
+
+                            //renabling verify button
+                            verifyBtn.disabled = false;
+                            verifyBtn.style.cursor = "pointer";
+                            verifyBtn.classList.remove("disabled");
                         }
                     })
                     .catch((err) => {
-                        console.log(err);
+                        //console.log(err);
                     });
                 });
             }
@@ -123,10 +138,10 @@ loginForm.addEventListener("submit", (e) => {
                 //renabling the login button
                 loginBtn.disabled = false;
                 loginBtn.style.cursor = "pointer";
-                
+                loginBtn.classList.remove("disabled");
             }
         }
     }).catch((err) => {
-        console.log(err);
+        //console.log(err);
     });
 });

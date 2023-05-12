@@ -1,0 +1,100 @@
+.description{
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.img-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}
+
+.gif{
+    border-radius: 1rem;
+}
+
+#branch-img-container{
+    width: 35%;
+    margin: 0.5rem 0;
+}
+
+#court-img-container{
+    width: 35%;
+    margin: 0.5rem 0;
+}
+
+#guidelines{
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
+
+#guidelines li{
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    list-style: none;
+}
+
+#coach-guidelines li{
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    list-style: none;
+}
+
+#branch-img-container img, #court-img-container img{
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.last-msg{
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.last-emoji{
+    color: red; 
+    font-size: 1.5rem; 
+    text-align: center;
+}
+
+@media(max-width: 900px){
+    .img-container{
+        flex-direction: column;
+    }
+    #branch-img-container{
+        width: 80%;
+    }
+    #court-img-container{
+        width: 80%;
+    }
+    .gif{
+        width: 100%;
+    }
+}
+
+@media(max-width: 680px){
+    .description{
+        font-size: 1rem;
+        text-align: justify;
+    }
+
+    .last-msg{
+        text-align: center;
+    }
+
+    #guidelines{
+        font-size: 1rem;
+    }
+
+    #guidelines li{
+        font-size: 0.8rem;
+    }
+
+
+}

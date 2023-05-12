@@ -2,9 +2,11 @@ fetch("../../controller/general/system_maintenance_notify_controller.php")
     .then(response => response.json())
     .then(data => {
         const systemNotifyDiv = document.getElementById("system-notify");
-        const para = document.createElement("marquee");
+        const para = document.createElement("p");
 
-
+        para.style.textAlign = "center";
+        para.style.padding = "1rem";
+    
         if(data != [] && data != null){
             let msg = "There will be a system maintenance on " + data.startingDate;
             msg += " at " + data.startingTime;

@@ -52,7 +52,7 @@ const filterFeedback = (e) =>{
             let flag = false;
             const childDivs = Array.from(allDivs[i].childNodes);
             childDivs.forEach(cell => {   //go each cell of that row
-                if(cell.innerHTML.toLowerCase().includes(searchVal)){ //if found
+                if(cell.innerText.toLowerCase().includes(searchVal)){ //if found
                     flag = true;
                 }
             });
@@ -265,6 +265,12 @@ fetch("../../controller/general/our_feedback_controller.php")
             showAmountFilter.appendChild(option);
         }
 
+        //change show amount to 5 by default if have more than 5 feedbacks
+        if(branchFeedbacks.length > 5){
+            showAmountFilter.value = 5;
+            const event = new Event("change");
+            showAmountFilter.dispatchEvent(event);
+        }
 
     })
     .catch(err => console.error(err));

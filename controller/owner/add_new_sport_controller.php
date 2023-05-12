@@ -1,4 +1,5 @@
 <?php
+    //this script is used to add a new sport to the database
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['owner'])){
@@ -65,6 +66,8 @@
     require_once("../../src/owner/owner.php");
     $owner = Owner::getInstance();
 
+    $owner -> setUserID($_SESSION['userid']);
+
     //same sport name check
     $sports = $owner -> getSports();
     foreach($sports as $sport){
@@ -96,4 +99,3 @@
     echo json_encode($returnMsg);
     die();
 ?>
-

@@ -1,4 +1,6 @@
 <?php
+    //this script is used to activate the user's account after registration or after the user has logged in when the account is not activated
+    //this is done after the code has been sent to the user's email and the user has entered the code
     session_start();
     require_once("../../src/general/security.php");
 

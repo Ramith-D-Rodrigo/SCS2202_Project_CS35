@@ -262,7 +262,7 @@ class User extends Actor implements JsonSerializable{
         $branchResultArr = [];
         $coachResultArr = [];
 
-        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of receptionist (pending request)
+        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of manager (pending request)
             $courtBranchSql = sprintf("SELECT DISTINCT `branchID`
             FROM `sports_court`
             WHERE `sportID`
@@ -300,7 +300,7 @@ class User extends Actor implements JsonSerializable{
 
     public function makeReservation($date, $st, $et, $people, $payment, $chargeID, Sports_Court $court){
         $result = $court -> createReservation($this -> userID, $date, $st, $et, $payment, $people, $chargeID, $this -> connection);
-        return $result; //an array
+        return $result; //an array (on success, array with reservationID, on failure, array with errMsg) [0 -> true or false, 1 -> reservationID or errMsg]
     }
 
     public function getReservationHistory(){   //Joining sport, sport court, branch, reservation tables
@@ -670,7 +670,12 @@ class User extends Actor implements JsonSerializable{
 
     private function giveBranchFeedback($reservationObj, $branchObj, $feedback, $rating){ //give feedback to a branch
         //update the status of the reservation to let that the user has given feedback
-        $updateResult = $reservationObj -> updateStatus($this -> connection, 'feedbackGiven');
+        //first get the status of the reservation
+        $reservationObj -> getDetails($this -> connection, ['status']);
+        $currStatus = json_decode(json_encode($reservationObj), true)['status'];
+
+        //append the feedbackGiven status to the current status so that the user cannot give feedback again
+        $updateResult = $reservationObj -> updateStatus($this -> connection, $currStatus . ' feedbackGiven');
         if($updateResult === false){
             return false;
         }

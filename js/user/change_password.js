@@ -6,7 +6,6 @@ const passwordFieldsDiv = document.querySelector("#passwordFields");
 const passwordChangeButton = document.getElementById("submitBtn2");
 const verificationCodeField = document.getElementById("verificationCode");
 
-
 function validateCredentialsForm(event){
     //passwords matching or not
     const password = document.getElementById("password");
@@ -34,14 +33,19 @@ function validateCredentialsForm(event){
     }
 
     if(flag === false){ //Has invalid inputs
-        console.log("Form is invalid");
         return false;
     }
     else{   //valid to submit the data
-        console.log("Form is valid");
         return true;
     }
 }
+
+passwordChangeButton.addEventListener('click', (e)=>{
+    if(!validateCredentialsForm(e)){
+        e.preventDefault();
+        return;
+    }
+});
 
 credentialForm.addEventListener('submit', function passwordRequest(e){
     e.preventDefault();
@@ -62,6 +66,7 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
     //disable the submit button
     passwordChangeButton.disabled = true;
     passwordChangeButton.style.cursor = "not-allowed";
+    passwordChangeButton.classList.add("disabled");
     
     //send the data to the server
     fetch('../../controller/user/change_password_validation_controller.php', {
@@ -99,6 +104,7 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
                 //re enable the submit button
                 passwordChangeButton.disabled = false;
                 passwordChangeButton.style.cursor = "pointer";
+                passwordChangeButton.classList.remove("disabled");
 
                 //add the verification code form submit event listener
                 credentialForm.addEventListener('submit', function verifyCode(e){
@@ -111,6 +117,7 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
                     //disable the submit button
                     passwordChangeButton.disabled = true;
                     passwordChangeButton.style.cursor = "not-allowed";
+                    passwordChangeButton.classList.add("disabled");
 
                     //reset messages
                     passwordErrMsg.innerHTML = "";
@@ -139,6 +146,7 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
                             //re enable the submit button
                             passwordChangeButton.disabled = false;
                             passwordChangeButton.style.cursor = "pointer";
+                            passwordChangeButton.classList.remove("disabled");
                             
                             if(data.errMsg === undefined){  //if there is no error message
                                 passwordErrMsg.innerHTML = "";

@@ -5,6 +5,8 @@ const startingTime = document.getElementById("startT");
 const endingTime = document.getElementById("endT");
 const peopleCount = document.getElementById("peopleCount");
 const reservationDate = document.getElementById("resDate");
+const holderName = document.getElementById("name");
+const contactNum = document.getElementById("contactNum");
 const fee = document.getElementById("resFee");
 const recepID = document.getElementById("recID");
 const resID = document.getElementById("resID");
@@ -23,6 +25,8 @@ fetch("../../controller/receptionist/basic_payment_info_controller.php")
         
         recepID.innerHTML = data['receptionist']['userID'];
         resID.innerHTML = data['reservationID'];
+        holderName.innerHTML = formData.name;
+        contactNum.innerHTML = formData.contactNumber;
         formData.reservationID = resID.innerHTML;
         formData.receptionistID = recepID.innerHTML;
         localStorage.setItem("formData", JSON.stringify(formData));

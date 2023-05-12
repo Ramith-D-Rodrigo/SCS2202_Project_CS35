@@ -1,6 +1,7 @@
 import {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain} from "../FUNCTIONS.js";
 import {currency} from "../CONSTANTS.js";
 
+//code for getting data from the server starts from line 479
 
 const coachingSessionsContainer = document.querySelector('#coachingSessionsContainer');
 
@@ -116,12 +117,15 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
     const formData = new FormData();
     formData.append('sessionID', selectedSession);
 
-    console.log(Object.fromEntries(formData));
-
     let icon = null;    //for the icon to be displayed in the message box
     icon = document.createElement('i');
     icon.style.fontSize = '6rem';
     icon.style.margin = '4rem 0';
+
+    //disable the confirm button
+    confirmBtn.disabled = true;
+    confirmBtn.style.cursor = 'not-allowed';
+    confirmBtn.classList.add('disabled');
 
     //send the sessionID to the server
     fetch("../../controller/user/leave_coaching_session_controller.php", {
@@ -147,7 +151,12 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
 
         return res.json();
     })
-    .then(data => {
+    .then(data => { //for the message to be displayed in the message box
+        //reset the confirm button
+        confirmBtn.disabled = false;
+        confirmBtn.style.cursor = 'pointer';
+        confirmBtn.classList.remove('disabled');
+
         //close the popup
         popUpCancellation(e);
 
@@ -156,8 +165,6 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
 
         msg.innerHTML = data.msg;
         msg.appendChild(icon);
-        msgBox.style.display = 'block';
-
 
         //display the message box
         msgBox.style.display = 'block';
@@ -207,8 +214,6 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
 
     formData.append('sessionID', selectedSession);
 
-    console.log(Object.fromEntries(formData));
-
     let successflag = false;
 
     let icon = null;    //for the icon to be displayed in the message box
@@ -216,6 +221,11 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
     icon.style.fontSize = '6rem';
     icon.style.margin = '4rem 0';
 
+    //disable the confirm button
+    confirmBtn.disabled = true;
+    confirmBtn.style.cursor = 'not-allowed';
+    confirmBtn.classList.add('disabled');
+    
     //send the request to the server
     fetch("../../controller/user/cancel_coaching_session_request_controller.php", {
         method: 'POST',
@@ -245,7 +255,12 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
 
         return res.json();
     })
-    .then(data => {
+    .then(data => { //for the message to be displayed in the message box
+        //reset the confirm button
+        confirmBtn.disabled = false;
+        confirmBtn.style.cursor = 'pointer';
+        confirmBtn.classList.remove('disabled');
+
         //close the popup
         popUpCancellation(e);
 
@@ -273,7 +288,7 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
         });
     })
     .catch(err => {
-        console.log(err);
+        //console.log(err);
     });
 }
 
@@ -395,6 +410,12 @@ const giveFeedback = (e) => {   //give feedback functionality
     icon.style.fontSize = '6rem';
     icon.style.color = 'green';
 
+    //disable the submit button
+    const submitBtn = feedbackForm.querySelector('input[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.style.cursor = 'not-allowed';
+    submitBtn.classList.add('disabled');
+    
     //send the feedback data to the server
     fetch("../../controller/user/give_coach_feedback_controller.php", {
         method: 'POST',
@@ -408,6 +429,11 @@ const giveFeedback = (e) => {   //give feedback functionality
         return res.json();
     })
     .then(data => {
+        //enable the submit button
+        submitBtn.disabled = false;
+        submitBtn.style.cursor = 'pointer';
+        submitBtn.classList.remove('disabled');
+        
         if(successflag){    //if the feedback is successfully sent
             feedbackFormDiv.style.display = 'none'; //close the feedback div
 
@@ -436,7 +462,7 @@ const giveFeedback = (e) => {   //give feedback functionality
         }
     })
     .catch(err => {
-        console.log(err);
+        //console.log(err);
     });
 }
 
@@ -445,13 +471,13 @@ let sportSet = new Set();   //to store the sports of the coaching sessions
 let coachSet = new Set();   //to store the coaches of the coaching sessions
 
 
+//get the coaching sessions from the server
 fetch("../../controller/user/coaching_sessions_controller.php")
     .then(res => {
         successflag = res.ok;
         return res.json();
     })
     .then(data => {
-        console.log(data);
         if(successflag){
             for(let i = 0; i < data.coachingSessions.length; i++){
                 //create a div for each coaching session
@@ -469,7 +495,6 @@ fetch("../../controller/user/coaching_sessions_controller.php")
                     photo: data.coaches[data.coachingSessions[i].coachID].photo
                 }
                 coachSet.add(coachObj);
-                console.log(coachSet);
 
                 const imagesContainer = document.createElement('div');  //container for the images (both coach and sport)
                 imagesContainer.className = 'images-container';

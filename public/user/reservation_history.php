@@ -26,6 +26,15 @@
                 ?>
                 <main>
                     <div class="content-box" id="reservationHistoryBox">
+                        <div class="filter">
+                            <div>
+                                From : <input type="date" id="filter-start-date">
+                            </div>
+
+                            <div>
+                                To : <input type="date" id="filter-end-date">
+                            </div>
+                        </div>
                     </div>
                 </main>
                 <div id="authFormDiv" class="content-box">

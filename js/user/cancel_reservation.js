@@ -1,3 +1,5 @@
+import { MAX_REFUND_DAYS } from "../CONSTANTS.js";
+
 let reservationAndTimeStampArr = [];   //array of objects of reservation id and reserved timestamp
 const msg = document.getElementById("msg"); //message div
 
@@ -30,7 +32,7 @@ const authFormDisplay = (e) => {
     const currentTime = new Date().getTime();
     
     //check if 3 days have passed since the reservation was made
-    if(currentTime - reservedTimeStamp > 259200000){   //259200000 is 3 days in milliseconds
+    if((currentTime - reservedTimeStamp) > (MAX_REFUND_DAYS * 24 * 60 * 60 * 1000)){ //3 days in milliseconds
         //display the alternative message
         altMsgDiv.innerHTML = "Note : You are not eligible for a refund as 3 days have passed since the reservation was made.";
     }
@@ -124,6 +126,12 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
         e.preventDefault();
         const formData = new FormData(authForm);
 
+        //disable the submit button
+        const submitButton = authForm.querySelector("button[type='submit']");
+        submitButton.disabled = true;
+        submitButton.style.cursor = "not-allowed";
+        submitButton.classList.add("disabled");
+
         //send the form data to the server
         fetch("../../controller/general/authentication_controller.php", {  //authentication first
             method: "POST",
@@ -132,7 +140,7 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                 "Content-Type" : "application/json"
             }
 
-        }).then(async (res) => {
+        }).then(async (res) => {            
             if(res.ok){ //ok means the status code is 200
                 //can cancel the reservation
                 //get the reservation id from the session storage
@@ -185,6 +193,11 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                         icon.style.color = "red";
                     }
 
+                    //enable the submit button
+                    submitButton.disabled = false;
+                    submitButton.style.cursor = "pointer";
+                    submitButton.classList.remove("disabled");
+                    
                     return res.json();
                 })
                 .then(data =>{
@@ -198,11 +211,17 @@ const init = (reservationAndTimeStamp) => { //reservationAndTimeStamp is an arra
                 const authMsg = document.querySelector("#authMsg");
                 authMsg.innerHTML = "Invalid credentials";
                 authMsg.classList.add("altMsg-invalid");
+
+                //enable the submit button
+                submitButton.disabled = false;
+                submitButton.style.cursor = "pointer";
+                submitButton.classList.remove("disabled");
+
                 throw new Error("Invalid credentials");
             }
         })
         .catch((err) => {
-            console.log(err);
+            //console.log(err);
         });
     });
 

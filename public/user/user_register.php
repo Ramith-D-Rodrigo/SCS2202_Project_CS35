@@ -31,16 +31,18 @@
                                     <div class="left-field">Name*</div>
                                     <div class="right-field">
                                         <input type="text" 
-                                                pattern="[a-zA-Z]+" 
+                                                pattern="^[a-zA-Z]+$" 
                                                 name="firstName"
                                                 id="firstName" 
-                                                required placeholder="First Name">
+                                                required placeholder="First Name"
+                                                title="Letters only. No spaces">
                                         <input type="text" 
-                                                pattern="[a-zA-Z]+" 
+                                                pattern="^[a-zA-Z]+$" 
                                                 name="lastName"
                                                 id="lastName" 
                                                 required 
-                                                placeholder="Last Name">
+                                                placeholder="Last Name"
+                                                title="Letters only. No spaces">
                                     </div>
                                 </div>
                                 
@@ -62,7 +64,8 @@
                                             pattern="[0-9]{10,11}" 
                                             name="contactNum"
                                             id="usercontact"
-                                            required>
+                                            required
+                                            title="Numbers only, length between 10 and 11">
                                     </div>
                                 </div>
 
@@ -84,7 +87,7 @@
                                             type="text" 
                                             placeholder="Optional (centimeters)" 
                                             min="0" 
-                                            pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
+                                            pattern = "^\d*\.?\d*$"
                                             id="height"
                                             name="height">
                                     </div>
@@ -98,7 +101,7 @@
                                             type="text" 
                                             placeholder="Optional (kilograms)" 
                                             min="0"
-                                            pattern = "[1-9][0-9]*(?:\.[1-9][0-9])*"
+                                            pattern = "^\d*\.?\d*$"
                                             id="weight"
                                             name="weight">
                                     </div>
@@ -228,7 +231,7 @@
                                 <div id="errmsg" class="err-msg"></div>
                                 <div id="successmsg" class="success-msg"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="registerBtn"  name= "regSubmitBtn" value="submit" onclick="return validateForm(event)"> Register </button>
+                                    <button type="submit" id="registerBtn"  name= "regSubmitBtn" value="submit"> Register </button>
                                 </div>
                             </form>                    
                         </div>
@@ -240,9 +243,8 @@
             ?>
 
             </body>
-            <script src="/js/user/user_register_form.js"></script>
-            <script src="/js/user/user_register_form_handle.js"></script>
-            <script src="/js/user/user_register_validation.js"></script>
+            <script type="module" src="/js/user/user_register_form.js"></script>
+            <script type="module" src="/js/user/user_register_form_handle.js"></script>
         </html>
     <?php
     }

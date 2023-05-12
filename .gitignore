@@ -6,3 +6,4 @@
 config.php
 .idea/php.xml
 .idea/workspace.xml
+*.xml

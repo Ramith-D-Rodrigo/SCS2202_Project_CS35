@@ -5,8 +5,10 @@ const result = document.getElementById("branches");
 
 function viewFeedback(e){
     e.preventDefault();
-    const parent = e.target.parentNode.parentNode;
-    const branchID = parent.querySelector("form").id;
+    const infoDiv = e.target.parentNode.parentNode;
+    const formEl = infoDiv.querySelector("form");
+    const form = new FormData(formEl);
+    const branchID = form.get("branch");
     localStorage.setItem("feedbackBranch", branchID);
     window.location.href = "/public/general/our_feedback.php";
 }
@@ -17,7 +19,7 @@ const showMap = (e) => {
 
     //get the latitude and longitude
     const parentDiv = e.target.parentNode;
-    console.log(parentDiv);
+    //console.log(parentDiv);
     const latitude = parentDiv.querySelector(".latitude").value;
     const longitude = parentDiv.querySelector(".longitude").value;
 
@@ -95,7 +97,7 @@ fetch("../../controller/general/our_branches_controller.php")
                 branchImage.src = branches[i].photos[0];    //add the first photo
             }
             else{
-                branchImage.src = "/public/general/branch_images/";
+                branchImage.src = "/uploads/branch_images/";
             }
 
             setInterval(() =>{

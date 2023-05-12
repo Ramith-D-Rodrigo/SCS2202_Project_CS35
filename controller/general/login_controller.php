@@ -1,4 +1,5 @@
 <?php
+    //this script is used to log in to the system
     session_start();
     require_once("../../src/general/security.php");
 

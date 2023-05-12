@@ -1,4 +1,5 @@
 <?php
+    //this script is used to give feedback to the coach
     session_start();
     require_once("../../src/general/security.php");
     require_once("../../controller/CONSTANTS.php");

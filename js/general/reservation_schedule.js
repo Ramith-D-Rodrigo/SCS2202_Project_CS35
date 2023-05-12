@@ -16,12 +16,15 @@ import { MAX_RESERVATION_DAYS } from '../CONSTANTS.js';
 fetch("../../controller/general/reservation_schedule_controller.php?" + params)
     .then(res => res.json())
     .then(data => {
-        console.log(data);
         createReservationSchedulePage(data);
        //creating the event listeners for the navigation buttons
         let navDateIncrement = 0;
         //next button
         const nextBtn = document.getElementById("nextBtn");
+
+        //previous button
+        const prevBtn = document.getElementById("prevBtn");
+
         nextBtn.addEventListener("click", ()=>{
              //get the schedule from the session storage
             const schedules = JSON.parse(sessionStorage.getItem("schedule"));
@@ -50,7 +53,7 @@ fetch("../../controller/general/reservation_schedule_controller.php?" + params)
                 i++;
             });
             //console.log(tableParents);
-            updateTheReservationTables(schedules, data);  //update the reservations
+            updateTheReservationTables(schedules, data, navDateIncrement);  //update the reservations
 
             if(navDateIncrement >= MAX_RESERVATION_DAYS - 10){  //now reached the limit (disable the button)
                 nextBtn.disabled = true;
@@ -58,8 +61,6 @@ fetch("../../controller/general/reservation_schedule_controller.php?" + params)
             }
         });
 
-        //previous button
-        const prevBtn = document.getElementById("prevBtn");
         prevBtn.addEventListener("click", ()=>{
             //get the schedule from the session storage
             const schedules = JSON.parse(sessionStorage.getItem("schedule"));
@@ -88,7 +89,7 @@ fetch("../../controller/general/reservation_schedule_controller.php?" + params)
                 i++;
             });
             //console.log(tableParents);
-            updateTheReservationTables(schedules, data);  //update the reservations
+            updateTheReservationTables(schedules, data, navDateIncrement);  //update the reservations
 
             if(navDateIncrement === 0){  //now reached the limit (disable the button)
                 prevBtn.disabled = true;
@@ -100,4 +101,8 @@ fetch("../../controller/general/reservation_schedule_controller.php?" + params)
         prevBtn.disabled = true;
         prevBtn.classList.add("nav-disable");
 
-    });
+    })
+    .catch(err =>{
+        //redirect to the error page
+        window.location.href = "/500.php";
+    })

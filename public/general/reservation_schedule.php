@@ -2,7 +2,7 @@
     session_start();
     require_once("../../src/general/security.php");
     //check the authentication
-    if(!Security::userAuthentication(logInCheck: FALSE)){ //cannot access (NOT operator)
+    if(!Security::userAuthentication(logInCheck: FALSE, acceptingUserRoles:['user'])){ //cannot access (NOT operator)
         Security::redirectUserBase();
     }
     else{
@@ -120,6 +120,9 @@
                                 </div>
                                 <div style="text-align:center; font-style:italic; margin-top:10px; font-size:smaller">
                                     Contact Relevant branch manager for Formal reservations incase of holding events
+
+                                    <br>
+                                    Refer <a href="/public/general/about_us.php#guidelines" style="all:unset; cursor:pointer">Here</a> for Reservation Guidelines
                                 </div>
                             </form>
                     </div>
@@ -133,7 +136,7 @@
                         </div>
                         <div id="card-holder-name-div">
                         <i class="fa-solid fa-signature" style="color: gray"></i>
-                            <input type="text" id="card-holder-name" name="card-holder-name" placeholder="Name on Card" required>
+                            <input type="text" id="card-holder-name" name="card-holder-name" placeholder="Name on Card" required pattern="^[a-zA-Z\s]*$" title="Enter the Name Correctly. Only Letters and Spaces Allowed">
                         </div>
                         <div id="card-element">
                         </div>

@@ -3,6 +3,7 @@ const reservationForm = document.querySelector('form');
 import {updateTheReservationTables, createScheduleObjects} from '../general/reservation_schedule_functions.js';
 
 import { currency } from '../CONSTANTS.js';
+import { addLeadingZeros } from '../FUNCTIONS.js';
 
 let sendingRequest = null;  //to store the reservation details
 let stripe = null;  //to store the payment gateway
@@ -66,6 +67,9 @@ reservationForm.addEventListener('submit', (event) => {
     const errMsgBox = document.getElementById("errMsg");
     errMsgBox.innerHTML = "";
 
+    const successMsgBox = document.getElementById("successMsg");
+    successMsgBox.innerHTML = "";
+
     sendingRequest = {
         "numOfPeople" : formData.get("numOfPeople"),
         "reservingStartTime" : formData.get("reservingStartTime"),
@@ -90,7 +94,10 @@ reservationForm.addEventListener('submit', (event) => {
         reservingCourtSchedule[0].courtMaintenance.forEach((maintenance) => {
             const maintenanceStartDate = new Date(maintenance.startingDate);
             const maintenanceEndDate = new Date(maintenance.endingDate);
-    
+
+            maintenanceStartDate.setHours(0, 0, 0, 0);
+            maintenanceEndDate.setHours(23, 59, 59, 999);
+
             if(reservingDate >= maintenanceStartDate && reservingDate <= maintenanceEndDate){
                 clientValFlag = false;
                 throw new Error("The court is under maintenance at this time");
@@ -98,15 +105,24 @@ reservationForm.addEventListener('submit', (event) => {
         });
     }
     catch(err){
-        errMsgBox.innerHTML = err.message;
-        return;
+        if(err.name === "TypeError"){   //if there is no court maintenance
+            clientValFlag = true;
+        }
+        else{
+            errMsgBox.innerHTML = err.message;
+            return;
+        }
     }
 
     //check if the reserving time is in branch maintenance date
     try{
-        schedules[2].forEach((maintenance) => {
+        //length - 1 because the last index has the branch maintenance schedule
+        schedules[schedules.length - 1].forEach((maintenance) => {
             const maintenanceStartDate = new Date(maintenance.startingDate);
             const maintenanceEndDate = new Date(maintenance.endingDate);
+
+            maintenanceStartDate.setHours(0, 0, 0, 0);
+            maintenanceEndDate.setHours(23, 59, 59, 999);
     
             if(reservingDate >= maintenanceStartDate && reservingDate <= maintenanceEndDate){
                 clientValFlag = false;
@@ -115,15 +131,28 @@ reservationForm.addEventListener('submit', (event) => {
         });
     }
     catch(err){
-        errMsgBox.innerHTML = err.message;
-        return;
+        if(err.name === "TypeError"){   //if there is no branch maintenance
+            clientValFlag = true;
+        }
+        else{
+            errMsgBox.innerHTML = err.message;
+            return;
+        }
     }
 
     //check if the reserving time is in a coaching session
     try{
         reservingCourtSchedule[0].coachingSessions.forEach((coaching) => {
+            const sessionStartDate = new Date(coaching.startDate);
+            const sessionCancelDate = new Date(coaching.cancelDate);
+
+            sessionStartDate.setHours(0, 0, 0, 0);
+            if(sessionCancelDate != "Invalid Date"){
+                sessionCancelDate.setHours(23, 59, 59, 999);
+            }
+
             const day = reservingDate.toLocaleDateString('en-US', { weekday: 'long' });
-            if(day === coaching.day){
+            if(day === coaching.day && sessionStartDate <= reservingDate && (sessionCancelDate == "Invalid Date" || sessionCancelDate >= reservingDate)){
                 //4 cases
                 const startingTimeObj = new Date(coaching.startingTime);
                 const endingTimeObj = new Date(coaching.endingTime);
@@ -158,8 +187,13 @@ reservationForm.addEventListener('submit', (event) => {
         });
     }
     catch(err){
-        errMsgBox.innerHTML = err.message;
-        return;
+        if(err.name === "TypeError"){   //if there is no coaching session
+            clientValFlag = true;
+        }
+        else{
+            errMsgBox.innerHTML = err.message;
+            return;
+        }
     }
 
     //check if the reserving time is in a reservation
@@ -167,8 +201,9 @@ reservationForm.addEventListener('submit', (event) => {
         reservingCourtSchedule[0].reservations.forEach((reservation) => {
             const startingTime = new Date(reservation.startingTime);
             const endingTime = new Date(reservation.endingTime);
-    
-            const checkingReservationDate = startingTime.toISOString().split('T')[0];
+            
+            //get date in YYYY-MM-DD format with local time
+            const checkingReservationDate = startingTime.getFullYear() + "-" + addLeadingZeros((startingTime.getMonth() + 1)) + "-" + addLeadingZeros(startingTime.getDate());
     
             if(checkingReservationDate === sendingRequest.reservingDate){
                 const startingTimeStr = startingTime.toLocaleTimeString('en-US', { hour12: false });
@@ -178,44 +213,47 @@ reservationForm.addEventListener('submit', (event) => {
                 //1. the reserving time is in the middle of the reservation
                 if(reserveStartingTime >= startingTimeStr && reserveEndingTime <= endingTimeStr){
                     clientValFlag = false;
-                    console.log("middle");
+                    //console.log("middle");
                     throw new Error("The Time is already reserved");
                 }
     
                 //2. the reserve starting start time is before the reservation start time but the reserve ending time is in the middle of the reservation
                 else if(reserveStartingTime < startingTimeStr && reserveEndingTime > startingTimeStr && reserveEndingTime <= endingTimeStr){
                     clientValFlag = false;
-                    console.log("before");
+                    //console.log("before");
                     throw new Error("The Time is already reserved");
                 }
     
                 //3. the reserve starting start time is in the middle of the reservation but the reserve ending time is after the reservation end time
                 else if(reserveStartingTime >= startingTimeStr && reserveStartingTime < endingTimeStr && reserveEndingTime > endingTimeStr){
                     clientValFlag = false;
-                    console.log("after");
+                    //console.log("after");
                     throw new Error("The Time is already reserved");
                 }
     
                 //4. the reserve starting start time is before the reservation start time and the reserve ending time is after the reservation end time
                 else if(reserveStartingTime < startingTimeStr && reserveEndingTime > endingTimeStr){
                     clientValFlag = false;
-                    console.log("before and after");
+                    //console.log("before and after");
                     throw new Error("The Time is already reserved");
                 }
             }
         });
     }
     catch(err){
-        errMsgBox.innerHTML = err.message;
-        return;
+        if(err.name === "TypeError"){   //if there is no reservation
+            clientValFlag = true;
+        }
+        else{
+            errMsgBox.innerHTML = err.message;
+            return;
+        }
     }
-
-
 
     //add the amount to the payment gateway
     const amount = document.getElementById("amount");
-    amount.innerHTML = "You are paying " + currency + " ";
-    amount.innerHTML += formData.get("reservationPrice");
+    amount.innerHTML = "You are paying "+ " ";
+    amount.innerHTML += formData.get("reservationPrice");   //currency is already added in formData
 
     //payment gateway popup div display
     paymentGatewayPopup.style.display = "block";
@@ -299,22 +337,6 @@ const stripeTokenHandler = (token) => {
             errMsgBox.innerHTML = "";
             successMsgBox.innerHTML = data.successMsg;
 
-            //update the table
-            const url = new URL(window.location);   //get the url
-            const params = new URLSearchParams(url.search); //search parameters
-            //console.log(params);
-            const getReq = params.get("reserveBtn");
-            //console.log(getReq);
-
-            //update the reservation table
-            fetch("../../controller/general/reservation_schedule_controller.php?reserveBtn=".concat(getReq))
-                .then(res => res.json())
-                .then(data => {
-                    const scheduleObjs = createScheduleObjects(data);
-                    sessionStorage.removeItem("schedule");   //remove the previous schedule
-                    sessionStorage.setItem("schedule", JSON.stringify(scheduleObjs));
-                    updateTheReservationTables(scheduleObjs);
-                });
         }
         else if(data.errMsg !== undefined){  //reservation failed
             const successMsgBox = document.getElementById("successMsg");
@@ -324,16 +346,32 @@ const stripeTokenHandler = (token) => {
             errMsgBox.innerHTML = data.errMsg;
         }
 
-        //animate the payment gateway popup
-        animateGateWayClosing();
-        main.click();
+        //update the table
+        const url = new URL(window.location);   //get the url
+        const params = new URLSearchParams(url.search); //search parameters
 
-        //reset the pay button
-        payBtn.innerHTML = "Pay Now";
-        payBtn.classList.remove("disabled");
-        payBtn.disabled = false;
+        //update the reservation table
+        fetch("../../controller/general/reservation_schedule_controller.php?" + params)
+            .then(res => res.json())
+            .then(data => {
+                const scheduleObjs = createScheduleObjects(data);
+                sessionStorage.removeItem("schedule");   //remove the previous schedule
+                sessionStorage.setItem("schedule", JSON.stringify(scheduleObjs));
+                updateTheReservationTables(scheduleObjs, data);
+            })
+            .then(() => {
+                //animate the payment gateway popup
+                animateGateWayClosing();
+                main.click();
+
+                //reset the pay button
+                payBtn.innerHTML = "Pay Now";
+                payBtn.classList.remove("disabled");
+                payBtn.disabled = false;
+            })
+
     })
     .catch((err) => {
-        console.log(err);
+        //console.log(err);
     });
 }
