@@ -1,11 +1,13 @@
 <?php
     session_start();
-    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
-        header("Location: /public/receptionist/receptionist_login.php");
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['receptionist'])){
+        Security::redirectUserBase();
+        die();
     }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

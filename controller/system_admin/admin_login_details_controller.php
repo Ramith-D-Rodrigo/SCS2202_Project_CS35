@@ -1,5 +1,12 @@
 <?php
     session_start();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['admin'])){
+        Security::redirectUserBase();
+        die();
+    }
+
+
     require_once("../../src/system_admin/admin.php");
     require_once("../../src/system_admin/dbconnection.php");
 

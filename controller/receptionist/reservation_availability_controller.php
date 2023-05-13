@@ -1,11 +1,10 @@
 <?php
     session_start();
-    // require_once("../../src/general/security.php");
-    // //check the authentication
-    // if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
-    //     Security::redirectUserBase();
-    //     die();
-    // }
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['receptionist'])){
+        Security::redirectUserBase();
+        die();
+    }
 
     //post request check
     // if($_SERVER['REQUEST_METHOD'] !== 'POST'){
@@ -106,7 +105,7 @@
 
     //can continue
     $staffMember = new Staff();
-    $receptionist = $staffMember -> getStaffMemeber('receptionist');   
+    $receptionist = $staffMember -> getStaffMember('receptionist');   
     $receptionist -> setDetails(uid : $recepID);
 
     $reservingCourt = new Sports_Court($court_id);

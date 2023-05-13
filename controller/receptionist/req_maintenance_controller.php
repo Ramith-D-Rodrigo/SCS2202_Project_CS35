@@ -1,5 +1,11 @@
 <?php
     session_start();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['receptionist'])){
+        Security::redirectUserBase();
+        die();
+    }
+    
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/general/branch.php");
     require_once("../../src/system_admin/admin.php");
@@ -32,7 +38,7 @@
                 $flag = true;
             }else {
                 $staffMember = new Staff();
-                $receptionist = $staffMember -> getStaffMemeber($_SESSION['userrole']);
+                $receptionist = $staffMember -> getStaffMember($_SESSION['userrole']);
                 $results = $receptionist -> branchMaintenance($reason,$sDate,$eDate,$_SESSION['branchID'],$_SESSION['userid'],$connection);    
 
                 $desc = "You have a pending branch maintenance request starting from ".$sDate. "to".$eDate;
@@ -53,7 +59,7 @@
                 $flag = true;
             }else{
                 $staffMember = new Staff();
-                $recep = $staffMember -> getStaffMemeber($_SESSION['userrole']);
+                $recep = $staffMember -> getStaffMember($_SESSION['userrole']);
                 $results = $recep -> reqMaintenance($reason,$sportName,$courtName,$sDate,$eDate,$_SESSION['userid'],$connection);
 
                 $desc = "You have a pending court maintenance request starting from ".$sDate. "to".$eDate;

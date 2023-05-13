@@ -1,12 +1,17 @@
 <?php
     session_start();
-
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['receptionist'])){
+        Security::redirectUserBase();
+        die();
+    }
+    
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/receptionist/dbconnection.php");
     require_once("../../src/system_admin/staff.php");
 
     $staffMember = new Staff();
-    $recep = $staffMember -> getStaffMemeber('receptionist');          //$_SESSION['userrole']
+    $recep = $staffMember -> getStaffMember('receptionist');          //$_SESSION['userrole']
     
     $result = $recep -> editBranch($_SESSION['userid'], $_SESSION['branchID'],$connection);  //search the branch to edit
 

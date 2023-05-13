@@ -1,5 +1,11 @@
 <?php
     session_start();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['receptionist'])){
+        Security::redirectUserBase();
+        die();
+    }
+    
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/receptionist/dbconnection.php");
     require_once("../../src/system_admin/staff.php");
@@ -12,7 +18,7 @@
 
     // print_r($decisionDetails);
     $staffM = new Staff();
-    $receptionist = $staffM -> getStaffMemeber($_SESSION['userrole']);
+    $receptionist = $staffM -> getStaffMember($_SESSION['userrole']);
     $decision = $receptionist -> handleReservation($decisionDetails[1],$decisionDetails[0],$connection);
 
     //sending a notification about the reservation status

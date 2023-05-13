@@ -1,5 +1,11 @@
 <?php
     session_start();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['admin'])){
+        Security::redirectUserBase();
+        die();
+    }
+    
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/manager/manager.php");
     require_once("../../src/system_admin/admin.php");
@@ -87,7 +93,7 @@
         if($result){   //successfully registered
             // echo "Successfully Registered";
             $message = 'Registered Successfully';
-            
+        
         }else{
             $message = "There was Error in Registering ";
             $flag = true;

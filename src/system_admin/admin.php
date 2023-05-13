@@ -71,7 +71,7 @@ class Admin extends Actor{
 
     public function registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$database) {
         $staffMember = new Staff();
-        $staffMember = $staffMember -> getStaffMemeber($staffRole);
+        $staffMember = $staffMember -> getStaffMember($staffRole);
         $staffMember -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
 
         $result1 = $staffMember -> register($database);
