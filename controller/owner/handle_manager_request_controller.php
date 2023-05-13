@@ -15,13 +15,19 @@
 
     if(count($decisionDetails) == 2){
         $result = $owner -> updateManagerRequest(courtID: $decisionDetails['courtID'],decision: $decisionDetails['decision']);
+
+        $notificationID = uniqid('notreqcourt');    //send the notification about the reply
+        $owner -> addNotification($notificationID,"Court Request",$decisionDetails['desc'],date('Y-m-d'),$decisionDetails['manager']);
     }else{
         $result = $owner -> updateManagerRequest(manager: $decisionDetails['manager'],startingDate: $decisionDetails['startingDate'],decision: $decisionDetails['decision']);
+    
+        $notificationID = uniqid('notreqdiscount');   //send the notification about the reply
+        $owner -> addNotification($notificationID,"Discount Request",$decisionDetails['desc'],date('Y-m-d'),$decisionDetails['manager']);
+    
     }
     
     header('Content-Type: application/json');
     echo json_encode($result);
     die();
-
 
 ?>

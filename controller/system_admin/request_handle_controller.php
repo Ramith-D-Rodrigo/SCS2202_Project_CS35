@@ -26,6 +26,11 @@
         $result = $admin -> makeBranchActive($decision,$branchID,$connection);
         if($result){
             $message = "Branch Request Decision Added Successfully";
+
+            //sending notification about the decision of a pending branch request
+            $notificationID = uniqid('notrequest');
+            $desc = "New branch request which is located in " .$location. " has been ".$decision. " by the system administrator";
+            $admin -> addNotification($notificationID,"Decision for the Branch Request",$desc,date('Y-m-d'),'owner6409c21e372fa');
         }else{
             $message = "Error Occured While Adding Branch Request Decision";
             $flag = true;

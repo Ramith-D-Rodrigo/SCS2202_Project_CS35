@@ -28,6 +28,10 @@
         
         if($result){
             $message = "System Maintenance Notification Added Successfully";
+
+            //send the mail regarding the system maintenance
+            $duration = $downHrs .":". $downMins;
+            $admin -> mailSystemMaintenance($startDate,$startTime,$duration);
         }else{
             $flag = true;
             $message = "Error Occured While Saving System Maintenance Notification";

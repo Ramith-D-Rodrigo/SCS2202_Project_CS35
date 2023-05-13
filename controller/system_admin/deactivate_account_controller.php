@@ -2,6 +2,7 @@
     session_start();
     require_once("../../src/system_admin/admin.php");
     require_once("../../src/system_admin/dbconnection.php");
+    require_once("../../src/general/actor.php");
 
     $requestJSON = file_get_contents("php://input");
     $profile = json_decode($requestJSON, true);
@@ -20,6 +21,13 @@
     
     if($deactivateResult){
         $message = "Account Deactivated Successfully.";
+
+        //send a mail regarding the account deactivation
+        $actor = new Actor();
+        $actor -> setUserID($profileID);
+
+        require_once("../../src/general/mailer.php");
+        Mailer::deactivateStaffAccountNotification($actor -> getEmailAddress(),$actor -> getUsername());
     }else{
         $message = "Error Occured While Deactivating Account.";
         $flag = true;

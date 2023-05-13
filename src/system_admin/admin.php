@@ -3,6 +3,7 @@ require_once("../../src/system_admin/staff.php");
 require_once("../../src/general/actor.php");
 require_once("../../src/general/notification.php");
 
+
 class Admin extends Actor{
 
     private static $admin;
@@ -301,6 +302,15 @@ class Admin extends Actor{
         $result = $notification -> setNotificationEntry($this -> connection);
 
         return $result;
+    }
+
+    public function mailSystemMaintenance($date,$sTime,$duration){
+        $results = $this -> connection -> query("SELECT `username`,`emailAddress` FROM `login_details` WHERE `isActive` = 1;");
+        while($row = $results -> fetch_object()){
+            //send the mail regarding the login credentials
+            require_once("../../src/general/mailer.php");
+            Mailer::systemMaintenanceNotification($row->emailAddress,$row -> username,$date,$sTime,$duration);
+        }
     }
 }
 

@@ -38,6 +38,12 @@
     if(!$flag){
         if($updateResult){
             $message = "Login Details Updated Successfully.";
+
+            $actor = new Actor();
+            $actor -> setUserID($profileID);
+            //send a mail regarding the change of login details
+            require_once("../../src/general/mailer.php");
+            Mailer::changeStaffLoginNotification($actor -> getEmailAddress(),$newEmail,$credentials['Password'],$actor -> getUsername());
         }else{
             $message = "Error Occured While Updating Login Details.";
         }
