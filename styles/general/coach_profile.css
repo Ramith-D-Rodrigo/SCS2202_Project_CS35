@@ -3,6 +3,26 @@
     justify-content:space-around; 
     flex-direction:row;
     align-items: center;
+    width: 100%;
+}
+
+.body-container{
+    align-items: unset;
+}
+
+.content-box{
+    width: 100%;
+}
+
+#joinSession{
+    width: unset;
+}
+
+.coach-info{
+    display:flex; 
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .left-field{
@@ -19,19 +39,34 @@
     max-width:100%;
 }
 
+.personal{
+    width: 50%;
+    margin: 0.5rem auto;
+}
+
+
 .coach-image{
     border-radius: 50%;
-    background: linear-gradient(180deg, #dac340, #e6800d);
-    height: 250px;
-    width: 250px;
+    aspect-ratio: 1/1;
+    width: 100%;
     object-fit: cover;
 }
 
 .coach-image-container{
-    height: 250px;
-    width: 250px;
-    margin: 0 20px;
-    border-radius: 50%;
+    width: 40%;
+}
+
+.detailsContainer{
+    width: 60%;
+}
+.detailsContainer > *{
+    margin: 0.5rem 1rem;
+}
+
+.title{
+    text-align:center; 
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
 }
 
 .checked{
@@ -46,4 +81,111 @@
 .success-msg{
     color: green;
     text-align: center;
+}
+
+.rating-star{
+    margin:0 0.2em;
+    font-size :1.5em;
+}
+
+#requestingSession{
+    width: unset;
+}
+
+#sessionFee{
+    margin-left: 1rem;
+}
+
+#stu-feedbacks{
+    height: 100%;
+}
+
+#navIcons{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+@media(max-width:1275px){
+    .detailsContainer #coachRating span i{
+        font-size: 1rem;
+        margin: 0 0.1em;
+    }
+
+    .left-field.personal{
+        width: 30%;
+        margin: 0.1rem;
+    }
+    .right-field.personal{
+        width: 70%;
+    }
+}
+
+@media(max-width:960px){
+    .coach-info{
+        flex-direction: column;
+    }
+
+    .row-container{
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .left-field{
+        all:unset;
+        font-size: larger;
+    }
+
+    .right-field{
+        all: unset;
+    }
+
+    .coach-image-container{
+        width: 80%;
+    }
+
+    .personal{
+        text-align: center;
+    }
+    
+    .detailsContainer{
+        width: 100%;
+    }
+
+    .detailsContainer > *{
+        margin: 0.5rem;
+    }
+
+    .detailsContainer #coachRating span i{
+        font-size: 1rem;
+        margin: 0 0.1em;
+    }
+}
+
+@media(max-width:685px){
+    .body-container{
+        flex-wrap: wrap;
+    }
+    .coach-info .detailsContainer > *{
+        font-size: 1rem;
+    }
+
+    #sessionFee{
+        text-align: center;
+        margin: 1rem;
+    }
+
+    #requestingSession{
+        width: 100%;
+    }
+
+    #stu-feedbacks{
+        height: 80vh;
+        overflow-y: auto;
+    }
+
+    
 }

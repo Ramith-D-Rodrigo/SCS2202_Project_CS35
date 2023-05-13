@@ -1,0 +1,80 @@
+DELIMITER //
+CREATE TRIGGER update_branch_revenue_insert
+AFTER INSERT
+ON reservation
+FOR EACH ROW
+BEGIN
+    DECLARE currBranch VARCHAR(35) DEFAULT NULL;
+    DECLARE amount double;
+    DECLARE currRevenue double;
+    
+    SELECT b.revenue , b.branchID INTO currRevenue, currBranch FROM branch b INNER JOIN sports_court sc ON sc.branchID = b.branchID WHERE sc.courtID = New.sportCourt;
+    IF(currRevenue IS NULL) THEN 
+    	UPDATE branch SET revenue = New.paymentAmount WHERE branchID = currBranch;
+    ELSE 
+    	UPDATE branch SET revenue = currRevenue + New.paymentAmount WHERE branchID = currBranch;
+	END IF;
+END//
+
+
+Here, using old status as cancelled because, it is after we cancel the reservation that we check for refund
+
+CREATE TRIGGER update_branch_revenue_update
+AFTER UPDATE
+ON reservation
+FOR EACH ROW
+BEGIN
+    DECLARE currBranch VARCHAR(35) DEFAULT NULL;
+    DECLARE currRevenue double;
+    
+    IF(Old.status LIKE 'Cancelled' AND New.status LIKE 'Refunded') THEN
+    	SELECT b.revenue , b.branchID INTO currRevenue, currBranch FROM branch b INNER JOIN sports_court sc ON sc.branchID = b.branchID WHERE sc.courtID = New.sportCourt;
+    	UPDATE branch SET revenue = currRevenue - New.paymentAmount WHERE branchID = currBranch;
+	END IF;
+END
+
+
+DELIMITER //
+
+CREATE TRIGGER update_branch_revenue_coach_insert
+AFTER INSERT
+ON coach_session_payment
+FOR EACH ROW
+BEGIN
+    DECLARE currBranch VARCHAR(35) DEFAULT NULL;
+    DECLARE currRevenue double;
+    DECLARE paymentCourt VARCHAR(35);
+    
+    IF(New.status LIKE 'Processed') THEN
+    	SELECT sc.courtID INTO paymentCourt FROM sports_court sc INNER JOIN coaching_session cs ON cs.courtID = sc.courtID WHERE cs.sessionID = New.sessionID;
+    	SELECT b.revenue , b.branchID INTO currRevenue, currBranch FROM branch b INNER JOIN sports_court sc ON sc.branchID = b.branchID WHERE sc.courtID = paymentCourt;
+        IF(currRevenue IS NULL) THEN 
+    		UPDATE branch SET revenue = New.paymentAmount WHERE branchID = currBranch;
+    	ELSE 
+    		UPDATE branch SET revenue = currRevenue + New.paymentAmount WHERE branchID = currBranch;
+		END IF;
+	END IF;
+END//
+
+DELIMITER //
+
+CREATE TRIGGER update_branch_revenue_coach_update
+AFTER UPDATE
+ON coach_session_payment
+FOR EACH ROW
+BEGIN
+    DECLARE currBranch VARCHAR(35) DEFAULT NULL;
+    DECLARE currRevenue double;
+    DECLARE paymentCourt VARCHAR(35);
+    
+    IF(New.status LIKE 'Refunded') THEN
+    	SELECT sc.courtID INTO paymentCourt FROM sports_court sc INNER JOIN coaching_session cs ON cs.courtID = sc.courtID WHERE cs.sessionID = New.sessionID;
+    	SELECT b.revenue , b.branchID INTO currRevenue, currBranch FROM branch b INNER JOIN sports_court sc ON sc.branchID = b.branchID WHERE sc.courtID = paymentCourt;
+    	UPDATE branch SET revenue = New.paymentAmount WHERE branchID = currBranch;
+    	UPDATE branch SET revenue = currRevenue + New.paymentAmount WHERE branchID = currBranch;
+	END IF;
+END//
+
+
+
+

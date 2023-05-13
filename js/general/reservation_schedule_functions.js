@@ -1,4 +1,5 @@
-import { MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS } from "../CONSTANTS.js";
+import { MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, currency } from "../CONSTANTS.js";
+import {changeToLocalTime} from "../FUNCTIONS.js";
 
 
 function createReservationSchedulePage(jsonData){
@@ -41,17 +42,25 @@ function addReservationInformation(jsonData){   //function to add the reservatio
     reservingBranchLocationDiv.innerHTML = reservingBranchLocationDiv.innerHTML + " " + jsonData.city;
 
     const reservationPriceDiv = document.getElementById("reservationPriceDisplay"); //reservation price display
-    reservationPriceDiv.innerHTML = reservationPriceDiv.innerHTML + " Rs. " + jsonData.reservingSport.reservationPrice + " per Hour";
+    reservationPriceDiv.innerHTML = reservationPriceDiv.innerHTML + currency + " " + jsonData.reservingSport.reservationPrice + " per Hour";
 
     const branchOpeningTimeDiv = document.getElementById("branchOpeningTime");  //branch opening time
-    branchOpeningTimeDiv.innerHTML = branchOpeningTimeDiv.innerHTML + " " + jsonData.openingTime;
+    branchOpeningTimeDiv.innerHTML = branchOpeningTimeDiv.innerHTML + " " + changeToLocalTime(jsonData.openingTime);
 
     const branchClosingTimeDiv = document.getElementById("branchClosingTime");  //branch closing time
-    branchClosingTimeDiv.innerHTML = branchClosingTimeDiv.innerHTML + " " + jsonData.closingTime;
+    branchClosingTimeDiv.innerHTML = branchClosingTimeDiv.innerHTML + " " + changeToLocalTime(jsonData.closingTime);
 }
 
 function createScheduleNavigation(jsonData){
     const allScheduleDetailsDiv = document.getElementById("allScheduleDetails");
+
+    const navBtnsDiv = document.getElementById("scheduleNavBtns");
+
+    const courtBtnDiv = document.createElement("div");
+    courtBtnDiv.className = "courtBtnDiv";
+    //allScheduleDetailsDiv.insertBefore(courtBtnDiv, navBtnsDiv); //append the buttons before the nav buttons
+
+    allScheduleDetailsDiv.appendChild(courtBtnDiv);
 
     for(var key in jsonData.branchReservationSchedule){   //to create the buttons and store reservation details
         const courtBtn = document.createElement("button");
@@ -59,9 +68,7 @@ function createScheduleNavigation(jsonData){
         courtBtn.id = key;
         courtBtn.innerHTML = "Court " + jsonData.branchReservationSchedule[key].courtName;
 
-        const navBtnsDiv = document.getElementById("scheduleNavBtns");
-        allScheduleDetailsDiv.insertBefore(courtBtn, navBtnsDiv); //append the buttons before the nav buttons
-
+        courtBtnDiv.appendChild(courtBtn); //append the buttons before the nav buttons
         
         //create divs for reservation tables
         const courtScheduleDiv = document.createElement("div");
@@ -97,6 +104,10 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
                 timeDiff : (((endingTimeDateObj - startingTimeDateObj)/1000)/60)/60    //time difference in 1 hour slots
             };
 
+            if(jsonData.branchReservationSchedule[key].schedule.reservations[resInfo]['reservationID'] !== undefined){
+                userReservation['reservationID'] = jsonData.branchReservationSchedule[key].schedule.reservations[resInfo]['reservationID'];
+            }
+
             currCourtReservations.push(userReservation);
             
         }
@@ -128,13 +139,29 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
                 day : sessionDay
             };
 
+            if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['startDate'] !== undefined){
+                const startDate = jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['startDate'];
+                coachingSession['startDate'] = startDate;
+            }
+
+            if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['cancelDate'] !== undefined){
+                if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['cancelDate'] !== null){
+                    const cancelDate = jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['cancelDate'];
+                    coachingSession['cancelDate'] = cancelDate;
+                }
+            }
+
+            if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['sessionID'] !== undefined){
+                coachingSession['sessionID'] = jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['sessionID'];
+            }
+
             currCoachReservations.push(coachingSession);
         }
         courtSchedule['coachingSessions'] = currCoachReservations;
 
         //go through all the court maintenance
         let currCourtMaintenance = Array();
-        for(var resInfo in jsonData.branchReservationSchedule[key].schedule.courtMaintenance){  //go through all the reservation of each court
+        for(var resInfo in jsonData.branchReservationSchedule[key].schedule.courtMaintenance){  //go through all the maintenance of each court
             const startingDate = jsonData.branchReservationSchedule[key].schedule.courtMaintenance[resInfo]['startingDate'].split("-");
             const endingDate = jsonData.branchReservationSchedule[key].schedule.courtMaintenance[resInfo]['endingDate'].split("-");
 
@@ -147,14 +174,15 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
             //console.log(startingTimeDateObj, endingTimeDateObj);
 
             const courtMaintenance = {
-                startingDate : startingTimeDateObj,
-                endingDate : endingTimeDateObj,
+                startingDate : jsonData.branchReservationSchedule[key].schedule.courtMaintenance[resInfo]['startingDate'],
+                endingDate : jsonData.branchReservationSchedule[key].schedule.courtMaintenance[resInfo]['endingDate'],
                 noOfDays : ((endingTimeDateObj - startingTimeDateObj)/1000/60/60/24) + 1 //+1 because the ending date is included
             };
 
             currCourtMaintenance.push(courtMaintenance);
         }
         courtSchedule['courtMaintenance'] = currCourtMaintenance;
+        courtSchedule['courtID'] = key;
 
         schedulesArr[i] = courtSchedule;
         i++;
@@ -162,17 +190,17 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
 
     //branch maintenance
     let branchMaintenance = Array();
-    for(var resInfo in jsonData.branchMaintenance){  //go through all the reservation of each court
+    for(var resInfo in jsonData.branchMaintenance){  //go through all the maintenance info of the branch
         const startingDate = jsonData.branchMaintenance[resInfo]['startingDate'].split("-");
         const endingDate = jsonData.branchMaintenance[resInfo]['endingDate'].split("-");
 
-        //create date objects for the reservation starting and ending times
+        //create date objects for maintenance starting and ending dates
         const startingTimeDateObj = new Date(startingDate[0], startingDate[1] - 1, startingDate[2]);
         const endingTimeDateObj = new Date(endingDate[0], endingDate[1] - 1, endingDate[2]);
 
         const branchMaintenanceObj = {
-            startingDate : startingTimeDateObj,
-            endingDate : endingTimeDateObj,
+            startingDate : jsonData.branchMaintenance[resInfo]['startingDate'],
+            endingDate : jsonData.branchMaintenance[resInfo]['endingDate'],
             noOfDays : ((endingTimeDateObj - startingTimeDateObj)/1000/60/60/24) + 1 //+1 because the ending date is included
         };
 
@@ -199,19 +227,28 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
 
     for(let i = 0; i < scheduleObjs.length - 1; i++){//going through each reservation schedule of the courts ( - 1 because the last element is the branch maintenance)
         const table = document.createElement("table");  //initial table
-        const tableRow = table.insertRow();
-        const tableCell = tableRow.insertCell();    //first empty cell
+        const tableHeader = document.createElement("thead");   //table header
+
+        const headerRow = document.createElement("tr"); //header row
+        const firstCell = document.createElement("th");   //first empty cell
+
+        headerRow.appendChild(firstCell);
+        tableHeader.appendChild(headerRow);
     
         for(let j = 0;  j < 10; j++){   //adding days to the header of the table (only 10 days)
-            const weekdayTab = tableRow.insertCell();
+            const weekdayCell = document.createElement("th");
+            headerRow.appendChild(weekdayCell);
             const tempDate = new Date();
             tempDate.setDate(tempDate.getDate() + 1);   //ignoring the current day
             if(dateIncrement !== ''){    //not the initial table (the user has pressed the navigation buttons)
                 tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
             }
             tempDate.setDate(tempDate.getDate() + j);
-            weekdayTab.innerHTML =  tempDate.toLocaleDateString() +"<br>" + weekdays[tempDate.getDay()];
+            weekdayCell.innerHTML =  tempDate.toLocaleDateString() +"<br>" + weekdays[tempDate.getDay()];
         }
+
+        tableHeader.appendChild(headerRow);
+        table.appendChild(tableHeader);
     
         const openingTime = new Date();
         openingTime.setHours(branchOpeningTime[0]);
@@ -227,21 +264,23 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
     
     
         let currTime = openingTime; //starting the time periods
+
+        //table body
+        const tableBody = document.createElement("tbody");
+        table.appendChild(tableBody);
     
         while(currTime < closingTime){
-            const tableRow = table.insertRow();
+            const tableRow = tableBody.insertRow(); //table row
     
-            const timePeriod = tableRow.insertCell();
+            const timePeriod = tableRow.insertCell(); //time period cell
 
             const periodStartPrint = currTime.toLocaleTimeString(); //print to print in the page
-            const periodStartCompare = currTime.toTimeString(); //compare to compare the times
     
-            currTime.setMinutes(currTime.getMinutes() + 60);    //append time period by 60 minutes
+            currTime.setMinutes(currTime.getMinutes() + MIN_RESERVATION_TIME_HOURS * 60);    //append the time period by the reservation time (in minutes)
     
             const periodEndPrint = currTime.toLocaleTimeString();
-            const periodEndCompare = currTime.toTimeString();
 
-            for(let j = 0; j < 10; j++){
+            for(let j = 0; j < 10; j++){ //creating the table cells for the reservation table
                 const cell = tableRow.insertCell();
                 const tempDate = new Date();
                 tempDate.setDate(tempDate.getDate() + 1);   //ignoring the current day
@@ -249,23 +288,24 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
                     tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
                 }
                 tempDate.setDate(tempDate.getDate() + j);
-                cell.id = "court" + i +tempDate.toLocaleDateString().replaceAll("/", "-") + periodStartPrint.replaceAll(" ", '');   //id is => "Court , Reservation Date, Starting Time"
+                cell.id = createCellID(i, tempDate.toLocaleDateString(), periodStartPrint);
+                //cell.id = "court" + i +tempDate.toLocaleDateString().replaceAll("/", "-") + periodStartPrint.replaceAll(" ", '');   //id is => "Court , Reservation Date, Starting Time"
 
             }
             tableRow.id = "court" + i + periodStartPrint.replaceAll(" ", '') + periodEndPrint.replaceAll(" ", '');
     
-            timePeriod.innerText = periodStartPrint + " - " + periodEndPrint;    
+            timePeriod.innerText = periodStartPrint + " - " + periodEndPrint;       //setting the time period in the cell
         }
         createdTables.push(table);
     }
     return createdTables;
 }
 
-function updateTheReservationTables(scheduleObjs, jsonData){
+function updateTheReservationTables(scheduleObjs, jsonData, dateIncrement = ''){    //dateIncrement is the number of days to increment the date
     //convert object to array
     scheduleObjs = Object.values(scheduleObjs);
    
-    for(let i = 0; i < scheduleObjs.length - 1; i++){   //go through each schedule
+    for(let i = 0; i < scheduleObjs.length - 1; i++){   //go through each schedule (i-1 because the last element is the branch maintenance)
         //user reservations
         if(scheduleObjs[i].reservations !== undefined){    //if there are reservations
             for(let j = 0; j < scheduleObjs[i]['reservations'].length; j++){    //replace the empty cells with reserved cells
@@ -303,10 +343,35 @@ function updateTheReservationTables(scheduleObjs, jsonData){
                 //we will create a cell for each day of the week, and we will check if the day of the week matches the day of the coaching session
                 //if it does, we will add the cell to the table
                 let tempDate = new Date();  //we will use this to increment the date
+                if(dateIncrement !== ''){    //not the initial table (the user has pressed the navigation buttons, or the user has changed the date)
+                    tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
+                }
+                tempDate.setHours(0, 0, 0, 0);  //set the time to 00:00:00
+
                 let inc = 1; //we will increment the date by 1 day
                 do{
                     //get the day of the week to string
                     const day = tempDate.toLocaleDateString('en-US', { weekday: 'long' });
+                    if(res.startDate !== undefined){    //if the coaching session has a start date
+                        const startDate = new Date(res.startDate);
+                        startDate.setHours(0, 0, 0, 0);  //set the time to 00:00:00
+                        if(tempDate < startDate){   //if the date is before the start date, we don't have to check it
+                            inc++;
+                            tempDate.setDate(tempDate.getDate() + 1);    //increment the date by 1
+                            continue;
+                        }
+                    }
+
+                    if(res.cancelDate !== undefined){    //if the coaching session has a cancel date
+                        if(res.cancelDate !== null){    //if the cancel date is not null
+                            const endDate = new Date(res.cancelDate);
+                            endDate.setHours(23, 59, 59, 999);  //set the time to 23:59:59:999
+                            if(tempDate > endDate){   //if the date is after the cancel date, the session is over
+                                break;
+                            }
+                        }
+                    }
+
                     if(day === sessionDay){    //if the day of the week matches the day of the coaching session
                         const resDate = tempDate.toLocaleDateString();
                         const cell = createReservationCell("Coaching Session", res.timeDiff);
@@ -326,7 +391,7 @@ function updateTheReservationTables(scheduleObjs, jsonData){
                         inc++;
                         tempDate.setDate(tempDate.getDate() + 1);    //increment the date by 1
                     }
-                }while(inc < 30);    //we will increment the date until we reach the 30th day
+                }while(inc <= 30);    //we will increment the date until we reach the 30th day
             }
         }
 
@@ -365,7 +430,51 @@ function makeReservationBox(jsonData){
     const reservationPrice = document.getElementById("reservationPrice");  //reservation price input
     reservationPrice.min = jsonData.reservingSport['reservationPrice'];
     
+    if(jsonData.branchDiscount != null){
+        const discount = document.createElement("div");
+        discount.id = "discount";
+        discount.style.fontSize = "1.5em";
+        discount.style.fontWeight = "bold";
+        discount.style.fontStyle = "italic";
+        discount.innerHTML = jsonData.branchDiscount + "% off for reserving at this branch!";
+        discount.innerHTML = discount.innerHTML.toUpperCase();
 
+        //hidden input for the discount
+        const discountInput = document.createElement("input");
+        discountInput.type = "hidden";
+        discountInput.id = "discountInput";
+
+        discountInput.value = jsonData.branchDiscount;
+        discount.appendChild(discountInput);
+
+        discount.style.marginTop = "10px";
+
+        //read only input for price without discount
+        const priceWithoutDiscount = document.createElement("input");
+        priceWithoutDiscount.type = "text";
+        priceWithoutDiscount.id = "priceWithoutDiscount";
+        priceWithoutDiscount.setAttribute("readonly", "");
+
+        //textNode 
+        const textNode = document.createTextNode("Price without Discount");
+        
+        const tempDiv = document.createElement("div");
+        tempDiv.className = "reservation-price";
+        tempDiv.appendChild(textNode);
+        tempDiv.appendChild(priceWithoutDiscount);
+
+        reservationPrice.parentNode.parentNode.insertBefore(tempDiv, reservationPrice.parentNode);
+
+        //clear the reservation price
+        const priceParent = reservationPrice.parentNode;
+        priceParent.innerHTML = "";
+
+        //new text node
+        const newTextNode = document.createTextNode("The Price You are Paying");
+        priceParent.appendChild(newTextNode);
+        priceParent.appendChild(reservationPrice);
+        priceParent.appendChild(discount);
+    }
     
     const courtBtns = document.getElementsByClassName('courtBtn');
     const reserveBtn = document.getElementById("makeReserveBtn");   //make reservation button
@@ -374,10 +483,7 @@ function makeReservationBox(jsonData){
     
     selectedCourt.value = courtBtns[0].innerHTML;   //at the start, the first court is the selected
     reserveBtn.value = courtBtns[0].id;
-    courtBtns[0].style.backgroundColor = "lightblue";
-    courtBtns[0].style.color = "black";
-    courtBtns[0].style.boxShadow = "0 0 10px 0 rgba(0,0,0,0.5)";
-
+    courtBtns[0].classList.add("selected");
     
     //court button to display the schedule of each court when pressed
     for(let i = 0; i < courtBtns.length; i++){
@@ -385,13 +491,9 @@ function makeReservationBox(jsonData){
         const btn = document.getElementById(courtBtns[i].id);
         btn.addEventListener('click', ()=>{
             for(let j = 0; j < courtBtns.length; j++){  //changing back to default color
-                courtBtns[j].style.backgroundColor = "";
-                courtBtns[j].style.color = "";
-                courtBtns[j].style.boxShadow = "";
+                courtBtns[j].classList.remove("selected");
             }
-            btn.style.backgroundColor = "lightblue";
-            btn.style.color = "black";
-            btn.style.boxShadow = "0 0 10px 0 rgba(0,0,0,0.5)";
+            btn.classList.add("selected");  //change the color of the pressed button
     
             const allSchedules = document.getElementsByClassName('court-schedule'); //get all the schedule divs
     
@@ -412,9 +514,7 @@ function createReservationCell(innerText, timeDiff){   //create a reservation ce
     const cell = document.createElement("td");
     cell.rowSpan = timeDiff;
     cell.innerText = innerText;
-    cell.style.background = "linear-gradient(180deg, rgba(5,5,108,1) 0%, rgba(0,0,0,1) 48%, rgba(167,0,0,1) 100%)";
-    cell.style.color = "white";
-    cell.style.borderRadius = "10px";
+    cell.classList.add("reserved");
     return cell;
 }
 
@@ -474,8 +574,8 @@ function createMaintenanceCell(maintenanceObj, openingTime, closingTime, courtNu
         tempDate.setDate(maintenance.startingDate.getDate() + k);    //increment the date by 1
         const newCell = createReservationCell("Unable Due to Maintenance", timeDiff);   //create the cell
         const namingID = createCellID(courtNum, tempDate.toLocaleDateString(), startingTimeObj.toLocaleTimeString());
-        newCell.style.background = "";
-        newCell.style.backgroundColor = "grey";
+        newCell.classList.remove("reserved");
+        newCell.classList.add("maintenance");
 
         newCell.id = namingID;
 
@@ -488,4 +588,4 @@ function createMaintenanceCell(maintenanceObj, openingTime, closingTime, courtNu
 
 //we can export updateTheReservationTables, createScheduleObjects, and createReservationTable functions aswell to use them to update the table after a reservation is made
 
-export {updateTheReservationTables, createScheduleObjects, createReservationSchedulePage, createReservationTable};
+export {updateTheReservationTables, createScheduleObjects, createReservationSchedulePage, createReservationTable, createScheduleNavigation, createCellID};

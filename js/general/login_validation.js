@@ -1,4 +1,4 @@
-verbose = true; //for debugging
+verbose = false; //for debugging
 
 function validateForm(event){
     const errMsg = document.getElementById("errmsgbox");    //For Displaying the Error messages

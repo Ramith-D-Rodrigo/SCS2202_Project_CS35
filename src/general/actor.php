@@ -1,4 +1,6 @@
 <?php
+    require_once("notification.php");
+    require_once("../../controller/CONSTANTS.php");
     class Actor{
         protected $emailAddress;
         protected $username;
@@ -12,6 +14,29 @@
             if($userRole === ''){
                 require("dbconnection.php");
                 $this -> connection = $connection;
+            }
+            else if($userRole === 'user'){
+                require("../../src/user/dbconnection.php");
+                $this -> connection = $connection;
+            }
+            else if($userRole === 'coach'){
+                require("../../src/coach/dbconnection.php");
+                $this -> connection = $connection;
+            }
+            else if($userRole === 'admin'){
+                require("../../src/system_admin/dbconnection.php");
+                $this -> connection = $connection;
+            }
+            else if($userRole === 'manager'){
+                require("../../src/manager/manager_dbconnection.php");
+                $this -> connection = $connection;
+            }
+            else if($userRole === 'owner'){
+                require("../../src/owner/dbconnection.php");
+                $this -> connection = $connection;
+            }
+            else{
+                die("Invalid User Role");
             }
         }
 
@@ -43,7 +68,18 @@
         }
 
         public function getEmailAddress(){
-            return $this -> emailAddress;
+            if(isset($this -> emailAddress) && $this -> emailAddress != ''){
+                return $this -> emailAddress;
+            }
+            else{ //get from the database
+                $sql = sprintf("SELECT emailAddress FROM `login_details` WHERE userID = '%s'", $this -> connection -> real_escape_string($this -> userID));
+                $result = $this -> connection -> query($sql);
+                $resultRow = $result -> fetch_object();
+                $this -> emailAddress = $resultRow -> emailAddress;
+                $result -> free_result();
+                unset($resultRow);
+                return $this -> emailAddress;
+            }
         }
 
         public function login($inputUsername, $inputPassword){
@@ -136,6 +172,34 @@
                 return FALSE;
             }
             return TRUE;
+        }
+
+        public function getNotifications(){
+            $sql = sprintf("SELECT `notificationID` FROM `notification` WHERE `userID` = '%s' AND `date` <= '%s' ORDER BY `date` DESC",
+            $this -> connection -> real_escape_string($this -> userID),
+            $this -> connection -> real_escape_string(date("Y-m-d")));
+
+            $result = $this -> connection -> query($sql);
+
+            if($result === FALSE){
+                return null;
+            }
+
+            $notifications = array();
+            while($resultRow = $result -> fetch_object()){
+                $currNotifcation = new Notification($resultRow -> notificationID);
+                $notifications[] = $currNotifcation;
+            }
+            $result -> free_result();
+
+            return $notifications;
+        }
+
+        public function readNotification($notification){
+            //set the lifetime of the notification in time format
+            $lifeTime = strval(NOTIFICATION_LIFE_TIME_HOURS) .":00:00";
+            $notification -> setDetails(lifetime: $lifeTime);
+            return $notification -> markAsRead($this -> connection);
         }
     }
 ?>

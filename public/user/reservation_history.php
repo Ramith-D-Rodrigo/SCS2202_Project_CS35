@@ -16,6 +16,7 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
                 <link rel="stylesheet" href="/styles/user/cancel_reservation.css">
+                <link rel="stylesheet" href="/styles/user/reservation_history.css">
                 <link rel="stylesheet" href="/styles/user/give_feedback.css">
                 <title>Reservation History</title>
             </head>
@@ -24,7 +25,16 @@
                     require_once("../../public/general/header.php");
                 ?>
                 <main>
-                    <div class="content-box" style="overflow-x:auto;" id="reservationHistoryBox">
+                    <div class="content-box" id="reservationHistoryBox">
+                        <div class="filter">
+                            <div>
+                                From : <input type="date" id="filter-start-date">
+                            </div>
+
+                            <div>
+                                To : <input type="date" id="filter-end-date">
+                            </div>
+                        </div>
                     </div>
                 </main>
                 <div id="authFormDiv" class="content-box">
@@ -53,7 +63,7 @@
 
                 <div class="content-box" id="msgBox">
                     <div style="text-align:center">
-                        <div id="msg" style="display:flex; flex-direction:column"></div>
+                        <div id="msg"></div>
                     </div>
                     <div style="text-align:center; margin-top: 3rem">
                         <span id="dismiss">
@@ -94,20 +104,11 @@
                 </div>
                 <?php
                     require_once("../../public/general/footer.php");
-                    if(isset($_SESSION['reserveCancelSuccess'])){   //cancel alert
-                        $msg = $_SESSION['reserveCancelSuccess'];
-                        echo "<script type='text/javascript'>alert('$msg');</script>";
-                        unset($_SESSION['reserveCancelSuccess']);
-                    }
-                    else if(isset($_SESSION['reserveCancelError'])){
-                        $msg = $_SESSION['reserveCancelError'];
-                        echo "<script type='text/javascript'>alert('$msg');</script>";
-                        unset($_SESSION['reserveCancelSuccess']);
-                    }
                 ?>    
             </body>
             <script src="/js/user/account_links.js"></script>
             <script type="module" src="/js/user/reservation_history.js"></script>
+            <script type="module" src="/js/general/notifications.js"></script>
         </html>
     <?php
     }

@@ -16,7 +16,7 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="/styles/general/register_page.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-        <title></title>
+                <title>Registration</title>
             </head>
 
             <body>

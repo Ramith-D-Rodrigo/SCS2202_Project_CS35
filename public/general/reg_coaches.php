@@ -2,7 +2,7 @@
     session_start();
     require_once("../../src/general/security.php");
     //check the authentication
-    if(!Security::userAuthentication(logInCheck: FALSE)){ //cannot access (NOT operator)
+    if(!Security::userAuthentication(logInCheck: FALSE, acceptingUserRoles:['user'])){ //cannot access (NOT operator)
         Security::redirectUserBase();
     }
     else{
@@ -22,16 +22,26 @@
                 <?php
                     require_once("header.php");
                 ?>
-                <main class="body-container">
-                    <div class="content-box" style="align-items:center">
-                        <div id="filter">
-                            Filter By : 
-                            <select id="sportSelect">
-                                <option value="">Sport</option>
-                            </select>
+                <main>
+                    <div class="body-container">
+                        <div class="content-box">
+                            <div id="filter">
+                                <div>
+                                    Filter By 
+                                    <select id="sportSelect">
+                                        <option value="">Sport</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    Show 
+                                    <select id="showSelect">
+                                        <option value="">All</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div id="coachList">
-                        </div>
+                    </div>
+                    <div class="body-container" id="coachList">
                     </div>
                 </main>
                 <?php
@@ -40,6 +50,7 @@
             </body>
             <script src="/js/user/account_links.js"></script>
             <script src="/js/general/reg_coaches.js"></script>
+            <script type="module" src="/js/general/notifications.js"></script>
         </html>
 
     <?php

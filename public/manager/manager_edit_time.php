@@ -28,6 +28,7 @@ require_once("../../src/general/uuid.php");
 
     <main class="body_container">
         <div class="content_box">
+        <form>
             <div class="open_close">
                 <div id="but_Open">Current Opening Time:
                     <input type="text" value="" id="OpenTime">
@@ -43,41 +44,34 @@ require_once("../../src/general/uuid.php");
 
             <div class="NewOpenClose">
                 <div id="but_NewOpen">New Opening Time:
-                    <input type="time" value="" id="NewOpen">
+                    <input type="time" value="" id="NewOpen" name="newOpen">
                 </div>
                 <div id="but_NewClose">New ClosingTime:
-                    <input type="time" value="" id="Newclose">
+                    <input type="time" value="" id="Newclose" name="newClose">
                 </div>
             </div>
 
             <div class="button">
                 <div>
-                    <button>Change</button>
+                    <button type ="submit" name="cha-man">Change</button>
                 </div>
                 <div>
                     <button onclick="window.location.href='manager_dashboard.php'">Cancel</button>
                 </div>
             </div>
 
+        </form>
 
+        <div class="err-msg"></div>
+        <div class="success-msg"></div>
         </div>
 
 
     </main>
-
-    <?php
-
-    if (isset($_SESSION['branchTime'])) {
-        foreach ($_SESSION['branchTime'] as $currTime) {
-
-            echo  $currTime['openingTime'];
-            echo  $currTime['closingTime'];
-        }
-    }
-    ?>
     <?php
     require_once("../general/footer.php");
     ?>
 </body>
-
+<script src="/js/manager/view_time.js"></script>
+<script src="/js/manager/edit_time.js"></script>
 </html>

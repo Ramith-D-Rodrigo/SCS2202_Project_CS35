@@ -1,18 +1,24 @@
 <?php
+    //this script is used to make a reservation
     session_start();
+    require_once("../../src/general/security.php");
+    //check the authentication
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
+
+    //post request check
+    if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        Security::redirectUserBase();
+        die();
+    }
 
     $returningMsg = [];
 
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
     $reservationDetails = json_decode($requestJSON, true);
 
-    if(!isset($_SESSION['userrole']) || !isset($_SESSION['userid'])){  //not logged in
-        //$_SESSION['reservationFail'] = "Please Log in to make a Reservation";
-        $returningMsg['errMsg'] = "Please Log in to make a Reservation";
-        header('Content-Type: application/json;');    //because we are sending json
-        echo json_encode($returningMsg);
-        exit();
-    }
 
     if(empty($requestJSON) || $requestJSON == null){ //have not made the reservation
         $returningMsg['errMsg'] = "Not made any reservations yet";
@@ -28,19 +34,16 @@
     require_once("../../src/general/branch.php");
     require_once("../CONSTANTS.php");
 
-    if($_SESSION['userrole'] !== 'user'){   //not a user
-        header("Location: /index.php");
-        exit();
-    }
     
     //store the reservation details
 
-    $court_id = $reservationDetails['makeReserveBtn'];
+    $court_id = $reservationDetails['courtID'];
     $numOfpeople = htmlspecialchars($reservationDetails['numOfPeople'], ENT_QUOTES);
     $startingTime = $reservationDetails['reservingStartTime'];
     $endingTime = $reservationDetails['reservingEndTime'];
     $date = $reservationDetails['reservingDate'];
     $user = $_SESSION['userid'];
+    $token = $reservationDetails['tokenID'];
     
     //user inputs validation
     $validationFlag = false;
@@ -54,6 +57,8 @@
         echo json_encode($returningMsg);
         exit();
     }
+
+    date_default_timezone_set(SERVER_TIMEZONE);
 
     $startingTimeObj = new DateTime($startingTime);
     $endingTimeObj = new DateTime($endingTime);
@@ -74,7 +79,7 @@
     else if($endingTimeObj -> format('s') != '00'){    //seconds should be 0
         $validationFlag = true;
     }
-    else if($timeDifference -> h < MIN_RESERVATION_TIME_HOURS || $timeDifference -> h > MAX_RESERVATION_TIME_HOURS || ($timeDifference -> h === MAX_RESERVATION_TIME_HOURS && $timeDifference -> i === 30)){ //minimum and maximum reservation time period check
+    else if($timeDifference -> h < MIN_RESERVATION_TIME_HOURS || $timeDifference -> h > MAX_RESERVATION_TIME_HOURS || ($timeDifference -> h === MAX_RESERVATION_TIME_HOURS && $timeDifference -> i != 0)){ //minimum and maximum reservation time period check
         $validationFlag = true;
     }
     if($validationFlag === true){
@@ -102,32 +107,37 @@
 
     //can continue
     $reservingUser = new User(); 
-    $reservingUser -> setDetails(uid : $user);//create an user with logged in userid
+    $reservingUser -> setUserID($user);//create an user with logged in userid
 
     $reservingCourt = new Sports_Court($court_id);
-    $sport = $reservingCourt -> getSport($reservingUser -> getConnection());
+    $reservingSport = $reservingCourt -> getSport($reservingUser -> getConnection());
 
-    if($sport === false){   //no sport
+    if($reservingSport === false){   //no sport
         $returningMsg['errMsg'] = "Invalid Inputs";
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($returningMsg);
         exit();
     }
     
-    $reservingSport = new Sport();
-    $reservingSport -> setID($sport);
-    $reservationPrice = $reservingSport -> getDetails($reservingUser -> getConnection(), 'reservationPrice');
+    $reservingSport -> getDetails($reservingUser -> getConnection(), ['reservationPrice', 'sportName']);
+    $reservationPrice = json_decode(json_encode($reservingSport)) -> reservationPrice; //get the reservation price
     $calculation = ($timeDifference -> h + ($timeDifference -> i/60));  //get hours and minutes and convert minutes to hours to get the period in hours
     $payment = $reservationPrice * $calculation;//calculate the payment
 
-
-    //reservation availability check
-    $schedule = $reservingCourt -> getSchedule($reservingUser -> getConnection());
-
-
-    //branch maintenance
+    //check for branch discount
     $branchID = $reservingCourt -> getBranch($reservingUser -> getConnection());
     $branch = new Branch($branchID);
+
+    $discountValue = $branch -> getCurrentDiscount($reservingUser -> getConnection());
+
+    if($discountValue != null){    //branch has a discount
+        $payment = $payment - ($payment * ($discountValue/100));
+    }
+
+
+    //reservation availability check
+
+    //branch maintenance
     $branchMaintenance = $branch -> getBranchMaintenance($reservingUser -> getConnection(),['startingDate', 'endingDate'], $date, 'a');
 
     if(count($branchMaintenance) !== 0){   //branch has maintenance
@@ -142,97 +152,85 @@
         }
     }
 
-    //court maintenance
-    foreach($schedule['maintenance'] as $maintenance){
-        if(strtotime($maintenance -> startingDate) <= strtotime($date) && strtotime($maintenance -> endingDate) >= strtotime($date)){   //the reservation date is in middle of the maintenance period
-            $returningMsg['errMsg'] = "Court is under Maintenance";
-            header('Content-Type: application/json;');    //because we are sending json
-            echo json_encode($returningMsg);
-            exit();
-        }
+    $availabilityCheck = $reservingCourt -> reservationAvailability($date, $startingTime, $endingTime, $reservingUser -> getConnection());
+
+    if($availabilityCheck[0] === false){   //court is not available
+        $returningMsg['errMsg'] = $availabilityCheck[1];    //get the error message
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($returningMsg);
+        unset($reservingCourt);
+        exit();
+    }
+    //can be reserved
+
+    //payment 
+    require_once("../../src/general/paymentGateway.php");
+
+    $reservingUser -> getProfileDetails(['firstName', 'lastName']);
+    $userJSON = json_decode(json_encode($reservingUser), true);
+
+    $fName = $userJSON['firstName'];
+    $lName = $userJSON['lastName'];
+
+
+    $branch -> getDetails($reservingUser -> getConnection(), ['city']);
+    $branchName =  json_decode(json_encode($branch), true)['city'];
+    //current timestamp for the timezone of the server
+    date_default_timezone_set(SERVER_TIMEZONE);
+    $timestamp = date('Y-m-d H:i:s');   
+
+    //reservation description
+    $reservationDescription = "Reservation for ".$date." from ".$startingTime." to ".$endingTime." for ".$numOfpeople." people on ".$branchName. " by ".$fName." ".$lName." at ".$timestamp;
+
+    $paymentResult = paymentGateway::userReservationPayment($payment, $reservationDescription, CURRENCY, $token);
+    if(!$paymentResult[0]){ //0th index is the status of the payment
+        //payment failed
+        $returningMsg['errMsg'] = $paymentResult[1]; //1st index is the error message
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode($returningMsg);
+        exit();
     }
 
-    //coaching sessions
-    foreach($schedule['coachingSessions'] as $coachingSession){
-        //get the day of the week of reservation date
-        if($coachingSession -> noOfStudents > 0){   //ongoing session
-            $dayOfWeek = date('l', strtotime($date));
-            if($coachingSession -> day === $dayOfWeek){ //reservation is on the same day
-                if(strtotime($coachingSession -> startingTime) > strtotime($startingTime) && strtotime($coachingSession -> endingTime) < strtotime($endingTime)){
-                    $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
-                    header('Content-Type: application/json;');    //because we are sending json
-                    echo json_encode($returningMsg);
-                    exit();
-                }
-                else if(strtotime($coachingSession -> startingTime) <= strtotime($startingTime) && strtotime($coachingSession -> endingTime) >= strtotime($endingTime)){ //before coaching session starting time, but reservation ending time is inside the coaching session
-                    $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
-                    header('Content-Type: application/json;');    //because we are sending json
-                    echo json_encode($returningMsg);
-                    exit();
-                }
-                else if(strtotime($coachingSession -> startingTime) > strtotime($startingTime) && (strtotime($endingTime) <= strtotime($coachingSession -> endingTime) && strtotime($endingTime) > strtotime($coachingSession -> startingTime))){ //current reserving time slot is over an already reserved time slot
-                    $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
-                    header('Content-Type: application/json;');    //because we are sending json
-                    echo json_encode($returningMsg);
-                    exit();
-                }
-                else if((strtotime($startingTime) >= strtotime($coachingSession -> startingTime) && strtotime($startingTime) < strtotime($coachingSession -> endingTime)) && strtotime($coachingSession -> endingTime) < strtotime($endingTime)){ //current reserving time slot is over an already reserved time slot
-                    $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
-                    header('Content-Type: application/json;');    //because we are sending json
-                    echo json_encode($returningMsg);
-                    exit();
-                }
-            }
-        }
-    }
+    $chargeID = $paymentResult[2]; //2nd index is the charge id
 
-
-    //user reservations
-    foreach($schedule['reservations'] as $reservation){
-        //print_r($reservation);
-        if($reservation -> date === $date && $reservation -> status === 'Pending'){ //only need the reservations that are pending
-            if(strtotime($startingTime) < strtotime($reservation -> startingTime) && strtotime($endingTime) > strtotime($reservation -> endingTime)){ //current reserving time slot is over an already reserved time slot
-                $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
-                header('Content-Type: application/json;');    //because we are sending json
-                echo json_encode($returningMsg);
-                exit();
-                //echo "Over the top"."<br>";
-            }
-            else if(strtotime($startingTime) >= strtotime($reservation -> startingTime) && strtotime($endingTime) <= strtotime($reservation -> endingTime)){    //current reserving time slot is within an already reserved time slot
-                $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
-                header('Content-Type: application/json;');    //because we are sending json
-                echo json_encode($returningMsg);
-                exit();
-                //echo "within or same"."<br>";
-            }
-            else if(strtotime($startingTime) < strtotime($reservation -> startingTime) && (strtotime($endingTime) <= strtotime($reservation -> endingTime) && strtotime($endingTime) > strtotime($reservation -> startingTime))){    //ending time is within an already resevred slot
-                $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
-                header('Content-Type: application/json;');    //because we are sending json
-                echo json_encode($returningMsg);
-                exit();
-                //echo "ending is within or same. starting is outside"."<br>";
-            }
-            else if((strtotime($startingTime) >= strtotime($reservation -> startingTime) && strtotime($startingTime) < strtotime($reservation -> endingTime)) && strtotime($endingTime) > strtotime($reservation -> endingTime)){   //starting time is within an already reserved slot
-                $returningMsg['errMsg'] = "Entered Time Period is already Reserved";
-                header('Content-Type: application/json;');    //because we are sending json
-                echo json_encode($returningMsg);
-                exit();
-                //echo "starting is within or same. ending is outside"."<br>";
-            }
-            else{
-                continue;   //can be reserved
-            }
-        }
-    }
-
-    //now making the reservation
-    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $reservingCourt);   //pass the reserving court object to the function
-    if($result === TRUE){
+    //now making the reservation since the payment succeeded
+    $result = $reservingUser -> makeReservation($date, $startingTime, $endingTime, $numOfpeople, $payment, $chargeID, $reservingCourt);   //pass the reserving court object to the function
+    if($result[0] === TRUE){
         $returningMsg['successMsg'] = "Reservation has been made Successfully";
+
+        //add notification
+        require_once("../../src/general/notification.php");
+        $notificationID = uniqid("not". substr($fName, 0, 3));
+
+        $notification = new Notification($notificationID);
+
+        $courtName = $reservingCourt -> getName($reservingUser -> getConnection());
+        $notificationDescription = "You have a upcoming reservation on ".$date." from ".$startingTime." to ".$endingTime." at ".$branchName." on Court ".$courtName;
+        //notification trigger date is 3 days before the reservation date
+        $notificationTriggerDate = date('Y-m-d', strtotime($date. ' - 3 days'));
+        $notification -> setDetails(subject: "Upcoming Reservation", 
+            status: 'Unread', 
+            description: $notificationDescription, 
+            date : $notificationTriggerDate, 
+            userID: $reservingUser -> getUserID());
+
+        $notification -> setNotificationEntry($reservingUser -> getConnection());
+
+        //update the reservation notification id
+        $createdReservation = new Reservation();
+        $createdReservation -> setID($result[1]); //1st index is the reservation id
+        $createdReservation -> addNotificationID($notificationID, $reservingUser -> getConnection());
+
+        //send email regarding the reservation payment
+        require_once("../../src/general/mailer.php");
+        $sportName = json_decode(json_encode($reservingSport), true)['sportName'];
+        Mailer::onlineReservationPayment($reservingUser -> getEmailAddress(), $reservingUser -> getUsername(), $branchName, $sportName, $courtName, $date, $startingTime, $endingTime, $payment, CURRENCY);
+
+        header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($returningMsg);
     }
-    else{
-        $returningMsg['errMsg'] = "Reservation has not been made";
+    else{//error while inserting the reservation
+        $returningMsg['errMsg'] = $result[1];   //1st index is the error message
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode($returningMsg);
     }

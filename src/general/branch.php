@@ -2,6 +2,9 @@
     require_once("../../src/manager/manager.php");
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/general/branch_feedback.php");
+    require_once("../../src/general/sport.php");
+    require_once("../../src/general/sport_court.php");
+    require_once("../../controller/CONSTANTS.php");
 
     class Branch implements JsonSerializable{
         private $branchID;
@@ -12,256 +15,176 @@
         private $receptionist;
         private $openingTime;
         private $closingTime;
+        private $openingDate;
         private $photos;
         private $currManager;
         private $currReceptionist;
         private $requestStatus;
         private $revenue;
+        private $latitude;
+        private $longitude;
 
 
         public function __construct($branch_id){
             $this -> branchID = $branch_id;
         }
 
-        public function getDetails($database, $wantedProperty = ''){
-            if($wantedProperty === 'branchID'){
-                return $this -> branchID;
-            }
-            else if($wantedProperty === ''){
-                $branchSql = sprintf("SELECT * FROM `branch`
-                WHERE
-                `branchID`
-                LIKE '%s'",
-                $database -> real_escape_string($this -> branchID));
-                $result =  $database -> query($branchSql);
+        public function getBranchID(){
+            return $this -> branchID;
+        }
 
-                $row = $result -> fetch_object();
-                $result -> free_result();
-
-                $managerID = $row -> currManager;
-                //get manager details by setting the manager object values
-                $manager = new Manager();
-                $manager -> setDetails(uid: $managerID);
-                $manager -> getDetails($database);
-
-                //get receptionist details by setting the receptionist object values
-                $receptionistID = $row -> currReceptionist;
-                $receptionist = new Receptionist();
-                $receptionist -> setDetails(uid :$receptionistID);
-                $receptionist -> getDetails($database);
-
-
-                $this -> setDetails(city: $row -> city, address: $row -> address,email: $row -> branchEmail, opening_time: $row -> openingTime, closing_time: $row -> closingTime, manager: $manager, receptionist: $receptionist);
-
-                //set branch photos from database
-                $this -> getBranchPictures($database);
-
-                return $this;
+        public function getDetails($database, $wantedColumns = []){
+            $sql = "SELECT ";
+            if($wantedColumns === []){
+                $sql .= "*";
             }
             else{
-                $sql = sprintf("SELECT `%s` as `wanted_property` FROM `branch` WHERE `branchID` LIKE '%s'",
-                $database -> real_escape_string($wantedProperty),
-                $database -> real_escape_string($this -> branchID));
-
-                $result = $database -> query($sql);
-                $row = $result -> fetch_object();
-                $wantedInfo = $row -> wanted_property;
-                unset($row);
-                $result -> free_result();
-                return $wantedInfo;
+                $sql .= implode(", ", $wantedColumns);
             }
 
-        }
-
-        public function setDetails($city = '', $address = '', $email = '', $manager = '', $receptionist = '', $opening_time = '', $closing_time = ''){
-            //conditions to check if the property is set or passing the default value
-            if(!isset($this -> city) || $city  !== ''){
-                $this -> city = $city;
-            }
-            if(!isset($this -> address) || $address  === ''){
-                $this -> address = $address;
-            }
-            if(!isset($this -> branchEmail) || $email  === ''){
-                $this -> branchEmail = $email;
-            }
-            if(!isset($this -> manager) || $manager  === ''){
-                $this -> manager = $manager;
-            }
-            if(!isset($this -> receptionist) || $receptionist  === ''){
-                $this -> receptionist = $receptionist;
-            }
-            if(!isset($this -> openingTime) || $opening_time  === ''){
-                $this -> openingTime = $opening_time;
-            }
-            if(!isset($this -> closingTime) || $closing_time  === ''){
-                $this -> closingTime = $closing_time;
-            }
-        }
-
-/*         public function getManager($database){      //get manager Info
-            if(isset($this -> manager) || $this -> manager !== ''){
-                return $this -> manager;
-            }
-
-            $this -> manager = new Manager();
-            $managerID = $this -> manager -> getID($database);
-            $this -> manager -> setDetails(uid: $managerID, brID: $this -> branchID);
-            $this -> manager -> getDetails($database);  //get details of the manager
-
-
-            $sql = sprintf("SELECT `staff_id`
-            FROM `staff`
-            WHERE `branch_id` = '%s'
-            AND `leave_date` IS NULL
-            AND `staff_role` = 'manager'",
+            $sql .= sprintf(" FROM `branch`
+            WHERE
+            `branchID`
+            LIKE '%s'",
             $database -> real_escape_string($this -> branchID));
 
-            $result = $database -> query($sql);
+            $result =  $database -> query($sql);
 
-            $manager = $result -> fetch_object();
-            $this -> manager = $manager;
-            return $manager;
-        }
-
-        public function getManagerID($database){ //get Manager ID (currently working)
-            if(isset($this -> manager) || $this -> manager !== ''){ //the manager is set
-                return $this -> manager -> getID($database);
-            }
-
-            $sql = sprintf("SELECT `staff_id`
-            FROM `staff`
-            WHERE `branch_id` = '%s'
-            AND `leave_date` IS NULL
-            AND `staff_role` = 'manager'",
-            $database -> real_escape_string($this -> branchID));
-
-            $result = $database -> query($sql);
             $row = $result -> fetch_object();
-
-
-            $manager = new Manager();
-            $managerID = $row -> staff_id;
-            $manager -> setDetails(uid: $managerID, brID: $this -> branchID);
-            $this -> manager = $manager;    //for future use
-            unset($row);
             $result -> free_result();
-            return $managerID;
-        } */
 
-        public function getReceptionistID($database){  //get Receptionist ID
-            if(isset($this -> receptionist)){
-                return $this -> receptionist;
+            foreach($row as $key => $value){
+                $this -> $key = $value;
+            }
+        }
+
+        public function setDetails($city = '', $address = '', $branchEmail = '', $currManager = '', $currReceptionist = '', $openingTime = '', $closingTime = '', $latitude = '', $longitude = '', $openingDate = ''){
+            //get argument names and values as an array
+            $args = get_defined_vars();
+
+            foreach($args as $key => $value){
+                if($value !== ''){
+                    $this -> $key = $value;
+                }
+            }
+        }
+
+        public function createBranchEntry($database, $ownerID){
+
+            $sql = sprintf("INSERT INTO `branch` 
+                (`branchID`,
+                `city`, 
+                `address`, 
+                `branchEmail`, 
+                `openingTime`, 
+                `closingTime`, 
+                `latitude`, 
+                `longitude`, 
+                `openingDate`,
+                `ownerID`,
+                `ownerRequestDate`,
+                `requestStatus`)
+                VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+                $database -> real_escape_string($this -> branchID),
+                $database -> real_escape_string($this -> city),
+                $database -> real_escape_string($this -> address),
+                $database -> real_escape_string($this -> branchEmail),
+                $database -> real_escape_string($this -> openingTime),
+                $database -> real_escape_string($this -> closingTime),
+                $database -> real_escape_string($this -> latitude),
+                $database -> real_escape_string($this -> longitude),
+                $database -> real_escape_string($this -> openingDate),
+                $database -> real_escape_string($ownerID),
+                $database -> real_escape_string(date("Y-m-d")),
+                $database -> real_escape_string("p"));
+
+            $result = $database -> query($sql);
+            if($result){
+                return TRUE;
+            }
+            else{
+                return FALSE;
+            }
+        }
+
+        public function addSportCourt($sport, $database){   //add a sport court to the branch
+            $sport -> getDetails($database, wantedColumns: ['sportName']);
+
+            $sportName = json_decode(json_encode($sport), true)['sportName'];
+
+            $courIDPrefix = substr($this -> branchID, 0, 3) . substr($sportName, 0, 3);
+            $courtID = uniqid($courIDPrefix);
+
+            //to select the courtName, we need to number of courts of the same sport in the branch
+
+            $courtCount = count($this -> getBranchCourts($database, sport: $sport));
+            $newCourtNo = $courtCount + 1;
+
+            if($newCourtNo > count(ALPHABET)){  
+                //if the number of courts is greater than the number of letters in the alphabet, we need to add the next letter to the new court name
+                $courtName = ALPHABET[($newCourtNo / count(ALPHABET)) - 1] . (ALPHABET[($newCourtNo % count(ALPHABET)) - 1]);
+            }
+            else{
+                $courtName = ALPHABET[$courtCount];
+
             }
 
-            $sql = sprintf("SELECT staffID
-            FROM staff
-            WHERE branchID = '%s'
-            AND staffRole = 'receptionist'",
+            $court = new Sports_Court($courtID);
+            $court -> setDetails($courtName, $this -> branchID, $sport -> getID());
+
+            $status = $court -> createCourtEntry($database);
+
+            return $status;
+        }
+
+        public function getCurrentReceptionist($database){
+            $sql = sprintf("SELECT currReceptionist FROM branch WHERE branchID = '%s'",
             $database -> real_escape_string($this -> branchID));
 
             $result = $database -> query($sql);
 
             $receptionist = $result -> fetch_object();
-            $this -> currReceptionist = $receptionist;
-            return $receptionist;
+            $this -> currReceptionist = $receptionist -> currReceptionist;
+
+            $recep = new Receptionist();
+            $recep -> setUserID($receptionist -> currReceptionist);
+
+            return $recep;
         }
 
-
-        public function getAllSports($database){    //only courts with accepted status
-            $sql = sprintf("SELECT DISTINCT `s`.`sportID`,`s`.`sportName` from `sport` `s`
-            INNER JOIN `sports_court` `sc`
-            ON `s`.`sportID` = `sc`.`sportID`
-            INNER JOIN `branch` `b`
-            ON `b`.`branchID` = `sc`.`branchID`
-            WHERE `b`.`branchID` = '%s'
-            AND `sc`.`requestStatus` = 'a'",
-
+        public function getCurrentManager($database){
+            $sql = sprintf("SELECT currManager FROM branch WHERE branchID = '%s'",
             $database -> real_escape_string($this -> branchID));
 
-            $result =  $database -> query($sql);
+            $result = $database -> query($sql);
+
+            $manager = $result -> fetch_object();
+            $this -> currManager = $manager -> currManager;
+
+            $man = new Manager();
+            $man -> setUserID($manager -> currManager);
+
+            return $man;
+        }
+
+        public function offeringSports($database){  //return an array of sports offered by the branch (the sports that have courts with accepted status)
             $sports = [];
-            while($row = $result -> fetch_object()) {
-                array_push($sports,$row);
-                unset($row);
+            //get all the courts
+            $courts = $this -> getBranchCourts(database : $database,  courtStatus : 'a');
+
+            $sportIDs = [];
+            foreach($courts as $court){
+                $courtSport = $court -> getSport($database);
+
+                if(!in_array($courtSport -> getID(), $sportIDs)){   //exclude duplicate sports
+                    array_push($sports, $courtSport);
+                    array_push($sportIDs, $courtSport -> getID());
+                }
             }
-            $result -> free_result();
-            
+
             return $sports;
         }
 
-        public function getAllCourts($database) {
-            $sql = sprintf("SELECT `courtName`
-            FROM
-            `sports_court`
-            WHERE
-            `branchID`
-            LIKE
-            '%s' ",
-            $database -> real_escape_string($this -> branchID));     //get the number of sports courts in a branch when the sport id is given
-
-            $result = $database -> query($sql);
-            $courtNames = [];
-            while($row = $result -> fetch_object()) {
-                array_push($courtNames, $row -> courtName);
-                unset($row);
-            }
-            $result -> free_result();
-            return $courtNames;
-        }
-
-        public function getSportCourts($sportID, $database, $status = ''){
-
-            if($status === ''){ //want all the courts of that sportID
-                $status = '%';  //wildcard
-            }
-
-            $sql = sprintf("SELECT `courtID`
-            FROM
-            `sports_court`
-            WHERE
-            `branchID` LIKE '%s'
-            AND
-            `sportID` LIKE '%s'
-            AND
-            `requestStatus` LIKE '%s'",
-            $database -> real_escape_string($this -> branchID),
-            $database -> real_escape_string($sportID),
-            $database -> real_escape_string($status));
-
-            $result = $database -> query($sql);
-            $courts = [];
-            while($row = $result -> fetch_object()){
-                array_push($courts, $row -> courtID);
-                unset($row);
-            }
-            $result -> free_result();
-            return $courts;
-        }
-
-        public function getSportCourtNames($sportID, $database){
-            $sql = sprintf("SELECT `courtName`
-            FROM
-            `sports_court`
-            WHERE
-            `branchID`
-            LIKE
-            '%s'
-            AND
-            `sportID`
-            LIKE
-            '%s'",
-            $database -> real_escape_string($this -> branchID),
-            $database -> real_escape_string($sportID));
-
-            $result = $database -> query($sql);
-            $courtNames = [];
-            while($row = $result -> fetch_object()){
-                array_push($courtNames, $row -> courtName);
-                unset($row);
-            }
-            $result -> free_result();
-            return $courtNames;
-        }
 
         public function updateBranchEmail($newEmail,$database) {
             $updateSQL = sprintf("UPDATE `branch` SET `branchEmail` = '%s' WHERE `branch`.`branchID` = '%s'",
@@ -271,6 +194,7 @@
             $result = $database -> query($updateSQL);
             return $result;
         }
+
         public function getBranchPictures($database){   //function get branch photos and store in the object
             $this -> photos = [];
             $sql = sprintf("SELECT `photo`
@@ -301,9 +225,17 @@
         }
 
 
-        public function getBranchFeedback($database){
+        public function getBranchFeedback($database, int $limit = null, $wantedFeedbackDetails = []){
             $sql = sprintf("SELECT `userFeedbackID` FROM `user_branch_feedback` WHERE `branchID` = '%s'",
             $database -> real_escape_string($this -> branchID));    //sql to get the feedback ids
+
+            if($limit != null){ //if limited number of feedbacks are required
+                //normally the limit is given when only the latest feedbacks are required
+                //so the feedbacks are sorted by date
+                $sql .= " ORDER BY `date` DESC";
+
+                $sql .= sprintf(" LIMIT %d", $limit);
+            }
 
             $result = $database -> query($sql);
 
@@ -314,7 +246,7 @@
                 $tempFeedback = new Branch_Feedback();  //create an feedback object for each result
                 $tempFeedback -> setDetails(userfeedback_id: $currFeedbackID);
 
-                $tempFeedback -> getDetails($database); //get feedback details
+                $tempFeedback -> getDetails($database, $wantedFeedbackDetails); //get feedback details
                 array_push($allFeedbacks, $tempFeedback);
                 unset($tempFeedback);
                 unset($row);
@@ -364,6 +296,7 @@
         }
 
         public function getCurrentDiscount($database){ //function to get the current discount of the branch (available during the current date)
+            date_default_timezone_set(SERVER_TIMEZONE);
             $today = date('Y-m-d');
 
             $sql = sprintf("SELECT `discountValue`
@@ -423,26 +356,143 @@
             return $allMaintenances;
         }
 
+        public function getBranchCourts($database,Sport $sport = null, $courtStatus = '%'){ //get courts of the branch (null means all, otherwise courts of specific court)
+            if($sport == null){
+                $sql = sprintf("SELECT `courtID` FROM `sports_court` WHERE `branchID` = '%s' AND `requestStatus` LIKE '%s'",
+                $database -> real_escape_string($this -> branchID),
+                $database -> real_escape_string($courtStatus));
+            }
+            else{
+                $sql = sprintf("SELECT `courtID` FROM `sports_court` WHERE `branchID` = '%s' AND `sportID` = '%s' AND `requestStatus` LIKE '%s'",
+                $database -> real_escape_string($this -> branchID),
+                $database -> real_escape_string($sport -> getID()),
+                $database -> real_escape_string($courtStatus));
+            }
+
+            $result = $database -> query($sql);
+
+            $allCourts = [];
+            while($row = $result -> fetch_object()){
+                $tempCourt = new Sports_Court($row -> courtID);
+                array_push($allCourts, $tempCourt);
+                unset($tempCourt);
+                unset($row);
+            }
+
+            return $allCourts;
+        }
+
+        public function getBranchRevenue($database, $dateFrom, $dateTo, Sport $sport = null){    //function to get the revenue of the branch within specific range
+            $totalRevenue = 0;
+
+            if($sport == null){
+                //get the revenue of the branch from the reservations
+                $totalRevenue += $this -> courtReservationRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database, sport: null);
+
+                //get the revenue of the branch from the coach session payments
+                $totalRevenue += $this -> coachSessionPaymentRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database, sport: null);
+            }else{
+                //get the revenue of the branch from the reservations
+                $totalRevenue += $this -> courtReservationRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database,sport: $sport);
+
+                //get the revenue of the branch from the coach session payments
+                $totalRevenue += $this -> coachSessionPaymentRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database,sport: $sport);
+            
+            }
+            
+            return $totalRevenue;
+        }
+
+        public function courtReservationRevenue($dateFrom, $dateTo,Sport $sport = null, $database){
+            $totalRevenue = 0;
+            //first get all the courts of the branch
+            if($sport == null){
+                $allCourts = $this -> getBranchCourts(database: $database,sport: null);
+            }else{
+                $allCourts = $this -> getBranchCourts($database, $sport);
+            }
+            
+
+            //build the sql query for user reservations
+            $userSql = "SELECT SUM(`paymentAmount`) as `total` FROM `reservation` WHERE `sportCourt` IN (";
+            foreach($allCourts as $court){
+                $userSql .= "'".$court -> getID()."',";
+            }
+
+            $userSql = substr($userSql, 0, -1); //remove the last comma
+
+            $userSql .= sprintf(") AND DATE(`reservedDate`) >= '%s' AND DATE(`reservedDate`) <= '%s' AND (`status` NOT LIKE 'Cancelled' AND `status` NOT LIKE 'Refunded')",
+            $database -> real_escape_string($dateFrom),
+            $database -> real_escape_string($dateTo));
+
+            $result = $database -> query($userSql);
+            $row = $result -> fetch_object();
+            $totalRevenue += $row -> total;   //avoid getting the revenue as null
+
+            return $totalRevenue;
+        }
+
+        public function coachSessionPaymentRevenue($dateFrom, $dateTo, Sport $sport = null,$database){
+            $totalRevenue = 0;
+            //first get all the courts of the branch
+            if($sport == null){
+                $allCourts = $this -> getBranchCourts(database: $database);
+            }else{
+                $allCourts = $this -> getBranchCourts($database, $sport);
+            }
+
+            //build the sql query for coaching session payments of the coach
+            $coachSql = "SELECT SUM(`csp`.`paymentAmount`) as `total` 
+            FROM `coach_session_payment` `csp` 
+            INNER JOIN `coaching_session` `cs` 
+            ON `cs`.`sessionID` = `csp`.`sessionID` 
+            WHERE `cs`.`courtID` IN (";
+
+            foreach($allCourts as $court){
+                $coachSql .= "'".$court -> getID()."',";
+            }
+
+            $coachSql = substr($coachSql, 0, -1); //remove the last comma
+
+            $coachSql .= sprintf(") AND `csp`.`paymentDate` >= '%s' AND `csp`.`paymentDate` <= '%s' AND `csp`.`status` LIKE 'Processed'",
+            $database -> real_escape_string($dateFrom),
+            $database -> real_escape_string($dateTo));
+
+            $result = $database -> query($coachSql);
+            $row = $result -> fetch_object();
+            $totalRevenue += $row -> total;   //avoid getting the revenue as null
+            
+            return $totalRevenue;
+        }
+
         public function jsonSerialize():mixed{
-            return [
-                'branchID' => $this -> branchID,
-                'city' => $this -> city,
-                'address' => $this -> address,
-                'email' => $this -> branchEmail,
-                'manager' => $this -> manager,
-                'receptionist' => $this -> receptionist,
-                'openingTime' => $this -> openingTime,
-                'closingTime' => $this -> closingTime,
-                'photos' => $this -> photos
-            ];
+            //get class properties
+            $properties = get_object_vars($this);
+
+            $returnJSON = [];
+
+            foreach($properties as $key => $value){
+                if(isset($this -> $key) && $value != ''){
+                    $returnJSON[$key] = $value;
+                }
+            }
+
+            return $returnJSON;
         }
 
         public  function get_time($database){
-            $sql=sprintf( "SELECT `openingTime`,`closingTime` FROM `branch` WHERE `branchID`LIKE '%s' ",
+            $sql=sprintf( "SELECT `openingTime`,`closingTime` FROM `branch` WHERE `branchID` LIKE '%s' ",
+
             $database -> real_escape_string($this -> branchID));
+            
             $Result = $database -> query($sql);
             $timeResult=[];
              
+            $row = $Result -> fetch_object();
+
+            $timeResult['openingTime'] = $row -> openingTime;
+
+
             foreach($Result as $time){
                 $temporaryOpen =$time['openingTime'];
                 $temporaryClose= $time['closingTime'];
@@ -451,10 +501,23 @@
             // while($row =  $Result  -> fetch_object()) {
             //     array_push($timeResult,[ $row['openingTime'] -> openingTime,$row['closingTime'] -> closingTime]);
             // }
+
+           
             return  $timeResult;
-    }
+        }
+
+        public function changeTime($database, $openingTime ,$closingTime){
+            $result = $database -> query(sprintf("UPDATE `branch` 
+            SET `openingTime` = '%s', `closingTime` = '%s' WHERE `branchID` = '%s'",
+            // $database -> real_escape_string($this -> managerID),
+            // $database -> real_escape_string($this -> contactNum),
+            $database -> real_escape_string($openingTime),
+            $database -> real_escape_string($closingTime),
+            $database -> real_escape_string($this ->branchID)));
+    
+            return $result;
+    
+        }
     
     }
-   
-
 ?>

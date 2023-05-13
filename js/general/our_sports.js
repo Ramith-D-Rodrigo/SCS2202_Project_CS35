@@ -1,23 +1,6 @@
+import {currency} from "../CONSTANTS.js";
+
 const sportsContainer = document.getElementById("sportsContainer"); //displaying container
-
-
-function changeBtnValue(e){
-    const reseveBtn = e.target.parentNode.lastChild.lastChild;    //get the button
-    //e.target iss the select option
-    //parentNode is the form
-    //lastChild is the div button container
-    //lastChild's lastChild is the button
-    if(e.target.value === ""){  //selected "Choose One" option
-        reseveBtn.value = "";
-        return;
-    }
-    
-    const sportsRow = e.target.parentNode.parentNode.parentNode;   //great grandparent is the sportsRow div (form (parent) -> form div (grandparent) -> sport row div (great grandparent))
-    //console.log(sportsRow);
-    
-    reseveBtn.value = [e.target.value, sportsRow.id];    //branch id first, then the sport id
-    //console.log(reseveBtn.value);
-}
 
 
 fetch("../../controller/general/our_sports_controller.php")
@@ -25,11 +8,10 @@ fetch("../../controller/general/our_sports_controller.php")
     .then((data) => {
         //console.log(data);
         
-        for(i = 0; i < data.length; i++){   //traverse each sport
+        for(let i = 0; i < data.length; i++){   //traverse each sport
             const currSportContainer = document.createElement("div"); //displaying container
             currSportContainer.className = "content-box";
-            const sportsRowDiv = document.createElement("div"); //row for each sport
-            sportsRowDiv.id = data[i].sport_id; //set sport id
+            currSportContainer.id = data[i].sport_id; //set sport id
             
             const sportsIconContainerDiv = document.createElement("div");   //img container
             sportsIconContainerDiv.className = "sport-icon-container";
@@ -40,18 +22,59 @@ fetch("../../controller/general/our_sports_controller.php")
             sportImage.onerror = "this.src='/styles/icons/no-results.png''";    //set img to load when the current sport img is not found
 
             sportsIconContainerDiv.appendChild(sportImage); //append img to the container
-            sportsRowDiv.appendChild(sportsIconContainerDiv);   //append the container to the row
+            currSportContainer.appendChild(sportsIconContainerDiv);   //append the container to the row
 
             const sportInfoDiv = document.createElement("div"); //container to store the form
 
             const sportInfoForm = document.createElement("form");   //form
             sportInfoForm.method = "get";
             sportInfoForm.action = "/public/general/reservation_schedule.php";
-            sportInfoForm.innerHTML = "Sport : " + data[i].sport_name + "<br>" +
-                                      "Reservation Price : Rs. "+ data[i].reserve_price + " per hour <br>" +
-                                      "Available Branches : " ;
+
+           //sport name
+            const nameDiv = document.createElement("div");
+            nameDiv.className = "row-container";
+
+            const sportField = document.createElement("div");
+            sportField.className = "left-field";
+            sportField.innerHTML = "Sport";
+
+            const sportNameField = document.createElement("div");
+            sportNameField.className = "right-field";
+            sportNameField.innerHTML = data[i].sport_name;
+
+            nameDiv.appendChild(sportField);
+            nameDiv.appendChild(sportNameField);
+            sportInfoForm.appendChild(nameDiv);
+
+            //reservation price
+            const priceDiv = document.createElement("div");
+            priceDiv.className = "row-container";
+
+            const priceField = document.createElement("div");
+            priceField.className = "left-field";
+            priceField.innerHTML = "Reservation Price";
+
+            const priceValueField = document.createElement("div");
+            priceValueField.className = "right-field";
+            priceValueField.innerHTML = currency + " " + parseFloat(data[i].reserve_price).toFixed(2) + " per hour";
+
+            priceDiv.appendChild(priceField);
+            priceDiv.appendChild(priceValueField);
+            sportInfoForm.appendChild(priceDiv);
+
+            //available branches
+            const branchDiv = document.createElement("div");
+            branchDiv.className = "row-container";
+
+            const branchField = document.createElement("div");
+            branchField.className = "left-field";
+            branchField.innerHTML = "Available Branches";
+            
+            const branchValueField = document.createElement("div");
+            branchValueField.className = "right-field";
 
             const providingBranchSelection = document.createElement("select");  //providing branches selection
+            providingBranchSelection.name = "branch";
             providingBranchSelection.setAttribute("required", "");
             providingBranchSelection.className = "providing_branches";
 
@@ -60,40 +83,40 @@ fetch("../../controller/general/our_sports_controller.php")
             emptyOption.value = "";
             providingBranchSelection.appendChild(emptyOption);
 
-            for(j = 0; j < data[i].providing_branches.length; j++){ //create option for providing branches
+            for(let j = 0; j < data[i].providing_branches.length; j++){ //create option for providing branches
                 const branchOption = document.createElement("option");
                 branchOption.text = data[i].providing_branches[j].branch_name;
                 branchOption.value = data[i].providing_branches[j].branch_id;
                 providingBranchSelection.appendChild(branchOption);
             }
 
-            sportInfoForm.appendChild(providingBranchSelection);    //append the select to the form
+            branchValueField.appendChild(providingBranchSelection);
+            branchDiv.appendChild(branchField);
+            branchDiv.appendChild(branchValueField);
+
+            sportInfoForm.appendChild(branchDiv);//append the branches to the form
 
             const btnContainer = document.createElement("div"); //container for the reserve button
             btnContainer.className = "btn-container";
 
+            //hidden input for the sport id
+            const sportIdInput = document.createElement("input");
+            sportIdInput.type = "hidden";
+            sportIdInput.name = "sport";
+            sportIdInput.value = data[i].sport_id;
+
+            sportInfoForm.appendChild(sportIdInput); //append the hidden input to the form
 
             const reserveBtn = document.createElement("button");
             reserveBtn.innerHTML = "Make a Reservation";
             reserveBtn.type = "submit";
-            reserveBtn.name = "reserveBtn"; //we need to send this to the reservation schedule controller (get method)
-            //value should be changed with user's selection (need event listener for selection)
-
             btnContainer.appendChild(reserveBtn);  //append the reserve button
 
             sportInfoForm.appendChild(btnContainer);  //append the reserve button
             sportInfoDiv.appendChild(sportInfoForm);    //append the form to the form container
-            sportsRowDiv.appendChild(sportInfoDiv); //append the form container to the row
-
-            //finally append the row
-            currSportContainer.appendChild(sportsRowDiv);
+            currSportContainer.appendChild(sportInfoDiv); //append the form container to the content box
             sportsContainer.appendChild(currSportContainer);
         }
-
-        //event listener for the select options
-        const selectOption = document.querySelectorAll(".providing_branches");
-        //console.log(selectOption);
-        selectOption.forEach(element => element.addEventListener("change", changeBtnValue));
-    })
+    });
 
 

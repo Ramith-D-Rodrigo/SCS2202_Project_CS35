@@ -1,6 +1,7 @@
 #feedbackBox{
     padding: 25px;
-    position:absolute; 
+    position:fixed; 
+    margin: 2rem auto;
     display:none;
     top:50%; 
     left:50%; 

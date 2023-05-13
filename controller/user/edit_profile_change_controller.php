@@ -1,10 +1,23 @@
 <?php
+    //this script is used to edit the user profile
     session_start();
     require_once("../../src/user/user.php");
     require_once("../../src/user/user_dependent.php");
     require_once("../../src/general/security.php");
 
-    $editableFields = ['contactNo', 
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
+
+    //server request method check
+    if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        http_response_code(405);
+        die();
+    }
+    
+
+    $editableFields = ['contactNum', 
     'height', 
     'weight', 
     'homeAddress', 
@@ -44,7 +57,7 @@
         if(isset($_POST[$field])){  //check if field is set ( the user has inputted something)
             $_POST[$field] = trim($_POST[$field]);  //remove leading and trailing whitespace
             $_POST[$field] = htmlspecialchars($_POST[$field], ENT_QUOTES);  //convert special characters to html entities
-            if($field == "contactNo"){  // contact number validation
+            if($field == "contactNum"){  // contact number validation
                 if(!preg_match("/^[0-9]{10,11}$/", $_POST[$field])){
                     $returnMsg["errMsg"] = "Invalid Contact Number";
                     $validationErrFlag = true;
@@ -53,41 +66,58 @@
                 $arr['contactNum'] = $_POST[$field];
             }
             else if($field == 'height'){    // height validation
-                //floating point number regex
-                if(!preg_match("/^\d*\.?\d*$/", $_POST[$field])){
-                    if($_POST[$field] == ''){
-                        $flag = $editingUser -> isStudent();   //to check if user is student (students cannot remove height and weight)
+                if($_POST[$field] == ''){   //empty string
+                    $flag = $editingUser -> isStudent();   //to check if user is student (students cannot remove height and weight)
 
-                        if($flag == true){
-                            $returnMsg["errMsg"] = "You cannot change your height and weight as you are a student";
-                            $validationErrFlag = true;
-                            break;
-                        }
-                    }
-                    else{
-                        $returnMsg["errMsg"] = "Invalid Height";
+                    if($flag == true){
+                        $returnMsg["errMsg"] = "You cannot change your height and weight as you have joined for a session(s).";
                         $validationErrFlag = true;
                         break;
                     }
+                    else{ //if not a student, then check for pending coaching session requests
+                        $sessionRequests = $editingUser -> getPendingCoachingSessionRequests();
+
+                        if(count($sessionRequests) != 0){   //has pending requests, thus cannot edit
+                            $returnMsg["errMsg"] = "You cannot change your height and weight as you have requested for a session(s).";
+                            $validationErrFlag = true;
+                            break;
+                        }
+
+                    }
                 }
+                //floating point number regex
+                if(!preg_match("/^\d*\.?\d*$/", $_POST[$field])){
+                    $returnMsg["errMsg"] = "Invalid Height";
+                    $validationErrFlag = true;
+                    break;
+                }
+
                 $arr['height'] = $_POST[$field];
             }
             else if($field == 'weight'){    // weight validation
-                if(!preg_match("/^\d*\.?\d*$/", $_POST[$field])){
-                    if($_POST[$field] == ''){
-                        $flag = $editingUser -> isStudent();   //to check if user is student (students cannot remove height and weight)
-                        if($flag == true){
-                            $returnMsg["errMsg"] = "You cannot change your height and weight as you are a student";
+                if($_POST[$field] == ''){
+                    $flag = $editingUser -> isStudent();   //to check if user is student (students cannot remove height and weight)
+                    if($flag == true){
+                        $returnMsg["errMsg"] = "You cannot change your height and weight as you are a student";
+                        $validationErrFlag = true;
+                        break;
+                    }
+                    else{ //if not a student, then check for pending coaching session requests
+                        $sessionRequests = $editingUser -> getPendingCoachingSessionRequests();
+
+                        if(count($sessionRequests) != 0){   //has pending requests, thus cannot edit
+                            $returnMsg["errMsg"] = "You cannot change your height and weight as you have requested for a session(s).";
                             $validationErrFlag = true;
                             break;
                         }
                     }
-                    else{
-                        $returnMsg["errMsg"] = "Invalid Weight";
-                        $validationErrFlag = true;
-                        break;
-                    }
                 }
+                if(!preg_match("/^\d*\.?\d*$/", $_POST[$field])){
+                    $returnMsg["errMsg"] = "Invalid Weight";
+                    $validationErrFlag = true;
+                    break;
+                }
+                
                 $arr['weight'] = $_POST[$field];
             }
             else if($field === 'medicalConcern1' || $field === 'medicalConcern2' || $field === 'medicalConcern3' || $field === 'medicalConcern4' || $field === 'medicalConcern5' || $field === 'name1' || $field === 'name2' || $field === 'name3'){   // medical concerns validation and emergency name validation

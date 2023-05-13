@@ -2,7 +2,7 @@
     session_start();
     require_once("../../src/general/security.php");
     //check the authentication
-    if(!Security::userAuthentication(logInCheck: FALSE)){ //cannot access (NOT operator)
+    if(!Security::userAuthentication(logInCheck: FALSE, acceptingUserRoles:['user'])){ //cannot access (NOT operator)
         Security::redirectUserBase();
     }
     else{
@@ -17,6 +17,9 @@
                 <link rel="stylesheet" href="/styles/general/our_branches.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
+                <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css">
+
                 <title>Our Branches</title>
             </head>
             <body>
@@ -24,16 +27,23 @@
                         require_once("header.php");
                     ?>
                     <main>
-                        <div class="body-container" id="branches" style="flex-direction:column">
+                        <div class="body-container branch-list" id="branches">
 
                         </div>
                     </main>
                     <?php
                         require_once("footer.php");
                     ?>
+                    <div class="map-container content-box">
+                        <div id="map"></div>
+                        <div class="google-link">
+                            <a href="">Open in <i class="fa-brands fa-google"></i> Maps</a>
+                        </div>
+                    </div>
             </body>
             <script src="/js/user/account_links.js"></script>
-            <script src="/js/general/our_branchs.js"></script>
+            <script type="module" src="/js/general/our_branchs.js"></script>
+            <script type="module" src="/js/general/notifications.js"></script>
         </html>
     <?php
     }

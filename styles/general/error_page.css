@@ -1,0 +1,43 @@
+.error{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #fff;
+}
+
+.error *{
+    margin: 1rem;
+
+}
+
+.error__content__title{
+    font-size: 10rem;
+    text-align: center;
+    color: #f00;
+}
+
+.error__content__title i{
+    color: #f00;
+    font-size: 10rem;
+}
+
+.error__content__text{
+    font-size: 4rem;
+    text-align: center;
+}
+
+
+@media(max-width: 680px){
+    .error__content__title{
+        font-size: 5rem;
+    }
+    .error__content__title i{
+        font-size: 5rem;
+    }
+    .error__content__text{
+        font-size: 2rem;
+    }
+}
+

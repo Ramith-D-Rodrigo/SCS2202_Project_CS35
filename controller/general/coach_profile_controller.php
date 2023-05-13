@@ -1,8 +1,11 @@
 <?php
+
+    //this script is used to get all the details of a specific coach to display in the coach profile page
     session_start();
     //script authentication
-    if(isset($_SESSION['userid']) && isset($_SESSION['userrole']) && ($_SESSION['userrole'] === 'manager' || $_SESSION['userrole'] === 'owner' || $_SESSION['userrole'] === 'admin' || $_SESSION['userrole'] === 'receptionist')){
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        die();
     }
 
     if(isset($_GET['coachID'])){    //coming from a get request
@@ -26,7 +29,7 @@
     $coachSport = new Sport();
     $coachSport -> setID($viewingCoach -> getSport());
 
-    $sportName = $coachSport -> getDetails($connection);   //sport name and max no of students
+    $sportName = $coachSport -> getDetails($connection, ['sportName', 'maxNoOfStudents']);   //sport name and max no of students
 
     //get coaching sessions of the coach
 
@@ -36,9 +39,16 @@
         foreach($coachingSessionsObjs as $currSession){
             $currSession -> getDetails($connection);
 
-            //filtering session needed information
             $tempJSON = json_encode($currSession);  
             $neededInfo = json_decode($tempJSON, true);
+
+            if(isset($neededInfo['cancelDate']) && $neededInfo['cancelDate'] !== NULL){ //if the session is cancelled
+                //we do not need this session
+                unset($neededInfo);
+                continue;
+            }
+
+            //filtering session needed information
             unset($neededInfo["coachMonthlyPayment"]);
             array_push($coachingSessionsArr, $neededInfo);
             unset($currSession);
@@ -52,6 +62,7 @@
     $coachNeededInfo = json_decode($coachJSON, true);
     unset($coachNeededInfo['homeAddress']);
     unset($coachNeededInfo['sport']);
+    unset($coachNeededInfo['username']);
 
     //calculate age
     $today = new DateTime();
@@ -63,16 +74,11 @@
     unset($today);
     unset($coachBirthday);
 
-    //filtering sport's needed information
-    $sportJSON = json_encode($coachSport);
-    $sportNeededInfo = json_decode($sportJSON, true);
-    unset($sportNeededInfo['description']);
-    unset($sportNeededInfo['reservationPrice']);
 
     $returningJSON = array(
         "coachInfo" => $coachNeededInfo,
         "coachRating" => $coachRating,
-        "sportInfo" => $sportNeededInfo,
+        "sportInfo" => $coachSport,
         "coachingSessions" => $coachingSessionsArr,
         "coachFeedback" => $coachFeedback
     );

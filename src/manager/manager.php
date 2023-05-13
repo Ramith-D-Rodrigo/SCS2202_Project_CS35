@@ -1,5 +1,4 @@
 <?php
-    require_once("../../src/general/uuid.php");
     require_once("../../src/system_admin/staffMember.php");
     require_once("../../src/general/actor.php");
 
@@ -141,6 +140,30 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
 
         return [$branchName -> city, $this -> branchID];  //return the message and other important details
     }
+
+    public function getSessionData(){
+
+        $getBranch = sprintf("SELECT `branchID` AS brid
+        FROM `staff`
+        WHERE `staffID` = '%s'",
+        $this-> connection -> real_escape_string($this -> userID));
+
+        $brResult = $this-> connection -> query($getBranch);
+
+        $branchIDResult = $brResult -> fetch_object();   //get the branch_id
+        $this -> branchID = $branchIDResult -> brid;
+
+        $getBrName = sprintf("SELECT `city`
+        FROM `branch`
+        WHERE `branchID` = '%s'",
+        $this->connection -> real_escape_string($this -> branchID));
+
+        $brNameResult = $this->connection -> query($getBrName);
+
+        $branchName = $brNameResult -> fetch_object();   //get the branch_city
+
+        return [$branchName -> city, $this -> branchID];  //return the branch name and id
+    }
     public function getSportID($sportName, $database){
         $sportSql = sprintf("SELECT `sportID`
         FROM `sport`
@@ -173,57 +196,51 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     }
 
 
-    public function getDetails($database){
-        $sql = sprintf("SELECT * FROM `staff`
+    public function getDetails($wantedColumns = []){
+        $sql = "SELECT ";
+
+        if(empty($wantedColumns)){
+            $sql .= "*";
+        }
+        else{
+            $sql .= implode(", ", $wantedColumns);
+        }
+
+        $sql .= sprintf(" FROM `staff`
         WHERE
         `staffID` = '%s'
-        AND
+        AND 
         `staffRole` = 'manager'",
-        $database -> real_escape_string($this -> userID));
+        $this -> connection -> real_escape_string($this -> userID));
 
-        $result = $database -> query($sql);
+        $result = $this -> connection -> query($sql);
+
         $row = $result -> fetch_object();
 
-        if($row === NULL){
-            return FALSE;
+        foreach($row as $key => $value){
+            $this -> $key = $value;
         }
-        $this -> setDetails(fName: $row -> firstName,
-            lName: $row -> lastName,
-            contactNo: $row -> contactNum,
-            dob: $row -> dateOfBirth,
-            brID: $row -> branchID,
-            gender: $row -> gender);
 
-        $this -> joinDate = $row -> joinDate;
-        $this -> leaveDate = $row -> leaveDate;
-        $this -> staffRole = $row -> staffRole;
-
-
-        $result -> free_result();
-        unset($row);
         return $this;
     }
 
     public function jsonSerialize() : mixed{
-        return [
-            'managerID' => $this -> userID,
-            'firstName' => $this -> firstName,
-            'lastName' => $this -> lastName,
-            'emailAddress' => $this -> emailAddress,
-            'contactNum' => $this -> contactNum,
-            'joinDate' => $this -> joinDate,
-            'leaveDate' => $this -> leaveDate,
-            'dateOfBirth' => $this -> dateOfBirth,
-            'username' => $this -> username,
-            'password' => $this -> password,
-            'gender' => $this -> gender,
-            'branchID' => $this -> branchID,
-            'staffRole' => $this -> staffRole
-        ];
+        $classProperties = get_object_vars($this);
+        $jsonProperties = [];
 
+        foreach($classProperties as $key => $value){    //to get the properties that are set
+            if($key === 'connection'){
+                continue;
+            }
+            if(isset($value)){
+                $jsonProperties[$key] = $value;
+            }
+        }
+
+        return $jsonProperties;
     }
 
-    public function add_court($database, $court_name ,$sport_id, $branch_id, $court_id, $managerID){
+    public function add_court($database, $courtName ,$sportID, $branchID, $courtID, $managerID){
         $result = $database -> query(sprintf("INSERT INTO `sports_court`
         (`courtID`,
         `sportID`,
@@ -235,15 +252,16 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
         ('%s','%s','%s','%s','p','%s')",
         // $database -> real_escape_string($this -> managerID),
         // $database -> real_escape_string($this -> contactNum),
-        $database -> real_escape_string($court_id),
-        $database -> real_escape_string($sport_id),
-        $database -> real_escape_string($court_name),
-        $database -> real_escape_string($branch_id),
+        $database -> real_escape_string($courtID),
+        $database -> real_escape_string($sportID),
+        $database -> real_escape_string($courtName),
+        $database -> real_escape_string($branchID),
         $database -> real_escape_string($managerID)));
 
         return $result;
 
     }
+
 
     
     // public function getSportID($sportName, $database){
@@ -276,5 +294,31 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
     //         return ['errMsg' => "Sorry, Cannot find what you are looking For"];
     //     }
     // }
+   
+   public function changeTimeofaBranch($openingTime,$closingTime,$branchID){
+        $branch = new Branch($branchID);
+        return $branch -> changeTime($this -> connection,$openingTime,$closingTime);
     }
+      
+    public function addDiscount($database, $managerID, $startingDate, $endingDate, $discountValue, $branchID){
+
+        $result = $database -> query(sprintf("INSERT INTO `discount`
+        ( `managerID`,`startingDate`,`endingDate`, `decision`, `discountValue`,`branchID`)
+        VALUES 
+        ('%s','%s', '%s', 'p', '%s', '%s')",
+        $database -> real_escape_string( $managerID),
+        $database -> real_escape_string($startingDate),
+        $database -> real_escape_string($endingDate),
+        $database -> real_escape_string($discountValue),
+        $database -> real_escape_string($branchID)));
+        
+        return $result;
+    }
+
+    
+
+    
+}  
+
+    
 ?>

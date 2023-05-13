@@ -1,0 +1,91 @@
+.content-box{
+    flex-basis: 45%;
+    flex-grow: 1;
+}
+
+.body-container{
+    justify-content: space-around;
+    align-items: stretch;
+    flex-wrap: wrap-reverse;
+}
+#map{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+}
+
+.note{
+    font-size: 0.8rem;
+    color: #555;
+    text-align: center;
+    font-style: italic;
+}
+
+.submit-btn-container{
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.map-container{
+    position: relative;
+    width: 100%;
+    min-height: 70vh;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.msg{
+    margin-top: 3rem;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.error{
+    border: 2px solid red;
+}
+
+
+@media(max-width: 680px){
+    .content-box{
+        flex-basis: 100%;
+    }
+    .map-container{
+        min-height: 30vh;
+    }
+
+    .row-container{
+        flex-direction: column;
+    }
+
+    .left-field{
+        width: 100%;
+        text-align: center;
+    }
+
+    .right-field{
+        width: 100%;
+    }
+
+    .right-field > div > div{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+
+    .submit-btn-container{
+        position: relative;
+        margin: 2rem auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+    .submit-btn-container > button{
+        margin: 0 auto;
+    }
+}

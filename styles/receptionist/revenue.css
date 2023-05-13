@@ -1,0 +1,33 @@
+.all-filter-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+}
+
+.all-filter-container > div{
+    width: 50%;
+}
+
+.border-error{
+    border: 2px solid red;
+}
+
+
+.filter-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+}
+
+.content-box{
+    min-width: 80%;
+}
+
+#revenue{
+    width: 100%;
+    max-height: 60vh;
+}

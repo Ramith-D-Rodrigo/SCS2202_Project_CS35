@@ -1,0 +1,134 @@
+.options{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap-reverse;
+}
+
+#changeTitle{
+    margin: 2rem 0;
+    font-size: 2rem;
+    width: 100%;
+    text-align: center;
+}
+
+
+.note{
+    font-size: 0.8rem;
+    color: gray;
+    margin: 0.5rem;
+    font-style: italic;
+    width: 100%;
+    text-align: center;
+}
+
+.content-box{
+    min-width: 60%;
+}
+
+.sport-info{
+    width: 60%;
+}
+
+.sport-img-div{
+    width: 40%;
+}
+
+.sport-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+}
+
+#sport-icon{
+    width: 22rem;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    opacity: 1;
+    transition: 500ms;
+}
+
+.sport-icon-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.msg{
+    height: 1rem;
+    text-align: center;
+}
+
+#authFormDiv{
+    display:none;
+    width: 300px;
+    height: 300px;
+    min-width: unset;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+}
+
+body{
+    position: relative;
+}
+
+#authFormDiv > div{
+    width: 100%;
+    height: 100%;
+
+}
+
+.btn-container{
+    display:flex; 
+    flex-direction: row;
+    margin-top: 0.5rem;
+}
+
+#authMsg{
+    height:1rem;
+    text-align: center;
+    color: red;
+}
+
+
+@media(max-width: 950px){
+    .sport-info{
+        width: 100%;
+    }
+
+    .sport-img-div{
+        width: 100%;
+        margin: 0.5rem auto;
+    }
+
+    #sport-icon{
+        width: 15rem; 
+    }
+}
+
+
+@media(max-width: 680px){
+    .options{
+        justify-content: center;
+    }
+
+    .row-container{
+        flex-direction: column;
+    }
+    .left-field{
+        width: 100%;
+        text-align: center;
+    }
+
+    .right-field{
+        width: 100%;
+    }
+}

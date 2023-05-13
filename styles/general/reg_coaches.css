@@ -4,37 +4,60 @@
 
 .coach-image{
     border-radius: 50%;
-    background: linear-gradient(180deg, #dac340, #e6800d);
-    height: 250px;
-    width: 250px;
+    aspect-ratio: 1/1;
+    width: 100%;
     object-fit: cover;
 }
 
 .coach-image-container{
-    height: 250px;
-    width: 250px;
-    margin: 0 20px;
-    border-radius: 50%;
+    width: 80%;
+}
+.coach{
+    display:flex; 
+    flex-direction:column; 
+    align-items: center;
+    justify-content: center;
+    width: 25rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
 
 .info{
-    min-width:50%;
-    padding: 1%;
-    display: inline-block;
-    white-space: nowrap;
-
+    width: 100%;
 }
 
-.coach-row{
-    margin: 25px;
-    display:flex; 
-    flex-direction:row; 
-    align-items: center;
-    justify-content: center;
-}
-
-
-.coachInfo{
+.coach-info{
     display:flex; 
     flex-direction:column; 
+}
+
+#coachList{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+}
+
+#filter{
+    display: flex;
+    flex-direction: row;
+}
+
+
+@media(max-width: 680px){
+    #filter{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+
 }

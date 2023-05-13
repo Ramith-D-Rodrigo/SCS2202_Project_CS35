@@ -1,4 +1,5 @@
 <?php
+    //this script is used to log out any actor
     require_once("../../src/general/actor.php");
 
     //echo "log out button";
@@ -9,5 +10,5 @@
     }while($result === false);  //maks sure that the session is destroyed
 
     unset($logOutActor);
-    header("Location: /index.php"); //redirect back to the homepage
+    header("Location: /"); //redirect back to the homepage
 ?>

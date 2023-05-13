@@ -1,6 +1,9 @@
 <?php
     require_once("../../src/general/reservation.php");
     require_once("../../src/general/actor.php");
+    require_once("../../src/coach/coaching_session.php");
+    require_once("../../controller/CONSTANTS.php");
+    require_once("../../src/general/sport_court.php");
 
 class User extends Actor implements JsonSerializable{
     private $firstName;
@@ -14,7 +17,6 @@ class User extends Actor implements JsonSerializable{
     private $dependents;
     private $medicalConcerns;
     private $gender;
-    private $isactive;
     private $profilePhoto;
 
     public function __construct($actor = null){
@@ -45,10 +47,6 @@ class User extends Actor implements JsonSerializable{
 
     public function setProfilePic($profilePic){
         $this -> profilePhoto = $profilePic;
-    }
-
-    public function getUserID(){    //userID getter
-        return $this -> userID;
     }
 
     public function getProfilePic(){
@@ -82,7 +80,7 @@ class User extends Actor implements JsonSerializable{
         $this -> connection -> real_escape_string($this -> username),
         $this -> connection -> real_escape_string($this -> emailAddress),
         $this -> connection -> real_escape_string($this -> password),
-        $this -> connection -> real_escape_string($this -> isactive)));
+        $this -> connection -> real_escape_string($this -> isActive)));
 
 /*         if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
@@ -162,7 +160,7 @@ class User extends Actor implements JsonSerializable{
 
     public function registerUser(){    //public function to register the user
         $this -> registerDate = date("Y-m-d");
-        $this -> isactive = 0;  //still pending, has to verify using the email
+        $this -> isActive = 0;  //still pending, has to verify using the email
         $loginEntry = $this -> create_login_details_entry();
         $userEntry = $this -> create_user_entry();
         $medicalConcernEntry = $this -> create_user_medicalConcerns();
@@ -246,20 +244,6 @@ class User extends Actor implements JsonSerializable{
         return TRUE;
     }
 
-    public function activateAccount(){
-        $this -> isactive = 1;
-        $sql = sprintf("UPDATE `login_details` SET `isActive` = '%s' WHERE `userID` = '%s'",
-        $this -> connection -> real_escape_string($this -> isactive),
-        $this -> connection -> real_escape_string($this -> userID));
-
-        $result = $this -> connection -> query($sql);
-
-        if($result === FALSE){
-            return FALSE;
-        }
-        return TRUE;
-    }
-
     public function searchSport($sportName){
         $sportSql = sprintf("SELECT `sportID`,
         `sportName`,
@@ -278,7 +262,7 @@ class User extends Actor implements JsonSerializable{
         $branchResultArr = [];
         $coachResultArr = [];
 
-        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of receptionist (pending request)
+        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of manager (pending request)
             $courtBranchSql = sprintf("SELECT DISTINCT `branchID`
             FROM `sports_court`
             WHERE `sportID`
@@ -314,9 +298,9 @@ class User extends Actor implements JsonSerializable{
         return $result;
     }
 
-    public function makeReservation($date, $st, $et, $people, $payment, $court){
-        $result = $court -> createReservation($this -> userID, $date, $st, $et, $payment, $people, $this -> connection);
-        return $result;
+    public function makeReservation($date, $st, $et, $people, $payment, $chargeID, Sports_Court $court){
+        $result = $court -> createReservation($this -> userID, $date, $st, $et, $payment, $people, $chargeID, $this -> connection);
+        return $result; //an array (on success, array with reservationID, on failure, array with errMsg) [0 -> true or false, 1 -> reservationID or errMsg]
     }
 
     public function getReservationHistory(){   //Joining sport, sport court, branch, reservation tables
@@ -339,7 +323,7 @@ class User extends Actor implements JsonSerializable{
             $endingTime = $row -> ending_time; */
 
             //$row -> {"time_period"} = $startingTime . " to " . $endingTime;
-            $currReservation -> getDetails($this -> connection);  //get the reservation details
+            $currReservation -> getDetails($this -> connection, ['date', 'startingTime', 'endingTime', 'status', 'reservedDate', 'paymentAmount']);  //get the reservation details
 
             array_push($reservations, $currReservation);
             unset($currReservation);
@@ -354,18 +338,20 @@ class User extends Actor implements JsonSerializable{
         return $result;
     }
 
-    public function getProfileDetails($wantedProperty = ''){   //get the profile details and store in the object
-        if($wantedProperty !== ''){ //when needed only single property
-            $detailsSql = sprintf("SELECT `%s` FROM `user` WHERE `userID` = '%s'",
-            $this -> connection -> real_escape_string($wantedProperty),
-            $this -> connection -> real_escape_string($this -> userID)); //user details
+    public function getProfileDetails($wantedColumns = []){   //get the profile details and store in the object
+        if($wantedColumns !== []){  //if the user wants to get specific columns
+            $wantedColumns = implode(", ", $wantedColumns);
+            $sql = sprintf("SELECT %s FROM `user` WHERE `userID` = '%s'", $wantedColumns, $this -> connection -> real_escape_string($this -> userID));
+            $result = $this -> connection -> query($sql);
 
-            $result = $this -> connection -> query($detailsSql);
-            $resultObj = $result -> fetch_object();
-            $returnVal = $resultObj -> {$wantedProperty};
+            $row = $result -> fetch_object();
+
             $result -> free_result();
-            unset($resultObj);
-            return $returnVal;
+
+            foreach($row as $key => $value){
+                $this -> $key = $value;
+            }
+            return $this;
         }
 
         $detailsSql = sprintf("SELECT * FROM `user` WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID)); //user details
@@ -400,7 +386,6 @@ class User extends Actor implements JsonSerializable{
             height: $detailsrow -> height,
             weight: $detailsrow -> weight,
             email: $loginrow -> emailAddress,
-            password: $loginrow -> password,
             username: $loginrow -> username,
             medicalConcerns: $medicalConcernsArr,
             dependents: $dependentArr);
@@ -416,10 +401,35 @@ class User extends Actor implements JsonSerializable{
     public function isStudent(){    //check if the user is a student
         $sql = sprintf("SELECT `stuID` FROM `student` WHERE  `stuID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
         $result = $this -> connection -> query($sql);
-        if($result -> num_rows === 0){
+        if($result -> num_rows === 0){  //haven't registered as a student
+            return false;
+        }
+
+        //registered as a student, but he might have left all coaching sessions (resulting he is not a student anymore)
+
+        //check for ongoing coaching sessions
+        $ongoingSessions = $this -> getOngoingCoachingSessions();
+        if(count($ongoingSessions) === 0){  //no ongoing coaching sessions
             return false;
         }
         return true;
+    }
+
+    public function getOngoingCoachingSessions(){   //return coaching sessions the user is attending
+        $sql = sprintf("SELECT `sessionID` 
+        FROM `student_registered_session` 
+        WHERE `stuID` = '%s' 
+        AND `leaveDate` IS NULL", $this -> connection -> real_escape_string($this -> userID));
+        $result = $this -> connection -> query($sql);
+        $sessionArr = [];
+        while($row = $result -> fetch_object()){
+            $sessionID = $row -> sessionID;
+            $currSession = new Coaching_Session($sessionID);
+            array_push($sessionArr, $currSession);
+            unset($currSession);
+            unset($row);
+        }
+        return $sessionArr;
     }
 
     public function setDetailsByProperty($propertyName, $propertyValue){   //set the details of the user
@@ -480,7 +490,7 @@ class User extends Actor implements JsonSerializable{
                 unset($editingValArr[$key]);
                 continue;
             }
-            $sql .= sprintf(" `%s` = '%s',", $key, $this -> connection -> real_escape_string($value));
+            $sql .= sprintf(" `%s` = NULLIF('%s', ''),", $key, $this -> connection -> real_escape_string($value));
         }
 
         if(sizeof($editingValArr) === 0){   //no need to update the user profile (only have medical concerns and dependents)
@@ -498,6 +508,133 @@ class User extends Actor implements JsonSerializable{
         return true;    //successfully update the profile
     }
 
+    public function getPendingCoachingSessionRequests(){   //function to get coaching sessions that are requested by the user (returns an array of sessionIDs)
+        $sql = sprintf("SELECT `sessionID` FROM `user_request_coaching_session` 
+        WHERE `userID` = '%s'", 
+        $this -> connection -> real_escape_string($this -> userID));
+
+        $result = $this -> connection -> query($sql);
+        
+        $requestArr = [];
+        while($row = $result -> fetch_object()){
+            $sessionID = $row -> sessionID;
+            $tempSession = new Coaching_Session($sessionID);
+            array_push($requestArr, $tempSession);
+            unset($row);
+        }
+        return $requestArr;
+    }
+
+    public function getLeftCoachingSessions(){
+        $sql = sprintf("SELECT `sessionID` FROM `student_registered_session` 
+        WHERE `stuID` = '%s'
+        AND `leaveDate` IS NOT NULL",
+        $this -> connection -> real_escape_string($this -> userID));
+
+        $result = $this -> connection -> query($sql);
+
+        $sessionArr = [];
+        while($row = $result -> fetch_object()){
+            $sessionID = $row -> sessionID;
+            $tempSession = new Coaching_Session($sessionID);
+            array_push($sessionArr, $tempSession);
+            unset($row);
+        }
+
+        return $sessionArr;
+    }
+
+    public function requestCoachingSession($sessionObj, $message){
+        date_default_timezone_set(SERVER_TIMEZONE);
+        $date = date('Y-m-d');   
+        
+        $notificationID = uniqid("notReq".substr($this -> userID, 0, 3));
+
+        //send a notification to the coach
+        //add the notification first because the notificationID is needed to add the request (foreign key)
+        require_once("../../src/general/notification.php");
+        $requestNotification = new Notification($notificationID);
+
+        $sessionCoach = $sessionObj -> getCoach($this -> connection);
+
+        $notDescription = "You have a new request from an user to join your Coaching Session. Please check your Coaching Session Requests to accept or reject the request.";
+        
+
+        $requestNotification -> setDetails(subject : "New Student Request",
+            status : "Unread",
+            description : $notDescription,
+            date : date("Y-m-d"),
+            userID : $sessionCoach -> getUserID());
+
+        $requestNotification -> setNotificationEntry($this -> connection);
+
+        
+        $sql = sprintf("INSERT INTO `user_request_coaching_session` 
+        (`userID`, `sessionID`, `message`, `requestDate`, `notificationID`) 
+        VALUES ('%s', '%s', NULLIF('%s', ''), '%s', '%s')",
+        $this -> connection -> real_escape_string($this -> userID),
+        $this -> connection -> real_escape_string($sessionObj -> getSessionID()),
+        $this -> connection -> real_escape_string($message),
+        $this -> connection -> real_escape_string($date),
+        $this -> connection -> real_escape_string($notificationID));
+
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+
+        return true;
+    }
+
+    public function cancelCoachingSessionRequest($sessionObj){
+        //first get the notificationID of the request
+        $sql = sprintf("SELECT `notificationID` FROM `user_request_coaching_session` 
+        WHERE `userID` = '%s'
+        AND `sessionID` = '%s'",
+        $this -> connection -> real_escape_string($this -> userID),
+        $this -> connection -> real_escape_string($sessionObj -> getSessionID()));
+
+        $result = $this -> connection -> query($sql);
+        $row = $result -> fetch_object();
+        $notificationID = $row -> notificationID;
+
+        //delete the session request
+        $sql = sprintf("DELETE FROM `user_request_coaching_session` 
+        WHERE `userID` = '%s'
+        AND `sessionID` = '%s'",
+        $this -> connection -> real_escape_string($this -> userID),
+        $this -> connection -> real_escape_string($sessionObj -> getSessionID()));
+
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+
+        //delete the notification
+        require_once("../../src/general/notification.php");
+        $notification = new Notification($notificationID);
+        $notification -> deleteNotification($this -> connection);
+        return true;
+    }
+
+    public function leaveCoachingSession($sessionObj){
+        date_default_timezone_set(SERVER_TIMEZONE);
+        $date = date('Y-m-d');
+        $sql = sprintf("UPDATE `student_registered_session` 
+        SET `leaveDate` = '%s'
+        WHERE `stuID` = '%s'
+        AND `sessionID` = '%s'",
+        $this -> connection -> real_escape_string($date),
+        $this -> connection -> real_escape_string($this -> userID),
+        $this -> connection -> real_escape_string($sessionObj -> getSessionID()));
+
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+        return true;
+    }
+
     public function giveFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //generalized function to give feedback to coach or branch
         if(get_class($feedbackObj) === 'Coaching_Session'){ //the user is giving feedback to a coach
             return $this -> giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating);
@@ -511,12 +648,34 @@ class User extends Actor implements JsonSerializable{
     }
 
     private function giveCoachFeedback($feedbackObj, $feedbackOwner, $feedback, $rating){ //give feedback to a coach
+        $feedbackID = uniqid('coachFB');
 
+        $sql = sprintf("INSERT INTO `student_coach_feedback` 
+            (`feedbackID`, `stuID`, `coachID`, `description`, `rating`, `date`)
+            VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
+            $this -> connection -> real_escape_string($feedbackID),
+            $this -> connection -> real_escape_string($this -> userID),
+            $this -> connection -> real_escape_string($feedbackOwner -> getUserID()),   //feedback owner is the coach
+            $this -> connection -> real_escape_string($feedback),
+            $this -> connection -> real_escape_string($rating),
+            $this -> connection -> real_escape_string(date('Y-m-d')));
+
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+
+        return true;
     }
 
     private function giveBranchFeedback($reservationObj, $branchObj, $feedback, $rating){ //give feedback to a branch
         //update the status of the reservation to let that the user has given feedback
-        $updateResult = $reservationObj -> updateStatus($this -> connection, 'feedbackGiven');
+        //first get the status of the reservation
+        $reservationObj -> getDetails($this -> connection, ['status']);
+        $currStatus = json_decode(json_encode($reservationObj), true)['status'];
+
+        //append the feedbackGiven status to the current status so that the user cannot give feedback again
+        $updateResult = $reservationObj -> updateStatus($this -> connection, $currStatus . ' feedbackGiven');
         if($updateResult === false){
             return false;
         }
@@ -529,23 +688,35 @@ class User extends Actor implements JsonSerializable{
         return true;
     }
 
+    public function deactivateAccount(){
+        $sql = sprintf("UPDATE `login_details` SET `isActive` = '0' WHERE `userID` = '%s'", $this -> connection -> real_escape_string($this -> userID));
+        $result = $this -> connection -> query($sql);
+        if($result === false){
+            return false;
+        }
+        return true;
+    }
+
     public function jsonSerialize() : mixed{    //to json encode
-        return [
-            'username' => $this -> username,
-            'password' => $this -> password,
-            'fName' => $this -> firstName,
-            'lName' => $this -> lastName,
-            'homeAddress' => $this -> homeAddress,
-            'gender' => $this -> gender,
-            'dob' => $this -> birthday,
-            'height' => $this -> height,
-            'weight' => $this -> weight,
-            'profilePic' => $this -> profilePhoto,
-            'email' => $this -> emailAddress,
-            'contactNo' => $this -> contactNum,
-            'medicalConcerns' => $this -> medicalConcerns,
-            'dependents' => $this -> dependents
-        ];
+        $ObjectProperties = get_object_vars($this);
+        $returnJSON = [];
+
+        foreach($ObjectProperties as $key => $value){
+            if($key === 'connection'){
+                continue;
+            }
+
+            if($key === 'password'){
+                continue;
+            }
+
+            if(!isset($value)){
+                continue;
+            }
+            $returnJSON[$key] = $value;
+        }
+
+        return $returnJSON;
     }
 }
 ?>

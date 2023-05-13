@@ -33,23 +33,26 @@
             $santizedEmail = filter_var($email, FILTER_SANITIZE_EMAIL); //sanitize the email address
 
             if(!filter_var($santizedEmail, FILTER_VALIDATE_EMAIL) ){ //check if the email is valid
-                return false;
+                return [false, "Invalid"];
             }
 
             require("dbconnection.php");
             self::$connection = $connection;
-            $sql = sprintf("SELECT `emailAddress` FROM `login_details` WHERE `emailAddress` = '%s'", self::$connection -> real_escape_string($santizedEmail));
+            $sql = sprintf("SELECT `ld`.`emailAddress`, `b`.`branchEmail` FROM `login_details` `ld` CROSS JOIN 
+            `branch` `b` WHERE `ld`.`emailAddress` = '%s' OR (`b`.`branchEmail` = '%s' AND `b`.`requestStatus` = 'a')",     //get the email addresses of branches that are already registered
+            self::$connection -> real_escape_string($santizedEmail),
+            self::$connection -> real_escape_string($santizedEmail));
 
             $result = self::$connection -> query($sql);
             //$row = $result -> fetch_object();
             self::$connection -> close();
 
             if($result -> num_rows == 0){  //if the email address is not in the database, it is available
-                return true;
+                return [true, "Available"];
             }
             else{
                 
-                return false;
+                return [false, "Unavailable"];
             }
         }
 
@@ -76,7 +79,7 @@
             self::$connection = $connection;
             $sql = sprintf("SELECT `userID`, `username`, `password`, `userRole` 
             FROM `login_details` 
-            WHERE `username` = '%s' AND `userID` = '%s' AND `userRole` = '%s'",
+            WHERE `username` LIKE '%s' AND `userID` = '%s' AND `userRole` = '%s'",
             self::$connection -> real_escape_string($inputUsername),
             self::$connection -> real_escape_string($userID),
             self::$connection -> real_escape_string($userRole));
@@ -104,23 +107,28 @@
                     return true; //can access
                 }
                 else{   //the user is logged in
-                    if(!($_SESSION['userrole'] === 'user')){   //if the logged in person is not a coach or an user
-                        return false;   //they cannot access (we are referring to staff here)
+                    if(!in_array($_SESSION['userrole'], $acceptingUserRoles)){  //the user is trying to access a page that cannot be accessed by their role 
+                        return false;
                     }
-                    else{
+                    else{   //can access
                         return true;
                     }
                 }
             }
             else{   //access is based on the userRole
                 if(!isset($_SESSION['userid'])){    //the user is not logged in
-                    if(empty($acceptingUserRoles)){ //no one can access when logged in (register, login pages, etc)
+                    if(empty($acceptingUserRoles)){     //the page can be accessed by anyone (not logged in) 
+                        //because if the logincheck is true but the array is empty, it means that the page can be accessed by anyone when not logged in
                         return true;
+                    }
+                    else{   //the array is not empty, meaning that the page access is restricted to certain user roles 
+                        //since the user is not logged in, they cannot access
+                        return false;   //no access
                     }   
-                    return false;   //no access
                 }
                 else{   //is logged in
-                    if(!in_array($_SESSION['userrole'], $acceptingUserRoles)){  //the user is trying to access a page that cannot be accessed by their role (works for empty array)
+                    if(!in_array($_SESSION['userrole'], $acceptingUserRoles)){  //the user is trying to access a page that cannot be accessed by their role 
+                        //(works for empty array because no one can access when logged in (register, login pages, etc))
                         return false;
                     }
                     else{   //can access
@@ -132,7 +140,7 @@
 
         public static function redirectUserBase(){  //redirects the user to the appropriate page (starting page) based on the user role
             if(!isset($_SESSION['userrole'])){  //homepage
-                header("Location: /index.php");
+                header("Location: /");
                 return;
             }
             switch($_SESSION['userrole']){
@@ -152,7 +160,7 @@
                     header("Location: /public/coach/coach_dashboard.php");
                     break;
                 case 'any' || 'user':
-                    header("Location: /index.php");
+                    header("Location: /");
                     break;
             }
         }

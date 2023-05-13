@@ -2,7 +2,7 @@
     session_start();
     require_once("../../src/general/security.php");
     //check the authentication
-    if(!Security::userAuthentication(logInCheck: FALSE)){ //cannot access (NOT operator)
+    if(!Security::userAuthentication(logInCheck: FALSE, acceptingUserRoles:['user'])){ //cannot access (NOT operator)
         Security::redirectUserBase();
     }
     else{
@@ -23,7 +23,7 @@
                     require_once("header.php");
                 ?>
                 <main>
-                    <div style="display:flex; justify-content:center; align-items:center; flex-direction:row" id="sportsContainer">
+                    <div id="sportsContainer">
                     </div>
                 </main> 
 
@@ -31,8 +31,9 @@
                     require_once("footer.php");
                 ?>
             </body>
-            <script src="/js/general/our_sports.js"></script>
+            <script type="module" src="/js/general/our_sports.js"></script>
             <script src="/js/user/account_links.js"></script>
+            <script type="module" src="/js/general/notifications.js"></script>
         </html>
     <?php
     }

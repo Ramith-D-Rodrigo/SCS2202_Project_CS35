@@ -1,45 +1,20 @@
 <?php
+    //this script is used to get the reservation history of the user
     session_start();
-    if(!(isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is not logged in
-        header("Location: /index.php");
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
     }
 
-    if($_SESSION['userrole'] !== 'user'){   //not an user (might be another actor)
-        header("Location: /index.php");
-        exit();
-    }
     require_once("../../src/user/user.php");
     
     $user = new User();
     $user -> setDetails(uid: $_SESSION['userid']);
     $reservationHistory = $user -> getReservationHistory();
     
-/*     if(isset($_SESSION['reservationHistory'])){ //previous reservation history clear
-        unset($_SESSION['reservationHistory']);
-    } */
-    $neededInfo = [];
-
-    if(count($reservationHistory) !== 0){  //has reservations
-        $reservationJSON = json_encode($reservationHistory);
-        $reservationASSOC = json_decode($reservationJSON, true);
-        foreach($reservationASSOC as $i){
-            //echo($i['user_id']);
-            unset($i["user_id"]);
-            unset($i['formal_manager_id']);
-            unset($i['onsite_receptionist_id']);
-            unset($i['numOfPeople']);
-            unset($i['sport_court']);
-            array_push($neededInfo, $i);
-        }
-        unset($reservationASSOC);
-        unset($reservationJSON);
-        //$_SESSION['reservationHistory'] = $reservationHistory;
-    }
-    unset($reservationHistory);
-
 
     unset($user);
     header('Content-Type: application/json;');    //because we are sending json
-    echo json_encode($neededInfo);
+    echo json_encode($reservationHistory);
 ?>

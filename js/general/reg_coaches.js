@@ -1,5 +1,7 @@
 const coachListDivContainer = document.getElementById("coachList");
 const sportsFilter = document.getElementById("sportSelect");
+const showFilter = document.getElementById("showSelect");
+
 
 fetch("../../controller/general/reg_coaches_controller.php")
     .then(res => res.json())
@@ -14,7 +16,8 @@ fetch("../../controller/general/reg_coaches_controller.php")
 
         for(let i = 0; i < data.length; i++){
             const coachInfoDiv = document.createElement("div");
-            coachInfoDiv.className = "coach-row";
+            coachInfoDiv.className = "coach";
+            coachInfoDiv.classList.add("content-box");
 
             const coachImgContainer = document.createElement("div");
             coachImgContainer.className = "coach-image-container";
@@ -29,10 +32,10 @@ fetch("../../controller/general/reg_coaches_controller.php")
             coachInfoDiv.appendChild(coachImgContainer);
 
             const formDiv = document.createElement("div");
+            formDiv.className = "coach-info";
             const form = document.createElement("form");
 
             form.id = data[i].coachID; //coach id for each form
-            form.className = "coachInfo";
             form.action = "/public/general/coach_profile.php";
             form.method = "get";
 
@@ -54,7 +57,12 @@ fetch("../../controller/general/reg_coaches_controller.php")
             const sportDiv = document.createElement("div"); //coach sport
             sportDiv.className = "info";
             sportDiv.innerHTML = "Sport : " + data[i].sport;
+
+            //add sport to set
             sportSet.add(data[i].sport);
+
+            //add sport name as a class to the coach div
+            coachInfoDiv.classList.add(data[i].sport);
 
             form.appendChild(sportDiv);
 
@@ -75,7 +83,7 @@ fetch("../../controller/general/reg_coaches_controller.php")
 
                 //decimal rating
                 if(data[i].rating % 1 !== 0 && j === Math.ceil(data[i].rating)){
-                    star.className = "fa fa-star-half-o checked";
+                    star.className = "fa-solid fa-star-half-stroke checked";
                 }
 
                 ratingDiv.appendChild(star);
@@ -104,23 +112,101 @@ fetch("../../controller/general/reg_coaches_controller.php")
         }
 
         //add event listener to filter coaches by sport
-        sportsFilter.addEventListener("change", () => {
-            const sport = sportsFilter.value;   //get selected sport
+        sportsFilter.addEventListener("change", CoachFilter);
 
-            const coachList = document.getElementsByClassName("coachInfo"); //get all coach info divs
+        //show filter
 
-            for(let j = 0; j < coachList.length; j++){
-                const coachSport = coachList[j].children[1].innerHTML.split(" : ")[1];  //get the sport of that coach
+        //get the count of coaches
+        const coachCount = data.length;
+        let inc = 0;
 
-                if(sport === ""){   //if no sport is selected, show all coaches
-                    coachList[j].parentElement.parentElement.style.display = "flex";
-                }
-                else if(coachSport === sport){
-                    coachList[j].parentElement.parentElement.style.display = "flex";
-                }
-                else{
-                    coachList[j].parentElement.parentElement.style.display = "none";
-                }
+        while(inc < coachCount){
+            inc += 5;
+
+            if(inc > coachCount){   //if the increment is greater, then break
+                break;
             }
-        });
+            //otherwise can add option for increment of 5
+
+            //create option for select element
+            const option = document.createElement("option");
+            option.value = inc;
+            option.innerHTML = inc;
+
+            //add option to select element
+            showFilter.appendChild(option);
+        }
+
+
+        //add event listener to filter coaches by count
+        showFilter.addEventListener("change", CoachFilter);
     })
+
+const CoachFilter = () => {
+    //get the sport selected
+    const sport = sportsFilter.value;
+
+    //get the count selected
+    const count = showFilter.value;
+
+    //get the coach list
+    const coachList = document.getElementsByClassName("coach");
+
+    let currDisplayingCoaches  = [];
+
+    //first display all coaches
+    for(let i = 0; i < coachList.length; i++){
+        coachList[i].style.display = "flex";
+        currDisplayingCoaches.push(coachList[i]);
+    }
+
+    if(sport === "" && count === ""){   //if no filter is selected, return
+        return;
+    }
+
+    //now filter by sport
+    for(let i = 0; i < currDisplayingCoaches.length; i++){
+        const coachSport = currDisplayingCoaches[i].classList[2];
+
+        if(sport === ""){
+            currDisplayingCoaches[i].style.display = "flex";
+        }
+        else if(coachSport === sport){
+            currDisplayingCoaches[i].style.display = "flex";
+        }
+        else{
+            currDisplayingCoaches[i].style.display = "none";
+
+            //remove coach from currDisplayingCoaches
+            currDisplayingCoaches.splice(i, 1);
+            i--;    //decrement i to account for the removed coach
+        }
+    }
+
+
+    if(count === ""){   //if no count is selected, return
+        return;
+    }
+
+    if(currDisplayingCoaches.length < count){   //if the count is greater than the number of coaches, return
+        return;
+    }
+
+    if(currDisplayingCoaches.length === count){   //if the count is equal to the number of coaches, return
+        return;
+    }
+
+    if(currDisplayingCoaches.length === 0){   //if there are no coaches, return
+        return;
+    }
+
+    //now filter by count
+    for(let i = 0; i < currDisplayingCoaches.length; i++){
+        if(i < count){
+            currDisplayingCoaches[i].style.display = "flex";
+        }
+        else{
+            currDisplayingCoaches[i].style.display = "none";
+        }
+    }
+}

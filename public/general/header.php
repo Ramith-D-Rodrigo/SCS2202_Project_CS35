@@ -1,6 +1,6 @@
 <header>
     <div class='header-top'>
-        <div> <!-- For the current visiting page of the site -->
+        <div class="header-top-left"> <!-- For the current visiting page of the site -->
             <?php
                 if($_SERVER['REQUEST_URI'] === '/index.php' || $_SERVER['REQUEST_URI'] === '/'){    //home page
                     echo "Welcome";
@@ -38,26 +38,37 @@
                 else if($_SERVER['REQUEST_URI'] === '/public/user/reservation_history.php'){  //reservation history
                     echo "Reservation History";
                 }
-                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/coach_profile.php')){  //reservation history
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/coach_profile.php')){  //coach profile
                     echo "Coach Profile";
                 }
-                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/our_feedback.php')){  //reservation history
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/general/our_feedback.php')){  //feedback page
                     echo "Our Feedback";
                 }
-                else if(str_contains($_SERVER['REQUEST_URI'],'/public/user/edit_profile.php')){  //reservation history
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/user/edit_profile.php')){  //edit profile
                     echo "Edit Profile";
+                }
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/user/coaching_sessions.php')){  //coaching sessions
+                    echo "Coaching Sessions";
                 }
             ?>
         </div>
-        <div style="text-align:center"> <!--- sports complex name -->
+        <div class="header-top-middle"> <!--- sports complex name -->
            Example Sports Complex
         </div>
-        <div>
+        <div class="header-top-right">
         <?php
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
         ?>  
-            <div style="float:right" id="accountIcons">
-            
+            <div id="accountIcons" class="header-right">
+                <input type="checkbox" class="dropdown-check" id="notificationCheck">
+                <div class='notification-container'>
+                    <label for="notificationCheck">
+                        <i class="fa-solid fa-bell btn bell"></i>
+                        <i class="notification-count" id="notificationCount"></i>
+                    </label>
+                    <ul class="dropdown">
+                    </ul>
+                </div>
                 <?php if(isset($_SESSION['userProfilePic'])){?>
                     
                     <button class ="btn" id='profileBtn'><img src="<?php echo $_SESSION['userProfilePic']?>" class="acc-img" style="border: solid thin black"></button>
@@ -65,7 +76,7 @@
                 }
                 else{
                 ?>
-                    <button class ="btn" id='profileBtn'><img src="/styles/icons/profile_icon.svg" class="acc-img"></button>
+                    <button class ="btn" id='profileBtn'><i class="fa-solid fa-circle-user"></i></button>
                 <?php
                 }
                 ?>
@@ -75,27 +86,70 @@
             }
             else{
         ?>
-            <div style="float:right" id="userOptions">
+            <div style="float:right" id="userOptions" class="header-right">
                 <button class="btn" id ="register" onclick="window.location.href='/public/general/register.php'">Register<i class="fa-solid fa-user-plus" style="margin: 0 10px"></i></button>
                 <button class="btn" id="login" onclick="window.location.href='/public/general/login.php'">Log in<i class="fa-solid fa-right-to-bracket" style="margin: 0 10px"></i></button>
             </div>
         <?php
             }
         ?>
+            <div>
+                <input type="checkbox" class="nav-checkbox" id="navCheckbox">
+                <label for="navCheckbox" class="nav-check-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </label>
+            </div>
         </div>
     </div>
 
     <nav class="header-links">
-        <a href="/index.php">Home</a>
-        <a href="/public/general/our_sports.php">Our Sports</a>
-        <a href="/public/general/our_branches.php">Our Branches</a>
-        <a href="/public/general/reg_coaches.php">Registered Coaches</a>
-        <a href="/public/general/our_feedback.php">Our Feedback</a>
-        <a href="/public/general/about_us.php">About Us</a>
-        <div id="profile-links" style="float:right; margin-right:20px; display:none">
-            <a href="/public/user/coaching_sessions.php">Coaching Sessions</a>
-            <a href="/public/user/reservation_history.php">Reservation History</a>
-            <a href="/public/user/edit_profile.php">Edit Profile</a>
-        </div>
+        <ul>
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/public/general/our_sports.php">Our Sports</a>
+            </li>
+            <li>
+                <a href="/public/general/our_branches.php">Our Branches</a>
+            </li>
+            <li>
+                <a href="/public/general/reg_coaches.php">Registered Coaches</a>
+            </li>
+            <li>
+                <a href="/public/general/our_feedback.php">Our Feedback</a>
+            </li>
+            <li>
+                <a href="/public/general/about_us.php">About Us</a>
+            </li>
+            <?php
+                if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){ //user logged in
+            ?>
+                 <li class="profile-links">
+                    <a href="/public/user/edit_profile.php">Edit Profile</a>
+                </li>
+                <li class="profile-links">
+                    <a href="/public/user/coaching_sessions.php">Coaching Sessions</a>
+                </li>
+                <li class="profile-links">
+                    <a href="/public/user/reservation_history.php">Reservation History</a>
+                </li>
+                <li class="session-links-responsive">
+                    <a href="/controller/general/logout_controller.php">Log out</a>
+                </li>
+            <?php
+                }
+                else{
+            ?>
+                <li class="session-links-responsive">
+                    <a href="/public/general/register.php">Register</a>
+                </li>
+                <li class="session-links-responsive">
+                    <a href="/public/general/login.php">Log in</a>
+                </li>
+            <?php
+                }
+            ?>
+        </ul>
     </nav>
 </header>

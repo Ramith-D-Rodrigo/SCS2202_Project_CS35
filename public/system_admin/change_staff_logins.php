@@ -24,37 +24,38 @@
     ?>
     <main class="body-container" style="display:flex;flex-direction:column">
         <div class="content-box">
-            <div style="display:flex;flex-direction:row">
-                <div class="row-container" style="margin-right:-100px;display:flex;align-items:center;flex-direction:row">
-                    <div> Staff Role: </div>
-                    <div>
-                        <select name="staffRole" id="staffRole">
-                            <option value="">Choose Role</option>
-                            <option value="receptionist">Receptionist</option>
-                            <option value="manager">Manager</option>
-                        </select>
+            <form action="../../controller/system_admin/change_login_controller.php" method="post">
+                <div style="display:flex;flex-direction:row">
+                    <div class="row-container" style="margin-right:-100px;display:flex;align-items:center;flex-direction:row">
+                        <div> Staff Role: </div>
+                        <div>
+                            <select name="staffRole" id="staffRole">
+                                <option value="">Choose Role</option>
+                                <option value="receptionist">Receptionist</option>
+                                <option value="manager">Manager</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="row-container" style="margin-left:-100px;display:flex;align-items:center;flex-direction:row">
-                    <div> Registered Branch: </div>
-                    <div>
-                        <select name="branchName" id="branchName">
-                            <option value="">Choose Branch</option>
-                        </select>
+                    <div class="row-container" style="margin-left:-100px;display:flex;align-items:center;flex-direction:row">
+                        <div> Registered Branch: </div>
+                        <div>
+                            <select name="branchName" id="branchName">
+                                <option value="">Choose Branch</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </div> 
-            <div class="row-container">
-                    <div class="left-side"> Username: </div>
-                    <div class="right-side"><input readonly id="username"></input>
+                </div> 
+                <div class="row-container">
+                        <div class="left-side"> Username: </div>
+                        <div class="right-side"><input readonly id="username"></input>
+                        </div>    
+                    </div>
+                <div class="row-container">
+                    <div class="left-side"> Current Email: </div>
+                    <div class="right-side"><input readonly id="currEmail"></input>
                     </div>    
                 </div>
-            <div class="row-container">
-                <div class="left-side"> Current Email: </div>
-                <div class="right-side"><input readonly id="currEmail"></input>
-                </div>    
-            </div>
-            <form action="../../controller/system_admin/change_login_controller.php" method="post">
+           
                 <div class="row-container">
                     <div class="left-side"> New Email: </div>
                     <div class="right-side">
@@ -82,7 +83,8 @@
                     </div>    
                     <!-- <div><button type="submit" id="viewBtn" >Show Password</button></div> -->
                 </div>
-                <div id="err-msg">
+                <input hidden name="role" id="staff"></input>
+                <div class="err-msg" id="err-msg">
                     <?php 
                         if(isset($_SESSION['emailError'])){
                             echo $_SESSION['emailError'];
@@ -91,9 +93,18 @@
                         }
                     ?>
                 </div>
+                <div class="success-msg">
+                    <?php 
+                        if(isset($_SESSION['successMsg'])){
+                            echo $_SESSION['successMsg'];
+                            echo '<br>';
+                            unset($_SESSION['successMsg']);
+                        }
+                    ?>
+                </div>
                 <div class="row-container" style="justify-content:flex-end">
-                    <button id="viewBtn" onclick="window.location.href='../../public/system_admin/change_staff_logins.php'">Cancel</button>
-                    <button type="submit" id="viewBtn" onclick="return validateForm(event)">Confirm</button>
+                    <button  onclick="window.location.href='../../public/system_admin/change_staff_logins.php'">Cancel</button>
+                    <button name="confirmBtn" type="submit" id="confirmBtn" onclick="return validateForm(event)">Confirm</button>
                 </div>
             </form>
         </div>

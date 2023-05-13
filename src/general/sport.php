@@ -7,10 +7,21 @@
         private $minCoachingSessionPrice;
         private $maxNoOfStudents;
 
-        public function getDetails($database, $wantedProperty = ''){
-            $sql = sprintf("SELECT * FROM `sport`
-            WHERE `sportID`
-            LIKE '%s'", $database -> real_escape_string($this -> sportID));
+        public function getDetails($database, $wantedColumns = []){
+            $sql = "SELECT ";
+            if(empty($wantedColumns)){
+                $sql = $sql . "*";
+            }
+            else{
+                foreach($wantedColumns as $column){
+                    $sql .= "`$column`,";
+                }
+                $sql = substr($sql, 0, -1); //remove the last comma
+            }
+            $sql .= " FROM `sport` ";
+
+            $sql .= sprintf("WHERE `sportID` LIKE '%s'", $database -> real_escape_string($this -> sportID));
+
             $result = $database -> query($sql);
 
             $row = $result -> fetch_object();
@@ -20,29 +31,43 @@
                 $this -> $key = $value;
             }
 
-/*             $this -> sportName = $row -> sportName;
-            $this -> description = $row -> description;
-            $this -> reservationPrice = $row -> reservationPrice;
-            $this -> manNoOfStudents = $row -> manNoOfStudents; */
-
             $result -> free_result();
+            unset($row);
+            return $this;
+        }
 
-            if($wantedProperty === 'sportID'){
-                return $this -> sportID;
+        public function setDetails($sportName = '', $description = '', $reservationPrice = '', $minCoachingSessionPrice = '', $maxNoOfStudents = ''){
+            $args = get_defined_vars();
+
+            foreach($args as $key => $value){
+                if($value !== ''){
+                    $this -> $key = $value;
+                }
             }
-            else if($wantedProperty === 'sportName'){
-                return $this -> sportName;
-            }
-            else if($wantedProperty === 'reservationPrice'){
-                return $this -> reservationPrice;
-            }
-            else{
-                return $this;
-            }
+        }
+
+        public function createSportEntry($database){
+            $sql = sprintf("INSERT INTO `sport` 
+                (`sportID`,`sportName`, `description`, `reservationPrice`, `minCoachingSessionPrice`, `maxNoOfStudents`) 
+                VALUES ('%s','%s', '%s', '%s', '%s', NULLIF('%s', ''))",
+                $database -> real_escape_string($this -> sportID),
+                $database -> real_escape_string($this -> sportName),
+                $database -> real_escape_string($this -> description),
+                $database -> real_escape_string($this -> reservationPrice),
+                $database -> real_escape_string($this -> minCoachingSessionPrice),
+                $database -> real_escape_string($this -> maxNoOfStudents));
+
+            $result = $database -> query($sql);
+
+            return $result;
         }
 
         public function setID($id){
             $this -> sportID = $id;
+        }
+
+        public function getID(){
+            return $this -> sportID;
         }
 
         public function getSportID($spName, $database) {
@@ -53,15 +78,33 @@
             return $result;
         }
 
-        public function jsonSerialize() : mixed{
-            return [
-                "sportID" => $this -> sportID,
-                "sportName" => $this -> sportName,
-                "description" => $this -> description,
-                "reservationPrice" => $this -> reservationPrice,
-                "maxNoOfStudents" => $this -> maxNoOfStudents
-            ];
+        public function updateDetails($updatingColumns, $database){
+            $sql = "UPDATE `sport` SET ";
+            foreach($updatingColumns as $column => $value){
+                $sql .= sprintf("`%s` = '%s',", 
+                $database -> real_escape_string($column),
+                $database -> real_escape_string($value));
+            }
+            $sql = substr($sql, 0, -1); //remove the last comma
+            $sql .= sprintf(" WHERE `sportID` LIKE '%s'", $database -> real_escape_string($this -> sportID));
 
+            $result = $database -> query($sql);
+
+            return $result;
+        }
+
+        public function jsonSerialize() : mixed{
+            $classProperties = get_object_vars($this);
+
+            $returnJSON = [];
+
+            foreach($classProperties as $key => $value){
+                if(isset($value)){
+                    $returnJSON[$key] = $value;
+                }
+            }
+
+            return $returnJSON;
         }
     }
 
