@@ -236,7 +236,7 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
 
             //half stars for decimal value
             if(i === Math.ceil(data.coachRating) && data.coachRating % 1 !== 0){
-                star.className = "fa-solid fa-star-half-stroke checked";
+                star.className = "fa-solid fa-star-half-stroke checked rating-star";
             }
             rating.appendChild(star);
         }
