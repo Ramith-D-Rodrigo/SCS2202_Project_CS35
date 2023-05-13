@@ -248,14 +248,6 @@
         }
 
         public function getSportCourtRequests($manager = null, $decision = '%'){ //get all the sport court requests including court photos(adding new sports court to some branch)
-
-            $existingCourtsSQL = $this -> connection -> query("SELECT COUNT(`courtID`) AS `Count`,`sportID`,`branchID` FROM `sports_court` WHERE 
-            `requestStatus` LIKE 'a' AND `addedManager` IS NULL GROUP BY `branchID`,`sportID`"); 
-
-           $existingCourts = array();
-            while($row = $existingCourtsSQL -> fetch_object()){
-                array_push($existingCourts, $row);
-            }
             
             if($manager == null){
                 $sql = sprintf("SELECT `sc`.*,`scp`.`courtPhoto` FROM 
@@ -267,7 +259,7 @@
             else{
                 $sql = sprintf("SELECT `sc`.*,`scp`.`courtPhoto` FROM 
                 `sports_court` `sc` LEFT JOIN `sports_court_photo` `scp` ON `sc`.`courtID` = `scp`.`courtID`
-                WHERE `managerID` = '%s' AND `requestStatus` LIKE '%s'",
+                WHERE `addedManager` = '%s' AND `requestStatus` LIKE '%s'",
                 $this -> connection -> real_escape_string($manager -> getUserID()),
                 $this -> connection -> real_escape_string($decision));
                 $result = $this -> connection -> query($sql);
@@ -276,7 +268,6 @@
             $sportCourtArr = array();
 
             while($row = $result -> fetch_object()){
-                $row -> existingCourts = $existingCourts; //adding the existing courts details of each sport in each branch
                 array_push($sportCourtArr, $row);
             }
 
@@ -329,6 +320,14 @@
 
             $result = $newSport -> createSportEntry($this -> connection);
 
+            return $result;
+        }
+
+        public function addNotification($notificationID,$subject,$description,$date,$userID){
+            $notification = new Notification($notificationID);
+            $notification -> setDetails(subject: $subject,description: $description,date: $date,userID: $userID,status: "Unread");
+            $result = $notification -> setNotificationEntry($this -> connection);
+    
             return $result;
         }
 
