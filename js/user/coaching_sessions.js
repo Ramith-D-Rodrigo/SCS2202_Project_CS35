@@ -411,7 +411,7 @@ const giveFeedback = (e) => {   //give feedback functionality
     icon.style.color = 'green';
 
     //disable the submit button
-    const submitBtn = feedbackForm.querySelector('input[type="submit"]');
+    const submitBtn = feedbackForm.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
     submitBtn.style.cursor = 'not-allowed';
     submitBtn.classList.add('disabled');
