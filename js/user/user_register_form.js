@@ -102,7 +102,9 @@ regForm.addEventListener("submit", (e) => {
                         successMsgBox.innerHTML = "";
                         successMsgBox.innerHTML = data.successMsg;
                         successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected to the home page, Please wait...";
-                        window.location.href = "/";
+                        setTimeout(() => {
+                            window.location.href = "/";
+                        }, 3000);
                     }
                     else if(data.errMsg !== undefined){  //verification failed
                         errMsgBox.innerHTML = "";

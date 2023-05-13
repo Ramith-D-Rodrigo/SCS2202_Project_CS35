@@ -178,7 +178,7 @@
                                 <div class="row-container">
                                     <div class="left-field">Upload a Profile Picture</div>
                                     <div class="right-field">
-                                        <input type=file name="user_pic" accept=".jpg, .jpeg, .png" id="user_profile_pic" title="Maximum File Size 2MB. Only Accepts JPG, PNG" style="width:100%">
+                                        <input type=file name="user_pic" accept=".jpg, .jpeg, .png" id="user_profile_pic" title="Maximum File Size 1MB. Only Accepts JPG, PNG" style="width:100%">
                                     </div>
                                 </div>
                                 
