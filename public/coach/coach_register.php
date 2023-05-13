@@ -32,16 +32,6 @@
 
                     Coaching Sport : 
                         <select name ="sport" id="sport">
-                            <?php
-                            foreach( $_SESSION["sports"] as $sport){
-                              ?>  
-                              <option value=<?php echo $sport[0]?>><?php echo $sport[1]?></option>
-                              <?php 
-                            }
-
-                            ?>
-                            
-
                         </select> 
                         <br>
 
@@ -187,4 +177,6 @@
     </body>
     <script src="/js/coach/coach_register_form_handle.js"></script>
     <script src="/js/coach/coach_register_validation.js"></script>
+    <script src="/js/coach/coach_register_details.js"></script>
+
 </html>
