@@ -73,7 +73,7 @@ selectedSport.addEventListener("change",(e) => {
 
 function submitDecsion(event){
     event.preventDefault();
-    $decisionDetails = {
+    const decisionDetails = {
         Decision: event.target.value,
         BranchID: document.getElementById("branchID").value,
         Location: document.getElementById("city").value,
@@ -86,9 +86,9 @@ function submitDecsion(event){
         header: {
             "Content-Type" : "application/json"
         },
-        body: JSON.stringify($decisionDetails)
+        body: JSON.stringify(decisionDetails)
     })
-    .then(res => res.json)
+    .then(res => res.json())
     .then(data => {
         console.log(data);
         if(!data['Flag']){
@@ -99,9 +99,9 @@ function submitDecsion(event){
             successMsg.innerHTML = data['Message'];
             overlay.style.display = "block";
 
-            // setTimeout(function(){
-            //     location.reload();
-            // },3000);
+            setTimeout(function(){
+                location.reload();
+            },3000);
         }else{
             errMsg.innerHTML = data['Message'];
         }

@@ -49,7 +49,7 @@ function checkBranchMaintenance($branchID,$stDate,$endDate,$database) {         
 
     $slotAvail = sprintf("SELECT `decision` FROM `branch_maintenance` WHERE (((`startingDate` BETWEEN 
     '%s' AND '%s')  OR (`endingDate` BETWEEN 
-    '%s' AND '%s')) OR (`startingDate` > '%s' AND `endingDate` < '%s')) AND `branchID` = '%s' AND `decision` = 'p'",
+    '%s' AND '%s')) OR (`startingDate` < '%s' AND `endingDate` > '%s')) AND `branchID` = '%s' AND `decision` = 'a'",
     $database -> real_escape_string($stDate),
     $database -> real_escape_string($endDate),
     $database -> real_escape_string($stDate),
