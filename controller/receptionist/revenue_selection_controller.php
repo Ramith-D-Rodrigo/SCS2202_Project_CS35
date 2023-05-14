@@ -12,7 +12,7 @@
     require_once("../../src/system_admin/staff.php");
 
     $staffMember  = new Staff();
-    $receptionist = $staffMember -> getStaffMemeber($_SESSION['userrole']);
+    $receptionist = $staffMember -> getStaffMember($_SESSION['userrole']);
 
     $branch = new Branch($_SESSION['branchID']);
 
