@@ -12,6 +12,12 @@ loginForm.addEventListener("submit", (e) => {
     const password = formData.get("password");
     const user = { username, password };
 
+    //disable the login button
+    const loginBtn = document.getElementById("loginBtn");   //disabling login button
+    loginBtn.disabled = true;
+    loginBtn.style.cursor = "not-allowed";
+    loginBtn.classList.add("disabled");
+
     fetch("../../controller/general/login_controller.php", {
         method: "POST",
         headers: {
@@ -23,24 +29,21 @@ loginForm.addEventListener("submit", (e) => {
         if(data.successMsg !== undefined){  //login success
             successMsgBox.innerHTML = data.successMsg;
 
-            //disabling buttons
-
-            const loginBtn = document.getElementById("loginBtn");   //disabling login button
-            loginBtn.disabled = true;
-            loginBtn.style.cursor = "not-allowed";
-
+            //disabling other buttons
             const regBtn = document.getElementById("regBtn"); //disabling register button
             regBtn.disabled = true;
             regBtn.style.cursor = "not-allowed";
+            regBtn.classList.add("disabled");
 
             const forgotBtn = document.getElementById("forBtn"); //disabling forgot password button
             forgotBtn.disabled = true;
             forgotBtn.style.cursor = "not-allowed";
+            forgotBtn.classList.add("disabled");
 
             successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>You will be Redirected, Please Wait...";
 
             if(data.userrole === 'user'){
-                window.location.href = "/index.php";
+                window.location.href = "/";
             }
             else if(data.userrole === 'coach'){
                 window.location.href = "/public/coach/coach_dashboard.php";
@@ -86,6 +89,12 @@ loginForm.addEventListener("submit", (e) => {
                     const userCode = activationData.get("verificationCode");
             
                     const request = {"verificationCode" : userCode, "activationType" : "activate"};    //create a json object to send to the server
+
+                    //disable the verify button
+                    verifyBtn.disabled = true;
+                    verifyBtn.style.cursor = "not-allowed";
+                    verifyBtn.classList.add("disabled");
+
                     fetch("../../controller/user/account_activation_controller.php", {
                         method: "POST",
                         header: {
@@ -103,20 +112,36 @@ loginForm.addEventListener("submit", (e) => {
                             successMsgBox.innerHTML = successMsgBox.innerHTML + ".<br>Now you can login to your account.";
                             activateDiv.innerHTML = ""; //remove the activation div
 
+                            //renabling the login button
+                            loginBtn.disabled = false;
+                            loginBtn.style.cursor = "pointer";
+                            loginBtn.classList.remove("disabled");
+
                         }
                         else if(data.errMsg !== undefined){  //verification failed
                             errMsgBox.innerHTML = "";
                             successMsgBox.innerHTML = "";
                             errMsgBox.innerHTML = data.errMsg;
+
+                            //renabling verify button
+                            verifyBtn.disabled = false;
+                            verifyBtn.style.cursor = "pointer";
+                            verifyBtn.classList.remove("disabled");
                         }
                     })
                     .catch((err) => {
-                        console.log(err);
+                        //console.log(err);
                     });
                 });
             }
+            else{   //probably wrong username or password
+                //renabling the login button
+                loginBtn.disabled = false;
+                loginBtn.style.cursor = "pointer";
+                loginBtn.classList.remove("disabled");
+            }
         }
     }).catch((err) => {
-        console.log(err);
+        //console.log(err);
     });
 });

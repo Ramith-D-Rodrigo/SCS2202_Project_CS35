@@ -17,17 +17,17 @@ main::before{
     display: flex;
     justify-content: center;
     flex-direction: row;
-    width: 600px;
+    width: 500px;
     margin: 10px auto;
 }
 
 .left-side{
-    width: 600px;
+    width: 50%;
 }
 
 .right-side{
-    width: 1200px;
-    margin-left: 60px;
+    width: 50%;
+    /* margin-left: 60px; */
 }
 
 .right-side > textarea{

@@ -10,8 +10,6 @@ const sportCard = document.querySelector("#sports");
 fetch("../../controller/owner/dashboard_controller.php")
     .then(res => res.json())
     .then(data => {
-        console.log(data);
-
         //add the data to the revenue card
         revenueCard.innerHTML = `${currency} ${parseFloat(data.revenue).toFixed(2)}`;
         
@@ -79,7 +77,7 @@ fetch("../../controller/owner/dashboard_controller.php")
             sportDiv.className = "sport-icon-container";
             //image for the sport
             const img = document.createElement("img");
-            img.src = `/uploads/sport_images/${sport.sportName}.jpg`;
+            img.src = `/uploads/sport_images/${sport.sportName.toLowerCase()}.jpg`;
 
             img.className = "sport-icon";
 

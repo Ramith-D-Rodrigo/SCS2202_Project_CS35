@@ -34,9 +34,9 @@ cancelFeedbackBtn.addEventListener("click", (e) => {
 
     const main = document.querySelector("main");
 
-    //closing the authentication form should remove the blur effect
-    main.style.filter = "blur(0px)";
-    main.style.pointerEvents = "auto";
+    //closing the authentication form
+    main.classList.remove("main-darken");
+    main.classList.remove("disabled");
 
 
     //add closing animation keyframes
@@ -120,6 +120,11 @@ feedbackBox.querySelector("form").addEventListener("submit", (e) => {
 
     const userInput = JSON.stringify(Object.fromEntries(formData));
 
+    //disable the submit button
+    submitFeedbackBtn.disabled = true;
+    submitFeedbackBtn.style.cursor = "not-allowed";
+    submitFeedbackBtn.classList.add("disabled");
+
     //send the feedback to the server
     fetch("../../controller/user/give_feedback_controller.php", {
         method: "POST",
@@ -131,20 +136,18 @@ feedbackBox.querySelector("form").addEventListener("submit", (e) => {
         //close the feedback form
         cancelFeedbackBtn.click();
 
+        //re-enable the submit button
+        submitFeedbackBtn.disabled = false;
+        submitFeedbackBtn.style.cursor = "pointer";
+        submitFeedbackBtn.classList.remove("disabled");
+        
         const msgBox = document.querySelector("#msgBox");
         //blur the main content and darken it
         const main = document.querySelector("main");
-        main.style.filter = "blur(5px)";
-        //animate the blur effect
-        main.style.transition = "filter 0.5s ease-in-out";
-        //disable main 
-        main.style.pointerEvents = "none";
+        main.classList.add("main-darken");
+        main.classList.add("disabled");
 
         const msg = document.getElementById("msg");
-        msg.innerHTML = "";   //clear the message
-        msg.style.fontSize = "1.5rem";
-        msg.style.fontWeight = "bold";
-        msg.style.textAlign = "center";
 
         const icon = document.createElement("i");    //icon
         icon.style.fontSize = "2.5rem";
@@ -176,10 +179,12 @@ feedbackBox.querySelector("form").addEventListener("submit", (e) => {
         //display the message box
         msgBox.style.display = "block";
 
+        return response.json();
+        
     }).then((data) => {
-        console.log(data);
+        //console.log(data);
     }).catch((error) => {
-        console.log(error);
+        //console.log(error);
     });
 });
 
@@ -207,13 +212,9 @@ const init = () => {
             const feedbackFormDiv = document.querySelector("#feedbackBox");
             feedbackFormDiv.style.display = "block";
 
-            //blur the main content
             const main = document.querySelector("main");
-            main.style.filter = "blur(5px)";
-            //animate the blur effect
-            main.style.transition = "filter 0.5s ease-in-out";
-            //disable main 
-            main.style.pointerEvents = "none";
+            main.classList.add("main-darken");
+            main.classList.add("disabled");
 
             //scroll to the feedback form
             feedbackFormDiv.scrollIntoView({behavior: "smooth", block: "center"});

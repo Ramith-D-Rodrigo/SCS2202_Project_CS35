@@ -70,6 +70,7 @@ const getNotifications = async (notificationList) => {
                 if(unreadCount > 0){
                     //set the badge to the show unread notifications
                     notificationCount.classList.add("have-notifications");
+                    notificationCount.innerHTML = unreadCount;
                 }
                 else{
                     //remove the badge
@@ -78,7 +79,7 @@ const getNotifications = async (notificationList) => {
             }
         })
         .catch(err => {
-            console.log(err);
+            //console.log(err);
         });
 }
 
@@ -101,11 +102,11 @@ const markNotificationAsRead = async (e) => {
         return res.json();
     })
     .then(data => {
-        console.log(data);
+        //console.log(data);
         getNotifications(notificationList);
     })
     .catch(err => {
-        console.log(err);
+        //console.log(err);
     });
 }
 

@@ -1,20 +1,24 @@
 <?php
+    //this script is used to request to join a coaching session
     session_start();
     require_once("../../src/general/security.php");
     //check the authentication
     if(!Security::userAuthentication(logInCheck : TRUE, acceptingUserRoles : ['user'])){
         Security::redirectUserBase();
+        die();
     }
 
     //check request method
     if($_SERVER['REQUEST_METHOD'] != 'POST'){
         Security::redirectUserBase();
+        die();
     }
 
     //get user response json
     $requestJSON = file_get_contents('php://input');
     if($requestJSON == NULL){
         Security::redirectUserBase();
+        die();
     }
 
     //decode json
@@ -69,6 +73,53 @@
                     echo json_encode($returnMsg);
                     die();
                 }
+
+                //check whether the user is joined in some other session that is being held at the same time and day of the week as the requested session
+                $session -> getDetails($requestingUser -> getConnection(), ['day', 'startingTime', 'endingTime']);
+                $requestingSession -> getDetails($requestingUser -> getConnection(), ['day', 'startingTime', 'endingTime']);
+
+                $checkingSessionASSOC = json_decode(json_encode($session), true);
+                $requestingSessionASSOC = json_decode(json_encode($requestingSession), true);
+
+                if($checkingSessionASSOC['day'] == $requestingSessionASSOC['day']){ //same day
+                    //4 conditions
+                    //1 - checking session starts before requesting session and ends after the requesting session
+                    if($checkingSessionASSOC['startingTime'] < $requestingSessionASSOC['startingTime'] && $checkingSessionASSOC['endingTime'] > $requestingSessionASSOC['endingTime']){
+                        http_response_code(400);
+                        header('Content-Type: application/json');
+                        $returnMsg['msg'] = 'You have already joined a session that is being held at the same time and day of the week as the requested session';
+                        echo json_encode($returnMsg);
+                        die();
+                    }
+
+                    //2 - checking session starts after or same time as requesting session and ends before or same time as requesting session
+                    if($checkingSessionASSOC['startingTime'] >= $requestingSessionASSOC['startingTime'] && $checkingSessionASSOC['endingTime'] <= $requestingSessionASSOC['endingTime']){
+                        http_response_code(400);
+                        header('Content-Type: application/json');
+                        $returnMsg['msg'] = 'You have already joined a session that is being held at the same time and day of the week as the requested session';
+                        echo json_encode($returnMsg);
+                        die();
+                    }
+
+                    //3 - checking session starts before the requesting session but ends before or same time as requesting session's ending time
+                    if($checkingSessionASSOC['startingTime'] < $requestingSessionASSOC['startingTime'] && $checkingSessionASSOC['endingTime'] <= $requestingSessionASSOC['endingTime'] && $checkingSessionASSOC['endingTime'] > $requestingSessionASSOC['startingTime']){
+                        http_response_code(400);
+                        header('Content-Type: application/json');
+                        $returnMsg['msg'] = 'You have already joined a session that is being held at the same time and day of the week as the requested session';
+                        echo json_encode($returnMsg);
+                        die();
+                    }
+
+                    //4 - checking session starts after or same time as requesting session's starting time but ends after the requesting session
+                    if($checkingSessionASSOC['startingTime'] >= $requestingSessionASSOC['startingTime'] && $checkingSessionASSOC['startingTime'] < $requestingSessionASSOC['endingTime'] && $checkingSessionASSOC['endingTime'] > $requestingSessionASSOC['endingTime']){
+                        http_response_code(400);
+                        header('Content-Type: application/json');
+                        $returnMsg['msg'] = 'You have already joined a session that is being held at the same time and day of the week as the requested session';
+                        echo json_encode($returnMsg);
+                        die();
+                    }
+                }
+
             }
         }
     }
@@ -85,6 +136,18 @@
                 die();
             }
         }
+    }
+
+    //check if the user has weight and height entered in his profile
+    $requestingUser -> getProfileDetails(['height', 'weight']);
+
+    $userArr = json_decode(json_encode($requestingUser), true);
+    if(!isset($userArr['height']) || !isset($userArr['weight']) || $userArr['height'] == null || $userArr['weight'] == null){    //the user has not entered his weight and height
+        http_response_code(400);
+        header('Content-Type: application/json');
+        $returnMsg['msg'] = 'Please enter your weight and height in your profile';
+        echo json_encode($returnMsg);
+        die();
     }
 
     //the user can request now
@@ -104,4 +167,3 @@
     echo json_encode($returnMsg);
     die();
 ?>
-

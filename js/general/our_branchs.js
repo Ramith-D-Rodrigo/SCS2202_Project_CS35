@@ -3,22 +3,12 @@ import {disableElementsInMain, enableElementsInMain} from "../FUNCTIONS.js";
 
 const result = document.getElementById("branches");
 
-function changeBtnValue(e){
-    const form = e.target.parentNode.parentNode;    //form
-    const reseveBtn = form.lastChild;   //button
-    if(e.target.value === ""){  //selected "Choose One" option
-        reseveBtn.value = "";
-        return;
-    }
-    //console.log(form);
-    reseveBtn.value = [form.id, e.target.value];    //branch id first, then the sport id (here, form has the branch id)
-    //console.log(reseveBtn.value);
-}
-
 function viewFeedback(e){
     e.preventDefault();
-    const branchID = e.target.parentElement.id;
-    console.log(branchID);
+    const infoDiv = e.target.parentNode.parentNode;
+    const formEl = infoDiv.querySelector("form");
+    const form = new FormData(formEl);
+    const branchID = form.get("branch");
     localStorage.setItem("feedbackBranch", branchID);
     window.location.href = "/public/general/our_feedback.php";
 }
@@ -29,7 +19,7 @@ const showMap = (e) => {
 
     //get the latitude and longitude
     const parentDiv = e.target.parentNode;
-    console.log(parentDiv);
+    //console.log(parentDiv);
     const latitude = parentDiv.querySelector(".latitude").value;
     const longitude = parentDiv.querySelector(".longitude").value;
 
@@ -93,7 +83,6 @@ fetch("../../controller/general/our_branches_controller.php")
             branches[i] = data[i];  //store the json objects in the array
             const branchContainer = document.createElement("div");
             branchContainer.setAttribute("class", "content-box");
-            branchContainer.style.maxWidth = "80%";
             const branchRow = document.createElement("div");
             branchRow.setAttribute("class", "branch-row");
 
@@ -108,7 +97,7 @@ fetch("../../controller/general/our_branches_controller.php")
                 branchImage.src = branches[i].photos[0];    //add the first photo
             }
             else{
-                branchImage.src = "/public/general/branch_images/";
+                branchImage.src = "/uploads/branch_images/";
             }
 
             setInterval(() =>{
@@ -139,11 +128,20 @@ fetch("../../controller/general/our_branches_controller.php")
             branchRow.appendChild(branchImageContainer);
 
             const formDiv = document.createElement("div");
+
+            formDiv.className = "branch-info";
+
             const form = document.createElement("form");
-            form.id = branches[i].branchID; //branch id for each form
             form.className = "branchInfo";
             form.action = "/public/general/reservation_schedule.php";
             form.method = "get";
+
+            //hidden input for branch id
+            const branchID = document.createElement("input");
+            branchID.setAttribute("type", "hidden");
+            branchID.setAttribute("name", "branch");
+            branchID.setAttribute("value", branches[i].branchID);
+            form.appendChild(branchID);
 
             const openingTimeArr = branches[i].openingTime.split(":"); //setting opening time
             const openingTime = new Date();
@@ -157,6 +155,29 @@ fetch("../../controller/general/our_branches_controller.php")
             closingTime.setMinutes(closingTimeArr[1]);
             closingTime.setSeconds(closingTimeArr[2]); 
 
+            const rating = document.createElement("div");   //branch rating div
+            rating.className = "info";
+            rating.innerHTML = "Rating : ";
+            const branchRating = parseFloat(branches[i].rating);
+            
+            for(let j = 0; j < 5; j++){
+                const star = document.createElement("span");
+                star.className = "fa fa-star";
+                star.style.margin = "0 0.2em";
+                if(j < branchRating){
+                    star.className = "fa fa-star checked";
+                }
+                //color star for decimal rating
+                if(j === Math.floor(branchRating) && branchRating % 1 !== 0){
+                    star.className = "fa-solid fa-star-half-stroke";
+                    star.style.color = "gold";
+                }
+                star.style.fontSize = "1.5em";
+                rating.appendChild(star);
+            }
+
+            formDiv.appendChild(rating);
+
             const location = document.createElement("div"); //branch location div
             location.className = "info";
             location.innerHTML = "Location : " + branches[i].city;
@@ -164,6 +185,7 @@ fetch("../../controller/general/our_branches_controller.php")
             const branchLocation = document.createElement("div"); //branch location div
             branchLocation.style.display = "inline-block";
             branchLocation.style.marginLeft = "1em";
+
             //hidden inputs for  latitude and longitude
             const latitude = document.createElement("input");
             latitude.type = "hidden";
@@ -189,40 +211,22 @@ fetch("../../controller/general/our_branches_controller.php")
             branchLocation.appendChild(mapIcon);
 
             location.appendChild(branchLocation);
-            form.appendChild(location);
-
-            const rating = document.createElement("div");   //branch rating div
-            rating.className = "info";
-            rating.innerHTML = "Rating : ";
-            const branchRating = parseFloat(branches[i].rating);
-            
-            for(let j = 0; j < 5; j++){
-                const star = document.createElement("span");
-                star.className = "fa fa-star";
-                star.style.margin = "0 0.2em";
-                if(j < branchRating){
-                    star.className = "fa fa-star checked";
-                }
-                //color star for decimal rating
-                if(j === Math.floor(branchRating) && branchRating % 1 !== 0){
-                    star.className = "fa-solid fa-star-half-stroke";
-                    star.style.color = "gold";
-                }
-                star.style.fontSize = "1.5em";
-                rating.appendChild(star);
-            }
-
-            form.appendChild(rating);
-
+            formDiv.appendChild(location);
+      
             const address = document.createElement("div");  //branch address div
             address.className = "info";
             address.innerHTML = "Address : " + branches[i].address;
-            form.appendChild(address);
+            formDiv.appendChild(address);
 
             const opening_time = document.createElement("div"); //branch opening time div
             opening_time.className = "info";
             opening_time.innerHTML = "Opening Time : " + openingTime.toLocaleTimeString();
-            form.appendChild(opening_time);
+            formDiv.appendChild(opening_time);
+
+            const closing_time = document.createElement("div"); //branch closing time div
+            closing_time.className = "info";
+            closing_time.innerHTML = "Closing Time : " + closingTime.toLocaleTimeString();
+            formDiv.appendChild(closing_time);
             
             const manager = document.createElement("div");  //branch manager div
             manager.className = "info";
@@ -236,23 +240,12 @@ fetch("../../controller/general/our_branches_controller.php")
             managerName = managerName + branches[i].manager['firstName'] + " " + branches[i].manager['lastName'];
 
             manager.innerHTML = "Manager : " + managerName;
-            form.appendChild(manager);
-
-            const closing_time = document.createElement("div"); //branch closing time div
-            closing_time.className = "info";
-            closing_time.innerHTML = "Closing Time : " + closingTime.toLocaleTimeString();
-            form.appendChild(closing_time);
+            formDiv.appendChild(manager);
 
             const manager_contact = document.createElement("div");  //branch manager contact div
             manager_contact.className = "info";
             manager_contact.innerHTML = "Manager Contact No : " + branches[i].manager['contactNum'];
-            form.appendChild(manager_contact);
-
-            const feedbackBtn = document.createElement("button");//branch feedback button
-            feedbackBtn.innerHTML = "View Feedback";
-            //feedbackBtn.disabled = true;    //for now it is disabled
-            feedbackBtn.addEventListener("click", viewFeedback);
-            form.appendChild(feedbackBtn);
+            formDiv.appendChild(manager_contact);
 
             const receptionist = document.createElement("div"); //branch receptionist div
             receptionist.className = "info";
@@ -266,18 +259,29 @@ fetch("../../controller/general/our_branches_controller.php")
             receptionistName = receptionistName + branches[i].receptionist['firstName'] + " " + branches[i].receptionist['lastName'];
 
             receptionist.innerHTML = "Receptionist : " + receptionistName;
-            form.appendChild(receptionist);
-
-            const branchEmail = document.createElement("div");  //branch email
-            branchEmail.className = "info";
-            branchEmail.innerHTML = "Branch Email : " + branches[i].branchEmail;
-            form.appendChild(branchEmail);
+            formDiv.appendChild(receptionist);
 
             const receptionist_contact = document.createElement("div"); //branch receptionist contact div
             receptionist_contact.className = "info";    
             receptionist_contact.innerHTML = "Receptionist Contact No : " + branches[i].receptionist['contactNum'];
-            receptionist_contact.style = "min-width: 100%";
-            form.appendChild(receptionist_contact);
+            formDiv.appendChild(receptionist_contact);
+
+            const branchEmail = document.createElement("div");  //branch email
+            branchEmail.className = "info";
+            branchEmail.innerHTML = "Branch Email : " + branches[i].branchEmail;
+            formDiv.appendChild(branchEmail);
+
+
+            const feedbackBtn = document.createElement("button");//branch feedback button
+            feedbackBtn.innerHTML = "View Feedback";
+
+            //div for feedback
+            const feedbackDiv = document.createElement("div");
+            feedbackDiv.className = "info";
+            feedbackDiv.appendChild(feedbackBtn);
+            
+            feedbackBtn.addEventListener("click", viewFeedback);
+            formDiv.appendChild(feedbackDiv);
 
             const providing_sports = document.createElement("div"); //providing sports div
             providing_sports.className = "info";
@@ -286,6 +290,7 @@ fetch("../../controller/general/our_branches_controller.php")
             const sportSelector = document.createElement("select");
             sportSelector.setAttribute("required", "");
             sportSelector.className = "providing_sports";
+            sportSelector.name = "sport";
 
             const emptyOption = document.createElement("option");
             emptyOption.value = "";
@@ -305,7 +310,6 @@ fetch("../../controller/general/our_branches_controller.php")
 
             const reserveBtn = document.createElement("button");    //reservation button
             reserveBtn.innerHTML = "Make a Reservation";
-            reserveBtn.name = "reserveBtn";
             reserveBtn.type = "submit";
 
             form.appendChild(reserveBtn);
@@ -316,11 +320,6 @@ fetch("../../controller/general/our_branches_controller.php")
             branchContainer.appendChild(branchRow);
             result.appendChild(branchContainer);
         }
-
-        //event listener for the select options
-        const selectOption = document.querySelectorAll(".providing_sports");
-        //console.log(selectOption);
-        selectOption.forEach(element => element.addEventListener("change", changeBtnValue));
     });
 
 

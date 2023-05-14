@@ -1,4 +1,5 @@
 <?php
+    //this script is used to change the sport details (after the owner has been authenticated)
     session_start();
     require_once("../../src/general/security.php");
     require_once("../CONSTANTS.php");

@@ -6,6 +6,48 @@
     align-items: center;
     flex-wrap: wrap;
 }
+.filter-box{
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.coach-img-container{
+    width: 80%;
+    margin: 0 auto;
+}
+
+.coach-img{
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
+    
+}
+
+.sport-img-container{
+    width: 100%;
+    margin: 0 auto;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.sport-img{
+    width: 30%;
+    height: 30%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
+    float: right;
+
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.images-container{
+    position: relative;
+}
 
 
 .btnDiv button{

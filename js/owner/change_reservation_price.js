@@ -8,6 +8,12 @@ import {displaySportInfo, init, sports } from "./sports.js";
 const togglePasswordBtn = document.getElementById("togglePasswordBtn");
 const passwordInput = document.getElementById("password");
 
+const authFormDiv = document.getElementById("authFormDiv");
+
+const main = document.querySelector("main");
+
+let formData = null;
+
 await init();
 //display the first sport
 displaySportInfo({target: {value: sports[0].sportID}});
@@ -25,7 +31,7 @@ changeForm.addEventListener("submit", (e) => {
         return;
     }
 
-    const formData = new FormData(changeForm);
+    formData = new FormData(changeForm);
 
     //check if the new price is valid
     const newPrice = formData.get("newPrice");
@@ -106,14 +112,9 @@ changeForm.addEventListener("submit", (e) => {
 
 
     //first authenticate the user
-
-    const authFormDiv = document.getElementById("authFormDiv");
     authFormDiv.style.display = "block";
 
-    const main = document.querySelector("main");
     main.style.opacity = "0.5";
-
-    const authForm = authFormDiv.querySelector("form");
 
     disableElementsInMain(main);
 
@@ -128,66 +129,86 @@ changeForm.addEventListener("submit", (e) => {
         enableElementsInMain(main);
         main.removeEventListener("click", mainClick);
     });
+});
 
-    authForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const authFormData = new FormData(authForm);
+//authentication form
+const authForm = authFormDiv.querySelector("form");
+authForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const authFormData = new FormData(authForm);
 
-        if(!authForm.reportValidity()){
-            return;
+    if(!authForm.reportValidity()){
+        return;
+    }
+    let authStatus = null;
+
+    //disable the submit button
+    const submitBtn = authForm.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+    submitBtn.classList.add("disabled");
+
+    //send the request
+    fetch("../../controller/general/authentication_controller.php", {
+        method: "POST",
+        header: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(Object.fromEntries(authFormData))
+    })
+    .then(res => {
+        authStatus = res.ok;
+        return res.json();
+    })
+    .then(data => {
+        if(!authStatus){
+            const authMsg = authForm.querySelector("#authMsg");
+            authMsg.innerHTML = data.errMsg;
+
+            //enable the submit button
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("disabled");
         }
-        let authStatus = null;
-        //send the request
-        fetch("../../controller/general/authentication_controller.php", {
-            method: "POST",
-            header: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(Object.fromEntries(authFormData))
-        })
-        .then(res => {
-            authStatus = res.ok;
-            return res.json();
-        })
-        .then(data => {
-            if(!authStatus){
-                const authMsg = authForm.querySelector("#authMsg");
-                authMsg.innerHTML = data.errMsg;
-            }
-            else{
-                //close the authFormDiv by clicking on the main
-                main.click();
+        else{
+            //close the authFormDiv by clicking on the main
+            main.click();
 
-                //send the request to change the reservation price
-                let status = null;
-                //send the request
-                fetch("../../controller/owner/change_sport_info_controller.php", {
-                    method: "POST",
-                    header: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(Object.fromEntries(formData))
-                })
-                .then(res => {
-                    status = res.status;
-                    return res.json();
-                })
-                .then(data => {
-                    if(status == 200){
-                        msg.innerHTML = data.msg;
-                        msg.style.color = "green";
+            //send the request to change the reservation price
+            let status = null;
+            //send the request
+            fetch("../../controller/owner/change_sport_info_controller.php", {
+                method: "POST",
+                header: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(Object.fromEntries(formData))
+            })
+            .then(res => {
+                status = res.status;
+                return res.json();
+            })
+            .then(data => {
+                if(status == 200){
+                    msg.innerHTML = data.msg;
+                    msg.style.color = "green";
 
-                        
-                        init().then(() => {
-                            displaySportInfo({target: {value: formData.get("sportID")}});
-                        });
-                        
-                    }else{
-                        msg.innerHTML = data.msg;
-                        msg.style.color = "red";
-                    }
-                })
-            }
-        });
+                    
+                    init().then(() => {
+                        //change the filter value to the current sport
+                        document.getElementById("sportsFilter").value = formData.get("sportID");
+
+                        //display the current sport
+                        displaySportInfo({target: {value: formData.get("sportID")}});
+                    });
+                    
+                }else{
+                    msg.innerHTML = data.msg;
+                    msg.style.color = "red";
+                }
+
+                //enable the submit button
+                submitBtn.disabled = false;
+                submitBtn.classList.remove("disabled");
+            })
+        }
     });
 });

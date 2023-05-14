@@ -93,3 +93,79 @@ main::before{
     margin:0;
     font-size: calc(1vw + 0.02rem);
 }
+
+#system-notify{
+    background-color: #ECFCFF;
+    color: black;
+}
+
+#system-notify marquee{
+    font-size: 1.2rem;
+    white-space: nowrap;
+}
+
+@media(max-width: 900px){
+    #landing-img1{
+        content: url(../landing_res_res_1.webp);
+        height: auto;
+    }
+
+    #landing-img2{
+        height: auto;
+        content: url(../landing_coach_res_1.webp);
+    }
+
+    #system-notify marquee{
+        font-size: 1rem;
+    }
+}
+
+@media(max-width: 680px){
+    .slides{
+        display: block;
+    }
+
+    .slide{
+        width: 100%;
+    }
+
+    #system-notify marquee{
+        font-size: 0.8rem;
+    }
+
+    #reservationBtn{
+        position: absolute;
+        padding: initial calc(0.1vw + 0.1rem);
+        top: 75%;
+        left: 8%;
+        margin:0;
+        font-size: calc(1vw + 0.5rem);
+    }
+    #coachBtn{
+        top: 72.83950617283951%;
+        left:1.5%;
+        position: absolute;
+        padding: initial calc(0.1vw + 0.1rem);
+        margin:0;
+        font-size: calc(1vw + 0.5rem);
+    }
+
+    #radio1:checked ~ .first{
+        margin-left: 0;
+    }
+
+    .manual-btn{
+        display: none;
+    }
+    
+    #radio2:checked ~ .first{
+        margin-left: 0;
+    }
+
+    main{
+        display: flex;
+        flex-direction: column; 
+        align-items: stretch;
+        justify-content: space-evenly;
+    }
+}

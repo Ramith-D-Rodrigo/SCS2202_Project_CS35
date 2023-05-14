@@ -1,6 +1,7 @@
 import {changeToLocalTime, capitalizeFirstLetter, disableElementsInMain, enableElementsInMain} from "../FUNCTIONS.js";
 import {currency} from "../CONSTANTS.js";
 
+//code for getting data from the server starts from line 479
 
 const coachingSessionsContainer = document.querySelector('#coachingSessionsContainer');
 
@@ -85,7 +86,7 @@ const coachProfile = (e) => {   //a function to redirect to the coach profile pa
 const leaveSessionPopUp = (e) => {   //popup confirmation for leaving the session
     e.preventDefault();
     confirmBtn.value = 'leave';
-    const btnDiv = e.target.parentElement;
+    const btnDiv = e.currentTarget.parentElement;
     const sessionID = findInputFieldValue('sessionID', btnDiv);
 
     selectedSession = sessionID;    //store the session id
@@ -116,12 +117,15 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
     const formData = new FormData();
     formData.append('sessionID', selectedSession);
 
-    console.log(Object.fromEntries(formData));
-
     let icon = null;    //for the icon to be displayed in the message box
     icon = document.createElement('i');
     icon.style.fontSize = '6rem';
     icon.style.margin = '4rem 0';
+
+    //disable the confirm button
+    confirmBtn.disabled = true;
+    confirmBtn.style.cursor = 'not-allowed';
+    confirmBtn.classList.add('disabled');
 
     //send the sessionID to the server
     fetch("../../controller/user/leave_coaching_session_controller.php", {
@@ -147,7 +151,12 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
 
         return res.json();
     })
-    .then(data => {
+    .then(data => { //for the message to be displayed in the message box
+        //reset the confirm button
+        confirmBtn.disabled = false;
+        confirmBtn.style.cursor = 'pointer';
+        confirmBtn.classList.remove('disabled');
+
         //close the popup
         popUpCancellation(e);
 
@@ -156,8 +165,6 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
 
         msg.innerHTML = data.msg;
         msg.appendChild(icon);
-        msgBox.style.display = 'block';
-
 
         //display the message box
         msgBox.style.display = 'block';
@@ -185,7 +192,8 @@ const leaveSession = (e) => {   //a function to leave the session functionality 
 const cancelSessionRequestPopUp = (e) => {   //popup confirmation for session request cancellation
     e.preventDefault();
     confirmBtn.value = 'cancel';
-    const btnDiv = e.target.parentElement;
+    //get session id from e's current target
+    const btnDiv = e.currentTarget.parentElement;
     const sessionID = findInputFieldValue('sessionID', btnDiv);
 
     selectedSession = sessionID;    //store the session id
@@ -206,8 +214,6 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
 
     formData.append('sessionID', selectedSession);
 
-    console.log(Object.fromEntries(formData));
-
     let successflag = false;
 
     let icon = null;    //for the icon to be displayed in the message box
@@ -215,6 +221,11 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
     icon.style.fontSize = '6rem';
     icon.style.margin = '4rem 0';
 
+    //disable the confirm button
+    confirmBtn.disabled = true;
+    confirmBtn.style.cursor = 'not-allowed';
+    confirmBtn.classList.add('disabled');
+    
     //send the request to the server
     fetch("../../controller/user/cancel_coaching_session_request_controller.php", {
         method: 'POST',
@@ -244,7 +255,12 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
 
         return res.json();
     })
-    .then(data => {
+    .then(data => { //for the message to be displayed in the message box
+        //reset the confirm button
+        confirmBtn.disabled = false;
+        confirmBtn.style.cursor = 'pointer';
+        confirmBtn.classList.remove('disabled');
+
         //close the popup
         popUpCancellation(e);
 
@@ -272,7 +288,7 @@ const cancelSessionRequest = (e) => {   //a function to cancel the session reque
         });
     })
     .catch(err => {
-        console.log(err);
+        //console.log(err);
     });
 }
 
@@ -288,9 +304,9 @@ const popUpCancellation = (e) => {   //close the confirmation div
 }
 
 const popUpConfirmation = (e) => {   //close the confirmation div
-    if(e.target.value === 'leave'){
+    if(e.currentTarget.value === 'leave'){
         leaveSession(e);
-    }else if(e.target.value === 'cancel'){
+    }else if(e.currentTarget.value === 'cancel'){
         cancelSessionRequest(e);
     }
 }
@@ -298,7 +314,7 @@ const popUpConfirmation = (e) => {   //close the confirmation div
 
 const giveFeedbackPopUp = (e) => {   //give feedback popup
     e.stopPropagation();
-    const btnDiv = e.target.parentElement;
+    const btnDiv = e.currentTarget.parentElement;
 
     //need to get the coach id and session id 
     const coachID = findInputFieldValue('coachID', btnDiv);
@@ -394,6 +410,12 @@ const giveFeedback = (e) => {   //give feedback functionality
     icon.style.fontSize = '6rem';
     icon.style.color = 'green';
 
+    //disable the submit button
+    const submitBtn = feedbackForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.style.cursor = 'not-allowed';
+    submitBtn.classList.add('disabled');
+    
     //send the feedback data to the server
     fetch("../../controller/user/give_coach_feedback_controller.php", {
         method: 'POST',
@@ -407,6 +429,11 @@ const giveFeedback = (e) => {   //give feedback functionality
         return res.json();
     })
     .then(data => {
+        //enable the submit button
+        submitBtn.disabled = false;
+        submitBtn.style.cursor = 'pointer';
+        submitBtn.classList.remove('disabled');
+        
         if(successflag){    //if the feedback is successfully sent
             feedbackFormDiv.style.display = 'none'; //close the feedback div
 
@@ -435,7 +462,7 @@ const giveFeedback = (e) => {   //give feedback functionality
         }
     })
     .catch(err => {
-        console.log(err);
+        //console.log(err);
     });
 }
 
@@ -444,13 +471,13 @@ let sportSet = new Set();   //to store the sports of the coaching sessions
 let coachSet = new Set();   //to store the coaches of the coaching sessions
 
 
+//get the coaching sessions from the server
 fetch("../../controller/user/coaching_sessions_controller.php")
     .then(res => {
         successflag = res.ok;
         return res.json();
     })
     .then(data => {
-        console.log(data);
         if(successflag){
             for(let i = 0; i < data.coachingSessions.length; i++){
                 //create a div for each coaching session
@@ -468,30 +495,34 @@ fetch("../../controller/user/coaching_sessions_controller.php")
                     photo: data.coaches[data.coachingSessions[i].coachID].photo
                 }
                 coachSet.add(coachObj);
-                console.log(coachSet);
 
+                const imagesContainer = document.createElement('div');  //container for the images (both coach and sport)
+                imagesContainer.className = 'images-container';
                 //add coach image to the div
                 const coachImgContainer = document.createElement('div');
+                coachImgContainer.className = 'coach-img-container';
+
                 const coachImg = document.createElement('img');
+                coachImg.className = 'coach-img';
                 coachImg.src = data.coaches[data.coachingSessions[i].coachID].photo;
-                coachImg.style.width = "18rem";
-                coachImg.style.height = 'auto';
 
                 coachImg.setAttribute('onerror', 'this.src = "/styles/icons/no-results.png"');
                 coachImgContainer.appendChild(coachImg);
-                sessionDiv.appendChild(coachImgContainer);
+                imagesContainer.appendChild(coachImgContainer);
 
                 //add sport image to the div
                 const sportImgContainer = document.createElement('div');
-                const sportImg = document.createElement('img');
-                //resize the image
-                sportImg.style.width = "10rem";
-                sportImg.style.height = 'auto';
+                sportImgContainer.className = 'sport-img-container';
 
-                sportImg.src = "/uploads/sport_images/" + data.coaches[data.coachingSessions[i].coachID].sport + ".jpg";
+                const sportImg = document.createElement('img');
+                sportImg.className = 'sport-img';
+
+                sportImg.src = "/uploads/sport_images/" + data.coaches[data.coachingSessions[i].coachID].sport.toLowerCase() + ".jpg";
 
                 sportImgContainer.appendChild(sportImg);
-                sessionDiv.appendChild(sportImgContainer);
+                imagesContainer.appendChild(sportImgContainer);
+
+                sessionDiv.appendChild(imagesContainer);
 
                 //sport class for filtering
                 sessionDiv.classList.add(data.coaches[data.coachingSessions[i].coachID].sport);

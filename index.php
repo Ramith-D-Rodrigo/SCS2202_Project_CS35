@@ -2,7 +2,7 @@
     session_start();
     require_once("src/general/security.php");
     //check the authentication
-    if(!Security::userAuthentication(logInCheck: FALSE)){       //cannot access (NOT operator)
+    if(!Security::userAuthentication(logInCheck: FALSE, acceptingUserRoles:['user'])){       //cannot access (NOT operator)
         Security::redirectUserBase();
     }
     else{
@@ -24,22 +24,28 @@
                     require_once("./public/general/header.php");
                 ?>
                 <main>
+                    <div id="system-notify"></div>
                     <div class="search">
-                        <form action="/public/general/search_results.php" method="get" id="searchBar" style="min-width:80%">
-                            <input class="search-input" type="text" name="sportName" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
-                            <button class ="search-icon-btn" type="submit" onclick="return searchValidation(event)">Search</button>
-                        </form>
+                        <input type="checkbox" id="searchCheck">
+                        <div class="search-box">
+                            <form action="/public/general/search_results.php" method="get" id="searchBar" style="min-width:80%">
+                                <input class="search-input" type="text" name="sportName" placeholder="Search a Sport" pattern="[a-zA-Z]+" title="Enter The Name Correctly" required>
+                                <label for="searchCheck" class="search-icon">
+                                    <i class="fa-solid fa-magnifying-glass" ></i>
+                                </label>
+                            </form>
+                        </div>
                     </div>
                     <div class="slider">
                         <div class="slides">
                             <input type="radio" name="radio-btn" id="radio1">
                             <input type="radio" name="radio-btn" id="radio2">
                             <div class="slide first">
-                                <img class="landing-img" id="landing-img1" src="/styles/landing_res.png">
+                                <img class="landing-img" id="landing-img1" src="/styles/landing_res.webp">
                                 <button id="reservationBtn" onclick="window.location.href='/public/general/our_sports.php'">Make a Reservation Now!</button>
                             </div>
                             <div class="slide">
-                                <img class="landing-img" id="landing-img2" src="/styles/landing_coach.png">
+                                <img class="landing-img" id="landing-img2" src="/styles/landing_coach.webp">
                                 <button id="coachBtn" onclick="window.location.href='/public/general/reg_coaches.php'">Choose Your Trainer!</button>
                             </div>
                             <div class="navigation-auto">
@@ -60,6 +66,7 @@
             <script src="/js/general/search_validation.js"></script>
             <script src="/js/general/index_animation.js"></script>
             <script src="/js/user/account_links.js"></script>
+            <script src="/js/general/system_maintenance_notify.js"></script>
             <script type="module" src="/js/general/notifications.js"></script>
         </html>
 

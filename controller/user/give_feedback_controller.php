@@ -1,20 +1,23 @@
 <?php
+    //this script is used to give feedback to the branch which the user has made a reservation
     session_start();
-    if(!(isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is not logged in
-        header("Location: /index.php");
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
     }
 
-    if($_SESSION['userrole'] !== 'user'){   //not an user (might be another actor)
-        header("Location: /index.php");
-        exit();
+    //server request method check
+    if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        http_response_code(405);
+        die();
     }
 
     require_once("../../src/user/user.php");
     require_once("../../src/general/reservation.php");
     require_once("../../src/general/branch.php");
 
-    $headerCode = null;
+    $headerCode = 400;  //initially set the header code to 400 (bad request)
 
     $userInput = file_get_contents("php://input");
     $userInput = json_decode($userInput, true);
@@ -37,9 +40,10 @@
     $user = new User();
     $user -> setUserID($_SESSION['userid']);
 
-    $reservation -> getDetails($user -> getConnection(), ['`status`']);
+    $reservation -> getDetails($user -> getConnection(), ['status']);
 
     $status = json_decode(json_encode($reservation), true)['status'];   //get the status of the reservation
+
 
     if($status !== 'Checked In' && $status !== 'Declined'){    //if the reservation is not checked in or declined
         $headerCode = 400;

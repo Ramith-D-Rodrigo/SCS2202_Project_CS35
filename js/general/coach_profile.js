@@ -1,5 +1,6 @@
-import {currency} from "../../js/CONSTANTS.js";
-import {changeToLocalTime} from "../../js/FUNCTIONS.js";
+import {currency, MAX_FEEDBACK_DISPLAY_COUNT} from "../../js/CONSTANTS.js";
+import {changeToLocalTime, feedbackPagination} from "../../js/FUNCTIONS.js";
+
 
 const url = new URL(window.location);   //get the url
 const params = new URLSearchParams(url.search); //search parameters
@@ -15,6 +16,48 @@ let maxStudents = 0;
 
 let branchSet = new Set();  //to store the branch names
 let branchSessionMap = new Map();   //to map the branch to the sessions
+
+//feedback objects stored in this array
+let feedbacks = [];
+let currPage = 1;   //current page of the feedbacks
+
+//feedback navigation buttons
+const nextPage = document.querySelector("#nextPage");
+const prevPage = document.querySelector("#prevPage");
+
+const feedbackContainer = document.querySelector("#stu-feedbacks"); //feedback container
+
+//disable the previous button
+prevPage.classList.add("disabled");
+
+//disable the next button
+nextPage.classList.add("disabled");
+
+
+const nextFeedbacks = (e) => {
+    if(currPage * MAX_FEEDBACK_DISPLAY_COUNT >= feedbacks.length){   //if the current page is the last page
+        //disable the next button
+        e.target.classList.add("disabled");
+        return;
+    }
+    feedbackPagination(currPage + 1, currPage, feedbackContainer, feedbacks, MAX_FEEDBACK_DISPLAY_COUNT, nextPage, prevPage, {name : false, date : true});
+    currPage++;
+}
+
+const prevFeedbacks = (e) => {
+    if(currPage == 1){  //if the current page is the first page
+        //disable the previous button
+        e.target.classList.add("disabled");
+        return;
+    }
+    feedbackPagination(currPage - 1, currPage, feedbackContainer, feedbacks, MAX_FEEDBACK_DISPLAY_COUNT, nextPage, prevPage, {name : false, date : true});
+    currPage--;
+}
+
+//add the event listeners
+nextPage.addEventListener("click", nextFeedbacks);
+prevPage.addEventListener("click", prevFeedbacks);
+
 
 const sessionBranches = document.querySelector("#sessionBranches"); //branches that the coach conducts the sessions
 const coachingSessions = document.querySelector("#coachingSessions");   //sessions that the coach conducts by branch
@@ -39,19 +82,38 @@ const sessionInfo = (e) => {    //function to get the session info when a sessio
     const noOfStudents = document.querySelector("#noOfStudents");
     const paymentAmount = document.querySelector("#paymentAmount");
 
-    sessions.forEach(session => {
-        if(session.sessionID === sessionID){ //if the session is found
+    //display the session info
+
+    //first clear the fields
+    if(e.target.id === "coachingSessions"){    //if the event is triggered from the coach profile container  
+        timePeriod.value = "";
+        day.value = "";
+        startingTime.value = "";
+        endingTime.value = "";
+        courtName.value = "";
+        noOfStudents.value = "";
+        paymentAmount.value = "";
+    }
+    else if(e.target.id === "requestingSession"){  //if the event is triggered from the join request form
+        const sessionFee = document.querySelector("#sessionFee");
+        sessionFee.innerHTML = "Session Fee : ";
+        const errMsg = document.querySelector("#errMsg");
+        errMsg.innerHTML = "";
+    }
+
+    for(let i = 0; i < sessions.length; i++){
+        if(sessions[i].sessionID === sessionID){ //if the session is found
             if(e.target.id === "coachingSessions"){    //if the event is triggered from the coach profile container
                 //insert the session info
-                timePeriod.value = session.timePeriod;
-                day.value = session.day;
-                startingTime.value = session.startingTime;
-                endingTime.value = session.endingTime;
-                courtName.value = session.courtName;
-                noOfStudents.value = session.noOfStudents;
-                paymentAmount.value = session.paymentAmount;
+                timePeriod.value = sessions[i].timePeriod;
+                day.value = sessions[i].day;
+                startingTime.value = sessions[i].startingTime;
+                endingTime.value = sessions[i].endingTime;
+                courtName.value = sessions[i].courtName;
+                noOfStudents.value = sessions[i].noOfStudents;
+                paymentAmount.value = sessions[i].paymentAmount;
 
-                if(parseInt(session.noOfStudents) >= parseInt(maxStudents)){   //if the session is full
+                if(parseInt(sessions[i].noOfStudents) >= parseInt(maxStudents)){   //if the session is full
                     noOfStudents.style.color = "red";
                     noOfStudents.setAttribute("title", "This Session has Reached the Maximum Number of Students");                
                 }
@@ -60,32 +122,16 @@ const sessionInfo = (e) => {    //function to get the session info when a sessio
                 const sessionFee = document.querySelector("#sessionFee");
                 const errMsg = document.querySelector("#errMsg");
                 errMsg.innerHTML = "";
-                sessionFee.innerHTML = sessionFee.innerHTML  + session.paymentAmount;
+                sessionFee.innerHTML = sessionFee.innerHTML  + sessions[i].paymentAmount;
 
-                if(parseInt(session.noOfStudents) >= parseInt(maxStudents)){   //if the session is full
+                if(parseInt(sessions[i].noOfStudents) >= parseInt(maxStudents)){   //if the session is full
                     errMsg.innerHTML = "This Session has Reached the Maximum Number of Students";
                 }
             }
+            //found the session
+            return; //exit the function
         }
-        else{
-            //clear the fields
-            if(e.target.id === "coachingSessions"){    //if the event is triggered from the coach profile container  
-                timePeriod.value = "";
-                day.value = "";
-                startingTime.value = "";
-                endingTime.value = "";
-                courtName.value = "";
-                noOfStudents.value = "";
-                paymentAmount.value = "";
-            }
-            else if(e.target.id === "requestingSession"){  //if the event is triggered from the join request form
-                const sessionFee = document.querySelector("#sessionFee");
-                sessionFee.innerHTML = "Session Fee: ";
-                const errMsg = document.querySelector("#errMsg");
-                errMsg.innerHTML = "";
-            }
-        }
-    });
+    }
 }
 
 const branchSelected = (e) => { //function to get the sessions when a branch is selected
@@ -110,7 +156,7 @@ const branchSelected = (e) => { //function to get the sessions when a branch is 
             }
         }
     }
-    coachingSessionElement.innerHTML = "";    //remove the current sessions
+    coachingSessionElement.innerHTML = "";    //remove the current sessions (clear the select element)
     if(branch === ""){  //if no branch is selected
         const defaultOption = document.createElement("option");
         defaultOption.text = "Please Select a Branch";
@@ -130,10 +176,7 @@ const branchSelected = (e) => { //function to get the sessions when a branch is 
     sessionInfo(nextObj);
 }
 
-//change time to local
-
-
-
+//fetch the coach info
 fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(coachID))
     .then(res => res.json())
     .then(data => { //data is added to the page
@@ -149,60 +192,55 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         let nameOpening; 
         if(data.coachInfo.gender === 'm'){
             nameOpening = "Mr. ";
-            genderDiv.innerHTML = genderDiv.innerHTML + "Male";
+            genderDiv.nextElementSibling.innerHTML = "Male";
         }
         else{
             nameOpening = "Mrs. ";
-            genderDiv.innerHTML = genderDiv.innerHTML + "Female";
+            genderDiv.nextElementSibling.innerHTML = "Female";
         }
 
         //coach name
         const nameDiv = document.querySelector("#coachName");
-        nameDiv.innerHTML = nameDiv.innerHTML + nameOpening + data.coachInfo.firstName + " " + data.coachInfo.lastName;
-
-        //coach username
-        const usernameDiv = document.querySelector("#coachUsername");
-        usernameDiv.innerHTML = usernameDiv.innerHTML + data.coachInfo.username;
+        nameDiv.nextElementSibling.innerHTML = nameOpening + data.coachInfo.firstName + " " + data.coachInfo.lastName;
 
         //coach age
         const ageDiv = document.querySelector("#coachAge");
-        ageDiv.innerHTML = ageDiv.innerHTML + data.coachInfo.age;
+        ageDiv.nextElementSibling.innerHTML = data.coachInfo.age;
 
         //coach sport
         const sportDiv = document.querySelector("#coachSport");
-        sportDiv.innerHTML = sportDiv.innerHTML + data.sportInfo.sportName;
+        sportDiv.nextElementSibling.innerHTML = data.sportInfo.sportName;
 
         //coach email
         const emailDiv = document.querySelector("#coachEmail");
-        emailDiv.innerHTML = emailDiv.innerHTML + data.coachInfo.emailAddress;
+        emailDiv.nextElementSibling.innerHTML = data.coachInfo.emailAddress;
 
         //coach contact num
         const contactDiv = document.querySelector("#coachContactNo");
-        contactDiv.innerHTML = contactDiv.innerHTML + data.coachInfo.contactNum;
+        contactDiv.nextElementSibling.innerHTML = data.coachInfo.contactNum;
 
         //coach rating
         const ratingDiv = document.querySelector("#coachRating");
         
         //rating stars
         const rating = document.createElement("span");
-        rating.style.marginLeft = "10px";
+
         for(let i = 1; i <= 5; i++){
             const star = document.createElement("i");
             star.ariaHidden = "true";   //for screen readers
-            star.className = "fa fa-star";
-            star.style.margin = "0 0.2em";
-            star.style.fontSize = "1.5em";
+            star.className = "fa fa-star rating-star";
+
             if(i <= data.coachRating){
                 star.classList.add("checked");
             }
 
             //half stars for decimal value
             if(i === Math.ceil(data.coachRating) && data.coachRating % 1 !== 0){
-                star.className = "fa-solid fa-star-half-stroke checked";
+                star.className = "fa-solid fa-star-half-stroke checked rating-star";
             }
             rating.appendChild(star);
         }
-        ratingDiv.appendChild(rating);
+        ratingDiv.nextElementSibling.appendChild(rating);
 
         //coach qulifications 
         const qualifications = document.querySelector("#coachQulifations");
@@ -234,30 +272,9 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         //event listener for the branch select and coaching sessions (added at the very end)
         
         //student feedback
-        const feedbackDiv = document.querySelector("#feedbackContainer");
-        for(let i = 0; i < data.coachFeedback.length; i++){
-            const feedback = document.createElement("div");
-            feedback.innerHTML = data.coachFeedback[i].description;
+        feedbacks = data.coachFeedback;
 
-            //rating stars
-            const rating = document.createElement("span");
-            rating.style.marginLeft = "10px";
-
-            //add the stars
-            for(let j = 1; j <= 5; j++){
-                const star = document.createElement("i");
-                star.className = "fa fa-star";
-                star.ariaHidden = "true";   //for screen readers
-                if(j <= data.coachFeedback[i].rating){
-                    star.classList.add("checked");
-                }
-                rating.appendChild(star);
-            }
-
-            feedback.appendChild(rating);
-            feedbackDiv.appendChild(feedback);
-        }
-
+        feedbackPagination(1, currPage, feedbackContainer, feedbacks, MAX_FEEDBACK_DISPLAY_COUNT, nextPage, prevPage, {name : false, date : true});
 
         //join session form
 
@@ -282,7 +299,7 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
                 endingTime: changeToLocalTime(data.coachingSessions[i].endingTime),
                 branchName: data.coachingSessions[i].branchName,
                 courtName: data.coachingSessions[i].courtName,
-                paymentAmount: currency + " " + data.coachingSessions[i].paymentAmount,
+                paymentAmount: currency + " " + parseFloat(data.coachingSessions[i].paymentAmount).toFixed(2),
             }
 
             sessions.push(session);
@@ -294,5 +311,9 @@ fetch("../../controller/general/coach_profile_controller.php?coachID=".concat(co
         sessionBranches.addEventListener("change", branchSelected);
         coachingSessions.addEventListener("change", sessionInfo);
         requestingSessionBranch.addEventListener("change", branchSelected);
+        requestingSession.addEventListener("change", sessionInfo);
         
     })
+    .catch(err => {
+        window.location.href = "/500.php";
+    });

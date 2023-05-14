@@ -1,14 +1,12 @@
 <?php
+    //this script is used to get the reservation history of the user
     session_start();
-    if(!(isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is not logged in
-        header("Location: /index.php");
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
     }
 
-    if($_SESSION['userrole'] !== 'user'){   //not an user (might be another actor)
-        header("Location: /index.php");
-        exit();
-    }
     require_once("../../src/user/user.php");
     
     $user = new User();

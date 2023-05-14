@@ -1,10 +1,18 @@
 <?php
+    //this script is used to get all the sports that are provided by the branches to display in the our sports page
     session_start();
     require_once("../../src/general/dbconnection.php");
     require_once("../../src/general/sport_court.php");
     require_once("../../src/general/branch.php");
     require_once("../../src/general/sport.php");
     require_once("../../src/general/website_functions/our_sports_functions.php");
+
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
 
     $allSports = getAllSports($connection); //get all sports
 

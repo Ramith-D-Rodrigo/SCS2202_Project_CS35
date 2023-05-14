@@ -1,27 +1,26 @@
 <?php
+    //this script is used to get the schedule of a particular branch's sport and display it in the reservation schedule page
     session_start();
     require_once("../../src/general/branch.php");
     require_once("../../src/general/dbconnection.php");
     require_once("../../src/general/sport_court.php");
     require_once("../../src/general/sport.php");
 
-/*     if($_SERVER['REQUEST_METHOD'] === 'POST'){  //we are coming from a post request
-        $reservationPlace = $_SESSION[$_POST['reserveBtn']];    //get the array
-        $_SESSION['reservationPlace'] = $reservationPlace;  //assign the array to session
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
     }
-    else{
-        $reservationPlace = $_SESSION['reservationPlace'];
-    } */
 
-    $reservationPlace = explode(",",$_GET['reserveBtn']);
+    $scheduleBranchID = $_GET['branch'];
+    $scheduleSport = $_GET['sport'];
 
-    //branch id -> 0th index, sport id -> 1st index
-
-    $branch = new Branch($reservationPlace[0]);
+    $branch = new Branch($scheduleBranchID);
     $branch -> getDetails($connection, ['city', 'openingTime', 'closingTime']);
 
     $sport = new Sport();   
-    $sport -> setID($reservationPlace[1]);
+    $sport -> setID($scheduleSport);
     $sports_courts = $branch -> getBranchCourts($connection, $sport, 'a');  //get all the sports court of that branch's sport (request status should be accepted)
 
     //to get sport details
@@ -63,6 +62,8 @@
             $coachingSessionDetails['startingTime'] = $currCoachingSession -> startingTime;
             $coachingSessionDetails['endingTime'] = $currCoachingSession -> endingTime;
             $coachingSessionDetails['timePeriod'] = $currCoachingSession -> timePeriod;
+            $coachingSessionDetails['startDate'] = $currCoachingSession -> startDate;
+            $coachingSessionDetails['cancelDate'] = $currCoachingSession -> cancelDate;
 
             $courtSchedule['coachingSessions'][$i] =  $coachingSessionDetails;   //coaching session details stored in courtschedule
             $i++;

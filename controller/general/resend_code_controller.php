@@ -1,8 +1,11 @@
 <?php
+    //this script is used to resend the code to the user when they click the resend code button
     session_start();
-    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is logged in
-        header("Location: /index.php"); //the user shouldn't be able to access this page
-        exit();
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : TRUE)){
+        Security::redirectUserBase();
+        die();
     }
 
     require_once("../../src/general/mailer.php");

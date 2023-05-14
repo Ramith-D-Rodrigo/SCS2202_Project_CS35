@@ -1,4 +1,5 @@
 <?php
+    //this script is used to add a new branch to the system (a request sent by the owner to admin)
     session_start();
     require_once("../../src/general/security.php");
     require_once("../../controller/CONSTANTS.php");
@@ -9,7 +10,7 @@
     }
 
     //server request method
-    if(!$_SERVER['REQUEST_METHOD'] == 'POST'){
+    if($_SERVER['REQUEST_METHOD'] != 'POST'){
         Security::redirectUserBase();
         die();
     }
@@ -74,15 +75,27 @@
                 }
 
                 array_push($sportIDs, $sport['sportID']); //push the sportID to the array
-                array_push($sportsAndCourts, $sport); //push the sportID to the array
+                array_push($sportsAndCourts, $sport); //push the sport and court count to the array
+            }
+
+            if(!$flag){ //break out from the outer loop
+                break;
             }
         }
 
         if($field == 'email'){
-            if(!Security::checkEmailAvailability($_POST[$field])){  //invalid email or unavailable email
-                $msg['msg'] = 'invalid Email Address';
-                $flag = false;
-                break;
+            $status = Security::checkEmailAvailability($_POST[$field]); //check if the email is valid and available
+            if(!$status[0]){  //invalid email or unavailable email
+                if($status[1] == 'Invalid'){
+                    $msg['msg'] = 'invalid Email Address';
+                    $flag = false;
+                    break;
+                }
+                else if($status[1] == 'Unavailable'){
+                    $msg['msg'] = 'Email Address is Already Used In This System';
+                    $flag = false;
+                    break;
+                }
             }
         }
 
@@ -102,7 +115,7 @@
                 break;
             }
 
-            //opening time dateObj
+            //opening time dateObj and closing time dateObj
 
             $openingTime = new DateTime($_POST['openingTime']);
             $closingTime = new DateTime($_POST['closingTime']);
@@ -128,9 +141,11 @@
                 $msg['msg'] = 'The time difference between Opening Time and Closing Time must be greater than ' . MAX_RESERVATION_TIME_HOURS . ' hours';
                 break;
             }
+        }
 
+        if($field === 'openingDate'){
             //check if the opening date is a valid date
-            if(!strtotime($_POST['openingDate'])){
+            if(!strtotime($_POST[$field])){
                 $flag = false;
                 $msg['msg'] = 'Invalid Opening Date';
                 break;
@@ -151,7 +166,6 @@
         die();
     }
 
-    $sportObjects = []; //array that will store the sport objects
 
     require_once('../../src/owner/owner.php');
     require_once('../../src/general/sport.php');
@@ -161,9 +175,44 @@
 
     $owner -> setUserID($_SESSION['userid']);  //set the owner's userID
 
-    $status = $owner -> requestToAddBranch($_POST['city'], 
-        $_POST['address'], 
-        $_POST['openingTime'], 
+    //check whether the requesting branch is already in the system
+    $registeredBranches = $owner -> getBranches(); 
+
+    foreach($registeredBranches as $currBranch){
+        $currBranch -> getDetails($owner -> getConnection(), ['city', 'branchEmail', 'address', 'requestStatus', 'latitude', 'longitude']);
+        $branchASSOC = json_decode(json_encode($currBranch), true); //convert the branch object to an associative array
+
+        if($branchASSOC['requestStatus'] == 'a'){
+            if($branchASSOC['city'] == $_POST['city']){
+                $msg['msg'] = 'Branch with Same City Already Exists';
+                http_response_code(400);
+                echo json_encode($msg);
+                die();
+            }
+            else if($branchASSOC['branchEmail'] == $_POST['email']){
+                $msg['msg'] = 'Email Address is Already Used In This System';
+                http_response_code(400);
+                echo json_encode($msg);
+                die();
+            }
+            else if($branchASSOC['address'] == $_POST['address']){
+                $msg['msg'] = 'There is a Branch in the Same Address';
+                http_response_code(400);
+                echo json_encode($msg);
+                die();
+            }
+            else if($branchASSOC['latitude'] == $_POST['latitude'] && $branchASSOC['longitude'] == $_POST['longitude']){
+                $msg['msg'] = 'There is a Branch in the Same Location';
+                http_response_code(400);
+                echo json_encode($msg);
+                die();
+            }     
+        }
+    }
+
+    $status = $owner -> requestToAddBranch(htmlspecialchars($_POST['city'], ENT_QUOTES), //htmlspecialchars to prevent XSS (Cross Site Scripting)
+        htmlspecialchars($_POST['address'], ENT_QUOTES), 
+        $_POST['openingTime'],
         $_POST['closingTime'], 
         $_POST['email'],
         $sportsAndCourts, 

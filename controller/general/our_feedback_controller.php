@@ -1,9 +1,18 @@
 <?php
+    //this script is used to get all the feedback of the branches to display in the our feedback page
+    session_start();
     require_once("../../src/general/website_functions/our_branches_functions.php");
     require_once("../../src/user/dbconnection.php");
     require_once("../../src/general/branch.php");
 
     $allBranches = getAllBranches($connection); //get all the branches
+
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : false, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
 
     $allFeedbacksBranchWise = [];
     

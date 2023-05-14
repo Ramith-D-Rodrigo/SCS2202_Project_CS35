@@ -1,18 +1,22 @@
 <?php
+    //this script is used to cancel a reservation of a user
     session_start();
-    if(!(isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is not logged in
-        header("Location: /index.php");
-        exit();
-    }
-
-    if($_SESSION['userrole'] !== 'user'){   //not a user (might be another actor)
-        header("Location: /index.php");
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck :  TRUE, acceptingUserRoles : ['user'])){
+        Security::redirectUserBase();
+        die();
     }
 
     if(!isset($_SESSION['userAuth']) || $_SESSION['userAuth'] !== true){   //if the user is not authenticated
-        header("Location: /index.php");
-        exit();
+        http_response_code(401);
+        echo json_encode(['msg' => 'User is not authenticated']);
+        die();
+    }
+
+    //server request method check
+    if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        http_response_code(405);
+        die();
     }
 
     //now that user is authenticated, we can proceed with the cancellation process
@@ -24,17 +28,24 @@
     require_once("../../src/general/paymentGateway.php");
 
     $cancellingUser = new User();
-    $cancellingUser -> setDetails(uid: $_SESSION['userid']);
+    $cancellingUser -> setUserID($_SESSION['userid']);
     $selectedReservation = json_decode(file_get_contents("php://input"), true)['reservationID'];
 
     $cancellingReservation = new Reservation();
     $cancellingReservation -> setID($selectedReservation);
 
-    $cancellingReservation -> getDetails($cancellingUser -> getConnection(), ['chargeID', 'status', 'reservedDate', 'paymentAmount']);
+    $cancellingReservation -> getDetails($cancellingUser -> getConnection(), ['chargeID', 'status', 'reservedDate', 'paymentAmount', 'userID', 'notificationID']);
 
     $reservationDetails = json_decode(json_encode($cancellingReservation), true);
 
     if($reservationDetails['status'] !== 'Pending'){   //if the reservation is not in pending state
+        http_response_code(400);
+        header('Content-Type: application/json;');    //because we are sending json
+        echo json_encode(array('msg' => "Invalid Reservation"));
+        die();
+    }
+
+    if($reservationDetails['userID'] !== $_SESSION['userid']){   //if the reservation is not made by the requesting user
         http_response_code(400);
         header('Content-Type: application/json;');    //because we are sending json
         echo json_encode(array('msg' => "Invalid Reservation"));
@@ -52,6 +63,16 @@
     if($result === TRUE){   //if cancelling the reservation is successful
         $statusCode = 200;
         $returnMsg['msg'] = "Reservation Cancelled Successfully";
+
+        //delete reservation notification
+        require_once("../../src/general/notification.php");
+        
+        if(isset($reservationDetails['notificationID'])){
+            $notificationID = $reservationDetails['notificationID'];
+            $deletingNotification = new Notification($notificationID);
+            $deletingNotification -> deleteNotification($cancellingUser -> getConnection());
+        }
+
         //server timezone set
         date_default_timezone_set(SERVER_TIMEZONE);
 
@@ -59,7 +80,7 @@
         $reservedDateTimeStamp = new DateTime($reservedDate);
         $dateDiff = $reservedDateTimeStamp -> diff(new DateTime(date('Y-m-d H:i:s')));
 
-        if($dateDiff -> days < 3){ //can refund
+        if($dateDiff -> days < MAX_REFUND_DAYS){ //can refund
             $result = paymentGateway::chargeRefund($reservationDetails['chargeID'], $reservationDetails['paymentAmount']);
             if($result[0] === false){
                 $returnMsg['msg'] = "Reservation Cancelled Successfully.<br>Refund Failed : " . $result[1];
@@ -71,7 +92,6 @@
                 $cancellingReservation -> updateStatus($cancellingUser -> getConnection(), 'Refunded');
             }
         }
-
     }
     else{
         $statusCode = 400;

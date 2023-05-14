@@ -1,4 +1,5 @@
 <?php
+    //this script is used to add a new sport to the database
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['owner'])){
@@ -65,6 +66,24 @@
     require_once("../../src/owner/owner.php");
     $owner = Owner::getInstance();
 
+    $owner -> setUserID($_SESSION['userid']);
+
+    //same sport name check
+    $sports = $owner -> getSports();
+    foreach($sports as $sport){
+        $sport -> getDetails($owner -> getConnection(), ['sportName']);
+        $spName = json_decode(json_encode($sport), true)['sportName'];
+
+        if($spName == $userInputs['name']){
+            http_response_code(400);
+            $returnMsg['msg'] = "Sport Already Exists";
+            header("Content-Type: application/json");
+            echo json_encode($returnMsg);
+            die();
+        }
+    }
+
+
     $result = $owner -> addNewSport($userInputs['name'], $userInputs['description'], $userInputs['reservationPrice'], $maxPlayers);
         
     if($result){
@@ -80,4 +99,3 @@
     echo json_encode($returnMsg);
     die();
 ?>
-

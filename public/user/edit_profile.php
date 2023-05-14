@@ -17,7 +17,6 @@
                 <link rel="stylesheet" href="/styles/general/styles.css">
                 <link rel="stylesheet" href="/styles/user/edit_profile.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-                <link rel="stylesheet" href="/styles/general/notification.css">
             </head>
             <body>
                 <?php   require_once("../../public/general/header.php"); ?>
@@ -27,6 +26,7 @@
                         <div class="content-box" style="min-width:40%">
                             <form id="editForm">
                                 <div id="profilePicField" class="row-container">
+                                    <div class="pic-text">Upload New Photo</div>
                                     <img id="profilePicImg">
                                     <input type="file" 
                                     name="profilePic" 
@@ -53,7 +53,7 @@
                                         Contact Number
                                     </div>
                                     <div class="right-field">
-                                        <input type="text" name="contactNo"
+                                        <input type="text" name="contactNum"
                                             pattern="[0-9]{10,11}" 
                                             id="usercontact"
                                             required>
@@ -102,14 +102,14 @@
                                     <div class="right-field" id="genderField"></div>
                                 </div>
 
-                                <div style="text-align:center">
+                                <div style="text-align:center" class="title">
                                     Medical Concerns <button id="medicalConcernBtn"><i class="fa-solid fa-circle-plus"></i></button>
                                 </div>
 
                                 <div id="medicalConcernsField" style="width:100%">
                                 </div>
 
-                                <div style="text-align:center">Emergency Contact Details</div>
+                                <div class="title">Emergency Contact Details</div>
 
                                 <div id="emergencyDetails">
                                     <div id="emergencydetail1">
@@ -155,14 +155,14 @@
                                 <div class="err-msg" id="errMsg"></div>
                                 <div class="success-msg" id="successMsg"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="submitBtn" onclick="return validateChanges(event)">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
+                                    <button type="submit" id="submitBtn"">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
                                 </div>
                             </form>
                         </div>
 
                         <div class="content-box" style="min-width:40%">
                             <form id="credentialForm">
-                                <div style="text-align:center">Change Password</div>
+                                <div class="title">Change Password</div>
                                 <div class="row-container">
                                     <div class="left-field">
                                         Email Address
@@ -217,13 +217,13 @@
                                 <div class="err-msg" id="errMsg2"></div>
                                 <div class="success-msg" id="successMsg2"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="submitBtn2" onclick="return validateCredentialsForm(event)">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
+                                    <button type="submit" id="submitBtn2">Save Changes <i class="fa-solid fa-floppy-disk"></i></button>
                                 </div>
                             </form>
                         </div>
 
                         <div class="content-box" style="min-width:40%">
-                            <div style="text-align:center">Deactivate Account</div>
+                            <div class="title">Deactivate Account</div>
                             <form id ="deactivateForm">
                                 <div class="row-container">
                                     <div class="left-field">
@@ -248,7 +248,7 @@
                                 <div class="err-msg" id="errMsg3"></div>
                                 <div class="success-msg" id="successMsg3"></div>
                                 <div class="btn-container">
-                                    <button type="submit" id="submitBtn3" onclick="return validateDeactivateForm(event)">Deactivate Account <i class="fa-solid fa-trash"></i></button>
+                                    <button type="submit" id="submitBtn3">Deactivate Account <i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -257,8 +257,7 @@
 
                 <?php require_once("../../public/general/footer.php"); ?>
             </body>
-            <script src="/js/user/edit_profile_handle.js"></script>
-            <script src="/js/user/edit_profile_getdetails.js"></script>
+            <script type="module" src="/js/user/edit_profile_getdetails.js"></script>
             <script src="/js/user/change_password.js"></script>
             <script src="/js/user/account_links.js"></script>
             <script src="/js/user/deactivate_account.js"></script>

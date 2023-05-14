@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/styles/general/styles.css">
     <link rel="stylesheet" href="/styles/general/staff.css">
     <link rel="stylesheet" href="/styles/receptionist/receptionist.css">
+    <link rel="stylesheet" href="/styles/receptionist/profiles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <title>Coach Profile</title>
 </head>
@@ -23,70 +24,68 @@
     ?>
     <main class="body-container">
     <div style="display:flex;flex-direction:row" id="search_results">
-        <div class="content-box" style="width:65%" id="profileData">
+        <div class="content-box" id="profileData">
             <div id="profilePic" style="display:flex; justify-content:center;margin-bottom:5%">
             </div>
             <div id="errProfile-msg">
             </div>
             <div class="row-container">
-            <div class="left-side"> Coach ID: </div>
-            <div class="right-side" id="cid"> </div>
+                <div class="left-side"> Coach ID: </div>
+                <input class="right-side" id="cid"> </input>
             </div>
             <div class="row-container">
                 <div class="left-side"> Sport: </div>
-                <div class="right-side" id="sport"> </div>
+                <input class="right-side" id="sport"> </input>
             </div>
             <br>
             <div class="row-container">
-            <div class="left-side"> Name: </div>
-            <div class="right-side" id="name"> </div>
+                <div class="left-side"> Name: </div>
+                <input class="right-side" id="name"> </input>
             </div>
             <br>
             <div class="row-container">
                 <div class="left-side"> Gender: </div>
-                <div class="right-side" id="gender"> 
-                </div>
+                <input class="right-side" id="gender"> </input>
             </div>
             <br>
             <div class="row-container">
                 <div class="left-side"> Birthday: </div>
-                <div class="right-side" id="bday"> </div>
+                <input class="right-side" id="bday"> </input>
             </div>
             <br>
             <div class="row-container">
                 <div class="left-side"> Contact Number: </div>
-                <div class="right-side" id="contactN"> </div>
+                <input class="right-side" id="contactN"> </input>
             </div>
             <br>
             <div class="row-container">
                 <div class="left-side"> Email Address: </div>
-                <div class="right-side" id="eAddress"> </div>
+                <input class="right-side" id="eAddress"> </input>
             </div>
             <br>
             <div class="row-container">
                 <div class="left-side"> Overall Rating: </div>
-                <div class="right-side" id="rating"> </div>
+                <input class="right-side" id="rating"> </input>
             </div>
             <br>
             <div class="row-container">
                 <div class="left-side"> Qualifications: </div>
-                <div class="right-side" id="qualifications"> </div>
+                <div id="qualifications" style="display:flex;flex-direction:column" class="right-side"> </div>
             </div>
             <br>
             <br>
             <div class="row-container">
                 <div class="left-side"> Coaching Sessions:  </div>
-                <div class="right-side" id="sessionInfo">   
-                </div>
+                <div id="sessionInfo" style="display:flex;flex-direction:column" class="right-side"> </div>
             </div>
         </div>
-        <div class="content-box" style="width:44%" id="feedbackData">  
+        <div class="content-box" id="feedbackData">  
             <input readonly id="feedbackCaption"></input> 
             <br>
             <br>
             <div id="errFeedback-msg">
             </div>   
-            <div id="feedback">
+            <div id="feedback" style="display:flex;flex-direction:column">
             </div>
         </div>
     </div>

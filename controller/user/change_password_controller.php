@@ -1,4 +1,5 @@
 <?php
+    //this script is used to change the password of the user, after they have entered the verification code sent to their email
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
@@ -24,7 +25,7 @@
     $requestInput = json_decode(file_get_contents("php://input"), true);
     if($requestInput == null || !isset($requestInput['verificationCode'])){ //some error with post request
         $returnMsg['errMsg'] = "Invalid Request";
-        http_response_code(401);
+        http_response_code(400);
         header('Content-Type: application/json;');
         echo json_encode($returnMsg);
         die();
@@ -33,7 +34,7 @@
     if($requestInput['verificationCode'] != $_SESSION['verificationCode']){
         $returnMsg['errMsg'] = "Invalid Code";
         //invalid request code
-        http_response_code(400);
+        http_response_code(401);
         header('Content-Type: application/json;');
         echo json_encode($returnMsg);
         die();

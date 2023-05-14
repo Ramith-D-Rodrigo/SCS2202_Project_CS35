@@ -1,17 +1,23 @@
 <?php
+    //this script is used to check if the user input email address or username during the password reset functiontiality
     session_start();
-    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is logged in
-        header("Location: /index.php"); //the user shouldn't be able to access this page
-        exit();
-    }
-
     require_once("../../src/general/actor.php");
     require_once("../../src/general/security.php");
     require_once("../../src/general/mailer.php");
 
+    if(!Security::userAuthentication(logInCheck : TRUE)){
+        http_response_code(401);
+        die();
+    }
+
     //get the json data from the request
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
+    
+    if($data == null){
+        http_response_code(400);
+        die();
+    }
     $userInput = $data['userInput'];
 
     //check if the user input is an email address or a username
@@ -31,6 +37,7 @@
     else if($returnVal[2] === 'admin'){
         header('Content-Type: application/json;');
         echo json_encode(array("errMsg" => "Unable to send the email. <br>Please try again later"));
+        exit();
     }
 
     $email = $returnVal[0];
@@ -58,4 +65,3 @@
     exit();
 
 ?>
-

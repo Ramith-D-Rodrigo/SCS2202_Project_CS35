@@ -1,4 +1,5 @@
 <?php
+    //this script is used to give feedback to the coach
     session_start();
     require_once("../../src/general/security.php");
     require_once("../../controller/CONSTANTS.php");
@@ -82,7 +83,7 @@
         if($feedback -> stuID === $feedbackUser -> getUserID()){    //found the matching feedback
             //check the date
             date_default_timezone_set(SERVER_TIMEZONE);
-            $feedbackDate = new DateTime($feedback -> feedbackDate);
+            $feedbackDate = new DateTime($feedback -> date);
             $currDate = new DateTime("now");
             $diff = $currDate -> diff($feedbackDate);
 

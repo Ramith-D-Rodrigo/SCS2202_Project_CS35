@@ -22,15 +22,28 @@
     flex-wrap: wrap;
 }
 
+.card-content{
+    height: 60vh;
+    overflow-y: auto;
+}
+
+.schedule-btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .options{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: wrap-reverse;
 }
 .content-box{
-    min-width: 40%;
+    flex-basis: 45%;
+    flex-grow: 1;
 }
 
 #currRating{
@@ -44,22 +57,6 @@
 
 .checked{
     color: gold;
-}
-
-.feedback-header{
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-.feedback-header > i {
-    font-size: 1.5rem;
-}
-
-
-.feedback-footer{
-    font-style: italic;
-    font-size: 0.8rem;
-    color: gray;
 }
 
 #navIcons{
@@ -113,4 +110,49 @@
 
 .map-container > div > a:hover{
     background-color: unset;
+}
+
+
+@media(max-width: 680px){
+    #currRating > i{
+        font-size: 2rem;
+        margin: 0 0.25rem;
+    }
+
+    .map-container{
+        width: 400px;
+        height: 400px;
+        left: 50%;
+        margin: 0 auto;
+    }
+
+    .row-container{
+        flex-direction: column;
+    }
+
+    .left-field{
+        width: 100%;
+        text-align: center;
+    }
+
+    .right-field{
+        width: 100%;
+    }
+
+    .options{
+        justify-content: center;
+    }
+}
+
+@media(max-width: 500px){
+    .content-box{
+        flex-basis: 100%;
+    }
+    .map-icon{
+        font-size: 1.5rem;
+    }
+    .map-container{
+        width: 300px;
+        height: 300px;
+    }
 }

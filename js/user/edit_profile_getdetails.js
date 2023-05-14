@@ -1,43 +1,29 @@
-//editable fields
+import { togglePassword, pictureSize , decodeHtml } from "../FUNCTIONS.js";
 
 let currValues = [];    //array of current values of the fields (associative array)
 
-//editable fields
-const editableFields = ['contactNo', 'dependents', 'height', 'weight', 'homeAddress', 'medicalConcerns', 'profilePic', 'email'];
+//code for getting data from the server is starting from line 526
 
-function decodeHtml(str){     //function to decode escaped html special characters
-    var map =
-    {
-        '&amp;': '&',
-        '&lt;': '<',
-        '&gt;': '>',
-        '&quot;': '"',
-        '&#039;': "'"
-    };
-    return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
-}
+//code for editing the profile is starting from line 40 to 522
+
+//editable fields
+const editableFields = ['contactNum', 'dependents', 'height', 'weight', 'homeAddress', 'medicalConcerns', 'profilePhoto'];
 
 //Toggle Password
 
 const togglePasswordbtns = document.querySelectorAll(".togglePassword");
-togglePasswordbtns.forEach(togglePassword);
 
-function togglePassword(element){
-    element.addEventListener('click',(e)=>{
+for(let i = 0; i < togglePasswordbtns.length; i++){
+    const currBtn = togglePasswordbtns[i];
+    const parentDiv = currBtn.parentElement;
+    const passwordField = parentDiv.children[0];
+
+    currBtn.addEventListener('click',(e)=>{
         e.preventDefault();
-        const parentDiv = element.parentElement;
-        const passwordField = parentDiv.children[0];
-
-        if(passwordField.type === 'password'){  //Show password
-            passwordField.type = 'text';
-            element.innerHTML = "<i class='fa-solid fa-eye-slash'></i>";
-        }
-        else{   //Hide Password
-            passwordField.type = 'password';
-            element.innerHTML = "<i class='fa-solid fa-eye'></i>";
-        }
+        togglePassword(currBtn, passwordField);
     });
 }
+
 
 const concernAddBtn = document.getElementById("medicalConcernBtn");
 
@@ -90,7 +76,6 @@ function removeMedicalConcern(e){   //remove medical concern when button is pres
     medicalCount--;
     const parent = e.currentTarget.parentElement;  //list element
     const freedID = parent.id.slice(-1);    //get the removing number
-    console.log(freedID);
 
     if(!medicalinputID.includes(parseInt(freedID))){    //does not include the item number
         medicalinputID.push(parseInt(freedID));
@@ -118,11 +103,11 @@ function removeEmergencyContact(e){
         return;
     }
     const clickedBtn = e.currentTarget;
-    const parent = clickedBtn.parentElement.parentElement.parentElement; //first parent is right field, grandparent is row container, 3rd one is the inputDiv
+    const deletingID = clickedBtn.id.slice(-1);
+    const parent = document.querySelector("#emergencydetail" + deletingID);
     emergencyCount--;
 
-    const freedID = clickedBtn.id.slice(-1);
-    emergencydetailID.push(freedID);    //available for next use
+    emergencydetailID.push(deletingID);    //available for next use
     parent.remove();
     if(emergencyCount < 3){
         emergencyDetailsBtn.parentElement.style.display = '';
@@ -207,7 +192,6 @@ function addEmergencyContact(e){
         else if(info === 2){    //relationship
             leftField.appendChild(relationshipField);
             rightField.appendChild(inputRelationship);
-            rightField.appendChild(removeBtn);
             row.appendChild(leftField);
             row.appendChild(rightField);
         }
@@ -221,21 +205,12 @@ function addEmergencyContact(e){
         }
         inputDiv.appendChild(row);
     }
+    inputDiv.appendChild(removeBtn);
     emergencyDetailsContainer.appendChild(inputDiv);
     if(emergencyCount == 3){
         emergencyDetailsBtn.parentElement.style.display = 'none';   //hide the whole div
     }
     return currID;
-}
-
-//profile pic upload size check
-function pictureSize(size){ //max size 2mb
-    if(size > 2097152){
-        return false;
-    }
-    else{
-        return true;
-    }
 }
 
 const editForm = document.querySelector("#editForm");   //edit form
@@ -275,7 +250,7 @@ function validateChanges(e){
     }
 
 
-//have to check input values validity (similary)
+    //have to check input values validity (similary)
     const emergencyDetails = document.getElementById("emergencyDetails");
     const emergencyDetailsChildren = emergencyDetails.children;
     
@@ -291,7 +266,20 @@ function validateChanges(e){
     //each field has 1 element ( we need the right fields children element for input value)
 
     //div container -> emgcontact children -> rows -> fields -> field's children
-    for(i = 0; i < emergencyDetailsChildren.length; i++){
+    for(let i = 0; i < emergencyDetailsChildren.length; i++){
+        //children[0] -> first row
+        //children[1] -> second row
+        //children[2] -> third row
+
+        //children[0].children[0] -> left field (label container)
+        //children[0].children[1] -> right field (input container)
+
+        //children[0].children[0].children[0] -> left field's children (label)
+        //children[0].children[1].children[0] -> right field's children (input)
+
+        //children[0].children[0].children[0].value -> left field's children's value (label value)
+        //children[0].children[1].children[0].value -> right field's children's value (input value)
+
         names[i] = emergencyDetailsChildren[i].children[0].children[1].children[0].value.toLowerCase();
         relationship[i] = emergencyDetailsChildren[i].children[1].children[1].children[0].value.toLowerCase();
         contactNum[i] = emergencyDetailsChildren[i].children[2].children[1].children[0].value; 
@@ -339,10 +327,10 @@ function validateChanges(e){
         medicalArr = Array.from(medicalConcernDiv.children[0].children);  //create an array for the elements inside (list elements) the medical concern div
         medicalArr.forEach((val, i, arr)=> {    //traverse the array
             if(val.tagName.toLowerCase() === 'li'){    //find the child list elements
-                if(val.childNodes[0].nodeType === 3){  //check if the child is a text node
+                if(val.childNodes[0].nodeType === 3){  //check if the child is a text node (text node has nodeType 3)
                     concerns.push(val.childNodes[0].nodeValue.toLowerCase());    //push the text node value
                 }
-                else{
+                else{   //if the child is not a text node (it is an input field)
                     concerns.push(val.children.item(0).value.toLowerCase());  //push the input value 
                 }
             }
@@ -361,11 +349,9 @@ function validateChanges(e){
     }
 
     if(flag === false){ //Has invalid inputs
-        console.log("Form is invalid");
         return false;
     }
     else{   //valid to submit the data
-        console.log("Form is valid");
         return true;
     }
 }
@@ -373,7 +359,6 @@ function validateChanges(e){
 editForm.addEventListener('submit', (e) => {
     let newValues = []; //new values to be updated
     e.preventDefault();
-    console.log("Form is valid");
     const formData = new FormData(editForm);
 
     let newMedicalConcerns = [];
@@ -385,7 +370,7 @@ editForm.addEventListener('submit', (e) => {
         contactNum: ""
     }
 
-    for([key,value] of formData){
+    for(const [key,value] of formData){
         if(key === "profilePic"){
             const photoSize = formData.get("profilePic").size;
 
@@ -407,7 +392,7 @@ editForm.addEventListener('submit', (e) => {
             tempDependent.relationship = value;
             continue;
         }
-        else if(key.includes("contact") && key !== "contactNo"){  //not the user's contact number
+        else if(key.includes("contact") && key !== "contactNum"){  //not the user's contact number
             tempDependent.contactNum = value;
             newEmergencyDetails.push(tempDependent);
             tempDependent = {
@@ -439,7 +424,6 @@ editForm.addEventListener('submit', (e) => {
     }
     else{
         if(newMedicalConcerns.length === 0){    //if the user has removed all the medical concerns
-            console.log("removed all");
             newValues['medicalAllRemoved'] = true;
         }
         medFlag = true;
@@ -474,7 +458,6 @@ editForm.addEventListener('submit', (e) => {
         }
     }
 
-    console.log(newValues);
     if(Object.keys(newValues).length === 0){ //nothing changed
         errMsg.innerHTML = "You haven't changed Anything";
         return;
@@ -485,6 +468,10 @@ editForm.addEventListener('submit', (e) => {
         sendingData.append(key, newValues[key]);
     }
 
+    //disable the submit button
+    submitBtn.disabled = true;
+    submitBtn.classList.add("disabled");
+
     //send the data to the server
     fetch("/controller/user/edit_profile_change_controller.php", {
         method: "POST",
@@ -492,6 +479,11 @@ editForm.addEventListener('submit', (e) => {
     })
     .then((res) => res.json())
     .then((data) => {
+        //enable the submit button
+        submitBtn.disabled = false;
+        submitBtn.classList.remove("disabled");
+
+
         if(data.errMsg !== undefined){
             errMsg.innerHTML = data.errMsg;
         }
@@ -501,7 +493,16 @@ editForm.addEventListener('submit', (e) => {
     });
 });
 
+//adding event listeners to the submit button
+const editProfileSubmitBtn = document.getElementById("submitBtn");
+const deactivateAccountSubmitBtn = document.getElementById("submitBtn3");
 
+editProfileSubmitBtn.addEventListener('click', (e) => {
+    if(!validateChanges(e)){
+        e.preventDefault();
+        return;
+    }
+});
 
 fetch("/controller/user/edit_profile_entry_controller.php") //get the details of the user from the server
     .then((res) => res.json())
@@ -517,7 +518,6 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
                 currValues[keys[i]] = values[i];
             }
         }
-        console.log(currValues);
 
         const nameField = document.getElementById("nameField"); //set the name field
         nameField.innerHTML = data["firstName"] + " " + data["lastName"];
@@ -532,10 +532,21 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         homeAddress.innerHTML = decodeHtml(data['homeAddress']);
 
         const weight = document.getElementById("weight");   //set the weight field
-        weight.value = data['weight'];
+        if(data['weight'] === null || data['weight'] === undefined){
+            weight.value = "";
+        }
+        else{
+            weight.value = data['weight'];
+        }
+
         
         const height = document.getElementById("height");   //set the height field
-        height.value = data['height'];
+        if(data['height'] === null || data['height'] === undefined){
+            height.value = "";
+        }
+        else{
+            height.value = data['height'];
+        }
 
         const gender = document.getElementById("genderField");  //set the gender field
         if(data['gender'] === 'm'){
@@ -565,7 +576,7 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
 
             data['medicalConcerns'].forEach((concern, index) => {
                 const concernItem = document.createElement("li");
-                concernInput = document.createElement("input");
+                const concernInput = document.createElement("input");
                 concernInput.type = "text";
                 concernInput.value = concern.medicalConcern;
                 concernInput.name = "medicalConcern" + (index+1);
@@ -593,19 +604,14 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
         //set the profile picture
         const currProfilePicField = document.getElementById("profilePicField");
         const profilePicImg = document.getElementById("profilePicImg");
-        //change the img container size to 100px
-        currProfilePicField.style.width = "auto";
-        currProfilePicField.style.height = "15rem";
 
-        profilePicImg.style.maxHeight = "100%";
-
-        if(data['profilePic'] !== null){    //has a profile picture  
+        if(data['profilePhoto'] !== null){    //has a profile picture  
             profilePicImg.src = data['profilePhoto'];
         }
         else{
             profilePicImg.src = "/styles/icons/profile_icon.svg";
         }
-        profilePicImg.style.borderRadius = "50%";
+
         profilePicImg.setAttribute("onerror", "this.src='/styles/icons/profile_icon.svg';");
 
         //add event listener to the file upload input
@@ -670,9 +676,8 @@ fetch("/controller/user/edit_profile_entry_controller.php") //get the details of
 
         if(emergencyCount === 3){   //maximum number of dependents
             emergencyDetailsBtn.parentElement.style.display = 'none';   //hide the whole div
-            console.log("hide");
         }
     })
     .catch((err) => {
-        console.log(err);
+        //console.log(err);
     });

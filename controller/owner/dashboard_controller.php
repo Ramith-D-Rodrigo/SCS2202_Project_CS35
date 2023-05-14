@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the dashboard data of the owner
     session_start();
     require_once("../../src/general/security.php");
     require_once("../../controller/CONSTANTS.php");
@@ -48,7 +49,7 @@
 
     //get sports 
 
-    $sports = $owner -> getSports($owner -> getConnection());
+    $sports = $owner -> getSports();
 
     foreach($sports as $sport){
         $sport -> getDetails($owner -> getConnection(), ['sportName']);

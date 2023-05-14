@@ -1,9 +1,14 @@
 <?php
+    //this script is used to get the profile details of the user
     session_start();
 
-    require_once("../../src/general/uuid.php");
     require_once("../../src/user/user.php");
-    require_once("../../src/user/dbconnection.php");
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
+        Security::redirectUserBase();
+        die();
+    }
 
     $userID = $_SESSION['userid'];
 

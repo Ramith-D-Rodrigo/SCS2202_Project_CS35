@@ -1,4 +1,5 @@
 <?php
+    //this script is used to deactivate the user account after the user has entered the verification code
     session_start();
     require_once("../../src/general/security.php");
     require_once("../../src/general/mailer.php");

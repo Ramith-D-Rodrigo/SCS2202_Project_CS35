@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the details of the sports to display in the add new branch page so the owner can choose the sports that the branch will provide
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['owner'])){

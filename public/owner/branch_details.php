@@ -12,10 +12,8 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="/styles/general/styles.css">
-        <link rel="stylesheet" href="/styles/general/notification.css">
+        <link rel="stylesheet" href="/styles/owner/styles.css">
         <link rel="stylesheet" href="/styles/owner/branch_details.css">
-        <link rel="stylesheet" href="/styles/general/staff.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
         
         <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
@@ -119,6 +117,9 @@
 
                 <div class="map-icon-container">
                     <i class="fa-solid fa-map-location-dot map-icon" id="mapIcon"></i>
+                </div>
+                <div class="schedule-btn">
+                    <button onclick="window.location.href='/public/owner/reservation_schedule.php'" id="scheduleBtn">View Schedule</button>
                 </div>
             </div>
 

@@ -26,6 +26,12 @@ requestForm.addEventListener("submit", (e) => {
     errMsg.innerHTML = "";
     successMsg.innerHTML = "Sending Request...";
 
+    //disable the submit button
+    const submitBtn = requestForm.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+    submitBtn.classList.add("disabled");
+    submitBtn.style.cursor = "not-allowed";
+
     fetch("../../controller/user/request_coaching_session_controller.php", {
         method: "POST",
         headers: {
@@ -46,7 +52,11 @@ requestForm.addEventListener("submit", (e) => {
         return res.json();
     })
     .then(data => {
-        
         msgBox.innerHTML = data.msg;
+
+        //enable the submit button
+        submitBtn.disabled = false;
+        submitBtn.classList.remove("disabled");
+        submitBtn.style.cursor = "pointer";
     })
 });

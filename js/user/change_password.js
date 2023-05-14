@@ -6,7 +6,6 @@ const passwordFieldsDiv = document.querySelector("#passwordFields");
 const passwordChangeButton = document.getElementById("submitBtn2");
 const verificationCodeField = document.getElementById("verificationCode");
 
-
 function validateCredentialsForm(event){
     //passwords matching or not
     const password = document.getElementById("password");
@@ -34,17 +33,26 @@ function validateCredentialsForm(event){
     }
 
     if(flag === false){ //Has invalid inputs
-        console.log("Form is invalid");
         return false;
     }
     else{   //valid to submit the data
-        console.log("Form is valid");
         return true;
     }
 }
 
+passwordChangeButton.addEventListener('click', (e)=>{
+    if(!validateCredentialsForm(e)){
+        e.preventDefault();
+        return;
+    }
+});
+
 credentialForm.addEventListener('submit', function passwordRequest(e){
     e.preventDefault();
+
+    //reset messages
+    passwordErrMsg.innerHTML = "";
+    passwordSuccessMsg.innerHTML = "";
 
     const formData = new FormData(credentialForm);
     const arr = Array.from(formData.entries());
@@ -55,6 +63,11 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
 
     passwordSuccessMsg.innerHTML = "Please wait while we send you a verification code";
 
+    //disable the submit button
+    passwordChangeButton.disabled = true;
+    passwordChangeButton.style.cursor = "not-allowed";
+    passwordChangeButton.classList.add("disabled");
+    
     //send the data to the server
     fetch('../../controller/user/change_password_validation_controller.php', {
         method: 'POST',
@@ -78,6 +91,8 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
                 credentialForm.reset();   //clear the form
                 passwordFieldsDiv.parentElement.removeChild(passwordFieldsDiv); //remove the password fields
                 verificationCodeField.style.display = "";   //show the verification code input
+                //make it required
+                verificationCodeField.setAttribute("required", "");
 
                 //remove the credential form submit event listener
                 credentialForm.removeEventListener('submit', passwordRequest);
@@ -86,6 +101,11 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
                 passwordChangeButton.removeAttribute("onclick");
                 passwordChangeButton.innerHTML = "Verify Code";
 
+                //re enable the submit button
+                passwordChangeButton.disabled = false;
+                passwordChangeButton.style.cursor = "pointer";
+                passwordChangeButton.classList.remove("disabled");
+
                 //add the verification code form submit event listener
                 credentialForm.addEventListener('submit', function verifyCode(e){
                     e.preventDefault();
@@ -93,6 +113,15 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
                     const formData = new FormData(credentialForm);
 
                     const verificationCode = Object.fromEntries(formData.entries());
+
+                    //disable the submit button
+                    passwordChangeButton.disabled = true;
+                    passwordChangeButton.style.cursor = "not-allowed";
+                    passwordChangeButton.classList.add("disabled");
+
+                    //reset messages
+                    passwordErrMsg.innerHTML = "";
+                    passwordSuccessMsg.innerHTML = "";
 
                     fetch("../../controller/user/change_password_controller.php", { //send the verification code to the server
                         method: "POST",
@@ -113,6 +142,12 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
                             return res.json();
                         })
                         .then((data) => {
+
+                            //re enable the submit button
+                            passwordChangeButton.disabled = false;
+                            passwordChangeButton.style.cursor = "pointer";
+                            passwordChangeButton.classList.remove("disabled");
+                            
                             if(data.errMsg === undefined){  //if there is no error message
                                 passwordErrMsg.innerHTML = "";
                                 passwordSuccessMsg.innerHTML = "Password Changed Successfully";
@@ -121,12 +156,13 @@ credentialForm.addEventListener('submit', function passwordRequest(e){
                                 verificationCodeField.style.display = "none";
                                 //remove the verification code form submit event listener
                                 credentialForm.removeEventListener('submit', verifyCode);
-                                //remove the verification code form submit event listener
+                                //add the change password form submit event listener again
                                 credentialForm.addEventListener('submit', passwordRequest);
 
                                 //remove password change button event listener
                                 passwordChangeButton.innerHTML = "Save Changes <i class='fa-solid fa-floppy-disk'></i>";
                                 passwordChangeButton.setAttribute("onclick", "validateCredentialsForm(event)");
+
                                 //show the password fields
                                 verificationCodeField.parentElement.insertBefore(passwordFieldsDiv, verificationCodeField);
                             }

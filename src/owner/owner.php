@@ -39,61 +39,7 @@
             $this -> userRole = 'owner';
         }
 
-
-/*         private function create_login_details_entry($database){   //enter details to the login_details table
-            $result = $database -> query(sprintf("INSERT INTO `login_details`
-            (`user_id`, 
-            `username`,
-            `email_address`, 
-            `password`, 
-            `user_role`,
-            `is_active`) 
-            VALUES 
-            '%s','%s','%s','%s','owner',1)",
-            $database -> real_escape_string($this -> ownerID),
-            $database -> real_escape_string($this -> username),
-            $database -> real_escape_string($this -> emailAddress),
-            $database -> real_escape_string($this -> password))); 
-
-             if ($result === TRUE) {
-                echo "New log in details record created successfully<br>";
-            }
-            else{
-                echo "Error<br>";
-            }
-            return $result;
-        } */
-
-/*         private function create_owner_entry($database) {
-            $sql =(sprintf("INSERT INTO `owner`
-            (`owner_id`,
-            `contact_no`,
-            `first_name`, 
-            `last_name`) 
-            VALUES '%s','%s','%s','%s','%s')",
-            $database -> real_escape_string($this -> contactNum),
-            $database -> real_escape_string($this -> firstName),
-            $database -> real_escape_string($this -> lastName)));
-
-            $result = $database->query($sql);
-
-            return $result;
-        } */
-
-/*         public function registerOwner($database){    //public function to register the user
-            // $this -> joinDate = date("Y-m-d");
-            // $this -> leaveDate = '';
-            $loginEntry = $this -> create_login_details_entry($database);
-            //$staffEntry = $this -> create_staff_entry($database);
-            $ownerEntry = $this -> create_owner_entry($database);
-
-            if($loginEntry  === TRUE && $ownerEntry === TRUE){    //all has to be true (successfully registered)
-                return TRUE;
-            }
-        } */
-
-
-        public function getRevenue($dateFrom, $dateTo, $branch = null){    //get the revenue of the branches
+        public function getRevenue($dateFrom, $dateTo, $branch = null,$sport = null){    //get the revenue of the branches
             if($branch == null){    //all branches are needed
                 $branchArr = $this -> getBranches();
                 $revenue = 0;
@@ -105,7 +51,12 @@
                 return $revenue;
             }
             else{
-                return $branch -> getBranchRevenue($this -> connection, $dateFrom, $dateTo);
+                if($sport == null){
+                    return $branch -> getBranchRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo);
+                }else{
+                    return $branch -> getBranchRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo,sport: $sport);
+                }
+                
             }
 
         }
@@ -124,33 +75,43 @@
             return $branchArr;
         }
 
-        public function getCoachingSessionRevenue($dateFrom, $dateTo, $branch = null){    //get the revenue of the coaching sessions of the branch
+        public function getCoachingSessionRevenue($dateFrom, $dateTo, $branch = null, Sport $sport = null){    //get the revenue of the coaching sessions of the branch
             if($branch == null){    //all branches are needed
                 $branchArr = $this -> getBranches();
                 $revenue = 0;
 
                 foreach($branchArr as $branch){
-                    $revenue += $branch -> coachSessionPaymentRevenue($this -> connection, $dateFrom, $dateTo);
+                    $revenue += $branch -> coachSessionPaymentRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo);
                 }
                 return $revenue;
             }
             else{
-                return $branch -> coachSessionPaymentRevenue($this -> connection, $dateFrom, $dateTo);
+                if($sport == null){
+                    return $branch -> coachSessionPaymentRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo,sport: null);
+                }else{
+                    return $branch -> coachSessionPaymentRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo,sport: $sport);
+                }
+                
             }
         }
 
-        public function getReservationRevenue($dateFrom, $dateTo, $branch = null){    //get the revenue of the reservations of the branch
+        public function getReservationRevenue($dateFrom, $dateTo, $branch = null, Sport $sport = null){    //get the revenue of the reservations of the branch
             if($branch == null){
                 $branchArr = $this -> getBranches();
                 $revenue = 0;
 
                 foreach($branchArr as $branch){
-                    $revenue += $branch -> courtReservationRevenue($this -> connection, $dateFrom, $dateTo);
+                    $revenue += $branch -> courtReservationRevenue(database:$this -> connection,dateFrom: $dateFrom,dateTo: $dateTo);
                 }
                 return $revenue;
             }
             else{
-                return $branch -> courtReservationRevenue($this -> connection, $dateFrom, $dateTo);
+                if($sport == null) {
+                    return $branch -> courtReservationRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo,sport: null);
+                }else{
+                    return $branch -> courtReservationRevenue(database: $this -> connection,dateFrom: $dateFrom,dateTo: $dateTo,sport: $sport);
+                }
+                
             }
         }
 
@@ -170,24 +131,31 @@
             return $sportArr;
         }
 
-        public function changeReservationPrice($sport, $newPrice){
-            $sql = sprintf("UPDATE `sport` SET `reservationPrice` = '%s' WHERE `sportID` = '%s'",
-            $this -> connection -> real_escape_string($newPrice),
-            $this -> connection -> real_escape_string($sport -> getID()));
-            $result = $this -> connection -> query($sql);
-
-            if($result === TRUE){
-                return TRUE;
-            }
-            else{
-                return FALSE;
-            }
-        }
-
         public function managerRequests($manager = null, $discountDecision = '%', $courtDecision = '%'){   //% for wildcard
             $totalRequests =  array_merge($this -> getDiscountRequests(manager: $manager, decision: $discountDecision), $this -> getSportCourtRequests(manager: $manager, decision: $courtDecision));
             return $totalRequests;
         }
+
+        public function updateManagerRequest($manager = null,$courtID = null, $startingDate = null,$decision = '%'){
+            
+            $sql = '';
+            if($manager == null){
+                $sql = sprintf("UPDATE `sports_court` SET `requestStatus` = '%s' WHERE `courtID` = '%s'",
+                $this -> connection -> real_escape_string($decision),
+                $this -> connection -> real_escape_string($courtID));
+
+            }else{
+                $sql = sprintf("UPDATE `discount` SET `decision` = '%s' WHERE `managerID` = '%s' AND `startingDate` = '%s'",
+                $this -> connection -> real_escape_string($decision),
+                $this -> connection -> real_escape_string($manager),
+                $this -> connection -> real_escape_string($startingDate));
+
+            }
+
+            $result = $this -> connection -> query($sql);
+            return $result;
+        }
+
 
         public function getDiscountRequests($manager = null, $decision = '%'){   //% for wildcard
 
@@ -212,13 +180,18 @@
             return $discountArr;
         }
 
-        public function getSportCourtRequests($manager = null, $decision = '%'){ //get all the sport court requests (adding new sports court to some branch)
+        public function getSportCourtRequests($manager = null, $decision = '%'){ //get all the sport court requests including court photos(adding new sports court to some branch)
             if($manager == null){
-                $sql = sprintf("SELECT * FROM `sports_court` WHERE `requestStatus` LIKE '%s' AND `addedManager` IS NOT NULL", $this -> connection -> real_escape_string($decision));
+                $sql = sprintf("SELECT `sc`.*,`scp`.`courtPhoto` FROM 
+                `sports_court` `sc` LEFT JOIN `sports_court_photo` `scp` ON `sc`.`courtID` = `scp`.`courtID` 
+                WHERE `sc`.`requestStatus` LIKE '%s' AND `sc`.`addedManager` IS NOT NULL", 
+                $this -> connection -> real_escape_string($decision));
                 $result = $this -> connection -> query($sql);
             }
             else{
-                $sql = sprintf("SELECT * FROM `sports_court` WHERE `managerID` = '%s' AND `requestStatus` LIKE '%s'",
+                $sql = sprintf("SELECT `sc`.*,`scp`.`courtPhoto` FROM 
+                `sports_court` `sc` LEFT JOIN `sports_court_photo` `scp` ON `sc`.`courtID` = `scp`.`courtID`
+                WHERE `managerID` = '%s' AND `requestStatus` LIKE '%s'",
                 $this -> connection -> real_escape_string($manager -> getUserID()),
                 $this -> connection -> real_escape_string($decision));
                 $result = $this -> connection -> query($sql);

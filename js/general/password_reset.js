@@ -53,6 +53,13 @@ form.addEventListener('submit', checkuserInput = (e)=>{
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
+    //disable the button to prevent multiple submissions
+    const checkBtn = document.getElementById('checkBtn');
+    checkBtn.disabled = true;
+    checkBtn.innerHTML = "Checking...";
+    checkBtn.classList.add('disabled');
+    
+
     //send data to server
     fetch('../../controller/general/email_username_check_controller.php', { //check the user input
         method: 'POST',
@@ -74,7 +81,11 @@ form.addEventListener('submit', checkuserInput = (e)=>{
             inputDiv.innerHTML = "Enter the code sent to your email: <input type='text' name='userInputCode' id='code' required>";
             
             const checkBtn = document.getElementById('checkBtn'); //check button
+
+            //re enable the button
+            checkBtn.disabled = false;
             checkBtn.innerHTML = "Verify Code";
+            checkBtn.classList.remove('disabled');
             checkBtn.setAttribute('id', 'verifyBtn');
 
             //code resend button
@@ -89,6 +100,17 @@ form.addEventListener('submit', checkuserInput = (e)=>{
             //add event listener to resend button
             resendBtn.addEventListener('click', resendCode = (e)=>{
                 e.preventDefault();
+                
+                //disable the button to prevent multiple submissions
+                resendBtn.disabled = true;
+                resendBtn.innerHTML = "Resending...";
+                resendBtn.classList.add('disabled');
+
+                //disable verify button
+                const verifyBtn = document.getElementById('verifyBtn');
+                verifyBtn.disabled = true;
+                verifyBtn.classList.add('disabled');
+
                 fetch('../../controller/general/resend_code_controller.php', { //check the user input
                     method: 'POST',
                     headers: {
@@ -97,6 +119,18 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                     body: JSON.stringify(data)
                 }).then(res => res.json())
                 .then(data => {
+                    //re enable the button
+                    resendBtn.disabled = false;
+                    resendBtn.innerHTML = "Resend Code";
+                    resendBtn.classList.remove('disabled');
+
+                    //re enable the verify button
+                    verifyBtn.disabled = false;
+                    verifyBtn.classList.remove('disabled');
+
+                    successMsgBox.innerHTML = "";
+                    errMsgBox.innerHTML = "";
+
                     if(data.errMsg === undefined){  //if no error
                         successMsgBox.innerHTML = data.successMsg;
                     }
@@ -115,6 +149,17 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                 const codeCheckFormData = new FormData(form);
                 const codeCheckData = Object.fromEntries(codeCheckFormData);
 
+                //disable the button to prevent multiple submissions
+                const verifyBtn = document.getElementById('verifyBtn');
+                verifyBtn.disabled = true;
+                verifyBtn.innerHTML = "Verifying...";
+                verifyBtn.classList.add('disabled');
+
+                //disable the resend button
+                resendBtn.disabled = true;
+                resendBtn.classList.add('disabled');
+
+                
                 fetch('../../controller/general/reset_code_check_controller.php', { //check the user input
                     method: 'POST',
                     headers: {
@@ -124,6 +169,15 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                 })
                 .then(res => res.json())
                 .then(data => {
+                    //re enable the button
+                    verifyBtn.disabled = false;
+                    verifyBtn.innerHTML = "Verify Code";
+                    verifyBtn.classList.remove('disabled');
+
+                    //re enable the resend button
+                    resendBtn.disabled = false;
+                    resendBtn.classList.remove('disabled');
+
                     if(data.errMsg === undefined){  //if no error (code is correct)
                         //remove the code input field
                         const codeInputDiv = document.getElementById('inputDiv');
@@ -185,6 +239,12 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                             const formData = new FormData(form);
                             const data = Object.fromEntries(formData);
 
+                            //disable the button to prevent multiple submissions
+                            const resetBtn = document.getElementById('resetBtn');
+                            resetBtn.disabled = true;
+                            resetBtn.innerHTML = "Resetting...";
+                            resetBtn.classList.add('disabled');
+
                             fetch('../../controller/general/password_reset_controller.php', { //reset the password
                                 method: 'POST',
                                 headers: {
@@ -194,6 +254,7 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                             })
                             .then(res => res.json())
                             .then(data => {
+
                                 if(data.errMsg === undefined){  //if no error (password is reset)
                                     errMsgBox.innerHTML = "";
                                     successMsgBox.innerHTML = data.successMsg + "<br>Redirecting to the login page...";
@@ -204,10 +265,15 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                                 else{   //password reset failed
                                     errMsgBox.innerHTML = data.errMsg;
                                     successMsgBox.innerHTML = "";
+
+                                    //re enable the button
+                                    resetBtn.disabled = false;
+                                    resetBtn.innerHTML = "Reset Password";
+                                    resetBtn.classList.remove('disabled');
                                 }
                             })
                             .catch(err => {
-                                console.log(err);
+                                //console.log(err);
                             });
                         });
                     }
@@ -217,7 +283,7 @@ form.addEventListener('submit', checkuserInput = (e)=>{
                     }
                 })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                 });
                     
             });
@@ -225,6 +291,11 @@ form.addEventListener('submit', checkuserInput = (e)=>{
             //if email or username is incorrect, show error
             errMsgBox.innerHTML = data.errMsg;
             successMsgBox.innerHTML = "";
+
+            //re enable the button
+            checkBtn.disabled = false;
+            checkBtn.innerHTML = "Check";
+            checkBtn.classList.remove('disabled');
         }
     })
 });

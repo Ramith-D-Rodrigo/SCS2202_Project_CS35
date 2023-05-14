@@ -42,7 +42,7 @@ main::before{
     content: '';
     width: 60%;
     height: 60%;
-    background: url('../viewReservations.png');
+    background: url('viewReservations.png');
     background-size:contain;
     background-repeat: no-repeat;
 }
@@ -51,7 +51,7 @@ main::before{
     content: '';
     width: 60%;
     height: 60%;
-    background: url('../onsiteReservations.png');
+    background: url('onsiteReservations.png');
     background-size:contain;
     background-repeat: no-repeat;
 }
@@ -59,7 +59,7 @@ main::before{
     content: '';
     width: 60%;
     height: 60%;
-    background: url('../branch.png');
+    background: url('branch.png');
     background-size:contain;
     background-repeat: no-repeat;
 }
@@ -67,7 +67,7 @@ main::before{
     content: '';
     width: 60%;
     height: 60%;
-    background: url('../maintenance.png');
+    background: url('maintenance.png');
     background-size:contain;
     background-repeat: no-repeat;
 }
@@ -75,7 +75,7 @@ main::before{
     content: '';
     width: 60%;
     height: 60%;
-    background: url('../profile.png');
+    background: url('profile.png');
     background-size:contain;
     background-repeat: no-repeat;
 }

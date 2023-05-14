@@ -1,11 +1,5 @@
-function pictureSize(size){ //max size 2mb
-    if(size > 2097152){
-        return false;
-    }
-    else{
-        return true;
-    }
-}
+import {verbose, MIN_USER_REGISTRATION_AGE}  from '../CONSTANTS.js';
+import { pictureSize } from '../FUNCTIONS.js';
 
 function validateForm(event){
     const errMsg = document.getElementById("errmsg");   //For Displaying the Error messages
@@ -18,6 +12,62 @@ function validateForm(event){
 
     if(form.reportValidity() === false){ //Form is invalid from HTML persepective
         errMsg.innerHTML = errMsg.innerHTML + "Please Add Valid Information";
+
+        //get the invalid fields
+        const invalidFields = form.querySelectorAll(":invalid");
+
+        for(let i = 0; i < invalidFields.length; i++){  //traverse through the invalid fields
+            //console.log(invalidFields[i].name);
+            if(invalidFields[i].name === "firstName"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>First Name is Invalid";
+            }
+            else if(invalidFields[i].name === "lastName"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Last Name is Invalid";
+            }
+            else if(invalidFields[i].name === 'birthday'){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Birthday is Invalid, You must be at least " + MIN_USER_REGISTRATION_AGE + " years old to register<br>";
+                errMsg.innerHTML = errMsg.innerHTML + "And the age should not be greater than 100 years old";
+            }
+            else if(invalidFields[i].name === "contactNum"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Contact Number is Invalid";
+            }
+            else if(invalidFields[i].name === 'homeAddress'){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Home Address is Invalid";
+            }
+            else if(invalidFields[i].name === "email"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Email is Invalid";
+            }
+            else if(invalidFields[i].name === "username"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Username is Invalid";
+            }
+            else if(invalidFields[i].name === "password"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Password is Invalid";
+            }
+            else if(invalidFields[i].name === "passwordConfirm"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Confirmation Password is Invalid";
+            }
+            else if(invalidFields[i].name === "user_pic"){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Profile Picture is Invalid";
+            }
+            else if(invalidFields[i].name.includes('name') && invalidFields[i].name !== 'firstName' && invalidFields[i].name !== 'lastName'){   //if the field is an emergency contact name
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Emergency Contact Name is Invalid";
+            }
+            else if(invalidFields[i].name.includes('relationship')){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Emergency Contact Relationship is Invalid";
+            }
+            else if(invalidFields[i].name.includes('emgcontactNum')){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Emergency Contact Number is Invalid";
+            }  
+            else if(invalidFields[i].name.includes('medical_concern')){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Medical Concern is Invalid";
+            }
+            else if(invalidFields[i].name === 'height'){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Height is Invalid";
+            }
+            else if(invalidFields[i].name === 'weight'){
+                errMsg.innerHTML = errMsg.innerHTML + "<br>Weight is Invalid";
+            }
+        }
         return false;
     }
     else{   //Form is valid from HTML perspective
@@ -50,12 +100,26 @@ function validateForm(event){
             }
         }
 
-  
-        //uploaded size is okay
-/*         else{
-            errMsg.innerHTML = errMsg.innerHTML + "Uploaded Image is okay";
-            return false;
-        } */
+        //check height and weight are negative
+        const height = document.getElementById("height");
+        const weight = document.getElementById("weight");
+
+        if(height.value !== "" && height.value < 0){
+            errMsg.innerHTML = errMsg.innerHTML + "Height Cannot be Negative<br>";
+            flag = false;
+        }
+        else{
+            errMsg.innerHTML.replace("Height Cannot be Negative<br>", "");
+        }
+
+        if(weight.value !== "" && weight.value < 0){
+            errMsg.innerHTML = errMsg.innerHTML + "Weight Cannot be Negative<br>";
+            flag = false;
+        }
+        else{
+            errMsg.innerHTML.replace("Weight Cannot be Negative<br>", "");
+        }
+
     
         //passwords matching or not
         const password = document.getElementById("password");
@@ -91,7 +155,24 @@ function validateForm(event){
         //each field has 1 element ( we need the right fields children element for input value)
 
         //div container -> emgcontact children -> rows -> fields -> field's children
-        for(i = 0; i < emergencyDetailsChildren.length; i++){
+        for(let i = 0; i < emergencyDetailsChildren.length; i++){
+            if(emergencyDetailsChildren[i].classList.contains("title")){ //the title of the div container
+                continue;
+            }
+            //children[0] -> first row
+            //children[1] -> second row
+            //children[2] -> third row
+
+            //children[0].children[0] -> left field (label container)
+            //children[0].children[1] -> right field (input container)
+
+            //children[0].children[0].children[0] -> left field's children (label)
+            //children[0].children[1].children[0] -> right field's children (input)
+
+            //children[0].children[0].children[0].value -> left field's children's value (label value)
+            //children[0].children[1].children[0].value -> right field's children's value (input value)
+
+
             names[i] = emergencyDetailsChildren[i].children[0].children[1].children[0].value.toLowerCase();
             relationship[i] = emergencyDetailsChildren[i].children[1].children[1].children[0].value.toLowerCase();
             contactNum[i] = emergencyDetailsChildren[i].children[2].children[1].children[0].value; 
@@ -105,7 +186,7 @@ function validateForm(event){
 
         contactNum.push(usercontact);
         names.push(user);
-        console.log(user);
+        //console.log(user);
         //removing empty fields
         contactNum = contactNum.filter(i => i !== '');   
         relationship = relationship.filter(i => i !== '');   
@@ -157,7 +238,10 @@ function validateForm(event){
 
         medicalArr.forEach((val, i, arr)=> {    //traverse the array
             if(val.tagName.toLowerCase() === 'div'){    //find the child divs
-                console.log(val.children);
+                if(val.classList.contains('title')){    //skip the title div
+                    return;
+                }
+                //console.log(val.children);
                 concerns.push(val.children.item(0).value.toLowerCase());  //push the input value 
             }
         })
@@ -165,7 +249,7 @@ function validateForm(event){
         concerns = concerns.filter(i => i !== '');
         
         if(verbose){
-            console.log(concerns);
+            //console.log(concerns);
         }
 
         if(new Set(concerns).size !== concerns.length){ //check for duplicate contact numbers
@@ -186,3 +270,5 @@ function validateForm(event){
         }
     } 
 }
+
+export {validateForm};

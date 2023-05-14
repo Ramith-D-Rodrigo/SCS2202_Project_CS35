@@ -1,4 +1,5 @@
 <?php 
+    //this script is used to validate the new password and send the verification code to the user's email
     session_start();
     require_once("../../src/general/security.php"); //security class
 

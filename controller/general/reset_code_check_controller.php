@@ -1,11 +1,14 @@
 <?php
+    //this script is used to check the reset code entered by the user and send a new code if the code is wrong
     session_start();
-    if((isset($_SESSION['userrole']) && isset($_SESSION['userid']))){  //if the user is logged in
-        header("Location: /index.php"); //the user shouldn't be able to access the page
-        exit();
+    require_once("../../src/general/security.php");
+
+    if(!Security::userAuthentication(logInCheck : TRUE)){
+        Security::redirectUserBase();
+        die();
     }
 
-    if(!isset($_SESSION['resetUserID'])){  //if the user is not logged in and has not checked the reset code
+    if(!isset($_SESSION['resetUserID'])){  //if the user has not requested to reset the password
         header('Content-Type: application/json;');
         echo json_encode(array("errMsg" => "Unable to reset your password. <br>Please try again later"));
         exit();

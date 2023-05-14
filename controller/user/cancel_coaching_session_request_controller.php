@@ -1,4 +1,5 @@
 <?php
+    //this script is used to cancel a coaching session request by the user
     session_start();
 
     require_once("../../src/general/security.php");
@@ -57,5 +58,3 @@
     echo json_encode($msg);
     die();
 ?>
-
-

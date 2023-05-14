@@ -137,32 +137,6 @@
             return $status;
         }
 
-         public function getManager($database){      //get manager Info
-            if(isset($this -> manager) || $this -> manager !== ''){
-                return $this -> manager;
-            }
-
-            $this -> manager = new Manager();
-            $managerID = $this -> manager -> getID($database);
-            $this -> manager -> setDetails(uid: $managerID, brID: $this -> branchID);
-            $this -> manager -> getDetails($database);  //get details of the manager
-
-
-            $sql = sprintf("SELECT `staff_id`
-            FROM `staff`
-            WHERE `branch_id` = '%s'
-            AND `leave_date` IS NULL
-            AND `staff_role` = 'manager'",
-            $database -> real_escape_string($this -> branchID));
-
-            $result = $database -> query($sql);
-
-            $manager = $result -> fetch_object();
-            $this -> manager = $manager;
-            return $manager;
-        }
-
-
         public function getCurrentReceptionist($database){
             $sql = sprintf("SELECT currReceptionist FROM branch WHERE branchID = '%s'",
             $database -> real_escape_string($this -> branchID));
@@ -408,21 +382,36 @@
             return $allCourts;
         }
 
-        public function getBranchRevenue($database, $dateFrom, $dateTo){    //function to get the revenue of the branch within specific range
+        public function getBranchRevenue($database, $dateFrom, $dateTo, Sport $sport = null){    //function to get the revenue of the branch within specific range
             $totalRevenue = 0;
 
-            //get the revenue of the branch from the reservations
-            $totalRevenue += $this -> courtReservationRevenue($dateFrom, $dateTo, $database);
+            if($sport == null){
+                //get the revenue of the branch from the reservations
+                $totalRevenue += $this -> courtReservationRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database, sport: null);
 
-            //get the revenue of the branch from the coach session payments
-            $totalRevenue += $this -> coachSessionPaymentRevenue($dateFrom, $dateTo, $database);
+                //get the revenue of the branch from the coach session payments
+                $totalRevenue += $this -> coachSessionPaymentRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database, sport: null);
+            }else{
+                //get the revenue of the branch from the reservations
+                $totalRevenue += $this -> courtReservationRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database,sport: $sport);
 
+                //get the revenue of the branch from the coach session payments
+                $totalRevenue += $this -> coachSessionPaymentRevenue(dateFrom: $dateFrom,dateTo: $dateTo,database: $database,sport: $sport);
+            
+            }
+            
             return $totalRevenue;
         }
 
-        public function courtReservationRevenue($dateFrom, $dateTo, $database){
+        public function courtReservationRevenue($dateFrom, $dateTo,Sport $sport = null, $database){
+            $totalRevenue = 0;
             //first get all the courts of the branch
-            $allCourts = $this -> getBranchCourts($database);
+            if($sport == null){
+                $allCourts = $this -> getBranchCourts(database: $database,sport: null);
+            }else{
+                $allCourts = $this -> getBranchCourts($database, $sport);
+            }
+            
 
             //build the sql query for user reservations
             $userSql = "SELECT SUM(`paymentAmount`) as `total` FROM `reservation` WHERE `sportCourt` IN (";
@@ -432,20 +421,25 @@
 
             $userSql = substr($userSql, 0, -1); //remove the last comma
 
-            $userSql .= sprintf(") AND `date` >= '%s' AND `date` <= '%s' AND (`status` NOT LIKE 'Cancelled' AND `status` NOT LIKE 'Refunded')",
+            $userSql .= sprintf(") AND DATE(`reservedDate`) >= '%s' AND DATE(`reservedDate`) <= '%s' AND (`status` NOT LIKE 'Refunded')",
             $database -> real_escape_string($dateFrom),
             $database -> real_escape_string($dateTo));
 
             $result = $database -> query($userSql);
             $row = $result -> fetch_object();
-            $totalRevenue = $row -> total;
+            $totalRevenue += $row -> total;   //avoid getting the revenue as null
 
             return $totalRevenue;
         }
 
-        public function coachSessionPaymentRevenue($dateFrom, $dateTo, $database){
+        public function coachSessionPaymentRevenue($dateFrom, $dateTo, Sport $sport = null,$database){
+            $totalRevenue = 0;
             //first get all the courts of the branch
-            $allCourts = $this -> getBranchCourts($database);
+            if($sport == null){
+                $allCourts = $this -> getBranchCourts(database: $database);
+            }else{
+                $allCourts = $this -> getBranchCourts($database, $sport);
+            }
 
             //build the sql query for coaching session payments of the coach
             $coachSql = "SELECT SUM(`csp`.`paymentAmount`) as `total` 
@@ -466,7 +460,7 @@
 
             $result = $database -> query($coachSql);
             $row = $result -> fetch_object();
-            $totalRevenue = $row -> total;
+            $totalRevenue += $row -> total;   //avoid getting the revenue as null
             
             return $totalRevenue;
         }
