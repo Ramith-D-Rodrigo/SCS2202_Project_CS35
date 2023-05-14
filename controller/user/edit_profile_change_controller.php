@@ -4,6 +4,7 @@
     require_once("../../src/user/user.php");
     require_once("../../src/user/user_dependent.php");
     require_once("../../src/general/security.php");
+    require_once("../../config.php");
 
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user'])){
         Security::redirectUserBase();
@@ -161,7 +162,7 @@
     //profile picture upload validation
     if(!empty($_FILES['profilePic']['name'])){   //if the user uploaded a profile picture
         //check image size
-        if($_FILES['profilePic']['size'] > 2097152){ //image size is greater than 1MB
+        if($_FILES['profilePic']['size'] > MAX_USER_PROFILE_PICTURE_SIZE){ //image size is greater than 1MB
             $returnMsg['errMsg'] = 'Image size is too large';
             $validationErrFlag = true;
         }
