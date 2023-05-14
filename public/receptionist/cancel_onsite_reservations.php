@@ -1,10 +1,13 @@
 <?php
-   session_start();
-   if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
-       header("Location: /public/receptionist/receptionist_login.php");
-       exit();
-   } 
+    session_start();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['receptionist'])){
+        Security::redirectUserBase();
+        die();
+    }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,10 +28,19 @@
     <main class="body-container">
         <div id="searchResults" style="display:flex;flex-direction:column">
         </div>
+        <div id="overlay"></div>
+        <div id="warning-msg" style="display:flex;flex-direction:row;display:none">
+            <button id="Yes"><i class="fa-solid fa-check"></i></button>
+            <button id="No"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="success-msg">
+        </div>
+        <div id="err-msg"></div>
     </main>
     <?php
         require_once("../general/footer.php");
     ?>
 </body>
 <script src="/js/receptionist/get_onsite_reservations.js"></script>
+<script type="module" src="/js/general/notifications.js"></script>
 </html>

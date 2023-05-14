@@ -1,6 +1,8 @@
 <?php
 require_once("../../src/system_admin/staff.php");
 require_once("../../src/general/actor.php");
+require_once("../../src/general/notification.php");
+
 
 class Admin extends Actor{
 
@@ -69,7 +71,7 @@ class Admin extends Actor{
 
     public function registerStaff($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID,$staffRole,$database) {
         $staffMember = new Staff();
-        $staffMember = $staffMember -> getStaffMemeber($staffRole);
+        $staffMember = $staffMember -> getStaffMember($staffRole);
         $staffMember -> setDetails($fName, $lName, $email, $contactNo, $bday,  $gender, $userid, $username, $password, $branchID);
 
         $result1 = $staffMember -> register($database);
@@ -136,12 +138,18 @@ class Admin extends Actor{
         return $pendingBranch;
     }
 
-    public function getLoginDetails($role,$branch,$database) {
+    public function getLoginDetails($role,$database,$branch = NULL) {
         
-        $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` INNER JOIN
-        `staff` `s` ON `l`.`userID` = `s`.`staffID` WHERE `s`.`leaveDate` IS NULL AND `s`.`branchID` = '%s' AND `s`.`staffRole` = '%s'",
-        $database -> real_escape_string($branch),
-        $database -> real_escape_string($role));
+        if($branch === NULL){
+            $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` 
+            WHERE `l`.`userRole` = '%s' AND `l`.`isActive` = 1",
+            $database -> real_escape_string($role));
+        }else{
+            $sql = sprintf("SELECT `l`.`userID`,`l`.`username`,`l`.`emailAddress` FROM `login_details` `l` INNER JOIN
+            `staff` `s` ON `l`.`userID` = `s`.`staffID` WHERE `s`.`leaveDate` IS NULL AND `s`.`branchID` = '%s' AND `s`.`staffRole` = '%s'",
+            $database -> real_escape_string($branch),
+            $database -> real_escape_string($role));
+        }
         
         $row = $database -> query($sql) -> fetch_object();
         $loginResults = [];
@@ -176,11 +184,22 @@ class Admin extends Actor{
         return $branchInfo;
     }
 
-    public function updateStaffLogin($userID,$newEmail,$newPwd,$database){
-        $sql = sprintf("UPDATE `login_details` SET `emailAddress` = '%s', `password` = '%s', `isActive` = 1 WHERE `userID` = '%s'",
-        $database -> real_escape_string($newEmail),
-        $database -> real_escape_string($newPwd),
-        $database -> real_escape_string($userID));
+    public function updateStaffLogin($database,$userID,$newEmail = NULL,$newPwd = NULL){
+        if($newEmail === NULL){
+            $sql = sprintf("UPDATE `login_details` SET `password` = '%s', `isActive` = 1 WHERE `userID` = '%s'",
+            $database -> real_escape_string($newPwd),
+            $database -> real_escape_string($userID));
+        }else if($newPwd === NULL){
+            $sql = sprintf("UPDATE `login_details` SET `emailAddress` = '%s', `isActive` = 1 WHERE `userID` = '%s'",
+            $database -> real_escape_string($newEmail),
+            $database -> real_escape_string($userID));
+        }else{
+            $sql = sprintf("UPDATE `login_details` SET `emailAddress` = '%s', `password` = '%s', `isActive` = 1 WHERE `userID` = '%s'",
+            $database -> real_escape_string($newEmail),
+            $database -> real_escape_string($newPwd),
+            $database -> real_escape_string($userID));
+        }
+        
 
         $result = $database -> query($sql);
         return $result;
@@ -253,7 +272,10 @@ class Admin extends Actor{
         $database -> real_escape_string($startTime));
 
         $result = $database -> query($sql);
-        return $result;
+        if($result){
+            return true;
+        }
+        return false;
     }
 
     public function removeSystemMaintenance($database){
@@ -271,10 +293,27 @@ class Admin extends Actor{
         $result = $database -> query($sql) -> fetch_object();
         $maintenanceR = [];
         if($result !== NULL){
-            $maintenanceR = [$result];
+            array_push($maintenanceR,$result);
         }
         
         return $maintenanceR;
+    }
+
+    public function addNotification($notificationID,$subject,$description,$date,$userID){
+        $notification = new Notification($notificationID);
+        $notification -> setDetails(subject: $subject,description: $description,date: $date,userID: $userID,status: "Unread");
+        $result = $notification -> setNotificationEntry($this -> connection);
+
+        return $result;
+    }
+
+    public function mailSystemMaintenance($date,$sTime,$duration){
+        $results = $this -> connection -> query("SELECT `username`,`emailAddress` FROM `login_details` WHERE `isActive` = 1;");
+        while($row = $results -> fetch_object()){
+            //send the mail regarding the login credentials
+            require_once("../../src/general/mailer.php");
+            Mailer::systemMaintenanceNotification($row->emailAddress,$row -> username,$date,$sTime,$duration);
+        }
     }
 }
 

@@ -54,7 +54,16 @@
                 if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/receptionist_dashboard.php')){  //Check whether the receptionist is in the dashboard
             ?>
                 <div style="float:right" >
-                    <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button>
+                    <!-- <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button> -->
+                    <input type="checkbox" class="dropdown-check" id="notificationCheck">
+                    <div class='notification-container'>
+                        <label for="notificationCheck">
+                            <i class="fa-solid fa-bell btn bell"></i>
+                            <i class="notification-count" id="notificationCount"></i>
+                        </label>
+                        <ul class="dropdown">
+                        </ul>
+                    </div>
                     <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-from-bracket" style="margin: 0 10px"></i></button>        
                 </div>
                     
@@ -62,7 +71,16 @@
                 } else { 
             ?>
                 <div style="float:right" >
-                    <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button>
+                    <!-- <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button> -->
+                    <input type="checkbox" class="dropdown-check" id="notificationCheck">
+                    <div class='notification-container'>
+                        <label for="notificationCheck">
+                            <i class="fa-solid fa-bell btn bell"></i>
+                            <i class="notification-count" id="notificationCount"></i>
+                        </label>
+                        <ul class="dropdown">
+                        </ul>
+                    </div>
                     <button class ="btn" id="" onclick="window.location.href='/public/receptionist/receptionist_dashboard.php'"><i class="fa-solid fa-house"></i></button>
                     <button class ="btn" id="" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-from-bracket" style="margin: 0 10px"></i></button>        
                 </div>

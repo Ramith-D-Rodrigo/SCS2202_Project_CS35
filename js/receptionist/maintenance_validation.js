@@ -1,7 +1,8 @@
 verbose = true; //for debugging
 
 function validateForm(event){
-    const errMsg = document.getElementById("errmsg");    //For Displaying the Error messages
+    event.preventDefault();
+    const errMsg = document.getElementById("errMsg");    //For Displaying the Error messages
     const sDate = document.getElementById("sDate");
     const eDate = document.getElementById("eDate");
     const stDate = new Date(sDate.value)
@@ -10,7 +11,7 @@ function validateForm(event){
     dayDiff = (enDate.getTime()-stDate.getTime())/(1000*3600*24);   //get the difference of days
     if (dayDiff>31 || dayDiff<7) {   //invalid data range
         event.preventDefault(); //do not submit
-        return false;
+        return;
     } 
     
     const loginForm = document.getElementById("reqForm"); //get login form
@@ -22,10 +23,11 @@ function validateForm(event){
     if(!loginForm.reportValidity()){   //has errors
         errMsg.innerHTML = 'Please Enter valid information';
         event.preventDefault(); //do not submit
+        return;
     }
     
     errMsg.innerHTML = '' //empty error message
-    return true;
+    submitRequest();
 }
 
 // const spName = document.getElementById("sportName");
@@ -77,7 +79,7 @@ eDate.min = eminDate;
 eDate.max = emaxDate;
 
 sDate.addEventListener('change',(e) => {
-    const errorMsg = document.getElementById('errmsg');
+    const errorMsg = document.getElementById('errMsg');
     if(eDate.value === ''){
         return;
     }
@@ -106,7 +108,7 @@ sDate.addEventListener('change',(e) => {
 })
 
 eDate.addEventListener('change',(e) => {
-    const errorMsg = document.getElementById('errmsg');
+    const errorMsg = document.getElementById('errMsg');
     if(sDate.value === ''){
         return;
     }

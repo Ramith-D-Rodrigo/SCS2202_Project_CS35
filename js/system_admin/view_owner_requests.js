@@ -19,13 +19,16 @@ fetch("../../controller/system_admin/view_owner_requests_controller.php")
                 formData.type = "GET";
                 formData.action = "branch_request.php";
                 const leftContainer = document.createElement("div");
-                leftContainer.style.display = "flex";
-                leftContainer.style.marginRight = "180px";
+                leftContainer.className = "left-field";
+                // leftContainer.style.display = "flex";
+                // leftContainer.style.marginRight = "180px";
                 const rightContainer = document.createElement("div");
-                rightContainer.style.display = "flex";
+                rightContainer.className = "right-field";
+                // rightContainer.style.display = "flex";
                 leftContainer.innerHTML = "Branch: ".concat(data[i].city,"<br>","Requested On: ",data[i].ownerRequestDate);  
                 const btn = document.createElement("button");
                 btn.innerHTML = "View Request";
+                btn.style.marginTop = "25px";
                 if(data[i].requestStatus == 'p'){
                     btn.type = "submit";
                     btn.name = "branchID";

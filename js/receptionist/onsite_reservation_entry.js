@@ -3,12 +3,15 @@ fetch("../../controller/receptionist/req_maintenance_entry_controller.php")  //t
     .then(data => {
         // console.log(data[0].sportName);
         const sportSelect = document.getElementById("sport");  //get the available sports details
+        let sportName = [];
         for(i = 0; i < data.length; i++){
-            const option = document.createElement("option");
-            option.value = data[i].sportID;
-            option.innerHTML = data[i].sportName;
-            option.value = data[i].sportID;
-            sportSelect.appendChild(option);
+            if(!sportName.includes(data[i]['Sport'].sportName)){
+                sportName.push(data[i]['Sport'].sportName)
+                const option = document.createElement("option");
+                option.value = data[i]['Sport'].sportID;
+                option.innerHTML = data[i]['Sport'].sportName;
+                sportSelect.appendChild(option);
+            }
         }
     });
 

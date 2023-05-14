@@ -1,10 +1,13 @@
 <?php
-   session_start();
-   if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
-       header("Location: /public/receptionist/receptionist_login.php");
-       exit();
-   } 
+    session_start();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['receptionist'])){
+        Security::redirectUserBase();
+        die();
+    }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,7 +94,8 @@
                 </div>
             </div>
             <div style="display:flex;flex-direction:row;justify-content:flex-end">
-                <button onclick="saveReservation()" class="btn" style="background-color:white;color:black;margin-top:20px"> Print & Save <i class="fa-solid fa-print"></i> </button>
+                <button onclick="printReceipt()" class="btn" style="background-color:white;color:black;margin-top:20px"> Print <i class="fa-solid fa-print"></i> </button>
+                <button onclick="saveReservation()" class="btn" style="background-color:white;color:black;margin-top:20px"> Save & Exit <i class="fa-solid fa-floppy-disk"></i> </button>
                 <button onclick="window.location.href='../receptionist/onsite_reservation_entry.php'" class="btn" style="background-color:white;color:black;margin-top:20px">Cancel Reservation <i class="fa-solid fa-trash"></i> </button>
             </div>
         </div>
@@ -102,4 +106,5 @@
 </body>
     <script type="module" src="/js/receptionist/reservation_info.js"></script>
     <script src="/js/receptionist/make_reservation.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html>

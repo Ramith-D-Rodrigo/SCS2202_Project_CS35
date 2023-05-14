@@ -1,10 +1,13 @@
 <?php
     session_start();
-    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
-        header("Location: /public/system_admin/admin_login.php");
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['admin'])){
+        Security::redirectUserBase();
+        die();
     }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,16 +25,16 @@
         require_once("dashboard_header.php");
     ?>
     <main class="body-conatainer" style="display:flex;justify-content:center;">
-        <div id="err-msg" style="display:flex;height:10%">
+        <div id="err-msg" style="display:flex;margin-top:15%;height:10%">
         </div>
-        <div id="maintenance">
-            <?php
-                if(isset($_SESSION['removeSuccess'])){
-                    echo $_SESSION['removeSuccess'];
-                    echo '<br>';
-                    unset($_SESSION['removeSuccess']);
-                }
-            ?>
+        <div id="maintenance" style="margin-top: 5%;">
+        </div>
+        <div id="overlay"></div>
+        <div id="warning-msg" style="display:flex;flex-direction:row;display:none">
+            <button id="Yes"><i class="fa-solid fa-check"></i></button>
+            <button id="No"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="success-msg">
         </div>
     </main>
     <?php
@@ -39,4 +42,5 @@
     ?>
 </body>
     <script src="/js/system_admin/view_sys_maintenance.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html>

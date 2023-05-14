@@ -22,7 +22,7 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
             
             // console.log(data);
             const reservations = document.getElementById("reservations");
-            for(i=0; i<data.length; i++){
+            for(let i=0; i<data.length; i++){
                 const reservDiv = document.createElement("div");
                 reservDiv.style.display = "flex";
                 reservDiv.style.flexDirection = "row";
@@ -66,39 +66,33 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
                     "<br>","Number of Students: ",data[i].noOfStudents,
                     "<br>","Status: ","Reserved");
                 }
-                const resID = document.createElement("input");
-                resID.hidden = true;
-                resID.name = "reservationID";
-                const formInput = document.createElement("form");
-                formInput.style.display = "flex";
-                formInput.style.flexDirection = "column";
-                formInput.action = "../../controller/receptionist/handle_reservation_controller.php";
-                formInput.method = "POST";
+                const btnDiv = document.createElement("div");
+                btnDiv.style.display = "flex";
+                btnDiv.style.flexDirection = "column";
                 const confirmBtn = document.createElement("button");
+                confirmBtn.onclick = submitDecision;
                 confirmBtn.innerHTML = "Confirm";
-                confirmBtn.name = "btnVal";
                 confirmBtn.style.marginBottom = "5px";
                 const  cancelBtn = document.createElement("button");
-                cancelBtn.name = "btnVal";
                 cancelBtn.innerHTML = "Cancel";
+                cancelBtn.onclick = submitDecision;
                 reservDiv.appendChild(leftContent);
                 reservDiv.appendChild(rightContent);
 
                 if(data[i].status !== undefined){    //remove adding two buttons for permanent reservations
                     if(data[i].status === "Pending"){
-                        resID.value = data[i].reservationID;
-                        confirmBtn.value = "Checked In";
-                        cancelBtn.value = "Declined";
+                        confirmBtn.value = "Checked In".concat(",",data[i].reservationID);
+                        cancelBtn.value = "Declined".concat(",",data[i].reservationID);
+                                            
                     }else{    
                         cancelBtn.disabled = true;
                         cancelBtn.style.opacity = "50%";
                         confirmBtn.disabled = true;
                         confirmBtn.style.opacity = "50%";
                     }
-                    formInput.appendChild(confirmBtn);
-                    formInput.appendChild(cancelBtn);
-                    formInput.appendChild(resID);
-                    reservDiv.appendChild(formInput);
+                    btnDiv.appendChild(confirmBtn);
+                    btnDiv.appendChild(cancelBtn);
+                    reservDiv.appendChild(btnDiv);
                 }
                     
                 reservations.appendChild(reservDiv);
@@ -106,3 +100,38 @@ fetch("../../controller/receptionist/view_reservations_controller.php")
         }
 
     });
+
+function submitDecision(){
+    // console.log(JSON.stringify(this.value));
+
+    fetch("../../controller/receptionist/handle_reservation_controller.php",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(this.value)   //convert the decision details object to JSON
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            const successMsg = document.getElementById("success-msg");
+            const errMsg = document.getElementById("err-msg");
+            const overlay = document.getElementById("overlay");
+            overlay.className = "overlay";
+            successMsg.className = "dialog-box";
+            if(data){
+                successMsg.style.display = "block";
+                successMsg.innerHTML = "Saved Successfully";
+                overlay.style.display = "block";
+                
+            }else{
+                errMsg.style.display = "block";
+                errMsg.innerHTML = "Error Occured When Saving";
+                overlay.style.display = "block";
+            }
+            setTimeout(function(){
+                location.reload();
+            },3000);
+            // console.log(data);
+        });
+
+}

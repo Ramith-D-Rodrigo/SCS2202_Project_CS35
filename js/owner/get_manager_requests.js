@@ -23,13 +23,32 @@ fetch("../../controller/owner/get_manager_requests_controller.php")
             btn.innerHTML = "View Request";
             btn.name = "requestDetails";
             btn.type = "submit";
-            btn.value = JSON.stringify(data[i]);
+            reqInfo = [];
             if(data[i].type === "discount"){
+                reqInfo[0] =  data[i].managerID;
+                reqInfo[1] = data[i].startingDate;
+                reqInfo[2] = data[i].sportID;
+                reqInfo[3] = data[i]['manager'].firstName;
+                reqInfo[4] = data[i]['manager'].lastName;
+                reqInfo[5] = data[i]['branch'].city;
+                reqInfo[6] = "discount";
+
+                btn.value = reqInfo;
                 flag1 = 1;
                 form.action = "../../public/owner/view_discount_request.php";
                 leftContainer.innerHTML = "Managed By: ".concat(data[i]['manager'].firstName, " ", data[i]['manager'].lastName, "<br>",
                 "Branch: ",data[i]['branch'].city,"<br>","Discount Value: ".concat(data[i].discountValue));
             }else{
+                reqInfo[0] =  data[i].addedManager;
+                reqInfo[1] = data[i].branchID;
+                reqInfo[2] = data[i].sportID;
+                reqInfo[3] = data[i]['manager'].firstName;
+                reqInfo[4] = data[i]['manager'].lastName;
+                reqInfo[5] = data[i]['branch'].city;
+                reqInfo[6] = data[i].courtID;
+                // reqInfo[7] = ;
+
+                btn.value = (reqInfo);
                 flag2 = 1;
                 container.style.marginLeft = '10%';
                 form.action = "../../public/owner/view_court_request.php";

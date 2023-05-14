@@ -1,9 +1,11 @@
 <?php
     session_start();
-    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
-        header("Location: /public/system_admin/admin_login.php");
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['admin'])){
+        Security::redirectUserBase();
+        die();
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -24,22 +26,23 @@
     ?>
     <main class="body-container" style="display:flex;flex-direction:column">
         <div class="content-box">
-            <form action="../../controller/system_admin/change_login_controller.php" method="post">
+            <form>
                 <div style="display:flex;flex-direction:row">
                     <div class="row-container" style="margin-right:-100px;display:flex;align-items:center;flex-direction:row">
                         <div> Staff Role: </div>
                         <div>
-                            <select name="staffRole" id="staffRole">
+                            <select id="staffRole">
                                 <option value="">Choose Role</option>
                                 <option value="receptionist">Receptionist</option>
                                 <option value="manager">Manager</option>
+                                <option value="owner">Owner</option>
                             </select>
                         </div>
                     </div>
                     <div class="row-container" style="margin-left:-100px;display:flex;align-items:center;flex-direction:row">
                         <div> Registered Branch: </div>
                         <div>
-                            <select name="branchName" id="branchName">
+                            <select id="branchName">
                                 <option value="">Choose Branch</option>
                             </select>
                         </div>
@@ -57,56 +60,47 @@
                 </div>
            
                 <div class="row-container">
-                    <div class="left-side"> New Email: </div>
+                    <div class="left-side"> New Email: 
+                    <p style="font-size:10px;font-style:italic">Leave it empty if you don't want to change</p>
+                    </div>
                     <div class="right-side">
-                    <input required
-                    name="newEmail" id="newEmail"
+                    <input
+                    id="newEmail"
                     type="email"></input>
                     </div>    
                 </div>
                 <div class="row-container">
-                    <div class="left-side"> New Password: </div>
-                    <div class="right-side"><input required
-                    name="newPwd" id="newPwd"
+                    <div class="left-side"> New Password: 
+                    <p style="font-size:10px;font-style:italic">Leave it empty if you don't want to change</p>
+                    </div>
+                    <div class="right-side"><input
+                    id="newPwd"
                     type="password"
                     pattern="(?=.*\d)(?=.*[A-Z]).{8,}" 
                     minlength="8"
-                    required title="Password length must be atleast 8 characters. Must include an uppercase letter and a number">
+                    title="Password length must be atleast 8 characters. Must include an uppercase letter and a number">
                     </input>
                     <button class="togglePassword"> Show Password</button>
                     </div>    
                 </div>
                 <div class="row-container">
                     <div class="left-side"> Confirm Password: </div>
-                    <div class="right-side"><input type="password" required name="confirmPwd" id="confirmPwd"></input>
+                    <div class="right-side"><input type="password" id="confirmPwd"></input>
                     <button class="togglePassword"> Show Password</button>
                     </div>    
                     <!-- <div><button type="submit" id="viewBtn" >Show Password</button></div> -->
                 </div>
                 <input hidden name="role" id="staff"></input>
                 <div class="err-msg" id="err-msg">
-                    <?php 
-                        if(isset($_SESSION['emailError'])){
-                            echo $_SESSION['emailError'];
-                            echo '<br>';
-                            unset($_SESSION['emailError']);
-                        }
-                    ?>
-                </div>
-                <div class="success-msg">
-                    <?php 
-                        if(isset($_SESSION['successMsg'])){
-                            echo $_SESSION['successMsg'];
-                            echo '<br>';
-                            unset($_SESSION['successMsg']);
-                        }
-                    ?>
                 </div>
                 <div class="row-container" style="justify-content:flex-end">
                     <button  onclick="window.location.href='../../public/system_admin/change_staff_logins.php'">Cancel</button>
-                    <button name="confirmBtn" type="submit" id="confirmBtn" onclick="return validateForm(event)">Confirm</button>
+                    <button id="confirmBtn" onclick="validateForm(event)">Confirm</button>
                 </div>
             </form>
+        </div>
+        <div id="overlay"></div>
+        <div id="success-msg">
         </div>
     </main>
     <?php
@@ -116,4 +110,5 @@
     <script src="/js/system_admin/get_all_branches.js"></script>
     <script src="/js/system_admin/staff_login_details.js"></script>
     <script src="/js/system_admin/login_details_form_handle.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html>

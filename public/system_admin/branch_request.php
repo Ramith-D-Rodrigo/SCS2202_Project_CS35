@@ -1,9 +1,11 @@
 <?php
     session_start();
-    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
-        header("Location: /public/general/login.php");
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['admin'])){
+        Security::redirectUserBase();
+        die();
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +26,7 @@
     ?>
     <main class="body-container">
         <div>
-            <form action="../../controller/system_admin/request_handle_controller.php" method="POST">
+            <form>
                 <div class="content-box" id="branch_request">
                     <div class="row-container">
                         <div class="left-side">
@@ -92,26 +94,21 @@
                         </div>       
                     </div>
                     <input hidden name="branchID" id="branchID"></input>
+                    <div class="err-msg" id="err-msg"></div>
                     <div style="display:flex;flex-direction:row;justify-content:flex-end;margin-top:5%">
-                            <button type="submit" id ="cancelBtn" name="decision" value="Decline">Decline</button>
-                            <button type="submit" id="acceptBtn" name="decision" value="Accept">Accept</button>
+                            <button  id ="cancelBtn"  value="Decline">Decline</button>
+                            <button  id="acceptBtn"   value="Accept">Accept</button>
                     </div>
                 </div>
             </form>
-            <div class="err-msg" id="err-msg">
-                <?php
-                    if(isset($_SESSION['branchExistError'])){
-                        echo $_SESSION['branchExistError'];
-                        echo '<br>';
-                        unset($_SESSION['branchExistError']);
-                    }
-                ?>
-            </div>
         </div>
+        <div id="overlay"></div>
+        <div id="successMsg"></div>
     </main>
     <?php
         require_once("../general/footer.php");
     ?>
 </body>
 <script src="/js/system_admin/branch_request.js"></script>
+<script type="module" src="/js/general/notifications.js"></script>
 </html>

@@ -35,6 +35,10 @@
                 require("../../src/owner/dbconnection.php");
                 $this -> connection = $connection;
             }
+            else if($userRole === 'receptionist'){
+                require("../../src/receptionist/dbconnection.php");
+                $this -> connection = $connection;
+            }
             else{
                 die("Invalid User Role");
             }

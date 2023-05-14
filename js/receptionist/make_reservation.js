@@ -11,13 +11,6 @@ function saveReservation() {
     })
     .then((res) => res.json())
     .then((data) => {
-        var paymentReceipt = document.getElementById("paymentReceipt");
-        var originalContents = document.body.innerHTML;   
-
-        document.body.innerHTML = paymentReceipt.innerHTML;   //print only the payment receipt's content
-        window.print();
-
-        document.body.innerHTML = originalContents;  //convert the body to show the original content
         if(data){
             window.location.href = '../../public/receptionist/receptionist_dashboard.php';
         }else{
@@ -25,6 +18,14 @@ function saveReservation() {
             errMsg.innerHTML = "Error in saving the reservation";
         }
     });
-    
+}
 
+function printReceipt(){
+    var paymentReceipt = document.getElementById("paymentReceipt");
+    var originalContents = document.body.innerHTML;   
+
+    document.body.innerHTML = paymentReceipt.innerHTML;   //print only the payment receipt's content
+    window.print();
+
+    document.body.innerHTML = originalContents;  //convert the body to show the original content
 }

@@ -6,6 +6,7 @@
     require_once("../../src/coach/coach.php");
     require_once("../../src/coach/coaching_session.php");
     require_once("../../src/general/actor.php");
+    require_once("../../src/general/notification.php");
 
 class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
@@ -288,12 +289,13 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
 
     public function getAllSports($branchID,$database) {
         $branch = new Branch($branchID);
-        $sportObjects = $branch -> offeringSports($database);
-        $sportNames = [];
-        foreach($sportObjects as $sportObject){
-            array_push($sportNames,$sportObject -> getDetails($database,['sportName']));
+        $allCourts = $branch -> getBranchCourts(database: $database,courtStatus: 'a');
+        $courtDetails = [];
+        foreach($allCourts as $courtObject){
+            $sport = $courtObject->getSport($database);
+            array_push($courtDetails,["Court"=>$courtObject -> getName($database),"Sport"=>$sport -> getDetails($database,['sportName'])]);
         }
-        return $sportNames;
+        return $courtDetails;
     }
 
     // public function getAllCourts($branchID,$database) {
@@ -511,6 +513,13 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $result;
     }
 
+    public function updateBranchPhotos($branchID,$photos,$database){
+        $branch = new Branch($branchID);
+        $result = $branch -> addBranchPhotos($photos,$database);
+
+        return $result;
+    }
+
     public function updateBranch($recepID,$branchID,$email,$number,$database){
         $updateEmail = $this -> updateBranchEmail($branchID,$email,$database);
         $updateNumber = $this -> updateContactNumber($recepID,$number,$database);
@@ -580,6 +589,14 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         $reservation = new Reservation();
         $reservation -> setID($resID);
         $result = $reservation -> updateStatus($database,"Cancelled");
+        return $result;
+    }
+    
+    public function addNotification($notificationID,$subject,$description,$date,$userID){
+        $notification = new Notification($notificationID);
+        $notification -> setDetails(subject: $subject,description: $description,date: $date,userID: $userID,status: "Unread");
+        $result = $notification -> setNotificationEntry($this -> connection);
+
         return $result;
     }
     

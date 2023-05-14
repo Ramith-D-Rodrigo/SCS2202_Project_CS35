@@ -2,19 +2,34 @@ const url = new URL(window.location);
 const parameters = new URLSearchParams(url.search); //search parameters
 
 const discountDetails = parameters.get("requestDetails");  //get the discount details
-const discount = JSON.parse(discountDetails);   //parse and return javascript object
-console.log(discount);
+const discount = (discountDetails);//parse and return javascript object
+// console.log(discount[0]);
 
-const branch = document.getElementById("branch");
-branch.value = discount['branch'].city;
-const manager = document.getElementById("manager");
-manager.value = discount['manager'].firstName.concat(" ", discount['manager'].lastName);
-const discountValue = document.getElementById("discount");
-discountValue.value = "Rs. ".concat(discount.discountValue);
-const startingDate = document.getElementById("sDate");
-startingDate.value = discount.startingDate;
-const endingDate = document.getElementById("eDate");
-endingDate.value = discount.endingDate;
+var managerID = '';
+var startingDate = '';
+fetch("../../controller/owner/view_manager_request_controller.php?btn=".concat(discount))
+.then(res => res.json())
+.then(data => {
+    console.log(data);
+    startingDate = data[0];
+    for(let i=4;i<data.length;i++){
+        if(data[0] === data[i]['startingDate']){
+            const branch = document.getElementById("branch");
+            branch.value = data[3];
+            const manager = document.getElementById("manager");
+            manager.value = data[1].concat(" ", data[2]);
+            managerID = data[i].managerID;
+            const discountValue = document.getElementById("discount");
+            discountValue.value = "Rs. ".concat(data[i]['discountValue']);
+            const startingDate = document.getElementById("sDate");
+            startingDate.value = data[i].startingDate;
+            const endingDate = document.getElementById("eDate");
+            endingDate.value = data[i].endingDate;
+        }
+    }
+    
+});
+
 
 const accept = document.getElementById("accept");
 const decline = document.getElementById("decline");
@@ -26,15 +41,17 @@ function submitDecision(event){
         var decisionInfo = null;
         if(event.target.value === "Accepted"){
             decisionInfo = {
-                decision: "a",
-                manager: discount['manager'].userID,
-                startingDate: discount.startingDate
+                decision: 'a',
+                desc: decision.value,
+                manager: managerID,
+                startingDate: startingDate
             }  
         }else{
             decisionInfo = {
-                decision: "p",
-                manager: discount['manager'].userID,
-                startingDate: discount.startingDate
+                decision: 'p',
+                desc: decision.value,
+                manager: managerID,
+                startingDate: startingDate
             } 
         }
         console.log(decisionInfo);

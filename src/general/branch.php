@@ -214,6 +214,19 @@
             return $this -> photos;
         }
 
+        public function addBranchPhotos($photos, $database){
+            for($i = 0;$i <count($photos); $i++){
+                $sql = sprintf("INSERT INTO `branch_photo` (`branchID`, `photo`) VALUES ('%s', '../../uploads/branch_images/%s')",
+                $database -> real_escape_string($this -> branchID),
+                $database -> real_escape_string($photos[$i]));
+
+                $result = $database -> query($sql);
+                if(!$result){  //if there's an error saving photos return false
+                    return FALSE;
+                }
+            }
+        }
+
         public function addBranchFeedback($addedUser, $feedback, $rating, $database){
             $newFeedback = new Branch_Feedback();
             

@@ -2,22 +2,8 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
-    width: 760px;
+    width: 100%;
     /* margin: 10px auto; */
-}
-
-.left-side{
-    width: 600px;
-    margin-top: 15px;
-}
-
-.right-side{
-    width: 1200px;
-    margin-left: 60px;
-}
-
-.right-side > textarea{
-    max-width:80%;
 }
 
 main{

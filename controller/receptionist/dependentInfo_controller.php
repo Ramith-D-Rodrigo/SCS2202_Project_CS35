@@ -1,11 +1,17 @@
 <?php
 session_start();
+require_once("../../src/general/security.php");
+if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['receptionist'])){
+    Security::redirectUserBase();
+    die();
+}
+
 require("../../src/receptionist/receptionist.php");
 require("../../src/receptionist/dbconnection.php");
 require("../../src/system_admin/staff.php");
 
 $staffMember = new Staff();
-$receptionist = $staffMember -> getStaffMemeber($_SESSION['userrole']);  
+$receptionist = $staffMember -> getStaffMember($_SESSION['userrole']);  
 
 $userID = htmlspecialchars($_GET['userID']);
 $name = htmlspecialchars($_GET['name']);

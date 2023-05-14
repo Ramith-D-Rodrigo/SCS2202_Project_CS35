@@ -1,9 +1,11 @@
 <?php
     session_start();
-    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
-        header("Location: /public/system_admin/admin_login.php");
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['admin'])){
+        Security::redirectUserBase();
+        die();
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +26,7 @@
     ?>
     <main class="body-container">
         <div class="content-box">
-            <form action="../../controller/system_admin/deactivate_account_controller.php" method="POST">
+            <form>
                 <div style="display:flex;flex-direction:row">
                     <div class="row-container" style="margin-right:-100px;display:flex;align-items:center;flex-direction:row">
                         <div> Staff Role: </div>
@@ -77,19 +79,17 @@
                 </div>
                 <div class="err-msg" id="err-msg">
                 </div>
-                <div class="success-msg">
-                        <?php 
-                            if(isset($_SESSION['successMsg'])){
-                                echo $_SESSION['successMsg'];
-                                echo '<br>';
-                                unset($_SESSION['successMsg']);
-                            }
-                        ?>
-                </div>
                 <div class="row-container" style="justify-content: flex-end;">
-                    <button name="deactivateBtn" id="deactivateBtn" type="submit">Deactivate Account</button>
+                    <button id="deactivateBtn">Deactivate Account</button>
                 </div>
             </form>
+        </div>
+        <div id="overlay"></div>
+        <div id="warning-msg" style="display:flex;flex-direction:row;display:none">
+            <button id="Yes"><i class="fa-solid fa-check"></i></button>
+            <button id="No"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="success-msg">
         </div>
     </main>
     <?php
@@ -98,4 +98,6 @@
 </body>
     <script src="/js/system_admin/get_all_branches.js"></script>
     <script src="/js/system_admin/account_info.js"></script>
+    <script src="/js/system_admin/deactivate_account.js"></script>
+    <script type="module" src="/js/general/notifications.js"></script>
 </html>

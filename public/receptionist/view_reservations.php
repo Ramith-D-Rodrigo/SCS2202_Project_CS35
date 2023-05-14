@@ -1,9 +1,11 @@
 <?php
     session_start();
-    if(!(isset($_SESSION['userid']) && isset($_SESSION['userrole']))) {
-        header("Location: /public/general/login.php");
-        exit();
+    require_once("../../src/general/security.php");
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['receptionist'])){
+        Security::redirectUserBase();
+        die();
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -24,10 +26,10 @@
     ?>
     <main class="body-container">
         <div>
-            <div id="err-msg">
-            </div>
-            <div id="reservations" style="display:flex;flex-direction:column">
-            </div>
+            <div id="reservations" style="display:flex;flex-direction:column"> </div>
+            <div id="overlay"></div>
+            <div id="err-msg"></div>
+            <div id="success-msg"></div>
         </div>
     </main>
     <?php
@@ -35,4 +37,5 @@
     ?>
 </body>
 <script src="/js/receptionist/view_reservations.js"></script>
+<script type="module" src="/js/general/notifications.js"></script>
 </html>

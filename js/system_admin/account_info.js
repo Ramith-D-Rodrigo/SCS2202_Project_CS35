@@ -23,10 +23,6 @@ staffRole.addEventListener("change", (e) => {      //for getting the branch name
                     lastName.value = '';
                     contactN.value = '';
                     jDate.value = '';
-                    // const searchError = document.createElement("div");
-                    // searchError.className = "no-result";
-                    // searchError.id = "no-result";
-                    // errorDiv.appendChild(searchError);
                 }else{   
                     errorDiv.innerHTML = "";
                     username.value = data[0][1];
@@ -57,12 +53,6 @@ selectedBranch.addEventListener("change", (e) => {
             .then((data) => {
                 // console.log(data);
                 if(data[0]['errMsg'] !== undefined){
-                    // const errorDiv = document.getElementById("err-msg");
-                    // const searchError = document.createElement("div");
-                    // searchError.className = "no-result";
-                    // searchError.id = "no-result";
-                    // searchError.innerHTML = data[0]['errMsg'];
-                    // errorDiv.appendChild(searchError);\
                     errorDiv.innerHTML = data[0]['errMsg'];
                     username.value = '';
                     email.value = '';

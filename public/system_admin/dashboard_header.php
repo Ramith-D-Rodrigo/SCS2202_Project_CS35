@@ -1,6 +1,6 @@
 <header>
     <div class='header-top'>
-        <div style="align-items:flex-start"> <!-- For the current visiting page of the site -->
+        <div style="display:flex;justify-content:flex-start"> <!-- For the current visiting page of the site -->
             <?php
                 if($_SERVER['REQUEST_URI'] === '/public/system_admin/admin_dashboard.php'){  //admin dashboard
                     echo "Welcome, ".$_SESSION['username'];
@@ -34,7 +34,7 @@
                 }
             ?>
         </div>
-        <div style="align-items:flex-end">
+        <div style="display:flex;justify-content:flex-end">
             <?php
             
             if(isset($_SESSION['userid']) && isset($_SESSION['userrole'])){    //admin logged in     
@@ -42,7 +42,15 @@
                 if($_SERVER['REQUEST_URI'] === '/public/system_admin/admin_dashboard.php'){    //Check whether the admin is in the dashboard
             ?>
                 <div style="float:right">
-                    <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button>
+                    <input type="checkbox" class="dropdown-check" id="notificationCheck">
+                    <div class='notification-container'>
+                        <label for="notificationCheck">
+                            <i class="fa-solid fa-bell btn bell"></i>
+                            <i class="notification-count" id="notificationCount"></i>
+                        </label>
+                        <ul class="dropdown">
+                        </ul>
+                    </div>
                     <button class ="btn" id="" onclick="window.location.href='/public/system_admin/account_settings.php'">Settings<i class="fa-solid fa-gear" style="margin: 0 5px"></i></button>
                     <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-from-bracket" style="margin: 0 5px"></i></button>        
                 </div>
@@ -51,7 +59,15 @@
                 } else { 
             ?>
                 <div style="float:right">
-                    <button class ="btn" id="" onclick="window.location.href=''"><i class="fa-solid fa-bell"></i></button>
+                <input type="checkbox" class="dropdown-check" id="notificationCheck">
+                    <div class='notification-container'>
+                        <label for="notificationCheck">
+                            <i class="fa-solid fa-bell btn bell"></i>
+                            <i class="notification-count" id="notificationCount"></i>
+                        </label>
+                        <ul class="dropdown">
+                        </ul>
+                    </div>
                     <button class ="btn" id="" onclick="window.location.href='/public/system_admin/admin_dashboard.php'"><i class="fa-solid fa-house"></i></button>
                     <button class ="btn" id="logout" onclick="window.location.href='/controller/general/logout_controller.php'">Log Out<i class="fa-solid fa-right-from-bracket" style="margin: 0 10px"></i></button>        
                 </div>

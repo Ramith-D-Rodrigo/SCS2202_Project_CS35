@@ -1,47 +1,54 @@
 const url = new URL(window.location); 
 const parameters = new URLSearchParams(url.search); //search parameters
 
-const courtDetails = parameters.get("requestDetails");  //get the discount details
-const court = JSON.parse(courtDetails);   //parse and return javascript object
-console.log(court);
-
-const branch = document.getElementById("branch");
-branch.value = court['branch'].city;
-const manager = document.getElementById("manager");
-manager.value = court['manager'].firstName.concat(" ", court['manager'].lastName);
-const sport = document.getElementById("sport");
-sport.value = court['sport'].sportName;
-const existingCourts = document.getElementById("exCourts");
-var flag = 0;
-for(let i=0; i<court['existingCourts'].length; i++){
-    if(court['existingCourts'][i].sportID == court['sport'].sportID && 
-        court['existingCourts'][i].branchID == court['branch'].branchID){
-            flag = 1; //there exists a court for this sport in this branch
-            existingCourts.value += court['existingCourts'][i].Count;
+const discountDetails = parameters.get("requestDetails");  //get the discount details
+const discount = (discountDetails);//parse and return javascript object
+// console.log(discount[0]);
+var managerID = '';
+var court = '';
+fetch("../../controller/owner/view_manager_request_controller.php?btn=".concat(discount))
+.then(res => res.json())
+.then(data => {
+    court = data[0];
+    const branch = document.getElementById("branch");
+    branch.value = data[3];
+    const manager = document.getElementById("manager");
+    manager.value = data[1].concat(" ",data[2]);
+    const sport = document.getElementById("sport");
+    sport.value = data[5].sportName;
+    const existingCourts = document.getElementById("exCourts");
+    
+    
+    if(data[4] == 0){
+        existingCourts.value = "No courts exist";
     }else{
-        continue;
+        existingCourts.value = data[4];
     }
-    existingCourts.value += court['existingCourts'][i].courtName.concat(" ");
-}
-if(flag == 0){
-    existingCourts.value = "No courts exist";
-}
 
-const photos = document.getElementById("photos");
-if(court.courtPhoto === null){
-    const input = document.createElement('input');
-    input.readOnly = true;
-    input.value = "No photos uploaded";
-    photos.appendChild(input);
-}else{
-    for(let i=0; i<court.courtPhoto.length; i++){
-        const image = document.createElement('img');
-        image.src = court.courtPhoto[i];
-        image.style.width = "200px";
-        image.style.height = "200px";
-        photos.appendChild(image);
+    for(let i=6;i<data.length;i++){
+        if(data[i].courtID == data[0]){
+            managerID = data[i].addedManager;
+            const photos = document.getElementById("photos");
+            if(data[i].courtPhoto === null){
+                const input = document.createElement('input');
+                input.readOnly = true;
+                input.value = "No photos uploaded";
+                photos.appendChild(input);
+            }else{
+                for(let j=0; j<data[i].courtPhoto.length; j++){
+                    const image = document.createElement('img');
+                    image.src = data[i].courtPhoto[j];
+                    image.style.width = "200px";
+                    image.style.height = "200px";
+                    photos.appendChild(image);
+                }
+            }
+        }
+       
     }
-}
+    
+})
+
 
 const accept = document.getElementById("accept");
 const decline = document.getElementById("decline");
@@ -53,13 +60,17 @@ function submitDecision(event){
         var decisionInfo = null;
         if(event.target.value === "Accepted"){
             decisionInfo = {
-                decision: "a",
-                courtID: court.courtID
+                manager : managerID,
+                decision : 'a',
+                desc: decision.value,
+                courtID: court
             }  
         }else{
             decisionInfo = {
-                decision: "p",
-                courtID: court.courtID
+                manager : managerID,
+                decision : 'd',
+                desc: decision.value,
+                courtID: court
             } 
         }
         console.log(decisionInfo);
