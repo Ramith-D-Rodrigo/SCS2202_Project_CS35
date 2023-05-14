@@ -57,20 +57,28 @@ const openUserReservationDetails = (reservationID) => {
                 document.querySelector("#userImg").src = data.userDetails.profilePhoto;
             }
 
+            
+            //add user contact number
+            const contactVal = document.querySelector("#userContactNum");
+
             //add user name
             const username = document.querySelector("#userName");
-            username.value = data.userDetails.firstName + " " + data.userDetails.lastName;
-
-            //check gender and add it to the user name
-            if(data.userDetails.gender == 'm'){
-                username.value = "Mr. " + username.value;
+            if(data.userDetails.reservationHolder !== undefined){   //onsite reservation
+                username.value = data.userDetails.reservationHolder;
+                contactVal.value = data.userDetails.contactNumber;
+                
             }
-            else{
-                username.value = "Ms. " + username.value;
+            else{ //online reservation
+                username.value = data.userDetails.firstName + " " + data.userDetails.lastName;
+                contactVal.value = data.userDetails.contactNum;
+                //check gender and add it to the user name
+                if(data.userDetails.gender == 'm'){
+                    username.value = "Mr. " + username.value;
+                }
+                else{
+                    username.value = "Ms. " + username.value;
+                }
             }
-
-            //add user contact number
-            document.querySelector("#userContactNum").value = data.userDetails.contactNum;
 
             //reserved timestamp
             document.querySelector("#timestamp").value = data.reservedDate;

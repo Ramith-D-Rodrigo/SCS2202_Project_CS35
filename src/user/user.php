@@ -632,6 +632,19 @@ class User extends Actor implements JsonSerializable{
         if($result === false){
             return false;
         }
+
+        //update the coaching session student count
+        $updateSql = sprintf("UPDATE `coaching_session`
+        SET `noOfStudents` = `noOfStudents` - 1
+        WHERE `sessionID` = '%s'",
+        $this -> connection -> real_escape_string($sessionObj -> getSessionID()));
+
+        $result = $this -> connection -> query($updateSql);
+
+        if($result === false){
+            return false;
+        }
+
         return true;
     }
 
