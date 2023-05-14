@@ -1,21 +1,24 @@
 <?php
-    session_start();
-    require_once("../../src/manager/manager_dbconnection.php");
-    require_once("../../src/general/branch.php");
+    // session_start();
+    // require_once("../../src/general/branch.php");
+    // require_once("../../src/manager/manager.php");
 
-    $managerBranch = new Branch($_SESSION['branchID']);
-    $sports = $managerBranch -> getAllSports($connection);
-    print_r($sports);
+    // $manager_obj = new Manager();
+    // $managerBranch = new Branch($_SESSION['branchID']);
+    // $sports = $managerBranch -> offeringSports($manager_obj -> getConnection());
+    // $manager_obj -> setDetails(uid: $_SESSION['userid']);
 
-    foreach($sports as $currSport){
-        $tempCourtID = $managerBranch -> getSportCourts($currSport -> sport_id, $connection);
-        $tempCourt = new Sports_Court($tempCourtID);
+    // print_r($sports);
+
+    // foreach($sports as $currSport){
+    //     $tempCourtID = $managerBranch ->getBranchCourts($manager_obj -> getConnection(), $currSport, $courtStatus = 'a');
+    //    // $tempCourt = new Sports_Court($tempCourtID);
+    //     print_r($tempCourtID);
+    // //    foreach($tempCourtID as $currCourtID){
         
-        $tempCourt -> getName($connection);
-        
-    
-    
-    }
+    // //    }
+    //     //$tempCourt -> getName($manager_obj -> getConnection());
+    // }
     
 
 ?>

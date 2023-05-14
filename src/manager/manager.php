@@ -217,7 +217,7 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
         return $jsonProperties;
     }
 
-    public function add_court($database, $courtName ,$sportID, $branchID, $courtID, $managerID){
+    public function add_court($database, $courtName ,$sportID, $branchID, $courtID, $managerID, ){
         $result = $database -> query(sprintf("INSERT INTO `sports_court`
         (`courtID`,
         `sportID`,
@@ -292,7 +292,12 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
         return $result;
     }
 
-    
+    // public function getCoachDetails($database){
+    //     $sql = sprintf("select *
+    //     FROM `coach`,
+    //     ")
+
+    // }
 
     
 }  

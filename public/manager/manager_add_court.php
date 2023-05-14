@@ -44,7 +44,7 @@
             <input type=file name="Court_pic" accept=".jpg, .jpeg, .png" id="Court_pic" title="Maximum File Size 2MB. Only Accepts JPG, PNG">
           </div>
           <div>
-          <img src=" C:\Users"  width="250" height="250" id="img">
+          <img src=" "  width="250" height="250" id="img">
           </div>
           <div>
             <button type="submit" id="but_Add">Add</button>

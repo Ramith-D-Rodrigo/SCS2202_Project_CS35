@@ -37,13 +37,14 @@
                 foreach($_SESSION['branchCourts'] as $currCourt){
                   echo "Sport : ".$currCourt['sport']."<br>";
                   echo "Court Name : ".$currCourt['courtName']."<br>";
+                  echo "Photo : ".$currCourt['photo']."<br>";
                   if($currCourt['status'] === 'p'){
                     echo "Status : Pending<br><br>";
                   }
                   else{
                     echo "Status : Accepted<br><br>";
                   }
-
+                  // echo "Status : ".$currCourt['status']."<br>";
                 }
               }
             ?>

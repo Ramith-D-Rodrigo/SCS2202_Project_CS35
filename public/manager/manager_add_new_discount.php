@@ -39,7 +39,7 @@ session_start();
                 <div id="Reservation">Reservation Price with Entered value:
                     <input type="text" value="" name="price" id="Price">
 
-                    <select required name="sport">
+                    <select required name="sport" id="sportSelect">
                         <option value="">Choose Sports</option>
                         <option value="Badminton" <?php if (isset($_SESSION['sport'])) {
                                                         if ($_SESSION['sport'] === "Badminton") {

@@ -486,31 +486,31 @@
             return $returnJSON;
         }
 
-        public  function get_time($database){
-            $sql=sprintf( "SELECT `openingTime`,`closingTime` FROM `branch` WHERE `branchID` LIKE '%s' ",
+        // public  function get_time($database){
+        //     $sql=sprintf( "SELECT `openingTime`,`closingTime` FROM `branch` WHERE `branchID` LIKE '%s' ",
 
-            $database -> real_escape_string($this -> branchID));
+        //     $database -> real_escape_string($this -> branchID));
             
-            $Result = $database -> query($sql);
-            $timeResult=[];
+        //     $Result = $database -> query($sql);
+        //     $timeResult=[];
              
-            $row = $Result -> fetch_object();
+        //     $row = $Result -> fetch_object();
 
-            $timeResult['openingTime'] = $row -> openingTime;
+        //     $timeResult['openingTime'] = $row -> openingTime;
 
 
-            foreach($Result as $time){
-                $temporaryOpen =$time['openingTime'];
-                $temporaryClose= $time['closingTime'];
-                array_push($timeResult,['openingTime'=>$temporaryOpen,'closingTime'=>$temporaryClose]);
-            }
-            // while($row =  $Result  -> fetch_object()) {
-            //     array_push($timeResult,[ $row['openingTime'] -> openingTime,$row['closingTime'] -> closingTime]);
-            // }
+        //     foreach($Result as $time){
+        //         $temporaryOpen =$time['openingTime'];
+        //         $temporaryClose= $time['closingTime'];
+        //         array_push($timeResult,['openingTime'=>$temporaryOpen,'closingTime'=>$temporaryClose]);
+        //     }
+        //     // while($row =  $Result  -> fetch_object()) {
+        //     //     array_push($timeResult,[ $row['openingTime'] -> openingTime,$row['closingTime'] -> closingTime]);
+        //     // }
 
            
-            return  $timeResult;
-        }
+        //     return  $timeResult;
+        // } 
 
         public function changeTime($database, $openingTime ,$closingTime){
             $result = $database -> query(sprintf("UPDATE `branch` 

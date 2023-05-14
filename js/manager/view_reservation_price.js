@@ -1,8 +1,8 @@
 fetch("../../controller/manager/reservationprice_controller.php")
     .then(res => res.json())
     .then(data => {
-        const reservationpriceInput = document.getElementById("OpenTime");
-        openingTimeInput.value = data.openingTime;
+        const reservationpriceInput = document.getElementById("Price");
+        reservationpriceInput.value = data.reservationPrice;
 
         
 
