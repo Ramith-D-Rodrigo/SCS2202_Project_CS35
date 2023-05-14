@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once("../../src/manager/manager_dbconnection.php");
-require_once("../../src/general/uuid.php");
+
 
 // require_once("../../controller/manager/view_time_controller.php")
 

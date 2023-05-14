@@ -1,15 +1,16 @@
 <?php
     session_start();
     // require_once("../../src/manager/manager.php");
-    require_once("../../src/manager/manager_dbconnection.php");
+    //require_once("../../src/manager/manager_dbconnection.php");
     require_once("../../src/general/branch.php");
     // require_once("../../src/manager/manager_dbconnection.php");
 
 
     $managerBranchID = $_SESSION['branchID'];
-    
+    $manager = new Manager();
+
     $branch = new Branch($managerBranchID);
-    $branch -> getDetails($connection, ['openingTime', 'closingTime']);
+    $branch -> getDetails($manager -> getConnection(), ['openingTime', 'closingTime']);
     
     $branchASSOC = json_decode(json_encode($branch), true);
 
