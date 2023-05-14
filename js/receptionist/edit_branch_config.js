@@ -2,6 +2,8 @@ const numBtn = document.getElementById("ChangeNumBtn");
 const emailBtn = document.getElementById("EmailChangeBtn");
 const newNumberDiv = document.getElementById("newNumberField");
 const newEmailDiv = document.getElementById("newEmailField");
+const newNumber = document.getElementById("numberRSide");
+const newEmail = document.getElementById("emailRSide");
 const photos = document.getElementById("photo");
 const changeBtn = document.getElementById("changeBtn");
 const successMsg = document.getElementById("success-msg");
@@ -16,6 +18,8 @@ numBtn.addEventListener('click',(e)=>{
     numBtn.style.opacity = '0.5';
     numBtn.disabled = 'true';
     newNumberDiv.style.display = "flex";
+    newNumber.required = true;
+    newEmail.required = true;
 });
 
 emailBtn.addEventListener('click',(e)=>{
@@ -40,19 +44,17 @@ function saveChanges(event){
     event.preventDefault();
     const newEmail = document.getElementById("newEmail");
     const newNumber = document.getElementById("newNumber");
-    const form = document.getElementById("form");
-    if(!form.reportValidity()){
-        errMsg.style.color = "red";
-        errMsg.style.textAlign = "center";
+    const branchForm = document.getElementById("branchForm");
+    if(!branchForm.reportValidity()){
         errMsg.innerHTML = "Data Not Valid";
         return;
     }
     if(newEmail.value === '' && newNumber.value === '' && newPhoto.files.length === 0){
         return;
     }
-    console.log(newEmail.value);
-    console.log(newNumber.value);
-    console.log(newPhoto.files);
+    // console.log(newEmail.value);
+    // console.log(newNumber.value);
+    // console.log(newPhoto.files);
     let images = [];
     if(newPhoto.files !== ''){
         const files = newPhoto.files;     //get all the user selected files
@@ -84,8 +86,6 @@ function saveChanges(event){
                 location.reload();
             },3000);
         }else{
-            errMsg.style.color = "red";
-            errMsg.style.textAlign = "center";
             errMsg.innerHTML = data['Message'];
         }
     });
