@@ -42,12 +42,11 @@ function togglePassword(element){
 const password = document.getElementById("password");
 const cPassword = document.getElementById("cPassword");
 function validateForm(element){
-    element.preventDefault();
     const form = document.querySelector("form");
 
     if(newEmail.value === '' && newPwd.value === ''){
         errMsg.innerHTML = "No Changes Made";
-        return;
+        return false;
     }
     if(verbose){
         console.log(form.reportValidity());
@@ -56,22 +55,26 @@ function validateForm(element){
     if(password.value !== ''){
         if(password.value != cPassword.value) {    //compare the password and the confirm password fields
             errMsg.innerHTML = "Passwords are mismatched";
-            return;
+            return false;
         }
     }
     
 
     if(!form.reportValidity()){ //Form is invalid from HTML persepective
         errMsg.innerHTML = "Please Add Valid Information";
-        return;
+        return false;
     }
 
     errMsg.innerHTML = '';
-    saveChanges();
+    return true;
 }
 
-function saveChanges(){
-    
+const form = document.querySelector("form");
+
+form.addEventListener('submit', saveChanges);
+
+function saveChanges(e){
+    e.preventDefault();
     const newDetails = {Email:newEmail.value, Password:newPwd.value, Profile:confirmBtn.value};
     console.log(newDetails);
     fetch("../../controller/system_admin/change_login_controller.php",{
