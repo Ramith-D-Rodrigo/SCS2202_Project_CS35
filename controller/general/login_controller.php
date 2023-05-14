@@ -106,8 +106,8 @@
         else if($userrole === 'manager'){  //manager login
             $loginManager = new Manager($loginActor);
             $result = $loginManager -> getSessionData();
-            $_SESSION['city'] = $result[1];
-            $_SESSION['branchID'] = $result[0];
+            $_SESSION['city'] = $result[0];
+            $_SESSION['branchID'] = $result[1];
             $loginManager -> closeConnection();
             unset($loginManager);
         }
