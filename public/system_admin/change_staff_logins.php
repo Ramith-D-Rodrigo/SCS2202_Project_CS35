@@ -95,7 +95,7 @@
                 </div>
                 <div class="row-container" style="justify-content:flex-end">
                     <button  onclick="window.location.href='../../public/system_admin/change_staff_logins.php'">Cancel</button>
-                    <button id="confirmBtn" onclick="validateForm(event)">Confirm</button>
+                    <button type="submit" id="confirmBtn">Confirm</button>
                 </div>
             </form>
         </div>
@@ -107,8 +107,8 @@
         require_once("../../public/general/footer.php");
     ?>
 </body>
-    <script src="/js/system_admin/get_all_branches.js"></script>
-    <script src="/js/system_admin/staff_login_details.js"></script>
-    <script src="/js/system_admin/login_details_form_handle.js"></script>
+    <script type="module" src="/js/system_admin/get_all_branches.js"></script>
+    <script type="module" src="/js/system_admin/staff_login_details.js"></script>
+    <script type="module" src="/js/system_admin/login_details_form_handle.js"></script>
     <script type="module" src="/js/general/notifications.js"></script>
 </html>

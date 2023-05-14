@@ -127,9 +127,9 @@
             return self::sendMail($recipientEmail, $recipientUsername, $subject, $body);
         }
 
-        public static function changeStaffLoginNotification($recipientEmail,$newEmail='',$newPwd='',$recipient_name){   //this function is used to send the verification code to the user's email upon registration
+        public static function changeStaffLoginNotification($recipientEmail,$newEmail=null,$newPwd='',$recipient_name){   //this function is used to send the verification code to the user's email upon registration
             $subject = "Change of Login Credentials";
-            if($newEmail = ''){
+            if($newEmail === null){
                 $body = "<p>Hi $recipient_name,</p>
                         <p>System Administrator has recently changed your account password into a different one.</p>
                         <p> So you have to login with the new password from now on. </p>
@@ -137,7 +137,7 @@
                         <p> Password : $newPwd </p>
                         <p>If you have any trouble with logging into the account, feel free to contact the system admininstrator.</p>
                         <p>Regards,<br>Sportude Support</p>";
-            }elseif($newPwd = ''){
+            }else if($newPwd === ''){
                 $body = "<p>Hi $recipient_name,</p>
                         <p>System Administrator has recently changed your account email into a different one.</p>
                         <p> So you have to use the new email account from now on to get the latest notifications. </p>

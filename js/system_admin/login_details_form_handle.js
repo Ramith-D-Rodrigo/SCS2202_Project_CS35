@@ -1,8 +1,8 @@
-var errMsg = document.getElementById("err-msg");   //For Displaying the Error messages
+const errMsg = document.getElementById("err-msg");   //For Displaying the Error messages
 const password = document.getElementById("newPwd");
 const cPassword = document.getElementById("confirmPwd");
 const branch = document.getElementById("branchName");
-var staffRole = document.getElementById("staffRole");
+const staffRole = document.getElementById("staffRole");
 const newEmail = document.getElementById("newEmail");
 const confirmBtn = document.getElementById("confirmBtn");
 const overlay = document.getElementById("overlay");
@@ -17,6 +17,7 @@ togglePasswordbtns.forEach(togglePassword);
 
 function togglePassword(element){
     element.addEventListener('click',(e)=>{
+        e.preventDefault();
         const parentDiv = element.parentElement;
         const passwordField = parentDiv.children[0];
 
@@ -32,16 +33,14 @@ function togglePassword(element){
 }
 
 function validateForm(event){
-    // console.log("fe");
-    event.preventDefault();
     if(branch.value === "" || staffRole.value === ""){   //Haven't selected any specific role 
         event.preventDefault(); //do not submit
         errMsg.innerHTML = "Haven't Selected any Specific Role";
-        return false;
+        return;
     }
     if(newEmail.value === '' && password.value === ''){
         errMsg.innerHTML = "No Changes Made";
-        return;
+        return false;
     }
     if(verbose){
         console.log(form.reportValidity());
@@ -50,22 +49,26 @@ function validateForm(event){
     if(password.value !== ''){
         if(password.value != cPassword.value) {    //compare the password and the confirm password fields
             errMsg.innerHTML = "Passwords are mismatched";
-            return;
+            return false;
         }
     }
 
     if(!form.reportValidity()){ //Form is invalid from HTML persepective
         errMsg.innerHTML = "Please Add Valid Information";
-        return;
+        return false;
     }
 
     errMsg.innerHTML = '' //empty before the validation
-    saveChanges();
-    
+    return true;
 }
 
-function saveChanges(){
-    
+const form = document.querySelector("form");
+
+const saveChanges = (e) => {
+    if(!validateForm(e)){
+        return;
+    }
+    e.preventDefault();
     const newDetails = {Email:newEmail.value, Password:password.value, Profile:confirmBtn.value};
     console.log(newDetails);
     fetch("../../controller/system_admin/change_login_controller.php",{
@@ -95,3 +98,5 @@ function saveChanges(){
     });
     
 }
+
+form.addEventListener("submit",saveChanges);

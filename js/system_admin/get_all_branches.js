@@ -11,7 +11,7 @@ fetch("../../controller/system_admin/view_branch_list_controller.php")
             errorDiv.appendChild(searchError);
         }else{
             const branch = document.getElementById("branchName");
-            for(i=0;i<data.length;i++){
+            for(let i=0;i<data.length;i++){
                 const option = document.createElement("option");
                 option.value = data[i];
                 option.innerHTML = data[i];
