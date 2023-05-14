@@ -1,7 +1,8 @@
 <?php
+    //this script is used to mark a notification as read
     session_start();
     require_once("../../src/general/security.php");
-    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user', 'coach', 'system_admin', 'receptionist', 'owner', 'manager'])){       //not logged in, so no notifications
+    if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['user', 'coach', 'admin', 'receptionist', 'owner', 'manager'])){       //not logged in, so no notifications
         http_response_code(401);
         die();
     }

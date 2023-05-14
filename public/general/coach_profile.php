@@ -2,7 +2,7 @@
     session_start();
     require_once("../../src/general/security.php");
     //check the authentication
-    if(!Security::userAuthentication(logInCheck: FALSE)){//cannot access (NOT operator)
+    if(!Security::userAuthentication(logInCheck: FALSE, acceptingUserRoles:['user'])){//cannot access (NOT operator)
         Security::redirectUserBase();
     }
     else{
@@ -31,14 +31,34 @@
                                     <img class="coach-image" id="coachProfilePic">
                                 </div>
                                 <div class="detailsContainer">
-                                    <div id="coachName">Name : </div>
-                                    <div id="coachUsername">Coach Username : </div>
-                                    <div id="coachAge">Age : </div>
-                                    <div id="coachGender">Gender : </div>
-                                    <div id="coachSport">Sport : </div>
-                                    <div id="coachEmail">Email : </div>
-                                    <div id="coachContactNo">Contact No : </div>
-                                    <div id="coachRating">Rating : </div>
+                                    <div class="row-container">
+                                        <div id="coachName" class="left-field personal">Name</div>
+                                        <div class="right-field personal"></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div id="coachAge" class="left-field personal">Age</div>
+                                        <div class="right-field personal"></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div id="coachGender" class="left-field personal">Gender</div>
+                                        <div class="right-field personal"></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div id="coachSport" class="left-field personal">Sport</div>
+                                        <div class="right-field personal"></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div id="coachEmail" class="left-field personal">Email</div>
+                                        <div class="right-field personal"></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div id="coachContactNo" class="left-field personal">Contact No</div>
+                                        <div class="right-field personal"></div>
+                                    </div>
+                                    <div class="row-container">
+                                        <div id="coachRating" class="left-field personal">Rating</div>
+                                        <div class="right-field personal"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div>

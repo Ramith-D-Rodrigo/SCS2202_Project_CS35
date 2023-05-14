@@ -1,3 +1,5 @@
+import {currency} from "../CONSTANTS.js";
+
 const url = new URL(window.location);   //get the url
 const params = new URLSearchParams(url.search); //search parameters
 //console.log(params);
@@ -5,6 +7,25 @@ const params = new URLSearchParams(url.search); //search parameters
 const sportName = params.get("sportName");
 //console.log(sportName);
 const resultContainer = document.getElementById("searchResult");
+
+const formDiv = document.getElementById("searchBar");
+const input = formDiv.querySelector("input");
+
+function searchValidation(event){
+    if(formDiv.reportValidity() === false){
+        event.preventDefault();
+        return false;
+    }
+    else{
+        if(input.value.length < 3){
+            event.preventDefault();
+            return false;
+        }
+        return true;
+    }
+}
+
+formDiv.addEventListener("submit", searchValidation);
 
 fetch("../../controller/general/search_controller.php?sportName=".concat(sportName))    //call the controller
     .then((res) => res.json())
@@ -117,7 +138,7 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                 branchInfoDiv.appendChild(courtCountDiv);
 
                 const reservationPrice = document.createElement("div"); //reservation price
-                reservationPrice.innerHTML = "Reservation Price : Rs. "+ branches[i].reserve_price;
+                reservationPrice.innerHTML = "Reservation Price : "+ currency + " " + branches[i].reserve_price;
                 reservationPrice.className = "result-info";
                 branchInfoDiv.appendChild(reservationPrice);
 
@@ -132,8 +153,19 @@ fetch("../../controller/general/search_controller.php?sportName=".concat(sportNa
                 branchInfoDiv.appendChild(discountDiv);
 
                 const button = document.createElement("button");
-                button.name = "reserveBtn";
-                button.value = [branches[i].branchID, branches[i].sport_id];
+
+                //two hidden inputs for the branchID and sportID
+                const branchID = document.createElement("input");
+                branchID.type = "hidden";
+                branchID.name = "branch";
+                branchID.value = branches[i].branchID;
+                form.appendChild(branchID);
+
+                const sportID = document.createElement("input");
+                sportID.type = "hidden";
+                sportID.name = "sport";
+                sportID.value = branches[i].sport_id;
+                form.appendChild(sportID);
 
                 button.innerHTML = "Make a Reservation";
 

@@ -1,5 +1,5 @@
 <?php
-
+    //this script is used to validate the user input password and deactivate the user account
     session_start();
     require_once("../../src/general/security.php");
 

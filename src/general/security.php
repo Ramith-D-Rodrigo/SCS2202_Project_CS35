@@ -33,13 +33,13 @@
             $santizedEmail = filter_var($email, FILTER_SANITIZE_EMAIL); //sanitize the email address
 
             if(!filter_var($santizedEmail, FILTER_VALIDATE_EMAIL) ){ //check if the email is valid
-                return false;
+                return [false, "Invalid"];
             }
 
             require("dbconnection.php");
             self::$connection = $connection;
             $sql = sprintf("SELECT `ld`.`emailAddress`, `b`.`branchEmail` FROM `login_details` `ld` CROSS JOIN 
-            `branch` `b` WHERE `ld`.`emailAddress` = '%s' OR `b`.`branchEmail` = '%s'", 
+            `branch` `b` WHERE `ld`.`emailAddress` = '%s' OR (`b`.`branchEmail` = '%s' AND `b`.`requestStatus` = 'a')",     //get the email addresses of branches that are already registered
             self::$connection -> real_escape_string($santizedEmail),
             self::$connection -> real_escape_string($santizedEmail));
 
@@ -48,11 +48,11 @@
             self::$connection -> close();
 
             if($result -> num_rows == 0){  //if the email address is not in the database, it is available
-                return true;
+                return [true, "Available"];
             }
             else{
                 
-                return false;
+                return [false, "Unavailable"];
             }
         }
 
@@ -107,10 +107,10 @@
                     return true; //can access
                 }
                 else{   //the user is logged in
-                    if(!($_SESSION['userrole'] === 'user')){   //if the logged in person is not a user
-                        return false;   //they cannot access (we are referring to staff and coach here)
+                    if(!in_array($_SESSION['userrole'], $acceptingUserRoles)){  //the user is trying to access a page that cannot be accessed by their role 
+                        return false;
                     }
-                    else{
+                    else{   //can access
                         return true;
                     }
                 }
@@ -140,7 +140,7 @@
 
         public static function redirectUserBase(){  //redirects the user to the appropriate page (starting page) based on the user role
             if(!isset($_SESSION['userrole'])){  //homepage
-                header("Location: /index.php");
+                header("Location: /");
                 return;
             }
             switch($_SESSION['userrole']){
@@ -160,7 +160,7 @@
                     header("Location: /public/coach/coach_dashboard.php");
                     break;
                 case 'any' || 'user':
-                    header("Location: /index.php");
+                    header("Location: /");
                     break;
             }
         }

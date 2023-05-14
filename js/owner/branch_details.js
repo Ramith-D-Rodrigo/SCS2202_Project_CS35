@@ -50,8 +50,6 @@ const branchDetailsForm = document.querySelector("#branchContainer");
 fetch("../../controller/owner/branch_details_controller.php")
     .then(res => res.json())
     .then(data => {
-        console.log(data);
-
         //initialize and store the data
         for(let i = 0; i < data.length; i++){
             branches.push(data[i]);
@@ -73,6 +71,18 @@ fetch("../../controller/owner/branch_details_controller.php")
 
         //display the first branch details
         displayBranchDetails({target: {value: branches[0].branchDetails.branchID}});
+
+        //view schedule btn event listener
+        const viewScheduleBtn = document.querySelector("#scheduleBtn");
+        viewScheduleBtn.addEventListener("click", (e) => {
+            //get the branch id
+            const branchID = document.querySelector("#branchFilter").value;
+
+            //store in session storage
+            sessionStorage.setItem("branchID", branchID);
+            //redirect to the schedule page
+            window.location.href = "/public/owner/reservation_schedule.php";
+        });
     })
     .then(() => {
         //event listener for map icon
@@ -228,8 +238,6 @@ const displayBranchDetails = (e) => {
             fetch("../../controller/owner/branch_feedback_controller.php?branchID=" + branchID)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data);
-
                     //sort the feedbacks according to the date
                     for(let i = 0; i < data.length; i++){
                         sortFeedbacks(data[i]);

@@ -1,4 +1,6 @@
 <?php
+    //this script is used to get all the branches and their details to display in the our branches page
+    session_start();
     $resultArr = [];
     require_once("../../src/general/dbconnection.php");
     require_once("../../src/general/website_functions/our_branches_functions.php");
@@ -36,22 +38,29 @@
         //get branch pictures
         $branchASSOC['photos'] = $tempBranch -> getBranchPictures($connection);
 
+        //get branch manager and receptionist details
+        $branchASSOC['manager'] = "";
+        $branchASSOC['receptionist'] = "";
 
-        $branchManager = new Manager(); //to get manager details
-        $branchManager -> setUserID($branchASSOC['currManager']);
+        if(isset($branchASSOC['currManager'])){
+            $branchManager = new Manager(); //to get manager details
+            $branchManager -> setUserID($branchASSOC['currManager']);
+    
+            $branchManager -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+    
+            $branchASSOC['manager'] = $branchManager;
 
-        $branchManager -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
-
-        $branchReceptionist = new Receptionist(); //to get receptionist details
-        $branchReceptionist -> setUserID($branchASSOC['currReceptionist']);
-
-        $branchReceptionist -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+        }
+        if(isset($branchASSOC['currReceptionist'])){
+            $branchReceptionist = new Receptionist(); //to get receptionist details
+            $branchReceptionist -> setUserID($branchASSOC['currReceptionist']);
+    
+            $branchReceptionist -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+            $branchASSOC['receptionist'] = $branchReceptionist;
+        }
 
         $branchASSOC['sports'] = $branchSports;
         $branchASSOC['rating'] = $branchRating;
-        $branchASSOC['manager'] = $branchManager;
-        $branchASSOC['receptionist'] = $branchReceptionist;
-
 
         array_push($branchInfo, $branchASSOC);   //push to array;
 

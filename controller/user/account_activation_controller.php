@@ -1,4 +1,6 @@
 <?php
+    //this script is used to activate the user's account after registration or after the user has logged in when the account is not activated
+    //this is done after the code has been sent to the user's email and the user has entered the code
     session_start();
     require_once("../../src/general/security.php");
 
@@ -18,7 +20,7 @@
     $requestJSON =  file_get_contents("php://input");   //get the raw json string
 
     if($requestJSON == '' || $requestJSON === false){ //if the json string is empty
-        header("Location: /index.php"); //the user shouldn't be able to access the page
+        Security::redirectUserBase(); //the user shouldn't be able to access the page
         exit();
     }
 

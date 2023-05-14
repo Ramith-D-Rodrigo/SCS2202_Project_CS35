@@ -39,60 +39,6 @@
             $this -> userRole = 'owner';
         }
 
-
-/*         private function create_login_details_entry($database){   //enter details to the login_details table
-            $result = $database -> query(sprintf("INSERT INTO `login_details`
-            (`user_id`, 
-            `username`,
-            `email_address`, 
-            `password`, 
-            `user_role`,
-            `is_active`) 
-            VALUES 
-            '%s','%s','%s','%s','owner',1)",
-            $database -> real_escape_string($this -> ownerID),
-            $database -> real_escape_string($this -> username),
-            $database -> real_escape_string($this -> emailAddress),
-            $database -> real_escape_string($this -> password))); 
-
-             if ($result === TRUE) {
-                echo "New log in details record created successfully<br>";
-            }
-            else{
-                echo "Error<br>";
-            }
-            return $result;
-        } */
-
-/*         private function create_owner_entry($database) {
-            $sql =(sprintf("INSERT INTO `owner`
-            (`owner_id`,
-            `contact_no`,
-            `first_name`, 
-            `last_name`) 
-            VALUES '%s','%s','%s','%s','%s')",
-            $database -> real_escape_string($this -> contactNum),
-            $database -> real_escape_string($this -> firstName),
-            $database -> real_escape_string($this -> lastName)));
-
-            $result = $database->query($sql);
-
-            return $result;
-        } */
-
-/*         public function registerOwner($database){    //public function to register the user
-            // $this -> joinDate = date("Y-m-d");
-            // $this -> leaveDate = '';
-            $loginEntry = $this -> create_login_details_entry($database);
-            //$staffEntry = $this -> create_staff_entry($database);
-            $ownerEntry = $this -> create_owner_entry($database);
-
-            if($loginEntry  === TRUE && $ownerEntry === TRUE){    //all has to be true (successfully registered)
-                return TRUE;
-            }
-        } */
-
-
         public function getRevenue($dateFrom, $dateTo, $branch = null,$sport = null){    //get the revenue of the branches
             if($branch == null){    //all branches are needed
                 $branchArr = $this -> getBranches();
@@ -185,20 +131,11 @@
             return $sportArr;
         }
 
-        public function changeReservationPrice($sport, $newPrice){
-            $sql = sprintf("UPDATE `sport` SET `reservationPrice` = '%s' WHERE `sportID` = '%s'",
-            $this -> connection -> real_escape_string($newPrice),
-            $this -> connection -> real_escape_string($sport -> getID()));
-            $result = $this -> connection -> query($sql);
-
-            if($result === TRUE){
-                return TRUE;
-            }
-            else{
-                return FALSE;
-            }
+        public function managerRequests($manager = null, $discountDecision = '%', $courtDecision = '%'){   //% for wildcard
+            $totalRequests =  array_merge($this -> getDiscountRequests(manager: $manager, decision: $discountDecision), $this -> getSportCourtRequests(manager: $manager, decision: $courtDecision));
+            return $totalRequests;
         }
-        
+
         public function updateManagerRequest($manager = null,$courtID = null, $startingDate = null,$decision = '%'){
             
             $sql = '';
@@ -219,10 +156,6 @@
             return $result;
         }
 
-        public function managerRequests($manager = null, $discountDecision = '%', $courtDecision = '%'){   //% for wildcard
-            $totalRequests =  array_merge($this -> getDiscountRequests(manager: $manager, decision: $discountDecision), $this -> getSportCourtRequests(manager: $manager, decision: $courtDecision));
-            return $totalRequests;
-        }
 
         public function getDiscountRequests($manager = null, $decision = '%'){   //% for wildcard
 

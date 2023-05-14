@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the feedbacks of a branch and the branch rating to display in the branch details page along with the branch details
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['owner'])){
@@ -14,7 +15,7 @@
     $branchID = $_GET['branchID'];
 
     if(!isset($branchID)){
-        Security::redirectUserBase();
+        http_response_code(400);
         die();
     }
 

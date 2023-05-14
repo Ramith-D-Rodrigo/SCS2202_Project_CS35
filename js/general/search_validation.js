@@ -1,16 +1,19 @@
-verbose = true; //for debugging
+
+const formDiv = document.getElementById("searchBar");
+const input = formDiv.querySelector("input");
 
 function searchValidation(event){
-    const formDiv = document.getElementById("searchBar");
-
-    if(verbose){
-        console.log(formDiv.reportValidity());
-    }
-
     if(formDiv.reportValidity() === false){
+        event.preventDefault();
         return false;
     }
     else{
+        if(input.value.length < 3){
+            event.preventDefault();
+            return false;
+        }
         return true;
     }
 }
+
+formDiv.addEventListener("submit", searchValidation);

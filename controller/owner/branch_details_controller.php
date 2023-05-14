@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the details of the branches to display in the branch details page of the owner
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['owner'])){
@@ -24,8 +25,12 @@
         $branchManager = $currBranch -> getCurrentManager($owner -> getConnection());  //branch manager
         $branchReceptionist = $currBranch -> getCurrentReceptionist($owner -> getConnection());    //branch receptionist
 
-        $branchManager -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
-        $branchReceptionist -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+        if($branchManager -> getUserID() != null){
+            $branchManager -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+        }
+        if($branchReceptionist -> getUserID() != null){
+            $branchReceptionist -> getDetails(['firstName', 'lastName', 'contactNum', 'gender']);
+        }
 
         $currBranch -> getBranchPictures($owner -> getConnection());    //get branch photos
 

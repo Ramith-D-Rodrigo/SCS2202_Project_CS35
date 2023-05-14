@@ -17,7 +17,6 @@ class User extends Actor implements JsonSerializable{
     private $dependents;
     private $medicalConcerns;
     private $gender;
-    private $isactive;
     private $profilePhoto;
 
     public function __construct($actor = null){
@@ -48,10 +47,6 @@ class User extends Actor implements JsonSerializable{
 
     public function setProfilePic($profilePic){
         $this -> profilePhoto = $profilePic;
-    }
-
-    public function getUserID(){    //userID getter
-        return $this -> userID;
     }
 
     public function getProfilePic(){
@@ -85,7 +80,7 @@ class User extends Actor implements JsonSerializable{
         $this -> connection -> real_escape_string($this -> username),
         $this -> connection -> real_escape_string($this -> emailAddress),
         $this -> connection -> real_escape_string($this -> password),
-        $this -> connection -> real_escape_string($this -> isactive)));
+        $this -> connection -> real_escape_string($this -> isActive)));
 
 /*         if ($result === TRUE) {
             echo "New log in details record created successfully<br>";
@@ -165,7 +160,7 @@ class User extends Actor implements JsonSerializable{
 
     public function registerUser(){    //public function to register the user
         $this -> registerDate = date("Y-m-d");
-        $this -> isactive = 0;  //still pending, has to verify using the email
+        $this -> isActive = 0;  //still pending, has to verify using the email
         $loginEntry = $this -> create_login_details_entry();
         $userEntry = $this -> create_user_entry();
         $medicalConcernEntry = $this -> create_user_medicalConcerns();
@@ -249,20 +244,6 @@ class User extends Actor implements JsonSerializable{
         return TRUE;
     }
 
-    public function activateAccount(){
-        $this -> isactive = 1;
-        $sql = sprintf("UPDATE `login_details` SET `isActive` = '%s' WHERE `userID` = '%s'",
-        $this -> connection -> real_escape_string($this -> isactive),
-        $this -> connection -> real_escape_string($this -> userID));
-
-        $result = $this -> connection -> query($sql);
-
-        if($result === FALSE){
-            return FALSE;
-        }
-        return TRUE;
-    }
-
     public function searchSport($sportName){
         $sportSql = sprintf("SELECT `sportID`,
         `sportName`,
@@ -281,7 +262,7 @@ class User extends Actor implements JsonSerializable{
         $branchResultArr = [];
         $coachResultArr = [];
 
-        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of receptionist (pending request)
+        while($row = $sportResult -> fetch_assoc()){    //sports found, traverse the table  //request status = a -> court is active, request status = p -> court request of manager (pending request)
             $courtBranchSql = sprintf("SELECT DISTINCT `branchID`
             FROM `sports_court`
             WHERE `sportID`
@@ -319,7 +300,7 @@ class User extends Actor implements JsonSerializable{
 
     public function makeReservation($date, $st, $et, $people, $payment, $chargeID, Sports_Court $court){
         $result = $court -> createReservation($this -> userID, $date, $st, $et, $payment, $people, $chargeID, $this -> connection);
-        return $result; //an array
+        return $result; //an array (on success, array with reservationID, on failure, array with errMsg) [0 -> true or false, 1 -> reservationID or errMsg]
     }
 
     public function getReservationHistory(){   //Joining sport, sport court, branch, reservation tables
@@ -651,6 +632,19 @@ class User extends Actor implements JsonSerializable{
         if($result === false){
             return false;
         }
+
+        //update the coaching session student count
+        $updateSql = sprintf("UPDATE `coaching_session`
+        SET `noOfStudents` = `noOfStudents` - 1
+        WHERE `sessionID` = '%s'",
+        $this -> connection -> real_escape_string($sessionObj -> getSessionID()));
+
+        $result = $this -> connection -> query($updateSql);
+
+        if($result === false){
+            return false;
+        }
+
         return true;
     }
 
@@ -689,7 +683,12 @@ class User extends Actor implements JsonSerializable{
 
     private function giveBranchFeedback($reservationObj, $branchObj, $feedback, $rating){ //give feedback to a branch
         //update the status of the reservation to let that the user has given feedback
-        $updateResult = $reservationObj -> updateStatus($this -> connection, 'feedbackGiven');
+        //first get the status of the reservation
+        $reservationObj -> getDetails($this -> connection, ['status']);
+        $currStatus = json_decode(json_encode($reservationObj), true)['status'];
+
+        //append the feedbackGiven status to the current status so that the user cannot give feedback again
+        $updateResult = $reservationObj -> updateStatus($this -> connection, $currStatus . ' feedbackGiven');
         if($updateResult === false){
             return false;
         }

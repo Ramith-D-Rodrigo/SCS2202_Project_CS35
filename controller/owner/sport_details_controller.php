@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get the details of all the sports that the complex is offering to display in the sport details page
     session_start();
     require_once("../../src/general/security.php");
     if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['owner'])){

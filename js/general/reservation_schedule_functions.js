@@ -1,4 +1,4 @@
-import { MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, currency } from "../CONSTANTS.js";
+import { MAX_RESERVATION_DAYS, MIN_RESERVATION_DAYS, MIN_RESERVATION_TIME_HOURS, currency } from "../CONSTANTS.js";
 import {changeToLocalTime} from "../FUNCTIONS.js";
 
 
@@ -104,6 +104,10 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
                 timeDiff : (((endingTimeDateObj - startingTimeDateObj)/1000)/60)/60    //time difference in 1 hour slots
             };
 
+            if(jsonData.branchReservationSchedule[key].schedule.reservations[resInfo]['reservationID'] !== undefined){
+                userReservation['reservationID'] = jsonData.branchReservationSchedule[key].schedule.reservations[resInfo]['reservationID'];
+            }
+
             currCourtReservations.push(userReservation);
             
         }
@@ -135,13 +139,29 @@ function createScheduleObjects(jsonData){   //function to create objects to all 
                 day : sessionDay
             };
 
+            if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['startDate'] !== undefined){
+                const startDate = jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['startDate'];
+                coachingSession['startDate'] = startDate;
+            }
+
+            if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['cancelDate'] !== undefined){
+                if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['cancelDate'] !== null){
+                    const cancelDate = jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['cancelDate'];
+                    coachingSession['cancelDate'] = cancelDate;
+                }
+            }
+
+            if(jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['sessionID'] !== undefined){
+                coachingSession['sessionID'] = jsonData.branchReservationSchedule[key].schedule.coachingSessions[resInfo]['sessionID'];
+            }
+
             currCoachReservations.push(coachingSession);
         }
         courtSchedule['coachingSessions'] = currCoachReservations;
 
         //go through all the court maintenance
         let currCourtMaintenance = Array();
-        for(var resInfo in jsonData.branchReservationSchedule[key].schedule.courtMaintenance){  //go through all the reservation of each court
+        for(var resInfo in jsonData.branchReservationSchedule[key].schedule.courtMaintenance){  //go through all the maintenance of each court
             const startingDate = jsonData.branchReservationSchedule[key].schedule.courtMaintenance[resInfo]['startingDate'].split("-");
             const endingDate = jsonData.branchReservationSchedule[key].schedule.courtMaintenance[resInfo]['endingDate'].split("-");
 
@@ -250,19 +270,17 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
         table.appendChild(tableBody);
     
         while(currTime < closingTime){
-            const tableRow = tableBody.insertRow();
+            const tableRow = tableBody.insertRow(); //table row
     
-            const timePeriod = tableRow.insertCell();
+            const timePeriod = tableRow.insertCell(); //time period cell
 
             const periodStartPrint = currTime.toLocaleTimeString(); //print to print in the page
-            const periodStartCompare = currTime.toTimeString(); //compare to compare the times
     
-            currTime.setMinutes(currTime.getMinutes() + 60);    //append time period by 60 minutes
+            currTime.setMinutes(currTime.getMinutes() + MIN_RESERVATION_TIME_HOURS * 60);    //append the time period by the reservation time (in minutes)
     
             const periodEndPrint = currTime.toLocaleTimeString();
-            const periodEndCompare = currTime.toTimeString();
 
-            for(let j = 0; j < 10; j++){
+            for(let j = 0; j < 10; j++){ //creating the table cells for the reservation table
                 const cell = tableRow.insertCell();
                 const tempDate = new Date();
                 tempDate.setDate(tempDate.getDate() + 1);   //ignoring the current day
@@ -270,23 +288,24 @@ function createReservationTable(scheduleObjs, jsonData, dateIncrement = ''){
                     tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
                 }
                 tempDate.setDate(tempDate.getDate() + j);
-                cell.id = "court" + i +tempDate.toLocaleDateString().replaceAll("/", "-") + periodStartPrint.replaceAll(" ", '');   //id is => "Court , Reservation Date, Starting Time"
+                cell.id = createCellID(i, tempDate.toLocaleDateString(), periodStartPrint);
+                //cell.id = "court" + i +tempDate.toLocaleDateString().replaceAll("/", "-") + periodStartPrint.replaceAll(" ", '');   //id is => "Court , Reservation Date, Starting Time"
 
             }
             tableRow.id = "court" + i + periodStartPrint.replaceAll(" ", '') + periodEndPrint.replaceAll(" ", '');
     
-            timePeriod.innerText = periodStartPrint + " - " + periodEndPrint;    
+            timePeriod.innerText = periodStartPrint + " - " + periodEndPrint;       //setting the time period in the cell
         }
         createdTables.push(table);
     }
     return createdTables;
 }
 
-function updateTheReservationTables(scheduleObjs, jsonData){
+function updateTheReservationTables(scheduleObjs, jsonData, dateIncrement = ''){    //dateIncrement is the number of days to increment the date
     //convert object to array
     scheduleObjs = Object.values(scheduleObjs);
    
-    for(let i = 0; i < scheduleObjs.length - 1; i++){   //go through each schedule
+    for(let i = 0; i < scheduleObjs.length - 1; i++){   //go through each schedule (i-1 because the last element is the branch maintenance)
         //user reservations
         if(scheduleObjs[i].reservations !== undefined){    //if there are reservations
             for(let j = 0; j < scheduleObjs[i]['reservations'].length; j++){    //replace the empty cells with reserved cells
@@ -324,10 +343,35 @@ function updateTheReservationTables(scheduleObjs, jsonData){
                 //we will create a cell for each day of the week, and we will check if the day of the week matches the day of the coaching session
                 //if it does, we will add the cell to the table
                 let tempDate = new Date();  //we will use this to increment the date
+                if(dateIncrement !== ''){    //not the initial table (the user has pressed the navigation buttons, or the user has changed the date)
+                    tempDate.setDate(tempDate.getDate() + dateIncrement);   //we have to set the starting date for that increment
+                }
+                tempDate.setHours(0, 0, 0, 0);  //set the time to 00:00:00
+
                 let inc = 1; //we will increment the date by 1 day
                 do{
                     //get the day of the week to string
                     const day = tempDate.toLocaleDateString('en-US', { weekday: 'long' });
+                    if(res.startDate !== undefined){    //if the coaching session has a start date
+                        const startDate = new Date(res.startDate);
+                        startDate.setHours(0, 0, 0, 0);  //set the time to 00:00:00
+                        if(tempDate < startDate){   //if the date is before the start date, we don't have to check it
+                            inc++;
+                            tempDate.setDate(tempDate.getDate() + 1);    //increment the date by 1
+                            continue;
+                        }
+                    }
+
+                    if(res.cancelDate !== undefined){    //if the coaching session has a cancel date
+                        if(res.cancelDate !== null){    //if the cancel date is not null
+                            const endDate = new Date(res.cancelDate);
+                            endDate.setHours(23, 59, 59, 999);  //set the time to 23:59:59:999
+                            if(tempDate > endDate){   //if the date is after the cancel date, the session is over
+                                break;
+                            }
+                        }
+                    }
+
                     if(day === sessionDay){    //if the day of the week matches the day of the coaching session
                         const resDate = tempDate.toLocaleDateString();
                         const cell = createReservationCell("Coaching Session", res.timeDiff);
@@ -347,7 +391,7 @@ function updateTheReservationTables(scheduleObjs, jsonData){
                         inc++;
                         tempDate.setDate(tempDate.getDate() + 1);    //increment the date by 1
                     }
-                }while(inc < 30);    //we will increment the date until we reach the 30th day
+                }while(inc <= 30);    //we will increment the date until we reach the 30th day
             }
         }
 
@@ -544,4 +588,4 @@ function createMaintenanceCell(maintenanceObj, openingTime, closingTime, courtNu
 
 //we can export updateTheReservationTables, createScheduleObjects, and createReservationTable functions aswell to use them to update the table after a reservation is made
 
-export {updateTheReservationTables, createScheduleObjects, createReservationSchedulePage, createReservationTable};
+export {updateTheReservationTables, createScheduleObjects, createReservationSchedulePage, createReservationTable, createScheduleNavigation, createCellID};

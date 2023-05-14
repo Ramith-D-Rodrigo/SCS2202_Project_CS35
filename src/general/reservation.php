@@ -240,6 +240,16 @@
             return $result;
         }
 
+        public function getOnsiteReservationInfo($database){
+            $sql = sprintf("SELECT * FROM `onsite_reservation_holder` WHERE `reservationID` = '%s'",
+            $database -> real_escape_string($this -> reservationID));
+
+            $result = $database -> query($sql);
+
+            $resultObj = $result -> fetch_object();
+            return $resultObj;
+        }
+
 
         public function JsonSerialize() : mixed{
             $objectProperties = get_object_vars($this);

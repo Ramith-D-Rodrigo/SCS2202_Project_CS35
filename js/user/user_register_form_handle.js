@@ -1,6 +1,8 @@
 //Event Handling and Client Side Validation in User Registration
 
-var verbose = true; //debugging
+import { MIN_USER_REGISTRATION_AGE } from "../CONSTANTS.js";
+
+var verbose = false; //debugging
 
 //Medical Concerns 
 
@@ -10,7 +12,7 @@ const medicalConcernBtn = document.getElementById("medConbtn");
 var medicalCount = 0;   //no of medical concerns of the user
 let medicalinputID = [];
 
-for(i = 1; i <=5; i++){ //array of medicalIDs
+for(let i = 1; i <=5; i++){ //array of medicalIDs
     medicalinputID.push(i);
 }
 if(verbose){
@@ -93,7 +95,7 @@ const emergencyDetailsBtn = document.getElementById("emergencyDetailsbtn");
 var emergencyCount = 1;   //no of emergency details of the user
 let emergencydetailID = [];
 
-for(i = 2; i <=3; i++){ //array of emergencyIDs
+for(let i = 2; i <=3; i++){ //array of emergencyIDs
     emergencydetailID.push(i);
 }
 if(verbose){
@@ -129,7 +131,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     inputRelationship.appendChild(initialOption);
 
 
-    for(i = 0; i < relationshipOptions.length; i++){
+    for(let i = 0; i < relationshipOptions.length; i++){
         const optionField = document.createElement("option");
         optionField.setAttribute('value',relationshipOptions[i]);
         optionField.innerHTML = relationshipOptions[i];
@@ -167,7 +169,7 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
     const relationshipField = document.createTextNode("Relationship");
     const contactNoField = document.createTextNode("Contact Number");
     
-    for(info = 1; info <= 3; info++){   //info = 1 -> name, info = 2 -> relationship, info = 3 -> contact number
+    for(let info = 1; info <= 3; info++){   //info = 1 -> name, info = 2 -> relationship, info = 3 -> contact number
         const row = document.createElement("div");
         row.className = "row-container";
     
@@ -201,18 +203,6 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
         }
         inputDiv.appendChild(row);
     }
-/*     inputDiv.appendChild(nameField);
-    inputDiv.appendChild(inputName);
-    inputDiv.appendChild(breakpoint1);
-
-    inputDiv.appendChild(relationshipField);
-    inputDiv.appendChild(inputRelationship);
-    inputDiv.appendChild(breakpoint2);
-
-    inputDiv.appendChild(contactNoField);
-    inputDiv.appendChild(inputContactNum);
-    inputDiv.appendChild(removeBtn); */
-
     emergencyDetailsContainer.appendChild(inputDiv);
     if(emergencyCount == 3){
         emergencyDetailsBtn.parentElement.style.display = 'none';   //hide the whole div
@@ -222,13 +212,12 @@ emergencyDetailsBtn.addEventListener('click',(e)=>{
 
 //BirthDay maxDate and minDate
 
-
 //maxDate
 const bDay = document.getElementById("bday");
 const today = new Date().toISOString().split("T")[0];
 const maxYear = today.split("-");
 
-maxYear[0] = (maxYear[0] - 14).toString();  //Must be atleast age of 14
+maxYear[0] = (maxYear[0] - MIN_USER_REGISTRATION_AGE).toString();  //Must be atleast age of 14
 if(verbose){
     console.log("Birthday Max Date = " + maxYear);
 }
@@ -240,7 +229,7 @@ bday.max = maxDate;
 //minDate
 const minYear = today.split("-");
 
-minYear[0] = (minYear[0] - 100).toString();  //Must be atleast age of 14
+minYear[0] = (minYear[0] - 100).toString();  //not more than 100 years old
 if(verbose){
     console.log("Birthday Min Date = " + minYear);
 }
@@ -248,10 +237,10 @@ if(verbose){
 const minDate = new Date(minYear).toISOString().split("T")[0];
 bday.min = minDate;
 
-//message focues
+//message focuses
 
 const errMsg = document.getElementById("errmsg");
-console.log(errMsg.innerHTML.length);
+//console.log(errMsg.innerHTML.length);
 if(errMsg.innerHTML.length !== 0){
     window.location.hash = '#errmsg';
 }

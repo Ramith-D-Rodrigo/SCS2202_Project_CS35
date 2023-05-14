@@ -13,14 +13,11 @@ const init = async () => {
                 sports.pop();
             }
             sports.pop(); */
-           console.log(sports);
 
             for(const sport of data){   //add the sports to the array
-                console.log(sport);
                 sports.push(sport);
             }
 
-            console.log(sports);
         })
         .then(() => {
             //first add the sports to the filtering

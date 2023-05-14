@@ -29,6 +29,9 @@
                 if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/view_revenue.php')){
                     echo "View Revenue";
                 }
+                if(str_contains($_SERVER['REQUEST_URI'],'/public/owner/reservation_schedule.php')){
+                    echo "Reservation Schedule";
+                }
             ?>
         </div>
         <div class="header-top-right">

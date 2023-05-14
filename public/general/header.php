@@ -105,7 +105,7 @@
     <nav class="header-links">
         <ul>
             <li>
-                <a href="/index.php">Home</a>
+                <a href="/">Home</a>
             </li>
             <li>
                 <a href="/public/general/our_sports.php">Our Sports</a>

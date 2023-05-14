@@ -1,5 +1,4 @@
 <?php
-    require_once("../../src/general/uuid.php");
     require_once("../../src/system_admin/staffMember.php");
     require_once("../../src/general/actor.php");
 
@@ -140,6 +139,30 @@ class Manager extends Actor implements JsonSerializable , StaffMember{
         $branchName = $brNameResult -> fetch_object();   //get the branch_city
 
         return [$branchName -> city, $this -> branchID];  //return the message and other important details
+    }
+
+    public function getSessionData(){
+
+        $getBranch = sprintf("SELECT `branchID` AS brid
+        FROM `staff`
+        WHERE `staffID` = '%s'",
+        $this-> connection -> real_escape_string($this -> userID));
+
+        $brResult = $this-> connection -> query($getBranch);
+
+        $branchIDResult = $brResult -> fetch_object();   //get the branch_id
+        $this -> branchID = $branchIDResult -> brid;
+
+        $getBrName = sprintf("SELECT `city`
+        FROM `branch`
+        WHERE `branchID` = '%s'",
+        $this->connection -> real_escape_string($this -> branchID));
+
+        $brNameResult = $this->connection -> query($getBrName);
+
+        $branchName = $brNameResult -> fetch_object();   //get the branch_city
+
+        return [$branchName -> city, $this -> branchID];  //return the branch name and id
     }
     public function getSportID($sportName, $database){
         $sportSql = sprintf("SELECT `sportID`

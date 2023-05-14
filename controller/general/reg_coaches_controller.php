@@ -1,4 +1,5 @@
 <?php
+    //this script is used to get all the coaches and display in the registered coaches page
     session_start();
 
     require_once("../../src/general/dbconnection.php");

@@ -79,7 +79,7 @@ const getNotifications = async (notificationList) => {
             }
         })
         .catch(err => {
-            console.log(err);
+            //console.log(err);
         });
 }
 
@@ -102,11 +102,11 @@ const markNotificationAsRead = async (e) => {
         return res.json();
     })
     .then(data => {
-        console.log(data);
+        //console.log(data);
         getNotifications(notificationList);
     })
     .catch(err => {
-        console.log(err);
+        //console.log(err);
     });
 }
 

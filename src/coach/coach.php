@@ -221,7 +221,7 @@ class Coach extends Actor implements JsonSerializable{
 
         $result = $this -> connection -> query($sql);
 
-        if($result == NULL){    //no sessions
+        if($result -> num_rows == 0){    //no sessions
             return NULL;
         }
 
@@ -362,13 +362,13 @@ class Coach extends Actor implements JsonSerializable{
 
     
     public function getFeedback(){
-        $sql = sprintf("SELECT `description`, `rating`, `date` FROM `student_coach_feedback` WHERE `coachID` = '%s' ORDER BY `date` DESC", 
+        $sql = sprintf("SELECT `description`, `rating`, `date`, `stuID` FROM `student_coach_feedback` WHERE `coachID` = '%s' ORDER BY `date` DESC", 
         $this -> connection -> real_escape_string($this -> userID));
 
         $result = $this -> connection -> query($sql);
 
         $feedbackArr = [];
-        if($result !== NULL){   //coach has feedback
+        if($result -> num_rows != 0){   //coach has feedback
             while($row = $result -> fetch_object()){
                 array_push($feedbackArr, $row);
                 unset($row);

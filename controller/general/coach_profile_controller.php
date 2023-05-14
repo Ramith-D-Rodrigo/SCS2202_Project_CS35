@@ -1,7 +1,6 @@
 <?php
 
-use Stripe\LoginLink;
-
+    //this script is used to get all the details of a specific coach to display in the coach profile page
     session_start();
     //script authentication
     require_once("../../src/general/security.php");
@@ -30,7 +29,7 @@ use Stripe\LoginLink;
     $coachSport = new Sport();
     $coachSport -> setID($viewingCoach -> getSport());
 
-    $sportName = $coachSport -> getDetails($connection);   //sport name and max no of students
+    $sportName = $coachSport -> getDetails($connection, ['sportName', 'maxNoOfStudents']);   //sport name and max no of students
 
     //get coaching sessions of the coach
 
@@ -63,6 +62,7 @@ use Stripe\LoginLink;
     $coachNeededInfo = json_decode($coachJSON, true);
     unset($coachNeededInfo['homeAddress']);
     unset($coachNeededInfo['sport']);
+    unset($coachNeededInfo['username']);
 
     //calculate age
     $today = new DateTime();
@@ -74,16 +74,11 @@ use Stripe\LoginLink;
     unset($today);
     unset($coachBirthday);
 
-    //filtering sport's needed information
-    $sportJSON = json_encode($coachSport);
-    $sportNeededInfo = json_decode($sportJSON, true);
-    unset($sportNeededInfo['description']);
-    unset($sportNeededInfo['reservationPrice']);
 
     $returningJSON = array(
         "coachInfo" => $coachNeededInfo,
         "coachRating" => $coachRating,
-        "sportInfo" => $sportNeededInfo,
+        "sportInfo" => $coachSport,
         "coachingSessions" => $coachingSessionsArr,
         "coachFeedback" => $coachFeedback
     );
