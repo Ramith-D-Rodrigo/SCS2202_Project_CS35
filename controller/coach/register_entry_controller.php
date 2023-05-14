@@ -16,7 +16,7 @@
     $sport_info = [];
     foreach($allsports as $sport){
 
-        if($sport -> minCoachingSessionPrice == null){
+        if($sport -> maxNoOfStudents == null){
                continue;
           }else{
              $branchdetails =  branchesWithThatSport($sport ->sportID, $connection);

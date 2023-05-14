@@ -1,69 +1,71 @@
 <?php
      session_start();
+     
+        require_once("../../src/general/security.php"); 
+
+        if(!Security::userAuthentication(logInCheck: TRUE, acceptingUserRoles: ['coach'])){
+            Security::redirectUserBase();
+            die();
+        }
+
      require_once("../../src/coach/dbconnection.php");
      require_once("../../src/coach/coach.php");
+     require_once("../../src/general/branch.php");
+     require_once("../../src/general/sport.php");
+     require_once("../../src/general/sport_court.php");
+
+     require_once("../../src/general/website_functions/our_sports_functions.php");
+
 
 
  $coachsport = $_SESSION['coachsportid'] ;
 
  $coach = new Coach() ;
  $coach -> setDetails(sport:$coachsport);
+ $coach -> setUserID($_SESSION['userid']);
 
- $result = $coach -> getBranchesWithCourts($connection);
+ $branches =  branchesWithThatSport( $coachsport, $coach -> getConnection());
+ 
+ $sportObj = new Sport();
+ $sportObj -> setID($coachsport);
 
- $branches = [];
+ $response = [];
+ $branch_info = [];
+
+foreach($branches as $currBranch){
+    $tempBranch = new Branch($currBranch -> branch_id);
+
+    $branchCourts = $tempBranch ->getBranchCourts($coach -> getConnection(), $sportObj, 'a');
+    
+    $branchCourtInfo = [];
+    foreach($branchCourts as $currCourt){
+        $name = $currCourt -> getName($coach -> getConnection());
+        $id = $currCourt -> getID();
+
+        array_push($branchCourtInfo,['courtID' => $id, 'courtName' => $name]);
+    }
  
 
-while($row = $result->fetch_object()){
-    $court_info = [];
-    
-         $court_info["id"] = $row->courtID;
-         $court_info["name"] = $row->courtName;
+     $tempBranch -> getDetails($coach -> getConnection(), ['city', 'openingTime', 'closingTime']);
 
-         
-     $branch_info = [];
-    
-     $branch_info["city"] = $row->city;
-     $branch_info["opening_time"] = $row->openingTime;
-     $branch_info["closing_time"] = $row->closingTime;
-     $branch_info["id"] = $row->branchID;
+     $branchArr = json_decode(json_encode($tempBranch), true);
+     $branchArr['courts'] = $branchCourtInfo;
 
+     array_push($branch_info, $branchArr);
     //  array_push($branches,$branch_info);
-
-    if(!isset($branches[$branch_info["id"]])){
-      
-        $branches[$branch_info["id"]] = [$branch_info,"courts"=>[$court_info]];
-
-    }
-    else{
-        array_push( $branches[$branch_info["id"]]["courts"],$court_info);
-
-    }
-
-    if(!isset($_SESSION["min_coaching_session_price"])){
-
-        $_SESSION["min_coaching_session_price"] = $row->minCoachingSessionPrice;
-    }
-
-    if(!isset($_SESSION["reservation_price"])){
-
-        $_SESSION["reservation_price"] = $row->reservationPrice;
-    }
-
-    if(!isset($_SESSION["max_no_of_students"])){
-
-        $_SESSION["max_no_of_students"] = $row->maxNoOfStudents;
-    }
-
-
     
 }
 
+$sportObj -> getDetails($coach -> getConnection(), ['minCoachingSessionPrice', 'maxNoOfStudents']);
+
+$response = ['sportDetails' => $sportObj, 'branchAndCourts' => $branch_info];
+
+
 //print_r($branches);
 
-$_SESSION['BranchesWithCourts'] = $branches;
+echo json_encode($response);
 
-header("Location: /public/coach/coach_addsession.php");
+
 
 
 ?>

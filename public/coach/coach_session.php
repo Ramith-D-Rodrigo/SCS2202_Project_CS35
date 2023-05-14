@@ -32,7 +32,7 @@
         <div class="flex-container">
             <div class="tabs add_session">
                 
-                <div><button class =" " onclick="window.location.href='/controller/coach/add_new_session_entry_controller.php'">Add session</button></div>
+                <div><button class =" " onclick="window.location.href='/public/coach/coach_addsession.php'">Add session</button></div>
             </div>
         </div>    
             <div class="content-box">

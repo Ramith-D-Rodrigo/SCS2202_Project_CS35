@@ -1,7 +1,7 @@
 verbose = true;
 
-const StartingTime = document.getElementById("StartingTime");
-const EndingTime = document.getElementById("EndingTime");
+const StartingTime = document.getElementById("startingTime");
+const EndingTime = document.getElementById("closedTime");
 // const session_fee = document.getElementById("session_fee");
 const monthly_payment = document.getElementById("monthly_payment");
 

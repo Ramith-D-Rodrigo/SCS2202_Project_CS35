@@ -34,12 +34,6 @@
         <form action="/controller/coach/add_new_session_controller.php" method="POST">
             <label>Select Branch : 
                 <select name ="branch" id="branch">
-                        <?php
-                        foreach($BranchesWithCourts as $i){
-                            ?> <option value=<?php echo $i[0]['id'] ?>><?php echo $i[0]['city'] ?></option>
-                            <?php
-                        }
-                        ?> 
                 </select>
             </label>
                  
@@ -47,15 +41,6 @@
 
             <label>Select Court :
                 <select name ="court" id="Court">
-                <?php
-                        foreach($BranchesWithCourts as $i){
-                            foreach($i['courts'] as $j){
-                            ?> <option value=<?php echo $j['id']?>><?php echo $j['name']?></option>
-                            <?php
-                                $k++;
-                            }
-                        }
-                        ?> 
                 </select> 
             </label>
 
@@ -73,6 +58,18 @@
 
                 </select>
             </label>
+
+                    <br>
+
+                    <label>Opening Time :
+                        <Input name ="startingTime" id="startingTime" readonly>
+                        </Input> 
+                    </label>
+            
+                    <label>Closed Time :
+                        <input name ="closedTime" id="closedTime" readonly>
+                        </input> 
+                    </label>
 
                     <br>
 
@@ -108,7 +105,7 @@
             <br>
             <br>
 
-           <div> <h5>Only limited <?php echo $_SESSION["max_no_of_students"]?> students can join the sessionn</h5> </div>
+           <div> <h5 id="studentCount"></h5> </div>
 
      
             <div id="errmsg" class="err-msg">   </div>
@@ -122,7 +119,7 @@
 
             <div  hidden ><output id="max_no_of_students"><?php echo $_SESSION["max_no_of_students"]?></output></div>
 
-            <div  hidden><output id="opening_time"  ><?php echo $_SESSION["opening_time"]?></output></div>
+            <div hidden ><output id="opening_time"  ><?php echo $_SESSION["opening_time"]?></output></div>
 
             <div hidden ><output id="closing_time"><?php echo $_SESSION["closing_time"]?></output></div>
 
@@ -156,7 +153,7 @@
         ?>
 
     <script src="/js/coach/add_session_validation.js"></script>
-    <!-- <script src="/js/coach/add_new_session_controller.js"></script> -->
+   <script src="/js/coach/add_session_get_details.js"></script> 
 
 </body>
 
