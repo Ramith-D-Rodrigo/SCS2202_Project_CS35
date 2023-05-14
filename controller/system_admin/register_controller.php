@@ -93,6 +93,9 @@
         if($result){   //successfully registered
             // echo "Successfully Registered";
             $message = 'Registered Successfully';
+            //send a mail regarding the change of login details
+            require_once("../../src/general/mailer.php");
+            Mailer::sendCredentials($email, $fName, $lName,$username,$profile['Password']);
         
         }else{
             $message = "There was Error in Registering ";

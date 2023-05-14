@@ -60,7 +60,9 @@
                 </div>
            
                 <div class="row-container">
-                    <div class="left-side"> New Email: </div>
+                    <div class="left-side"> New Email: 
+                    <p style="font-size:10px;font-style:italic">Leave it empty if you don't want to change</p>
+                    </div>
                     <div class="right-side">
                     <input
                     id="newEmail"
@@ -68,8 +70,10 @@
                     </div>    
                 </div>
                 <div class="row-container">
-                    <div class="left-side"> New Password: </div>
-                    <div class="right-side"><input required
+                    <div class="left-side"> New Password: 
+                    <p style="font-size:10px;font-style:italic">Leave it empty if you don't want to change</p>
+                    </div>
+                    <div class="right-side"><input
                     id="newPwd"
                     type="password"
                     pattern="(?=.*\d)(?=.*[A-Z]).{8,}" 

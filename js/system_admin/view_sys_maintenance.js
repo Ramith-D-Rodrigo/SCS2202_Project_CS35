@@ -17,28 +17,30 @@ fetch("../../controller/system_admin/view_sys_maintenance_controller.php")
             mainResults.style.width = "50%";
             mainResults.style.height = "30%";
             mainResults.style.justifyContent = "center";
-            for(i=0;i<data.length;i++){
+            // for(i=0;i<data.length;i++){
                 const leftSide = document.createElement("div");
                 leftSide.style.display = "flex";
                 leftSide.style.marginRight = "180px";
-                leftSide.innerHTML = "Starting Date: ".concat(data[i]['startingDate'],"<br>"
-                ,"Starting Time: ",data[i]['startingTime']);
-                $downTime = data[i]['expectedDowntime'].split(":");
+                leftSide.innerHTML = "Starting Date: ".concat(data[0]['startingDate'],"<br>"
+                ,"Starting Time: ",data[0]['startingTime']);
+                $downTime = data[0]['expectedDowntime'].split(":");
                 leftSide.innerHTML += "<br>".concat("Expected Downtime: ",$downTime[0]," hrs ",$downTime[1]," mins");
                 const rightSide = document.createElement("div");
                 rightSide.style.display = "flex";
+                const form = document.createElement("form");
                 const btn = document.createElement("button");
                 btn.innerHTML = "Finish";
+                btn.addEventListener('click',promptMsg);
                 form.appendChild(btn);
                 rightSide.appendChild(form);
                 mainResults.appendChild(leftSide);
                 mainResults.appendChild(rightSide);
-            }
+            // }
         } 
     });
 
-function promptMsg(){
-
+function promptMsg(event){
+    event.preventDefault();
     const prompt = document.createElement("p");
     prompt.innerHTML = "Are you sure with the decision?";           
     const yesBtn = document.getElementById("Yes");

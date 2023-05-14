@@ -272,7 +272,10 @@ class Admin extends Actor{
         $database -> real_escape_string($startTime));
 
         $result = $database -> query($sql);
-        return $result;
+        if($result){
+            return true;
+        }
+        return false;
     }
 
     public function removeSystemMaintenance($database){
@@ -290,7 +293,7 @@ class Admin extends Actor{
         $result = $database -> query($sql) -> fetch_object();
         $maintenanceR = [];
         if($result !== NULL){
-            $maintenanceR = [$result];
+            array_push($maintenanceR,$result);
         }
         
         return $maintenanceR;

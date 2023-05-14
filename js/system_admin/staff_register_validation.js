@@ -80,8 +80,8 @@ function registerStaff(){
                 location.reload();
             },3000);
         }else{
-            errMsg.style.color = "red";
-            errMsg.style.textAlign = "center";
+            // errMsg.style.color = "red";
+            // errMsg.style.textAlign = "center";
             errMsg.innerHTML = data['Message'];
         }
     });

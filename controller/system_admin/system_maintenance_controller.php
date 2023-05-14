@@ -35,7 +35,7 @@
         if($result){
             $message = "System Maintenance Notification Added Successfully";
 
-            //send the mail regarding the system maintenance
+            // send the mail regarding the system maintenance
             $duration = $downHrs .":". $downMins;
             $admin -> mailSystemMaintenance($startDate,$startTime,$duration);
         }else{
@@ -44,7 +44,7 @@
         }
     }
 
-    header('Content-type: application/json');
+    header('Content-Type: application/json');
     echo json_encode(["Message"=>$message,"Flag"=>$flag]);
     die();
 

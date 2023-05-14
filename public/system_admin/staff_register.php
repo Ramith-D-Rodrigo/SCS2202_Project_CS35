@@ -86,8 +86,8 @@
         <div class="row-container">
             <div class="left-field"> Gender : </div>
             <div class="right-field" style="display:flex;flex-direction:row;margin-top:2px">
-                <div> <input type="radio" id="male" value="m"> Male </div>
-                <div> <input type="radio" id="female" value="f"> Female </div> 
+                <div> <input type="radio" name="gender" id="male" value="m"> Male </div>
+                <div> <input type="radio" name="gender" id="female" value="f"> Female </div> 
             </div>
         </div>
 
@@ -111,22 +111,24 @@
             minlength="8"
             id="password"
             required title="Password length must be atleast 8 characters. Must include an uppercase letter and a number"> 
+            <button class="togglePassword"> Show Password</button>
             </div>
             
         </div>
-        <div style="display:flex;justify-content:flex-end">
-            <button class="togglePassword"> Show Password</button>
-        </div>
+        <!-- <div style="display:flex;justify-content:flex-end">
+            
+        </div> -->
         
         <div class="row-container">
             <div class="left-field"> Confirm Password : </div>
             <div class="right-field"> <input type="password" id="cPassword" required>  
+            <button class="togglePassword"> Show Password</button>
             </div> <br> 
         </div>
-        <div style="display:flex;justify-content:flex-end">
-            <button class="togglePassword"> Show Password</button>
-        </div>
-        <div id="errmsg">
+        <!-- <div style="display:flex;justify-content:flex-end">
+            
+        </div> -->
+        <div id="errmsg" class="err-msg">
         </div> 
             <div style="display:flex;justify-content:flex-end">
                 <button id="register"  onclick="return validateForm(event)"> Register Staff</button>

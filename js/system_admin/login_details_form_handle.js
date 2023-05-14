@@ -32,6 +32,7 @@ function togglePassword(element){
 }
 
 function validateForm(event){
+    // console.log("fe");
     event.preventDefault();
     if(branch.value === "" || staffRole.value === ""){   //Haven't selected any specific role 
         event.preventDefault(); //do not submit

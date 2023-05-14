@@ -107,7 +107,7 @@
 
         public static function sendCredentials($recipientEmail, $recipient_fName, $recipient_lName,$recipient_name,$pwd){   //this function is used to send the verification code to the user's email upon registration
             $subject = "Staff Account Login";
-            $body = "<p>Hi $recipient_fName $recipient_lName</p>
+            $body = "<p>Hi $recipient_fName $recipient_lName,</p>
                     <p>DO NOT SHARE THIS LOGIN CREDENTIALS WITH ANYONE AT ALL TIMES. It will be a violation under the rules and regulations
                     of the company and will cause to serious lawful actions.</p>
                     <p>Username : $recipient_name </p>

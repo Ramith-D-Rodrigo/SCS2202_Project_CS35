@@ -53,8 +53,8 @@ function addMaintenance(){
         },
         body: JSON.stringify(maintenanceDetails),
     })
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
         console.log(data);
         if(!data['Flag']){
             overlay.className = "overlay";

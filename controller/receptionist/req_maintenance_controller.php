@@ -5,7 +5,7 @@
         Security::redirectUserBase();
         die();
     }
-    
+
     require_once("../../src/receptionist/receptionist.php");
     require_once("../../src/general/branch.php");
     require_once("../../src/system_admin/admin.php");
@@ -28,9 +28,10 @@
 
     $valid = checkAvailableSport($_SESSION['branchID'],$courtName,$sportName,$connection);
     $branch = new Branch($_SESSION['branchID']);      //get the manager ID to send the request about the maintenance
-    $managerID = json_decode(json_encode($branch -> getDetails($connection,['currManager'])),true)['currManager'];  
+    $branch -> getDetails($connection,['currManager']);
+    $managerID = json_decode(json_encode($branch),true)['currManager'];  
                
-    if(($valid -> num_rows > 0) || ($sportName === "ALL" && $courtName === "ALL")){
+    if(($valid -> num_rows > 0) || ($sportName === "ALL" && $courtName === "ALL")){  //check whether that this is a valid court or a branch request
         if($sportName === "ALL" && $courtName === "ALL") {
             $brAvailable = checkBranchMaintenance($_SESSION['branchID'],$sDate,$eDate,$connection);
             if($brAvailable -> num_rows > 0) {
@@ -44,7 +45,7 @@
                 $desc = "You have a pending branch maintenance request starting from ".$sDate. "to".$eDate;
                 $triggerDate = date('Y-m-d', strtotime($sDate. ' - 7 days'));   //trigger the notification to the manager atleast 7 days before the maintenance
                 $notificationID = uniqid("notmainten");
-                $recep -> addNotification($notificationID,"Branch Maintenance Request",$desc,$triggerDate,$managerID);
+                $receptionist -> addNotification($notificationID,"Branch Maintenance Request",$desc,$triggerDate,$managerID);
             
             }
            

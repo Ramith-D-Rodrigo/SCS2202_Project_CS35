@@ -36,9 +36,17 @@ newPhoto.addEventListener('change', function() {
     };
 });
 
-function saveChanges(){
+function saveChanges(event){
+    event.preventDefault();
     const newEmail = document.getElementById("newEmail");
     const newNumber = document.getElementById("newNumber");
+    const form = document.getElementById("form");
+    if(!form.reportValidity()){
+        errMsg.style.color = "red";
+        errMsg.style.textAlign = "center";
+        errMsg.innerHTML = "Data Not Valid";
+        return;
+    }
     if(newEmail.value === '' && newNumber.value === '' && newPhoto.files.length === 0){
         return;
     }

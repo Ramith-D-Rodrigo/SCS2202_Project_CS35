@@ -72,8 +72,9 @@ selectedSport.addEventListener("change",(e) => {
 });
 
 function submitDecsion(event){
+    event.preventDefault();
     $decisionDetails = {
-        Decision: e.target.value,
+        Decision: event.target.value,
         BranchID: document.getElementById("branchID").value,
         Location: document.getElementById("city").value,
         Email: document.getElementById("emailAddress").value,
@@ -98,9 +99,9 @@ function submitDecsion(event){
             successMsg.innerHTML = data['Message'];
             overlay.style.display = "block";
 
-            setTimeout(function(){
-                location.reload();
-            },3000);
+            // setTimeout(function(){
+            //     location.reload();
+            // },3000);
         }else{
             errMsg.innerHTML = data['Message'];
         }

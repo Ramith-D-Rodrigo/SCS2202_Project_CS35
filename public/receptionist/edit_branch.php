@@ -27,7 +27,7 @@
         ?>
         <main class="body-container">
             <div class="content-box">
-            <!-- <form class ="reg-form" action="/controller/receptionist/branch_changes_controller.php" method="post"> -->
+            <form id="form">
                 <div class="row-container">
                     <div class="left-field"> Branch Location (Main City): </div>
                     <div class="right-field" id="location"> 
@@ -50,9 +50,8 @@
                     <div class="right-field" id="numberRSide"><input
                     id="newNumber"
                     required 
-                    minlength="10"
-                    maxlength="11"
-                    pattern="[0-9]+"
+                    type="text"
+                    pattern="[0-9]{10,11}"
                     placeholder="New Contact Number"
                     > </div>
                 </div>
@@ -90,10 +89,11 @@
                         <button type="button" onclick="window.location.href='/public/receptionist/edit_branch.php'">Cancel</button>
                     </div>
                     <div style="display:flex;justify-content:right">
-                        <button   
+                        <button 
                         id ="changeBtn">Apply Changes</button>
                     </div>
                 </div>
+            </form>
             </div>
             <div id="overlay"></div>
             <div id="success-msg"></div>

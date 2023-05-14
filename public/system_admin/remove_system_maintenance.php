@@ -25,9 +25,9 @@
         require_once("dashboard_header.php");
     ?>
     <main class="body-conatainer" style="display:flex;justify-content:center;">
-        <div id="err-msg" style="display:flex;margin-top:45%;height:10%">
+        <div id="err-msg" style="display:flex;margin-top:15%;height:10%">
         </div>
-        <div id="maintenance">
+        <div id="maintenance" style="margin-top: 5%;">
         </div>
         <div id="overlay"></div>
         <div id="warning-msg" style="display:flex;flex-direction:row;display:none">

@@ -31,6 +31,7 @@
     if(!$flag){
         $result = $admin -> makeBranchActive($decision,$branchID,$connection);
         if($result){
+            // echo "wer";
             $message = "Branch Request Decision Added Successfully";
 
             //sending notification about the decision of a pending branch request
@@ -43,7 +44,7 @@
         }
     }
 
-    header('Content-type: application/json');
+    header('Content-Type: application/json');
     echo json_encode(["Message"=>$message,"Flag"=>$flag]);
     die();
 
