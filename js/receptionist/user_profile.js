@@ -16,16 +16,16 @@ fetch("../../controller/receptionist/view_sProfile_controller.php?userID=".conca
             searchErrorDiv.innerHTML = data[0]['errMsg'];
             searchError.appendChild(searchErrorDiv);
         }else{
-            const img = document.createElement("img");
-            const imgDiv = document.getElementById("profilePic");
-            img.className = "branch-img";
-            img.style.verticalAlign = "middle";
-            if(data[0].profilePhoto === null){
-                img.src = "/styles/icons/profile_icon.svg";
-            }else{
-                img.src = "/styles/icons/profile_icon.svg";
-            }
-            imgDiv.appendChild(img);
+            // const img = document.createElement("img");
+            // const imgDiv = document.getElementById("profilePic");
+            // img.className = "branch-img";
+            // img.style.verticalAlign = "middle";
+            // if(data[0].profilePhoto === null){
+            //     img.src = "/styles/icons/profile_icon.svg";
+            // }else{
+            //     img.src = data[0].profilePhoto;
+            // }
+            // imgDiv.appendChild(img);
             const nameOut = document.getElementById("name");           
             nameOut.setAttribute("readonly", "readonly");
             nameOut.value = data[0].firstName + " " + data[0].lastName;

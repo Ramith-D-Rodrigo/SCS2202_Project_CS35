@@ -41,6 +41,9 @@
                 else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/cancel_onsite_reservations.php')){   //cancel onsite reservations
                     echo "Cancel Onsite Reservations";
                 }
+                else if(str_contains($_SERVER['REQUEST_URI'],'/public/receptionist/branch_revenue.php')){   //cancel onsite reservations
+                    echo "Branch Revenue";
+                }
             ?>
         </div>
         <div class="header-top-middle">

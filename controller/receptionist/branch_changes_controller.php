@@ -11,12 +11,12 @@
     require_once("../../src/system_admin/staff.php");
     require_once("../../src/system_admin/credentials_availability.php");
 
-    $requestJSON = file_get_contents("php://input");
-    $branchDetails = json_decode($requestJSON, true);
+    // $requestJSON = file_get_contents("php://input");
+    // $branchDetails = json_decode($requestJSON, true);
 
-    $newEmail = htmlspecialchars($branchDetails['Email'], ENT_QUOTES);
-    $newContactN = htmlspecialchars($branchDetails['Number'], ENT_QUOTES);
-    $newPhotos = $branchDetails['Images'];
+    $newEmail = htmlspecialchars($_POST['newEmail'], ENT_QUOTES);
+    $newContactN = htmlspecialchars($_POST['newNumber'], ENT_QUOTES);
+    // $newPhotos = $branchDetails['Images'];
     // $newEmail = $_POST['newEmail'];
     // $newContactN = $_POST['newContactN'];
 
@@ -71,18 +71,21 @@
     }
 
     if(!$flag){     //can continue to update photos
-        if(count($newPhotos) !== 0){
+        if(!empty($_FILES['branchPic']['name'])){
             $flag3 = false;
-            for($i=0;$i<count($newPhotos);$i++){
-                $hasBranchPhoto = checkBranchPhotos($connection,$_SESSION['branchID'],$newPhotos[$i]);
+            // for($i=0;$i<count($newPhotos);$i++){
+                $hasBranchPhoto = checkBranchPhotos($connection,$_SESSION['branchID'],$_FILES['branchPic']['name']);
                 if($hasBranchPhoto){
                     $flag = true;
                     $flag3 = true;
-                    $msg .= "\nPhoto already exists.";
+                    $msg .= "\nPhoto with the same name already exists.";
                 }
-            }
+            // }
             if(!$flag3){
-                $msg = $receptionist -> updateBranchPhotos($_SESSION['branchID'],$newPhotos,$connection);
+                // for($j=0;$j<count($newPhotos);$j++){
+                    move_uploaded_file($_FILES['branchPic']["tmp_name"], '../../uploads/branch_images/'.$_FILES['branchPic']["name"]);  //move the file to this directory
+                // }
+                $msg = $receptionist -> updateBranchPhotos($_SESSION['branchID'],[$_FILES['branchPic']['name']],$connection);
             }
         }
         header('Content-Type: application/json');
