@@ -20,10 +20,10 @@ fetch("../../controller/receptionist/view_cProfile_controller.php?coachID=".conc
             const imgDiv = document.getElementById("profilePic");
             img.className = "branch-img";
             img.style.verticalAlign = "middle";
-            if(data[0].profilePhoto === null){
+            if(data[0]['photo'] === null){
                 img.src = "/styles/icons/profile_icon.svg";
             }else{
-                img.src = "/styles/icons/profile_icon.svg";
+                img.src = data[0]['photo'];
             }
             imgDiv.appendChild(img);
             const idDiv = document.getElementById("cid");
@@ -87,14 +87,17 @@ fetch("../../controller/receptionist/view_cProfile_controller.php?coachID=".conc
                 sessionInfo.appendChild(session);
             }
             else{
-                for(i=0;i<data[3].length;i++){
-                    const session = document.createElement("input");
-                    session.readOnly = true;
-                    session.className = "right-side-multiples";
-                    session.value = data[3][i][0].concat(" From ",data[3][i][1].substring(0,5)," To ",data[3][i][2].substring(0,5));
-                    sessionInfo.appendChild(session);
-                    const br = document.createElement("br");
-                    sessionInfo.appendChild(br);   
+                for(let i=0;i<data[3].length;i++){
+                    if(data[3][i][0] != null){
+                        const session = document.createElement("input");
+                        session.readOnly = true;
+                        session.className = "right-side-multiples";
+                        session.value = data[3][i][0].concat(" From ",data[3][i][1].substring(0,5)," To ",data[3][i][2].substring(0,5));
+                        sessionInfo.appendChild(session);
+                        const br = document.createElement("br");
+                        sessionInfo.appendChild(br);   
+                    }
+                    
                 }
             }
                

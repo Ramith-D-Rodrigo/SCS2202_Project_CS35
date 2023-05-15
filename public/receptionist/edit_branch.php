@@ -27,7 +27,7 @@
         ?>
         <main class="body-container">
             <div class="content-box">
-            <form id="branchForm">
+            <form id="branchForm" method="post">
                 <div class="row-container">
                     <div class="left-field"> Branch Location (Main City): </div>
                     <div class="right-field" id="location"> 
@@ -48,6 +48,7 @@
                 <div class="row-container" id="newNumberField">
                     <div class="left-field" id="numberLSide"> Con. Number to Replace: </div>
                     <div class="right-field" id="numberRSide"><input
+                    name = "newNumber"
                     id="newNumber" 
                     type="text"
                     pattern="[0-9]{10,11}"
@@ -66,6 +67,7 @@
                     <div class="left-field" id="emailLSide"> Email Address to Replace: </div>
                     <div class="right-field" style="width:55%" id="emailRSide"> <input
                     type="email"
+                    name="newEmail"
                     id="newEmail" 
                     placeholder="New Email Address"
                     > </div>
@@ -79,7 +81,7 @@
                 </div>
                 <div class="row-container">
                     <div class="left-field">Add More Branch Photos</div> 
-                    <div class="right-field"><input type="file" accept="image/*" multiple id="newPhoto"></div>
+                    <div class="right-field"><input name="branchPic" type="file" accept="image/*" id="newPhoto"></div>
                 </div>
                 <div id="err-msg" class="err-msg"></div>
                 <div style="display:flex;flex-direction:row">  

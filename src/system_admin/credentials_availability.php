@@ -102,7 +102,7 @@
     }
 
     function checkBranchPhotos($database,$branchID,$photo){
-        $sql = sprintf("SELECT * FROM `branch_photo` WHERE `branchID` = '../../uploads/branch_images/%s' AND `photo` = '%s'",
+        $sql = sprintf("SELECT * FROM `branch_photo` WHERE `branchID` = '%s' AND `photo` = '../../uploads/branch_images/%s'",
         $database -> real_escape_string($branchID),
         $database -> real_escape_string($photo));
 

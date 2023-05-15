@@ -367,10 +367,13 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         return $depInfo;
     }
 
-    public function getCoachProfiles($database){
-        $coachProResult = $database -> query("SELECT `c`.`coachID`,`c`.`firstName`,`c`.`lastName`,`c`.`contactNum`,`c`.`photo`,`s`.`sportName` FROM `coach` `c` 
-        INNER JOIN `sport` `s` ON `c`.`sport` = `s`.`sportID`");    //get the coach profile details and sport name
+    public function getCoachProfiles($branchID,$database){
+        $sql = sprintf("SELECT DISTINCT `c`.`coachID`,`c`.`firstName`,`c`.`lastName`,`c`.`contactNum`,`c`.`photo`,`s`.`sportName` FROM `coach` `c` 
+        INNER JOIN `sport` `s` ON `c`.`sport` = `s`.`sportID` INNER JOIN `coaching_session` `cs` ON `c`.`coachID` = `cs`.`coachID` INNER JOIN `sports_court` `sc` 
+        ON `cs`.`courtID` = `sc`.`courtID` INNER JOIN `branch` `b` ON `sc`.`branchID` = `b`.`branchID` WHERE `b`.`branchID` = '%s'",
+        $database -> real_escape_string($branchID));    //get the coach profile details and sport name
 
+        $coachProResult = $database -> query($sql);
         $profileResult = [];
         while($row = $coachProResult->fetch_object()){   //get profiles one by one
             array_push($profileResult,['coachID' => $row->coachID,'fName' => $row->firstName,'lName' => $row ->lastName, 'sport' => $row ->sportName, 'contactN' => $row -> contactNum, 'profilePhoto' => $row->photo]);
@@ -400,15 +403,18 @@ class Receptionist extends Actor implements JsonSerializable , StaffMember{
         $coachingSessions = $database -> query($coachingSessionsql);
         $sessionInfo = [];
         while($row = $coachingSessions -> fetch_object()){
-            $sql = sprintf("SELECT * FROM coaching_session cs
-            INNER JOIN sports_court c ON  `c`.`courtID` = `cs`.`courtID`
-            INNER JOIN branch b ON `c`.`branchID` = `b`.`branchID`
-            WHERE cs.sessionID = '%s' AND b.branchID = '%s'",
+            $sql = sprintf("SELECT * FROM `coaching_session` `cs`
+            INNER JOIN `coach` `coach` ON `coach`.`coachID` = `cs`.`coachID` INNER JOIN `sports_court` `c` ON  `c`.`courtID` = `cs`.`courtID`
+            INNER JOIN `branch` `b` ON `c`.`branchID` = `b`.`branchID`
+            WHERE `cs`.`sessionID` = '%s' AND `b`.`branchID` = '%s' AND `coach`.`coachID` = '%s'",
             $database -> real_escape_string($row -> sessionID),
-            $database -> real_escape_string($branchID));
+            $database -> real_escape_string($branchID),
+            $database -> real_escape_string($coachID));
             $session = $database -> query($sql) -> fetch_object();
-            array_push($sessionInfo,[$session->day,$session->startingTime,$session->endingTime]);
-        }
+            if($session != null){
+                array_push($sessionInfo,[$session->day,$session->startingTime,$session->endingTime]);
+            }
+    }
 
         $rating = $coach -> getRating($database);
         $feedbackResults = $coach -> getFeedback();

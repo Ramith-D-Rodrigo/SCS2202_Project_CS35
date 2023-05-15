@@ -79,3 +79,11 @@ main::before{
     background-size:contain;
     background-repeat: no-repeat;
 }
+#revenue{
+    content: '';
+    width: 60%;
+    height: 60%;
+    background: url('revenue.png');
+    background-size:contain;
+    background-repeat: no-repeat;
+}

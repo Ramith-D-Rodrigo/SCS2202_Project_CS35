@@ -13,7 +13,7 @@
     $staffM = new Staff();
     $receptionist = $staffM -> getStaffMember($_SESSION['userrole']);
 
-    $profileResults = $receptionist -> getCoachProfiles($connection);
+    $profileResults = $receptionist -> getCoachProfiles($_SESSION['branchID'],$connection);
 
     if(count($profileResults)===0) {    //if the array is empty, then there are no results
         array_push($profileResults,['errMsg' => "Sorry, Can't find any coach profiles"]);

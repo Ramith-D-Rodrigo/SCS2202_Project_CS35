@@ -58,19 +58,23 @@ function saveChanges(event){
     let images = [];
     if(newPhoto.files !== ''){
         const files = newPhoto.files;     //get all the user selected files
+        console.log(files);
         for (let i = 0; i < files.length; i++) {
-            const file = files[i]['name'];
+            if(files[i]['type'] !== "image/png" && files[i]['type'] !== "image/jpg" && files[i]['type'] !== "image/jpeg"){  //validate thr image type
+                errMsg.innerHTML = "Upload Image Type is invalid";
+                return;
+            }
+            // const file = files[i];
             // console.log(file);
-            images.push(file);  //save to the images array
+            images.push(files[i]['name']);  //save to the images array
         }
     }
-    const editedDetails = {Email: newEmail.value, Number: newNumber.value, Images: images};
+    // const editedDetails = {Email: newEmail.value, Number: newNumber.value, Images: images};
+    const formDetails = document.querySelector('form');
+    const formData = new FormData(formDetails);
     fetch("../../controller/receptionist/branch_changes_controller.php",{
         method: 'POST',
-        header: {
-            'Content-Type' : 'application/json'
-        },
-        body: JSON.stringify(editedDetails)
+        body: formData
     })
     .then((res) => res.json())
     .then((data) => {

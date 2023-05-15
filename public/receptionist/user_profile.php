@@ -30,8 +30,8 @@
             <div class="row-container"> 
             <div class="searchError"> </div>
             </div>
-            <div id="profilePic" style="display:flex; justify-content:center;margin-bottom:5%">
-            </div>
+            <!-- <div id="profilePic" style="display:flex; justify-content:center;margin-bottom:5%">
+            </div> -->
             <div class="row-container">
                 <div class="left-side"> Name: </div>
                 <input class="right-side" id="name"> </input>
