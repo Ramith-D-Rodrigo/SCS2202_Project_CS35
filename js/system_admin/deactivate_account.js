@@ -8,18 +8,24 @@ deactivateBtn.addEventListener("click", promptMsg);
 
 function promptMsg(event){
     event.preventDefault();
-    const prompt = document.createElement("p");
-    prompt.innerHTML = "Are you sure with the decision?";           
-    const yesBtn = document.getElementById("Yes");
-    const noBtn = document.getElementById("No");
-    yesBtn.value = this.value;
-    yesBtn.addEventListener("click", deactivateAccount);
-    noBtn.addEventListener("click", function(){location.reload();}); 
-    warningMsg.appendChild(prompt);
-    overlay.className = "overlay";
-    warningMsg.className = "dialog-box";
-    warningMsg.style.display = "block";
-    overlay.style.display = "block";
+    if(document.getElementById("branchName").value === '' ||
+    document.getElementById("staffRole").value === ''){
+        errMsg.innerHTML = "Not Selected Any Particular Role";
+    }else{
+        const prompt = document.createElement("p");
+        prompt.innerHTML = "Are you sure with the decision?";           
+        const yesBtn = document.getElementById("Yes");
+        const noBtn = document.getElementById("No");
+        yesBtn.value = this.value;
+        yesBtn.addEventListener("click", deactivateAccount);
+        noBtn.addEventListener("click", function(){location.reload();}); 
+        warningMsg.appendChild(prompt);
+        overlay.className = "overlay";
+        warningMsg.className = "dialog-box";
+        warningMsg.style.display = "block";
+        overlay.style.display = "block";
+    }
+    
         
 }
 
