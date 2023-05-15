@@ -24,10 +24,10 @@
     //sending a notification about the reservation status
     $reservation = new Reservation();
     $reservation -> setID($decisionDetails[1]);
-    $userID = json_decode(json_encode($reservation -> getDetails($connection,['userID'])),true)['userID'];   //get the userID if the reservation made by a user
-
+    $user = json_decode(json_encode($reservation -> getDetails($connection,['userID'])),true);   //get the userID if the reservation made by a user
+    
    
-    if($userID !== ''){   //if this is a user reservation
+    if(isset($user['userID'])){   //if this is a user reservation
         $resInfo = $reservation -> getDetails($connection,['date','startingTime','endingTime']);
         $resJSON = json_decode(json_encode($resInfo),true);
         $date = $resJSON['date'];
@@ -41,7 +41,7 @@
         }
 
         $notificationID = uniqid("notreserv");
-        $receptionist -> addNotification($notificationID,"Reservation Status",$desc,date('Y-m-d'),$userID);
+        $receptionist -> addNotification($notificationID,"Reservation Status",$desc,date('Y-m-d'),$user['userID']);
     }
     
     

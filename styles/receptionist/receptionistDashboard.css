@@ -25,7 +25,7 @@ main{
     background: linear-gradient(316.41deg, #6F0808 5.32%, #000000 45.92%, #000956 78.45%) center/cover no-repeat;
 }
 
-main::before{
+/* main::before{
     content: none;
     position: absolute;
     content: '';
@@ -36,7 +36,7 @@ main::before{
     opacity: 0.13;
     background: url('../bg_image2.jpg') center bottom no-repeat;
     background-size: cover; 
-}
+} */
 
 #reservations{
     content: '';
