@@ -35,3 +35,52 @@
     height: 200px;
     width : 100%;
 }
+
+#branch{
+    content: '';
+    width: 60%;
+    height: 60%;
+    background: url('branch.png');
+    background-size:contain;
+    background-repeat: no-repeat;
+}
+#maintenance{
+    content: '';
+    width: 60%;
+    height: 60%;
+    background: url('web_maintenance.png');
+    background-size:contain;
+    background-repeat: no-repeat;
+}
+#requests{
+    content: '';
+    width: 60%;
+    height: 60%;
+    background: url('request.png');
+    background-size:contain;
+    background-repeat: no-repeat;
+}
+#register{
+    content: '';
+    width: 60%;
+    height: 60%;
+    background: url('registerStaff.png');
+    background-size:contain;
+    background-repeat: no-repeat;
+}
+#changeLog{
+    content: '';
+    width: 60%;
+    height: 60%;
+    background: url('changeLogins.png');
+    background-size:contain;
+    background-repeat: no-repeat;
+}
+#deStaff{
+    content: '';
+    width: 60%;
+    height: 60%;
+    background: url('deactivate.png');
+    background-size:contain;
+    background-repeat: no-repeat;
+}
