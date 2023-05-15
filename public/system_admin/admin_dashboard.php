@@ -24,34 +24,49 @@
         require_once("dashboard_header.php");
 ?>
 <main>
-    <div class="long-container">
-        <div class=longTab>
-            <div> System Maintenance</div> 
-            <div> <button onclick="window.location.href='/public/system_admin/remove_system_maintenance.php'"> Finish </button> </div>
-            <div> <button onclick="window.location.href='/public/system_admin/add_system_maintenance.php'"> Add </button> </div>
-        </div>
-    </div>
-    <div class="long-container">
-        <div class=longTab>
-            <div> Owner Requests</div> 
-            <div> <button onclick="window.location.href='/public/system_admin/view_owner_requests.php'"> View More </button> </div>
-        </div>
-    </div>
-    <div class="flex-container">
-        <div class=tabs>
-            <div>Register Staff</div> 
-            <div> <button onclick="window.location.href= '/public/system_admin/staff_register.php'" > Proceed </button> </div>
-        </div> 
-        <div class=tabs>
-            <div>Change Staff Login Details</div> 
-            <div> <button onclick="window.location.href='/public/system_admin/change_staff_logins.php'" > Proceed </button> </div>
-        </div>
-        <div class=tabs>
-            <div>Deactivate Staff Accounts</div> 
-            <div> <button onclick="window.location.href='/public/system_admin/deactivate_account.php'" > Proceed </button> </div>
+    <div class="body-container dashboard-cards">
+        <div class="content-box single-card">
+            <div class="card-title">Branch Details</div> 
+            <div id="branch" class="card-content"></div>
+            <div class="card-button"> <button onclick="window.location.href='/public/receptionist/edit_branch.php'"> Edit</button> </div>
         </div>   
+        <div class="content-box single-card">
+            <div class="card-title"> System Maintenance</div> 
+            <div id="maintenance" class="card-content"></div>
+            <div class="card-button"> 
+                <button onclick="window.location.href='/public/system_admin/remove_system_maintenance.php'"> Finish </button> 
+                <button onclick="window.location.href='/public/system_admin/add_system_maintenance.php'"> Add </button>
+            </div>
+        </div>
+        <div class="content-box single-card">
+            <div class="card-title"> Owner Requests</div> 
+            <div id="requests" class="card-content"></div>
+            <div class="card-button"> 
+                <button onclick="window.location.href='/public/system_admin/view_owner_requests.php'"> View More </button> 
+            </div>
+        </div>
+        <div class="content-box single-card">
+            <div class="card-title">Register Staff</div> 
+            <div id="register" class="card-content"></div>
+            <div class="card-button"> 
+                <button onclick="window.location.href= '/public/system_admin/staff_register.php'" > Proceed </button> 
+            </div>
+        </div>
+        <div class="content-box single-card">
+            <div class="card-title">Change Staff Login Details</div> 
+            <div id="changeLog" class="card-content"></div>
+            <div class="card-button"> 
+                <button onclick="window.location.href='/public/system_admin/change_staff_logins.php'" > Proceed </button> 
+            </div>
+        </div>
+        <div class="content-box single-card">
+            <div class="card-title">Deactivate Staff Accounts</div>
+            <div id="deStaff" class="card-content"></div> 
+            <div class="card-button"> 
+                <button onclick="window.location.href='/public/system_admin/deactivate_account.php'" > Proceed </button>
+             </div>
+        </div>  
     </div>
-</div>
 </main>
 <?php
         require_once("../general/footer.php");
