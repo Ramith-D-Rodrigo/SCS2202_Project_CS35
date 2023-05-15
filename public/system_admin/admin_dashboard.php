@@ -26,11 +26,6 @@
 <main>
     <div class="body-container dashboard-cards">
         <div class="content-box single-card">
-            <div class="card-title">Branch Details</div> 
-            <div id="branch" class="card-content"></div>
-            <div class="card-button"> <button onclick="window.location.href='/public/receptionist/edit_branch.php'"> Edit</button> </div>
-        </div>   
-        <div class="content-box single-card">
             <div class="card-title"> System Maintenance</div> 
             <div id="maintenance" class="card-content"></div>
             <div class="card-button"> 
